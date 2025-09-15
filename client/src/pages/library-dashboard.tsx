@@ -4,10 +4,28 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button as UIButton } from '@/components/ui/button';
 import { useTheme } from '@/lib/ui-library/theme';
 import Button from '@/lib/ui-library/Button';
+import TagSelector from '@/lib/ui-library/TagSelector';
 
 export default function LibraryDashboard() {
   const { theme, toggleTheme } = useTheme();
   const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const sampleTags = [
+    { id: 'maiz-blanco', label: 'Maíz Blanco' },
+    { id: 'wheat-hard-winter', label: 'HRW - Wheat Hard Red Winter' },
+    { id: 'wheat-soft-winter', label: 'SRW - Wheat Soft Red Winter' },
+    { id: 'wheat-hard-spring', label: 'HRS - Wheat Hard Red Spring' },
+    { id: 'yellow-corn', label: 'YC - Yellow Corn' },
+    { id: 'grain-sorghum', label: 'YGS - Yellow Grain Sorghum' },
+    { id: 'whole-oats', label: 'OATS - Whole Oats' },
+    { id: 'cacao-blanco', label: 'cacao blanco' },
+    { id: 'frijol-amarillo', label: 'Frijol amarillo 1' },
+    { id: 'soya-2025', label: 'Soya 2025' },
+    { id: 'semillas-girasol', label: 'Semillas de girasol - SW' },
+    { id: 'test-component', label: 'TestTestTest' },
+    { id: 'maiz-amarillo', label: 'Maíz Amarillo' }
+  ];
 
   const stats = [
     {
@@ -205,6 +223,18 @@ export default function LibraryDashboard() {
                           <Button intent="secondary">Secondary</Button>
                           <Button intent="danger">Danger</Button>
                         </div>
+                      </div>
+                      
+                      <div>
+                        <h4 className="text-sm font-medium text-foreground mb-3">TagSelector Component</h4>
+                        <TagSelector
+                          tags={sampleTags}
+                          selectedTags={selectedTags}
+                          onSelectionChange={setSelectedTags}
+                          allowMultiple={true}
+                          allowAll={true}
+                          size="sm"
+                        />
                       </div>
                       
                       <div>

@@ -1,0 +1,110 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+.chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.light { }
+.dark { }
+
+/* Sizes */
+.sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.md {
+  padding: 0.375rem 1rem;
+  font-size: 0.875rem;
+}
+
+.lg {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+/* Selected states - Light Theme */
+.light.selected {
+  background-color: hsl(142.1, 76.2%, 36.3%);
+  color: hsl(355.7, 100%, 97.3%);
+  border-color: hsl(142.1, 76.2%, 36.3%);
+}
+
+.light.selected:hover:not(:disabled) {
+  background-color: hsl(142.1, 76.2%, 32%);
+}
+
+.light.unselected {
+  background-color: hsl(210, 40%, 96%);
+  color: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(214.3, 31.8%, 91.4%);
+}
+
+.light.unselected:hover:not(:disabled) {
+  background-color: hsl(210, 40%, 92%);
+  border-color: hsl(214.3, 31.8%, 87%);
+}
+
+/* Selected states - Dark Theme */
+.dark.selected {
+  background-color: hsl(142.1, 70.6%, 45.3%);
+  color: hsl(210, 20%, 98%);
+  border-color: hsl(142.1, 70.6%, 45.3%);
+}
+
+.dark.selected:hover:not(:disabled) {
+  background-color: hsl(142.1, 70.6%, 50%);
+}
+
+.dark.unselected {
+  background-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+.dark.unselected:hover:not(:disabled) {
+  background-color: hsl(217.2, 32.6%, 20%);
+  border-color: hsl(217.2, 32.6%, 25%);
+}
+
+/* All button special styling */
+.light.all {
+  background-color: hsl(221.2, 83.2%, 53.3%);
+  color: hsl(210, 40%, 98%);
+  border-color: hsl(221.2, 83.2%, 53.3%);
+}
+
+.light.all:hover:not(:disabled) {
+  background-color: hsl(221.2, 83.2%, 48%);
+}
+
+.dark.all {
+  background-color: hsl(217.2, 91.2%, 59.8%);
+  color: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 91.2%, 59.8%);
+}
+
+.dark.all:hover:not(:disabled) {
+  background-color: hsl(217.2, 91.2%, 55%);
+}
+
+.hidden {
+  display: none !important;
+}
