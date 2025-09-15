@@ -18,6 +18,8 @@ export interface TagSelectorProps {
   config?: VisibilityConfig;    // override over default visibility config if passed
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
+  langOverride?: string;
+  i18nOrder?: 'global-first' | 'local-first';
 }
 
 export interface TagSelectorContext {

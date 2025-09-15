@@ -4,10 +4,10 @@ import { TagSelectorProvider } from './provider';
 import { TagSelectorView } from './view';
 
 const TagSelector: React.FC<TagSelectorProps> = ({
-  id, className, style, tags, selectedTags, onSelectionChange, allowMultiple, allowAll, config, size, disabled
+  id, className, style, tags, selectedTags, onSelectionChange, allowMultiple, allowAll, config, size, disabled, langOverride, i18nOrder
 }) => {
   return (
-    <TagSelectorProvider config={config}>
+    <TagSelectorProvider config={config} langOverride={langOverride} i18nOrder={i18nOrder}>
       <div id={id} style={style}>
         <TagSelectorView
           className={className}

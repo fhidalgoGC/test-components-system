@@ -3,29 +3,11 @@ import { Link } from 'wouter';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button as UIButton } from '@/components/ui/button';
 import { useTheme } from '@/lib/ui-library/theme';
-import Button from '@/lib/ui-library/Button';
-import TagSelector from '@/lib/ui-library/TagSelector';
 
 export default function LibraryDashboard() {
   const { theme, toggleTheme } = useTheme();
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
-  const sampleTags = [
-    { id: 'maiz-blanco', label: 'Maíz Blanco' },
-    { id: 'wheat-hard-winter', label: 'HRW - Wheat Hard Red Winter' },
-    { id: 'wheat-soft-winter', label: 'SRW - Wheat Soft Red Winter' },
-    { id: 'wheat-hard-spring', label: 'HRS - Wheat Hard Red Spring' },
-    { id: 'yellow-corn', label: 'YC - Yellow Corn' },
-    { id: 'grain-sorghum', label: 'YGS - Yellow Grain Sorghum' },
-    { id: 'whole-oats', label: 'OATS - Whole Oats' },
-    { id: 'cacao-blanco', label: 'cacao blanco' },
-    { id: 'frijol-amarillo', label: 'Frijol amarillo 1' },
-    { id: 'soya-2025', label: 'Soya 2025' },
-    { id: 'semillas-girasol', label: 'Semillas de girasol - SW' },
-    { id: 'test-component', label: 'TestTestTest' },
-    { id: 'maiz-amarillo', label: 'Maíz Amarillo' }
-  ];
+  const [isComponentsExpanded, setIsComponentsExpanded] = useState(true);
 
   const stats = [
     {
@@ -67,7 +49,8 @@ export default function LibraryDashboard() {
   ];
 
   const componentItems = [
-    { href: '#', label: 'Button', icon: 'fas fa-mouse-pointer' },
+    { href: '/components/button', label: 'Button', icon: 'fas fa-mouse-pointer' },
+    { href: '/components/tag-selector', label: 'TagSelector', icon: 'fas fa-tags' },
     { href: '#', label: 'TextField', icon: 'fas fa-edit' },
     { href: '#', label: 'Card', icon: 'fas fa-th-large' },
     { href: '#', label: 'Modal', icon: 'fas fa-bars' }
@@ -120,19 +103,28 @@ export default function LibraryDashboard() {
 
           {/* Component Categories */}
           <div className="mt-6">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-              Components
-            </h3>
-            <div className="space-y-1">
-              {componentItems.map((item) => (
-                <Link key={item.label} href={item.href}>
-                  <div className="flex items-center gap-3 px-3 py-2 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
-                    <i className={`${item.icon} text-sm`}></i>
-                    {item.label}
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <button
+              onClick={() => setIsComponentsExpanded(!isComponentsExpanded)}
+              className="flex items-center justify-between w-full px-3 py-2 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+              data-testid="components-toggle"
+            >
+              <h3 className="text-xs font-semibold uppercase tracking-wider">
+                Components
+              </h3>
+              <i className={`fas ${isComponentsExpanded ? 'fa-chevron-down' : 'fa-chevron-right'} text-xs`}></i>
+            </button>
+            {isComponentsExpanded && (
+              <div className="space-y-1 mt-3">
+                {componentItems.map((item) => (
+                  <Link key={item.label} href={item.href}>
+                    <div className="flex items-center gap-3 px-3 py-2 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer ml-3">
+                      <i className={`${item.icon} text-sm`}></i>
+                      {item.label}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </nav>
 
@@ -207,58 +199,6 @@ export default function LibraryDashboard() {
 
             {/* Main Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Component Preview */}
-              <Card>
-                <CardContent className="p-0">
-                  <div className="p-6 border-b border-border">
-                    <h3 className="font-semibold text-foreground">Component Preview</h3>
-                    <p className="text-sm text-muted-foreground">Interactive component demonstration</p>
-                  </div>
-                  <div className="p-6">
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-sm font-medium text-foreground mb-3">Button Component</h4>
-                        <div className="flex flex-wrap gap-3">
-                          <Button intent="primary">Primary Button</Button>
-                          <Button intent="secondary">Secondary</Button>
-                          <Button intent="danger">Danger</Button>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h4 className="text-sm font-medium text-foreground mb-3">TagSelector Component</h4>
-                        <TagSelector
-                          tags={sampleTags}
-                          selectedTags={selectedTags}
-                          onSelectionChange={setSelectedTags}
-                          allowMultiple={true}
-                          allowAll={true}
-                          size="sm"
-                        />
-                      </div>
-                      
-                      <div>
-                        <h4 className="text-sm font-medium text-foreground mb-3">TextField Component</h4>
-                        <div className="space-y-2">
-                          <input 
-                            type="text" 
-                            placeholder="Default input" 
-                            className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                            data-testid="input-default"
-                          />
-                          <input 
-                            type="text" 
-                            placeholder="With validation" 
-                            className="w-full px-3 py-2 border border-green-500 rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-green-500"
-                            data-testid="input-validation"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Build Configuration */}
               <Card>
                 <CardContent className="p-0">

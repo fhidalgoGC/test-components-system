@@ -5,12 +5,16 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/ui-library/theme";
 import LibraryDashboard from "@/pages/library-dashboard";
+import ButtonDemo from "@/pages/components/button-demo";
+import TagSelectorDemo from "@/pages/components/tag-selector-demo";
 import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={LibraryDashboard} />
+      <Route path="/components/button" component={ButtonDemo} />
+      <Route path="/components/tag-selector" component={TagSelectorDemo} />
       <Route component={NotFound} />
     </Switch>
   );
