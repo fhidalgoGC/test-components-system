@@ -64,109 +64,114 @@ export default function Preview() {
         </CardContent>
       </Card>
 
-      {/* Controls */}
-      <Card>
-        <CardContent className="p-0">
-          <div className="p-6 border-b border-border">
-            <h3 className="font-semibold text-foreground">Props Controls</h3>
-            <p className="text-sm text-muted-foreground">Customize the TagSelector properties</p>
-          </div>
-          <div className="p-6 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="size-select">Size</Label>
-                <Select value={size} onValueChange={(value: 'sm' | 'md' | 'lg') => setSize(value)}>
-                  <SelectTrigger id="size-select" data-testid="select-size">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sm">Small</SelectItem>
-                    <SelectItem value="md">Medium</SelectItem>
-                    <SelectItem value="lg">Large</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="multiple-switch"
-                  checked={allowMultiple}
-                  onCheckedChange={setAllowMultiple}
-                  data-testid="switch-multiple"
-                />
-                <Label htmlFor="multiple-switch">Allow Multiple</Label>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="all-switch"
-                  checked={allowAll}
-                  onCheckedChange={setAllowAll}
-                  data-testid="switch-all"
-                />
-                <Label htmlFor="all-switch">Show All Button</Label>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="disabled-switch"
-                  checked={disabled}
-                  onCheckedChange={setDisabled}
-                  data-testid="switch-disabled"
-                />
-                <Label htmlFor="disabled-switch">Disabled</Label>
+      {/* Controls and Code Side by Side */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Controls */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="p-6 border-b border-border">
+              <h3 className="font-semibold text-foreground">Props Controls</h3>
+              <p className="text-sm text-muted-foreground">Customize the TagSelector properties</p>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="size-select">Size</Label>
+                  <Select value={size} onValueChange={(value: 'sm' | 'md' | 'lg') => setSize(value)}>
+                    <SelectTrigger id="size-select" data-testid="select-size">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="sm">Small</SelectItem>
+                      <SelectItem value="md">Medium</SelectItem>
+                      <SelectItem value="lg">Large</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="multiple-switch"
+                      checked={allowMultiple}
+                      onCheckedChange={setAllowMultiple}
+                      data-testid="switch-multiple"
+                    />
+                    <Label htmlFor="multiple-switch">Allow Multiple</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="all-switch"
+                      checked={allowAll}
+                      onCheckedChange={setAllowAll}
+                      data-testid="switch-all"
+                    />
+                    <Label htmlFor="all-switch">Show All Button</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="disabled-switch"
+                      checked={disabled}
+                      onCheckedChange={setDisabled}
+                      data-testid="switch-disabled"
+                    />
+                    <Label htmlFor="disabled-switch">Disabled</Label>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label>Quick Selection Actions</Label>
+                  <div className="flex flex-col gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setSelectedTags([])}
+                      data-testid="button-clear"
+                    >
+                      Clear All
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setSelectedTags(tags.map(t => t.id))}
+                      data-testid="button-select-all"
+                    >
+                      Select All
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setSelectedTags(['react', 'typescript'])}
+                      data-testid="button-preset"
+                    >
+                      React + TS
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <div className="space-y-2">
-              <Label>Quick Selection Actions</Label>
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setSelectedTags([])}
-                  data-testid="button-clear"
-                >
-                  Clear All
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setSelectedTags(tags.map(t => t.id))}
-                  data-testid="button-select-all"
-                >
-                  Select All
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setSelectedTags(['react', 'typescript'])}
-                  data-testid="button-preset"
-                >
-                  React + TS
-                </Button>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Code Example */}
-      <Card>
-        <CardContent className="p-0">
-          <div className="p-6 border-b border-border">
-            <h3 className="font-semibold text-foreground">Generated Code</h3>
-            <p className="text-sm text-muted-foreground">Copy this code to use with current settings</p>
-          </div>
-          <div className="p-6">
-            <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-              <code className="text-muted-foreground whitespace-pre">
-                {generateCode()}
-              </code>
+        {/* Code Example */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="p-6 border-b border-border">
+              <h3 className="font-semibold text-foreground">Generated Code</h3>
+              <p className="text-sm text-muted-foreground">Copy this code to use with current settings</p>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="p-6">
+              <div className="bg-muted rounded-lg p-4 font-mono text-sm">
+                <code className="text-muted-foreground whitespace-pre">
+                  {generateCode()}
+                </code>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
