@@ -1,12 +1,22 @@
 import { useTheme } from 'next-themes';
-import { getTagSelectorDemoTranslations } from '../i18n';
+import { useHierarchicalTranslations, type SupportedLanguage } from '@/i18n';
+import { tagSelectorDemoTranslations } from '../i18n';
 
 export function useTagSelectorDemo() {
   const { resolvedTheme } = useTheme();
   const currentTheme: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
   
-  // Using default language for now - can be extended later
-  const t = getTagSelectorDemoTranslations('es');
+  // Get language from localStorage or default to 'es'
+  const language: SupportedLanguage = (localStorage.getItem('app-language') as SupportedLanguage) || 'es';
+  
+  // Use hierarchical translations
+  const { t: getTranslation } = useHierarchicalTranslations(
+    tagSelectorDemoTranslations[language], 
+    language
+  );
+  
+  // Create translation object for easier access
+  const t = tagSelectorDemoTranslations[language];
 
   return {
     t,

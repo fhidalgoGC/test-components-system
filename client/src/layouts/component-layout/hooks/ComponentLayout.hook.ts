@@ -1,12 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
+import { useHierarchicalTranslations, type SupportedLanguage } from '@/i18n';
 import { getDefaultTabs, loadDocumentationComponents } from '../utils/ComponentLayout.utils';
 import type { ComponentLayoutProps, TabConfig } from '../types/ComponentLayout.types';
+import { componentLayoutTranslations } from '../i18n';
 
 export function useComponentLayout(props: ComponentLayoutProps) {
+  // Get language from localStorage or default to 'es'
+  const language: SupportedLanguage = (localStorage.getItem('app-language') as SupportedLanguage) || 'es';
+  
+  // Use hierarchical translations
+  const { t: getTranslation } = useHierarchicalTranslations(
+    componentLayoutTranslations[language], 
+    language
+  );
+  
+  // Create translation object for easier access
+  const translations = componentLayoutTranslations[language];
+
   const {
     componentName,
-    componentDescription = "Interactive component documentation and examples",
+    componentDescription = translations.component.description,
     tabs: manualTabs,
     defaultTab: manualDefaultTab
   } = props;

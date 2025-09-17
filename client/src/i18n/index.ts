@@ -50,3 +50,7 @@ export const useHierarchicalTranslations = (
   
   return { t, global, local: localTranslations };
 };
+
+// Export new hooks
+export { useI18n } from './hooks/useI18n';
+export type { Language } from './hooks/useI18n';

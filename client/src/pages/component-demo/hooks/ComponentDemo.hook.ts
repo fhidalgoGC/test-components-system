@@ -1,16 +1,26 @@
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import type { MenuItem } from '@/components/sidebar';
-import { getComponentDemoTranslations } from '../i18n';
+import { useHierarchicalTranslations, type SupportedLanguage } from '@/i18n';
+import { componentDemoTranslations } from '../i18n';
 
 export function useComponentDemo() {
   const { resolvedTheme } = useTheme();
   const currentTheme: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
   
   const [currentPath, setCurrentPath] = useState('/');
-
-  // Using default language for now - can be extended later
-  const t = getComponentDemoTranslations('es');
+  
+  // Get language from localStorage or default to 'es'
+  const language: SupportedLanguage = (localStorage.getItem('app-language') as SupportedLanguage) || 'es';
+  
+  // Use hierarchical translations
+  const { t: getTranslation } = useHierarchicalTranslations(
+    componentDemoTranslations[language], 
+    language
+  );
+  
+  // Create translation object for easier access
+  const t = componentDemoTranslations[language];
 
   const menuItems: MenuItem[] = [
     {

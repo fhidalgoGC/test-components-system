@@ -12,5 +12,9 @@
   "header": {
     "title": "Component Library",
     "subtitle": "Modern React Components"
+  },
+  "defaults": {
+    "title": "UI Library",
+    "description": "React + TypeScript modular component system"
   }
 }
