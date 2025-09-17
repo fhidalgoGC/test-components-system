@@ -1,40 +1,50 @@
-/* LibraryDashboard specific styles */
+/* LibraryDashboard CSS Module styles */
 
-.library-dashboard {
+.container {
   min-height: 100vh;
 }
 
-.library-dashboard .component-grid {
+.componentGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
 }
 
-.library-dashboard .component-card {
+.componentCard {
   transition: all 0.2s ease-in-out;
 }
 
-.library-dashboard .component-card:hover {
+.componentCard:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.library-dashboard .code-block {
+.codeBlock {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.875rem;
   line-height: 1.5;
 }
 
-.library-dashboard .feature-icon {
+.featureIcon {
   transition: transform 0.2s ease;
 }
 
-.library-dashboard .feature-card:hover .feature-icon {
+.featureCard:hover .featureIcon {
   transform: scale(1.1);
 }
 
+/* Light theme */
+.light {
+  /* Additional light theme styles if needed */
+}
+
+/* Dark theme */
+.dark {
+  /* Additional dark theme styles if needed */
+}
+
 @media (max-width: 768px) {
-  .library-dashboard .component-grid {
+  .componentGrid {
     grid-template-columns: 1fr;
   }
 }

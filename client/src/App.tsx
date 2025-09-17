@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/ui-library/theme";
-import AppLayout from "@/layouts/AppLayout";
+import AppLayout from "@/layouts/app-layout";
 import LibraryDashboard from "@/pages/library-dashboard";
 import ButtonDemo from "@/pages/components/button-demo";
 import TagSelectorDemo from "@/pages/components/tag-selector-demo";

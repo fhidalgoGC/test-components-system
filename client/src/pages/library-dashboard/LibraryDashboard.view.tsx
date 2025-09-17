@@ -1,8 +1,9 @@
-import ComponentLayout from '@/layouts/ComponentLayout';
+import ComponentLayout from '@/layouts/component-layout';
 import { useLibraryDashboard } from './hooks';
 import type { TabConfig } from './LibraryDashboard.types';
 import { Preview, ReactDoc, CSSDoc, UsageDoc } from './documentation';
-import './LibraryDashboard.css';
+import { containerClasses } from './LibraryDashboard.module';
+import { useTheme } from 'next-themes';
 
 interface LibraryDashboardViewProps {
   className?: string;
@@ -10,6 +11,8 @@ interface LibraryDashboardViewProps {
 
 export function LibraryDashboardView({ className }: LibraryDashboardViewProps) {
   const { t } = useLibraryDashboard();
+  const { theme } = useTheme();
+  const currentTheme = (theme as 'light' | 'dark') || 'light';
 
   const tabs: TabConfig[] = [
     {
@@ -39,7 +42,7 @@ export function LibraryDashboardView({ className }: LibraryDashboardViewProps) {
   ];
 
   return (
-    <div className={`library-dashboard ${className || ''}`} data-testid="library-dashboard">
+    <div className={containerClasses(currentTheme, className)} data-testid="library-dashboard">
       <ComponentLayout
         componentName={t.title}
         componentDescription={t.description}

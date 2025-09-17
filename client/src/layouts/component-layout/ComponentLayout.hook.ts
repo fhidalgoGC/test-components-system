@@ -1,0 +1,64 @@
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
+import { getDefaultTabs, loadDocumentationComponents } from './ComponentLayout.utils';
+import type { ComponentLayoutProps, TabConfig } from './ComponentLayout.types';
+
+export function useComponentLayout(props: ComponentLayoutProps) {
+  const {
+    componentName,
+    componentDescription = "Interactive component documentation and examples",
+    tabs: manualTabs,
+    defaultTab: manualDefaultTab
+  } = props;
+
+  const { theme } = useTheme();
+  const currentTheme = (theme as 'light' | 'dark') || 'light';
+
+  const [activeTab, setActiveTab] = useState(() => {
+    if (manualTabs && manualDefaultTab) return manualDefaultTab;
+    if (manualTabs && manualTabs.length > 0) return manualTabs[0].id;
+    return 'preview';
+  });
+  
+  const [documentationComponents, setDocumentationComponents] = useState<Record<string, React.ComponentType>>({});
+  const [loading, setLoading] = useState(!manualTabs); // Don't load if using manual tabs
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Skip auto-loading if manual tabs are provided
+    if (manualTabs) {
+      setLoading(false);
+      return;
+    }
+
+    const loadDocumentation = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const components = await loadDocumentationComponents(componentName);
+        setDocumentationComponents(components);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        console.error('Error loading documentation:', errorMessage);
+        setError(`Could not load documentation for ${componentName}: ${errorMessage}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDocumentation();
+  }, [componentName, manualTabs]);
+
+  const tabs: TabConfig[] = manualTabs ? manualTabs : getDefaultTabs(documentationComponents);
+
+  return {
+    activeTab,
+    setActiveTab,
+    tabs,
+    loading,
+    error,
+    currentTheme,
+    componentDescription
+  };
+}

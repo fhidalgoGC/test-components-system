@@ -1,4 +1,4 @@
-import ComponentLayout from '@/layouts/ComponentLayout';
+import ComponentLayout from '@/layouts/component-layout';
 
 export default function TagSelectorDemo() {
   return (

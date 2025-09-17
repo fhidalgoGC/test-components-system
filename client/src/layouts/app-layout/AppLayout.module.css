@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.sidebar {
+  /* Sidebar styles are handled by the Sidebar component itself */
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.navbar {
+  /* Navbar styles are handled by the Navbar component itself */
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  padding: 1.5rem;
+}
+
+/* Light theme */
+.light {
+  /* Additional light theme styles if needed */
+}
+
+/* Dark theme */
+.dark {
+  /* Additional dark theme styles if needed */
+}
