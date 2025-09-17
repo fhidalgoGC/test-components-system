@@ -1,0 +1,21 @@
+export const es = {
+  title: 'Resumen de Biblioteca de Componentes',
+  description: 'Sistema de componentes modulares React + TypeScript',
+  tabs: {
+    structure: 'Estructura de Componentes',
+    react: 'React',
+    html: 'HTML',
+    css: 'CSS',
+    usage: 'Uso'
+  },
+  components: {
+    available: 'Componentes Disponibles',
+    comingSoon: 'Próximamente',
+    features: 'Características de la Biblioteca',
+    structure: 'Estructura de Componentes'
+  },
+  actions: {
+    documentation: 'Documentación',
+    download: 'Descargar'
+  }
+};

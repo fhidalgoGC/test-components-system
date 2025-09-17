@@ -1,0 +1,40 @@
+/* LibraryDashboard specific styles */
+
+.library-dashboard {
+  min-height: 100vh;
+}
+
+.library-dashboard .component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.library-dashboard .component-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.library-dashboard .component-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.library-dashboard .code-block {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.library-dashboard .feature-icon {
+  transition: transform 0.2s ease;
+}
+
+.library-dashboard .feature-card:hover .feature-icon {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .library-dashboard .component-grid {
+    grid-template-columns: 1fr;
+  }
+}
