@@ -1,0 +1,18 @@
+{
+  "themeToggle": {
+    "light": "Light Theme",
+    "dark": "Dark Theme",
+    "switch": "Toggle theme"
+  },
+  "language": {
+    "selector": "Language",
+    "spanish": "Español",
+    "english": "English"
+  },
+  "navigation": {
+    "overview": "Overview",
+    "components": "Components",
+    "expand": "Expand",
+    "collapse": "Collapse"
+  }
+}

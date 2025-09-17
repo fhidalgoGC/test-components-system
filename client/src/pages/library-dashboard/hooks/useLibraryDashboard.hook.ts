@@ -1,22 +1,17 @@
 import { useState } from 'react';
-import type { Language, Translation } from '../i18n';
-import { en } from '../i18n/en';
-import { es } from '../i18n/es';
+import { getLibraryDashboardTranslations } from '../i18n';
 
 const LANGUAGE_KEY = 'library-dashboard-language';
 
-const translations = {
-  en,
-  es
-};
+type Language = 'es' | 'en';
 
 export const useLibraryDashboard = () => {
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem(LANGUAGE_KEY);
-    return (saved && saved in translations) ? saved as Language : 'en';
+    return (saved === 'es' || saved === 'en') ? saved : 'en';
   });
 
-  const t = translations[language];
+  const t = getLibraryDashboardTranslations(language);
 
   const changeLanguage = (newLanguage: Language) => {
     setLanguage(newLanguage);

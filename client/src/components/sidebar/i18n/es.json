@@ -1,0 +1,18 @@
+{
+  "themeToggle": {
+    "light": "Tema Claro",
+    "dark": "Tema Oscuro",
+    "switch": "Cambiar tema"
+  },
+  "language": {
+    "selector": "Idioma",
+    "spanish": "Español",
+    "english": "English"
+  },
+  "navigation": {
+    "overview": "Vista General",
+    "components": "Componentes",
+    "expand": "Expandir",
+    "collapse": "Contraer"
+  }
+}

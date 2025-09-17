@@ -1,10 +1,11 @@
-export { en } from './en';
-export { es } from './es';
+import esTranslations from './es.json';
+import enTranslations from './en.json';
 
-export const i18n = {
-  en: () => import('./en').then(m => m.en),
-  es: () => import('./es').then(m => m.es),
+export const libraryDashboardTranslations = {
+  es: esTranslations,
+  en: enTranslations
 };
 
-export type Language = keyof typeof i18n;
-export type Translation = typeof import('./en').en;
+export const getLibraryDashboardTranslations = (language: string) => {
+  return libraryDashboardTranslations[language as keyof typeof libraryDashboardTranslations] || libraryDashboardTranslations.es;
+};

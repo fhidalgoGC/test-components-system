@@ -1,14 +1,9 @@
+import esTranslations from './es.json';
+import enTranslations from './en.json';
+
 export const navbarTranslations = {
-  es: {
-    loading: 'Cargando...',
-    title: 'Título',
-    description: 'Descripción'
-  },
-  en: {
-    loading: 'Loading...',
-    title: 'Title',
-    description: 'Description'
-  }
+  es: esTranslations,
+  en: enTranslations
 };
 
 export const getNavbarTranslations = (language: string) => {
