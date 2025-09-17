@@ -1,4 +1,4 @@
-import ComponentLayout from '@/components/layouts/ComponentLayout';
+import ComponentLayout from '@/layouts/ComponentLayout';
 
 export default function ButtonDemo() {
   return (

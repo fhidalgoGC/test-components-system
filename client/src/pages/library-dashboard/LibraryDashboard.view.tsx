@@ -1,4 +1,4 @@
-import ComponentLayout from '@/components/layouts/ComponentLayout';
+import ComponentLayout from '@/layouts/ComponentLayout';
 import { useLibraryDashboard } from './hooks';
 import type { TabConfig } from './LibraryDashboard.types';
 import { Preview, ReactDoc, CSSDoc, UsageDoc } from './documentation';
