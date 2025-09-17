@@ -1,8 +1,8 @@
 import ComponentLayout from '@/layouts/component-layout';
 import { useLibraryDashboard } from './hooks';
-import type { TabConfig } from './LibraryDashboard.types';
+import type { TabConfig } from './types/LibraryDashboard.types';
 import { Preview, ReactDoc, CSSDoc, UsageDoc } from './documentation';
-import { containerClasses } from './LibraryDashboard.module';
+import { containerClasses } from './css/LibraryDashboard.module';
 import { useTheme } from 'next-themes';
 
 interface LibraryDashboardViewProps {

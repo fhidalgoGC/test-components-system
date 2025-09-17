@@ -1,0 +1,43 @@
+{
+  "navbar": {
+    "title": "UI Library",
+    "description": "React + TypeScript modular component system"
+  },
+  "content": {
+    "title": "Component Demo Page",
+    "description": "Esta página demuestra los componentes Sidebar y Navbar con todas sus funcionalidades:"
+  },
+  "sidebar": {
+    "title": "🧭 Sidebar Features",
+    "features": [
+      "Menús de 1 y 2 niveles",
+      "Iconos personalizables",
+      "Estado activo automático",
+      "Cambio de tema (botón sol/luna)",
+      "Selector de idioma (ES/EN)",
+      "Navegación funcional"
+    ]
+  },
+  "navbar_section": {
+    "title": "📄 Navbar Features",
+    "features": [
+      "Título configurable",
+      "Descripción configurable",
+      "Sin botones (diseño limpio)",
+      "Responsive",
+      "Tema automático",
+      "Borde opcional"
+    ]
+  },
+  "currentPath": "Ruta actual",
+  "menu": {
+    "overview": "Overview",
+    "components": "Components",
+    "layouts": "Layouts",
+    "button_description": "Interactive buttons",
+    "input_description": "Form inputs", 
+    "modal_description": "Dialog modals",
+    "grid_description": "Grid layouts",
+    "flex_description": "Flexbox layouts"
+  }
+}
