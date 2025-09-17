@@ -11,6 +11,7 @@ export interface SubMenuItem {
   id: string;
   label: string;
   path: string;
+  icon?: string;
   isActive?: boolean;
   description?: string;
 }

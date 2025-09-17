@@ -30,8 +30,8 @@ export default function AppLayout({
       label: 'Components', 
       icon: 'Package',
       children: [
-        { id: 'button', label: 'Button', path: '/components/button' },
-        { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector' }
+        { id: 'button', label: 'Button', path: '/components/button', icon: 'MousePointer' },
+        { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector', icon: 'Tags' }
       ]
     },
     { 

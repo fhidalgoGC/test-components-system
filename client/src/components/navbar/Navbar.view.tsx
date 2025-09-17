@@ -14,7 +14,7 @@ export function NavbarView(props: NavbarProps) {
       data-testid="navbar"
     >
       <div className="navbar-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="navbar-content flex items-center h-16">
+        <div className="navbar-content flex items-center" style={{ height: '74px', minHeight: '74px', boxSizing: 'border-box' }}>
           <div className="navbar-brand flex flex-col justify-center">
             <h1 
               className="navbar-title text-xl font-semibold text-gray-900 dark:text-white sm:text-xl"
