@@ -67,7 +67,10 @@ export function SidebarView(props: SidebarProps) {
       data-testid="sidebar"
     >
       {/* Brand Header */}
-      <div className="px-4 border-b border-gray-200 dark:border-gray-700 flex items-center" style={{ height: '74px', minHeight: '74px', boxSizing: 'border-box' }}>
+      <div 
+        className="px-4 border-b border-gray-200 dark:border-gray-700 flex items-center h-[74px] min-h-[74px]" 
+        data-testid="sidebar-header"
+      >
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -173,17 +176,17 @@ export function SidebarView(props: SidebarProps) {
         <div className="grid grid-cols-2 gap-2">
           {/* Theme Toggle */}
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={handleThemeToggle}
             title={t.themeToggle.switch}
-            className="flex items-center justify-center"
+            className="flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600"
             data-testid="button-theme-toggle"
           >
             {currentTheme === 'dark' ? (
-              <Sun className="h-4 w-4" />
+              <Sun className="h-4 w-4 text-yellow-500" />
             ) : (
-              <Moon className="h-4 w-4" />
+              <Moon className="h-4 w-4 text-blue-500" />
             )}
           </Button>
 
