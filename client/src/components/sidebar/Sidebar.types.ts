@@ -20,6 +20,10 @@ export interface SidebarProps {
   currentPath?: string;
   onNavigate?: (path: string) => void;
   className?: string;
+  brandTitle?: string;
+  brandSubtitle?: string;
+  version?: string;
+  BrandIcon?: React.FC<{className?: string}>;
 }
 
 export interface SidebarState {

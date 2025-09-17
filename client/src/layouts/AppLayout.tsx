@@ -54,6 +54,9 @@ export default function AppLayout({
         menuItems={menuItems}
         currentPath={location}
         onNavigate={handleNavigation}
+        brandTitle="UI Library"
+        brandSubtitle="React + TS Components"
+        version="v1.2.0"
       />
 
       {/* Main Content Area */}

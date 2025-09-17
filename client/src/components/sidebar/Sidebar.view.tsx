@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, Sun, Moon, Globe } from 'lucide-react';
+import { ChevronDown, ChevronRight, Sun, Moon, Globe, Package } from 'lucide-react';
 import { useSidebar } from './hooks';
 import { getSidebarTranslations } from './i18n';
 import type { SidebarProps } from './Sidebar.types';
@@ -42,7 +42,13 @@ export function SidebarView(props: SidebarProps) {
 
   const t = getSidebarTranslations(currentLanguage);
 
-  const { className = '' } = props;
+  const { 
+    className = '', 
+    brandTitle = 'UI Library',
+    brandSubtitle,
+    version = 'v1.2.0',
+    BrandIcon = Package
+  } = props;
 
   return (
     <div 
@@ -50,37 +56,33 @@ export function SidebarView(props: SidebarProps) {
       style={{ width: '280px' }}
       data-testid="sidebar"
     >
-      {/* Header with controls */}
-      <div className="sidebar-header px-4 py-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-4">
-          {/* Theme Toggle */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleThemeToggle}
-            title={t.themeToggle.switch}
-            data-testid="button-theme-toggle"
-          >
-            {currentTheme === 'dark' ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </Button>
-
-          {/* Language Selector */}
-          <div className="flex items-center space-x-2">
-            <Globe className="h-4 w-4 text-gray-500" />
-            <Select value={currentLanguage} onValueChange={handleLanguageChange}>
-              <SelectTrigger className="w-20 h-8" data-testid="select-language">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="es" data-testid="language-es">ES</SelectItem>
-                <SelectItem value="en" data-testid="language-en">EN</SelectItem>
-              </SelectContent>
-            </Select>
+      {/* Brand Header */}
+      <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <BrandIcon className="h-4 w-4 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 
+                className="font-semibold text-gray-900 dark:text-white" 
+                data-testid="text-brand-title"
+              >
+                {brandTitle}
+              </h1>
+              {brandSubtitle && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {brandSubtitle}
+                </p>
+              )}
+            </div>
           </div>
+          <span 
+            className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-full font-medium"
+            data-testid="text-brand-version"
+          >
+            {version}
+          </span>
         </div>
       </div>
 
@@ -151,6 +153,38 @@ export function SidebarView(props: SidebarProps) {
           })}
         </div>
       </nav>
+
+      {/* Footer with Theme & Language Controls */}
+      <div className="mt-auto px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="grid grid-cols-2 gap-2">
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleThemeToggle}
+            title={t.themeToggle.switch}
+            className="flex items-center justify-center"
+            data-testid="button-theme-toggle"
+          >
+            {currentTheme === 'dark' ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </Button>
+
+          {/* Language Selector */}
+          <Select value={currentLanguage} onValueChange={handleLanguageChange}>
+            <SelectTrigger className="h-9" data-testid="select-language">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="es" data-testid="language-es">ES</SelectItem>
+              <SelectItem value="en" data-testid="language-en">EN</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
     </div>
   );
 }
