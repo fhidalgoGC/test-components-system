@@ -1,0 +1,6 @@
+{
+  "placeholder": "Enter text...",
+  "required": "This field is required",
+  "invalid": "Invalid input",
+  "clear": "Clear input"
+}

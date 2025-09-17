@@ -1,0 +1,7 @@
+{
+  "header": "Card Header",
+  "content": "Card Content",
+  "footer": "Card Footer",
+  "expand": "Expand",
+  "collapse": "Collapse"
+}
