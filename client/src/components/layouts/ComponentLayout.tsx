@@ -99,12 +99,6 @@ export default function ComponentLayout({
       component: documentationComponents.react
     },
     {
-      id: 'html',
-      label: 'HTML',
-      icon: 'fa-file-code',
-      component: documentationComponents.html
-    },
-    {
       id: 'css',
       label: 'CSS',
       icon: 'fa-palette',
