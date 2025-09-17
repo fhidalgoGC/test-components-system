@@ -170,14 +170,6 @@ export default function ComponentLayout({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Component Header */}
-      <div className="bg-card border-b border-border px-6 py-4">
-        <div>
-          <h2 className="text-xl font-semibold text-foreground">{componentName}</h2>
-          <p className="text-sm text-muted-foreground">{componentDescription}</p>
-        </div>
-      </div>
-
       {/* Tabs */}
       {!loading && !error && tabs.length > 0 && (
         <div className="bg-card border-b border-border">
