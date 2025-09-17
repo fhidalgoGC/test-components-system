@@ -1,198 +1,177 @@
-import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useState, useEffect } from 'react';
 
 interface TabConfig {
   id: string;
   label: string;
-  icon?: string;
-  content: React.ReactNode;
+  icon: string;
+  component?: React.ComponentType;
+  content?: React.ReactNode;
 }
 
 interface ComponentLayoutProps {
-  componentName?: string;
+  componentName: string;
   componentDescription?: string;
-  showStats?: boolean;
+  // Legacy support for manual tabs
   tabs?: TabConfig[];
   defaultTab?: string;
-  children?: React.ReactNode;
 }
 
 export default function ComponentLayout({ 
-  componentName = "Component Library Overview",
-  componentDescription = "React + TypeScript modular component system",
-  showStats = false,
-  tabs = [],
-  defaultTab,
-  children
+  componentName,
+  componentDescription = "Interactive component documentation and examples",
+  tabs: manualTabs,
+  defaultTab: manualDefaultTab
 }: ComponentLayoutProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id || 'overview');
+  const [activeTab, setActiveTab] = useState(() => {
+    if (manualTabs && manualDefaultTab) return manualDefaultTab;
+    if (manualTabs && manualTabs.length > 0) return manualTabs[0].id;
+    return 'preview';
+  });
+  const [documentationComponents, setDocumentationComponents] = useState<Record<string, React.ComponentType>>({});
+  const [loading, setLoading] = useState(!manualTabs); // Don't load if using manual tabs
+  const [error, setError] = useState<string | null>(null);
 
-  const getActiveTab = () => {
-    if (tabs.length === 0) return null;
-    return tabs.find(tab => tab.id === activeTab) || tabs[0];
-  };
-
-  const renderContent = () => {
-    if (children) {
-      return children;
+  useEffect(() => {
+    // Skip auto-loading if manual tabs are provided
+    if (manualTabs) {
+      setLoading(false);
+      return;
     }
 
-    if (showStats) {
+    const loadDocumentation = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Use import.meta.glob to create a static module map
+        const docIndex = import.meta.glob('/src/lib/ui-library/*/documentation/index.ts');
+        const key = `/src/lib/ui-library/${componentName}/documentation/index.ts`;
+        
+        console.log('Loading documentation for:', componentName, 'key:', key);
+        console.log('Available documentation paths:', Object.keys(docIndex));
+        
+        const load = docIndex[key];
+        if (!load) {
+          throw new Error(`Documentation not found for ${componentName} (${key})`);
+        }
+        
+        const documentationModule = await load() as any;
+        
+        const components: Record<string, React.ComponentType> = {};
+        
+        // Map the exported components to our tab structure
+        if (documentationModule.Preview) components.preview = documentationModule.Preview;
+        if (documentationModule.ReactDoc) components.react = documentationModule.ReactDoc;
+        if (documentationModule.HTMLDoc) components.html = documentationModule.HTMLDoc;
+        if (documentationModule.CSSDoc) components.css = documentationModule.CSSDoc;
+        if (documentationModule.UsageDoc) components.usage = documentationModule.UsageDoc;
+
+        console.log('Loaded components:', Object.keys(components));
+
+        if (Object.keys(components).length === 0) {
+          throw new Error(`No documentation components found for ${componentName}`);
+        }
+
+        setDocumentationComponents(components);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        console.error('Error loading documentation:', errorMessage);
+        setError(`Could not load documentation for ${componentName}: ${errorMessage}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDocumentation();
+  }, [componentName, manualTabs]);
+
+  const tabs: TabConfig[] = manualTabs ? manualTabs : [
+    {
+      id: 'preview',
+      label: 'Vista Previa',
+      icon: 'fa-eye',
+      component: documentationComponents.preview
+    },
+    {
+      id: 'react',
+      label: 'React',
+      icon: 'fa-code',
+      component: documentationComponents.react
+    },
+    {
+      id: 'html',
+      label: 'HTML',
+      icon: 'fa-file-code',
+      component: documentationComponents.html
+    },
+    {
+      id: 'css',
+      label: 'CSS',
+      icon: 'fa-palette',
+      component: documentationComponents.css
+    },
+    {
+      id: 'usage',
+      label: 'Uso',
+      icon: 'fa-book',
+      component: documentationComponents.usage
+    }
+  ].filter(tab => tab.component); // Only filter auto-loaded tabs
+
+  const renderContent = () => {
+    if (loading) {
       return (
-        <div className="space-y-8">
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Components</p>
-                    <p className="text-2xl font-bold text-foreground">24</p>
-                  </div>
-                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <i className="fas fa-cubes text-primary text-sm"></i>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Tests Passing</p>
-                    <p className="text-2xl font-bold text-foreground">98%</p>
-                  </div>
-                  <div className="w-8 h-8 bg-green-500/10 rounded-lg flex items-center justify-center">
-                    <i className="fas fa-check-circle text-green-500 text-sm"></i>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Bundle Size</p>
-                    <p className="text-2xl font-bold text-foreground">45KB</p>
-                  </div>
-                  <div className="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                    <i className="fas fa-archive text-purple-500 text-sm"></i>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Tree Shakable</p>
-                    <p className="text-2xl font-bold text-foreground">100%</p>
-                  </div>
-                  <div className="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                    <i className="fas fa-leaf text-emerald-500 text-sm"></i>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Cargando documentación...</p>
           </div>
-
-          {/* Configuration Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card>
-              <CardContent className="p-0">
-                <div className="p-6 border-b border-border">
-                  <h3 className="font-semibold text-foreground">Build Configuration</h3>
-                  <p className="text-sm text-muted-foreground">Vite + TypeScript setup</p>
-                </div>
-                <div className="p-6 space-y-4">
-                  <div className="bg-muted/50 rounded-lg p-4">
-                    <h4 className="font-medium text-foreground mb-3">Package Configuration</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <i className="fas fa-check text-orange-500"></i>
-                        <span className="text-muted-foreground">ESM output format</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <i className="fas fa-check text-red-500"></i>
-                        <span className="text-muted-foreground">TypeScript declarations</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <i className="fas fa-check text-green-500"></i>
-                        <span className="text-muted-foreground">Tree-shaking optimized</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <i className="fas fa-wrench text-blue-500"></i>
-                        <span className="text-muted-foreground">Vite bundling</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-0">
-                <div className="p-6 border-b border-border">
-                  <h3 className="font-semibold text-foreground">Features</h3>
-                  <p className="text-sm text-muted-foreground">Library capabilities</p>
-                </div>
-                <div className="p-6 space-y-4">
-                  <div className="bg-muted/50 rounded-lg p-4">
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <i className="fas fa-palette text-orange-500"></i>
-                        <span className="text-muted-foreground">Automatic dark/light themes</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <i className="fas fa-language text-blue-500"></i>
-                        <span className="text-muted-foreground">Local-first i18n</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <i className="fas fa-mobile-alt text-green-500"></i>
-                        <span className="text-muted-foreground">Responsive visibility</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <i className="fas fa-puzzle-piece text-purple-500"></i>
-                        <span className="text-muted-foreground">Modular architecture</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardContent className="p-0">
-              <div className="p-6 border-b border-border">
-                <h3 className="font-semibold text-foreground">Component Structure</h3>
-                <p className="text-sm text-muted-foreground">Modular organization following architectural guide</p>
-              </div>
-              <div className="p-6">
-                <div className="bg-muted/50 rounded-lg p-4 font-mono text-sm">
-                  <div className="text-muted-foreground whitespace-pre-wrap">
-{`ComponentName/
-├── types/           # TypeScript definitions
-├── hook/            # Custom hooks
-├── provider/        # Context providers
-├── view/            # UI components
-├── utils/           # Helper functions
-├── i18n/            # Translations
-└── index.tsx        # Main export`}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       );
     }
 
-    const activeTabData = getActiveTab();
-    return activeTabData ? activeTabData.content : null;
+    if (error) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="w-12 h-12 bg-destructive/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <i className="fas fa-exclamation-triangle text-destructive"></i>
+            </div>
+            <h3 className="font-semibold text-foreground mb-2">Error de Documentación</h3>
+            <p className="text-sm text-muted-foreground">{error}</p>
+          </div>
+        </div>
+      );
+    }
+
+    const activeTabData = tabs.find(tab => tab.id === activeTab);
+    if (!activeTabData) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <p className="text-muted-foreground">Contenido no disponible para esta pestaña</p>
+          </div>
+        </div>
+      );
+    }
+
+    // Handle both legacy content and new component modes
+    if (activeTabData.content) {
+      return <>{activeTabData.content}</>;
+    }
+    
+    if (activeTabData.component) {
+      const Component = activeTabData.component;
+      return <Component />;
+    }
+
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p className="text-muted-foreground">Contenido no disponible para esta pestaña</p>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -205,8 +184,8 @@ export default function ComponentLayout({
         </div>
       </div>
 
-      {/* Tabs (if provided) */}
-      {tabs.length > 0 && (
+      {/* Tabs */}
+      {!loading && !error && tabs.length > 0 && (
         <div className="bg-card border-b border-border">
           <div className="flex">
             {tabs.map((tab) => (
@@ -220,7 +199,7 @@ export default function ComponentLayout({
                 }`}
                 data-testid={`tab-${tab.id}`}
               >
-                {tab.icon && <i className={`fas ${tab.icon} text-sm`}></i>}
+                <i className={`fas ${tab.icon} text-sm`}></i>
                 {tab.label}
               </button>
             ))}

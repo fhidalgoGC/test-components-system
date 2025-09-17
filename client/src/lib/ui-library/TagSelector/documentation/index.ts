@@ -1,5 +1,5 @@
-export { default as Preview } from './preview';
-export { default as ReactDoc } from './react';
-export { default as HTMLDoc } from './html';
-export { default as CSSDoc } from './css';
-export { default as UsageDoc } from './usage';
+export { default as Preview } from './preview.tsx';
+export { default as ReactDoc } from './react.tsx';
+export { default as HTMLDoc } from './html.tsx';
+export { default as CSSDoc } from './css.tsx';
+export { default as UsageDoc } from './usage.tsx';
