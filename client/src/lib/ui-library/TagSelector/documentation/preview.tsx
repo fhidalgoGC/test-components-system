@@ -11,7 +11,7 @@ interface PreviewProps {
 
 export default function Preview({ 
   title = "Live Demo", 
-  description = "Interactive component preview",
+  description = "Interactive TagSelector component preview",
   children,
   showCode = false,
   codeExample = ""
@@ -25,7 +25,7 @@ export default function Preview({
             <p className="text-sm text-muted-foreground">{description}</p>
           </div>
           <div className="p-6">
-            <div className="min-h-32 bg-muted/50 rounded-lg border-2 border-dashed border-border p-6 flex items-center justify-center">
+            <div className="min-h-32 bg-muted/50 rounded-lg border-2 border-dashed border-border p-6">
               {children}
             </div>
           </div>
