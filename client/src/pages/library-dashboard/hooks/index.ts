@@ -1,1 +1,1 @@
-export { useLibraryDashboard } from './useLibraryDashboard';
+export { useLibraryDashboard } from './useLibraryDashboard.hook';
