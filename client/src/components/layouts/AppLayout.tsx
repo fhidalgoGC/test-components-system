@@ -5,9 +5,17 @@ import { useTheme } from '@/lib/ui-library/theme';
 
 interface AppLayoutProps {
   children: React.ReactNode;
+  headerTitle?: string;
+  headerDescription?: string;
+  showActionButtons?: boolean;
 }
 
-export default function AppLayout({ children }: AppLayoutProps) {
+export default function AppLayout({ 
+  children, 
+  headerTitle = "UI Library",
+  headerDescription = "React + TypeScript modular component system",
+  showActionButtons = true
+}: AppLayoutProps) {
   const { theme, toggleTheme } = useTheme();
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [location] = useLocation();
@@ -172,19 +180,21 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <header className="bg-card border-b border-border px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-foreground">UI Library</h2>
-              <p className="text-sm text-muted-foreground">React + TypeScript modular component system</p>
+              <h2 className="text-xl font-semibold text-foreground">{headerTitle}</h2>
+              <p className="text-sm text-muted-foreground">{headerDescription}</p>
             </div>
-            <div className="flex items-center gap-3">
-              <Button variant="default" data-testid="export-button">
-                <i className="fas fa-download mr-2"></i>
-                Export Library
-              </Button>
-              <Button variant="secondary" data-testid="build-button">
-                <i className="fas fa-play mr-2"></i>
-                Build
-              </Button>
-            </div>
+            {showActionButtons && (
+              <div className="flex items-center gap-3">
+                <Button variant="default" data-testid="export-button">
+                  <i className="fas fa-download mr-2"></i>
+                  Export Library
+                </Button>
+                <Button variant="secondary" data-testid="build-button">
+                  <i className="fas fa-play mr-2"></i>
+                  Build
+                </Button>
+              </div>
+            )}
           </div>
         </header>
 
