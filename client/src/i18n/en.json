@@ -1,0 +1,43 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close"
+  },
+  "navigation": {
+    "home": "Home",
+    "components": "Components",
+    "documentation": "Documentation",
+    "library": "Library"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "toggle": "Toggle theme"
+  },
+  "language": {
+    "english": "English",
+    "spanish": "Spanish",
+    "change": "Change language"
+  },
+  "layout": {
+    "sidebar": {
+      "toggle": "Toggle sidebar",
+      "expand": "Expand sidebar",
+      "collapse": "Collapse sidebar"
+    },
+    "header": {
+      "title": "Component Library",
+      "subtitle": "Modern React Components"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "search": "Buscar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "components": "Componentes",
+    "documentation": "Documentación",
+    "library": "Librería"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "toggle": "Cambiar tema"
+  },
+  "language": {
+    "english": "Inglés",
+    "spanish": "Español",
+    "change": "Cambiar idioma"
+  },
+  "layout": {
+    "sidebar": {
+      "toggle": "Alternar barra lateral",
+      "expand": "Expandir barra lateral",
+      "collapse": "Contraer barra lateral"
+    },
+    "header": {
+      "title": "Librería de Componentes",
+      "subtitle": "Componentes Modernos de React"
+    }
+  }
+}
