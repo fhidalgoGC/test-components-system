@@ -9,47 +9,47 @@ export function containerClasses(
   return parts.join(' ');
 }
 
-export function headerClasses(
+export function componentGridClasses(
   theme: 'light' | 'dark',
   extra?: string
 ) {
-  const parts = [styles.header, styles[theme]];
+  const parts = [styles.componentGrid, styles[theme]];
   if (extra) parts.push(extra);
   return parts.join(' ');
 }
 
-export function titleClasses(
+export function componentCardClasses(
   theme: 'light' | 'dark',
   extra?: string
 ) {
-  const parts = [styles.title, styles[theme]];
+  const parts = [styles.componentCard, styles[theme]];
   if (extra) parts.push(extra);
   return parts.join(' ');
 }
 
-export function subtitleClasses(
+export function codeBlockClasses(
   theme: 'light' | 'dark',
   extra?: string
 ) {
-  const parts = [styles.subtitle, styles[theme]];
+  const parts = [styles.codeBlock, styles[theme]];
   if (extra) parts.push(extra);
   return parts.join(' ');
 }
 
-export function gridClasses(
+export function featureIconClasses(
   theme: 'light' | 'dark',
   extra?: string
 ) {
-  const parts = [styles.grid, styles[theme]];
+  const parts = [styles.featureIcon, styles[theme]];
   if (extra) parts.push(extra);
   return parts.join(' ');
 }
 
-export function cardClasses(
+export function featureCardClasses(
   theme: 'light' | 'dark',
   extra?: string
 ) {
-  const parts = [styles.card, styles[theme]];
+  const parts = [styles.featureCard, styles[theme]];
   if (extra) parts.push(extra);
   return parts.join(' ');
 }

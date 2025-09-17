@@ -11,8 +11,8 @@ export function useComponentLayout(props: ComponentLayoutProps) {
     defaultTab: manualDefaultTab
   } = props;
 
-  const { theme } = useTheme();
-  const currentTheme = (theme as 'light' | 'dark') || 'light';
+  const { resolvedTheme } = useTheme();
+  const currentTheme: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
 
   const [activeTab, setActiveTab] = useState(() => {
     if (manualTabs && manualDefaultTab) return manualDefaultTab;

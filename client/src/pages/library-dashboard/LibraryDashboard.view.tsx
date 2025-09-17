@@ -11,8 +11,8 @@ interface LibraryDashboardViewProps {
 
 export function LibraryDashboardView({ className }: LibraryDashboardViewProps) {
   const { t } = useLibraryDashboard();
-  const { theme } = useTheme();
-  const currentTheme = (theme as 'light' | 'dark') || 'light';
+  const { resolvedTheme } = useTheme();
+  const currentTheme: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
 
   const tabs: TabConfig[] = [
     {

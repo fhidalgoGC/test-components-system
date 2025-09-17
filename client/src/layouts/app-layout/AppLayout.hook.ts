@@ -11,8 +11,8 @@ export function useAppLayout(props: AppLayoutProps) {
   } = props;
 
   const [location] = useLocation();
-  const { theme } = useTheme();
-  const currentTheme = (theme as 'light' | 'dark') || 'light';
+  const { resolvedTheme } = useTheme();
+  const currentTheme: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
 
   const menuItems = getDefaultMenuItems();
 
