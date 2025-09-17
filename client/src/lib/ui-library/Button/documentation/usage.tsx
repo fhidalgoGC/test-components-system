@@ -2,45 +2,48 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-interface UsageDocProps {
-  componentName?: string;
-  installation?: string;
-  quickStart?: string;
-  examples?: { title: string; code: string; description?: string }[];
-  bestPractices?: string[];
-  troubleshooting?: { issue: string; solution: string }[];
-}
-
-export default function UsageDoc({ 
-  componentName = "Button",
-  installation = "npm install @fremitech/ui",
-  quickStart = `import { Button } from '@fremitech/ui';
+export default function UsageDoc() {
+  const installation = `# Import from the ui-library
+import Button from '@/lib/ui-library/Button';`;
+  
+  const quickStart = `import Button from '@/lib/ui-library/Button';
 
 <Button intent="primary" size="md">
   Click me
-</Button>`,
-  examples = [
+</Button>`;
+  const examples = [
     {
-      title: "Form Submission",
-      code: `<form onSubmit={handleSubmit}>
-  <Button 
-    type="submit" 
-    intent="primary"
-    disabled={!isValid}
-  >
-    Submit Form
-  </Button>
-</form>`,
-      description: "Basic form submission button"
+      title: "Basic Button with Intent",
+      code: `<Button intent="primary" size="md" onClick={() => alert('Clicked!')}>
+  Primary Action
+</Button>
+
+<Button intent="secondary" size="md">
+  Secondary Action
+</Button>
+
+<Button intent="danger" size="md">
+  Delete
+</Button>`,
+      description: "Different visual intents for various actions"
     },
     {
-      title: "Async Action",
+      title: "Size Variations",
+      code: `<div className="flex items-center gap-2">
+  <Button intent="primary" size="sm">Small</Button>
+  <Button intent="primary" size="md">Medium</Button>
+  <Button intent="primary" size="lg">Large</Button>
+</div>`,
+      description: "Different sizes for various UI contexts"
+    },
+    {
+      title: "Async Operations",
       code: `const [loading, setLoading] = useState(false);
 
-const handleSave = async () => {
+const handleSubmit = async () => {
   setLoading(true);
   try {
-    await saveData();
+    await submitData();
   } finally {
     setLoading(false);
   }
@@ -49,46 +52,81 @@ const handleSave = async () => {
 <Button 
   intent="primary"
   disabled={loading}
-  onClick={handleSave}
+  onClick={handleSubmit}
 >
-  {loading ? 'Saving...' : 'Save Changes'}
+  {loading ? 'Submitting...' : 'Submit'}
 </Button>`,
-      description: "Handle async operations"
+      description: "Handle async operations with loading states"
     },
     {
-      title: "Button Group",
-      code: `<div className="flex gap-2">
-  <Button intent="primary" size="sm">Primary</Button>
-  <Button intent="secondary" size="sm">Secondary</Button>
-  <Button intent="danger" size="sm">Delete</Button>
-</div>`,
-      description: "Group of related buttons"
+      title: "Internationalization",
+      code: `// Using i18n translation keys
+<Button 
+  intent="primary" 
+  titleKey="submit_button" // Translates via i18n
+/>
+
+// Override with custom children
+<Button 
+  intent="secondary" 
+  titleKey="cancel_button"
+>
+  Cancel Override
+</Button>`,
+      description: "Internationalization support with title keys"
+    },
+    {
+      title: "Responsive Visibility",
+      code: `const mobileOnlyConfig = {
+  mobile: { portrait: true, landscape: true },
+  tablet: { portrait: false, landscape: false },
+  desktop: false
+};
+
+<Button 
+  config={mobileOnlyConfig}
+  intent="primary"
+  size="lg"
+>
+  Mobile Only Button
+</Button>`,
+      description: "Control button visibility across devices"
     }
-  ],
-  bestPractices = [
+  ];
+  const bestPractices = [
     "Use intent='primary' for the main action on a page",
-    "Limit primary buttons to one per section", 
-    "Use intent='secondary' for less important actions",
-    "Always provide meaningful button text",
-    "Use size='sm' in compact interfaces",
-    "Disable buttons during async operations",
-    "Include loading states for better UX"
-  ],
-  troubleshooting = [
+    "Limit primary buttons to one per section or form",
+    "Use intent='secondary' for alternative actions",
+    "Use intent='danger' for destructive actions (delete, remove)",
+    "Provide meaningful button text or use titleKey for i18n",
+    "Use size='sm' in compact interfaces like cards or modals",
+    "Use size='lg' for important call-to-action buttons",
+    "Disable buttons during async operations to prevent double-clicks",
+    "Use responsive visibility config for device-specific buttons",
+    "Leverage theme integration - buttons automatically adapt to light/dark themes"
+  ];
+  const troubleshooting = [
     {
-      issue: "Button click not working",
-      solution: "Ensure onClick prop is passed and not disabled"
+      issue: "Button not visible on certain devices",
+      solution: "Check the config prop - the button might be hidden by responsive visibility settings"
     },
     {
-      issue: "Styling not applied correctly",
-      solution: "Check if component CSS is imported properly"
+      issue: "Button styling not matching theme",
+      solution: "Ensure ThemeProvider is wrapping your app and theme context is available"
     },
     {
-      issue: "TypeScript errors with props",
-      solution: "Verify prop types match ButtonProps interface"
+      issue: "i18n translations not working",
+      solution: "Check that i18n context is available and translation files exist for the titleKey"
+    },
+    {
+      issue: "Custom className not applying",
+      solution: "CSS specificity issue - use more specific selectors or !important for overrides"
+    },
+    {
+      issue: "onClick handler not firing",
+      solution: "Check if button is disabled, or if event propagation is stopped elsewhere"
     }
-  ]
-}: UsageDocProps) {
+  ];
   return (
     <div className="space-y-6">
       {/* Installation */}
@@ -96,16 +134,14 @@ const handleSave = async () => {
         <CardContent className="p-0">
           <div className="p-6 border-b border-border">
             <h3 className="font-semibold text-foreground">Installation</h3>
-            <p className="text-sm text-muted-foreground">How to install and setup the {componentName} component</p>
+            <p className="text-sm text-muted-foreground">How to install and setup the Button component</p>
           </div>
           <div className="p-6 space-y-4">
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">Package Installation</h4>
+              <h4 className="text-sm font-medium text-foreground mb-2">Component Import</h4>
               <div className="bg-muted rounded-lg p-4 font-mono text-sm">
                 <code className="text-muted-foreground">
-                  {installation}<br/>
-                  # or<br/>
-                  yarn add @fremitech/ui
+                  {installation}
                 </code>
               </div>
             </div>

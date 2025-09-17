@@ -1,155 +1,195 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
-interface CSSDocProps {
-  componentName?: string;
-  baseStyles?: string;
-  variables?: { name: string; value: string; description: string }[];
-  modifiers?: { name: string; styles: string; description: string }[];
-  customization?: string;
-}
-
-export default function CSSDoc({ 
-  componentName = "TagSelector",
-  baseStyles = `/* Tag Selector Container */
-.tag-selector {
+export default function CSSDoc() {
+  const baseStyles = `/* TagSelector Base Styles (TagSelector.module.css) */
+.container {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  align-items: flex-start;
 }
 
-/* Individual Tag Styles */
-.tag {
+.chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.375rem 0.75rem;
-  border: 1px solid hsl(var(--border));
-  border-radius: 0.375rem;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-size: 0.875rem;
+  border-radius: 9999px;
   font-weight: 500;
+  transition: all 0.2s ease-in-out;
   cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  border: 1px solid transparent;
+  user-select: none;
 }
 
-.tag:hover:not(.tag-disabled) {
-  background: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
-  border-color: hsl(var(--accent-foreground) / 0.2);
-}`,
-  variables = [
-    { name: "tag-padding-sm", value: "0.25rem 0.5rem", description: "Padding for small tags" },
-    { name: "tag-padding-md", value: "0.375rem 0.75rem", description: "Padding for medium tags" },
-    { name: "tag-padding-lg", value: "0.5rem 1rem", description: "Padding for large tags" },
-    { name: "tag-border-radius", value: "0.375rem", description: "Tag border radius" },
-    { name: "tag-gap", value: "0.5rem", description: "Gap between tags" },
-    { name: "tag-transition", value: "all 0.2s ease", description: "Animation transition" }
-  ],
-  modifiers = [
-    {
-      name: "tag-selected",
-      styles: `.tag-selected {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-  border-color: hsl(var(--primary));
-}
-
-.tag-selected:hover:not(.tag-disabled) {
-  background: hsl(var(--primary) / 0.9);
-}`,
-      description: "Selected tag state"
-    },
-    {
-      name: "tag-all", 
-      styles: `.tag-all {
-  font-weight: 600;
-  background: hsl(var(--secondary));
-  color: hsl(var(--secondary-foreground));
-}
-
-.tag-all.tag-selected {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-}`,
-      description: "Special styling for 'All' tag"
-    },
-    {
-      name: "tag-disabled",
-      styles: `.tag-disabled,
-.tag-selector-disabled .tag {
+.chip:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  pointer-events: none;
+}`;
+  const sizeClasses = [
+    {
+      name: "sm",
+      styles: `.sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
 }`,
-      description: "Disabled state"
+      description: "Small tag size"
     },
     {
-      name: "size-variants",
-      styles: `.tag-selector-sm .tag {
-  padding: 0.25rem 0.5rem;
+      name: "md",
+      styles: `.md {
+  padding: 0.375rem 1rem;
+  font-size: 0.875rem;
+}`,
+      description: "Medium tag size (default)"
+    },
+    {
+      name: "lg",
+      styles: `.lg {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+}`,
+      description: "Large tag size"
+    }
+  ];
+  const lightThemeStates = [
+    {
+      name: "light.selected",
+      styles: `.light.selected {
+  background-color: hsl(142.1, 76.2%, 36.3%);
+  color: hsl(355.7, 100%, 97.3%);
+  border-color: hsl(142.1, 76.2%, 36.3%);
+}
+
+.light.selected:hover:not(:disabled) {
+  background-color: hsl(142.1, 76.2%, 32%);
+}`,
+      description: "Selected state in light theme"
+    },
+    {
+      name: "light.unselected",
+      styles: `.light.unselected {
+  background-color: hsl(210, 40%, 96%);
+  color: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(214.3, 31.8%, 91.4%);
+}
+
+.light.unselected:hover:not(:disabled) {
+  background-color: hsl(210, 40%, 92%);
+  border-color: hsl(214.3, 31.8%, 87%);
+}`,
+      description: "Unselected state in light theme"
+    },
+    {
+      name: "light.all",
+      styles: `.light.all {
+  background-color: hsl(221.2, 83.2%, 53.3%);
+  color: hsl(210, 40%, 98%);
+  border-color: hsl(221.2, 83.2%, 53.3%);
+}
+
+.light.all:hover:not(:disabled) {
+  background-color: hsl(221.2, 83.2%, 48%);
+}`,
+      description: "Special 'All' button styling in light theme"
+    }
+  ];
+
+  const darkThemeStates = [
+    {
+      name: "dark.selected",
+      styles: `.dark.selected {
+  background-color: hsl(142.1, 70.6%, 45.3%);
+  color: hsl(210, 20%, 98%);
+  border-color: hsl(142.1, 70.6%, 45.3%);
+}
+
+.dark.selected:hover:not(:disabled) {
+  background-color: hsl(142.1, 70.6%, 50%);
+}`,
+      description: "Selected state in dark theme"
+    },
+    {
+      name: "dark.unselected",
+      styles: `.dark.unselected {
+  background-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+.dark.unselected:hover:not(:disabled) {
+  background-color: hsl(217.2, 32.6%, 20%);
+  border-color: hsl(217.2, 32.6%, 25%);
+}`,
+      description: "Unselected state in dark theme"
+    },
+    {
+      name: "dark.all",
+      styles: `.dark.all {
+  background-color: hsl(217.2, 91.2%, 59.8%);
+  color: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 91.2%, 59.8%);
+}
+
+.dark.all:hover:not(:disabled) {
+  background-color: hsl(217.2, 91.2%, 55%);
+}`,
+      description: "Special 'All' button styling in dark theme"
+    }
+  ];
+  const visibilityClass = {
+    name: "hidden",
+    styles: `.hidden {
+  display: none !important;
+}`,
+    description: "Used for responsive visibility control"
+  };
+
+  const customizationExample = `/* Customizing TagSelector Component */
+/* Override container styles */
+.custom-tag-selector .container {
+  gap: 0.25rem; /* Tighter spacing */
+  justify-content: center; /* Center tags */
+}
+
+/* Custom tag styling */
+.custom-tag-selector .chip {
+  border-radius: 0.375rem; /* Less rounded */
+  font-weight: 600; /* Bolder text */
+  text-transform: uppercase; /* Uppercase labels */
   font-size: 0.75rem;
 }
 
-.tag-selector-md .tag {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.875rem;
-}
-
-.tag-selector-lg .tag {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-}`,
-      description: "Size variations"
-    }
-  ],
-  customization = `/* Custom TagSelector Styling */
-:root {
-  --tag-bg: 210 17% 95%;
-  --tag-bg-selected: 210 100% 50%;
-  --tag-border: 214 32% 91%;
-  --tag-text: 224 71% 4%;
-}
-
-/* Custom variants */
-.tag-selector-pills .tag {
-  border-radius: 9999px;
-  padding: 0.5rem 1rem;
-}
-
-.tag-selector-minimal .tag {
+/* Custom selected state */
+.custom-tag-selector .light.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  background: transparent;
-  text-decoration: underline;
+  color: white;
 }
 
-.tag-selector-minimal .tag-selected {
-  background: hsl(var(--accent));
-  text-decoration: none;
+/* Custom hover effects */
+.custom-tag-selector .chip:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive Design */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .tag-selector {
+  .custom-tag-selector .container {
     gap: 0.375rem;
   }
   
-  .tag {
-    font-size: 0.8125rem;
-    padding: 0.3125rem 0.625rem;
+  .custom-tag-selector .chip {
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.625rem;
   }
-}`
-}: CSSDocProps) {
+}`;
   return (
     <div className="space-y-6">
       <Card>
         <CardContent className="p-0">
           <div className="p-6 border-b border-border">
             <h3 className="font-semibold text-foreground">CSS Styles</h3>
-            <p className="text-sm text-muted-foreground">Component styling, CSS classes, and customization</p>
+            <p className="text-sm text-muted-foreground">TagSelector component CSS classes from TagSelector.module.css</p>
           </div>
           <div className="p-6 space-y-6">
             {/* Base Styles */}
@@ -162,50 +202,19 @@ export default function CSSDoc({
               </div>
             </div>
 
-            {/* CSS Variables */}
+            {/* Size Classes */}
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">CSS Variables</h4>
-              <div className="border border-border rounded-lg overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-muted">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Variable
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Default Value
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Description
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {variables.map((variable, index) => (
-                      <tr key={index} className="border-t border-border">
-                        <td className="px-4 py-2 font-mono text-sm text-foreground">--{variable.name}</td>
-                        <td className="px-4 py-2 font-mono text-sm text-muted-foreground">{variable.value}</td>
-                        <td className="px-4 py-2 text-sm text-muted-foreground">{variable.description}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Modifiers/Classes */}
-            <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">Modifier Classes</h4>
+              <h4 className="text-sm font-medium text-foreground mb-2">Size Classes</h4>
               <div className="space-y-4">
-                {modifiers.map((modifier, index) => (
+                {sizeClasses.map((sizeClass, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-2">
-                      <h5 className="font-mono text-sm text-foreground">.{modifier.name}</h5>
-                      <span className="text-xs text-muted-foreground">{modifier.description}</span>
+                      <h5 className="font-mono text-sm text-foreground">.{sizeClass.name}</h5>
+                      <span className="text-xs text-muted-foreground">{sizeClass.description}</span>
                     </div>
                     <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
                       <code className="text-muted-foreground whitespace-pre">
-                        {modifier.styles}
+                        {sizeClass.styles}
                       </code>
                     </div>
                   </div>
@@ -213,12 +222,66 @@ export default function CSSDoc({
               </div>
             </div>
 
-            {/* Customization */}
+            {/* Light Theme States */}
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">Customization</h4>
+              <h4 className="text-sm font-medium text-foreground mb-2">Light Theme States</h4>
+              <div className="space-y-4">
+                {lightThemeStates.map((state, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-between mb-2">
+                      <h5 className="font-mono text-sm text-foreground">.{state.name}</h5>
+                      <span className="text-xs text-muted-foreground">{state.description}</span>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                      <code className="text-muted-foreground whitespace-pre">
+                        {state.styles}
+                      </code>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dark Theme States */}
+            <div>
+              <h4 className="text-sm font-medium text-foreground mb-2">Dark Theme States</h4>
+              <div className="space-y-4">
+                {darkThemeStates.map((state, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-between mb-2">
+                      <h5 className="font-mono text-sm text-foreground">.{state.name}</h5>
+                      <span className="text-xs text-muted-foreground">{state.description}</span>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                      <code className="text-muted-foreground whitespace-pre">
+                        {state.styles}
+                      </code>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Visibility Class */}
+            <div>
+              <h4 className="text-sm font-medium text-foreground mb-2">Visibility Class</h4>
+              <div className="flex items-center justify-between mb-2">
+                <h5 className="font-mono text-sm text-foreground">.{visibilityClass.name}</h5>
+                <span className="text-xs text-muted-foreground">{visibilityClass.description}</span>
+              </div>
               <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
                 <code className="text-muted-foreground whitespace-pre">
-                  {customization}
+                  {visibilityClass.styles}
+                </code>
+              </div>
+            </div>
+
+            {/* Customization */}
+            <div>
+              <h4 className="text-sm font-medium text-foreground mb-2">Customization Example</h4>
+              <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                <code className="text-muted-foreground whitespace-pre">
+                  {customizationExample}
                 </code>
               </div>
             </div>

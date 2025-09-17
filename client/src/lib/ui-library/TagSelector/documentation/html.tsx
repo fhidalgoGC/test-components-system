@@ -1,94 +1,147 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
-interface HTMLDocProps {
-  componentName?: string;
-  basicStructure?: string;
-  variants?: { name: string; code: string }[];
-  attributes?: { name: string; description: string; type: string }[];
-}
-
-export default function HTMLDoc({ 
-  componentName = "TagSelector",
-  basicStructure = `<!-- Tag Selector Container -->
-<div class="tag-selector" data-testid="demo-tag-selector">
-  <!-- All Tags Option (when allowAll=true) -->
-  <button 
-    class="tag tag-all tag-selected"
-    data-testid="tag-all"
+export default function HTMLDoc() {
+  const basicStructure = `<!-- TagSelector HTML Output -->
+<div id="tag-container">
+  <div 
+    class="container md light" 
+    data-testid="tag-selector-container"
   >
-    All
-  </button>
-  
-  <!-- Individual Tags -->
-  <button 
-    class="tag tag-primary tag-selected" 
-    data-tag-id="react"
-    data-testid="tag-react"
-  >
-    React
-  </button>
-  
-  <button 
-    class="tag tag-primary" 
-    data-tag-id="typescript"
-    data-testid="tag-typescript"
-  >
-    TypeScript
-  </button>
-</div>`,
-  variants = [
+    <!-- All Button (when allowAll=true) -->
+    <button
+      class="chip md light all selected"
+      data-testid="tag-all"
+    >
+      All
+    </button>
+    
+    <!-- Individual Tag Buttons -->
+    <button
+      class="chip md light selected"
+      data-testid="tag-react"
+    >
+      React
+    </button>
+    
+    <button
+      class="chip md light unselected"
+      data-testid="tag-vue"
+    >
+      Vue
+    </button>
+  </div>
+</div>`;
+  const variants = [
     {
       name: "Size Variants",
-      code: `<div class="tag-selector tag-selector-sm">
-  <button class="tag">Small Tag</button>
+      code: `<!-- Small Tags -->
+<div class="container sm light">
+  <button class="chip sm light selected">Small</button>
 </div>
-<div class="tag-selector tag-selector-md">
-  <button class="tag">Medium Tag</button>
-</div>  
-<div class="tag-selector tag-selector-lg">
-  <button class="tag">Large Tag</button>
+
+<!-- Medium Tags (default) -->
+<div class="container md light">
+  <button class="chip md light selected">Medium</button>
+</div>
+
+<!-- Large Tags -->
+<div class="container lg light">
+  <button class="chip lg light selected">Large</button>
 </div>`
     },
     {
-      name: "States", 
-      code: `<!-- Selected State -->
-<button class="tag tag-selected">Selected Tag</button>
+      name: "Theme Variants",
+      code: `<!-- Light Theme -->
+<div class="container md light">
+  <button class="chip md light selected">Selected</button>
+  <button class="chip md light unselected">Unselected</button>
+</div>
+
+<!-- Dark Theme -->
+<div class="container md dark">
+  <button class="chip md dark selected">Selected</button>
+  <button class="chip md dark unselected">Unselected</button>
+</div>`
+    },
+    {
+      name: "Selection States",
+      code: `<!-- Selected Tags -->
+<button class="chip md light selected">Selected Tag</button>
+
+<!-- Unselected Tags -->
+<button class="chip md light unselected">Unselected Tag</button>
+
+<!-- All Button Selected -->
+<button class="chip md light all selected">All</button>
 
 <!-- Disabled State -->
-<div class="tag-selector tag-selector-disabled">
-  <button class="tag tag-disabled" disabled>
-    Disabled Tag
-  </button>
-</div>
-
-<!-- All Tag Special -->
-<button class="tag tag-all tag-selected">All</button>`
+<button class="chip md light unselected" disabled>
+  Disabled Tag
+</button>`
     },
     {
-      name: "Multiple Selection",
-      code: `<div class="tag-selector">
-  <button class="tag tag-selected" data-tag-id="react">React</button>
-  <button class="tag tag-selected" data-tag-id="vue">Vue</button>
-  <button class="tag" data-tag-id="angular">Angular</button>
-  <button class="tag" data-tag-id="svelte">Svelte</button>
+      name: "Multiple Selection Example",
+      code: `<div class="container md light" data-testid="tag-selector-container">
+  <button class="chip md light all unselected" data-testid="tag-all">
+    All
+  </button>
+  <button class="chip md light selected" data-testid="tag-react">
+    React
+  </button>
+  <button class="chip md light selected" data-testid="tag-typescript">
+    TypeScript
+  </button>
+  <button class="chip md light unselected" data-testid="tag-vue">
+    Vue
+  </button>
+</div>`
+    },
+    {
+      name: "Empty State",
+      code: `<!-- When no tags provided -->
+<div class="container md light" data-testid="tag-selector-container">
+  <span 
+    class="chip md light unselected opacity-50" 
+    data-testid="tag-no-tags"
+  >
+    No tags available
+  </span>
 </div>`
     }
-  ],
-  attributes = [
-    { name: "class", type: "string", description: "CSS classes for styling variants" },
-    { name: "data-testid", type: "string", description: "Test identifier for automation" },
-    { name: "data-tag-id", type: "string", description: "Unique identifier for each tag" },
-    { name: "disabled", type: "boolean", description: "Disables tag interaction" }
-  ]
-}: HTMLDocProps) {
+  ];
+  const attributes = [
+    { name: "class", type: "string", description: "Space-separated CSS classes: container/chip + size + theme + state + custom" },
+    { name: "data-testid", type: "string", description: "Test identifiers: 'tag-selector-container', 'tag-all', 'tag-{id}', 'tag-no-tags'" },
+    { name: "disabled", type: "boolean", description: "HTML disabled attribute when tag interaction is disabled" },
+    { name: "id", type: "string", description: "Container div id when id prop is provided" }
+  ];
+
+  const classStructure = `/* CSS Class Structure for TagSelector */
+/* Container gets: */
+.container      /* Base container styles */
+.{size}         /* sm | md | lg */
+.{theme}        /* light | dark */
+.{custom}       /* Any additional className prop */
+
+/* Each tag button gets: */
+.chip           /* Base chip/tag styles */
+.{size}         /* sm | md | lg */
+.{theme}        /* light | dark */
+.{state}        /* selected | unselected | all */
+.hidden         /* Applied when responsive config hides component */
+
+/* Examples: */
+/* Container: class="container md light custom-class" */
+/* Tag: class="chip md light selected" */
+/* All button: class="chip lg dark all selected" */`;
   return (
     <div className="space-y-6">
       <Card>
         <CardContent className="p-0">
           <div className="p-6 border-b border-border">
             <h3 className="font-semibold text-foreground">HTML Output</h3>
-            <p className="text-sm text-muted-foreground">Generated HTML structure and markup</p>
+            <p className="text-sm text-muted-foreground">Generated HTML structure from TagSelector component</p>
           </div>
           <div className="p-6 space-y-6">
             {/* Basic Structure */}
@@ -101,9 +154,19 @@ export default function HTMLDoc({
               </div>
             </div>
 
+            {/* Class Structure */}
+            <div>
+              <h4 className="text-sm font-medium text-foreground mb-2">CSS Class Structure</h4>
+              <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                <code className="text-muted-foreground whitespace-pre">
+                  {classStructure}
+                </code>
+              </div>
+            </div>
+
             {/* Variants */}
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">Variants</h4>
+              <h4 className="text-sm font-medium text-foreground mb-2">HTML Variants</h4>
               <div className="space-y-4">
                 {variants.map((variant, index) => (
                   <div key={index}>

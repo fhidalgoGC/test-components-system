@@ -1,62 +1,103 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
-interface HTMLDocProps {
-  componentName?: string;
-  basicStructure?: string;
-  variants?: { name: string; code: string }[];
-  attributes?: { name: string; description: string; type: string }[];
-}
+export default function HTMLDoc() {
+  const basicStructure = `<!-- Basic Button HTML Output -->
+<div id="button-container">
+  <button 
+    class="root md light primary" 
+    aria-hidden="false"
+    data-testid="button-primary"
+  >
+    Click Me
+  </button>
+</div>`;
 
-export default function HTMLDoc({ 
-  componentName = "Button",
-  basicStructure = `<!-- Basic Button -->
-<button 
-  class="btn btn-primary btn-md" 
-  type="button"
-  data-testid="demo-button"
->
-  Click Me!
-</button>`,
-  variants = [
+  const variants = [
     {
       name: "Size Variants",
-      code: `<button class="btn btn-primary btn-sm">Small</button>
-<button class="btn btn-primary btn-md">Medium</button>
-<button class="btn btn-primary btn-lg">Large</button>`
+      code: `<!-- Small Button -->
+<button class="root sm light primary">Small</button>
+
+<!-- Medium Button (default) -->
+<button class="root md light primary">Medium</button>
+
+<!-- Large Button -->
+<button class="root lg light primary">Large</button>`
     },
     {
-      name: "Intent Variants", 
-      code: `<button class="btn btn-primary">Primary</button>
-<button class="btn btn-secondary">Secondary</button>
-<button class="btn btn-danger">Danger</button>`
+      name: "Intent Variants - Light Theme", 
+      code: `<!-- Primary Intent -->
+<button class="root md light primary">Primary</button>
+
+<!-- Secondary Intent -->
+<button class="root md light secondary">Secondary</button>
+
+<!-- Danger Intent -->
+<button class="root md light danger">Danger</button>`
+    },
+    {
+      name: "Intent Variants - Dark Theme",
+      code: `<!-- Primary Intent -->
+<button class="root md dark primary">Primary</button>
+
+<!-- Secondary Intent -->
+<button class="root md dark secondary">Secondary</button>
+
+<!-- Danger Intent -->
+<button class="root md dark danger">Danger</button>`
     },
     {
       name: "States",
-      code: `<button class="btn btn-primary" disabled="true">
+      code: `<!-- Disabled Button -->
+<button class="root md light primary" disabled="true">
   Disabled Button
 </button>
 
-<button class="btn btn-primary btn-loading" disabled="true">
-  <span class="btn-spinner"></span>
-  Loading...
+<!-- Hidden Button (responsive) -->
+<button class="root md light primary hidden" aria-hidden="true">
+  Hidden Button
 </button>`
+    },
+    {
+      name: "With Custom Classes",
+      code: `<!-- Button with additional CSS classes -->
+<div class="custom-wrapper">
+  <button class="root lg light primary custom-button-class">
+    Custom Styled
+  </button>
+</div>`
     }
-  ],
-  attributes = [
-    { name: "class", type: "string", description: "CSS classes for styling variants" },
-    { name: "type", type: "string", description: "Button type (button, submit, reset)" },
-    { name: "disabled", type: "boolean", description: "Disables the button interaction" },
-    { name: "data-testid", type: "string", description: "Test identifier for automation" }
-  ]
-}: HTMLDocProps) {
+  ];
+
+  const attributes = [
+    { name: "class", type: "string", description: "Space-separated CSS classes: root + size + theme + intent + custom" },
+    { name: "disabled", type: "boolean", description: "HTML disabled attribute when button is disabled" },
+    { name: "aria-hidden", type: "boolean", description: "Accessibility attribute controlled by visibility config" },
+    { name: "data-testid", type: "string", description: "Test identifier in format 'button-{intent}'" },
+    { name: "id", type: "string", description: "Container div id when id prop is provided" }
+  ];
+
+  const classStructure = `/* CSS Class Structure */
+/* The button element gets multiple classes combined: */
+
+.root           /* Base button styles */
+.{size}         /* sm | md | lg */
+.{theme}        /* light | dark */
+.{intent}       /* primary | secondary | danger */
+.{custom}       /* Any additional className prop */
+.hidden         /* Applied when responsive config hides button */
+
+/* Example combined classes: */
+/* class="root md light primary" */
+/* class="root lg dark secondary custom-class" */`;
   return (
     <div className="space-y-6">
       <Card>
         <CardContent className="p-0">
           <div className="p-6 border-b border-border">
             <h3 className="font-semibold text-foreground">HTML Output</h3>
-            <p className="text-sm text-muted-foreground">Generated HTML structure and markup</p>
+            <p className="text-sm text-muted-foreground">Generated HTML structure from Button component</p>
           </div>
           <div className="p-6 space-y-6">
             {/* Basic Structure */}
@@ -69,9 +110,19 @@ export default function HTMLDoc({
               </div>
             </div>
 
+            {/* Class Structure */}
+            <div>
+              <h4 className="text-sm font-medium text-foreground mb-2">CSS Class Structure</h4>
+              <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                <code className="text-muted-foreground whitespace-pre">
+                  {classStructure}
+                </code>
+              </div>
+            </div>
+
             {/* Variants */}
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">Variants</h4>
+              <h4 className="text-sm font-medium text-foreground mb-2">HTML Variants</h4>
               <div className="space-y-4">
                 {variants.map((variant, index) => (
                   <div key={index}>

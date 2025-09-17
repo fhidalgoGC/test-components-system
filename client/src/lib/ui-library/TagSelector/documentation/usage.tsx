@@ -2,40 +2,38 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-interface UsageDocProps {
-  componentName?: string;
-  installation?: string;
-  quickStart?: string;
-  examples?: { title: string; code: string; description?: string }[];
-  bestPractices?: string[];
-  troubleshooting?: { issue: string; solution: string }[];
-}
+export default function UsageDoc() {
+  const installation = `# Import from the ui-library
+import TagSelector from '@/lib/ui-library/TagSelector';
+import type { Tag } from '@/lib/ui-library/TagSelector/types';`;
+  
+  const quickStart = `import TagSelector from '@/lib/ui-library/TagSelector';
+import type { Tag } from '@/lib/ui-library/TagSelector/types';
 
-export default function UsageDoc({ 
-  componentName = "TagSelector",
-  installation = "npm install @fremitech/ui",
-  quickStart = `import { TagSelector } from '@fremitech/ui';
-
-const tags = [
+const tags: Tag[] = [
   { id: 'react', label: 'React' },
   { id: 'vue', label: 'Vue' },
   { id: 'angular', label: 'Angular' }
 ];
 
+const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
 <TagSelector
   tags={tags}
-  selectedTags={[]}
-  onSelectionChange={(tags) => console.log(tags)}
+  selectedTags={selectedTags}
+  onSelectionChange={setSelectedTags}
   allowMultiple={true}
-/>`,
-  examples = [
+  allowAll={true}
+/>`;
+  const examples = [
     {
       title: "Filter Interface",
-      code: `const [filters, setFilters] = useState([]);
-const categories = [
+      code: `const [filters, setFilters] = useState<string[]>([]);
+const categories: Tag[] = [
   { id: 'electronics', label: 'Electronics' },
-  { id: 'clothing', label: 'Clothing' },
-  { id: 'books', label: 'Books' }
+  { id: 'clothing', label: 'Clothing & Fashion' },
+  { id: 'books', label: 'Books & Media' },
+  { id: 'home', label: 'Home & Garden' }
 ];
 
 <TagSelector
@@ -45,77 +43,128 @@ const categories = [
   allowMultiple={true}
   allowAll={true}
   size="md"
-/>`,
-      description: "Use for filtering content by categories"
+/>
+
+{/* Display filtered results */}
+<div className="mt-4">
+  Active filters: {filters.length > 0 ? filters.join(', ') : 'All categories'}
+</div>`,
+      description: "Use for filtering content by categories with All option"
     },
     {
-      title: "Single Selection Mode",
-      code: `const [priority, setPriority] = useState(['high']);
-const priorities = [
+      title: "Single Selection Priority",
+      code: `const [priority, setPriority] = useState<string[]>(['medium']);
+const priorities: Tag[] = [
   { id: 'low', label: 'Low Priority' },
   { id: 'medium', label: 'Medium Priority' },
-  { id: 'high', label: 'High Priority' }
+  { id: 'high', label: 'High Priority' },
+  { id: 'urgent', label: 'Urgent' }
 ];
 
 <TagSelector
   tags={priorities}
   selectedTags={priority}
   onSelectionChange={setPriority}
-  allowMultiple={false}
-  allowAll={false}
+  allowMultiple={false} // Only one can be selected
+  allowAll={false} // No "All" option for single selection
   size="sm"
 />`,
-      description: "Single selection for mutually exclusive options"
+      description: "Single selection for mutually exclusive priority levels"
     },
     {
-      title: "Skills Selector",
-      code: `const [skills, setSkills] = useState([]);
-const allSkills = [
-  { id: 'js', label: 'JavaScript' },
-  { id: 'ts', label: 'TypeScript' },
+      title: "Skills & Technologies",
+      code: `const [skills, setSkills] = useState<string[]>(['react', 'typescript']);
+const techStack: Tag[] = [
   { id: 'react', label: 'React' },
-  { id: 'vue', label: 'Vue' },
-  { id: 'node', label: 'Node.js' }
+  { id: 'vue', label: 'Vue.js' },
+  { id: 'angular', label: 'Angular' },
+  { id: 'typescript', label: 'TypeScript' },
+  { id: 'javascript', label: 'JavaScript' },
+  { id: 'nodejs', label: 'Node.js' },
+  { id: 'python', label: 'Python' }
 ];
 
 <TagSelector
-  tags={allSkills}
+  tags={techStack}
   selectedTags={skills}
   onSelectionChange={setSkills}
   allowMultiple={true}
+  allowAll={false} // Usually don't want "select all skills"
   size="lg"
 />`,
-      description: "Multi-selection for user skills or preferences"
+      description: "Multi-selection for user skills or technology preferences"
+    },
+    {
+      title: "Responsive with i18n",
+      code: `const responsiveConfig = {
+  mobile: { portrait: true, landscape: false },
+  tablet: { portrait: true, landscape: true },
+  desktop: true
+};
+
+const [languages, setLanguages] = useState<string[]>(['en']);
+const supportedLanguages: Tag[] = [
+  { id: 'en', label: 'English' },
+  { id: 'es', label: 'Español' },
+  { id: 'fr', label: 'Français' },
+  { id: 'de', label: 'Deutsch' }
+];
+
+<TagSelector
+  tags={supportedLanguages}
+  selectedTags={languages}
+  onSelectionChange={setLanguages}
+  allowMultiple={true}
+  allowAll={false}
+  size="md"
+  config={responsiveConfig} // Only show on larger screens
+  langOverride="es" // Force Spanish translations
+/>`,
+      description: "Responsive behavior with internationalization"
     }
-  ],
-  bestPractices = [
-    "Use meaningful tag labels that are easy to understand",
-    "Limit the number of tags to avoid overwhelming users", 
-    "Use allowAll option for filter scenarios",
-    "Set allowMultiple=false for mutually exclusive choices",
-    "Use size='sm' in compact interfaces",
-    "Provide clear visual feedback for selected state",
-    "Consider responsive design for mobile devices"
-  ],
-  troubleshooting = [
+  ];
+  const bestPractices = [
+    "Use clear, meaningful tag labels that users can easily understand",
+    "Limit the number of tags (8-12 max) to avoid overwhelming users",
+    "Use allowAll=true for filter/category scenarios where \"show all\" makes sense",
+    "Set allowMultiple=false for mutually exclusive choices (like priority levels)",
+    "Use size='sm' in compact interfaces like modals or sidebars",
+    "Use size='lg' for important selection interfaces",
+    "Provide visual feedback with proper selected/unselected states",
+    "Use responsive visibility config for device-specific tag selectors",
+    "Leverage i18n support for multilingual applications",
+    "Consider theme integration - tags automatically adapt to light/dark themes"
+  ];
+  const troubleshooting = [
     {
-      issue: "Tags not updating when selectedTags changes",
-      solution: "Ensure selectedTags is properly managed in state and passed as prop"
+      issue: "Tags not updating when selectedTags prop changes",
+      solution: "Ensure selectedTags array is properly managed in state and the reference changes when updated"
     },
     {
-      issue: "onSelectionChange not firing",
-      solution: "Check that onSelectionChange function is correctly bound and not undefined"
+      issue: "onSelectionChange callback not firing",
+      solution: "Check that the function is properly bound and not undefined. Verify it's not being overridden by disabled state"
     },
     {
-      issue: "Styling inconsistencies",
-      solution: "Verify CSS imports and check for conflicting styles"
+      issue: "TagSelector not visible on certain devices",
+      solution: "Check the config prop - the component might be hidden by responsive visibility settings"
     },
     {
-      issue: "All tag not working properly",
-      solution: "Ensure allowAll prop is set to true and handle 'all' logic in parent component"
+      issue: "All button behavior not working as expected",
+      solution: "Ensure allowAll=true and understand that it selects/deselects all available tags"
+    },
+    {
+      issue: "Single selection mode allowing multiple selections",
+      solution: "Set allowMultiple=false and ensure your onSelectionChange handler respects single selection"
+    },
+    {
+      issue: "Theme styling not applied correctly",
+      solution: "Ensure ThemeProvider is wrapping your app and theme context is available"
+    },
+    {
+      issue: "i18n translations not working for 'All' and 'No tags' text",
+      solution: "Check that i18n context is available and translation files exist for the required keys"
     }
-  ]
-}: UsageDocProps) {
+  ];
   return (
     <div className="space-y-6">
       {/* Installation */}
@@ -123,16 +172,14 @@ const allSkills = [
         <CardContent className="p-0">
           <div className="p-6 border-b border-border">
             <h3 className="font-semibold text-foreground">Installation</h3>
-            <p className="text-sm text-muted-foreground">How to install and setup the {componentName} component</p>
+            <p className="text-sm text-muted-foreground">How to install and setup the TagSelector component</p>
           </div>
           <div className="p-6 space-y-4">
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">Package Installation</h4>
+              <h4 className="text-sm font-medium text-foreground mb-2">Component Import</h4>
               <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-                <code className="text-muted-foreground">
-                  {installation}<br/>
-                  # or<br/>
-                  yarn add @fremitech/ui
+                <code className="text-muted-foreground whitespace-pre">
+                  {installation}
                 </code>
               </div>
             </div>
