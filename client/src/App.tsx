@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/ui-library/theme";
+import AppLayout from "@/components/layouts/AppLayout";
 import LibraryDashboard from "@/pages/library-dashboard";
 import ButtonDemo from "@/pages/components/button-demo";
 import TagSelectorDemo from "@/pages/components/tag-selector-demo";
@@ -11,12 +12,14 @@ import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={LibraryDashboard} />
-      <Route path="/components/button" component={ButtonDemo} />
-      <Route path="/components/tag-selector" component={TagSelectorDemo} />
-      <Route component={NotFound} />
-    </Switch>
+    <AppLayout>
+      <Switch>
+        <Route path="/" component={LibraryDashboard} />
+        <Route path="/components/button" component={ButtonDemo} />
+        <Route path="/components/tag-selector" component={TagSelectorDemo} />
+        <Route component={NotFound} />
+      </Switch>
+    </AppLayout>
   );
 }
 
