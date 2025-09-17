@@ -1,0 +1,16 @@
+{
+  "tabs": {
+    "home": "Home",
+    "components": "Components",
+    "documentation": "Documentation"
+  },
+  "navigation": {
+    "back": "Back",
+    "forward": "Forward",
+    "menu": "Menu"
+  },
+  "header": {
+    "title": "Component Library",
+    "subtitle": "Modern React Components"
+  }
+}

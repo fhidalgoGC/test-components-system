@@ -1,7 +1,7 @@
 import { useLocation } from 'wouter';
 import { useTheme } from 'next-themes';
-import { getDefaultMenuItems, handleNavigation } from './AppLayout.utils';
-import type { AppLayoutProps } from './AppLayout.types';
+import { getDefaultMenuItems, handleNavigation } from '../utils/AppLayout.utils';
+import type { AppLayoutProps } from '../types/AppLayout.types';
 
 export function useAppLayout(props: AppLayoutProps) {
   const {

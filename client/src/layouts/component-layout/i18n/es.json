@@ -1,0 +1,16 @@
+{
+  "tabs": {
+    "preview": "Vista previa",
+    "code": "Código",
+    "usage": "Uso", 
+    "documentation": "Documentación"
+  },
+  "loading": "Cargando documentación...",
+  "error": {
+    "title": "Error de Documentación",
+    "notAvailable": "Contenido no disponible para esta pestaña"
+  },
+  "component": {
+    "description": "Documentación interactiva y ejemplos de componentes"
+  }
+}

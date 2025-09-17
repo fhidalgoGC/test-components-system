@@ -1,8 +1,8 @@
 import { Sidebar } from '@/components/sidebar';
 import { Navbar } from '@/components/navbar';
-import { useAppLayout } from './AppLayout.hook';
-import { containerClasses, mainClasses, contentClasses } from './AppLayout.module';
-import type { AppLayoutProps } from './AppLayout.types';
+import { useAppLayout } from './hooks/AppLayout.hook';
+import { containerClasses, mainClasses, contentClasses } from './css/AppLayout.module';
+import type { AppLayoutProps } from './types/AppLayout.types';
 
 export function AppLayoutView(props: AppLayoutProps) {
   const { children, className = '' } = props;

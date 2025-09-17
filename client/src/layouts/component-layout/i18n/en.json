@@ -1,0 +1,16 @@
+{
+  "tabs": {
+    "preview": "Preview",
+    "code": "Code", 
+    "usage": "Usage",
+    "documentation": "Documentation"
+  },
+  "loading": "Loading documentation...",
+  "error": {
+    "title": "Documentation Error",
+    "notAvailable": "Content not available for this tab"
+  },
+  "component": {
+    "description": "Interactive component documentation and examples"
+  }
+}

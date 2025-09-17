@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import { getDefaultTabs, loadDocumentationComponents } from './ComponentLayout.utils';
-import type { ComponentLayoutProps, TabConfig } from './ComponentLayout.types';
+import { getDefaultTabs, loadDocumentationComponents } from '../utils/ComponentLayout.utils';
+import type { ComponentLayoutProps, TabConfig } from '../types/ComponentLayout.types';
 
 export function useComponentLayout(props: ComponentLayoutProps) {
   const {
