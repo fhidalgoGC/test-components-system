@@ -104,14 +104,23 @@ export function TagSelectorDemoView() {
   const { t, currentTheme } = useTagSelectorDemo();
   const [selectedTags, setSelectedTags] = useState<string[]>(['technology']);
 
-  // NEW: Handle the updated callback format
+  // NEW: Handle the updated callback format with complete label data
   const handleSelectionChange = (items: SelectedTagItem[]) => {
     // Extract IDs for backward compatibility with existing state
     const ids = items.map(item => item.id);
     setSelectedTags(ids);
     
-    // Full data available for debugging
-    console.log('Demo selection changed:', { ids, fullItems: items });
+    // Full data available for debugging - now includes complete label objects
+    console.log('Demo selection changed:', { 
+      ids, 
+      fullItems: items,
+      labelDetails: items.map(item => ({
+        id: item.id,
+        availableLabels: Object.keys(item.label),
+        currentLabel: item.label[currentLanguage] || item.label.default,
+        defaultLabel: item.label.default
+      }))
+    });
   };
   const [allowMultiple, setAllowMultiple] = useState(true);
   const [allowAll, setAllowAll] = useState(true);
