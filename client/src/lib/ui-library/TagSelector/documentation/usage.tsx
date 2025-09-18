@@ -39,6 +39,7 @@ const handleSelectionChange = (items: SelectedTagItem[]) => {
   getTagsFunction={getMyTags} // NEW: Async function
   selectedTags={selectedTags}
   onSelectionChange={handleSelectionChange} // NEW: Receives {id, language}[] format
+  useNewSelectionFormat={true} // Opt-in to new detailed format
   allowMultiple={true}
   allowAll={true}
   allLabel={{en: "All Items", es: "Todos los Elementos", default: "All Items"}}
@@ -97,6 +98,7 @@ const getFilterCategories = useCallback(async (): Promise<TagItem[]> => {
     getTagsFunction={getFilterCategories}
     selectedTags={filters}
     onSelectionChange={handleFilterChange}
+    useNewSelectionFormat={true} // Opt-in to new detailed format
     allowMultiple={true}
     allowAll={true}
     size="md"
@@ -163,6 +165,7 @@ const getTechStack = useCallback(async (): Promise<TagItem[]> => {
   getTagsFunction={getTechStack}
   selectedTags={skills}
   onSelectionChange={handleSkillsChange}
+  useNewSelectionFormat={true} // Opt-in to new detailed format
   allowMultiple={true}
   allowAll={false}
   size="lg"
@@ -201,6 +204,7 @@ const supportedLanguages: Tag[] = [
   tags={supportedLanguages}
   selectedTags={languages}
   onSelectionChange={handleLanguageChange}
+  useNewSelectionFormat={true} // Opt-in to new detailed format
   allowMultiple={true}
   allowAll={false}
   size="md"

@@ -21,7 +21,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   langOverride, 
   i18nOrder,
   allLabel,
-  defaultLabel
+  defaultLabel,
+  useNewSelectionFormat = false // Default to legacy format for backward compatibility
 }) => {
   const [resolvedTags, setResolvedTags] = useState<TagItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -30,12 +31,16 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   // Get language context directly, null if not wrapped in LanguageProvider
   const languageContext = useContext(LanguageContext);
 
-  // Create backward-compatible callback adapter
+  // Create TRUE backward-compatible callback adapter
   const adaptedCallback = (items: SelectedTagItem[]) => {
-    // SIMPLIFIED APPROACH: Always call with new format
-    // Users can extract IDs in their callback if needed: items.map(item => item.id)
-    // This provides the most information while maintaining backward compatibility
-    (onSelectionChange as NewSelectionCallback)(items);
+    if (useNewSelectionFormat) {
+      // NEW FORMAT: Pass full SelectedTagItem[] with {id, language}
+      (onSelectionChange as NewSelectionCallback)(items);
+    } else {
+      // LEGACY FORMAT: Extract IDs only for backward compatibility
+      const ids = items.map(item => item.id);
+      (onSelectionChange as LegacySelectionCallback)(ids);
+    }
   };
 
   // Load tags when component mounts or when language changes

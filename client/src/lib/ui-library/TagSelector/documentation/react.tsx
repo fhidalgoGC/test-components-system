@@ -31,6 +31,7 @@ export function AsyncTagSelector() {
         getTagsFunction={getTagsFromAPI}
         selectedTags={selectedTags}
         onSelectionChange={handleSelectionChange}
+        useNewSelectionFormat={true} // Opt-in to new {id, language}[] format
         allowMultiple={true}
         allowAll={true}
         allLabel={{en: "All Categories", es: "Todas las Categorías", default: "All Categories"}}
@@ -97,6 +98,7 @@ export function AsyncTagSelector() {
         getTagsFunction={getSkillsTags}
         selectedTags={selectedTags}
         onSelectionChange={handleSelectionChange}
+        useNewSelectionFormat={true} // Opt-in to new {id, language}[] format
         allowMultiple={true}
         allowAll={false}
         size="lg"
@@ -119,7 +121,8 @@ export function AsyncTagSelector() {
   getTagsFunction?: TagsFunction; // NEW: Async function to load tags
   tags?: Tag[]; // LEGACY: Static tags array (backward compatibility)
   selectedTags: string[];
-  onSelectionChange: (selectedTags: SelectedTagItem[]) => void; // NEW: Returns {id, language}[]
+  onSelectionChange: (selectedTags: string[] | SelectedTagItem[]) => void; // Legacy string[] or new {id, language}[]
+  useNewSelectionFormat?: boolean; // Opt-in to new callback format (default: false)
   
   // NEW: Multi-language support for built-in labels
   allLabel?: MultiLanguageLabel; // Custom label for "All" button
@@ -180,6 +183,7 @@ export function SingleSelectionTags() {
       tags={priorities}
       selectedTags={selectedTag}
       onSelectionChange={handleSingleSelection}
+      useNewSelectionFormat={true} // Opt-in to new {id, language}[] format
       allowMultiple={false} // Only one can be selected
       allowAll={false} // No "All" button
       size="sm"
@@ -204,6 +208,7 @@ const handleResponsiveSelection = (items: SelectedTagItem[]) => {
   tags={tags}
   selectedTags={selectedTags}
   onSelectionChange={handleResponsiveSelection}
+  useNewSelectionFormat={true} // Opt-in to new {id, language}[] format
   config={responsiveConfig}
   size="md"
 />`
@@ -211,7 +216,8 @@ const handleResponsiveSelection = (items: SelectedTagItem[]) => {
   const propExplanations = [
     { prop: 'tags', type: 'Tag[]', default: 'required', description: 'Array of tag objects with id and label' },
     { prop: 'selectedTags', type: 'string[]', default: 'required', description: 'Array of currently selected tag IDs' },
-    { prop: 'onSelectionChange', type: '(items: SelectedTagItem[]) => void', default: 'required', description: 'Callback when selection changes - now returns {id, language}[] format' },
+    { prop: 'onSelectionChange', type: '(items: string[] | SelectedTagItem[]) => void', default: 'required', description: 'Callback when selection changes - string[] (legacy) or {id, language}[] format' },
+    { prop: 'useNewSelectionFormat', type: 'boolean', default: 'false', description: 'Opt-in to new {id, language}[] callback format instead of legacy string[]' },
     { prop: 'allowMultiple', type: 'boolean', default: 'true', description: 'Allow multiple tag selection' },
     { prop: 'allowAll', type: 'boolean', default: 'true', description: 'Show "All" button to select/deselect all tags' },
     { prop: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size variant affecting padding and font size' },

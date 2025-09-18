@@ -147,6 +147,7 @@ export default function Preview() {
     }
     
     props.push(`selectedTags={${JSON.stringify(selectedTags)}}`);
+    props.push('useNewSelectionFormat={true} // For new detailed format');
     props.push('onSelectionChange={handleSelectionChange}');
     if (!allowMultiple) props.push('allowMultiple={false}');
     if (!allowAll) props.push('allowAll={false}');
@@ -172,6 +173,7 @@ export default function Preview() {
                   tags={legacyTags}
                   selectedTags={selectedTags}
                   onSelectionChange={handleSelectionChange}
+                  useNewSelectionFormat={true} // Demo uses new format
                   allowMultiple={allowMultiple}
                   allowAll={allowAll}
                   size={size}
@@ -186,6 +188,7 @@ export default function Preview() {
                   }
                   selectedTags={selectedTags}
                   onSelectionChange={handleSelectionChange}
+                  useNewSelectionFormat={true} // Demo uses new format
                   allowMultiple={allowMultiple}
                   allowAll={allowAll}
                   size={size}

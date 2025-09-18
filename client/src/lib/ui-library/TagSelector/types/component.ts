@@ -34,6 +34,9 @@ export interface TagSelectorProps {
   // BACKWARD COMPATIBLE: Supports both old (string[]) and new (SelectedTagItem[]) callbacks
   onSelectionChange: SelectionCallback;
   
+  // Control callback format for backward compatibility
+  useNewSelectionFormat?: boolean; // Default: false (legacy string[] format)
+  
   // Language support for All and Default labels
   allLabel?: MultiLanguageLabel;
   defaultLabel?: MultiLanguageLabel;
