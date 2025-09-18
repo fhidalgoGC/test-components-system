@@ -6,13 +6,9 @@ import type { AppLayoutProps } from '../types/AppLayout.types';
 import { appLayoutTranslations } from '../i18n';
 
 export function useAppLayout(props: AppLayoutProps) {
-  // Get language from localStorage or default to 'es'
-  const language: SupportedLanguage = (localStorage.getItem('app-language') as SupportedLanguage) || 'es';
-  
-  // Use hierarchical translations with fallback to global translations
-  const { t } = useHierarchicalTranslations(
-    appLayoutTranslations[language], 
-    language
+  // Use reactive hierarchical translations
+  const { t, language, changeLanguage } = useHierarchicalTranslations(
+    appLayoutTranslations
   );
 
   const {
@@ -34,6 +30,8 @@ export function useAppLayout(props: AppLayoutProps) {
     headerTitle,
     headerDescription,
     showActionButtons,
+    language,
+    changeLanguage,
     handleNavigation
   };
 }
