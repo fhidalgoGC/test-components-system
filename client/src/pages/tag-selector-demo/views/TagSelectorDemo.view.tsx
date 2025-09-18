@@ -190,6 +190,7 @@ export function TagSelectorDemoView() {
                     allowAll={allowAll}
                     size={size}
                     disabled={disabled}
+                    langOverride={currentLanguage}
                   />
                 ) : (
                   <TagSelectorComponent
@@ -204,6 +205,7 @@ export function TagSelectorDemoView() {
                     allowAll={allowAll}
                     size={size}
                     disabled={disabled}
+                    langOverride={currentLanguage}
                   />
                 )}
               </div>
