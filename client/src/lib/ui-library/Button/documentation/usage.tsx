@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import ButtonComponent from '../index';
 
 export default function UsageDoc() {
   const installation = `# Import from the ui-library
@@ -235,22 +235,22 @@ const handleSubmit = async () => {
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Button variant="outline" className="justify-start">
+              <ButtonComponent intent="secondary" size="md" className="justify-start">
                 <i className="fas fa-book mr-2"></i>
                 API Documentation
-              </Button>
-              <Button variant="outline" className="justify-start">
+              </ButtonComponent>
+              <ButtonComponent intent="secondary" size="md" className="justify-start">
                 <i className="fas fa-code mr-2"></i>
                 Source Code
-              </Button>
-              <Button variant="outline" className="justify-start">
+              </ButtonComponent>
+              <ButtonComponent intent="secondary" size="md" className="justify-start">
                 <i className="fas fa-play-circle mr-2"></i>
                 Interactive Demo
-              </Button>
-              <Button variant="outline" className="justify-start">
+              </ButtonComponent>
+              <ButtonComponent intent="secondary" size="md" className="justify-start">
                 <i className="fas fa-question-circle mr-2"></i>
                 Support
-              </Button>
+              </ButtonComponent>
             </div>
           </div>
         </CardContent>
