@@ -2,66 +2,89 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
 export default function ReactDoc() {
-  const importStatement = `import TagSelector from '@/lib/ui-library/TagSelector';
-import type { Tag } from '@/lib/ui-library/TagSelector/types';`;
+  const importStatement = `import TagSelector, { LanguageProvider, useLanguage } from '@/lib/ui-library/TagSelector';
+import type { Tag, TagItem, TagsFunction } from '@/lib/ui-library/TagSelector/types';
+import type { MultiLanguageLabel } from '@/lib/ui-library/types/language';`;
   
-  const basicExample = `export function BasicTagSelector() {
+  const basicExample = `// New async function approach
+export function AsyncTagSelector() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   
-  const tags: Tag[] = [
-    { id: 'react', label: 'React' },
-    { id: 'vue', label: 'Vue' },
-    { id: 'angular', label: 'Angular' }
-  ];
+  const getTagsFromAPI = useCallback(async (): Promise<TagItem[]> => {
+    const response = await fetch('/api/categories');
+    return response.json();
+  }, []);
 
   return (
-    <TagSelector
-      tags={tags}
-      selectedTags={selectedTags}
-      onSelectionChange={setSelectedTags}
-      allowMultiple={true}
-      allowAll={true}
-    />
+    <LanguageProvider defaultLanguage="en">
+      <TagSelector
+        getTagsFunction={getTagsFromAPI}
+        selectedTags={selectedTags}
+        onSelectionChange={setSelectedTags}
+        allowMultiple={true}
+        allowAll={true}
+      />
+    </LanguageProvider>
   );
 }`;
 
-  const advancedExample = `export function AdvancedTagSelector() {
+  const advancedExample = `export function MultiLanguageTagSelector() {
   const [selectedTags, setSelectedTags] = useState<string[]>(['frontend']);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { currentLanguage, setLanguage } = useLanguage();
   
-  const allTags: Tag[] = [
-    { id: 'frontend', label: 'Frontend Development' },
-    { id: 'backend', label: 'Backend Development' },
-    { id: 'database', label: 'Database Design' },
-    { id: 'design', label: 'UI/UX Design' },
-    { id: 'mobile', label: 'Mobile Development' }
-  ];
-  
-  const filteredTags = allTags.filter(tag =>
-    tag.label.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getSkillsTags = useCallback(async (): Promise<TagItem[]> => {
+    // Real API call with multi-language support
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return [
+      {
+        id: 'frontend',
+        label: {
+          en: 'Frontend Development',
+          es: 'Desarrollo Frontend',
+          fr: 'Développement Frontend',
+          default: 'Frontend Development'
+        }
+      },
+      {
+        id: 'backend',
+        label: {
+          en: 'Backend Development',
+          es: 'Desarrollo Backend',
+          fr: 'Développement Backend',
+          default: 'Backend Development'
+        }
+      },
+      {
+        id: 'design',
+        label: {
+          en: 'UI/UX Design',
+          es: 'Diseño UI/UX',
+          fr: 'Conception UI/UX',
+          default: 'UI/UX Design'
+        }
+      }
+    ];
+  }, []);
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search skills..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-4 px-3 py-2 border rounded"
-      />
+      <div className="mb-4">
+        <button onClick={() => setLanguage('en')}>English</button>
+        <button onClick={() => setLanguage('es')}>Español</button>
+        <button onClick={() => setLanguage('fr')}>Français</button>
+      </div>
+      
       <TagSelector
-        tags={filteredTags}
+        getTagsFunction={getSkillsTags}
         selectedTags={selectedTags}
         onSelectionChange={setSelectedTags}
         allowMultiple={true}
         allowAll={false}
         size="lg"
-        disabled={filteredTags.length === 0}
       />
       
       <div className="mt-4 text-sm text-gray-600">
-        Selected: {selectedTags.join(', ') || 'None'}
+        Selected: {selectedTags.join(', ') || 'None'} | Language: {currentLanguage}
       </div>
     </div>
   );
@@ -73,8 +96,9 @@ import type { Tag } from '@/lib/ui-library/TagSelector/types';`;
   className?: string;
   style?: CSSProperties;
   
-  // TagSelector Specific
-  tags: Tag[];
+  // TagSelector Specific - NEW ASYNC APPROACH
+  getTagsFunction?: TagsFunction; // NEW: Async function to load tags
+  tags?: Tag[]; // LEGACY: Static tags array (backward compatibility)
   selectedTags: string[];
   onSelectionChange: (selectedTags: string[]) => void;
   allowMultiple?: boolean; // Default: true
@@ -82,17 +106,27 @@ import type { Tag } from '@/lib/ui-library/TagSelector/types';`;
   size?: 'sm' | 'md' | 'lg'; // Default: 'md'
   disabled?: boolean; // Default: false
   
-  // Internationalization
-  langOverride?: string; // Override language
-  i18nOrder?: 'global-first' | 'local-first';
-  
   // Responsive Visibility
   config?: VisibilityConfig; // Controls responsive behavior
 }
 
+// NEW TYPES for async multi-language support
+type TagsFunction = () => Promise<TagItem[]>;
+
+interface TagItem {
+  id: string;
+  label: MultiLanguageLabel;
+}
+
+interface MultiLanguageLabel {
+  [languageCode: string]: string; // e.g., en: "Fruit", es: "Fruta"
+  default: string; // Fallback language
+}
+
+// LEGACY TYPE for backward compatibility
 interface Tag {
   id: string;
-  label: string;
+  label: string; // Single language only
 }`;
 
   const singleSelectionExample = `// Single selection mode (radio-like behavior)

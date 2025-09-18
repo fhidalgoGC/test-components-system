@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -6,15 +6,115 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import TagSelectorComponent from '../index';
 import type { Tag } from '../types';
+import type { TagItem } from '../../types/language';
+import { useLanguage } from '../../context/LanguageContext';
+
+// Demo async functions - real implementation examples
+const getStaticTags = async (): Promise<TagItem[]> => {
+  // Simulate async loading
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  return [
+    {
+      id: 'fruits',
+      label: {
+        en: 'Fruits',
+        es: 'Frutas',
+        fr: 'Fruits',
+        default: 'Fruits'
+      }
+    },
+    {
+      id: 'vegetables', 
+      label: {
+        en: 'Vegetables',
+        es: 'Vegetales',
+        fr: 'Légumes',
+        default: 'Vegetables'
+      }
+    },
+    {
+      id: 'dairy',
+      label: {
+        en: 'Dairy',
+        es: 'Lácteos',
+        fr: 'Produits laitiers',
+        default: 'Dairy'
+      }
+    },
+    {
+      id: 'meat',
+      label: {
+        en: 'Meat',
+        es: 'Carne',
+        fr: 'Viande',
+        default: 'Meat'
+      }
+    }
+  ];
+};
+
+const getApiTags = async (): Promise<TagItem[]> => {
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 800));
+  
+  return [
+    {
+      id: 'technology',
+      label: {
+        en: 'Technology',
+        es: 'Tecnología',
+        pt: 'Tecnologia',
+        default: 'Technology'
+      }
+    },
+    {
+      id: 'design',
+      label: {
+        en: 'Design',
+        es: 'Diseño',
+        it: 'Design',
+        default: 'Design'
+      }
+    },
+    {
+      id: 'programming',
+      label: {
+        en: 'Programming',
+        es: 'Programación',
+        de: 'Programmierung',
+        default: 'Programming'
+      }
+    }
+  ];
+};
+
+const getErrorTags = async (): Promise<TagItem[]> => {
+  // Simulate loading delay before error
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  // Simulate API error
+  throw new Error('Failed to load tags from API');
+};
 
 export default function Preview() {
-  const [selectedTags, setSelectedTags] = useState<string[]>(['react']);
+  const [selectedTags, setSelectedTags] = useState<string[]>(['technology']);
   const [allowMultiple, setAllowMultiple] = useState(true);
   const [allowAll, setAllowAll] = useState(true);
   const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
   const [disabled, setDisabled] = useState(false);
+  const [demoType, setDemoType] = useState<'async-food' | 'async-tech' | 'async-error' | 'legacy'>('async-tech');
 
-  const tags: Tag[] = [
+  // Get language context for the demo
+  const { currentLanguage, setLanguage } = useLanguage();
+
+  // Memoized async functions to avoid re-triggering loads
+  const getAsyncFoodTags = useCallback(getStaticTags, []);
+  const getAsyncTechTags = useCallback(getApiTags, []);
+  const getAsyncErrorTags = useCallback(getErrorTags, []);
+
+  // Legacy tags for backward compatibility demo
+  const legacyTags: Tag[] = [
     { id: 'react', label: 'React' },
     { id: 'vue', label: 'Vue' },
     { id: 'angular', label: 'Angular' },
@@ -25,7 +125,17 @@ export default function Preview() {
 
   const generateCode = () => {
     const props = [];
-    props.push(`tags={${JSON.stringify(tags, null, 2)}}`);
+    
+    if (demoType === 'legacy') {
+      props.push(`tags={${JSON.stringify(legacyTags, null, 2)}}`);
+    } else {
+      const funcName = 
+        demoType === 'async-food' ? 'getStaticTags' : 
+        demoType === 'async-tech' ? 'getApiTags' :
+        'getErrorTags';
+      props.push(`getTagsFunction={${funcName}}`);
+    }
+    
     props.push(`selectedTags={${JSON.stringify(selectedTags)}}`);
     props.push('onSelectionChange={setSelectedTags}');
     if (!allowMultiple) props.push('allowMultiple={false}');
@@ -47,15 +157,31 @@ export default function Preview() {
           </div>
           <div className="p-6">
             <div className="min-h-32 bg-muted/50 rounded-lg border-2 border-dashed border-border p-6">
-              <TagSelectorComponent
-                tags={tags}
-                selectedTags={selectedTags}
-                onSelectionChange={setSelectedTags}
-                allowMultiple={allowMultiple}
-                allowAll={allowAll}
-                size={size}
-                disabled={disabled}
-              />
+              {demoType === 'legacy' ? (
+                <TagSelectorComponent
+                  tags={legacyTags}
+                  selectedTags={selectedTags}
+                  onSelectionChange={setSelectedTags}
+                  allowMultiple={allowMultiple}
+                  allowAll={allowAll}
+                  size={size}
+                  disabled={disabled}
+                />
+              ) : (
+                <TagSelectorComponent
+                  getTagsFunction={
+                    demoType === 'async-food' ? getAsyncFoodTags : 
+                    demoType === 'async-tech' ? getAsyncTechTags :
+                    getAsyncErrorTags
+                  }
+                  selectedTags={selectedTags}
+                  onSelectionChange={setSelectedTags}
+                  allowMultiple={allowMultiple}
+                  allowAll={allowAll}
+                  size={size}
+                  disabled={disabled}
+                />
+              )}
             </div>
             <div className="mt-4 text-sm text-muted-foreground">
               Selected: {selectedTags.length > 0 ? selectedTags.join(', ') : 'None'}
@@ -75,6 +201,34 @@ export default function Preview() {
             </div>
             <div className="p-6 space-y-4">
               <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="demo-type-select">Demo Type</Label>
+                  <Select value={demoType} onValueChange={(value: 'async-food' | 'async-tech' | 'async-error' | 'legacy') => setDemoType(value)}>
+                    <SelectTrigger id="demo-type-select" data-testid="select-demo-type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="async-tech">Async Tech Tags (API)</SelectItem>
+                      <SelectItem value="async-food">Async Food Tags (Static)</SelectItem>
+                      <SelectItem value="async-error">Async Error Demo</SelectItem>
+                      <SelectItem value="legacy">Legacy Static Tags</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="language-select">Language</Label>
+                  <Select value={currentLanguage} onValueChange={setLanguage}>
+                    <SelectTrigger id="language-select" data-testid="select-language">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="es">Español</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="size-select">Size</Label>
                   <Select value={size} onValueChange={(value: 'sm' | 'md' | 'lg') => setSize(value)}>
@@ -135,7 +289,15 @@ export default function Preview() {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => setSelectedTags(tags.map(t => t.id))}
+                      onClick={() => {
+                        if (demoType === 'legacy') {
+                          setSelectedTags(legacyTags.map(t => t.id));
+                        } else {
+                          // For async demos, just select common IDs
+                          const commonIds = demoType === 'async-food' ? ['fruits', 'vegetables'] : ['technology', 'design'];
+                          setSelectedTags(commonIds);
+                        }
+                      }}
                       data-testid="button-select-all"
                     >
                       Select All
@@ -143,10 +305,18 @@ export default function Preview() {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => setSelectedTags(['react', 'typescript'])}
+                      onClick={() => {
+                        if (demoType === 'legacy') {
+                          setSelectedTags(['react', 'typescript']);
+                        } else if (demoType === 'async-food') {
+                          setSelectedTags(['fruits', 'dairy']);
+                        } else {
+                          setSelectedTags(['technology', 'programming']);
+                        }
+                      }}
                       data-testid="button-preset"
                     >
-                      React + TS
+                      {demoType === 'legacy' ? 'React + TS' : demoType === 'async-food' ? 'Fruits + Dairy' : 'Tech + Code'}
                     </Button>
                   </div>
                 </div>

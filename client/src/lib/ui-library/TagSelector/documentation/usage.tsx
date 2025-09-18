@@ -3,57 +3,97 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 export default function UsageDoc() {
-  const installation = `# Import from the ui-library
-import TagSelector from '@/lib/ui-library/TagSelector';
-import type { Tag } from '@/lib/ui-library/TagSelector/types';`;
-  
-  const quickStart = `import TagSelector from '@/lib/ui-library/TagSelector';
-import type { Tag } from '@/lib/ui-library/TagSelector/types';
+  const installation = `# Import from the ui-library - NEW ASYNC SYSTEM
+import TagSelector, { LanguageProvider, useLanguage } from '@/lib/ui-library/TagSelector';
+import type { Tag, TagItem, TagsFunction } from '@/lib/ui-library/TagSelector/types';
 
-const tags: Tag[] = [
-  { id: 'react', label: 'React' },
-  { id: 'vue', label: 'Vue' },
-  { id: 'angular', label: 'Angular' }
-];
+# Setup LanguageProvider at App level
+<LanguageProvider defaultLanguage="en">
+  <YourApp />
+</LanguageProvider>`;
+  
+  const quickStart = `// NEW ASYNC MULTI-LANGUAGE APPROACH
+import TagSelector from '@/lib/ui-library/TagSelector';
+import type { TagItem, TagsFunction } from '@/lib/ui-library/TagSelector/types';
+
+// Define async function that returns multi-language tags
+const getMyTags: TagsFunction = async (): Promise<TagItem[]> => {
+  // Load from API, database, etc.
+  const response = await fetch('/api/my-tags');
+  return response.json(); // Returns TagItem[] format
+};
 
 const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
 <TagSelector
-  tags={tags}
+  getTagsFunction={getMyTags} // NEW: Async function
   selectedTags={selectedTags}
   onSelectionChange={setSelectedTags}
   allowMultiple={true}
   allowAll={true}
-/>`;
-  const examples = [
-    {
-      title: "Filter Interface",
-      code: `const [filters, setFilters] = useState<string[]>([]);
-const categories: Tag[] = [
-  { id: 'electronics', label: 'Electronics' },
-  { id: 'clothing', label: 'Clothing & Fashion' },
-  { id: 'books', label: 'Books & Media' },
-  { id: 'home', label: 'Home & Garden' }
-];
-
-<TagSelector
-  tags={categories}
-  selectedTags={filters}
-  onSelectionChange={setFilters}
-  allowMultiple={true}
-  allowAll={true}
-  size="md"
 />
 
-{/* Display filtered results */}
-<div className="mt-4">
-  Active filters: {filters.length > 0 ? filters.join(', ') : 'All categories'}
-</div>`,
-      description: "Use for filtering content by categories with All option"
+// Tags automatically update when language changes!`;
+  const examples = [
+    {
+      title: "Async Loading with Real-time Language Switching",
+      code: `const [filters, setFilters] = useState<string[]>([]);
+const { currentLanguage, setLanguage } = useLanguage();
+
+const getFilterCategories = useCallback(async (): Promise<TagItem[]> => {
+  // Simulate API call with loading delay
+  await new Promise(resolve => setTimeout(resolve, 300));
+  
+  return [
+    {
+      id: 'electronics',
+      label: {
+        en: 'Electronics',
+        es: 'Electrónicos',
+        fr: 'Électronique',
+        default: 'Electronics'
+      }
     },
     {
-      title: "Single Selection Priority",
-      code: `const [priority, setPriority] = useState<string[]>(['medium']);
+      id: 'clothing',
+      label: {
+        en: 'Clothing & Fashion',
+        es: 'Ropa y Moda',
+        fr: 'Vêtements et Mode',
+        default: 'Clothing & Fashion'
+      }
+    }
+  ];
+}, []);
+
+<div>
+  {/* Language switcher */}
+  <select value={currentLanguage} onChange={(e) => setLanguage(e.target.value)}>
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+  </select>
+  
+  <TagSelector
+    getTagsFunction={getFilterCategories}
+    selectedTags={filters}
+    onSelectionChange={setFilters}
+    allowMultiple={true}
+    allowAll={true}
+    size="md"
+  />
+  
+  {/* Results update automatically with language changes */}
+  <div className="mt-4">
+    Active filters: {filters.length > 0 ? filters.join(', ') : 'All categories'}
+  </div>
+</div>`,
+      description: "Real-time loading with automatic language switching - labels update instantly when language changes"
+    },
+    {
+      title: "Legacy Tags Support (Backward Compatibility)",
+      code: `// LEGACY: Old static tags still work for backward compatibility
+const [priority, setPriority] = useState<string[]>(['medium']);
 const priorities: Tag[] = [
   { id: 'low', label: 'Low Priority' },
   { id: 'medium', label: 'Medium Priority' },
@@ -62,37 +102,50 @@ const priorities: Tag[] = [
 ];
 
 <TagSelector
-  tags={priorities}
+  tags={priorities} // LEGACY: Still works
   selectedTags={priority}
   onSelectionChange={setPriority}
   allowMultiple={false} // Only one can be selected
   allowAll={false} // No "All" option for single selection
   size="sm"
-/>`,
-      description: "Single selection for mutually exclusive priority levels"
+/>
+
+// NOTE: Legacy tags don't support language switching
+// Migrate to getTagsFunction for full functionality`,
+      description: "Backward compatibility - old 'tags' prop still works but without language support"
     },
     {
-      title: "Skills & Technologies",
+      title: "Error Handling & Loading States",
       code: `const [skills, setSkills] = useState<string[]>(['react', 'typescript']);
-const techStack: Tag[] = [
-  { id: 'react', label: 'React' },
-  { id: 'vue', label: 'Vue.js' },
-  { id: 'angular', label: 'Angular' },
-  { id: 'typescript', label: 'TypeScript' },
-  { id: 'javascript', label: 'JavaScript' },
-  { id: 'nodejs', label: 'Node.js' },
-  { id: 'python', label: 'Python' }
-];
+
+const getTechStack = useCallback(async (): Promise<TagItem[]> => {
+  try {
+    // Real API call with potential failure
+    const response = await fetch('/api/tech-stack');
+    if (!response.ok) throw new Error('Failed to load');
+    
+    return await response.json();
+  } catch (error) {
+    // TagSelector will show error message automatically
+    console.error('Failed to load tech stack:', error);
+    throw error; // Re-throw to let TagSelector handle it
+  }
+}, []);
 
 <TagSelector
-  tags={techStack}
+  getTagsFunction={getTechStack}
   selectedTags={skills}
   onSelectionChange={setSkills}
   allowMultiple={true}
-  allowAll={false} // Usually don't want "select all skills"
+  allowAll={false}
   size="lg"
-/>`,
-      description: "Multi-selection for user skills or technology preferences"
+/>
+
+// Automatically shows:
+// - Loading state while fetching
+// - Error message if fetch fails
+// - Empty state if no tags returned`,
+      description: "Automatic loading states and error handling - no manual state management needed"
     },
     {
       title: "Responsive with i18n",
