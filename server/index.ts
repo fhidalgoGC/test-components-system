@@ -14,6 +14,7 @@ async function startServer() {
         host: '0.0.0.0',
         port: port,
         strictPort: true,
+        allowedHosts: true,
       }
     });
     
