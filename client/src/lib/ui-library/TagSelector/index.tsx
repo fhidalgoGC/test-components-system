@@ -22,6 +22,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   i18nOrder,
   allLabel,
   defaultLabel,
+  defaultTagLabels,
   useNewSelectionFormat = false // Default to legacy format for backward compatibility
 }) => {
   const [resolvedTags, setResolvedTags] = useState<TagItem[]>([]);
@@ -112,6 +113,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
             onSelectionChange={adaptedCallback}
             allLabel={allLabel}
             defaultLabel={defaultLabel}
+            defaultTagLabels={defaultTagLabels}
             allowMultiple={allowMultiple}
             allowAll={allowAll}
             size={size}

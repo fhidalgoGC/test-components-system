@@ -29,7 +29,8 @@ export const TagSelectorView: React.FC<{
   disabled = false,
   isLoading = false,
   allLabel,
-  defaultLabel
+  defaultLabel,
+  defaultTagLabels
 }) => {
   const { theme, t, isVisible } = useTagSelectorContext();
   const languageContext = useLanguage();
