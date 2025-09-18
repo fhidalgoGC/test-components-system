@@ -1,8 +1,8 @@
 import { Sidebar } from '@/components/sidebar';
 import { Navbar } from '@/components/navbar';
-import { useComponentDemo } from './hooks/ComponentDemo.hook';
-import styles from './css/ComponentDemo.module.css';
-import { containerClasses, contentClasses } from './css/ComponentDemo.module';
+import { useComponentDemo } from '../hooks/ComponentDemo.hook';
+import styles from '../css/ComponentDemo.module.css';
+import { containerClasses, contentClasses } from '../css/ComponentDemo.module';
 
 export function ComponentDemoView() {
   const { 

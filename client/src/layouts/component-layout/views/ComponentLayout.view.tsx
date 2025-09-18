@@ -1,4 +1,4 @@
-import { useComponentLayout } from './hooks/ComponentLayout.hook';
+import { useComponentLayout } from '../hooks/ComponentLayout.hook';
 import { 
   containerClasses, 
   tabsClasses, 
@@ -6,9 +6,9 @@ import {
   contentClasses,
   loadingClasses,
   errorClasses
-} from './css/ComponentLayout.module';
-import type { ComponentLayoutProps } from './types/ComponentLayout.types';
-import styles from './css/ComponentLayout.module.css';
+} from '../css/ComponentLayout.module';
+import type { ComponentLayoutProps } from '../types/ComponentLayout.types';
+import styles from '../css/ComponentLayout.module.css';
 
 export function ComponentLayoutView(props: ComponentLayoutProps) {
   const { children, className = '' } = props;

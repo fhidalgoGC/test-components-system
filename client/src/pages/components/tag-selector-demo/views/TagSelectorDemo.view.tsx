@@ -1,7 +1,7 @@
 import ComponentLayout from '@/layouts/component-layout';
-import { useTagSelectorDemo } from './hooks/TagSelectorDemo.hook';
-import styles from './css/TagSelectorDemo.module.css';
-import { containerClasses } from './css/TagSelectorDemo.module';
+import { useTagSelectorDemo } from '../hooks/TagSelectorDemo.hook';
+import styles from '../css/TagSelectorDemo.module.css';
+import { containerClasses } from '../css/TagSelectorDemo.module';
 
 export function TagSelectorDemoView() {
   const { t, currentTheme } = useTagSelectorDemo();

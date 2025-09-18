@@ -1,8 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
-import { useNotFound } from './hooks/NotFound.hook';
-import styles from './css/NotFound.module.css';
-import { containerClasses, cardClasses } from './css/NotFound.module';
+import { useNotFound } from '../hooks/NotFound.hook';
+import styles from '../css/NotFound.module.css';
+import { containerClasses, cardClasses } from '../css/NotFound.module';
 
 export function NotFoundView() {
   const { t, currentTheme } = useNotFound();
