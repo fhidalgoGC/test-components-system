@@ -7,6 +7,8 @@
     "title": "Props del Componente",
     "description": "Propiedades disponibles para este componente",
     "propName": "Propiedad",
-    "propDescription": "Descripción"
+    "propDescription": "Descripción",
+    "propType": "Tipo",
+    "propExample": "Ejemplo"
   }
 }

@@ -3,6 +3,8 @@
     "title": "Component Props",
     "description": "Properties available for this component",
     "propName": "Property",
-    "propDescription": "Description"
+    "propDescription": "Description",
+    "propType": "Type",
+    "propExample": "Example"
   }
 }

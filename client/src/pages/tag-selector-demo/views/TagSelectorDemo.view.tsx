@@ -144,63 +144,93 @@ export function TagSelectorDemoView() {
   const getPropsData = () => [
     {
       name: 'getTagsFunction',
-      description: 'Required async function that returns TagItem[]. This function provides the tags to be displayed in the selector.'
+      type: 'TagsFunction',
+      description: 'Required async function that returns TagItem[]. This function provides the tags to be displayed in the selector.',
+      example: 'async () => [{ id: "1", label: { en: "Tag 1" } }]'
     },
     {
       name: 'selectedTags',
-      description: 'Array of strings representing the IDs of currently selected tags. Used for state management.'
+      type: 'string[]',
+      description: 'Array of strings representing the IDs of currently selected tags. Used for state management.',
+      example: '["tag1", "tag2"]'
     },
     {
       name: 'onSelectionChange',
-      description: 'Callback function that receives TagItem[] with complete translation data when selection changes.'
+      type: 'SelectionCallback',
+      description: 'Callback function that receives TagItem[] with complete translation data when selection changes.',
+      example: '(tags: TagItem[]) => console.log(tags)'
     },
     {
       name: 'allowMultiple',
-      description: 'Boolean to enable or disable multiple tag selection. Defaults to true.'
+      type: 'boolean',
+      description: 'Boolean to enable or disable multiple tag selection. Defaults to true.',
+      example: 'true'
     },
     {
       name: 'allowAll',
-      description: 'Boolean to show or hide the "All" button. Defaults to true.'
+      type: 'boolean',
+      description: 'Boolean to show or hide the "All" button. Defaults to true.',
+      example: 'false'
     },
     {
       name: 'size',
-      description: 'Size of the tags. Options: "sm", "md", or "lg". Defaults to "md".'
+      type: '"sm" | "md" | "lg"',
+      description: 'Size of the tags. Options: "sm", "md", or "lg". Defaults to "md".',
+      example: '"lg"'
     },
     {
       name: 'disabled',
-      description: 'Boolean to disable the entire component. Defaults to false.'
+      type: 'boolean',
+      description: 'Boolean to disable the entire component. Defaults to false.',
+      example: 'true'
     },
     {
       name: 'langOverride',
-      description: 'Optional string to override the detected language for tag labels.'
+      type: 'string',
+      description: 'Optional string to override the detected language for tag labels.',
+      example: '"es"'
     },
     {
       name: 'i18nOrder',
-      description: 'Order of translation lookup: "global-first" or "local-first". Defaults to "local-first".'
+      type: '"global-first" | "local-first"',
+      description: 'Order of translation lookup: "global-first" or "local-first". Defaults to "local-first".',
+      example: '"global-first"'
     },
     {
       name: 'allLabel',
-      description: 'MultiLanguageLabel object for customizing the "All" button text in different languages.'
+      type: 'MultiLanguageLabel',
+      description: 'MultiLanguageLabel object for customizing the "All" button text in different languages.',
+      example: '{ en: "All", es: "Todos" }'
     },
     {
       name: 'defaultLabel',
-      description: 'MultiLanguageLabel object for the default tag text when no tags are available.'
+      type: 'MultiLanguageLabel',
+      description: 'MultiLanguageLabel object for the default tag text when no tags are available.',
+      example: '{ en: "Default", es: "Por defecto" }'
     },
     {
       name: 'defaultTagLabels',
-      description: 'MultiLanguageLabel object for default tag labels when getTagsFunction returns no tags.'
+      type: 'MultiLanguageLabel',
+      description: 'MultiLanguageLabel object for default tag labels when getTagsFunction returns no tags.',
+      example: '{ en: "No tags", es: "Sin etiquetas" }'
     },
     {
       name: 'id',
-      description: 'Optional HTML id attribute for the component container.'
+      type: 'string',
+      description: 'Optional HTML id attribute for the component container.',
+      example: '"my-tag-selector"'
     },
     {
       name: 'className',
-      description: 'Optional CSS class names to apply to the component container.'
+      type: 'string',
+      description: 'Optional CSS class names to apply to the component container.',
+      example: '"custom-selector rounded-lg"'
     },
     {
       name: 'style',
-      description: 'Optional React CSSProperties object for inline styling.'
+      type: 'CSSProperties',
+      description: 'Optional React CSSProperties object for inline styling.',
+      example: '{ width: "300px", margin: "10px" }'
     }
   ];
 

@@ -1,6 +1,8 @@
 export interface PropInfo {
   name: string;
   description: string;
+  type: string;
+  example: string;
 }
 
 export interface PropsTableProps {

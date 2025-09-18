@@ -43,7 +43,13 @@ export const PropsTableView: React.FC<PropsTableProps> = ({
                   {t('propsTable.propName') || 'Property'}
                 </TableHead>
                 <TableHead className={styles.tableCell}>
+                  {t('propsTable.propType') || 'Type'}
+                </TableHead>
+                <TableHead className={styles.tableCell}>
                   {t('propsTable.propDescription') || 'Description'}
+                </TableHead>
+                <TableHead className={styles.tableCell}>
+                  {t('propsTable.propExample') || 'Example'}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -53,8 +59,14 @@ export const PropsTableView: React.FC<PropsTableProps> = ({
                   <TableCell className={`${styles.tableCell} ${styles.propName}`}>
                     {prop.name}
                   </TableCell>
+                  <TableCell className={`${styles.tableCell} ${styles.propType}`}>
+                    {prop.type}
+                  </TableCell>
                   <TableCell className={`${styles.tableCell} ${styles.propDescription}`}>
                     {prop.description}
+                  </TableCell>
+                  <TableCell className={`${styles.tableCell} ${styles.propExample}`}>
+                    {prop.example}
                   </TableCell>
                 </TableRow>
               ))}
