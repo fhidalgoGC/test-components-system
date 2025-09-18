@@ -15,7 +15,7 @@ Preferred communication style: Simple, everyday language.
 - **Styling**: Tailwind CSS with CSS variables for theming
 - **UI Components**: 
   - shadcn/ui component library with Radix UI primitives
-  - Custom UI library with Button component featuring responsive visibility, theming, and i18n
+  - Custom UI library with TagSelector component featuring async loading, multilingual support, and responsive design
 - **Theme System**: Custom theme provider with light/dark mode support and CSS variable-based theming
 
 ## Development Setup
@@ -83,7 +83,6 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
 - **Page-Scoped Component Architecture**: Restructured component organization to follow page-scoped pattern:
   - **Removed**: `client/src/pages/component-demo` directory and all references (including /demo route)
   - **Moved**: Components from centralized `client/src/pages/components/*` to page-specific locations:
-    - `button-demo`: moved to `client/src/pages/button-demo/components/button-demo/`
     - `tag-selector-demo`: moved to `client/src/pages/tag-selector-demo/components/tag-selector-demo/`
 - **Enhanced Page Structure**: Each page now contains its own `components/` subdirectory for better encapsulation
 - **Updated Import System**: Created page-level index.ts files that re-export from component subdirectories
@@ -93,7 +92,7 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
 ## Architectural Restructuring (September 2025)
 - **Complete Modular Architecture**: Restructured entire codebase to follow classified folder pattern:
   - **Layouts**: app-layout, component-layout now use css/, types/, hooks/, utils/, i18n/ subdirectories
-  - **Pages**: library-dashboard, component-demo, button-demo, tag-selector-demo, not-found restructured to modular pattern
+  - **Pages**: library-dashboard, tag-selector-demo, not-found restructured to modular pattern
   - **UI Components**: Maintained existing shadcn/ui structure per requirements
 - **Hierarchical i18n System**: Implemented comprehensive internationalization:
   - Global translations at client/src/i18n/ level
@@ -113,7 +112,14 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
 - **UI Library**: shadcn/ui components maintained in original flat structure
 - **Global Systems**: Centralized i18n, theme management, and shared utilities
 
+## Button Component and Demo Removal (September 18, 2025)
+- **Removed Components**: Eliminated Button component from UI library (`client/src/lib/ui-library/Button/`)
+- **Removed Pages**: Eliminated button-demo page (`client/src/pages/button-demo/`)
+- **Updated Navigation**: Removed Button menu item from sidebar navigation
+- **Updated Routes**: Removed `/components/button` route from Router configuration
+- **Focused Library**: Project now focuses solely on TagSelector component with comprehensive async and multilingual features
+
 ## Known Issues & Future Improvements
 - **i18n Array/Object Support**: Current hierarchical i18n system works for strings but needs enhancement for arrays and objects
 - **Font Awesome Dependencies**: Some components reference Font Awesome icons that may need resolution
-- **Type Safety**: Minor LSP diagnostics remaining in App.tsx and ComponentDemo.view.tsx
+- **Type Safety**: Minor LSP diagnostics remaining in Router.tsx

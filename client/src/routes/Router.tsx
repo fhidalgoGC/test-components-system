@@ -2,18 +2,17 @@ import { Switch, Route, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import AppLayout from "@/layouts/app-layout";
 import LibraryDashboard from "@/pages/library-dashboard";
-import ButtonDemo from "@/pages/button-demo";
 import TagSelectorDemo from "@/pages/tag-selector-demo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
 export function Router() {
   const [location] = useLocation();
-  const [headerState, setHeaderState] = useState({});
+  const [headerState, setHeaderState] = useState<any>({});
   
   // Listen for page header changes
   const currentHeader = usePageHeaderListener(() => {
-    setHeaderState(prev => ({...prev}));
+    setHeaderState((prev: any) => ({...prev}));
   });
   
   useEffect(() => {
@@ -35,7 +34,6 @@ export function Router() {
     
     // Fallback to default based on route
     switch (location) {
-      case '/components/button':
       case '/components/tag-selector':
         return {
           showActionButtons: false
@@ -53,7 +51,6 @@ export function Router() {
     <AppLayout {...getHeaderProps()}>
       <Switch>
         <Route path="/" component={LibraryDashboard} />
-        <Route path="/components/button" component={ButtonDemo} />
         <Route path="/components/tag-selector" component={TagSelectorDemo} />
         <Route component={NotFound} />
       </Switch>
