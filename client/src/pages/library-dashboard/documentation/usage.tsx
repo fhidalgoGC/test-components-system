@@ -4,77 +4,56 @@ export default function UsageDoc() {
       <div>
         <h3 className="text-lg font-semibold text-foreground mb-2">Guía de Instalación y Uso</h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Aprende cómo instalar e integrar el sistema de componentes en tu proyecto.
+          Aprende cómo usar los componentes de esta librería UI en tu proyecto.
         </p>
       </div>
 
       <div className="space-y-6">
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">📦 Instalación desde NPM</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">📦 Configuración del Proyecto</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`# Instalar el paquete
-npm install @fremitech/ui-library
+{`# Este es un proyecto local que incluye:
+# - React + TypeScript + Vite
+# - Tailwind CSS para estilos
+# - Sistema de temas claro/oscuro
+# - Internacionalización (ES/EN)
 
-# O con yarn  
-yarn add @fremitech/ui-library
-
-# O con pnpm
-pnpm add @fremitech/ui-library`}
+# Para usar los componentes, simplemente importa desde:
+# client/src/lib/ui-library`}
             </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">🔗 Instalación desde GitHub</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">📋 Importaciones Disponibles</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`# Clonar el repositorio
-git clone https://github.com/fremitech/ui-library.git
+{`// Importar componentes principales
+import { Button, TagSelector } from '@/lib/ui-library';
 
-# Instalar desde el repositorio directamente  
-npm install git+https://github.com/fremitech/ui-library.git
+// Importar tipos
+import type { 
+  ButtonProps, 
+  TagSelectorProps, 
+  Tag 
+} from '@/lib/ui-library';
 
-# O una versión específica/rama
-npm install git+https://github.com/fremitech/ui-library.git#v1.0.0
-npm install git+https://github.com/fremitech/ui-library.git#main`}
+// Importar proveedor de tema
+import { ThemeProvider, useTheme } from '@/lib/ui-library/theme';
+
+// Los estilos globales ya están configurados en:
+// client/src/index.css (Tailwind + variables CSS)`}
             </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">📋 Importaciones Necesarias</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">⚙️ Configuración con Temas</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// Importar los componentes principales
-import { 
-  Button, 
-  TagSelector,
-  LibraryDashboard 
-} from '@fremitech/ui-library';
-
-// Importar el proveedor de tema (obligatorio)
-import { ThemeProvider } from '@fremitech/ui-library/theme';
-
-// Importar estilos CSS (obligatorio)
-import '@fremitech/ui-library/styles.css';
-
-// Importar hooks personalizados
-import { 
-  useLibraryDashboard,
-  useTheme 
-} from '@fremitech/ui-library/hooks';`}
-            </pre>
-          </div>
-        </div>
-
-        <div>
-          <h4 className="text-md font-medium text-foreground mb-3">⚙️ Configuración Inicial</h4>
-          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// App.tsx - Configuración principal
-import { ThemeProvider } from '@fremitech/ui-library/theme';
-import '@fremitech/ui-library/styles.css';
+{`// App.tsx - Configuración con ThemeProvider
+import { ThemeProvider } from '@/lib/ui-library/theme';
 
 function App() {
   return (
@@ -97,13 +76,21 @@ export default App;`}
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`// Componente de ejemplo
-import { Button, TagSelector } from '@fremitech/ui-library';
+import { useState } from 'react';
+import { Button, TagSelector } from '@/lib/ui-library';
+import type { Tag } from '@/lib/ui-library';
 
 export function MyComponent() {
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  
+  const tags: Tag[] = [
+    { id: '1', label: 'React' },
+    { id: '2', label: 'TypeScript' },
+    { id: '3', label: 'Tailwind' }
+  ];
 
   return (
-    <div>
+    <div className="space-y-4">
       {/* Botón principal */}
       <Button 
         intent="primary" 
@@ -115,14 +102,12 @@ export function MyComponent() {
 
       {/* Selector de etiquetas */}
       <TagSelector
-        tags={[
-          { id: '1', label: 'React' },
-          { id: '2', label: 'TypeScript' },
-          { id: '3', label: 'Tailwind' }
-        ]}
+        tags={tags}
         selectedTags={selectedTags}
         onSelectionChange={setSelectedTags}
         allowMultiple={true}
+        allowAll={true}
+        size="md"
       />
     </div>
   );
@@ -132,29 +117,24 @@ export function MyComponent() {
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">🌐 Internacionalización</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🎨 Control de Temas</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// Usar el hook de internacionalización
-import { useLibraryDashboard } from '@fremitech/ui-library/hooks';
+{`// Usar el hook de temas
+import { useTheme } from '@/lib/ui-library/theme';
 
-export function InternationalComponent() {
-  const { language, t, changeLanguage } = useLibraryDashboard();
+export function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div>
-      <h1>{t.title}</h1>
-      <p>{t.description}</p>
-      
-      {/* Botones para cambiar idioma */}
-      <button onClick={() => changeLanguage('en')}>
-        English
+      <p>Tema actual: {theme}</p>
+      <button 
+        onClick={toggleTheme}
+        className="px-4 py-2 bg-primary text-primary-foreground rounded"
+      >
+        Cambiar a {theme === 'light' ? 'oscuro' : 'claro'}
       </button>
-      <button onClick={() => changeLanguage('es')}>
-        Español
-      </button>
-      
-      <p>Idioma actual: {language}</p>
     </div>
   );
 }`}
@@ -163,29 +143,66 @@ export function InternationalComponent() {
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">🎨 Personalización de Temas</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🌐 Propiedades de Componentes</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`/* En tu archivo CSS personalizado */
-:root {
-  /* Personalizar colores primarios */
-  --primary: 210 100% 50%;
-  --primary-foreground: 0 0% 100%;
-  
-  /* Personalizar colores de fondo */
-  --background: 0 0% 100%;
-  --foreground: 224 71% 4%;
-  
-  /* Personalizar colores de acento */
-  --accent: 210 17% 95%;
-  --accent-foreground: 222 47% 11%;
+{`// Button - Propiedades disponibles
+interface ButtonProps {
+  intent?: 'primary' | 'secondary' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  onClick?: () => void;
+  children: React.ReactNode;
+  className?: string;
 }
 
-/* Tema oscuro */
+// TagSelector - Propiedades disponibles  
+interface TagSelectorProps {
+  tags: Tag[];
+  selectedTags: string[];
+  onSelectionChange: (tags: string[]) => void;
+  allowMultiple?: boolean;
+  allowAll?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  className?: string;
+}
+
+// Tag - Estructura de datos
+interface Tag {
+  id: string;
+  label: string;
+}`}
+            </pre>
+          </div>
+        </div>
+
+        <div>
+          <h4 className="text-md font-medium text-foreground mb-3">🎨 Personalización de Estilos</h4>
+          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+{`/* Los temas se configuran en client/src/index.css */
+/* Variables CSS ya disponibles: */
+
+:root {
+  /* Colores principales */
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 210 20% 98%;
+  
+  /* Colores de fondo */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  
+  /* Colores de acento */
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+}
+
+/* Modo oscuro automático */
 .dark {
-  --background: 224 71% 4%;
-  --foreground: 213 31% 91%;
-  --accent: 216 34% 17%;
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --accent: 217.2 32.6% 17.5%;
   --accent-foreground: 210 40% 98%;
 }`}
             </pre>
