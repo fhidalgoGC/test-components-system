@@ -1,0 +1,1 @@
+export { usePropsTable } from './PropsTable.hook';

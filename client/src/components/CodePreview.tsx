@@ -27,8 +27,7 @@ export const CodePreview: React.FC<CodePreviewProps> = ({
   const { t } = useHierarchicalTranslations(componentsTranslations);
   const generateCode = () => {
     const propStrings = props.map(prop => {
-      const line = `${prop.name}={${prop.value}}`;
-      return prop.comment ? `${line} // ${prop.comment}` : line;
+      return `${prop.name}={${prop.value}}`;
     });
     
     return `<${componentName}\n  ${propStrings.join('\n  ')}\n/>`;

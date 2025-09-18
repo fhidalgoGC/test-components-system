@@ -1,8 +1,4 @@
 {
-  "codePreview": {
-    "generatedCode": "Generated Code",
-    "copyCodeDescription": "Copy this code to use with current settings"
-  },
   "propsTable": {
     "title": "Component Props",
     "description": "Properties available for this component",

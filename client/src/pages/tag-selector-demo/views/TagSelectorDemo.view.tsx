@@ -6,6 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import TagSelectorComponent from '@/lib/ui-library/TagSelector';
 import CodePreview from '@/components/CodePreview';
+import { PropsTable } from '@/components/props-table';
 // TagItem is already imported from language types
 import type { TagItem } from '@/lib/ui-library/types/language';
 import { useLanguage } from '@/lib/ui-library/context/LanguageContext';
@@ -138,6 +139,70 @@ export function TagSelectorDemoView() {
   const getAsyncErrorTags = useCallback(getErrorTags, []);
 
   // All demo types now use async functions with TagItem[] format
+
+  // Generate props data for PropsTable component
+  const getPropsData = () => [
+    {
+      name: 'getTagsFunction',
+      description: 'Required async function that returns TagItem[]. This function provides the tags to be displayed in the selector.'
+    },
+    {
+      name: 'selectedTags',
+      description: 'Array of strings representing the IDs of currently selected tags. Used for state management.'
+    },
+    {
+      name: 'onSelectionChange',
+      description: 'Callback function that receives TagItem[] with complete translation data when selection changes.'
+    },
+    {
+      name: 'allowMultiple',
+      description: 'Boolean to enable or disable multiple tag selection. Defaults to true.'
+    },
+    {
+      name: 'allowAll',
+      description: 'Boolean to show or hide the "All" button. Defaults to true.'
+    },
+    {
+      name: 'size',
+      description: 'Size of the tags. Options: "sm", "md", or "lg". Defaults to "md".'
+    },
+    {
+      name: 'disabled',
+      description: 'Boolean to disable the entire component. Defaults to false.'
+    },
+    {
+      name: 'langOverride',
+      description: 'Optional string to override the detected language for tag labels.'
+    },
+    {
+      name: 'i18nOrder',
+      description: 'Order of translation lookup: "global-first" or "local-first". Defaults to "local-first".'
+    },
+    {
+      name: 'allLabel',
+      description: 'MultiLanguageLabel object for customizing the "All" button text in different languages.'
+    },
+    {
+      name: 'defaultLabel',
+      description: 'MultiLanguageLabel object for the default tag text when no tags are available.'
+    },
+    {
+      name: 'defaultTagLabels',
+      description: 'MultiLanguageLabel object for default tag labels when getTagsFunction returns no tags.'
+    },
+    {
+      name: 'id',
+      description: 'Optional HTML id attribute for the component container.'
+    },
+    {
+      name: 'className',
+      description: 'Optional CSS class names to apply to the component container.'
+    },
+    {
+      name: 'style',
+      description: 'Optional React CSSProperties object for inline styling.'
+    }
+  ];
 
   // Generate props for CodePreview component
   const getCodeProps = () => {
@@ -300,6 +365,13 @@ export function TagSelectorDemoView() {
             props={getCodeProps()}
             title="Generated Code"
             description="Copy this code to use with current settings"
+          />
+
+          {/* Props Table */}
+          <PropsTable
+            props={getPropsData()}
+            title="TagSelector Props"
+            description="Complete list of properties available for the TagSelector component"
           />
         </div>
       </div>
