@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTagSelectorContext } from '../provider';
-import { containerClasses, chipClasses } from '../TagSelector.module';
+import { containerClasses, chipClasses } from '../css/TagSelector.module';
 import type { Tag } from '../types';
 
 export const TagSelectorView: React.FC<{

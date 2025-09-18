@@ -1,6 +1,6 @@
 import React from 'react';
 import { useButtonContext } from '../provider';
-import styles, { classes } from '../Button.module';
+import styles, { classes } from '../css/Button.module';
 
 export const ButtonView: React.FC<{
   className?: string;
