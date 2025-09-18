@@ -10,26 +10,90 @@ export default function UsageDoc() {
 
       <div className="space-y-6">
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">📦 Configuración del Proyecto</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">📦 Instalación desde NPM</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`# Este es un proyecto local que incluye:
+{`# Instalar la librería desde npm
+npm install @fremitech/ui-library
+
+# O con yarn
+yarn add @fremitech/ui-library
+
+# O con pnpm  
+pnpm add @fremitech/ui-library
+
+# Dependencias peer (React 18+)
+npm install react react-dom`}
+            </pre>
+          </div>
+        </div>
+
+        <div>
+          <h4 className="text-md font-medium text-foreground mb-3">🔗 Instalación desde GitHub</h4>
+          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+{`# Opción 1: Instalar desde release específico
+npm install https://github.com/fremitech/ui-library/releases/download/v1.0.0/ui-library.tgz
+
+# Opción 2: Instalar desde rama o tag
+npm install fremitech/ui-library#v1.0.0
+npm install fremitech/ui-library#main
+
+# Opción 3: Clonar para desarrollo
+git clone https://github.com/fremitech/ui-library.git
+cd ui-library
+npm install
+npm run build`}
+            </pre>
+          </div>
+        </div>
+
+        <div>
+          <h4 className="text-md font-medium text-foreground mb-3">🏠 Desarrollo Local</h4>
+          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+{`# Este es un proyecto de demostración que incluye:
 # - React + TypeScript + Vite
 # - Tailwind CSS para estilos
 # - Sistema de temas claro/oscuro
 # - Internacionalización (ES/EN)
 
-# Para usar los componentes, simplemente importa desde:
+# Para desarrollo local, importa desde:
 # client/src/lib/ui-library`}
             </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">📋 Importaciones Disponibles</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">📋 Importaciones para Proyectos Externos</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// Importar componentes principales
+{`// 1. Importar estilos base (requerido)
+import '@fremitech/ui-library/styles.css';
+
+// 2. Importar componentes principales
+import { Button, TagSelector } from '@fremitech/ui-library';
+
+// 3. Importar sistema de temas
+import { ThemeProvider, useTheme } from '@fremitech/ui-library/theme';
+
+// 4. Importar tipos TypeScript
+import type { 
+  ButtonProps, 
+  TagSelectorProps, 
+  Tag 
+} from '@fremitech/ui-library';`}
+            </pre>
+          </div>
+        </div>
+
+        <div>
+          <h4 className="text-md font-medium text-foreground mb-3">🏠 Importaciones para Desarrollo Local</h4>
+          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+{`// Para este proyecto de demostración:
+
+// Importar componentes principales
 import { Button, TagSelector } from '@/lib/ui-library';
 
 // Importar tipos
@@ -42,18 +106,18 @@ import type {
 // Importar proveedor de tema
 import { ThemeProvider, useTheme } from '@/lib/ui-library/theme';
 
-// Los estilos globales ya están configurados en:
-// client/src/index.css (Tailwind + variables CSS)`}
+// Los estilos ya están en: client/src/index.css`}
             </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">⚙️ Configuración con Temas</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">⚙️ Configuración Inicial</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// App.tsx - Configuración con ThemeProvider
-import { ThemeProvider } from '@/lib/ui-library/theme';
+{`// App.tsx - Configuración para proyectos externos
+import '@fremitech/ui-library/styles.css';
+import { ThemeProvider } from '@fremitech/ui-library/theme';
 
 function App() {
   return (
@@ -75,10 +139,10 @@ export default App;`}
           <h4 className="text-md font-medium text-foreground mb-3">🚀 Uso Básico</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// Componente de ejemplo
+{`// Componente de ejemplo para proyectos externos
 import { useState } from 'react';
-import { Button, TagSelector } from '@/lib/ui-library';
-import type { Tag } from '@/lib/ui-library';
+import { Button, TagSelector } from '@fremitech/ui-library';
+import type { Tag } from '@fremitech/ui-library';
 
 export function MyComponent() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -117,11 +181,44 @@ export function MyComponent() {
         </div>
 
         <div>
+          <h4 className="text-md font-medium text-foreground mb-3">📋 Configuración de Tailwind (Proyectos Externos)</h4>
+          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+{`// tailwind.config.js - En tu proyecto
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/@fremitech/ui-library/dist/**/*.{js,jsx}"
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // Variables CSS requeridas por la librería
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)", 
+          foreground: "var(--accent-foreground)",
+        },
+      },
+    },
+  },
+  plugins: [],
+}`}
+            </pre>
+          </div>
+        </div>
+
+        <div>
           <h4 className="text-md font-medium text-foreground mb-3">🎨 Control de Temas</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`// Usar el hook de temas
-import { useTheme } from '@/lib/ui-library/theme';
+import { useTheme } from '@fremitech/ui-library/theme';
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
