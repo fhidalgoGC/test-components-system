@@ -5,16 +5,16 @@ import { Button } from '@/components/ui/button';
 export default function UsageDoc() {
   const installation = `# Import from the ui-library - NEW ASYNC SYSTEM
 import TagSelector, { LanguageProvider, useLanguage } from '@/lib/ui-library/TagSelector';
-import type { Tag, TagItem, TagsFunction } from '@/lib/ui-library/TagSelector/types';
+import type { Tag, TagItem, TagsFunction, SelectedTagItem } from '@/lib/ui-library/TagSelector/types';
 
 # Setup LanguageProvider at App level
 <LanguageProvider defaultLanguage="en">
   <YourApp />
 </LanguageProvider>`;
   
-  const quickStart = `// NEW ASYNC MULTI-LANGUAGE APPROACH
+  const quickStart = `// NEW ASYNC MULTI-LANGUAGE APPROACH with Updated Callback
 import TagSelector from '@/lib/ui-library/TagSelector';
-import type { TagItem, TagsFunction } from '@/lib/ui-library/TagSelector/types';
+import type { TagItem, TagsFunction, SelectedTagItem } from '@/lib/ui-library/TagSelector/types';
 
 // Define async function that returns multi-language tags
 const getMyTags: TagsFunction = async (): Promise<TagItem[]> => {
@@ -25,12 +25,24 @@ const getMyTags: TagsFunction = async (): Promise<TagItem[]> => {
 
 const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+// NEW: Updated callback receives SelectedTagItem[] with {id, language}
+const handleSelectionChange = (items: SelectedTagItem[]) => {
+  // Extract IDs for backward compatibility with existing state
+  const ids = items.map(item => item.id);
+  setSelectedTags(ids);
+  
+  // Full data available: items contains {id, language} objects
+  console.log('Selected with language info:', items);
+};
+
 <TagSelector
   getTagsFunction={getMyTags} // NEW: Async function
   selectedTags={selectedTags}
-  onSelectionChange={setSelectedTags}
+  onSelectionChange={handleSelectionChange} // NEW: Receives {id, language}[] format
   allowMultiple={true}
   allowAll={true}
+  allLabel={{en: "All Items", es: "Todos los Elementos", default: "All Items"}}
+  defaultLabel={{en: "Default", es: "Por Defecto", default: "Default"}}
 />
 
 // Tags automatically update when language changes!`;
@@ -39,6 +51,13 @@ const [selectedTags, setSelectedTags] = useState<string[]>([]);
       title: "Async Loading with Real-time Language Switching",
       code: `const [filters, setFilters] = useState<string[]>([]);
 const { currentLanguage, setLanguage } = useLanguage();
+
+// NEW: Handle the updated callback format
+const handleFilterChange = (items: SelectedTagItem[]) => {
+  const ids = items.map(item => item.id);
+  setFilters(ids);
+  console.log('Filter selection with language:', items);
+};
 
 const getFilterCategories = useCallback(async (): Promise<TagItem[]> => {
   // Simulate API call with loading delay
@@ -77,10 +96,11 @@ const getFilterCategories = useCallback(async (): Promise<TagItem[]> => {
   <TagSelector
     getTagsFunction={getFilterCategories}
     selectedTags={filters}
-    onSelectionChange={setFilters}
+    onSelectionChange={handleFilterChange}
     allowMultiple={true}
     allowAll={true}
     size="md"
+    allLabel={{en: "All Categories", es: "Todas las Categorías", fr: "Toutes les Catégories", default: "All Categories"}}
   />
   
   {/* Results update automatically with language changes */}
@@ -118,6 +138,13 @@ const priorities: Tag[] = [
       title: "Error Handling & Loading States",
       code: `const [skills, setSkills] = useState<string[]>(['react', 'typescript']);
 
+// NEW: Handle the updated callback format
+const handleSkillsChange = (items: SelectedTagItem[]) => {
+  const ids = items.map(item => item.id);
+  setSkills(ids);
+  console.log('Skills selected with language info:', items);
+};
+
 const getTechStack = useCallback(async (): Promise<TagItem[]> => {
   try {
     // Real API call with potential failure
@@ -135,7 +162,7 @@ const getTechStack = useCallback(async (): Promise<TagItem[]> => {
 <TagSelector
   getTagsFunction={getTechStack}
   selectedTags={skills}
-  onSelectionChange={setSkills}
+  onSelectionChange={handleSkillsChange}
   allowMultiple={true}
   allowAll={false}
   size="lg"
@@ -156,6 +183,13 @@ const getTechStack = useCallback(async (): Promise<TagItem[]> => {
 };
 
 const [languages, setLanguages] = useState<string[]>(['en']);
+
+// NEW: Handle the updated callback format for legacy tags
+const handleLanguageChange = (items: SelectedTagItem[]) => {
+  const ids = items.map(item => item.id);
+  setLanguages(ids);
+  console.log('Languages selected:', items);
+};
 const supportedLanguages: Tag[] = [
   { id: 'en', label: 'English' },
   { id: 'es', label: 'Español' },
@@ -166,7 +200,7 @@ const supportedLanguages: Tag[] = [
 <TagSelector
   tags={supportedLanguages}
   selectedTags={languages}
-  onSelectionChange={setLanguages}
+  onSelectionChange={handleLanguageChange}
   allowMultiple={true}
   allowAll={false}
   size="md"

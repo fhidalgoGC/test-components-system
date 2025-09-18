@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import TagSelectorComponent from '../index';
-import type { Tag } from '../types';
+import type { Tag, SelectedTagItem } from '../types';
 import type { TagItem } from '../../types/language';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -99,6 +99,16 @@ const getErrorTags = async (): Promise<TagItem[]> => {
 
 export default function Preview() {
   const [selectedTags, setSelectedTags] = useState<string[]>(['technology']);
+
+  // NEW: Handle the updated callback format
+  const handleSelectionChange = (items: SelectedTagItem[]) => {
+    // Extract IDs for backward compatibility with existing state
+    const ids = items.map(item => item.id);
+    setSelectedTags(ids);
+    
+    // Full data available for debugging
+    console.log('Demo selection changed:', { ids, fullItems: items });
+  };
   const [allowMultiple, setAllowMultiple] = useState(true);
   const [allowAll, setAllowAll] = useState(true);
   const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
@@ -137,7 +147,7 @@ export default function Preview() {
     }
     
     props.push(`selectedTags={${JSON.stringify(selectedTags)}}`);
-    props.push('onSelectionChange={setSelectedTags}');
+    props.push('onSelectionChange={handleSelectionChange}');
     if (!allowMultiple) props.push('allowMultiple={false}');
     if (!allowAll) props.push('allowAll={false}');
     if (size !== 'md') props.push(`size="${size}"`);
@@ -161,7 +171,7 @@ export default function Preview() {
                 <TagSelectorComponent
                   tags={legacyTags}
                   selectedTags={selectedTags}
-                  onSelectionChange={setSelectedTags}
+                  onSelectionChange={handleSelectionChange}
                   allowMultiple={allowMultiple}
                   allowAll={allowAll}
                   size={size}
@@ -175,7 +185,7 @@ export default function Preview() {
                     getAsyncErrorTags
                   }
                   selectedTags={selectedTags}
-                  onSelectionChange={setSelectedTags}
+                  onSelectionChange={handleSelectionChange}
                   allowMultiple={allowMultiple}
                   allowAll={allowAll}
                   size={size}

@@ -3,10 +3,10 @@ import { Card, CardContent } from '@/components/ui/card';
 
 export default function ReactDoc() {
   const importStatement = `import TagSelector, { LanguageProvider, useLanguage } from '@/lib/ui-library/TagSelector';
-import type { Tag, TagItem, TagsFunction } from '@/lib/ui-library/TagSelector/types';
+import type { Tag, TagItem, TagsFunction, SelectedTagItem } from '@/lib/ui-library/TagSelector/types';
 import type { MultiLanguageLabel } from '@/lib/ui-library/types/language';`;
   
-  const basicExample = `// New async function approach
+  const basicExample = `// New async function approach with new callback format
 export function AsyncTagSelector() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   
@@ -15,14 +15,26 @@ export function AsyncTagSelector() {
     return response.json();
   }, []);
 
+  // NEW: Callback receives SelectedTagItem[] with {id, language}
+  const handleSelectionChange = (items: SelectedTagItem[]) => {
+    // Extract IDs for backward compatibility with existing state
+    const ids = items.map(item => item.id);
+    setSelectedTags(ids);
+    
+    // Full data available: items contains {id, language} objects
+    console.log('Selected items with language:', items);
+  };
+
   return (
     <LanguageProvider defaultLanguage="en">
       <TagSelector
         getTagsFunction={getTagsFromAPI}
         selectedTags={selectedTags}
-        onSelectionChange={setSelectedTags}
+        onSelectionChange={handleSelectionChange}
         allowMultiple={true}
         allowAll={true}
+        allLabel={{en: "All Categories", es: "Todas las Categorías", default: "All Categories"}}
+        defaultLabel={{en: "Default", es: "Por Defecto", default: "Default"}}
       />
     </LanguageProvider>
   );
@@ -31,6 +43,13 @@ export function AsyncTagSelector() {
   const advancedExample = `export function MultiLanguageTagSelector() {
   const [selectedTags, setSelectedTags] = useState<string[]>(['frontend']);
   const { currentLanguage, setLanguage } = useLanguage();
+
+  // NEW: Handle the updated callback format
+  const handleSelectionChange = (items: SelectedTagItem[]) => {
+    const ids = items.map(item => item.id);
+    setSelectedTags(ids);
+    console.log('Selected with language info:', items);
+  };
   
   const getSkillsTags = useCallback(async (): Promise<TagItem[]> => {
     // Real API call with multi-language support
@@ -77,7 +96,7 @@ export function AsyncTagSelector() {
       <TagSelector
         getTagsFunction={getSkillsTags}
         selectedTags={selectedTags}
-        onSelectionChange={setSelectedTags}
+        onSelectionChange={handleSelectionChange}
         allowMultiple={true}
         allowAll={false}
         size="lg"
@@ -100,7 +119,11 @@ export function AsyncTagSelector() {
   getTagsFunction?: TagsFunction; // NEW: Async function to load tags
   tags?: Tag[]; // LEGACY: Static tags array (backward compatibility)
   selectedTags: string[];
-  onSelectionChange: (selectedTags: string[]) => void;
+  onSelectionChange: (selectedTags: SelectedTagItem[]) => void; // NEW: Returns {id, language}[]
+  
+  // NEW: Multi-language support for built-in labels
+  allLabel?: MultiLanguageLabel; // Custom label for "All" button
+  defaultLabel?: MultiLanguageLabel; // Custom label for default state
   allowMultiple?: boolean; // Default: true
   allowAll?: boolean; // Default: true
   size?: 'sm' | 'md' | 'lg'; // Default: 'md'
@@ -121,6 +144,12 @@ interface TagItem {
 interface MultiLanguageLabel {
   [languageCode: string]: string; // e.g., en: "Fruit", es: "Fruta"
   default: string; // Fallback language
+}
+
+// NEW: Callback return type with language information
+interface SelectedTagItem {
+  id: string;
+  language: string; // Current language when selected
 }
 
 // LEGACY TYPE for backward compatibility
@@ -170,14 +199,16 @@ const responsiveConfig = {
   const propExplanations = [
     { prop: 'tags', type: 'Tag[]', default: 'required', description: 'Array of tag objects with id and label' },
     { prop: 'selectedTags', type: 'string[]', default: 'required', description: 'Array of currently selected tag IDs' },
-    { prop: 'onSelectionChange', type: '(tags: string[]) => void', default: 'required', description: 'Callback when selection changes' },
+    { prop: 'onSelectionChange', type: '(items: SelectedTagItem[]) => void', default: 'required', description: 'Callback when selection changes - now returns {id, language}[] format' },
     { prop: 'allowMultiple', type: 'boolean', default: 'true', description: 'Allow multiple tag selection' },
     { prop: 'allowAll', type: 'boolean', default: 'true', description: 'Show "All" button to select/deselect all tags' },
     { prop: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size variant affecting padding and font size' },
     { prop: 'disabled', type: 'boolean', default: 'false', description: 'Disable all tag interactions' },
     { prop: 'langOverride', type: 'string', default: 'undefined', description: 'Override language for i18n translations' },
     { prop: 'i18nOrder', type: "'global-first' | 'local-first'", default: 'undefined', description: 'Order of i18n resolution priority' },
-    { prop: 'config', type: 'VisibilityConfig', default: 'undefined', description: 'Responsive visibility configuration' }
+    { prop: 'config', type: 'VisibilityConfig', default: 'undefined', description: 'Responsive visibility configuration' },
+    { prop: 'allLabel', type: 'MultiLanguageLabel', default: 'undefined', description: 'Custom multi-language label for "All" button/chip' },
+    { prop: 'defaultLabel', type: 'MultiLanguageLabel', default: 'undefined', description: 'Custom multi-language label for default state' }
   ];
   return (
     <div className="space-y-6">
