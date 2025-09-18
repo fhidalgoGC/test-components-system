@@ -16,9 +16,8 @@ export interface TagSelectorProps {
   className?: string;
   style?: CSSProperties;
   
-  // Tags input - can be async function or direct array
-  getTagsFunction?: TagsFunction;
-  tags?: TagItem[]; // Direct TagItem array
+  // Tags input - only async function
+  getTagsFunction: TagsFunction; // Required async function
   
   selectedTags: string[]; // Still use IDs for state management
   onSelectionChange: SelectionCallback; // Always receives full TagItem[] with translations

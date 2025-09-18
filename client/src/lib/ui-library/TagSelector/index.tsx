@@ -9,8 +9,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   id, 
   className, 
   style, 
-  getTagsFunction,
-  tags, // TagItem[] or async function
+  getTagsFunction, // Required async function
   selectedTags, 
   onSelectionChange, 
   allowMultiple, 
@@ -41,28 +40,21 @@ const TagSelector: React.FC<TagSelectorProps> = ({
     let cancelled = false;
     
     const loadTags = async () => {
-      if (getTagsFunction) {
-        setIsLoading(true);
-        setError(null);
-        try {
-          const loadedTags = await getTagsFunction();
-          if (!cancelled) {
-            setResolvedTags(loadedTags);
-          }
-        } catch (err) {
-          if (!cancelled) {
-            setError(err instanceof Error ? err.message : 'Failed to load tags');
-            setResolvedTags([]);
-          }
-        } finally {
-          if (!cancelled) {
-            setIsLoading(false);
-          }
-        }
-      } else if (tags) {
-        // Tags are already TagItem[] format
+      setIsLoading(true);
+      setError(null);
+      try {
+        const loadedTags = await getTagsFunction();
         if (!cancelled) {
-          setResolvedTags(tags);
+          setResolvedTags(loadedTags);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load tags');
+          setResolvedTags([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
         }
       }
     };
@@ -72,7 +64,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
     return () => {
       cancelled = true;
     };
-  }, [getTagsFunction, tags, languageContext?.currentLanguage]);
+  }, [getTagsFunction, languageContext?.currentLanguage]);
 
   // Tags are already in the correct TagItem[] format
 
