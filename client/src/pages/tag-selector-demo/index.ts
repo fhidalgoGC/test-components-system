@@ -1,5 +1,8 @@
-export { TagSelectorDemoView as default } from './components/tag-selector-demo';
-export { TagSelectorDemoView } from './components/tag-selector-demo';
-export { useTagSelectorDemo } from './components/tag-selector-demo';
-export * from './components/tag-selector-demo/css/TagSelectorDemo.module';
-export * from './components/tag-selector-demo/i18n';
+export { TagSelectorDemoView } from './views/TagSelectorDemo.view';
+export { useTagSelectorDemo } from './hooks/TagSelectorDemo.hook';
+export * from './css/TagSelectorDemo.module';
+export * from './i18n';
+
+// Default export for backwards compatibility
+import { TagSelectorDemoView } from './views/TagSelectorDemo.view';
+export default TagSelectorDemoView;
