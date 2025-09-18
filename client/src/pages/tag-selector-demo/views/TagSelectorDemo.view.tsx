@@ -126,7 +126,7 @@ export function TagSelectorDemoView() {
   const [allowAll, setAllowAll] = useState(true);
   const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
   const [disabled, setDisabled] = useState(false);
-  const [demoType, setDemoType] = useState<'async-food' | 'async-tech' | 'async-error' | 'legacy'>('async-tech');
+  const [demoType, setDemoType] = useState<'async-food' | 'async-tech' | 'async-error'>('async-tech');
 
   // Get language context for the demo
   const { currentLanguage, setLanguage } = useLanguage();
@@ -136,28 +136,16 @@ export function TagSelectorDemoView() {
   const getAsyncTechTags = useCallback(getApiTags, []);
   const getAsyncErrorTags = useCallback(getErrorTags, []);
 
-  // Static tags in TagItem format
-  const staticTags: TagItem[] = [
-    { id: 'react', label: { en: 'React', es: 'React', default: 'React' } },
-    { id: 'vue', label: { en: 'Vue', es: 'Vue', default: 'Vue' } },
-    { id: 'angular', label: { en: 'Angular', es: 'Angular', default: 'Angular' } },
-    { id: 'svelte', label: { en: 'Svelte', es: 'Svelte', default: 'Svelte' } },
-    { id: 'javascript', label: { en: 'JavaScript', es: 'JavaScript', default: 'JavaScript' } },
-    { id: 'typescript', label: { en: 'TypeScript', es: 'TypeScript', default: 'TypeScript' } }
-  ];
+  // All demo types now use async functions with TagItem[] format
 
   const generateCode = () => {
     const props = [];
     
-    if (demoType === 'legacy') {
-      props.push(`tags={${JSON.stringify(staticTags, null, 2)}}`);
-    } else {
-      const funcName = 
-        demoType === 'async-food' ? 'getStaticTags' : 
-        demoType === 'async-tech' ? 'getApiTags' :
-        'getErrorTags';
-      props.push(`getTagsFunction={${funcName}}`);
-    }
+    const funcName = 
+      demoType === 'async-food' ? 'getAsyncFoodTags' : 
+      demoType === 'async-tech' ? 'getAsyncTechTags' :
+      'getAsyncErrorTags';
+    props.push(`getTagsFunction={${funcName}}`);
     
     props.push(`selectedTags={${JSON.stringify(selectedTags)}}`);
     props.push('onSelectionChange={handleSelectionChange} // Receives TagItem[] with translations');
@@ -181,33 +169,20 @@ export function TagSelectorDemoView() {
             </div>
             <div className="p-6">
               <div className="min-h-32 bg-muted/50 rounded-lg border-2 border-dashed border-border p-6">
-                {demoType === 'legacy' ? (
-                  <TagSelectorComponent
-                    tags={staticTags}
-                    selectedTags={selectedTags}
-                    onSelectionChange={handleSelectionChange}
-                    allowMultiple={allowMultiple}
-                    allowAll={allowAll}
-                    size={size}
-                    disabled={disabled}
-                    langOverride={currentLanguage}
-                  />
-                ) : (
-                  <TagSelectorComponent
-                    getTagsFunction={
-                      demoType === 'async-food' ? getAsyncFoodTags : 
-                      demoType === 'async-tech' ? getAsyncTechTags :
-                      getAsyncErrorTags
-                    }
-                    selectedTags={selectedTags}
-                    onSelectionChange={handleSelectionChange}
-                    allowMultiple={allowMultiple}
-                    allowAll={allowAll}
-                    size={size}
-                    disabled={disabled}
-                    langOverride={currentLanguage}
-                  />
-                )}
+                <TagSelectorComponent
+                  getTagsFunction={
+                    demoType === 'async-food' ? getAsyncFoodTags : 
+                    demoType === 'async-tech' ? getAsyncTechTags :
+                    getAsyncErrorTags
+                  }
+                  selectedTags={selectedTags}
+                  onSelectionChange={handleSelectionChange}
+                  allowMultiple={allowMultiple}
+                  allowAll={allowAll}
+                  size={size}
+                  disabled={disabled}
+                  langOverride={currentLanguage}
+                />
               </div>
               <div className="mt-4 text-sm text-muted-foreground">
                 Selected: {selectedTags.length > 0 ? selectedTags.join(', ') : 'None'}
@@ -229,7 +204,7 @@ export function TagSelectorDemoView() {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="demo-type-select">Demo Type</Label>
-                    <Select value={demoType} onValueChange={(value: 'async-food' | 'async-tech' | 'async-error' | 'legacy') => setDemoType(value)}>
+                    <Select value={demoType} onValueChange={(value: 'async-food' | 'async-tech' | 'async-error') => setDemoType(value)}>
                       <SelectTrigger id="demo-type-select" data-testid="select-demo-type">
                         <SelectValue />
                       </SelectTrigger>
@@ -237,7 +212,6 @@ export function TagSelectorDemoView() {
                         <SelectItem value="async-tech">Async Tech Tags (API)</SelectItem>
                         <SelectItem value="async-food">Async Food Tags (Static)</SelectItem>
                         <SelectItem value="async-error">Async Error Demo</SelectItem>
-                        <SelectItem value="legacy">Legacy Static Tags</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -316,13 +290,9 @@ export function TagSelectorDemoView() {
                         variant="outline" 
                         size="sm"
                         onClick={() => {
-                          if (demoType === 'legacy') {
-                            setSelectedTags(staticTags.map(t => t.id));
-                          } else {
-                            // For async demos, just select common IDs
-                            const commonIds = demoType === 'async-food' ? ['fruits', 'vegetables'] : ['technology', 'design'];
-                            setSelectedTags(commonIds);
-                          }
+                          // For async demos, select common IDs based on demo type
+                          const commonIds = demoType === 'async-food' ? ['fruits', 'vegetables'] : ['technology', 'design'];
+                          setSelectedTags(commonIds);
                         }}
                         data-testid="button-select-all"
                       >
@@ -332,9 +302,7 @@ export function TagSelectorDemoView() {
                         variant="outline" 
                         size="sm"
                         onClick={() => {
-                          if (demoType === 'legacy') {
-                            setSelectedTags(['react', 'typescript']);
-                          } else if (demoType === 'async-food') {
+                          if (demoType === 'async-food') {
                             setSelectedTags(['fruits', 'dairy']);
                           } else {
                             setSelectedTags(['technology', 'programming']);
@@ -342,7 +310,7 @@ export function TagSelectorDemoView() {
                         }}
                         data-testid="button-preset"
                       >
-                        {demoType === 'legacy' ? 'React + TS' : demoType === 'async-food' ? 'Fruits + Dairy' : 'Tech + Code'}
+                        {demoType === 'async-food' ? 'Fruits + Dairy' : 'Tech + Code'}
                       </Button>
                     </div>
                   </div>
