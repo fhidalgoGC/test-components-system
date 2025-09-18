@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import TagSelectorComponent from '@/lib/ui-library/TagSelector';
-import type { Tag, SelectedTagItem } from '@/lib/ui-library/TagSelector/types';
+// TagItem is already imported from language types
 import type { TagItem } from '@/lib/ui-library/types/language';
 import { useLanguage } from '@/lib/ui-library/context/LanguageContext';
 import { useTagSelectorDemo } from '../hooks/TagSelectorDemo.hook';
@@ -105,7 +105,7 @@ export function TagSelectorDemoView() {
   const [selectedTags, setSelectedTags] = useState<string[]>(['technology']);
 
   // NEW: Handle the updated callback format with complete label data
-  const handleSelectionChange = (items: SelectedTagItem[]) => {
+  const handleSelectionChange = (items: TagItem[]) => {
     // Extract IDs for backward compatibility with existing state
     const ids = items.map(item => item.id);
     setSelectedTags(ids);
