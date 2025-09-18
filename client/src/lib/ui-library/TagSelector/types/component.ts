@@ -1,6 +1,8 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../types/shared';
+import type { TagItem, TagsFunction } from '../../types/language';
 
+// Legacy Tag interface for backward compatibility
 export interface Tag {
   id: string;
   label: string;
@@ -10,7 +12,13 @@ export interface TagSelectorProps {
   id?: string;
   className?: string;
   style?: CSSProperties;
-  tags: Tag[];
+  
+  // New async function approach (preferred)
+  getTagsFunction?: TagsFunction;
+  
+  // Legacy props (for backward compatibility)
+  tags?: Tag[];
+  
   selectedTags: string[];
   onSelectionChange: (selectedTags: string[]) => void;
   allowMultiple?: boolean;

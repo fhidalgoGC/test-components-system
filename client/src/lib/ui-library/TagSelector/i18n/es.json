@@ -3,5 +3,6 @@
   "select_all": "Seleccionar Todo",
   "clear_selection": "Limpiar Selección",
   "no_tags": "No hay etiquetas disponibles",
-  "selected": "Seleccionado"
+  "selected": "Seleccionado",
+  "loading": "Cargando..."
 }

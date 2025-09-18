@@ -12,6 +12,7 @@ export const TagSelectorView: React.FC<{
   allowAll?: boolean;
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
+  isLoading?: boolean;
 }> = ({ 
   className, 
   tags, 
@@ -20,7 +21,8 @@ export const TagSelectorView: React.FC<{
   allowMultiple = true, 
   allowAll = true, 
   size = 'md', 
-  disabled = false 
+  disabled = false,
+  isLoading = false
 }) => {
   const { theme, t, isVisible } = useTagSelectorContext();
 
@@ -90,7 +92,16 @@ export const TagSelectorView: React.FC<{
         );
       })}
       
-      {tags.length === 0 && (
+      {isLoading && (
+        <span 
+          className={chipClasses(theme, isVisible, false, size, false, 'opacity-50')}
+          data-testid="tag-loading"
+        >
+          {t('loading')}
+        </span>
+      )}
+      
+      {!isLoading && tags.length === 0 && (
         <span 
           className={chipClasses(theme, isVisible, false, size, false, 'opacity-50')}
           data-testid="tag-no-tags"
