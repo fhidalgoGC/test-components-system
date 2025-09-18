@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import TagSelectorComponent from '@/lib/ui-library/TagSelector';
+import CodePreview from '@/components/CodePreview';
 // TagItem is already imported from language types
 import type { TagItem } from '@/lib/ui-library/types/language';
 import { useLanguage } from '@/lib/ui-library/context/LanguageContext';
@@ -138,23 +139,36 @@ export function TagSelectorDemoView() {
 
   // All demo types now use async functions with TagItem[] format
 
-  const generateCode = () => {
-    const props = [];
-    
+  // Generate props for CodePreview component
+  const getCodeProps = () => {
     const funcName = 
       demoType === 'async-food' ? 'getAsyncFoodTags' : 
       demoType === 'async-tech' ? 'getAsyncTechTags' :
       'getAsyncErrorTags';
-    props.push(`getTagsFunction={${funcName}}`);
     
-    props.push(`selectedTags={${JSON.stringify(selectedTags)}}`);
-    props.push('onSelectionChange={handleSelectionChange} // Receives TagItem[] with translations');
-    if (!allowMultiple) props.push('allowMultiple={false}');
-    if (!allowAll) props.push('allowAll={false}');
-    if (size !== 'md') props.push(`size="${size}"`);
-    if (disabled) props.push('disabled={true}');
+    const props = [
+      {
+        name: 'getTagsFunction',
+        value: `{${funcName}}`,
+        comment: 'Async function returning Promise<TagItem[]>'
+      },
+      {
+        name: 'selectedTags',
+        value: `{${JSON.stringify(selectedTags)}}`
+      },
+      {
+        name: 'onSelectionChange',
+        value: '{handleSelectionChange}',
+        comment: 'Receives TagItem[] with translations'
+      }
+    ];
     
-    return `<TagSelector\n  ${props.join('\n  ')}\n/>`;
+    if (!allowMultiple) props.push({ name: 'allowMultiple', value: '{false}' });
+    if (!allowAll) props.push({ name: 'allowAll', value: '{false}' });
+    if (size !== 'md') props.push({ name: 'size', value: `"${size}"` });
+    if (disabled) props.push({ name: 'disabled', value: '{true}' });
+    
+    return props;
   };
 
   return (
@@ -275,66 +289,18 @@ export function TagSelectorDemoView() {
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
-                    <Label>Quick Selection Actions</Label>
-                    <div className="flex flex-col gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => setSelectedTags([])}
-                        data-testid="button-clear"
-                      >
-                        Clear All
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => {
-                          // For async demos, select common IDs based on demo type
-                          const commonIds = demoType === 'async-food' ? ['fruits', 'vegetables'] : ['technology', 'design'];
-                          setSelectedTags(commonIds);
-                        }}
-                        data-testid="button-select-all"
-                      >
-                        Select All
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => {
-                          if (demoType === 'async-food') {
-                            setSelectedTags(['fruits', 'dairy']);
-                          } else {
-                            setSelectedTags(['technology', 'programming']);
-                          }
-                        }}
-                        data-testid="button-preset"
-                      >
-                        {demoType === 'async-food' ? 'Fruits + Dairy' : 'Tech + Code'}
-                      </Button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Code Example */}
-          <Card>
-            <CardContent className="p-0">
-              <div className="p-6 border-b border-border">
-                <h3 className="font-semibold text-foreground">Generated Code</h3>
-                <p className="text-sm text-muted-foreground">Copy this code to use with current settings</p>
-              </div>
-              <div className="p-6">
-                <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-                  <code className="text-muted-foreground whitespace-pre">
-                    {generateCode()}
-                  </code>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <CodePreview
+            componentName="TagSelector"
+            props={getCodeProps()}
+            title="Generated Code"
+            description="Copy this code to use with current settings"
+          />
         </div>
       </div>
     </div>
