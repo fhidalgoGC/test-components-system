@@ -65,81 +65,62 @@ npm run build`}
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">📋 Importaciones para Proyectos Externos</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">📋 Importaciones Simples</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// 1. Importar estilos base (requerido)
-import '@fremitech/ui-library/styles.css';
+{`// Todo incluido - sin configuración adicional
+import { 
+  Button, 
+  TagSelector, 
+  ThemeProvider, 
+  useTheme 
+} from '@fremitech/ui-library';
 
-// 2. Importar componentes principales
-import { Button, TagSelector } from '@fremitech/ui-library';
-
-// 3. Importar sistema de temas
-import { ThemeProvider, useTheme } from '@fremitech/ui-library/theme';
-
-// 4. Importar tipos TypeScript
+// Tipos TypeScript incluidos
 import type { 
   ButtonProps, 
   TagSelectorProps, 
   Tag 
-} from '@fremitech/ui-library';`}
+} from '@fremitech/ui-library';
+
+// ✅ Estilos incluidos automáticamente
+// ✅ Temas claro/oscuro incluidos
+// ✅ Internacionalización incluida
+// ✅ Sin setup adicional requerido`}
             </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">🏠 Importaciones para Desarrollo Local</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">⚙️ Configuración Mínima</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// Para este proyecto de demostración:
-
-// Importar componentes principales
-import { Button, TagSelector } from '@/lib/ui-library';
-
-// Importar tipos
-import type { 
-  ButtonProps, 
-  TagSelectorProps, 
-  Tag 
-} from '@/lib/ui-library';
-
-// Importar proveedor de tema
-import { ThemeProvider, useTheme } from '@/lib/ui-library/theme';
-
-// Los estilos ya están en: client/src/index.css`}
-            </pre>
-          </div>
-        </div>
-
-        <div>
-          <h4 className="text-md font-medium text-foreground mb-3">⚙️ Configuración Inicial</h4>
-          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// App.tsx - Configuración para proyectos externos
-import '@fremitech/ui-library/styles.css';
-import { ThemeProvider } from '@fremitech/ui-library/theme';
+{`// App.tsx - Solo envolver con ThemeProvider
+import { ThemeProvider } from '@fremitech/ui-library';
 
 function App() {
   return (
     <ThemeProvider>
       <div className="App">
-        {/* Tu aplicación aquí */}
+        {/* Tus componentes aquí */}
         <MyComponents />
       </div>
     </ThemeProvider>
   );
 }
 
-export default App;`}
+export default App;
+
+// ¡Eso es todo! Sin configuración adicional.`}
             </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">🚀 Uso Básico</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🚀 Uso Inmediato</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// Componente de ejemplo para proyectos externos
+{`// Listo para usar - estilos incluidos
 import { useState } from 'react';
 import { Button, TagSelector } from '@fremitech/ui-library';
 import type { Tag } from '@fremitech/ui-library';
@@ -154,8 +135,8 @@ export function MyComponent() {
   ];
 
   return (
-    <div className="space-y-4">
-      {/* Botón principal */}
+    <div>
+      {/* Funciona inmediatamente */}
       <Button 
         intent="primary" 
         size="md"
@@ -164,7 +145,7 @@ export function MyComponent() {
         Acción Principal
       </Button>
 
-      {/* Selector de etiquetas */}
+      {/* Estilos y temas incluidos */}
       <TagSelector
         tags={tags}
         selectedTags={selectedTags}
@@ -180,45 +161,13 @@ export function MyComponent() {
           </div>
         </div>
 
-        <div>
-          <h4 className="text-md font-medium text-foreground mb-3">📋 Configuración de Tailwind (Proyectos Externos)</h4>
-          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// tailwind.config.js - En tu proyecto
-module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/@fremitech/ui-library/dist/**/*.{js,jsx}"
-  ],
-  theme: {
-    extend: {
-      colors: {
-        // Variables CSS requeridas por la librería
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        primary: {
-          DEFAULT: "var(--primary)",
-          foreground: "var(--primary-foreground)",
-        },
-        accent: {
-          DEFAULT: "var(--accent)", 
-          foreground: "var(--accent-foreground)",
-        },
-      },
-    },
-  },
-  plugins: [],
-}`}
-            </pre>
-          </div>
-        </div>
 
         <div>
           <h4 className="text-md font-medium text-foreground mb-3">🎨 Control de Temas</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// Usar el hook de temas
-import { useTheme } from '@fremitech/ui-library/theme';
+{`// Temas incluidos - funciona inmediatamente
+import { useTheme } from '@fremitech/ui-library';
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
@@ -226,34 +175,35 @@ export function ThemeToggle() {
   return (
     <div>
       <p>Tema actual: {theme}</p>
-      <button 
-        onClick={toggleTheme}
-        className="px-4 py-2 bg-primary text-primary-foreground rounded"
-      >
+      <button onClick={toggleTheme}>
         Cambiar a {theme === 'light' ? 'oscuro' : 'claro'}
       </button>
     </div>
   );
-}`}
+}
+
+// ✅ Temas claro/oscuro incluidos
+// ✅ Transiciones automáticas
+// ✅ Persistencia en localStorage`}
             </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">🌐 Propiedades de Componentes</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🌐 API de Componentes</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`// Button - Propiedades disponibles
+{`// Button - Completamente estilizado
 interface ButtonProps {
   intent?: 'primary' | 'secondary' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
-  className?: string;
+  className?: string; // Para personalización opcional
 }
 
-// TagSelector - Propiedades disponibles  
+// TagSelector - Listo para usar
 interface TagSelectorProps {
   tags: Tag[];
   selectedTags: string[];
@@ -262,10 +212,10 @@ interface TagSelectorProps {
   allowAll?: boolean;
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
-  className?: string;
+  className?: string; // Para personalización opcional
 }
 
-// Tag - Estructura de datos
+// Tag - Estructura simple
 interface Tag {
   id: string;
   label: string;
@@ -275,33 +225,29 @@ interface Tag {
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-3">🎨 Personalización de Estilos</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🎨 Personalización (Opcional)</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
             <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-{`/* Los temas se configuran en client/src/index.css */
-/* Variables CSS ya disponibles: */
+{`// Personalización con className (opcional)
+import { Button } from '@fremitech/ui-library';
 
-:root {
-  /* Colores principales */
-  --primary: 262.1 83.3% 57.8%;
-  --primary-foreground: 210 20% 98%;
-  
-  /* Colores de fondo */
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  
-  /* Colores de acento */
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-}
+// Estilos básicos incluidos - personaliza si necesitas
+<Button 
+  intent="primary"
+  className="my-custom-styles"
+>
+  Botón Personalizado
+</Button>
 
-/* Modo oscuro automático */
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-}`}
+// O simplemente usa los estilos por defecto
+<Button intent="primary">
+  Botón Listo
+</Button>
+
+// ✅ Estilos completos incluidos
+// ✅ Temas adaptativos automáticos 
+// ✅ Responsive por defecto
+// ✅ Accesibilidad incluida`}
             </pre>
           </div>
         </div>
