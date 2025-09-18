@@ -1,9 +1,8 @@
 import { Switch, Route, useLocation } from "wouter";
 import AppLayout from "@/layouts/app-layout";
 import LibraryDashboard from "@/pages/library-dashboard";
-import ButtonDemo from "@/pages/components/button-demo";
-import TagSelectorDemo from "@/pages/components/tag-selector-demo";
-import ComponentDemo from "@/pages/component-demo";
+import ButtonDemo from "@/pages/button-demo";
+import TagSelectorDemo from "@/pages/tag-selector-demo";
 import NotFound from "@/pages/not-found";
 
 export function Router() {
@@ -24,12 +23,6 @@ export function Router() {
           headerDescription: "Selector de etiquetas interactivo con opciones múltiples, filtrado y soporte para diferentes modos de selección",
           showActionButtons: false
         };
-      case '/demo':
-        return {
-          headerTitle: "Component Demo",
-          headerDescription: "Demostración de componentes Sidebar y Navbar",
-          showActionButtons: false
-        };
       default:
         return {
           headerTitle: "UI Library",
@@ -45,7 +38,6 @@ export function Router() {
         <Route path="/" component={LibraryDashboard} />
         <Route path="/components/button" component={ButtonDemo} />
         <Route path="/components/tag-selector" component={TagSelectorDemo} />
-        <Route path="/demo" component={ComponentDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

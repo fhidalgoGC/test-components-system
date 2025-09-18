@@ -7,9 +7,10 @@ import { useTheme } from 'next-themes';
 
 interface LibraryDashboardViewProps {
   className?: string;
+  [key: string]: any; // Make compatible with RouteComponentProps
 }
 
-export function LibraryDashboardView({ className }: LibraryDashboardViewProps) {
+export function LibraryDashboardView({ className, ...props }: LibraryDashboardViewProps) {
   const { t } = useLibraryDashboard();
   const { resolvedTheme } = useTheme();
   const currentTheme: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
