@@ -162,6 +162,12 @@ interface Tag {
 export function SingleSelectionTags() {
   const [selectedTag, setSelectedTag] = useState<string[]>(['medium']);
   
+  // NEW: Handle the updated callback format
+  const handleSingleSelection = (items: SelectedTagItem[]) => {
+    const ids = items.map(item => item.id);
+    setSelectedTag(ids);
+  };
+  
   const priorities: Tag[] = [
     { id: 'low', label: 'Low Priority' },
     { id: 'medium', label: 'Medium Priority' },
@@ -173,7 +179,7 @@ export function SingleSelectionTags() {
     <TagSelector
       tags={priorities}
       selectedTags={selectedTag}
-      onSelectionChange={setSelectedTag}
+      onSelectionChange={handleSingleSelection}
       allowMultiple={false} // Only one can be selected
       allowAll={false} // No "All" button
       size="sm"
@@ -188,13 +194,19 @@ const responsiveConfig = {
   desktop: true
 };
 
+// NEW: Handle the updated callback format
+const handleResponsiveSelection = (items: SelectedTagItem[]) => {
+  const ids = items.map(item => item.id);
+  setSelectedTags(ids);
+};
+
 <TagSelector
   tags={tags}
   selectedTags={selectedTags}
-  onSelectionChange={setSelectedTags}
+  onSelectionChange={handleResponsiveSelection}
   config={responsiveConfig}
   size="md"
-/>`;
+/>`
 
   const propExplanations = [
     { prop: 'tags', type: 'Tag[]', default: 'required', description: 'Array of tag objects with id and label' },

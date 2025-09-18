@@ -14,6 +14,11 @@ export interface Tag {
   label: string;
 }
 
+// Callback types for backward compatibility
+export type LegacySelectionCallback = (selectedTags: string[]) => void;
+export type NewSelectionCallback = (selectedTags: SelectedTagItem[]) => void;
+export type SelectionCallback = LegacySelectionCallback | NewSelectionCallback;
+
 export interface TagSelectorProps {
   id?: string;
   className?: string;
@@ -26,7 +31,8 @@ export interface TagSelectorProps {
   tags?: Tag[];
   
   selectedTags: string[];
-  onSelectionChange: (selectedTags: SelectedTagItem[]) => void;
+  // BACKWARD COMPATIBLE: Supports both old (string[]) and new (SelectedTagItem[]) callbacks
+  onSelectionChange: SelectionCallback;
   
   // Language support for All and Default labels
   allLabel?: MultiLanguageLabel;

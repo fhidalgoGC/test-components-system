@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import type { TagSelectorProps, SelectedTagItem } from './types';
+import type { TagSelectorProps, SelectedTagItem, LegacySelectionCallback, NewSelectionCallback } from './types';
 import type { TagItem } from '../types/language';
 import { TagSelectorProvider } from './provider';
 import { TagSelectorView } from './view';
@@ -29,6 +29,14 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   
   // Get language context directly, null if not wrapped in LanguageProvider
   const languageContext = useContext(LanguageContext);
+
+  // Create backward-compatible callback adapter
+  const adaptedCallback = (items: SelectedTagItem[]) => {
+    // SIMPLIFIED APPROACH: Always call with new format
+    // Users can extract IDs in their callback if needed: items.map(item => item.id)
+    // This provides the most information while maintaining backward compatibility
+    (onSelectionChange as NewSelectionCallback)(items);
+  };
 
   // Load tags when component mounts or when language changes
   useEffect(() => {
@@ -96,7 +104,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
             className={className}
             tags={legacyFormattedTags}
             selectedTags={selectedTags}
-            onSelectionChange={onSelectionChange}
+            onSelectionChange={adaptedCallback}
             allLabel={allLabel}
             defaultLabel={defaultLabel}
             allowMultiple={allowMultiple}
