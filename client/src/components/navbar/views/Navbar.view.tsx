@@ -1,6 +1,6 @@
-import { useNavbar } from './hooks';
-import { getNavbarClasses } from './Navbar.utils';
-import type { NavbarProps } from './Navbar.types';
+import { useNavbar } from '../hooks';
+import { getNavbarClasses } from '../utils/Navbar.utils';
+import type { NavbarProps } from '../types/Navbar.types';
 
 export function NavbarView(props: NavbarProps) {
   const { formattedTitle, formattedDescription, currentTheme } = useNavbar(props);

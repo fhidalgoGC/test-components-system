@@ -1,1 +1,1 @@
-export { useSidebar } from '../Sidebar.hook';
+export { useSidebar } from './Sidebar.hook';

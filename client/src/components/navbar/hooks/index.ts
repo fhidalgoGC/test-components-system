@@ -1,1 +1,1 @@
-export { useNavbar } from '../Navbar.hook';
+export { useNavbar } from './Navbar.hook';

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { NavbarProps, NavbarState } from './Navbar.types';
-import { getStoredTheme, formatTitle, formatDescription } from './Navbar.utils';
+import type { NavbarProps, NavbarState } from '../types/Navbar.types';
+import { getStoredTheme, formatTitle, formatDescription } from '../utils/Navbar.utils';
 
 export const useNavbar = (props: NavbarProps) => {
   const { title, description } = props;

@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronRight, Sun, Moon, Globe, Package } from 'lucide-react';
-import { useSidebar } from './hooks';
-import { getSidebarTranslations } from './i18n';
-import type { SidebarProps } from './Sidebar.types';
+import { useSidebar } from '../hooks';
+import { getSidebarTranslations } from '../i18n';
+import type { SidebarProps } from '../types/Sidebar.types';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 

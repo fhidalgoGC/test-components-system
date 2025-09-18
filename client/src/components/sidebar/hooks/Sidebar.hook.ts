@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { SidebarProps, SidebarState, MenuItem } from './Sidebar.types';
+import type { SidebarProps, SidebarState, MenuItem } from '../types/Sidebar.types';
 import { 
   updateMenuActiveStates, 
   getExpandedItems, 
@@ -7,7 +7,7 @@ import {
   getStoredTheme,
   getStoredLanguage,
   setStoredLanguage
-} from './Sidebar.utils';
+} from '../utils/Sidebar.utils';
 
 export const useSidebar = (props: SidebarProps) => {
   const { menuItems, currentPath = '', onNavigate } = props;

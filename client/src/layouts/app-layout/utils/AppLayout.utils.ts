@@ -16,12 +16,6 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'button', label: 'Button', path: '/components/button', icon: 'MousePointer' },
         { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector', icon: 'Tags' }
       ]
-    },
-    { 
-      id: 'demo', 
-      label: 'Demo', 
-      icon: 'Layout',
-      path: '/demo' 
     }
   ];
 }
