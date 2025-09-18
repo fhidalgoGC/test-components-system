@@ -138,7 +138,7 @@ export const TagSelectorView: React.FC<{
             disabled={disabled}
             data-testid={`tag-${tag.id}`}
           >
-            {tag.label}
+            {resolveLabel(tag.label)}
           </button>
         );
       })}
