@@ -10,42 +10,42 @@ export default function UsageDoc() {
 
       <div className="space-y-6">
         <div>
-          <h4 className="text-md font-medium text-foreground mb-2">📦 Instalación desde NPM</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">📦 Instalación desde NPM</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <code className="text-muted-foreground">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`# Instalar el paquete
 npm install @fremitech/ui-library
 
-# O con yarn
+# O con yarn  
 yarn add @fremitech/ui-library
 
 # O con pnpm
 pnpm add @fremitech/ui-library`}
-            </code>
+            </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-2">🔗 Instalación desde GitHub</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🔗 Instalación desde GitHub</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <code className="text-muted-foreground">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`# Clonar el repositorio
 git clone https://github.com/fremitech/ui-library.git
 
-# Instalar desde el repositorio directamente
+# Instalar desde el repositorio directamente  
 npm install git+https://github.com/fremitech/ui-library.git
 
 # O una versión específica/rama
 npm install git+https://github.com/fremitech/ui-library.git#v1.0.0
 npm install git+https://github.com/fremitech/ui-library.git#main`}
-            </code>
+            </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-2">📋 Importaciones Necesarias</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">📋 Importaciones Necesarias</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <code className="text-muted-foreground">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`// Importar los componentes principales
 import { 
   Button, 
@@ -64,14 +64,14 @@ import {
   useLibraryDashboard,
   useTheme 
 } from '@fremitech/ui-library/hooks';`}
-            </code>
+            </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-2">⚙️ Configuración Inicial</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">⚙️ Configuración Inicial</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <code className="text-muted-foreground">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`// App.tsx - Configuración principal
 import { ThemeProvider } from '@fremitech/ui-library/theme';
 import '@fremitech/ui-library/styles.css';
@@ -88,14 +88,14 @@ function App() {
 }
 
 export default App;`}
-            </code>
+            </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-2">🚀 Uso Básico</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🚀 Uso Básico</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <code className="text-muted-foreground">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`// Componente de ejemplo
 import { Button, TagSelector } from '@fremitech/ui-library';
 
@@ -127,14 +127,14 @@ export function MyComponent() {
     </div>
   );
 }`}
-            </code>
+            </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-2">🌐 Internacionalización</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🌐 Internacionalización</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <code className="text-muted-foreground">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`// Usar el hook de internacionalización
 import { useLibraryDashboard } from '@fremitech/ui-library/hooks';
 
@@ -158,14 +158,14 @@ export function InternationalComponent() {
     </div>
   );
 }`}
-            </code>
+            </pre>
           </div>
         </div>
 
         <div>
-          <h4 className="text-md font-medium text-foreground mb-2">🎨 Personalización de Temas</h4>
+          <h4 className="text-md font-medium text-foreground mb-3">🎨 Personalización de Temas</h4>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <code className="text-muted-foreground">
+            <pre className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
 {`/* En tu archivo CSS personalizado */
 :root {
   /* Personalizar colores primarios */
@@ -188,7 +188,7 @@ export function InternationalComponent() {
   --accent: 216 34% 17%;
   --accent-foreground: 210 40% 98%;
 }`}
-            </code>
+            </pre>
           </div>
         </div>
       </div>
