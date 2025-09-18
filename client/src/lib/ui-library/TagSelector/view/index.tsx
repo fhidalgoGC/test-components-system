@@ -1,15 +1,16 @@
 import React from 'react';
 import { useTagSelectorContext } from '../provider';
 import { containerClasses, chipClasses } from '../css/TagSelector.module';
-import type { Tag, SelectedTagItem } from '../types';
+import type { SelectedTagItem } from '../types';
+import type { TagItem } from '../../types/language';
 import type { MultiLanguageLabel } from '../../types/language';
 import { useLanguage } from '../../context/LanguageContext';
 
 export const TagSelectorView: React.FC<{
   className?: string;
-  tags: Tag[];
+  tags: TagItem[]; // Now uses TagItem[] directly
   selectedTags: string[];
-  onSelectionChange: (selectedTags: SelectedTagItem[]) => void;
+  onSelectionChange: (selectedTags: TagItem[]) => void; // Returns TagItem[] directly
   allowMultiple?: boolean;
   allowAll?: boolean;
   size?: 'sm' | 'md' | 'lg';
@@ -41,25 +42,14 @@ export const TagSelectorView: React.FC<{
     return languageContext.resolveLabel(label);
   };
 
-  // Helper function to find TagItem by ID and convert to SelectedTagItem
-  const findTagById = (tagId: string): SelectedTagItem | null => {
-    const tag = tags.find(t => t.id === tagId);
-    if (!tag) return null;
-    
-    // Convert legacy Tag to SelectedTagItem format
-    const label: MultiLanguageLabel = typeof tag.label === 'string' 
-      ? { default: tag.label } 
-      : tag.label;
-    
-    return {
-      id: tag.id,
-      label
-    };
+  // Helper function to find TagItem by ID
+  const findTagById = (tagId: string): TagItem | null => {
+    return tags.find(t => t.id === tagId) || null;
   };
 
-  // Helper function to convert array of IDs to SelectedTagItem[]
-  const idsToSelectedTagItems = (ids: string[]): SelectedTagItem[] => {
-    return ids.map(id => findTagById(id)).filter((item): item is SelectedTagItem => item !== null);
+  // Helper function to convert array of IDs to TagItem[]
+  const idsToTagItems = (ids: string[]): TagItem[] => {
+    return ids.map(id => findTagById(id)).filter((item): item is TagItem => item !== null);
   };
 
   const handleAllClick = () => {
@@ -70,9 +60,8 @@ export const TagSelectorView: React.FC<{
     if (allSelected) {
       onSelectionChange([]);
     } else {
-      // Return SelectedTagItem[] format with complete label data
-      const allTagIds = tags.map(tag => tag.id);
-      onSelectionChange(idsToSelectedTagItems(allTagIds));
+      // Return TagItem[] format with complete label data
+      onSelectionChange(tags); // Pass all tags directly
     }
   };
 
@@ -82,13 +71,13 @@ export const TagSelectorView: React.FC<{
     if (allowMultiple) {
       const isSelected = selectedTags.includes(tagId);
       if (isSelected) {
-        // Remove from selection - convert remaining IDs to SelectedTagItem format
+        // Remove from selection - convert remaining IDs to TagItem format
         const remaining = selectedTags.filter(id => id !== tagId);
-        onSelectionChange(idsToSelectedTagItems(remaining));
+        onSelectionChange(idsToTagItems(remaining));
       } else {
-        // Add to selection - convert all IDs to SelectedTagItem format
+        // Add to selection - convert all IDs to TagItem format
         const newSelection = [...selectedTags, tagId];
-        onSelectionChange(idsToSelectedTagItems(newSelection));
+        onSelectionChange(idsToTagItems(newSelection));
       }
     } else {
       // Single selection mode

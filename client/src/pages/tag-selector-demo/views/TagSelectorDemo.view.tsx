@@ -136,21 +136,21 @@ export function TagSelectorDemoView() {
   const getAsyncTechTags = useCallback(getApiTags, []);
   const getAsyncErrorTags = useCallback(getErrorTags, []);
 
-  // Legacy tags for backward compatibility demo
-  const legacyTags: Tag[] = [
-    { id: 'react', label: 'React' },
-    { id: 'vue', label: 'Vue' },
-    { id: 'angular', label: 'Angular' },
-    { id: 'svelte', label: 'Svelte' },
-    { id: 'javascript', label: 'JavaScript' },
-    { id: 'typescript', label: 'TypeScript' }
+  // Static tags in TagItem format
+  const staticTags: TagItem[] = [
+    { id: 'react', label: { en: 'React', es: 'React', default: 'React' } },
+    { id: 'vue', label: { en: 'Vue', es: 'Vue', default: 'Vue' } },
+    { id: 'angular', label: { en: 'Angular', es: 'Angular', default: 'Angular' } },
+    { id: 'svelte', label: { en: 'Svelte', es: 'Svelte', default: 'Svelte' } },
+    { id: 'javascript', label: { en: 'JavaScript', es: 'JavaScript', default: 'JavaScript' } },
+    { id: 'typescript', label: { en: 'TypeScript', es: 'TypeScript', default: 'TypeScript' } }
   ];
 
   const generateCode = () => {
     const props = [];
     
     if (demoType === 'legacy') {
-      props.push(`tags={${JSON.stringify(legacyTags, null, 2)}}`);
+      props.push(`tags={${JSON.stringify(staticTags, null, 2)}}`);
     } else {
       const funcName = 
         demoType === 'async-food' ? 'getStaticTags' : 
@@ -160,8 +160,7 @@ export function TagSelectorDemoView() {
     }
     
     props.push(`selectedTags={${JSON.stringify(selectedTags)}}`);
-    props.push('useNewSelectionFormat={true} // For new detailed format');
-    props.push('onSelectionChange={handleSelectionChange}');
+    props.push('onSelectionChange={handleSelectionChange} // Receives TagItem[] with translations');
     if (!allowMultiple) props.push('allowMultiple={false}');
     if (!allowAll) props.push('allowAll={false}');
     if (size !== 'md') props.push(`size="${size}"`);
@@ -184,10 +183,9 @@ export function TagSelectorDemoView() {
               <div className="min-h-32 bg-muted/50 rounded-lg border-2 border-dashed border-border p-6">
                 {demoType === 'legacy' ? (
                   <TagSelectorComponent
-                    tags={legacyTags}
+                    tags={staticTags}
                     selectedTags={selectedTags}
                     onSelectionChange={handleSelectionChange}
-                    useNewSelectionFormat={true} // Demo uses new format
                     allowMultiple={allowMultiple}
                     allowAll={allowAll}
                     size={size}
@@ -202,7 +200,6 @@ export function TagSelectorDemoView() {
                     }
                     selectedTags={selectedTags}
                     onSelectionChange={handleSelectionChange}
-                    useNewSelectionFormat={true} // Demo uses new format
                     allowMultiple={allowMultiple}
                     allowAll={allowAll}
                     size={size}
@@ -318,7 +315,7 @@ export function TagSelectorDemoView() {
                         size="sm"
                         onClick={() => {
                           if (demoType === 'legacy') {
-                            setSelectedTags(legacyTags.map(t => t.id));
+                            setSelectedTags(staticTags.map(t => t.id));
                           } else {
                             // For async demos, just select common IDs
                             const commonIds = demoType === 'async-food' ? ['fruits', 'vegetables'] : ['technology', 'design'];

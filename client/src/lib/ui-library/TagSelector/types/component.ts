@@ -2,40 +2,26 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../types/shared';
 import type { TagItem, TagsFunction, MultiLanguageLabel } from '../../types/language';
 
-// New selection item format (preferred) - Complete tag data
+// Selection item format - Same as TagItem for consistency
 export interface SelectedTagItem {
   id: string;
   label: MultiLanguageLabel; // Complete label object with all translations
 }
 
-// Legacy Tag interface for backward compatibility
-export interface Tag {
-  id: string;
-  label: string;
-}
-
-// Callback types for backward compatibility
-export type LegacySelectionCallback = (selectedTags: string[]) => void;
-export type NewSelectionCallback = (selectedTags: SelectedTagItem[]) => void;
-export type SelectionCallback = LegacySelectionCallback | NewSelectionCallback;
+// Callback type - always receives TagItem[] (SelectedTagItem[] is same format)
+export type SelectionCallback = (selectedTags: TagItem[]) => void;
 
 export interface TagSelectorProps {
   id?: string;
   className?: string;
   style?: CSSProperties;
   
-  // New async function approach (preferred)
+  // Tags input - can be async function or direct array
   getTagsFunction?: TagsFunction;
+  tags?: TagItem[]; // Direct TagItem array
   
-  // Legacy props (for backward compatibility)
-  tags?: Tag[];
-  
-  selectedTags: string[];
-  // BACKWARD COMPATIBLE: Supports both old (string[]) and new (SelectedTagItem[]) callbacks
-  onSelectionChange: SelectionCallback;
-  
-  // Control callback format for backward compatibility
-  useNewSelectionFormat?: boolean; // Default: false (legacy string[] format)
+  selectedTags: string[]; // Still use IDs for state management
+  onSelectionChange: SelectionCallback; // Always receives full TagItem[] with translations
   
   // Language support for All and Default labels
   allLabel?: MultiLanguageLabel;
