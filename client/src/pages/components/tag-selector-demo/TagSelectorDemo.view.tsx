@@ -9,8 +9,8 @@ export function TagSelectorDemoView() {
   return (
     <div className={`${containerClasses(currentTheme)} ${styles.container}`} data-testid="tag-selector-demo">
       <ComponentLayout
-        componentName={t.componentName}
-        componentDescription={t.componentDescription}
+        componentName={t('componentName')}
+        componentDescription={t('componentDescription')}
       />
     </div>
   );

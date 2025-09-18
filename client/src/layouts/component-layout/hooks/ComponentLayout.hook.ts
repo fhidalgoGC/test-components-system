@@ -9,18 +9,15 @@ export function useComponentLayout(props: ComponentLayoutProps) {
   // Get language from localStorage or default to 'es'
   const language: SupportedLanguage = (localStorage.getItem('app-language') as SupportedLanguage) || 'es';
   
-  // Use hierarchical translations
-  const { t: getTranslation } = useHierarchicalTranslations(
+  // Use hierarchical translations with fallback to global translations
+  const { t } = useHierarchicalTranslations(
     componentLayoutTranslations[language], 
     language
   );
-  
-  // Create translation object for easier access
-  const translations = componentLayoutTranslations[language];
 
   const {
     componentName,
-    componentDescription = translations.component.description,
+    componentDescription = t('component.description') || "Interactive component documentation and examples",
     tabs: manualTabs,
     defaultTab: manualDefaultTab
   } = props;

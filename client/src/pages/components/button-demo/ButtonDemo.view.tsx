@@ -9,8 +9,8 @@ export function ButtonDemoView() {
   return (
     <div className={`${containerClasses(currentTheme)} ${styles.container}`} data-testid="button-demo">
       <ComponentLayout
-        componentName={t.componentName}
-        componentDescription={t.componentDescription}
+        componentName={t('componentName')}
+        componentDescription={t('componentDescription')}
       />
     </div>
   );

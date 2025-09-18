@@ -1,19 +1,22 @@
 import { useState } from 'react';
-import { getLibraryDashboardTranslations } from '../i18n';
+import { useHierarchicalTranslations, type SupportedLanguage } from '@/i18n';
+import { libraryDashboardTranslations } from '../i18n';
 
 const LANGUAGE_KEY = 'library-dashboard-language';
 
-type Language = 'es' | 'en';
-
 export const useLibraryDashboard = () => {
-  const [language, setLanguage] = useState<Language>(() => {
+  const [language, setLanguage] = useState<SupportedLanguage>(() => {
     const saved = localStorage.getItem(LANGUAGE_KEY);
     return (saved === 'es' || saved === 'en') ? saved : 'en';
   });
 
-  const t = getLibraryDashboardTranslations(language);
+  // Use hierarchical translations with fallback to global translations
+  const { t } = useHierarchicalTranslations(
+    libraryDashboardTranslations[language], 
+    language
+  );
 
-  const changeLanguage = (newLanguage: Language) => {
+  const changeLanguage = (newLanguage: SupportedLanguage) => {
     setLanguage(newLanguage);
     localStorage.setItem(LANGUAGE_KEY, newLanguage);
   };

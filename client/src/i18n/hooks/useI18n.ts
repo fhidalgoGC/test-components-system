@@ -12,20 +12,16 @@ interface I18nHookOptions<T = any> {
 /**
  * Hierarchical i18n hook that merges local translations with global translations
  * Local translations take priority over global translations
- * @param options - Configuration options
- * @returns Merged translations and language management functions
+ * @param localTranslations - Local translations object with language keys
+ * @param fallbackToGlobal - Whether to fallback to global translations (default: true)
+ * @returns Merged translations, language management, and translate function
  */
-export function useI18n<T = any>(options: I18nHookOptions<T> = {}) {
-  const {
-    language: initialLanguage,
-    localTranslations,
-    fallbackToGlobal = true
-  } = options;
-
+export function useI18n<T = any>(
+  localTranslations?: Record<Language, T>,
+  fallbackToGlobal: boolean = true
+) {
   // Language state management
   const [language, setLanguage] = useState<Language>(() => {
-    if (initialLanguage) return initialLanguage;
-    
     // Try to get from localStorage
     const saved = localStorage.getItem('app-language');
     return (saved === 'es' || saved === 'en') ? saved : 'es';
@@ -60,6 +56,21 @@ export function useI18n<T = any>(options: I18nHookOptions<T> = {}) {
     return mergeDeep(globalTranslations, currentLocalTranslations);
   }, [globalTranslations, currentLocalTranslations, fallbackToGlobal]);
 
+  // Function to get nested translation with fallback
+  const translate = useMemo(() => 
+    (path: string): string => {
+      const keys = path.split('.');
+      let result: any = mergedTranslations;
+      
+      for (const key of keys) {
+        result = result?.[key];
+      }
+      
+      return typeof result === 'string' ? result : path;
+    },
+    [mergedTranslations]
+  );
+
   const changeLanguage = (newLanguage: Language) => {
     setLanguage(newLanguage);
   };
@@ -67,6 +78,7 @@ export function useI18n<T = any>(options: I18nHookOptions<T> = {}) {
   return {
     language,
     t: mergedTranslations,
+    translate,
     changeLanguage,
     globalTranslations,
     localTranslations: currentLocalTranslations

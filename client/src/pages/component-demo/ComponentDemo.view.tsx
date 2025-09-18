@@ -17,8 +17,8 @@ export function ComponentDemoView() {
     <div className={`${containerClasses(currentTheme)} ${styles.container}`} data-testid="component-demo">
       {/* Navbar */}
       <Navbar
-        title={t.navbar.title}
-        description={t.navbar.description}
+        title={t('navbar.title')}
+        description={t('navbar.description')}
         showBorder={true}
       />
       
@@ -35,19 +35,19 @@ export function ComponentDemoView() {
           <div className="max-w-4xl mx-auto">
             <div className={contentClasses(currentTheme)}>
               <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-                {t.content.title}
+                {t('content.title')}
               </h2>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                {t.content.description}
+                {t('content.description')}
               </p>
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {t.sidebar.title}
+                    {t('sidebar.title')}
                   </h3>
                   <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    {t.sidebar.features.map((feature, index) => (
+                    {t('sidebar.features').map((feature, index) => (
                       <li key={index}>✅ {feature}</li>
                     ))}
                   </ul>
@@ -55,10 +55,10 @@ export function ComponentDemoView() {
                 
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {t.navbar_section.title}  
+                    {t('navbar_section.title')}  
                   </h3>
                   <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    {t.navbar_section.features.map((feature, index) => (
+                    {t('navbar_section.features').map((feature, index) => (
                       <li key={index}>✅ {feature}</li>
                     ))}
                   </ul>
@@ -67,7 +67,7 @@ export function ComponentDemoView() {
 
               <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <p className="text-sm text-blue-800 dark:text-blue-200">
-                  <strong>{t.currentPath}:</strong> {currentPath}
+                  <strong>{t('currentPath')}:</strong> {currentPath}
                 </p>
               </div>
             </div>

@@ -65,3 +65,33 @@ Preferred communication style: Simple, everyday language.
 - **embla-carousel-react**: Carousel component
 - **cmdk**: Command palette component
 - **nanoid**: URL-safe unique ID generator
+
+# Recent Changes
+
+## Architectural Restructuring (September 2025)
+- **Complete Modular Architecture**: Restructured entire codebase to follow classified folder pattern:
+  - **Layouts**: app-layout, component-layout now use css/, types/, hooks/, utils/, i18n/ subdirectories
+  - **Pages**: library-dashboard, component-demo, button-demo, tag-selector-demo, not-found restructured to modular pattern
+  - **UI Components**: Maintained existing shadcn/ui structure per requirements
+- **Hierarchical i18n System**: Implemented comprehensive internationalization:
+  - Global translations at client/src/i18n/ level
+  - Component/page/layout specific translations take priority over globals
+  - Uses useHierarchicalTranslations hook with fallback mechanism
+  - Supports Spanish (es) and English (en) languages
+- **CSS Modules Integration**: All restructured components use CSS modules with theme-aware styling
+- **Consistent Hook Patterns**: Standardized hooks across all components for theme, i18n, and state management
+
+## Project Structure Updates
+- **Modular Architecture**: Components, layouts, and pages follow classified folder pattern:
+  - `css/` - CSS modules and styling utilities
+  - `types/` - TypeScript type definitions
+  - `hooks/` - React hooks and custom logic
+  - `utils/` - Utility functions and helpers
+  - `i18n/` - Localized translations with hierarchical fallback
+- **UI Library**: shadcn/ui components maintained in original flat structure
+- **Global Systems**: Centralized i18n, theme management, and shared utilities
+
+## Known Issues & Future Improvements
+- **i18n Array/Object Support**: Current hierarchical i18n system works for strings but needs enhancement for arrays and objects
+- **Font Awesome Dependencies**: Some components reference Font Awesome icons that may need resolution
+- **Type Safety**: Minor LSP diagnostics remaining in App.tsx and ComponentDemo.view.tsx

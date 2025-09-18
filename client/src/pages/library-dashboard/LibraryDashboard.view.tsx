@@ -44,8 +44,8 @@ export function LibraryDashboardView({ className }: LibraryDashboardViewProps) {
   return (
     <div className={containerClasses(currentTheme, className)} data-testid="library-dashboard">
       <ComponentLayout
-        componentName={t.title}
-        componentDescription={t.description}
+        componentName={t('title')}
+        componentDescription={t('description')}
         tabs={tabs}
         defaultTab="preview"
       />
