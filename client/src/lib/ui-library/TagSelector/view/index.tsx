@@ -1,18 +1,22 @@
 import React from 'react';
 import { useTagSelectorContext } from '../provider';
 import { containerClasses, chipClasses } from '../css/TagSelector.module';
-import type { Tag } from '../types';
+import type { Tag, SelectedTagItem } from '../types';
+import type { MultiLanguageLabel } from '../../types/language';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const TagSelectorView: React.FC<{
   className?: string;
   tags: Tag[];
   selectedTags: string[];
-  onSelectionChange: (selectedTags: string[]) => void;
+  onSelectionChange: (selectedTags: SelectedTagItem[]) => void;
   allowMultiple?: boolean;
   allowAll?: boolean;
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   isLoading?: boolean;
+  allLabel?: MultiLanguageLabel;
+  defaultLabel?: MultiLanguageLabel;
 }> = ({ 
   className, 
   tags, 
@@ -22,9 +26,21 @@ export const TagSelectorView: React.FC<{
   allowAll = true, 
   size = 'md', 
   disabled = false,
-  isLoading = false
+  isLoading = false,
+  allLabel,
+  defaultLabel
 }) => {
   const { theme, t, isVisible } = useTagSelectorContext();
+  const languageContext = useLanguage();
+
+  // Helper function to resolve multilanguage labels
+  const resolveLabel = (label: MultiLanguageLabel): string => {
+    if (!languageContext) return label.default;
+    return languageContext.resolveLabel(label);
+  };
+
+  // Get current language for the callback
+  const currentLanguage = languageContext?.currentLanguage || 'default';
 
   const handleAllClick = () => {
     if (disabled) return;
@@ -34,7 +50,8 @@ export const TagSelectorView: React.FC<{
     if (allSelected) {
       onSelectionChange([]);
     } else {
-      onSelectionChange(tags.map(tag => tag.id));
+      // Return SelectedTagItem[] format with current language
+      onSelectionChange(tags.map(tag => ({ id: tag.id, language: currentLanguage })));
     }
   };
 
@@ -44,9 +61,13 @@ export const TagSelectorView: React.FC<{
     if (allowMultiple) {
       const isSelected = selectedTags.includes(tagId);
       if (isSelected) {
-        onSelectionChange(selectedTags.filter(id => id !== tagId));
+        // Remove from selection - convert remaining IDs to SelectedTagItem format
+        const remaining = selectedTags.filter(id => id !== tagId);
+        onSelectionChange(remaining.map(id => ({ id, language: currentLanguage })));
       } else {
-        onSelectionChange([...selectedTags, tagId]);
+        // Add to selection - convert all IDs to SelectedTagItem format
+        const newSelection = [...selectedTags, tagId];
+        onSelectionChange(newSelection.map(id => ({ id, language: currentLanguage })));
       }
     } else {
       // Single selection mode
@@ -54,7 +75,7 @@ export const TagSelectorView: React.FC<{
       if (isSelected) {
         onSelectionChange([]); // Deselect if already selected
       } else {
-        onSelectionChange([tagId]); // Select only this tag
+        onSelectionChange([{ id: tagId, language: currentLanguage }]); // Select only this tag
       }
     }
   };
@@ -68,12 +89,12 @@ export const TagSelectorView: React.FC<{
     >
       {allowAll && tags.length > 0 && (
         <button
-          className={chipClasses(theme, isVisible, allSelected, size, true)}
+          className={chipClasses(theme, isVisible, allSelected, size, false)}
           onClick={handleAllClick}
           disabled={disabled}
           data-testid="tag-all"
         >
-          {t('all')}
+          {allLabel ? resolveLabel(allLabel) : t('all')}
         </button>
       )}
       

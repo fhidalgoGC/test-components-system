@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import type { TagSelectorProps } from './types';
+import type { TagSelectorProps, SelectedTagItem } from './types';
 import type { TagItem } from '../types/language';
 import { TagSelectorProvider } from './provider';
 import { TagSelectorView } from './view';
@@ -19,7 +19,9 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   size, 
   disabled, 
   langOverride, 
-  i18nOrder
+  i18nOrder,
+  allLabel,
+  defaultLabel
 }) => {
   const [resolvedTags, setResolvedTags] = useState<TagItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -95,6 +97,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({
             tags={legacyFormattedTags}
             selectedTags={selectedTags}
             onSelectionChange={onSelectionChange}
+            allLabel={allLabel}
+            defaultLabel={defaultLabel}
             allowMultiple={allowMultiple}
             allowAll={allowAll}
             size={size}

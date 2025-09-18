@@ -1,6 +1,12 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../types/shared';
-import type { TagItem, TagsFunction } from '../../types/language';
+import type { TagItem, TagsFunction, MultiLanguageLabel } from '../../types/language';
+
+// New selection item format (preferred)
+export interface SelectedTagItem {
+  id: string;
+  language: string;
+}
 
 // Legacy Tag interface for backward compatibility
 export interface Tag {
@@ -20,7 +26,11 @@ export interface TagSelectorProps {
   tags?: Tag[];
   
   selectedTags: string[];
-  onSelectionChange: (selectedTags: string[]) => void;
+  onSelectionChange: (selectedTags: SelectedTagItem[]) => void;
+  
+  // Language support for All and Default labels
+  allLabel?: MultiLanguageLabel;
+  defaultLabel?: MultiLanguageLabel;
   allowMultiple?: boolean;
   allowAll?: boolean;
   config?: VisibilityConfig;    // override over default visibility config if passed
