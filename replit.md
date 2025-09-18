@@ -119,6 +119,13 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
 - **Updated Routes**: Removed `/components/button` route from Router configuration
 - **Focused Library**: Project now focuses solely on TagSelector component with comprehensive async and multilingual features
 
+## TagSelector Demo Simplification (September 18, 2025)
+- **Removed Documentation Folder**: Eliminated `client/src/lib/ui-library/TagSelector/documentation/` directory
+- **Simplified Demo Page**: Integrated live preview directly into `client/src/pages/tag-selector-demo/views/TagSelectorDemo.view.tsx`
+- **Removed ComponentLayout**: No longer uses component layout system, shows preview directly in page
+- **Maintained Full Functionality**: Preview with props controls, live demo, generated code, and async/multilingual features
+- **Streamlined Architecture**: Faster loading and simpler maintenance without separate documentation components
+
 ## Known Issues & Future Improvements
 - **i18n Array/Object Support**: Current hierarchical i18n system works for strings but needs enhancement for arrays and objects
 - **Font Awesome Dependencies**: Some components reference Font Awesome icons that may need resolution
