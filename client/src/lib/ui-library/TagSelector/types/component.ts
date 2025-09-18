@@ -2,10 +2,10 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../types/shared';
 import type { TagItem, TagsFunction, MultiLanguageLabel } from '../../types/language';
 
-// New selection item format (preferred)
+// New selection item format (preferred) - Complete tag data
 export interface SelectedTagItem {
   id: string;
-  language: string;
+  label: MultiLanguageLabel; // Complete label object with all translations
 }
 
 // Legacy Tag interface for backward compatibility
@@ -40,6 +40,9 @@ export interface TagSelectorProps {
   // Language support for All and Default labels
   allLabel?: MultiLanguageLabel;
   defaultLabel?: MultiLanguageLabel;
+  
+  // Translations for default tag labels (when no getTagsFunction or tags provided)
+  defaultTagLabels?: MultiLanguageLabel;
   allowMultiple?: boolean;
   allowAll?: boolean;
   config?: VisibilityConfig;    // override over default visibility config if passed

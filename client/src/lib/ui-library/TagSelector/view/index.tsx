@@ -17,6 +17,7 @@ export const TagSelectorView: React.FC<{
   isLoading?: boolean;
   allLabel?: MultiLanguageLabel;
   defaultLabel?: MultiLanguageLabel;
+  defaultTagLabels?: MultiLanguageLabel;
 }> = ({ 
   className, 
   tags, 
@@ -39,8 +40,26 @@ export const TagSelectorView: React.FC<{
     return languageContext.resolveLabel(label);
   };
 
-  // Get current language for the callback
-  const currentLanguage = languageContext?.currentLanguage || 'default';
+  // Helper function to find TagItem by ID and convert to SelectedTagItem
+  const findTagById = (tagId: string): SelectedTagItem | null => {
+    const tag = tags.find(t => t.id === tagId);
+    if (!tag) return null;
+    
+    // Convert legacy Tag to SelectedTagItem format
+    const label: MultiLanguageLabel = typeof tag.label === 'string' 
+      ? { default: tag.label } 
+      : tag.label;
+    
+    return {
+      id: tag.id,
+      label
+    };
+  };
+
+  // Helper function to convert array of IDs to SelectedTagItem[]
+  const idsToSelectedTagItems = (ids: string[]): SelectedTagItem[] => {
+    return ids.map(id => findTagById(id)).filter((item): item is SelectedTagItem => item !== null);
+  };
 
   const handleAllClick = () => {
     if (disabled) return;
@@ -50,8 +69,9 @@ export const TagSelectorView: React.FC<{
     if (allSelected) {
       onSelectionChange([]);
     } else {
-      // Return SelectedTagItem[] format with current language
-      onSelectionChange(tags.map(tag => ({ id: tag.id, language: currentLanguage })));
+      // Return SelectedTagItem[] format with complete label data
+      const allTagIds = tags.map(tag => tag.id);
+      onSelectionChange(idsToSelectedTagItems(allTagIds));
     }
   };
 
@@ -63,11 +83,11 @@ export const TagSelectorView: React.FC<{
       if (isSelected) {
         // Remove from selection - convert remaining IDs to SelectedTagItem format
         const remaining = selectedTags.filter(id => id !== tagId);
-        onSelectionChange(remaining.map(id => ({ id, language: currentLanguage })));
+        onSelectionChange(idsToSelectedTagItems(remaining));
       } else {
         // Add to selection - convert all IDs to SelectedTagItem format
         const newSelection = [...selectedTags, tagId];
-        onSelectionChange(newSelection.map(id => ({ id, language: currentLanguage })));
+        onSelectionChange(idsToSelectedTagItems(newSelection));
       }
     } else {
       // Single selection mode
@@ -75,7 +95,8 @@ export const TagSelectorView: React.FC<{
       if (isSelected) {
         onSelectionChange([]); // Deselect if already selected
       } else {
-        onSelectionChange([{ id: tagId, language: currentLanguage }]); // Select only this tag
+        const selectedItem = findTagById(tagId);
+        onSelectionChange(selectedItem ? [selectedItem] : []); // Select only this tag
       }
     }
   };
