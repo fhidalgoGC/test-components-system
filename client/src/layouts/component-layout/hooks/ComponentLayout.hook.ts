@@ -57,7 +57,33 @@ export function useComponentLayout(props: ComponentLayoutProps) {
     loadDocumentation();
   }, [componentName, manualTabs]);
 
-  const tabs: TabConfig[] = manualTabs ? manualTabs : getDefaultTabs(documentationComponents);
+  // Generate reactive tabs with translations
+  const tabs: TabConfig[] = manualTabs ? manualTabs : [
+    {
+      id: 'preview',
+      label: t('tabs.preview') || 'Vista Previa',
+      icon: 'fa-eye',
+      component: documentationComponents.preview
+    },
+    {
+      id: 'react',
+      label: 'React',
+      icon: 'fa-code',
+      component: documentationComponents.react
+    },
+    {
+      id: 'css',
+      label: 'CSS',
+      icon: 'fa-palette',
+      component: documentationComponents.css
+    },
+    {
+      id: 'usage',
+      label: t('tabs.usage') || 'Uso',
+      icon: 'fa-book',
+      component: documentationComponents.usage
+    }
+  ].filter(tab => tab.component); // Only include tabs that have components
 
   return {
     activeTab,
@@ -68,6 +94,7 @@ export function useComponentLayout(props: ComponentLayoutProps) {
     currentTheme,
     componentDescription,
     language,
-    changeLanguage
+    changeLanguage,
+    t
   };
 }

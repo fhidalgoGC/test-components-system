@@ -29,7 +29,7 @@ export default function Preview() {
         <CardContent className="p-0">
           <div className="p-6 border-b border-border">
             <h3 className="font-semibold text-foreground">Live Preview</h3>
-            <p className="text-sm text-muted-foreground">Interactive Button component demo</p>
+            <p className="text-sm text-muted-foreground">Demo interactivo del componente Button</p>
           </div>
           <div className="p-6">
             <div className="min-h-32 bg-muted/50 rounded-lg border-2 border-dashed border-border p-6 flex items-center justify-center">

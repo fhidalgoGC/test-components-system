@@ -18,25 +18,25 @@ export function LibraryDashboardView({ className, ...props }: LibraryDashboardVi
   const tabs: TabConfig[] = [
     {
       id: 'preview',
-      label: 'Components Structure',
+      label: t('tabs.structure') || 'Components Structure',
       icon: 'fa-sitemap',
       content: <Preview />
     },
     {
       id: 'react',
-      label: 'React',
+      label: t('tabs.react') || 'React',
       icon: 'fa-code',
       content: <ReactDoc />
     },
     {
       id: 'css',
-      label: 'CSS',
+      label: t('tabs.css') || 'CSS',
       icon: 'fa-palette',
       content: <CSSDoc />
     },
     {
       id: 'usage',
-      label: 'Uso',
+      label: t('tabs.usage') || 'Uso',
       icon: 'fa-book',
       content: <UsageDoc />
     }

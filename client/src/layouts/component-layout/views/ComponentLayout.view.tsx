@@ -19,7 +19,8 @@ export function ComponentLayoutView(props: ComponentLayoutProps) {
     tabs,
     loading,
     error,
-    currentTheme
+    currentTheme,
+    t
   } = useComponentLayout(props);
 
   const renderContent = () => {
@@ -28,7 +29,7 @@ export function ComponentLayoutView(props: ComponentLayoutProps) {
         <div className={loadingClasses(currentTheme)}>
           <div className={styles.loadingContent}>
             <div className={styles.spinner}></div>
-            <p className="text-muted-foreground">Cargando documentación...</p>
+            <p className="text-muted-foreground">{t('loading') || 'Cargando documentación...'}</p>
           </div>
         </div>
       );
@@ -41,7 +42,7 @@ export function ComponentLayoutView(props: ComponentLayoutProps) {
             <div className={styles.errorIcon}>
               <i className="fas fa-exclamation-triangle text-destructive"></i>
             </div>
-            <h3 className={styles.errorTitle}>Error de Documentación</h3>
+            <h3 className={styles.errorTitle}>{t('error.title') || 'Error de Documentación'}</h3>
             <p className={styles.errorMessage}>{error}</p>
           </div>
         </div>
@@ -53,7 +54,7 @@ export function ComponentLayoutView(props: ComponentLayoutProps) {
       return (
         <div className={styles.notAvailable}>
           <div className={styles.notAvailableContent}>
-            <p className={styles.notAvailableMessage}>Contenido no disponible para esta pestaña</p>
+            <p className={styles.notAvailableMessage}>{t('error.notAvailable') || 'Contenido no disponible para esta pestaña'}</p>
           </div>
         </div>
       );
@@ -72,7 +73,7 @@ export function ComponentLayoutView(props: ComponentLayoutProps) {
     return (
       <div className={styles.notAvailable}>
         <div className={styles.notAvailableContent}>
-          <p className={styles.notAvailableMessage}>Contenido no disponible para esta pestaña</p>
+          <p className={styles.notAvailableMessage}>{t('error.notAvailable') || 'Contenido no disponible para esta pestaña'}</p>
         </div>
       </div>
     );

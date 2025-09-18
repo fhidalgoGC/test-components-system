@@ -1,26 +1,43 @@
 import { Switch, Route, useLocation } from "wouter";
+import { useState, useEffect } from "react";
 import AppLayout from "@/layouts/app-layout";
 import LibraryDashboard from "@/pages/library-dashboard";
 import ButtonDemo from "@/pages/button-demo";
 import TagSelectorDemo from "@/pages/tag-selector-demo";
 import NotFound from "@/pages/not-found";
+import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
 export function Router() {
   const [location] = useLocation();
+  const [headerState, setHeaderState] = useState({});
   
-  // Define header content based on route
+  // Listen for page header changes
+  const currentHeader = usePageHeaderListener(() => {
+    setHeaderState(prev => ({...prev}));
+  });
+  
+  useEffect(() => {
+    setHeaderState(currentHeader);
+  }, [currentHeader]);
+  
+  // Define header content based on route and dynamic state
   const getHeaderProps = () => {
+    const dynamicHeader = headerState;
+    
+    // If a page has set dynamic header props, use those
+    if (dynamicHeader && Object.keys(dynamicHeader).length > 0) {
+      return {
+        headerTitle: dynamicHeader.title,
+        headerDescription: dynamicHeader.description,
+        showActionButtons: dynamicHeader.showActionButtons !== undefined ? dynamicHeader.showActionButtons : false
+      };
+    }
+    
+    // Fallback to default based on route
     switch (location) {
       case '/components/button':
-        return {
-          headerTitle: "Button",
-          headerDescription: "Botón principal para acciones importantes con soporte para diferentes tamaños, estilos y estados",
-          showActionButtons: false
-        };
       case '/components/tag-selector':
         return {
-          headerTitle: "TagSelector", 
-          headerDescription: "Selector de etiquetas interactivo con opciones múltiples, filtrado y soporte para diferentes modos de selección",
           showActionButtons: false
         };
       default:

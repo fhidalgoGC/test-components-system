@@ -27,6 +27,21 @@ export function useI18n<T = any>(
     return (saved === 'es' || saved === 'en') ? saved : 'es';
   });
 
+  // Listen for external language changes (from sidebar)
+  useEffect(() => {
+    const handleLanguageChange = (event: CustomEvent) => {
+      const newLanguage = event.detail?.language;
+      if (newLanguage === 'es' || newLanguage === 'en') {
+        setLanguage(newLanguage);
+      }
+    };
+
+    window.addEventListener('languageChange', handleLanguageChange as EventListener);
+    return () => {
+      window.removeEventListener('languageChange', handleLanguageChange as EventListener);
+    };
+  }, []);
+
   // Update localStorage when language changes
   useEffect(() => {
     localStorage.setItem('app-language', language);
