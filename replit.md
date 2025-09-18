@@ -68,6 +68,17 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## Component Organization Restructuring (September 18, 2025)
+- **Page-Scoped Component Architecture**: Restructured component organization to follow page-scoped pattern:
+  - **Removed**: `client/src/pages/component-demo` directory and all references (including /demo route)
+  - **Moved**: Components from centralized `client/src/pages/components/*` to page-specific locations:
+    - `button-demo`: moved to `client/src/pages/button-demo/components/button-demo/`
+    - `tag-selector-demo`: moved to `client/src/pages/tag-selector-demo/components/tag-selector-demo/`
+- **Enhanced Page Structure**: Each page now contains its own `components/` subdirectory for better encapsulation
+- **Updated Import System**: Created page-level index.ts files that re-export from component subdirectories
+- **Router Optimization**: Simplified route imports and removed obsolete component-demo references
+- **Type Compatibility**: Fixed LibraryDashboardView to be compatible with wouter's RouteComponentProps
+
 ## Architectural Restructuring (September 2025)
 - **Complete Modular Architecture**: Restructured entire codebase to follow classified folder pattern:
   - **Layouts**: app-layout, component-layout now use css/, types/, hooks/, utils/, i18n/ subdirectories
