@@ -11,7 +11,7 @@ interface LibraryDashboardViewProps {
 }
 
 export function LibraryDashboardView({ className, ...props }: LibraryDashboardViewProps) {
-  const { t } = useLibraryDashboard();
+  const { t, language, changeLanguage } = useLibraryDashboard();
   const { resolvedTheme } = useTheme();
   const currentTheme: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
 
