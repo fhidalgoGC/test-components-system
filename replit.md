@@ -1,6 +1,6 @@
 # Overview
 
-This is a full-stack web application built with React, TypeScript, Express.js, and PostgreSQL. The project follows a modern monorepo structure with a shared schema layer and features a comprehensive UI component library built on top of shadcn/ui. The application includes both a custom UI library implementation and standard shadcn/ui components, with support for theming, internationalization, and responsive design.
+This is a frontend-only React component library project built with React, TypeScript, and Vite. The project features a comprehensive UI component library built on top of shadcn/ui with custom components, complete theming system, internationalization support, and responsive design. This is a standalone frontend library without backend dependencies.
 
 # User Preferences
 
@@ -18,33 +18,20 @@ Preferred communication style: Simple, everyday language.
   - Custom UI library with Button component featuring responsive visibility, theming, and i18n
 - **Theme System**: Custom theme provider with light/dark mode support and CSS variable-based theming
 
-## Backend Architecture
-- **Framework**: Express.js with TypeScript
-- **Development**: Hot reloading with Vite integration in development mode
-- **API Structure**: RESTful API with `/api` prefix for all endpoints
-- **Error Handling**: Centralized error handling middleware
-- **Logging**: Custom request/response logging with timing information
-
-## Data Storage Solutions
-- **Database**: PostgreSQL with Neon serverless connection
-- **ORM**: Drizzle ORM for type-safe database operations
-- **Schema Management**: Shared schema layer in TypeScript with Zod validation
-- **Migrations**: Drizzle Kit for database migrations
-- **Session Storage**: PostgreSQL-based session storage with connect-pg-simple
-
-## Authentication and Authorization
-- **Session Management**: Express sessions with PostgreSQL storage
-- **User Schema**: Basic user model with username/password authentication
-- **Storage Interface**: Abstracted storage layer with both memory and database implementations
+## Development Setup
+- **Build Tool**: Vite for fast development and building
+- **Development Server**: Custom Vite server setup for component library development
+- **Hot Reloading**: Instant updates during development
+- **Component Demo**: Interactive component playground with live preview
+- **Documentation**: Built-in component documentation with usage examples
 
 ## External Dependencies
 
 ### Core Framework Dependencies
-- **@neondatabase/serverless**: Serverless PostgreSQL connection for Neon
-- **drizzle-orm**: TypeScript ORM for database operations
-- **drizzle-kit**: Database migration and schema management tool
-- **express**: Node.js web framework
 - **vite**: Build tool and development server
+- **react**: Core React library
+- **react-dom**: React DOM rendering
+- **typescript**: TypeScript language support
 
 ### UI and Component Libraries
 - **@radix-ui/***: Comprehensive set of unstyled, accessible UI primitives
@@ -54,19 +41,43 @@ Preferred communication style: Simple, everyday language.
 - **clsx**: Utility for conditional CSS classes
 
 ### Development and Build Tools
-- **tsx**: TypeScript execution for Node.js
-- **esbuild**: Fast JavaScript bundler for server builds
 - **@replit/vite-plugin-***: Replit-specific development plugins
 - **wouter**: Lightweight client-side routing library
+- **postcss**: CSS processing
+- **autoprefixer**: CSS vendor prefixing
 
 ### Additional Libraries
 - **date-fns**: Date utility library
 - **react-hook-form**: Form handling with validation
 - **embla-carousel-react**: Carousel component
 - **cmdk**: Command palette component
-- **nanoid**: URL-safe unique ID generator
+- **framer-motion**: Animation library
+- **lucide-react**: Icon library
+- **zod**: Schema validation (for frontend forms)
 
 # Recent Changes
+
+## Backend Removal and Frontend-Only Conversion (September 18, 2025)
+- **Architecture Conversion**: Converted from full-stack application to frontend-only React component library
+- **Eliminated Dependencies**: Removed all backend-related dependencies:
+  - Database: `@neondatabase/serverless`, `drizzle-orm`, `drizzle-kit`
+  - Server: `express`, `express-session`, `passport`, `passport-local`
+  - Development tools: `tsx`, `esbuild`, WebSockets (`ws`)
+  - Session storage: `connect-pg-simple`, `memorystore`
+- **Removed Directories**: 
+  - `server/` - Express.js backend implementation
+  - `shared/` - Shared schema and types
+  - `drizzle.config.ts` - Database configuration
+- **Development Setup**: Created `start-frontend.mjs` script for running Vite development server
+- **Documentation Update**: Updated replit.md to reflect frontend-only architecture
+- **CSS Module Organization**: Moved all `*.module.css` and `*.module.ts` files to respective `css/` directories
+
+## How to Run the Application
+Since the project is now frontend-only, use the custom startup script:
+```bash
+node start-frontend.mjs
+```
+This runs the Vite development server on `http://localhost:5000` with all UI components and documentation.
 
 ## Component Organization Restructuring (September 18, 2025)
 - **Page-Scoped Component Architecture**: Restructured component organization to follow page-scoped pattern:
