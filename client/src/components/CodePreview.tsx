@@ -45,8 +45,8 @@ export const CodePreview: React.FC<CodePreviewProps> = ({
           <p className="text-sm text-muted-foreground">{displayDescription}</p>
         </div>
         <div className="p-6">
-          <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <code className="text-muted-foreground whitespace-pre">
+          <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
+            <code className="text-muted-foreground whitespace-pre-wrap break-words block">
               {generateCode()}
             </code>
           </div>
