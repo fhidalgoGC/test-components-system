@@ -12,11 +12,12 @@
 }
 
 .codeBlock {
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--muted-foreground) / 0.8);
   white-space: pre-wrap;
   word-break: break-words;
   display: block;
   margin: 0;
+  opacity: 0.85;
 }
 
 .header {
