@@ -1,0 +1,40 @@
+.codePreview {
+  width: 100%;
+}
+
+.codeContainer {
+  background: hsl(var(--muted));
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+
+.codeBlock {
+  color: hsl(var(--muted-foreground));
+  white-space: pre-wrap;
+  word-break: break-words;
+  display: block;
+  margin: 0;
+}
+
+.header {
+  padding: 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.title {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.content {
+  padding: 1.5rem;
+}
