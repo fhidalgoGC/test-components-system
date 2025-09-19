@@ -42,67 +42,71 @@
 
 /* Selected states - Light Theme */
 .light.selected {
-  background-color: hsl(142.1, 76.2%, 36.3%);
-  color: hsl(355.7, 100%, 97.3%);
-  border-color: hsl(142.1, 76.2%, 36.3%);
+  background-color: var(--tag-light-selected-bg, hsl(142.1, 76.2%, 36.3%));
+  color: var(--tag-light-selected-text, hsl(355.7, 100%, 97.3%));
+  border-color: var(--tag-light-selected-border, hsl(142.1, 76.2%, 36.3%));
 }
 
 .light.selected:hover:not(:disabled) {
-  background-color: hsl(142.1, 76.2%, 32%);
+  background-color: var(--tag-light-selected-hover-bg, hsl(142.1, 76.2%, 32%));
+  border-color: var(--tag-light-selected-hover-border, hsl(142.1, 76.2%, 32%));
 }
 
 .light.unselected {
-  background-color: hsl(210, 40%, 96%);
-  color: hsl(222.2, 84%, 4.9%);
-  border-color: hsl(214.3, 31.8%, 91.4%);
+  background-color: var(--tag-light-unselected-bg, hsl(210, 40%, 96%));
+  color: var(--tag-light-unselected-text, hsl(222.2, 84%, 4.9%));
+  border-color: var(--tag-light-unselected-border, hsl(214.3, 31.8%, 91.4%));
 }
 
 .light.unselected:hover:not(:disabled) {
-  background-color: hsl(210, 40%, 92%);
-  border-color: hsl(214.3, 31.8%, 87%);
+  background-color: var(--tag-light-unselected-hover-bg, hsl(210, 40%, 92%));
+  border-color: var(--tag-light-unselected-hover-border, hsl(214.3, 31.8%, 87%));
 }
 
 /* Selected states - Dark Theme */
 .dark.selected {
-  background-color: hsl(142.1, 70.6%, 45.3%);
-  color: hsl(210, 20%, 98%);
-  border-color: hsl(142.1, 70.6%, 45.3%);
+  background-color: var(--tag-dark-selected-bg, hsl(142.1, 70.6%, 45.3%));
+  color: var(--tag-dark-selected-text, hsl(210, 20%, 98%));
+  border-color: var(--tag-dark-selected-border, hsl(142.1, 70.6%, 45.3%));
 }
 
 .dark.selected:hover:not(:disabled) {
-  background-color: hsl(142.1, 70.6%, 50%);
+  background-color: var(--tag-dark-selected-hover-bg, hsl(142.1, 70.6%, 50%));
+  border-color: var(--tag-dark-selected-hover-border, hsl(142.1, 70.6%, 50%));
 }
 
 .dark.unselected {
-  background-color: hsl(217.2, 32.6%, 17.5%);
-  color: hsl(210, 40%, 98%);
-  border-color: hsl(217.2, 32.6%, 17.5%);
+  background-color: var(--tag-dark-unselected-bg, hsl(217.2, 32.6%, 17.5%));
+  color: var(--tag-dark-unselected-text, hsl(210, 40%, 98%));
+  border-color: var(--tag-dark-unselected-border, hsl(217.2, 32.6%, 17.5%));
 }
 
 .dark.unselected:hover:not(:disabled) {
-  background-color: hsl(217.2, 32.6%, 20%);
-  border-color: hsl(217.2, 32.6%, 25%);
+  background-color: var(--tag-dark-unselected-hover-bg, hsl(217.2, 32.6%, 20%));
+  border-color: var(--tag-dark-unselected-hover-border, hsl(217.2, 32.6%, 25%));
 }
 
 /* All button special styling */
 .light.all {
-  background-color: hsl(221.2, 83.2%, 53.3%);
-  color: hsl(210, 40%, 98%);
-  border-color: hsl(221.2, 83.2%, 53.3%);
+  background-color: var(--tag-light-all-bg, hsl(221.2, 83.2%, 53.3%));
+  color: var(--tag-light-all-text, hsl(210, 40%, 98%));
+  border-color: var(--tag-light-all-border, hsl(221.2, 83.2%, 53.3%));
 }
 
 .light.all:hover:not(:disabled) {
-  background-color: hsl(221.2, 83.2%, 48%);
+  background-color: var(--tag-light-all-hover-bg, hsl(221.2, 83.2%, 48%));
+  border-color: var(--tag-light-all-hover-border, hsl(221.2, 83.2%, 48%));
 }
 
 .dark.all {
-  background-color: hsl(217.2, 91.2%, 59.8%);
-  color: hsl(222.2, 84%, 4.9%);
-  border-color: hsl(217.2, 91.2%, 59.8%);
+  background-color: var(--tag-dark-all-bg, hsl(217.2, 91.2%, 59.8%));
+  color: var(--tag-dark-all-text, hsl(222.2, 84%, 4.9%));
+  border-color: var(--tag-dark-all-border, hsl(217.2, 91.2%, 59.8%));
 }
 
 .dark.all:hover:not(:disabled) {
-  background-color: hsl(217.2, 91.2%, 55%);
+  background-color: var(--tag-dark-all-hover-bg, hsl(217.2, 91.2%, 55%));
+  border-color: var(--tag-dark-all-hover-border, hsl(217.2, 91.2%, 55%));
 }
 
 .hidden {
