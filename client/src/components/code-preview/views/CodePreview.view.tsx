@@ -28,11 +28,11 @@ export const CodePreviewView: React.FC<CodePreviewProps> = ({
   return (
     <Card className={className}>
       <CardContent className="p-0">
-        <div className={styles.header}>
-          <h3 className={styles.title}>{displayTitle}</h3>
-          <p className={styles.description}>{displayDescription}</p>
+        <div className="p-6 border-b border-border">
+          <h3 className="font-semibold text-foreground">{displayTitle}</h3>
+          <p className="text-sm text-muted-foreground">{displayDescription}</p>
         </div>
-        <div className={styles.content}>
+        <div className="p-6">
           <div className={styles.codeContainer}>
             <code className={styles.codeBlock}>
               {generatedCode}

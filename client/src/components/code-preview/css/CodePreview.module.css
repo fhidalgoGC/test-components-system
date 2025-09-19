@@ -3,21 +3,21 @@
 }
 
 .codeContainer {
-  background: hsl(var(--muted));
+  background: hsl(var(--muted) / 0.6);
   border-radius: 0.5rem;
   padding: 1rem;
   font-family: var(--font-mono);
   font-size: 0.875rem;
   overflow-x: auto;
+  border: 1px solid hsl(var(--border) / 0.3);
 }
 
 .codeBlock {
-  color: hsl(var(--muted-foreground) / 0.8);
+  color: hsl(var(--muted-foreground) / 0.7);
   white-space: pre-wrap;
   word-break: break-words;
   display: block;
   margin: 0;
-  opacity: 0.85;
 }
 
 .header {
