@@ -11,6 +11,36 @@ export interface SelectedTagItem {
 // Callback type - always receives TagItem[] (SelectedTagItem[] is same format)
 export type SelectionCallback = (selectedTags: TagItem[]) => void;
 
+// Theme customization types
+export interface TagThemeColors {
+  selected?: {
+    background?: string;
+    text?: string;
+    border?: string;
+    hoverBackground?: string;
+    hoverBorder?: string;
+  };
+  unselected?: {
+    background?: string;
+    text?: string;
+    border?: string;
+    hoverBackground?: string;
+    hoverBorder?: string;
+  };
+  all?: {
+    background?: string;
+    text?: string;
+    border?: string;
+    hoverBackground?: string;
+    hoverBorder?: string;
+  };
+}
+
+export interface TagCustomColors {
+  light?: TagThemeColors;
+  dark?: TagThemeColors;
+}
+
 export interface TagSelectorProps {
   id?: string;
   className?: string;
@@ -35,6 +65,10 @@ export interface TagSelectorProps {
   disabled?: boolean;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';
+  
+  // Theme customization
+  theme?: string; // CSS class name for theme (e.g., 'theme-corporate', 'theme-nature')
+  customColors?: TagCustomColors; // Direct color overrides
 }
 
 export interface TagSelectorContext {
