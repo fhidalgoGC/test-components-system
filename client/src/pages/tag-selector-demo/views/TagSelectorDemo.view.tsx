@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import TagSelectorComponent from '@/lib/ui-library/TagSelector';
-import CodePreview from '@/components/CodePreview';
+import { CodePreview } from '@/components/code-preview';
 import { PropsTable } from '@/components/props-table';
 // TagItem is already imported from language types
 import type { TagItem } from '@/lib/ui-library/types/language';
