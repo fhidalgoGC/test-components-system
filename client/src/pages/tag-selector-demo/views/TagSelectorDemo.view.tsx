@@ -231,6 +231,18 @@ export function TagSelectorDemoView() {
       type: 'CSSProperties',
       description: 'Optional React CSSProperties object for inline styling.',
       example: '{ width: "300px", margin: "10px" }'
+    },
+    {
+      name: 'theme',
+      type: 'string',
+      description: 'Optional CSS class name for theme styling. Use predefined themes or create custom ones.',
+      example: '"theme-corporate" | "theme-nature" | "theme-sunset"'
+    },
+    {
+      name: 'customColors',
+      type: 'TagCustomColors',
+      description: 'Object to customize colors for light/dark themes with selected, unselected, and all button states.',
+      example: '{ light: { selected: { background: "#2563eb" } } }'
     }
   ];
 
@@ -306,8 +318,8 @@ export function TagSelectorDemoView() {
           <Card>
             <CardContent className="p-0">
               <div className="p-6 border-b border-border">
-                <h3 className="font-semibold text-foreground">Props Controls</h3>
-                <p className="text-sm text-muted-foreground">Customize the TagSelector properties</p>
+                <h3 className="font-semibold text-foreground">Interactive Demo Controls</h3>
+                <p className="text-sm text-muted-foreground">Configure TagSelector properties to see live changes</p>
               </div>
               <div className="p-6 space-y-4">
                 <div className="space-y-4">
@@ -396,14 +408,14 @@ export function TagSelectorDemoView() {
             title="Generated Code"
             description="Copy this code to use with current settings"
           />
-
-          {/* Props Table */}
-          <PropsTable
-            props={getPropsData()}
-            title="TagSelector Props"
-            description="Complete list of properties available for the TagSelector component"
-          />
         </div>
+
+        {/* Props Table - Full Width */}
+        <PropsTable
+          props={getPropsData()}
+          title="TagSelector Props"
+          description="Complete list of properties available for the TagSelector component"
+        />
       </div>
     </div>
   );

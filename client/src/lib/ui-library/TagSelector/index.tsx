@@ -74,7 +74,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   const generateCustomColorStyles = () => {
     if (!customColors) return undefined;
     
-    const styles: React.CSSProperties = {};
+    const styles: Record<string, string> = {};
     
     // Light theme colors
     if (customColors.light) {
