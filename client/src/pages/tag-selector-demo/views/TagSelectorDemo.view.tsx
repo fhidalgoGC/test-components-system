@@ -144,9 +144,9 @@ export function TagSelectorDemoView() {
   const getPropsData = () => [
     {
       name: 'getTagsFunction',
-      type: 'TagsFunction',
+      type: '() => Promise<TagItem[]>',
       description: 'Required async function that returns TagItem[]. This function provides the tags to be displayed in the selector.',
-      example: 'async () => [{ id: "1", label: { en: "Tag 1" } }]'
+      example: 'async () => [{ id: "1", label: { en: "Tag 1", es: "Etiqueta 1", default: "Tag 1" } }]'
     },
     {
       name: 'selectedTags',
@@ -156,9 +156,9 @@ export function TagSelectorDemoView() {
     },
     {
       name: 'onSelectionChange',
-      type: 'SelectionCallback',
+      type: '(selectedTags: TagItem[]) => void',
       description: 'Callback function that receives TagItem[] with complete translation data when selection changes.',
-      example: '(tags: TagItem[]) => console.log(tags)'
+      example: '(tags) => console.log(tags)'
     },
     {
       name: 'allowMultiple',
@@ -198,21 +198,21 @@ export function TagSelectorDemoView() {
     },
     {
       name: 'allLabel',
-      type: 'MultiLanguageLabel',
+      type: '{ [languageCode: string]: string; default: string }',
       description: 'MultiLanguageLabel object for customizing the "All" button text in different languages.',
-      example: '{ en: "All", es: "Todos" }'
+      example: '{ en: "All", es: "Todos", default: "All" }'
     },
     {
       name: 'defaultLabel',
-      type: 'MultiLanguageLabel',
+      type: '{ [languageCode: string]: string; default: string }',
       description: 'MultiLanguageLabel object for the default tag text when no tags are available.',
-      example: '{ en: "Default", es: "Por defecto" }'
+      example: '{ en: "Default", es: "Por defecto", default: "Default" }'
     },
     {
       name: 'defaultTagLabels',
-      type: 'MultiLanguageLabel',
+      type: '{ [languageCode: string]: string; default: string }',
       description: 'MultiLanguageLabel object for default tag labels when getTagsFunction returns no tags.',
-      example: '{ en: "No tags", es: "Sin etiquetas" }'
+      example: '{ en: "No tags", es: "Sin etiquetas", default: "No tags" }'
     },
     {
       name: 'id',
