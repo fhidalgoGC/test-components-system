@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import AppLayout from "@/layouts/app-layout";
 import LibraryDashboard from "@/pages/library-dashboard";
 import TagSelectorDemo from "@/pages/tag-selector-demo";
+import ExternalAppDemo from "@/pages/external-app-demo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -38,6 +39,12 @@ export function Router() {
         return {
           showActionButtons: false
         };
+      case '/external-app-demo':
+        return {
+          headerTitle: "External App Demo",
+          headerDescription: "Real-world implementation example with LanguageProvider",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -52,6 +59,7 @@ export function Router() {
       <Switch>
         <Route path="/" component={LibraryDashboard} />
         <Route path="/components/tag-selector" component={TagSelectorDemo} />
+        <Route path="/external-app-demo" component={ExternalAppDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

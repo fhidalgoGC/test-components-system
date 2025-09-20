@@ -13,7 +13,8 @@ export function getDefaultMenuItems(): MenuItem[] {
       label: 'Components', 
       icon: 'Package',
       children: [
-        { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector', icon: 'Tags' }
+        { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector', icon: 'Tags' },
+        { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
       ]
     }
   ];
