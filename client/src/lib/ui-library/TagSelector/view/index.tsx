@@ -100,6 +100,57 @@ export const TagSelectorView: React.FC<{
     onSelectionChange([]);
   };
 
+  // Generate inline styles for individual tag metadata
+  const generateTagInlineStyles = (tag: TagItem, isSelected: boolean): React.CSSProperties => {
+    if (!tag.metadata?.colors) return {};
+    
+    const themeColors = tag.metadata.colors[theme];
+    if (!themeColors) return {};
+    
+    const state = isSelected ? themeColors.selected : themeColors.unselected;
+    if (!state) return {};
+    
+    const styles: React.CSSProperties = {};
+    
+    // Base styles for the current state
+    if (state.background) styles.backgroundColor = state.background;
+    if (state.text) styles.color = state.text;
+    if (state.border) styles.borderColor = state.border;
+    
+    return styles;
+  };
+
+  // Generate CSS hover styles using CSS custom properties for individual tags
+  const generateTagHoverStyles = (tag: TagItem, isSelected: boolean): Record<string, string> => {
+    if (!tag.metadata?.colors) return {};
+    
+    const themeColors = tag.metadata.colors[theme];
+    if (!themeColors) return {};
+    
+    const state = isSelected ? themeColors.selected : themeColors.unselected;
+    if (!state) return {};
+    
+    const hoverStyles: Record<string, string> = {};
+    
+    // Set CSS custom properties for hover states
+    if (state.hoverBackground) {
+      hoverStyles['--tag-hover-bg'] = state.hoverBackground;
+    }
+    if (state.hoverBorder) {
+      hoverStyles['--tag-hover-border'] = state.hoverBorder;
+    }
+    
+    return hoverStyles;
+  };
+
+  // Combine base styles and hover styles for a tag
+  const getCombinedTagStyles = (tag: TagItem, isSelected: boolean): React.CSSProperties => {
+    const baseStyles = generateTagInlineStyles(tag, isSelected);
+    const hoverStyles = generateTagHoverStyles(tag, isSelected);
+    
+    return { ...baseStyles, ...hoverStyles } as React.CSSProperties;
+  };
+
   return (
     <div 
       className={containerClasses(theme, isVisible, className)}
@@ -130,10 +181,14 @@ export const TagSelectorView: React.FC<{
       
       {tags.map((tag) => {
         const isSelected = selectedTags.includes(tag.id);
+        const hasMetadataColors = tag.metadata?.colors;
+        const tagStyles = hasMetadataColors ? getCombinedTagStyles(tag, isSelected) : {};
+        
         return (
           <button
             key={tag.id}
             className={chipClasses(theme, isVisible, isSelected, size, false)}
+            style={tagStyles}
             onClick={() => handleTagClick(tag.id)}
             disabled={disabled}
             data-testid={`tag-${tag.id}`}

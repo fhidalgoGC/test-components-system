@@ -16,6 +16,12 @@
   user-select: none;
 }
 
+/* Individual tag hover support using CSS custom properties */
+.chip:hover:not(:disabled) {
+  background-color: var(--tag-hover-bg, var(--tag-light-unselected-hover-bg, inherit));
+  border-color: var(--tag-hover-border, var(--tag-light-unselected-hover-border, inherit));
+}
+
 .chip:disabled {
   opacity: 0.5;
   cursor: not-allowed;
