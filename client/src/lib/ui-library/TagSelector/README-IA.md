@@ -259,34 +259,56 @@ function TechSelector() {
 />
 ```
 
-### 2. Direct Color Customization
+### 2. Granular Color Control for All Tag States
+
+**IMPORTANT**: Complete control over colors for every tag state with both fill and border colors.
 
 ```typescript
-const brandColors = {
+const granularBrandColors = {
   light: {
     selected: {
-      background: '#6366f1', // Brand primary
-      text: '#ffffff',
-      hoverBackground: '#4f46e5'
+      background: '#6366f1',        // Fill color when selected
+      text: '#ffffff',              // Text color when selected  
+      border: '#4338ca',            // Border color when selected
+      hoverBackground: '#4f46e5',   // Fill color when selected + hover
+      hoverBorder: '#3730a3'        // Border color when selected + hover
     },
     unselected: {
-      background: '#f8fafc',
-      text: '#334155',
-      hoverBackground: '#e2e8f0'
+      background: '#f8fafc',        // Fill color when unselected
+      text: '#334155',              // Text color when unselected
+      border: '#e2e8f0',            // Border color when unselected  
+      hoverBackground: '#e2e8f0',   // Fill color when unselected + hover
+      hoverBorder: '#cbd5e1'        // Border color when unselected + hover
     },
     all: {
-      background: '#ef4444', // Red for "Select All"
-      text: '#ffffff'
+      background: '#ef4444',        // Fill color for "All" button
+      text: '#ffffff',              // Text color for "All" button
+      border: '#dc2626',            // Border color for "All" button
+      hoverBackground: '#dc2626',   // Fill color for "All" button + hover
+      hoverBorder: '#b91c1c'        // Border color for "All" button + hover
     }
   },
   dark: {
     selected: {
-      background: '#8b5cf6',
-      text: '#ffffff'
+      background: '#8b5cf6',        // Fill color when selected (dark theme)
+      text: '#ffffff',              // Text color when selected (dark theme)
+      border: '#7c3aed',            // Border color when selected (dark theme)
+      hoverBackground: '#7c3aed',   // Fill color when selected + hover (dark theme)
+      hoverBorder: '#6d28d9'        // Border color when selected + hover (dark theme)
     },
     unselected: {
-      background: '#374151',
-      text: '#d1d5db'
+      background: '#374151',        // Fill color when unselected (dark theme)
+      text: '#d1d5db',              // Text color when unselected (dark theme)
+      border: '#4b5563',            // Border color when unselected (dark theme)
+      hoverBackground: '#4b5563',   // Fill color when unselected + hover (dark theme)
+      hoverBorder: '#6b7280'        // Border color when unselected + hover (dark theme)
+    },
+    all: {
+      background: '#f59e0b',        // Fill color for "All" button (dark theme)
+      text: '#000000',              // Text color for "All" button (dark theme)
+      border: '#d97706',            // Border color for "All" button (dark theme)
+      hoverBackground: '#d97706',   // Fill color for "All" button + hover (dark theme)
+      hoverBorder: '#b45309'        // Border color for "All" button + hover (dark theme)
     }
   }
 };
@@ -295,11 +317,58 @@ const brandColors = {
   getTagsFunction={getTags}
   selectedTags={selectedTags}
   onSelectionChange={handleChange}
-  customColors={brandColors}
+  customColors={granularBrandColors}
 />
 ```
 
-### 3. Combining Theme Class + Custom Colors
+### 3. Real-World Commodities Example
+
+Perfect for commodity trading interfaces like the provided screenshot:
+
+```typescript
+const commoditiesTheme = {
+  light: {
+    selected: {
+      background: '#10b981',        // Green fill for selected commodities
+      text: '#ffffff',              // White text for readability
+      border: '#059669',            // Darker green border 
+      hoverBackground: '#059669',   // Darker green on hover
+      hoverBorder: '#047857'        // Even darker border on hover
+    },
+    unselected: {
+      background: '#f9fafb',        // Light gray fill for unselected
+      text: '#374151',              // Dark text for contrast
+      border: '#e5e7eb',            // Light gray border
+      hoverBackground: '#f3f4f6',   // Slightly darker on hover  
+      hoverBorder: '#d1d5db'        // Darker border on hover
+    },
+    all: {
+      background: '#3b82f6',        // Blue fill for "All" button
+      text: '#ffffff',              // White text
+      border: '#2563eb',            // Darker blue border
+      hoverBackground: '#2563eb',   // Darker blue on hover
+      hoverBorder: '#1d4ed8'        // Even darker border on hover
+    }
+  }
+};
+
+// Usage for commodities interface
+<TagSelector
+  getTagsFunction={getCommodityTags}
+  selectedTags={selectedCommodities}
+  onSelectionChange={(tags) => setSelectedCommodities(tags.map(t => t.id))}
+  customColors={commoditiesTheme}
+  allowMultiple={true}
+  allowAll={true}
+  allLabel={{
+    en: 'All Commodities',
+    es: 'Todas las Materias Primas',
+    default: 'All Commodities'
+  }}
+/>
+```
+
+### 4. Combining Theme Class + Custom Colors
 
 ```typescript
 <TagSelector
@@ -315,6 +384,118 @@ const brandColors = {
     }
   }}
 />
+```
+
+## CSS Custom Properties Reference
+
+**For Advanced Users**: Direct CSS variable control for maximum customization flexibility.
+
+### Available CSS Variables
+
+All CSS variables follow the pattern: `--tag-{theme}-{state}-{property}`
+
+#### Light Theme Variables
+
+```css
+/* Selected state */
+--tag-light-selected-bg: #16a34a;           /* Fill color when selected */
+--tag-light-selected-text: #ffffff;         /* Text color when selected */
+--tag-light-selected-border: #16a34a;       /* Border color when selected */
+--tag-light-selected-hover-bg: #15803d;     /* Fill color when selected + hover */
+--tag-light-selected-hover-border: #15803d; /* Border color when selected + hover */
+
+/* Unselected state */
+--tag-light-unselected-bg: #f1f5f9;         /* Fill color when unselected */
+--tag-light-unselected-text: #475569;       /* Text color when unselected */
+--tag-light-unselected-border: #e2e8f0;     /* Border color when unselected */
+--tag-light-unselected-hover-bg: #e2e8f0;   /* Fill color when unselected + hover */
+--tag-light-unselected-hover-border: #cbd5e1; /* Border color when unselected + hover */
+
+/* All button state */
+--tag-light-all-bg: #3b82f6;                /* Fill color for "All" button */
+--tag-light-all-text: #ffffff;              /* Text color for "All" button */
+--tag-light-all-border: #3b82f6;            /* Border color for "All" button */
+--tag-light-all-hover-bg: #2563eb;          /* Fill color for "All" button + hover */
+--tag-light-all-hover-border: #2563eb;      /* Border color for "All" button + hover */
+```
+
+#### Dark Theme Variables
+
+```css
+/* Selected state */
+--tag-dark-selected-bg: #22c55e;            /* Fill color when selected (dark) */
+--tag-dark-selected-text: #000000;          /* Text color when selected (dark) */
+--tag-dark-selected-border: #22c55e;        /* Border color when selected (dark) */
+--tag-dark-selected-hover-bg: #16a34a;      /* Fill color when selected + hover (dark) */
+--tag-dark-selected-hover-border: #16a34a;  /* Border color when selected + hover (dark) */
+
+/* Unselected state */
+--tag-dark-unselected-bg: #374151;          /* Fill color when unselected (dark) */
+--tag-dark-unselected-text: #d1d5db;        /* Text color when unselected (dark) */
+--tag-dark-unselected-border: #4b5563;      /* Border color when unselected (dark) */
+--tag-dark-unselected-hover-bg: #4b5563;    /* Fill color when unselected + hover (dark) */
+--tag-dark-unselected-hover-border: #6b7280; /* Border color when unselected + hover (dark) */
+
+/* All button state */
+--tag-dark-all-bg: #60a5fa;                 /* Fill color for "All" button (dark) */
+--tag-dark-all-text: #000000;               /* Text color for "All" button (dark) */
+--tag-dark-all-border: #60a5fa;             /* Border color for "All" button (dark) */
+--tag-dark-all-hover-bg: #3b82f6;           /* Fill color for "All" button + hover (dark) */
+--tag-dark-all-hover-border: #3b82f6;       /* Border color for "All" button + hover (dark) */
+```
+
+### Direct CSS Usage
+
+You can override these variables directly in your CSS:
+
+```css
+.commodity-selector {
+  /* Custom commodities theme */
+  --tag-light-selected-bg: #10b981;
+  --tag-light-selected-border: #059669;
+  --tag-light-selected-hover-bg: #059669;
+  --tag-light-selected-hover-border: #047857;
+  
+  --tag-light-unselected-bg: #f9fafb;
+  --tag-light-unselected-border: #e5e7eb;
+  --tag-light-unselected-hover-bg: #f3f4f6;
+  --tag-light-unselected-hover-border: #d1d5db;
+}
+
+.financial-selector {
+  /* Custom financial theme */
+  --tag-light-selected-bg: #1d4ed8;
+  --tag-light-selected-border: #1e40af;
+  --tag-light-unselected-bg: #eff6ff;
+  --tag-light-unselected-border: #dbeafe;
+}
+```
+
+### Runtime CSS Variable Updates
+
+For dynamic color changes (e.g., user preferences):
+
+```typescript
+function updateTagColors(element: HTMLElement, colors: any) {
+  // Update CSS variables at runtime
+  if (colors.selected?.background) {
+    element.style.setProperty('--tag-light-selected-bg', colors.selected.background);
+  }
+  if (colors.selected?.border) {
+    element.style.setProperty('--tag-light-selected-border', colors.selected.border);
+  }
+  if (colors.unselected?.background) {
+    element.style.setProperty('--tag-light-unselected-bg', colors.unselected.background);
+  }
+  // ... continue for all needed variables
+}
+
+// Usage
+const tagSelectorElement = document.querySelector('.tag-selector-container');
+updateTagColors(tagSelectorElement, {
+  selected: { background: '#custom-color', border: '#custom-border' },
+  unselected: { background: '#another-color', border: '#another-border' }
+});
 ```
 
 ## Global State Integration (REACTIVE UPDATES)
