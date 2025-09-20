@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import type { LanguageContextValue, MultiLanguageLabel } from '../types/language';
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -13,6 +13,29 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   defaultLanguage = 'en' 
 }) => {
   const [currentLanguage, setCurrentLanguage] = useState<string>(defaultLanguage);
+
+  // Escuchar cambios globales de idioma
+  useEffect(() => {
+    const handleGlobalLanguageChange = (event: CustomEvent) => {
+      const newLanguage = event.detail?.language;
+      if (newLanguage && newLanguage !== currentLanguage) {
+        setCurrentLanguage(newLanguage);
+      }
+    };
+
+    // Escuchar el evento global de cambio de idioma
+    window.addEventListener('languageChange', handleGlobalLanguageChange as EventListener);
+
+    // También verificar localStorage al montar
+    const storedLanguage = localStorage.getItem('language');
+    if (storedLanguage && storedLanguage !== currentLanguage) {
+      setCurrentLanguage(storedLanguage);
+    }
+
+    return () => {
+      window.removeEventListener('languageChange', handleGlobalLanguageChange as EventListener);
+    };
+  }, [currentLanguage]);
 
   const setLanguage = useCallback((language: string) => {
     setCurrentLanguage(language);
