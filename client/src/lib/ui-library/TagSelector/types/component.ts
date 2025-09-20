@@ -23,6 +23,7 @@ export interface TagThemeColors {
     border?: string;
     hoverBackground?: string;
     hoverBorder?: string;
+    hoverText?: string;      // Text color on hover
   };
   unselected?: {
     background?: string;
@@ -30,6 +31,7 @@ export interface TagThemeColors {
     border?: string;
     hoverBackground?: string;
     hoverBorder?: string;
+    hoverText?: string;      // Text color on hover
   };
   all?: {
     background?: string;
@@ -37,6 +39,7 @@ export interface TagThemeColors {
     border?: string;
     hoverBackground?: string;
     hoverBorder?: string;
+    hoverText?: string;      // Text color on hover
   };
 }
 

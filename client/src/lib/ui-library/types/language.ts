@@ -12,6 +12,7 @@ export interface TagStateColors {
   border?: string;           // Border color
   hoverBackground?: string;  // Fill color on hover
   hoverBorder?: string;      // Border color on hover
+  hoverText?: string;        // Text color on hover
 }
 
 // Tag metadata for individual customization per tag

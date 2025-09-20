@@ -157,6 +157,9 @@ export const TagSelectorView: React.FC<{
     if (state.hoverBorder) {
       hoverStyles['--tag-hover-border'] = state.hoverBorder;
     }
+    if (state.hoverText) {
+      hoverStyles['--tag-hover-text'] = state.hoverText;
+    }
     
     return hoverStyles;
   };

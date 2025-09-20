@@ -91,6 +91,66 @@ const getApiTags = async (): Promise<TagItem[]> => {
         de: 'Programmierung',
         default: 'Programming'
       }
+    },
+    {
+      id: 'basis',
+      label: {
+        en: 'Basis',
+        es: 'Basis',
+        default: 'Basis'
+      },
+      metadata: {
+        colors: {
+          light: {
+            selected: {
+              background: '#f3e8ff',     // purple-100
+              hoverBackground: '#e9d5ff', // purple-200
+              border: '#d8b4fe',         // purple-300
+              hoverBorder: '#c084fc',    // purple-400
+              text: '#7c3aed',           // purple-700
+              hoverText: '#6b21a8'       // purple-800
+            },
+            unselected: {
+              background: '#ffffff',     // white
+              hoverBackground: '#f3e8ff', // purple-100
+              border: '#d8b4fe',         // purple-300
+              hoverBorder: '#c084fc',    // purple-400
+              text: '#9333ea',           // purple-600
+              hoverText: '#7c3aed'       // purple-700
+            }
+          }
+        }
+      }
+    },
+    {
+      id: 'fixed',
+      label: {
+        en: 'Fixed',
+        es: 'Fijo',
+        default: 'Fixed'
+      },
+      metadata: {
+        colors: {
+          light: {
+            selected: {
+              background: '#dbeafe',     // blue-100
+              hoverBackground: '#bfdbfe', // blue-200
+              border: '#93c5fd',         // blue-300
+              hoverBorder: '#60a5fa',    // blue-400
+              text: '#1d4ed8',           // blue-700
+              hoverText: '#1e40af'       // blue-800
+            },
+            unselected: {
+              background: '#ffffff',     // white
+              hoverBackground: '#dbeafe', // blue-100
+              border: '#93c5fd',         // blue-300
+              hoverBorder: '#60a5fa',    // blue-400
+              text: '#2563eb',           // blue-600
+              hoverText: '#1d4ed8'       // blue-700
+            }
+          }
+        }
+      }
     }
   ];
 };
@@ -105,7 +165,7 @@ const getErrorTags = async (): Promise<TagItem[]> => {
 
 export function TagSelectorDemoView() {
   const { t, currentTheme } = useTagSelectorDemo();
-  const [selectedTags, setSelectedTags] = useState<string[]>(['technology']);
+  const [selectedTags, setSelectedTags] = useState<string[]>(['basis', 'fixed']);
 
   // NEW: Handle the updated callback format with complete label data
   const handleSelectionChange = (items: TagItem[]) => {

@@ -20,6 +20,7 @@
 .chip:hover:not(:disabled) {
   background-color: var(--tag-hover-bg, var(--tag-light-unselected-hover-bg, inherit));
   border-color: var(--tag-hover-border, var(--tag-light-unselected-hover-border, inherit));
+  color: var(--tag-hover-text, inherit);
 }
 
 .chip:disabled {
