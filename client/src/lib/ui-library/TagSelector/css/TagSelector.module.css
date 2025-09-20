@@ -128,8 +128,9 @@
 }
 
 .light.selected:hover:not(:disabled) {
-  background-color: var(--tag-light-selected-hover-bg, hsl(142.1, 76.2%, 32%));
-  border-color: var(--tag-light-selected-hover-border, hsl(142.1, 76.2%, 32%));
+  background-color: var(--tag-hover-bg, var(--tag-light-selected-hover-bg, hsl(142.1, 76.2%, 32%)));
+  border-color: var(--tag-hover-border, var(--tag-light-selected-hover-border, hsl(142.1, 76.2%, 32%)));
+  color: var(--tag-hover-text, var(--tag-light-selected-text, hsl(355.7, 100%, 97.3%)));
 }
 
 .light.unselected {
@@ -139,8 +140,9 @@
 }
 
 .light.unselected:hover:not(:disabled) {
-  background-color: var(--tag-light-unselected-hover-bg, hsl(210, 40%, 92%));
-  border-color: var(--tag-light-unselected-hover-border, hsl(214.3, 31.8%, 87%));
+  background-color: var(--tag-hover-bg, var(--tag-light-unselected-hover-bg, hsl(210, 40%, 92%)));
+  border-color: var(--tag-hover-border, var(--tag-light-unselected-hover-border, hsl(214.3, 31.8%, 87%)));
+  color: var(--tag-hover-text, var(--tag-light-unselected-text, hsl(222.2, 84%, 4.9%)));
 }
 
 /* Selected states - Dark Theme */
@@ -151,8 +153,9 @@
 }
 
 .dark.selected:hover:not(:disabled) {
-  background-color: var(--tag-dark-selected-hover-bg, hsl(142.1, 70.6%, 50%));
-  border-color: var(--tag-dark-selected-hover-border, hsl(142.1, 70.6%, 50%));
+  background-color: var(--tag-hover-bg, var(--tag-dark-selected-hover-bg, hsl(142.1, 70.6%, 50%)));
+  border-color: var(--tag-hover-border, var(--tag-dark-selected-hover-border, hsl(142.1, 70.6%, 50%)));
+  color: var(--tag-hover-text, var(--tag-dark-selected-text, hsl(210, 20%, 98%)));
 }
 
 .dark.unselected {
@@ -162,8 +165,9 @@
 }
 
 .dark.unselected:hover:not(:disabled) {
-  background-color: var(--tag-dark-unselected-hover-bg, hsl(217.2, 32.6%, 20%));
-  border-color: var(--tag-dark-unselected-hover-border, hsl(217.2, 32.6%, 25%));
+  background-color: var(--tag-hover-bg, var(--tag-dark-unselected-hover-bg, hsl(217.2, 32.6%, 20%)));
+  border-color: var(--tag-hover-border, var(--tag-dark-unselected-hover-border, hsl(217.2, 32.6%, 25%)));
+  color: var(--tag-hover-text, var(--tag-dark-unselected-text, hsl(210, 40%, 98%)));
 }
 
 /* All button special styling */
