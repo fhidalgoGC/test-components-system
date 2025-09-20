@@ -1,4 +1,5 @@
 # TagSelector - AI Implementation Guide
+**Version: 1.0.1**
 
 ## Overview
 
@@ -1755,10 +1756,21 @@ Individual tags can override any size with custom pixel values:
 
 This implementation guide provides everything needed to implement the TagSelector component without needing to read the full source code. The component handles all complex logic internally while providing a simple, powerful API for various use cases.
 
-**Latest Updates:**
+## Version History
+
+### Version 1.0.1 (Current)
 - ✅ Granular sizing system with tam-1 through tam-12 sizes
 - ✅ Custom pixel-based sizing via metadata
 - ✅ Individual tag color customization via metadata
 - ✅ requireSelection prop for mandatory selections
 - ✅ Complete fallback system for colors and sizing
 - ✅ Enhanced TypeScript interfaces with full type safety
+
+### Versioning Rules
+- **Format**: MAJOR.MINOR.PATCH (e.g., 1.0.1)
+- **Increment**: PATCH +1 for each change (1.0.1 → 1.0.2)
+- **Rollover**: When PATCH reaches 10, increment MINOR and reset PATCH (1.0.10 → 1.1.0)
+- **Major**: For breaking changes (1.9.x → 2.0.0)
+
+### Future Updates
+Next version will be **1.0.2** when documentation changes are made.
