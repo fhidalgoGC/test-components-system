@@ -18,9 +18,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   useEffect(() => {
     const handleGlobalLanguageChange = (event: CustomEvent) => {
       const newLanguage = event.detail?.language;
-      console.log('LanguageProvider: Received language change event:', newLanguage, 'current:', currentLanguage);
       if (newLanguage && newLanguage !== currentLanguage) {
-        console.log('LanguageProvider: Updating language to:', newLanguage);
         setCurrentLanguage(newLanguage);
       }
     };
