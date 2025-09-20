@@ -14,6 +14,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   onSelectionChange, 
   allowMultiple, 
   allowAll, 
+  requireSelection,
   config, 
   size, 
   disabled, 
@@ -168,6 +169,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
             defaultTagLabels={defaultTagLabels}
             allowMultiple={allowMultiple}
             allowAll={allowAll}
+            requireSelection={requireSelection}
             size={size}
             disabled={disabled || isLoading}
             isLoading={isLoading}

@@ -127,6 +127,7 @@ export function TagSelectorDemoView() {
   };
   const [allowMultiple, setAllowMultiple] = useState(true);
   const [allowAll, setAllowAll] = useState(true);
+  const [requireSelection, setRequireSelection] = useState(false);
   const [size, setSize] = useState<TagSelectorSize>('md');
   const [disabled, setDisabled] = useState(false);
   const [demoType, setDemoType] = useState<'async-food' | 'async-tech' | 'async-error'>('async-tech');
@@ -301,6 +302,7 @@ export function TagSelectorDemoView() {
                   onSelectionChange={handleSelectionChange}
                   allowMultiple={allowMultiple}
                   allowAll={allowAll}
+                  requireSelection={requireSelection}
                   size={size}
                   disabled={disabled}
                   langOverride={currentLanguage}
@@ -394,6 +396,16 @@ export function TagSelectorDemoView() {
                         data-testid="switch-disabled"
                       />
                       <Label htmlFor="disabled-switch">Disabled</Label>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="require-selection-switch"
+                        checked={requireSelection}
+                        onCheckedChange={setRequireSelection}
+                        data-testid="switch-require-selection"
+                      />
+                      <Label htmlFor="require-selection-switch">Require Selection</Label>
                     </div>
                   </div>
                   

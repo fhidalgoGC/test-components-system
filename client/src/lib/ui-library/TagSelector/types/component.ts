@@ -64,6 +64,7 @@ export interface TagSelectorProps {
   defaultTagLabels?: MultiLanguageLabel;
   allowMultiple?: boolean;
   allowAll?: boolean;
+  requireSelection?: boolean; // Require at least one tag to be selected
   config?: VisibilityConfig;    // override over default visibility config if passed
   size?: TagSelectorSize;
   disabled?: boolean;

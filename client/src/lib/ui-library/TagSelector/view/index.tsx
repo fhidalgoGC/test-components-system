@@ -13,6 +13,7 @@ export const TagSelectorView: React.FC<{
   onSelectionChange: (selectedTags: TagItem[]) => void; // Returns TagItem[] directly
   allowMultiple?: boolean;
   allowAll?: boolean;
+  requireSelection?: boolean;
   size?: TagSelectorSize;
   disabled?: boolean;
   isLoading?: boolean;
@@ -26,6 +27,7 @@ export const TagSelectorView: React.FC<{
   onSelectionChange, 
   allowMultiple = true, 
   allowAll = true, 
+  requireSelection = false,
   size = 'md', 
   disabled = false,
   isLoading = false,
@@ -58,6 +60,10 @@ export const TagSelectorView: React.FC<{
     // If all tags are selected, clear selection; otherwise select all
     const allSelected = tags.length > 0 && tags.every(tag => selectedTags.includes(tag.id));
     if (allSelected) {
+      // Check if requireSelection prevents clearing all tags
+      if (requireSelection && selectedTags.length > 0) {
+        return; // Don't allow clearing if requireSelection is active
+      }
       onSelectionChange([]);
     } else {
       // Return TagItem[] format with complete label data
@@ -71,6 +77,10 @@ export const TagSelectorView: React.FC<{
     if (allowMultiple) {
       const isSelected = selectedTags.includes(tagId);
       if (isSelected) {
+        // Check if requireSelection prevents deselecting the last tag
+        if (requireSelection && selectedTags.length === 1) {
+          return; // Don't allow deselecting the last tag if requireSelection is active
+        }
         // Remove from selection - convert remaining IDs to TagItem format
         const remaining = selectedTags.filter(id => id !== tagId);
         onSelectionChange(idsToTagItems(remaining));
@@ -83,6 +93,10 @@ export const TagSelectorView: React.FC<{
       // Single selection mode
       const isSelected = selectedTags.includes(tagId);
       if (isSelected) {
+        // Check if requireSelection prevents deselecting in single mode
+        if (requireSelection) {
+          return; // Don't allow deselecting if requireSelection is active in single mode
+        }
         onSelectionChange([]); // Deselect if already selected
       } else {
         const selectedItem = findTagById(tagId);
@@ -96,6 +110,10 @@ export const TagSelectorView: React.FC<{
 
   const handleDefaultClick = () => {
     if (disabled) return;
+    // Check if requireSelection prevents clearing selection
+    if (requireSelection && selectedTags.length > 0) {
+      return; // Don't allow clearing if requireSelection is active
+    }
     // Clear selection when default chip is clicked
     onSelectionChange([]);
   };
