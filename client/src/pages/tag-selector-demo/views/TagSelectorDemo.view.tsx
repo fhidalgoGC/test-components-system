@@ -9,6 +9,7 @@ import { CodePreview } from '@/components/code-preview';
 import { PropsTable } from '@/components/props-table';
 // TagItem is already imported from language types
 import type { TagItem } from '@/lib/ui-library/types/language';
+import type { TagSelectorSize } from '@/lib/ui-library/TagSelector/types';
 import { useLanguage } from '@/lib/ui-library/context/LanguageContext';
 import { useTagSelectorDemo } from '../hooks/TagSelectorDemo.hook';
 import styles from '../css/TagSelectorDemo.module.css';
@@ -126,7 +127,7 @@ export function TagSelectorDemoView() {
   };
   const [allowMultiple, setAllowMultiple] = useState(true);
   const [allowAll, setAllowAll] = useState(true);
-  const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+  const [size, setSize] = useState<TagSelectorSize>('md');
   const [disabled, setDisabled] = useState(false);
   const [demoType, setDemoType] = useState<'async-food' | 'async-tech' | 'async-error'>('async-tech');
 

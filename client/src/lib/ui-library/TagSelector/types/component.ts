@@ -2,6 +2,9 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../types/shared';
 import type { TagItem, TagsFunction, MultiLanguageLabel, TagMetadata } from '../../types/language';
 
+// Unified size type for TagSelector
+export type TagSelectorSize = 'sm' | 'md' | 'lg' | 'tam-1' | 'tam-2' | 'tam-3' | 'tam-4' | 'tam-5' | 'tam-6' | 'tam-7' | 'tam-8' | 'tam-9' | 'tam-10' | 'tam-11' | 'tam-12';
+
 // Selection item format - Same as TagItem for consistency
 export interface SelectedTagItem {
   id: string;
@@ -62,7 +65,7 @@ export interface TagSelectorProps {
   allowMultiple?: boolean;
   allowAll?: boolean;
   config?: VisibilityConfig;    // override over default visibility config if passed
-  size?: 'sm' | 'md' | 'lg';
+  size?: TagSelectorSize;
   disabled?: boolean;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';

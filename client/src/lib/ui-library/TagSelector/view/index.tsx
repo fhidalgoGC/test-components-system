@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTagSelectorContext } from '../provider';
 import { containerClasses, chipClasses } from '../css/TagSelector.module';
-import type { SelectedTagItem } from '../types';
+import type { SelectedTagItem, TagSelectorSize } from '../types';
 import type { TagItem } from '../../types/language';
 import type { MultiLanguageLabel } from '../../types/language';
 import { useLanguage } from '../../context/LanguageContext';
@@ -13,7 +13,7 @@ export const TagSelectorView: React.FC<{
   onSelectionChange: (selectedTags: TagItem[]) => void; // Returns TagItem[] directly
   allowMultiple?: boolean;
   allowAll?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: TagSelectorSize;
   disabled?: boolean;
   isLoading?: boolean;
   allLabel?: MultiLanguageLabel;
@@ -143,12 +143,35 @@ export const TagSelectorView: React.FC<{
     return hoverStyles;
   };
 
-  // Combine base styles and hover styles for a tag
+  // Generate sizing styles from metadata
+  const generateTagSizingStyles = (tag: TagItem): React.CSSProperties => {
+    if (!tag.metadata?.sizing) return {};
+    
+    const sizing = tag.metadata.sizing;
+    const styles: React.CSSProperties = {};
+    
+    if (sizing.paddingX) {
+      styles.paddingLeft = sizing.paddingX;
+      styles.paddingRight = sizing.paddingX;
+    }
+    if (sizing.paddingY) {
+      styles.paddingTop = sizing.paddingY;
+      styles.paddingBottom = sizing.paddingY;
+    }
+    if (sizing.fontSize) styles.fontSize = sizing.fontSize;
+    if (sizing.minWidth) styles.minWidth = sizing.minWidth;
+    if (sizing.height) styles.height = sizing.height;
+    
+    return styles;
+  };
+
+  // Combine base styles, hover styles, and sizing styles for a tag
   const getCombinedTagStyles = (tag: TagItem, isSelected: boolean): React.CSSProperties => {
     const baseStyles = generateTagInlineStyles(tag, isSelected);
     const hoverStyles = generateTagHoverStyles(tag, isSelected);
+    const sizingStyles = generateTagSizingStyles(tag);
     
-    return { ...baseStyles, ...hoverStyles } as React.CSSProperties;
+    return { ...baseStyles, ...hoverStyles, ...sizingStyles } as React.CSSProperties;
   };
 
   return (

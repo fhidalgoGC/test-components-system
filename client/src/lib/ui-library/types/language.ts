@@ -26,6 +26,13 @@ export interface TagMetadata {
       unselected?: TagStateColors; // Colors when unselected (dark theme)
     };
   };
+  sizing?: {
+    paddingX?: string;    // Horizontal padding (e.g., '8px', '1rem')
+    paddingY?: string;    // Vertical padding (e.g., '4px', '0.5rem')
+    fontSize?: string;    // Font size (e.g., '14px', '0.875rem')
+    minWidth?: string;    // Minimum width (e.g., '80px', '5rem')
+    height?: string;      // Fixed height (e.g., '32px', '2rem')
+  };
 }
 
 export interface TagItem {
