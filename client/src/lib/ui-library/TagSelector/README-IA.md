@@ -1,5 +1,5 @@
 # TagSelector - AI Implementation Guide
-**Version: 1.0.1**
+**Version: 1.0.2**
 
 ## Overview
 
@@ -1444,7 +1444,141 @@ function ReactiveDemo() {
 
 ## Internationalization Examples
 
-### 1. Custom Labels for All Button
+### 1. Programmatic Language Changes (External Applications)
+
+**For applications consuming this TagSelector library**, here's how to change the language programmatically:
+
+#### Option A: Using langOverride Prop (Recommended)
+```typescript
+function MyApp() {
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // Function to change language from your application
+  const changeApplicationLanguage = (newLanguage: string) => {
+    setCurrentLanguage(newLanguage);
+    // Optional: Save to localStorage for persistence
+    localStorage.setItem('app-language', newLanguage);
+  };
+
+  return (
+    <div>
+      {/* Your language switcher UI */}
+      <div className="language-switcher">
+        <button onClick={() => changeApplicationLanguage('en')}>🇺🇸 English</button>
+        <button onClick={() => changeApplicationLanguage('es')}>🇪🇸 Español</button>
+        <button onClick={() => changeApplicationLanguage('fr')}>🇫🇷 Français</button>
+        <button onClick={() => changeApplicationLanguage('pt')}>🇧🇷 Português</button>
+      </div>
+
+      {/* TagSelector automatically updates with new language */}
+      <TagSelector
+        getTagsFunction={getTags}
+        selectedTags={selectedTags}
+        onSelectionChange={(tags) => setSelectedTags(tags.map(t => t.id))}
+        langOverride={currentLanguage} // Pass current language here
+      />
+    </div>
+  );
+}
+```
+
+#### Option B: Integration with Existing i18n Systems
+```typescript
+// With react-i18next
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { i18n } = useTranslation();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  return (
+    <div>
+      {/* Your existing language controls */}
+      <select 
+        value={i18n.language} 
+        onChange={(e) => i18n.changeLanguage(e.target.value)}
+      >
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+      </select>
+
+      {/* TagSelector syncs with your i18n system */}
+      <TagSelector
+        getTagsFunction={getTags}
+        selectedTags={selectedTags}
+        onSelectionChange={(tags) => setSelectedTags(tags.map(t => t.id))}
+        langOverride={i18n.language} // Automatically syncs
+      />
+    </div>
+  );
+}
+```
+
+#### Option C: Dynamic Language Changes with API Integration
+```typescript
+function LanguageAwareTagSelector() {
+  const [currentLang, setCurrentLang] = useState('en');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // Load tags in current language
+  const getTagsInLanguage = useCallback(async (): Promise<TagItem[]> => {
+    const response = await fetch(`/api/tags?lang=${currentLang}`);
+    const data = await response.json();
+    
+    return data.map(item => ({
+      id: item.id,
+      label: {
+        en: item.label_en,
+        es: item.label_es,
+        fr: item.label_fr,
+        default: item.label_en || item.label
+      }
+    }));
+  }, [currentLang]);
+
+  const handleLanguageChange = (newLang: string) => {
+    setCurrentLang(newLang);
+    // TagSelector will automatically reload with new language
+  };
+
+  return (
+    <div>
+      <div className="language-controls">
+        <button 
+          onClick={() => handleLanguageChange('en')}
+          className={currentLang === 'en' ? 'active' : ''}
+        >
+          English
+        </button>
+        <button 
+          onClick={() => handleLanguageChange('es')}
+          className={currentLang === 'es' ? 'active' : ''}
+        >
+          Español
+        </button>
+      </div>
+
+      <TagSelector
+        getTagsFunction={getTagsInLanguage} // Re-fetches when language changes
+        selectedTags={selectedTags}
+        onSelectionChange={(tags) => setSelectedTags(tags.map(t => t.id))}
+        langOverride={currentLang}
+      />
+    </div>
+  );
+}
+```
+
+#### Key Points for External Applications:
+- **Use `langOverride` prop**: Always pass the current language to ensure TagSelector displays the correct language
+- **Reactive Updates**: TagSelector automatically re-renders when `langOverride` changes
+- **Language Codes**: Use standard language codes (`'en'`, `'es'`, `'fr'`, etc.)
+- **Fallback Required**: Ensure all `MultiLanguageLabel` objects have a `default` property
+- **State Management**: Language can be managed via component state, global state, or i18n libraries
+
+### 2. Custom Labels for All Button
 
 ```typescript
 const customAllLabel = {
@@ -1758,7 +1892,13 @@ This implementation guide provides everything needed to implement the TagSelecto
 
 ## Version History
 
-### Version 1.0.1 (Current)
+### Version 1.0.2 (Current)
+- ✅ Added comprehensive programmatic language change documentation for external applications
+- ✅ Three different integration options: langOverride prop, i18n systems, and API integration
+- ✅ Fixed hover colors functionality with JavaScript event handlers
+- ✅ Complete examples for consuming applications
+
+### Version 1.0.1
 - ✅ Granular sizing system with tam-1 through tam-12 sizes
 - ✅ Custom pixel-based sizing via metadata
 - ✅ Individual tag color customization via metadata
@@ -1773,4 +1913,4 @@ This implementation guide provides everything needed to implement the TagSelecto
 - **Major**: For breaking changes (1.9.x → 2.0.0)
 
 ### Future Updates
-Next version will be **1.0.2** when documentation changes are made.
+Next version will be **1.0.3** when documentation changes are made.
