@@ -1,11 +1,12 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../types/shared';
-import type { TagItem, TagsFunction, MultiLanguageLabel } from '../../types/language';
+import type { TagItem, TagsFunction, MultiLanguageLabel, TagMetadata } from '../../types/language';
 
 // Selection item format - Same as TagItem for consistency
 export interface SelectedTagItem {
   id: string;
   label: MultiLanguageLabel; // Complete label object with all translations
+  metadata?: TagMetadata; // Optional individual tag customization
 }
 
 // Callback type - always receives TagItem[] (SelectedTagItem[] is same format)
