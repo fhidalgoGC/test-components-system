@@ -8,6 +8,9 @@ TagSelector is a comprehensive, multilingual React component designed for select
 
 - **Async Data Loading**: Required async function for tag data
 - **Multilingual Support**: Complete i18n system with hierarchical translations
+- **Advanced Sizing System**: 15 predefined sizes (sm/md/lg + tam-1 through tam-12) plus custom pixel sizing
+- **Individual Tag Customization**: Per-tag colors and sizing via metadata
+- **Require Selection**: Prevent deselecting the last tag for mandatory selections
 - **Theme Customization**: CSS Custom Properties + class-based theming
 - **Accessibility**: Full keyboard navigation and screen reader support
 - **Responsive Design**: Works on all device sizes
@@ -17,7 +20,14 @@ TagSelector is a comprehensive, multilingual React component designed for select
 
 ```typescript
 import TagSelector from '@/lib/ui-library/TagSelector';
-import type { TagItem, TagCustomColors, MultiLanguageLabel } from '@/lib/ui-library/TagSelector';
+import type { 
+  TagItem, 
+  TagCustomColors, 
+  TagSelectorSize,
+  TagMetadata,
+  TagStateColors,
+  MultiLanguageLabel 
+} from '@/lib/ui-library/TagSelector';
 ```
 
 ## Core Types
@@ -27,6 +37,42 @@ import type { TagItem, TagCustomColors, MultiLanguageLabel } from '@/lib/ui-libr
 interface TagItem {
   id: string;
   label: MultiLanguageLabel; // Complete translation object
+  metadata?: TagMetadata; // Optional individual tag customization (NEW)
+}
+
+### TagMetadata (NEW - Individual Tag Customization)
+```typescript
+interface TagMetadata {
+  colors?: {
+    light?: TagStateColors;
+    dark?: TagStateColors;
+  };
+  sizing?: TagSizing; // Custom pixel-based sizing
+}
+
+interface TagStateColors {
+  selected?: {
+    background?: string;
+    text?: string;
+    border?: string;
+    hoverBackground?: string;
+    hoverBorder?: string;
+  };
+  unselected?: {
+    background?: string;
+    text?: string;
+    border?: string;
+    hoverBackground?: string;
+    hoverBorder?: string;
+  };
+}
+
+interface TagSizing {
+  paddingX?: string;    // e.g., '12px', '1rem'
+  paddingY?: string;    // e.g., '8px', '0.5rem'
+  fontSize?: string;    // e.g., '14px', '0.875rem'
+  minWidth?: string;    // e.g., '80px', '5rem'
+  height?: string;      // e.g., '32px', '2rem'
 }
 ```
 
@@ -36,6 +82,11 @@ interface MultiLanguageLabel {
   [languageCode: string]: string;
   default: string; // Always required as fallback
 }
+```
+
+### TagSelectorSize (ENHANCED - Granular Sizing System)
+```typescript
+type TagSelectorSize = 'sm' | 'md' | 'lg' | 'tam-1' | 'tam-2' | 'tam-3' | 'tam-4' | 'tam-5' | 'tam-6' | 'tam-7' | 'tam-8' | 'tam-9' | 'tam-10' | 'tam-11' | 'tam-12';
 ```
 
 ### TagCustomColors (NEW - Theming System)
@@ -82,7 +133,8 @@ interface TagSelectorProps {
   // OPTIONAL BEHAVIOR PROPS
   allowMultiple?: boolean; // Default: true
   allowAll?: boolean; // Default: true - shows "Select All" button
-  size?: 'sm' | 'md' | 'lg'; // Default: 'md'
+  requireSelection?: boolean; // Default: false - prevents deselecting the last tag
+  size?: TagSelectorSize; // Default: 'md' - supports 'sm'|'md'|'lg'|'tam-1' through 'tam-12'
   disabled?: boolean; // Default: false
   
   // INTERNATIONALIZATION PROPS
@@ -615,6 +667,319 @@ const globalColors = {
   }}
 />
 ```
+
+## Advanced Sizing System
+
+### 1. Granular Size Control with tam-1 through tam-12
+
+**NEW FEATURE**: Beyond the basic `sm`, `md`, `lg` sizes, TagSelector now supports 12 additional granular sizes (`tam-1` through `tam-12`) for precise control.
+
+```typescript
+// Available sizes with their approximate dimensions
+type TagSelectorSize = 
+  | 'sm'     // Small (legacy)
+  | 'md'     // Medium (legacy) 
+  | 'lg'     // Large (legacy)
+  | 'tam-1'  // Extra tiny: 18px height, 0.625rem font
+  | 'tam-2'  // Tiny: 20px height, 0.6875rem font
+  | 'tam-3'  // Very small: 22px height, 0.75rem font
+  | 'tam-4'  // Small+: 24px height, 0.8125rem font
+  | 'tam-5'  // Small-medium: 26px height, 0.875rem font
+  | 'tam-6'  // Medium-: 28px height, 0.9375rem font
+  | 'tam-7'  // Medium: 32px height, 1rem font
+  | 'tam-8'  // Medium+: 36px height, 1.0625rem font
+  | 'tam-9'  // Large-: 40px height, 1.125rem font
+  | 'tam-10' // Large: 44px height, 1.1875rem font
+  | 'tam-11' // Large+: 48px height, 1.25rem font
+  | 'tam-12' // Extra large: 52px height, 1.3125rem font
+
+// Examples of different sizes
+<TagSelector
+  getTagsFunction={getTags}
+  selectedTags={selectedTags}
+  onSelectionChange={handleChange}
+  size="tam-1" // Very compact tags
+/>
+
+<TagSelector
+  getTagsFunction={getTags}
+  selectedTags={selectedTags}
+  onSelectionChange={handleChange}
+  size="tam-12" // Very large tags
+/>
+
+<TagSelector
+  getTagsFunction={getTags}
+  selectedTags={selectedTags}
+  onSelectionChange={handleChange}
+  size="tam-7" // Equivalent to medium
+/>
+```
+
+### 2. Custom Pixel-Based Sizing via Metadata
+
+**NEW FEATURE**: Individual tags can override size with custom pixel values through the `metadata.sizing` property.
+
+```typescript
+// Tags with custom pixel-based sizing
+const getCustomSizedTags = async (): Promise<TagItem[]> => {
+  return [
+    {
+      id: 'compact',
+      label: {
+        en: 'Compact Tag',
+        es: 'Etiqueta Compacta',
+        default: 'Compact Tag'
+      },
+      metadata: {
+        sizing: {
+          paddingX: '8px',      // Custom horizontal padding
+          paddingY: '4px',      // Custom vertical padding
+          fontSize: '11px',     // Custom font size
+          minWidth: '60px',     // Minimum width
+          height: '24px'        // Fixed height
+        }
+      }
+    },
+    {
+      id: 'large-emphasis',
+      label: {
+        en: 'Important',
+        es: 'Importante', 
+        default: 'Important'
+      },
+      metadata: {
+        sizing: {
+          paddingX: '20px',     // Extra wide padding
+          paddingY: '12px',     // Extra tall padding
+          fontSize: '16px',     // Large font
+          minWidth: '120px',    // Wide minimum
+          height: '48px'        // Tall height
+        }
+      }
+    },
+    {
+      id: 'normal',
+      label: {
+        en: 'Normal Tag',
+        default: 'Normal Tag'
+      }
+      // No metadata - uses global size prop
+    }
+  ];
+};
+
+// Usage: Mix global size with individual overrides
+<TagSelector
+  getTagsFunction={getCustomSizedTags}
+  selectedTags={selectedTags}
+  onSelectionChange={handleChange}
+  size="tam-5" // Global size for tags without metadata
+/>
+```
+
+### 3. Real-World Sizing Examples
+
+#### Financial Dashboard with Hierarchical Sizes
+```typescript
+const getFinancialTags = async (): Promise<TagItem[]> => {
+  return [
+    {
+      id: 'all-markets',
+      label: { en: 'All Markets', default: 'All Markets' },
+      metadata: {
+        sizing: {
+          paddingX: '24px',
+          paddingY: '16px', 
+          fontSize: '18px',
+          height: '56px'
+        },
+        colors: {
+          light: {
+            selected: { background: '#1e40af', text: '#ffffff' }
+          }
+        }
+      }
+    },
+    {
+      id: 'stocks',
+      label: { en: 'Stocks', default: 'Stocks' },
+      metadata: {
+        sizing: {
+          paddingX: '16px',
+          paddingY: '12px',
+          fontSize: '14px', 
+          height: '40px'
+        }
+      }
+    },
+    {
+      id: 'bonds',
+      label: { en: 'Bonds', default: 'Bonds' },
+      // Uses global size (tam-6 in this example)
+    }
+  ];
+};
+
+<TagSelector
+  getTagsFunction={getFinancialTags}
+  selectedTags={selectedMarkets}
+  onSelectionChange={setSelectedMarkets}
+  size="tam-6" // Default for tags without custom sizing
+  allowMultiple={true}
+  requireSelection={true} // Ensure at least one market is selected
+/>
+```
+
+#### Mobile-Optimized Responsive Sizing
+```typescript
+const getMobileTags = async (): Promise<TagItem[]> => {
+  const isMobile = window.innerWidth < 768;
+  
+  return [
+    {
+      id: 'categories',
+      label: { en: 'Categories', default: 'Categories' },
+      metadata: {
+        sizing: {
+          paddingX: isMobile ? '12px' : '20px',
+          paddingY: isMobile ? '8px' : '12px',
+          fontSize: isMobile ? '12px' : '14px',
+          height: isMobile ? '32px' : '44px'
+        }
+      }
+    }
+  ];
+};
+```
+
+## Require Selection Feature
+
+### 1. Basic requireSelection Usage
+
+**NEW FEATURE**: The `requireSelection` prop prevents users from deselecting the last remaining tag, ensuring at least one tag stays selected.
+
+```typescript
+function RequiredTagSelector() {
+  const [selectedTags, setSelectedTags] = useState<string[]>(['default-category']);
+  
+  return (
+    <TagSelector
+      getTagsFunction={getCategoryTags}
+      selectedTags={selectedTags}
+      onSelectionChange={(tags) => setSelectedTags(tags.map(t => t.id))}
+      requireSelection={true} // Prevents deselecting the last tag
+      allowMultiple={true}
+    />
+  );
+}
+```
+
+### 2. requireSelection Behavior Details
+
+- **Multiple Selection Mode**: When only one tag is selected, that tag cannot be deselected
+- **Single Selection Mode**: Selected tag cannot be deselected (user must select a different tag first)
+- **"All" Button**: Disabled when requireSelection is active and tags are selected
+- **Default Button**: Disabled when requireSelection is active and tags are selected
+
+```typescript
+// Examples of requireSelection behavior
+<TagSelector
+  getTagsFunction={getTags}
+  selectedTags={['technology']} // Only one tag selected
+  onSelectionChange={handleChange}
+  requireSelection={true}
+  allowMultiple={true}
+  // User cannot deselect 'technology' until they select another tag first
+/>
+
+<TagSelector
+  getTagsFunction={getTags}
+  selectedTags={['design']}
+  onSelectionChange={handleChange}
+  requireSelection={true}
+  allowMultiple={false} // Single selection mode
+  // User cannot deselect 'design' - must select a different tag
+/>
+```
+
+### 3. Real-World requireSelection Examples
+
+#### Filter Interface (Always Show Something)
+```typescript
+function ProductFilter() {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(['all']);
+  
+  return (
+    <div>
+      <h3>Product Categories</h3>
+      <TagSelector
+        getTagsFunction={getProductCategories}
+        selectedTags={selectedCategories}
+        onSelectionChange={(tags) => setSelectedCategories(tags.map(t => t.id))}
+        requireSelection={true} // Always have at least one category selected
+        allowMultiple={true}
+        allowAll={true}
+        allLabel={{
+          en: 'All Products',
+          es: 'Todos los Productos',
+          default: 'All Products'
+        }}
+      />
+      <ProductList categories={selectedCategories} />
+    </div>
+  );
+}
+```
+
+#### User Profile Settings (Required Choice)
+```typescript
+function NotificationSettings() {
+  const [notificationTypes, setNotificationTypes] = useState<string[]>(['email']);
+  
+  return (
+    <div>
+      <h3>How would you like to receive notifications?</h3>
+      <p className="text-sm text-gray-600">At least one option must be selected</p>
+      
+      <TagSelector
+        getTagsFunction={getNotificationOptions}
+        selectedTags={notificationTypes}
+        onSelectionChange={(tags) => setNotificationTypes(tags.map(t => t.id))}
+        requireSelection={true} // User must have at least one notification method
+        allowMultiple={true}
+        allowAll={false}
+      />
+    </div>
+  );
+}
+```
+
+#### Data Dashboard (Required Data Source)
+```typescript
+function DataSourceSelector() {
+  const [dataSources, setDataSources] = useState<string[]>(['primary']);
+  
+  return (
+    <TagSelector
+      getTagsFunction={getDataSources}
+      selectedTags={dataSources}
+      onSelectionChange={(tags) => setDataSources(tags.map(t => t.id))}
+      requireSelection={true} // Dashboard must always show data from at least one source
+      allowMultiple={true}
+      size="tam-8" // Large tags for important selection
+      customColors={{
+        light: {
+          selected: {
+            background: '#059669',
+            text: '#ffffff',
+            border: '#047857'
+          }
+        }
+      }}
+    />
+  );
+}
 
 ## CSS Custom Properties Reference
 
@@ -1357,4 +1722,43 @@ export const createAsyncTagLoader = (tags: TagItem[], delay: number = 500) => {
 };
 ```
 
+## Size Reference Chart
+
+### Legacy Sizes (Backwards Compatible)
+- `sm`: Small - padding: 0.25rem 0.75rem, font-size: 0.75rem
+- `md`: Medium - padding: 0.375rem 1rem, font-size: 0.875rem  
+- `lg`: Large - padding: 0.5rem 1.25rem, font-size: 0.875rem
+
+### Granular Sizes (tam-1 through tam-12)
+- `tam-1`: 18px height, 0.625rem font - Ultra compact
+- `tam-2`: 20px height, 0.6875rem font - Extra small
+- `tam-3`: 22px height, 0.75rem font - Very small
+- `tam-4`: 24px height, 0.8125rem font - Small plus
+- `tam-5`: 26px height, 0.875rem font - Small-medium
+- `tam-6`: 28px height, 0.9375rem font - Medium minus
+- `tam-7`: 32px height, 1rem font - Standard medium
+- `tam-8`: 36px height, 1.0625rem font - Medium plus
+- `tam-9`: 40px height, 1.125rem font - Large minus
+- `tam-10`: 44px height, 1.1875rem font - Standard large
+- `tam-11`: 48px height, 1.25rem font - Large plus
+- `tam-12`: 52px height, 1.3125rem font - Extra large
+
+### Custom Sizing via Metadata
+Individual tags can override any size with custom pixel values:
+- `paddingX`: Horizontal padding (e.g., '12px', '1rem')
+- `paddingY`: Vertical padding (e.g., '8px', '0.5rem')
+- `fontSize`: Font size (e.g., '14px', '0.875rem')
+- `minWidth`: Minimum width (e.g., '80px', '5rem')
+- `height`: Fixed height (e.g., '32px', '2rem')
+
+## Summary
+
 This implementation guide provides everything needed to implement the TagSelector component without needing to read the full source code. The component handles all complex logic internally while providing a simple, powerful API for various use cases.
+
+**Latest Updates:**
+- ✅ Granular sizing system with tam-1 through tam-12 sizes
+- ✅ Custom pixel-based sizing via metadata
+- ✅ Individual tag color customization via metadata
+- ✅ requireSelection prop for mandatory selections
+- ✅ Complete fallback system for colors and sizing
+- ✅ Enhanced TypeScript interfaces with full type safety
