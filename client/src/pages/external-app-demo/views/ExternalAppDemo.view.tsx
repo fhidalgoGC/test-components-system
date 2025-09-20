@@ -1,11 +1,9 @@
 import { useState, useCallback } from 'react';
-import { LanguageProvider, useLanguage } from '@/lib/ui-library/TagSelector';
+import { LanguageProvider } from '@/lib/ui-library/TagSelector';
 import TagSelector from '@/lib/ui-library/TagSelector';
 import type { TagItem } from '@/lib/ui-library/types/language';
-import { Button } from '@/components/ui/button';
 
 function ExternalAppContent() {
-  const { currentLanguage, setLanguage } = useLanguage();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   // Función async para cargar tags
@@ -56,31 +54,6 @@ function ExternalAppContent() {
     <div className="space-y-6 p-6">
       <div>
         <h1 className="text-2xl font-bold mb-4">External App Demo</h1>
-        
-        {/* Language buttons */}
-        <div className="flex gap-2 mb-6">
-          <Button 
-            variant={currentLanguage === 'en' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setLanguage('en')}
-          >
-            English
-          </Button>
-          <Button 
-            variant={currentLanguage === 'es' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setLanguage('es')}
-          >
-            Español
-          </Button>
-          <Button 
-            variant={currentLanguage === 'fr' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setLanguage('fr')}
-          >
-            Français
-          </Button>
-        </div>
       </div>
 
       {/* TagSelector */}
