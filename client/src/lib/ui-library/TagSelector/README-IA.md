@@ -317,6 +317,354 @@ const brandColors = {
 />
 ```
 
+## Global State Integration (REACTIVE UPDATES)
+
+**IMPORTANT**: The TagSelector component is designed to work reactively with global state management systems. This means it automatically updates when your app's theme or language changes globally.
+
+### 1. Global Theme Integration
+
+The component automatically detects and responds to theme changes through your application's theme provider.
+
+#### With next-themes (Most Common)
+
+```typescript
+import { useTheme } from 'next-themes';
+
+function ResponsiveTagSelector() {
+  const { theme, resolvedTheme } = useTheme();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  
+  // Component automatically reacts to global theme changes
+  const currentTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
+  
+  return (
+    <TagSelector
+      getTagsFunction={getTags}
+      selectedTags={selectedTags}
+      onSelectionChange={(tags) => setSelectedTags(tags.map(t => t.id))}
+      // Theme changes automatically when user toggles app theme
+      theme={currentTheme === 'dark' ? 'theme-dark-corporate' : 'theme-corporate'}
+    />
+  );
+}
+```
+
+#### With Custom Theme Context
+
+```typescript
+import { useThemeContext } from '@/contexts/ThemeContext';
+
+function ThemedTagSelector() {
+  const { currentTheme, isDark } = useThemeContext();
+  
+  return (
+    <TagSelector
+      getTagsFunction={getTags}
+      selectedTags={selectedTags}
+      onSelectionChange={handleChange}
+      // Automatically updates when global theme changes
+      theme={isDark ? 'theme-dark-nature' : 'theme-nature'}
+      customColors={isDark ? darkBrandColors : lightBrandColors}
+    />
+  );
+}
+```
+
+### 2. Global Language Integration
+
+The component automatically responds to language changes in your i18n system.
+
+#### With react-i18next
+
+```typescript
+import { useTranslation } from 'react-i18next';
+
+function MultilingualTagSelector() {
+  const { i18n, t } = useTranslation();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  
+  // Custom multilingual labels that react to language changes
+  const allButtonLabel = {
+    en: 'Select All Categories',
+    es: 'Seleccionar Todas las Categorías',
+    fr: 'Sélectionner Toutes',
+    de: 'Alle Auswählen',
+    default: 'Select All'
+  };
+  
+  return (
+    <TagSelector
+      getTagsFunction={getMultilingualTags}
+      selectedTags={selectedTags}
+      onSelectionChange={(tags) => setSelectedTags(tags.map(t => t.id))}
+      // Automatically uses current app language
+      langOverride={i18n.language} // Reacts to global language changes
+      allLabel={allButtonLabel}
+      // Component re-renders with new translations when language changes
+    />
+  );
+}
+```
+
+#### With Custom i18n System
+
+```typescript
+import { useLanguage } from '@/contexts/LanguageContext';
+
+function InternationalTagSelector() {
+  const { currentLanguage, changeLanguage } = useLanguage();
+  
+  return (
+    <div>
+      {/* Language switcher affects TagSelector automatically */}
+      <select 
+        value={currentLanguage} 
+        onChange={(e) => changeLanguage(e.target.value)}
+      >
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+      </select>
+      
+      <TagSelector
+        getTagsFunction={getTags}
+        selectedTags={selectedTags}
+        onSelectionChange={handleChange}
+        // Automatically updates when language changes above
+        langOverride={currentLanguage}
+      />
+    </div>
+  );
+}
+```
+
+### 3. Complete Reactive Integration
+
+This example shows how to integrate both theme and language reactivity:
+
+```typescript
+import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
+
+function FullyReactiveTagSelector() {
+  const { resolvedTheme } = useTheme();
+  const { i18n } = useTranslation();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  
+  // Define theme-aware color schemes
+  const getThemeClass = () => {
+    const baseTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
+    return `theme-${baseTheme}-corporate`;
+  };
+  
+  // Define multilingual labels
+  const customLabels = {
+    allButton: {
+      en: 'All Categories',
+      es: 'Todas las Categorías',
+      fr: 'Toutes les Catégories',
+      default: 'All Categories'
+    },
+    noResults: {
+      en: 'No categories found',
+      es: 'No se encontraron categorías',
+      fr: 'Aucune catégorie trouvée',
+      default: 'No categories found'
+    }
+  };
+  
+  return (
+    <div>
+      {/* These buttons demonstrate reactive updates */}
+      <div className="controls">
+        <button onClick={() => i18n.changeLanguage('en')}>English</button>
+        <button onClick={() => i18n.changeLanguage('es')}>Español</button>
+        <button onClick={() => i18n.changeLanguage('fr')}>Français</button>
+      </div>
+      
+      <TagSelector
+        getTagsFunction={getCategories}
+        selectedTags={selectedTags}
+        onSelectionChange={(tags) => {
+          setSelectedTags(tags.map(t => t.id));
+          console.log('Selection changed:', tags);
+        }}
+        // Both props automatically update when global state changes
+        theme={getThemeClass()} // Reacts to theme changes
+        langOverride={i18n.language} // Reacts to language changes
+        allLabel={customLabels.allButton}
+        defaultLabel={customLabels.noResults}
+        allowMultiple={true}
+        allowAll={true}
+      />
+    </div>
+  );
+}
+```
+
+### 4. Provider Setup for Reactive Updates
+
+To ensure your TagSelector works reactively, wrap your app with the necessary providers:
+
+```typescript
+// App.tsx or _app.tsx
+import { ThemeProvider } from 'next-themes';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n/config';
+
+function App({ Component, pageProps }) {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="light">
+      <I18nextProvider i18n={i18n}>
+        <Component {...pageProps} />
+      </I18nextProvider>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+```
+
+### 5. Dynamic Theme Switching Example
+
+```typescript
+function DynamicThemeTagSelector() {
+  const { theme, setTheme } = useTheme();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  
+  // Define different theme mappings
+  const themeMapping = {
+    light: 'theme-corporate',
+    dark: 'theme-dark-corporate',
+    auto: theme === 'dark' ? 'theme-dark-nature' : 'theme-nature'
+  };
+  
+  return (
+    <div>
+      {/* Theme switcher that affects TagSelector immediately */}
+      <div className="theme-controls">
+        <button onClick={() => setTheme('light')}>Light</button>
+        <button onClick={() => setTheme('dark')}>Dark</button>
+        <button onClick={() => setTheme('system')}>Auto</button>
+      </div>
+      
+      <TagSelector
+        getTagsFunction={getTags}
+        selectedTags={selectedTags}
+        onSelectionChange={(tags) => setSelectedTags(tags.map(t => t.id))}
+        // Theme updates instantly when buttons above are clicked
+        theme={themeMapping[theme as keyof typeof themeMapping]}
+      />
+    </div>
+  );
+}
+```
+
+### 6. Language-Aware Tag Loading
+
+For truly reactive multilingual support, your tag loading function should also be language-aware:
+
+```typescript
+function useLanguageAwareTags() {
+  const { i18n } = useTranslation();
+  
+  const getTagsForCurrentLanguage = useCallback(async (): Promise<TagItem[]> => {
+    try {
+      // API call includes current language
+      const response = await fetch(`/api/tags?lang=${i18n.language}`);
+      const data = await response.json();
+      
+      return data.map(item => ({
+        id: item.id,
+        label: {
+          en: item.label_en,
+          es: item.label_es,
+          fr: item.label_fr,
+          default: item.label_en || item.label
+        }
+      }));
+    } catch (error) {
+      console.error('Failed to load tags:', error);
+      return [];
+    }
+  }, [i18n.language]); // Re-runs when language changes
+  
+  return getTagsForCurrentLanguage;
+}
+
+// Usage
+function LanguageAwareTagSelector() {
+  const { i18n } = useTranslation();
+  const getTagsFunction = useLanguageAwareTags();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  
+  return (
+    <TagSelector
+      getTagsFunction={getTagsFunction} // Automatically reloads when language changes
+      selectedTags={selectedTags}
+      onSelectionChange={(tags) => setSelectedTags(tags.map(t => t.id))}
+      langOverride={i18n.language}
+    />
+  );
+}
+```
+
+### 7. Real-Time Reactive Demo
+
+This example demonstrates instant updates across multiple TagSelector instances:
+
+```typescript
+function ReactiveDemo() {
+  const { theme, setTheme } = useTheme();
+  const { i18n } = useTranslation();
+  const [selectedTags1, setSelectedTags1] = useState<string[]>([]);
+  const [selectedTags2, setSelectedTags2] = useState<string[]>([]);
+  
+  return (
+    <div>
+      {/* Global controls */}
+      <div className="global-controls">
+        <h3>Global Controls (affect all TagSelectors)</h3>
+        
+        <div className="theme-controls">
+          <label>Theme:</label>
+          <button onClick={() => setTheme('light')}>☀️ Light</button>
+          <button onClick={() => setTheme('dark')}>🌙 Dark</button>
+        </div>
+        
+        <div className="language-controls">
+          <label>Language:</label>
+          <button onClick={() => i18n.changeLanguage('en')}>🇺🇸 English</button>
+          <button onClick={() => i18n.changeLanguage('es')}>🇪🇸 Español</button>
+          <button onClick={() => i18n.changeLanguage('fr')}>🇫🇷 Français</button>
+        </div>
+      </div>
+      
+      {/* Both TagSelectors update automatically */}
+      <div className="selectors">
+        <h4>Categories Selector</h4>
+        <TagSelector
+          getTagsFunction={getCategoryTags}
+          selectedTags={selectedTags1}
+          onSelectionChange={(tags) => setSelectedTags1(tags.map(t => t.id))}
+          theme={theme === 'dark' ? 'theme-dark-corporate' : 'theme-corporate'}
+          langOverride={i18n.language}
+        />
+        
+        <h4>Skills Selector</h4>
+        <TagSelector
+          getTagsFunction={getSkillTags}
+          selectedTags={selectedTags2}
+          onSelectionChange={(tags) => setSelectedTags2(tags.map(t => t.id))}
+          theme={theme === 'dark' ? 'theme-dark-nature' : 'theme-nature'}
+          langOverride={i18n.language}
+        />
+      </div>
+    </div>
+  );
+}
+```
+
 ## Internationalization Examples
 
 ### 1. Custom Labels for All Button
