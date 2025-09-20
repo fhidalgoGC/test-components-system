@@ -321,43 +321,224 @@ const granularBrandColors = {
 />
 ```
 
-### 3. Real-World Commodities Example
+### 3. Individual Tag Metadata Colors (NEW FEATURE)
 
-Perfect for commodity trading interfaces like the provided screenshot:
+**IMPORTANT**: Each tag can now have its own unique colors using the `metadata` property. This provides maximum customization flexibility for each tag individually.
+
+#### TagStateColors Interface
 
 ```typescript
-const commoditiesTheme = {
-  light: {
-    selected: {
-      background: '#10b981',        // Green fill for selected commodities
-      text: '#ffffff',              // White text for readability
-      border: '#059669',            // Darker green border 
-      hoverBackground: '#059669',   // Darker green on hover
-      hoverBorder: '#047857'        // Even darker border on hover
+interface TagStateColors {
+  background?: string;        // Fill color
+  text?: string;             // Text color
+  border?: string;           // Border color
+  hoverBackground?: string;  // Fill color on hover
+  hoverBorder?: string;      // Border color on hover
+}
+```
+
+#### Individual Tag Customization
+
+```typescript
+// Example: Contract type tags with individual colors
+const getContractTypeTags = async (): Promise<TagItem[]> => {
+  return [
+    {
+      id: 'todos',
+      label: {
+        en: 'All',
+        es: 'Todos',
+        default: 'All'
+      },
+      metadata: {
+        colors: {
+          light: {
+            selected: {
+              background: '#8b5cf6',      // Purple fill
+              text: '#ffffff',            // White text
+              border: '#7c3aed',          // Purple border
+              hoverBackground: '#7c3aed', // Darker purple on hover
+              hoverBorder: '#6d28d9'      // Even darker purple border
+            },
+            unselected: {
+              background: '#f3f4f6',      // Light gray
+              text: '#374151',            // Dark text
+              border: '#e5e7eb',          // Gray border
+              hoverBackground: '#e5e7eb', // Darker gray on hover
+              hoverBorder: '#d1d5db'      // Darker gray border
+            }
+          }
+        }
+      }
     },
-    unselected: {
-      background: '#f9fafb',        // Light gray fill for unselected
-      text: '#374151',              // Dark text for contrast
-      border: '#e5e7eb',            // Light gray border
-      hoverBackground: '#f3f4f6',   // Slightly darker on hover  
-      hoverBorder: '#d1d5db'        // Darker border on hover
+    {
+      id: 'fijo',
+      label: {
+        en: 'Fixed',
+        es: 'Fijo',
+        default: 'Fixed'
+      },
+      metadata: {
+        colors: {
+          light: {
+            selected: {
+              background: '#3b82f6',      // Blue fill
+              text: '#ffffff',            // White text
+              border: '#2563eb',          // Blue border
+              hoverBackground: '#2563eb', // Darker blue on hover
+              hoverBorder: '#1d4ed8'      // Even darker blue border
+            },
+            unselected: {
+              background: '#eff6ff',      // Light blue
+              text: '#1e40af',            // Dark blue text
+              border: '#dbeafe',          // Light blue border
+              hoverBackground: '#dbeafe', // Darker light blue on hover
+              hoverBorder: '#bfdbfe'      // Darker blue border
+            }
+          }
+        }
+      }
     },
-    all: {
-      background: '#3b82f6',        // Blue fill for "All" button
-      text: '#ffffff',              // White text
-      border: '#2563eb',            // Darker blue border
-      hoverBackground: '#2563eb',   // Darker blue on hover
-      hoverBorder: '#1d4ed8'        // Even darker border on hover
+    {
+      id: 'basis',
+      label: {
+        en: 'Basis',
+        es: 'Basis',
+        default: 'Basis'
+      },
+      metadata: {
+        colors: {
+          light: {
+            selected: {
+              background: '#ec4899',      // Pink fill
+              text: '#ffffff',            // White text
+              border: '#db2777',          // Pink border
+              hoverBackground: '#db2777', // Darker pink on hover
+              hoverBorder: '#be185d'      // Even darker pink border
+            },
+            unselected: {
+              background: '#fdf2f8',      // Light pink
+              text: '#831843',            // Dark pink text
+              border: '#f9a8d4',          // Pink border
+              hoverBackground: '#fce7f3', // Darker light pink on hover
+              hoverBorder: '#f472b6'      // Darker pink border
+            }
+          }
+        }
+      }
     }
-  }
+  ];
 };
 
-// Usage for commodities interface
+// Usage with individual tag colors
 <TagSelector
-  getTagsFunction={getCommodityTags}
+  getTagsFunction={getContractTypeTags}
+  selectedTags={selectedTypes}
+  onSelectionChange={(tags) => setSelectedTypes(tags.map(t => t.id))}
+  allowMultiple={true}
+  allowAll={false}
+/>
+```
+
+#### Real-World Commodities Example with Individual Colors
+
+Perfect for commodity trading interfaces where each commodity has its own brand color:
+
+```typescript
+const getCommodityTagsWithColors = async (): Promise<TagItem[]> => {
+  return [
+    {
+      id: 'wheat-hrw',
+      label: {
+        en: 'HRW - Wheat Hard Red Winter',
+        es: 'Trigo Rojo Duro de Invierno',
+        default: 'HRW - Wheat Hard Red Winter'
+      },
+      metadata: {
+        colors: {
+          light: {
+            selected: {
+              background: '#d97706',      // Wheat golden color
+              text: '#ffffff',
+              border: '#b45309',
+              hoverBackground: '#b45309',
+              hoverBorder: '#92400e'
+            },
+            unselected: {
+              background: '#fef3c7',      // Light wheat color
+              text: '#92400e',
+              border: '#f9a8d4',
+              hoverBackground: '#fde68a',
+              hoverBorder: '#f59e0b'
+            }
+          }
+        }
+      }
+    },
+    {
+      id: 'corn-yellow',
+      label: {
+        en: 'YC - Yellow Corn',
+        es: 'Maíz Amarillo',
+        default: 'YC - Yellow Corn'
+      },
+      metadata: {
+        colors: {
+          light: {
+            selected: {
+              background: '#eab308',      // Corn yellow
+              text: '#000000',
+              border: '#ca8a04',
+              hoverBackground: '#ca8a04',
+              hoverBorder: '#a16207'
+            },
+            unselected: {
+              background: '#fef9c3',      // Light corn yellow
+              text: '#713f12',
+              border: '#fde047',
+              hoverBackground: '#fef08a',
+              hoverBorder: '#eab308'
+            }
+          }
+        }
+      }
+    },
+    {
+      id: 'soy-2025',
+      label: {
+        en: 'Soy 2025',
+        es: 'Soja 2025',
+        default: 'Soy 2025'
+      },
+      metadata: {
+        colors: {
+          light: {
+            selected: {
+              background: '#16a34a',      // Soy green
+              text: '#ffffff',
+              border: '#15803d',
+              hoverBackground: '#15803d',
+              hoverBorder: '#166534'
+            },
+            unselected: {
+              background: '#f0fdf4',      // Light soy green
+              text: '#166534',
+              border: '#bbf7d0',
+              hoverBackground: '#dcfce7',
+              hoverBorder: '#86efac'
+            }
+          }
+        }
+      }
+    }
+  ];
+};
+
+// Usage
+<TagSelector
+  getTagsFunction={getCommodityTagsWithColors}
   selectedTags={selectedCommodities}
   onSelectionChange={(tags) => setSelectedCommodities(tags.map(t => t.id))}
-  customColors={commoditiesTheme}
   allowMultiple={true}
   allowAll={true}
   allLabel={{
@@ -365,6 +546,55 @@ const commoditiesTheme = {
     es: 'Todas las Materias Primas',
     default: 'All Commodities'
   }}
+/>
+```
+
+#### Fallback Color System (Priority Order)
+
+**CRITICAL**: When a tag doesn't have metadata colors, the system uses this priority:
+
+1. **Tag metadata colors** (highest priority) - `tag.metadata.colors`
+2. **Global customColors** - `customColors` prop
+3. **Theme CSS classes** - `theme` prop classes
+4. **Default CSS variables** (lowest priority) - Built-in fallbacks
+
+Example mixing tags with and without metadata:
+
+```typescript
+const getMixedTags = async (): Promise<TagItem[]> => {
+  return [
+    {
+      id: 'special',
+      label: { en: 'Special', default: 'Special' },
+      metadata: {
+        colors: {
+          light: {
+            selected: { background: '#ff6b6b', border: '#ee5a5a' }
+          }
+        }
+      }
+    },
+    {
+      id: 'normal',
+      label: { en: 'Normal', default: 'Normal' }
+      // No metadata - will use global customColors or theme defaults
+    }
+  ];
+};
+
+// Global colors for tags without metadata
+const globalColors = {
+  light: {
+    selected: { background: '#3b82f6', border: '#2563eb' },
+    unselected: { background: '#f8fafc', border: '#e2e8f0' }
+  }
+};
+
+<TagSelector
+  getTagsFunction={getMixedTags}
+  selectedTags={selected}
+  onSelectionChange={setSelection}
+  customColors={globalColors} // Used for tags without metadata
 />
 ```
 
