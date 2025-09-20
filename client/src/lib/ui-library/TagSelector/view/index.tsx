@@ -226,14 +226,40 @@ export const TagSelectorView: React.FC<{
       {tags.map((tag) => {
         const isSelected = selectedTags.includes(tag.id);
         const hasMetadataColors = tag.metadata?.colors;
-        const tagStyles = hasMetadataColors ? getCombinedTagStyles(tag, isSelected) : {};
+        const baseStyles = hasMetadataColors ? generateTagInlineStyles(tag, isSelected) : {};
+        const sizingStyles = generateTagSizingStyles(tag);
+        
+        // Funciones para manejar el hover
+        const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
+          if (disabled || !hasMetadataColors) return;
+          
+          const themeColors = tag.metadata?.colors?.[theme];
+          const state = isSelected ? themeColors?.selected : themeColors?.unselected;
+          
+          if (state?.hoverBackground) e.currentTarget.style.backgroundColor = state.hoverBackground;
+          if (state?.hoverBorder) e.currentTarget.style.borderColor = state.hoverBorder;
+          if (state?.hoverText) e.currentTarget.style.color = state.hoverText;
+        };
+        
+        const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+          if (disabled || !hasMetadataColors) return;
+          
+          const themeColors = tag.metadata?.colors?.[theme];
+          const state = isSelected ? themeColors?.selected : themeColors?.unselected;
+          
+          if (state?.background) e.currentTarget.style.backgroundColor = state.background;
+          if (state?.border) e.currentTarget.style.borderColor = state.border;
+          if (state?.text) e.currentTarget.style.color = state.text;
+        };
         
         return (
           <button
             key={tag.id}
             className={chipClasses(theme, isVisible, isSelected, size, false)}
-            style={tagStyles}
+            style={{ ...baseStyles, ...sizingStyles }}
             onClick={() => handleTagClick(tag.id)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             disabled={disabled}
             data-testid={`tag-${tag.id}`}
           >
