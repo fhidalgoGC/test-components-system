@@ -16,7 +16,8 @@ client/src/lib/ui-library/
 │       ├── types/                 ← Definiciones de tipos TypeScript
 │       ├── views/                 ← Componentes de vista/renderizado
 │       ├── index.tsx              ← Punto de entrada principal
-│       └── README-IA.md           ← Documentación del componente
+│       ├── README-IA.md           ← Guía de implementación para IA
+│       └── README-IA--STYLES.md   ← Sistema de estilos y theming
 ├── utils/                         ← Utilidades globales compartidas
 ├── providers/                     ← Providers globales de la librería
 ├── types/                         ← Tipos globales compartidos
@@ -42,6 +43,7 @@ client/src/lib/ui-library/
 - **Utilidades**: `[utilityName].util.ts`
 - **Traducciones**: `[language].json` (ej: `en.json`, `es.json`)
 - **Index files**: `index.ts` (para re-exportar)
+- **Documentación IA**: `README-IA.md`, `README-IA--STYLES.md`
 
 ## 🛠️ Plantilla de Componente
 
@@ -69,7 +71,8 @@ components/MyComponent/
 │   ├── MyComponent.view.tsx
 │   └── index.ts
 ├── index.tsx
-└── README-IA.md
+├── README-IA.md
+└── README-IA--STYLES.md
 ```
 
 ### 2. Ejemplo de `index.tsx` Principal
@@ -319,8 +322,85 @@ export const MyComponent = () => {
 - **Accesibilidad**: Incluir atributos ARIA cuando sea necesario
 - **Performance**: Usar `memo` y `useCallback` para optimizaciones
 
+## 📖 Documentación para IA (OBLIGATORIO)
+
+Cada componente **DEBE** incluir estos archivos de documentación específicos para IA:
+
+### 1. `README-IA.md` - Guía de Implementación
+```markdown
+# [ComponentName] - AI Implementation Guide
+**Version: 1.0.0**
+
+## Overview
+Descripción clara del componente y su propósito.
+
+## Key Features
+- Lista de características principales
+- Funcionalidades destacadas
+
+## Installation & Imports
+```typescript
+import ComponentName from '@/lib/ui-library/components/ComponentName';
+import type { ComponentProps } from '@/lib/ui-library/components/ComponentName';
+```
+
+## Complete Props Interface
+Definición completa de la interfaz de props con comentarios explicativos.
+
+## Basic Implementation
+Ejemplos básicos de uso del componente.
+
+## Advanced Usage
+Ejemplos avanzados con configuraciones complejas.
+
+## Troubleshooting
+Problemas comunes y sus soluciones.
+
+## API Reference
+Referencia completa de la API del componente.
+```
+
+### 2. `README-IA--STYLES.md` - Sistema de Estilos
+```markdown
+# 🎨 [ComponentName] - Sistema de Estilos y Theming
+
+## Interfaces de Estilos
+Definición de todas las interfaces de theming y personalización.
+
+## Sistema de Colores
+Cómo aplicar y personalizar colores.
+
+## Sistema de Tamaños
+Opciones de sizing disponibles.
+
+## Theming Avanzado
+Uso de CSS custom properties y temas dinámicos.
+
+## Ejemplos Prácticos
+Casos de uso reales con código completo.
+
+## Integración Reactiva
+Cómo integrar con sistemas de temas reactivos.
+```
+
+### 3. Estructura de Documentación IA
+```
+components/MyComponent/
+├── README-IA.md          ← Guía de implementación principal
+├── README-IA--STYLES.md  ← Sistema de estilos específico
+└── [otros archivos...]
+```
+
+### ⚠️ Convenciones de Documentación IA
+- **Versionado**: Usar `**Version: X.Y.Z**` al inicio
+- **Ejemplos completos**: Incluir código ejecutable
+- **TypeScript**: Mostrar tipos e interfaces completas
+- **Casos de uso**: Desde básico hasta avanzado
+- **Troubleshooting**: Problemas comunes documentados
+- **Referencias**: Links internos a otros componentes relacionados
+
 ---
 
-## 🎯 Ejemplo Completo: Componente Modal
+## 🎯 Ejemplo Completo: Componente TagSelector
 
-Consulta el componente `TagSelector` como referencia completa de implementación siguiendo todas estas convenciones.
+Consulta el componente `TagSelector` como referencia completa de implementación siguiendo todas estas convenciones. Incluye ambos archivos README-IA para entender la estructura completa.
