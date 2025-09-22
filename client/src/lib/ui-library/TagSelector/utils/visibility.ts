@@ -1,4 +1,4 @@
-import type { VisibilityConfig, Device, Orientation } from '../../types/shared';
+import type { VisibilityConfig, Device, Orientation } from '../../types/shared.types';
 
 export const detectDevice = (w: number): Device =>
   w <= 640 ? 'mobile' : w <= 1024 ? 'tablet' : 'desktop';
