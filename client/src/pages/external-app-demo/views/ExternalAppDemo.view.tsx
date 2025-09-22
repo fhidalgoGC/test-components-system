@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { useAppLanguage } from "../../../providers/AppLanguageProvider";
 import { LibI18nProvider } from "../../../lib/ui-library/providers/LibI18n.provider";
 import TagSelector from "@/lib/ui-library/components/TagSelector";
-import type { TagItem } from "@/lib/ui-library/components/TagSelector/types/tag-selector.type";
+import type { TagItem } from "@/lib/ui-library/components/TagSelector/types/tag-selector.types";
 
 function ExternalAppContent() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -92,7 +92,7 @@ function ExternalAppContent() {
           }}
           requireSelection={true}
           allowMultiple={true}
-          allowAll={true}
+          allowAll={false}
           allLabel={{
             en: "All",
             es: "Todos",
