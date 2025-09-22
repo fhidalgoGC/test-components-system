@@ -1,3 +1,3 @@
-export * from './useThemeSafe';
-export * from './useI18nMerge';
-export * from './useVisibility';
+export * from './useThemeSafe.hook';
+export * from './useI18nMerge.hook';
+export * from './useVisibility.hook';
