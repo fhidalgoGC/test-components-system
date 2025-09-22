@@ -82,7 +82,6 @@ function ExternalAppContent() {
         parentLanguageProvider={app}
         globalTranslationPaths={globalTranslationPaths}
         translationPriority={translationPriority}
-        
       >
         <TagSelector
           getTagsFunction={getTags}

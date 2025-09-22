@@ -194,7 +194,7 @@ export const TagSelectorView: React.FC<{
     >
       {/* Default chip removed - should never show */}
       
-      {allowAll && tags.length > 0 && (
+      {allowAll && !requireSelection && tags.length > 0 && (
         <button
           className={chipClasses(theme, isVisible, allSelected, size, false)}
           onClick={handleAllClick}
