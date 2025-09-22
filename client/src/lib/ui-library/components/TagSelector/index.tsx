@@ -20,14 +20,14 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   langOverride, 
   i18nOrder,
   allLabel,
-  defaultLabel,
-  defaultTagLabels,
+  defaultSelectedTags,
   theme,
   customColors
 }) => {
   const [resolvedTags, setResolvedTags] = useState<TagItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasInitialized, setHasInitialized] = useState<boolean>(false);
   
   // Language is now handled internally by LibI18nProvider
   // No need to manually manage language context here
@@ -67,6 +67,28 @@ const TagSelector: React.FC<TagSelectorProps> = ({
       cancelled = true;
     };
   }, [getTagsFunction]);
+
+  // Handle default selection when tags are loaded
+  useEffect(() => {
+    if (!hasInitialized && resolvedTags.length > 0 && defaultSelectedTags && defaultSelectedTags.length > 0) {
+      // Find valid default tags that exist in loaded tags
+      const validDefaultTags = defaultSelectedTags.filter(id => 
+        resolvedTags.some(tag => tag.id === id)
+      );
+      
+      if (validDefaultTags.length > 0) {
+        // Get full TagItem objects for valid defaults
+        const defaultTagItems = resolvedTags.filter(tag => 
+          validDefaultTags.includes(tag.id)
+        );
+        
+        // Trigger selection change with default tags
+        onSelectionChange(defaultTagItems);
+      }
+      
+      setHasInitialized(true);
+    }
+  }, [resolvedTags, defaultSelectedTags, hasInitialized, onSelectionChange]);
 
   // Tags are already in the correct TagItem[] format
 
@@ -164,8 +186,6 @@ const TagSelector: React.FC<TagSelectorProps> = ({
             selectedTags={selectedTags}
             onSelectionChange={directCallback}
             allLabel={allLabel}
-            defaultLabel={defaultLabel}
-            defaultTagLabels={defaultTagLabels}
             allowMultiple={allowMultiple}
             allowAll={allowAll}
             requireSelection={requireSelection}

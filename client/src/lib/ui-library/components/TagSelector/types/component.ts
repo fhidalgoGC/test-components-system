@@ -60,12 +60,11 @@ export interface TagSelectorProps {
   selectedTags: string[]; // Still use IDs for state management
   onSelectionChange: SelectionCallback; // Always receives full TagItem[] with translations
   
-  // Language support for All and Default labels
+  // Language support for All label
   allLabel?: MultiLanguageLabel;
-  defaultLabel?: MultiLanguageLabel;
   
-  // Translations for default tag labels (when no getTagsFunction or tags provided)
-  defaultTagLabels?: MultiLanguageLabel;
+  // Default selected tags by ID (preselected on mount)
+  defaultSelectedTags?: string[];
   allowMultiple?: boolean;
   allowAll?: boolean;
   requireSelection?: boolean; // Require at least one tag to be selected

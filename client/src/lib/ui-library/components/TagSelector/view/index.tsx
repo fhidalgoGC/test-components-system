@@ -18,8 +18,6 @@ export const TagSelectorView: React.FC<{
   disabled?: boolean;
   isLoading?: boolean;
   allLabel?: MultiLanguageLabel;
-  defaultLabel?: MultiLanguageLabel;
-  defaultTagLabels?: MultiLanguageLabel;
 }> = ({ 
   className, 
   tags, 
@@ -31,9 +29,7 @@ export const TagSelectorView: React.FC<{
   size = 'md', 
   disabled = false,
   isLoading = false,
-  allLabel,
-  defaultLabel,
-  defaultTagLabels
+  allLabel
 }) => {
   const { theme, t, isVisible } = useTagSelectorContext();
   const { resolveLabel } = useLibI18n();

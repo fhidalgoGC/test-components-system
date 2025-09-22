@@ -99,12 +99,7 @@ function ExternalAppContent() {
             fr: "Tous",
             default: "All",
           }}
-          defaultLabel={{
-            en: "Select tags",
-            es: "Seleccionar etiquetas",
-            fr: "Sélectionner des étiquettes",
-            default: "Select tags",
-          }}
+          defaultSelectedTags={['typescript', 'react']}
         />
       </LibI18nProvider>
 
