@@ -82,12 +82,14 @@ function ExternalAppContent() {
         parentLanguageProvider={app}
         globalTranslationPaths={globalTranslationPaths}
         translationPriority={translationPriority}
+        
       >
         <TagSelector
           getTagsFunction={getTags}
           selectedTags={selectedTags}
           onSelectionChange={(tags: TagItem[]) => {
             setSelectedTags(tags.map((t: TagItem) => t.id));
+            console.log("Selected tags:", tags)
           }}
           requireSelection={true}
           allowMultiple={true}
