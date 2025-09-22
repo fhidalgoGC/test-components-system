@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { TagSelectorProps, SelectedTagItem } from './types';
+import type { TagSelectorProps} from './types';
 import type { TagItem } from '../types/language';
 import { TagSelectorProvider } from './provider';
 import { TagSelectorView } from './view';
