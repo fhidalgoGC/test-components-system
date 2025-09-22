@@ -2,7 +2,7 @@ import React from 'react';
 import { useTagSelectorContext } from '../provider';
 import { containerClasses, chipClasses } from '../css/TagSelector.module';
 import type { SelectedTagItem, TagSelectorSize } from '../types';
-import type { TagItem } from '../../types/language.types';
+import type { TagItem } from '../../types/tag-selector.types';
 import type { MultiLanguageLabel } from '../../types/language.types';
 import { useLibI18n } from '../../providers/LibI18n.provider';
 

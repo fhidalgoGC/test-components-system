@@ -2,7 +2,7 @@
 // LibI18nProvider (PROVIDER HIJO - DENTRO DE LA LIBRERÍA)
 // ---------------------------------------------
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
-import type { GenericLanguageProvider } from '../types/language.provider.types';
+import type { GenericLanguageProvider } from '../types/language.types';
 import { makeTranslator, type TranslationOrder } from '../TagSelector/utils';
 
 type Lang = 'es' | 'en';

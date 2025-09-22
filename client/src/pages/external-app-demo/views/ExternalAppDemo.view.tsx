@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useAppLanguage } from '../../../providers/AppLanguageProvider';
 import { LibI18nProvider } from '../../../lib/ui-library/providers/LibI18n.provider';
 import TagSelector from '@/lib/ui-library/TagSelector';
-import type { TagItem } from '@/lib/ui-library/types/language.types';
+import type { TagItem } from '@/lib/ui-library/types/tag-selector.types';
 
 
 function ExternalAppContent() {

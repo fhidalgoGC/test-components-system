@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../types/shared.types';
-import type { TagItem, TagsFunction, MultiLanguageLabel, TagMetadata } from '../../types/language.types';
+import type { TagItem, TagsFunction, TagMetadata } from '../../types/tag-selector.types';
+import type { MultiLanguageLabel } from '../../types/language.types';
 
 // Unified size type for TagSelector
 export type TagSelectorSize = 'sm' | 'md' | 'lg' | 'tam-1' | 'tam-2' | 'tam-3' | 'tam-4' | 'tam-5' | 'tam-6' | 'tam-7' | 'tam-8' | 'tam-9' | 'tam-10' | 'tam-11' | 'tam-12';

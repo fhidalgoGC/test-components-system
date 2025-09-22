@@ -5,45 +5,6 @@ export interface MultiLanguageLabel {
   default: string; // Required fallback
 }
 
-// Individual tag state colors interface
-export interface TagStateColors {
-  background?: string;        // Fill color
-  text?: string;             // Text color
-  border?: string;           // Border color
-  hoverBackground?: string;  // Fill color on hover
-  hoverBorder?: string;      // Border color on hover
-  hoverText?: string;        // Text color on hover
-}
-
-// Tag metadata for individual customization per tag
-export interface TagMetadata {
-  colors?: {
-    light?: {
-      selected?: TagStateColors;   // Colors when selected
-      unselected?: TagStateColors; // Colors when unselected
-    };
-    dark?: {
-      selected?: TagStateColors;   // Colors when selected (dark theme)
-      unselected?: TagStateColors; // Colors when unselected (dark theme)
-    };
-  };
-  sizing?: {
-    paddingX?: string;    // Horizontal padding (e.g., '8px', '1rem')
-    paddingY?: string;    // Vertical padding (e.g., '4px', '0.5rem')
-    fontSize?: string;    // Font size (e.g., '14px', '0.875rem')
-    minWidth?: string;    // Minimum width (e.g., '80px', '5rem')
-    height?: string;      // Fixed height (e.g., '32px', '2rem')
-  };
-}
-
-export interface TagItem {
-  id: string;
-  label: MultiLanguageLabel;
-  metadata?: TagMetadata; // Optional individual tag customization
-}
-
-export type TagsFunction = () => Promise<TagItem[]>;
-
 export interface LanguageContextValue {
   currentLanguage: string;
   setLanguage: (language: string) => void;
@@ -53,4 +14,19 @@ export interface LanguageContextValue {
 export interface LanguageProviderProps {
   children: React.ReactNode;
   defaultLanguage?: string;
+}
+
+// Interfaz genérica para cualquier proveedor de idioma compatible
+// Acepta cualquier string compatible con lang
+export interface GenericLanguageProvider {
+  lang: string;
+  setLang: (lang: any) => void; // Acepta cualquier tipo para máxima compatibilidad
+}
+
+// Función para detectar automáticamente cualquier proveedor de idioma
+// sin depender de imports específicos
+export function detectParentLanguageProvider(): GenericLanguageProvider | null {
+  // Esta función será implementada en el LibI18nProvider
+  // usando React.useContext de forma dinámica
+  return null;
 }
