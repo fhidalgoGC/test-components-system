@@ -43,7 +43,23 @@ function LanguageSwitcher() {
 
 function ExternalAppContent() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [translationPriority, setTranslationPriority] = useState<'component-first' | 'external-first'>('component-first');
   const app = useAppLanguage(); // Obtener el proveedor padre para inyectarlo
+  
+  // Guard para asegurar que app esté disponible
+  if (!app) {
+    return <div>Loading app context...</div>;
+  }
+  
+  // Traducciones externas personalizadas que se pueden combinar con las del componente
+  const externalTranslations = {
+    all: app.lang === 'es' ? 'TODOS (Externa)' : 'ALL (External)',
+    loading: app.lang === 'es' ? 'Cargando desde externa...' : 'Loading from external...',
+    no_tags: app.lang === 'es' ? 'Sin etiquetas (Externa)' : 'No tags (External)',
+    select_all: app.lang === 'es' ? 'Seleccionar Todo (Externa)' : 'Select All (External)',
+    clear_selection: app.lang === 'es' ? 'Limpiar (Externa)' : 'Clear (External)',
+    custom_external: app.lang === 'es' ? 'Solo en Externa' : 'External Only'
+  };
 
   // Función async para cargar tags
   const getTags = useCallback(async (): Promise<TagItem[]> => {
@@ -91,19 +107,71 @@ function ExternalAppContent() {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold mb-4">External App Demo</h1>
-        <p className="text-gray-600 mb-4">
-          Demostrando la sincronización automática de idiomas entre la app padre (AppLanguageProvider) 
-          y la librería hijo (LibI18nProvider).
+      <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+        <h3 className="text-lg font-semibold mb-2">🌐 App Padre (Externa)</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+          Este componente simula una aplicación externa que tiene su propio sistema de idioma y traducciones personalizadas.
         </p>
+        
+        {/* Mostrar estado del idioma */}
+        <div className="mb-3 text-sm">
+          <strong>Idioma actual:</strong> {app.lang === 'es' ? '🇪🇸 Español' : '🇺🇸 Inglés'}
+        </div>
         
         {/* Botones para cambiar idioma desde la app padre */}
         <LanguageSwitcher />
+        
+        {/* Control de prioridad de traducciones */}
+        <div className="mt-4">
+          <label className="block text-sm font-medium mb-2">
+            📋 Prioridad de Traducciones:
+          </label>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setTranslationPriority('component-first')}
+              className={`px-3 py-1 text-xs rounded ${
+                translationPriority === 'component-first'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+              data-testid="button-priority-component"
+            >
+              Componente Primero
+            </button>
+            <button
+              onClick={() => setTranslationPriority('external-first')}
+              className={`px-3 py-1 text-xs rounded ${
+                translationPriority === 'external-first'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+              data-testid="button-priority-external"
+            >
+              Externa Primero
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            {translationPriority === 'component-first' 
+              ? 'Las traducciones del componente tienen prioridad sobre las externas'
+              : 'Las traducciones externas tienen prioridad sobre las del componente'
+            }
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <h1 className="text-2xl font-bold mb-4">External App Demo</h1>
+        <p className="text-gray-600 mb-4">
+          Demostrando la integración de traducciones jerárquicas: componente vs externas con prioridad configurable.
+        </p>
       </div>
 
       {/* La librería recibe el proveedor padre como prop - completamente portable */}
-      <LibI18nProvider parentLanguageProvider={app}>
+      <LibI18nProvider 
+        parentLanguageProvider={app}
+        externalTranslations={externalTranslations}
+        translationPriority={translationPriority}
+      >
         <TagSelector
           getTagsFunction={getTags}
           selectedTags={selectedTags}
