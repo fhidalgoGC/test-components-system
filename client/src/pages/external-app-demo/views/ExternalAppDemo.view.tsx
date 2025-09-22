@@ -3,7 +3,6 @@ import { AppLanguageProvider, useAppLanguage } from '../../../providers/AppLangu
 import { LibI18nProvider } from '../../../lib/ui-library/providers/LibI18nProvider';
 import TagSelector from '@/lib/ui-library/TagSelector';
 import type { TagItem } from '@/lib/ui-library/types/language';
-import { globalTranslations } from '../../../i18n';
 
 function LanguageSwitcher() {
   const app = useAppLanguage();
@@ -52,10 +51,10 @@ function ExternalAppContent() {
     return <div>Loading app context...</div>;
   }
   
-  // Usar las traducciones globales del sistema (es.json, en.json)
-  const globalTranslationFiles = [
-    { lang: 'es' as const, translations: globalTranslations.es },
-    { lang: 'en' as const, translations: globalTranslations.en }
+  // Rutas a los archivos JSON de traducciones globales
+  const globalTranslationPaths = [
+    { lang: 'es', path: '../../../i18n/es.json' },
+    { lang: 'en', path: '../../../i18n/en.json' }
   ];
 
   // Función async para cargar tags
@@ -167,7 +166,7 @@ function ExternalAppContent() {
       {/* La librería recibe el proveedor padre como prop - completamente portable */}
       <LibI18nProvider 
         parentLanguageProvider={app}
-        globalTranslations={globalTranslationFiles}
+        globalTranslationPaths={globalTranslationPaths}
         translationPriority={translationPriority}
       >
         <TagSelector
