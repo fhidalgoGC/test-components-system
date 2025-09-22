@@ -4,7 +4,6 @@
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import type { GenericLanguageProvider } from '../types/language-provider';
 import { makeTranslator, type TranslationOrder } from '../TagSelector/utils';
-import type { SupportedLanguage } from '../../../i18n';
 
 type Lang = 'es' | 'en';
 
@@ -26,9 +25,9 @@ export function useLibI18n() {
   return ctx;
 }
 
-type GlobalTranslationFile = {
-  lang: SupportedLanguage;
-  translations: Record<string, any>; // JSON anidado como { "common": { "loading": "..." }, ... }
+type GlobalTranslationPath = {
+  lang: string; // Idioma como string genérico
+  path: string; // Ruta relativa o absoluta al archivo JSON
 };
 
 type LibI18nProviderProps = {
@@ -38,8 +37,8 @@ type LibI18nProviderProps = {
   onLanguageChange?: (next: Lang) => void;
   /** Proveedor padre inyectado (opcional) - permite conectar con cualquier sistema de idioma */
   parentLanguageProvider?: GenericLanguageProvider;
-  /** Array de archivos JSON de traducciones globales (es.json, en.json, etc.) */
-  globalTranslations?: GlobalTranslationFile[];
+  /** Array de rutas a archivos JSON de traducciones globales */
+  globalTranslationPaths?: GlobalTranslationPath[];
   /** Orden de prioridad: 'component-first' (por defecto) o 'external-first' */
   translationPriority?: 'component-first' | 'external-first';
   children: React.ReactNode;
@@ -76,11 +75,12 @@ export function LibI18nProvider({
   language, 
   onLanguageChange, 
   parentLanguageProvider,
-  globalTranslations = [],
+  globalTranslationPaths = [],
   translationPriority = 'component-first',
   children 
 }: LibI18nProviderProps) {
   const [internal, setInternal] = useState<Lang>(language ?? 'en');
+  const [loadedTranslations, setLoadedTranslations] = useState<Record<string, Record<string, any>>>({});
 
   // Determinar la fuente de verdad (prioridad: padre inyectado > prop controlada > interno)
   const effectiveLang: Lang = (parentLanguageProvider?.lang as Lang) ?? language ?? internal;
@@ -92,14 +92,38 @@ export function LibI18nProvider({
     }
   }, [parentLanguageProvider, language, internal]);
 
+  // Cargar traducciones dinámicamente desde las rutas
+  useEffect(() => {
+    const loadTranslations = async () => {
+      const loaded: Record<string, Record<string, any>> = {};
+      
+      for (const translationPath of globalTranslationPaths) {
+        try {
+          // Usar import dinámico para cargar el JSON
+          const module = await import(/* @vite-ignore */ translationPath.path);
+          loaded[translationPath.lang] = module.default || module;
+        } catch (error) {
+          console.warn(`Failed to load translation file for ${translationPath.lang} from ${translationPath.path}:`, error);
+          loaded[translationPath.lang] = {};
+        }
+      }
+      
+      setLoadedTranslations(loaded);
+    };
+
+    if (globalTranslationPaths.length > 0) {
+      loadTranslations();
+    }
+  }, [globalTranslationPaths]);
+
   // Procesar traducciones globales para el idioma actual
   const processedGlobalTranslations = useMemo(() => {
-    const globalFile = globalTranslations.find(gt => gt.lang === effectiveLang);
-    if (!globalFile) return {};
+    const globalTranslationsForLang = loadedTranslations[effectiveLang];
+    if (!globalTranslationsForLang) return {};
     
     // Aplanar la estructura anidada para compatibilidad con makeTranslator
-    return flattenTranslations(globalFile.translations);
-  }, [globalTranslations, effectiveLang]);
+    return flattenTranslations(globalTranslationsForLang);
+  }, [loadedTranslations, effectiveLang]);
 
   // Crear traductor usando el sistema jerárquico existente
   const t = useMemo(() => {
