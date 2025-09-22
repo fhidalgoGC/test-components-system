@@ -105,27 +105,6 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Modificar CSS modules
 - Implementar diseño responsivo
 
----
-
-## 🛠️ **Desarrollo y Arquitectura**
-
-### **`../README-BUILD-NEW-COMPONENTS.md`**
-**Cuándo usar:** Para desarrollar nuevos componentes en la librería.
-
-**Contiene:**
-- 🏗️ Arquitectura y estructura de componentes
-- 📁 Convenciones de carpetas y archivos
-- 🎨 Sistema de estilos y CSS modules
-- 🌐 Integración con sistema i18n
-- 🔧 Hooks y providers personalizados
-- 📝 Estándares de documentación
-
-**Buscar aquí para:**
-- Crear nuevos componentes
-- Seguir convenciones de la librería
-- Implementar CSS modules
-- Integrar i18n en componentes
-- Documentar componentes correctamente
 
 ---
 
@@ -165,13 +144,6 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 └── CSS modules
 ```
 
-### **🛠️ Desarrollo**
-```
-../README-BUILD-NEW-COMPONENTS.md
-├── Arquitectura de componentes
-├── Convenciones de código
-└── Estándares de documentación
-```
 
 ---
 
@@ -183,7 +155,6 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | Configurar idiomas | `./README-IA--LANGUAJE.md` |
 | Usar TagSelector | `./components/TagSelector/README-IA.md` |
 | Personalizar estilos | `./components/TagSelector/README-IA--STYLES.md` |
-| Crear nuevo componente | `../README-BUILD-NEW-COMPONENTS.md` |
 | API de LibI18nProvider | `./providers/README-LibI18n.provider.md` |
 | Resolver errores de imports | `./README-IA.md` |
 | Implementar provider padre | `./README-IA--LANGUAJE.md` |
