@@ -282,23 +282,6 @@ interface LibI18nProviderProps {
 
 ## 🐛 Solución de Problemas Comunes
 
-### **Error: "useLibI18n must be used within LibI18nProvider"**
-
-```jsx
-// ❌ MAL - Sin provider
-function App() {
-  return <ComponenteDeLaLibreria />;
-}
-
-// ✅ BIEN - Con provider
-function App() {
-  return (
-    <LibI18nProvider language="en">
-      <ComponenteDeLaLibreria />
-    </LibI18nProvider>
-  );
-}
-```
 
 ### **Error: "Module not found"**
 
