@@ -31,7 +31,7 @@ function ExternalAppContent() {
         id: "react",
         label: {
           en: "React",
-          es: "React",
+          es: "React-es",
           fr: "React",
           default: "React",
         },
@@ -40,7 +40,7 @@ function ExternalAppContent() {
         id: "typescript",
         label: {
           en: "TypeScript",
-          es: "TypeScript",
+          es: "TypeScript-es",
           fr: "TypeScript",
           default: "TypeScript",
         },
@@ -49,7 +49,7 @@ function ExternalAppContent() {
         id: "nodejs",
         label: {
           en: "Node.js",
-          es: "Node.js",
+          es: "Node.js-es",
           fr: "Node.js",
           default: "Node.js",
         },
@@ -58,7 +58,7 @@ function ExternalAppContent() {
         id: "design",
         label: {
           en: "UI/UX Design",
-          es: "Diseño UI/UX",
+          es: "Diseño UI/UX-es",
           fr: "Design UI/UX",
           default: "UI/UX Design",
         },
@@ -82,14 +82,13 @@ function ExternalAppContent() {
         parentLanguageProvider={app}
         globalTranslationPaths={globalTranslationPaths}
         translationPriority={translationPriority}
-        
       >
         <TagSelector
           getTagsFunction={getTags}
           selectedTags={selectedTags}
           onSelectionChange={(tags: TagItem[]) => {
             setSelectedTags(tags.map((t: TagItem) => t.id));
-            console.log("Selected tags:", tags)
+            console.log("Selected tags:", tags);
           }}
           requireSelection={true}
           allowMultiple={true}
