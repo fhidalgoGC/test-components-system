@@ -69,7 +69,47 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 🧩 **Componentes Específicos**
 
-### **`./components/[ComponentName]/README-IA.md`**
+### **TagSelector (Disponible Actualmente)**
+
+#### **`./components/TagSelector/README-IA.md`**
+**Cuándo usar:** Para implementar y configurar el componente TagSelector.
+
+**Contiene:**
+- 📖 Props completos del TagSelector
+- 🎯 Ejemplos de uso (básico, avanzado, async)
+- 🔧 API detallada del componente
+- 🌐 Integración con sistema i18n
+- ⚡ Funcionalidades (preselección, async loading, etc.)
+- 🎨 Variantes y temas disponibles
+
+**Buscar aquí para:**
+- Implementar TagSelector en un proyecto
+- Configurar props específicos (defaultSelectedTags, etc.)
+- Entender funcionalidades async
+- Integrar con sistema de idiomas
+- Personalizar comportamiento del componente
+
+#### **`./components/TagSelector/README-IA--STYLES.md`**
+**Cuándo usar:** Para personalizar estilos y temas del TagSelector.
+
+**Contiene:**
+- 🎨 Sistema de temas (light, dark, auto)
+- 📏 Variantes de tamaño (sm, md, lg)
+- 🎭 Variantes visuales (default, outline, ghost)
+- 🔧 CSS modules y customización
+- 🌈 Tokens de diseño y variables CSS
+- 📱 Diseño responsivo
+
+**Buscar aquí para:**
+- Personalizar estilos del TagSelector
+- Configurar temas light/dark
+- Ajustar tamaños y variantes
+- Modificar CSS modules
+- Implementar diseño responsivo
+
+### **Futuros Componentes (Estructura General)**
+
+#### **`./components/[ComponentName]/README-IA.md`**
 **Cuándo usar:** Para implementar y configurar componentes específicos de la librería.
 
 **Estructura general de documentación de componentes:**
@@ -87,7 +127,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Integrar componentes con sistema de idiomas
 - Personalizar comportamiento de componentes
 
-### **`./components/[ComponentName]/README-IA--STYLES.md`**
+#### **`./components/[ComponentName]/README-IA--STYLES.md`**
 **Cuándo usar:** Para personalizar estilos y temas de componentes específicos.
 
 **Estructura general de documentación de estilos:**
