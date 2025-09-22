@@ -138,6 +138,18 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
   - Direct imports to component view files without intermediate index files
   - Cleaner dependency graph and better development experience
 
+## Import Path Optimization and Library Structure (September 22, 2025)
+- **Export Structure Reorganization**: Created comprehensive export system for easy imports
+  - Main library export: `client/src/lib/ui-library/index.ts` exports all components, providers, types
+  - Components export: `client/src/lib/ui-library/components/index.ts` for component-specific imports
+  - Providers export: `client/src/lib/ui-library/providers/index.ts` for provider-specific imports
+  - Root entry point: `index.ts` for direct library access from external projects
+- **Vite Alias Configuration**: Added "GC-UI-COMPONENTS" alias for simplified imports
+  - External imports: `import { TagSelector, LibI18nProvider } from 'GC-UI-COMPONENTS'`
+  - Internal imports: Consistent relative path resolution
+- **Package Name Update**: Changed from "rest-express" to "GC-UI-COMPONENTS" for better identification
+- **Route Resolution Fix**: Solved "useLibI18n must be used within LibI18nProvider" error caused by import path issues
+
 ## Known Issues & Future Improvements
 - **i18n Array/Object Support**: Current hierarchical i18n system works for strings but needs enhancement for arrays and objects
 - **Font Awesome Dependencies**: Some components reference Font Awesome icons that may need resolution
