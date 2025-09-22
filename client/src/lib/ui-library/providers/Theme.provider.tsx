@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { tokens } from './tokens';
+import { tokens } from '../theme/tokens';
 
 const ThemeContext = createContext<{ 
   theme: 'light' | 'dark'; 

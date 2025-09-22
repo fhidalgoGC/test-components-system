@@ -1,2 +1,2 @@
-export * from './Theme.provider';
+export * from '../providers/Theme.provider';
 export * from './tokens';
