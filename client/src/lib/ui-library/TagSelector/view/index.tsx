@@ -4,7 +4,7 @@ import { containerClasses, chipClasses } from '../css/TagSelector.module';
 import type { SelectedTagItem, TagSelectorSize } from '../types';
 import type { TagItem } from '../../types/language';
 import type { MultiLanguageLabel } from '../../types/language';
-import { useLanguage } from '../../context/LanguageContext';
+import { useLibI18n } from '../../providers/LibI18nProvider';
 
 export const TagSelectorView: React.FC<{
   className?: string;
@@ -36,13 +36,7 @@ export const TagSelectorView: React.FC<{
   defaultTagLabels
 }) => {
   const { theme, t, isVisible } = useTagSelectorContext();
-  const languageContext = useLanguage();
-
-  // Helper function to resolve multilanguage labels
-  const resolveLabel = (label: MultiLanguageLabel): string => {
-    if (!languageContext) return label.default;
-    return languageContext.resolveLabel(label);
-  };
+  const { resolveLabel } = useLibI18n();
 
   // Helper function to find TagItem by ID
   const findTagById = (tagId: string): TagItem | null => {

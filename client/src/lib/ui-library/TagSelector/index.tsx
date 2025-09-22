@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { TagSelectorProps, SelectedTagItem } from './types';
 import type { TagItem } from '../types/language';
 import { TagSelectorProvider } from './provider';
 import { TagSelectorView } from './view';
-import LanguageContext from '../context/LanguageContext';
+import { LibI18nProvider } from '../providers/LibI18nProvider';
 
 const TagSelector: React.FC<TagSelectorProps> = ({
   id, 
@@ -30,8 +30,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   
-  // Get language context directly, null if not wrapped in LanguageProvider
-  const languageContext = useContext(LanguageContext);
+  // Language is now handled internally by LibI18nProvider
+  // No need to manually manage language context here
 
   // Direct callback - always passes TagItem[] with full translation data
   const directCallback = (items: TagItem[]) => {
@@ -67,7 +67,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
     return () => {
       cancelled = true;
     };
-  }, [getTagsFunction, languageContext?.currentLanguage]);
+  }, [getTagsFunction]);
 
   // Tags are already in the correct TagItem[] format
 
@@ -149,39 +149,41 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   const combinedClassName = theme ? (className ? `${className} ${theme}` : theme) : className;
 
   return (
-    <TagSelectorProvider config={config} langOverride={langOverride} i18nOrder={i18nOrder}>
-      <div id={id} className={combinedClassName} style={combinedStyle}>
-        {error ? (
-          <div 
-            className="text-red-500 text-sm p-2"
-            data-testid="tag-selector-error"
-          >
-            Error: {error}
-          </div>
-        ) : (
-          <TagSelectorView
-            className={className}
-            tags={resolvedTags}
-            selectedTags={selectedTags}
-            onSelectionChange={directCallback}
-            allLabel={allLabel}
-            defaultLabel={defaultLabel}
-            defaultTagLabels={defaultTagLabels}
-            allowMultiple={allowMultiple}
-            allowAll={allowAll}
-            requireSelection={requireSelection}
-            size={size}
-            disabled={disabled || isLoading}
-            isLoading={isLoading}
-          />
-        )}
-      </div>
-    </TagSelectorProvider>
+    <LibI18nProvider language={langOverride}>
+      <TagSelectorProvider config={config} langOverride={langOverride} i18nOrder={i18nOrder}>
+        <div id={id} className={combinedClassName} style={combinedStyle}>
+          {error ? (
+            <div 
+              className="text-red-500 text-sm p-2"
+              data-testid="tag-selector-error"
+            >
+              Error: {error}
+            </div>
+          ) : (
+            <TagSelectorView
+              className={className}
+              tags={resolvedTags}
+              selectedTags={selectedTags}
+              onSelectionChange={directCallback}
+              allLabel={allLabel}
+              defaultLabel={defaultLabel}
+              defaultTagLabels={defaultTagLabels}
+              allowMultiple={allowMultiple}
+              allowAll={allowAll}
+              requireSelection={requireSelection}
+              size={size}
+              disabled={disabled || isLoading}
+              isLoading={isLoading}
+            />
+          )}
+        </div>
+      </TagSelectorProvider>
+    </LibI18nProvider>
   );
 };
 
 export default TagSelector;
 export * from './types';
-export { LanguageProvider, useLanguage } from '../context/LanguageContext';
+export { LibI18nProvider, useLibI18n } from '../providers/LibI18nProvider';
 export type { TagItem, MultiLanguageLabel, TagsFunction, TagMetadata, TagStateColors } from '../types/language';
 export type { TagSelectorSize } from './types/component';
