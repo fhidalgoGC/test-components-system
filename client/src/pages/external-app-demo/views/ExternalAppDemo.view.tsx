@@ -43,6 +43,7 @@ function LanguageSwitcher() {
 
 function ExternalAppContent() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const app = useAppLanguage(); // Obtener el proveedor padre para inyectarlo
 
   // Función async para cargar tags
   const getTags = useCallback(async (): Promise<TagItem[]> => {
@@ -101,8 +102,8 @@ function ExternalAppContent() {
         <LanguageSwitcher />
       </div>
 
-      {/* La librería "detecta" el provider padre y se sincroniza automáticamente */}
-      <LibI18nProvider>
+      {/* La librería recibe el proveedor padre como prop - completamente portable */}
+      <LibI18nProvider parentLanguageProvider={app}>
         <TagSelector
           getTagsFunction={getTags}
           selectedTags={selectedTags}
