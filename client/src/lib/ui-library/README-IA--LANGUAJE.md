@@ -1,4 +1,5 @@
 # Sistema de Idiomas - UI Library
+**Version: 1.0.4**
 
 ## 📋 Sistema de traducciones para todos los componentes
 
