@@ -2,7 +2,7 @@
 // LibI18nProvider (PROVIDER HIJO - DENTRO DE LA LIBRERÍA)
 // ---------------------------------------------
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
-import { useAppLanguage } from '../../../providers/AppLanguageProvider';
+import type { GenericLanguageProvider } from '../types/language-provider';
 
 type Lang = 'es' | 'en';
 
@@ -36,30 +36,38 @@ type LibI18nProviderProps = {
   language?: Lang;
   /** Callback para cambios de idioma disparados desde la librería */
   onLanguageChange?: (next: Lang) => void;
+  /** Proveedor padre inyectado (opcional) - permite conectar con cualquier sistema de idioma */
+  parentLanguageProvider?: GenericLanguageProvider;
   children: React.ReactNode;
 };
 
 /**
- * Comportamiento:
- * - Si existe AppLanguageContext (padre), usamos padre.lang como fuente de verdad.
- * - Si NO existe padre y viene `language` en props, usamos esa prop (controlado por prop).
- * - Si NO existe padre ni `language`, la librería se autogestiona con estado interno.
- * - Cuando setLanguage es llamado dentro de la librería:
- *    - Si hay padre, le pedimos al padre cambiar (padre.setLang).
- *    - En su defecto, disparamos onLanguageChange si fue provisto.
- *    - Y si nada de lo anterior existe, cambiamos nuestro estado interno.
+ * Comportamiento INDEPENDIENTE:
+ * - Si recibe `parentLanguageProvider` (inyectado), usa ese como fuente de verdad
+ * - Si NO hay padre pero viene `language` en props, usamos esa prop (controlado por prop)
+ * - Si NO hay padre ni `language`, la librería se autogestiona con estado interno
+ * - Cuando setLanguage es llamado desde la librería:
+ *    - Si hay padre inyectado, le notifica al padre (padre.setLang)
+ *    - En su defecto, dispara onLanguageChange si fue provisto
+ *    - Y si nada existe, cambia su estado interno
  */
-export function LibI18nProvider({ language, onLanguageChange, children }: LibI18nProviderProps) {
-  const appLang = useAppLanguage(); // puede ser undefined si la librería se usa "sola"
+export function LibI18nProvider({ 
+  language, 
+  onLanguageChange, 
+  parentLanguageProvider, 
+  children 
+}: LibI18nProviderProps) {
   const [internal, setInternal] = useState<Lang>(language ?? 'en');
 
-  // Determinar la fuente de verdad (prioridad: padre > prop controlada > interno)
-  const effectiveLang: Lang = appLang?.lang ?? language ?? internal;
+  // Determinar la fuente de verdad (prioridad: padre inyectado > prop controlada > interno)
+  const effectiveLang: Lang = (parentLanguageProvider?.lang as Lang) ?? language ?? internal;
 
   // Si la prop `language` cambia desde afuera y no hay padre, reflejamos en interno para mantener consistencia
   useEffect(() => {
-    if (!appLang && language && language !== internal) setInternal(language);
-  }, [appLang, language, internal]);
+    if (!parentLanguageProvider && language && language !== internal) {
+      setInternal(language);
+    }
+  }, [parentLanguageProvider, language, internal]);
 
   const t = (key: keyof typeof DICT) => DICT[key]?.[effectiveLang] ?? key;
 
@@ -68,9 +76,9 @@ export function LibI18nProvider({ language, onLanguageChange, children }: LibI18
   };
 
   const setLanguage = (next: Lang) => {
-    if (appLang?.setLang) {
-      // Empujar hacia el provider padre
-      appLang.setLang(next);
+    if (parentLanguageProvider?.setLang) {
+      // Empujar hacia el provider padre inyectado
+      parentLanguageProvider.setLang(next);
       return;
     }
     if (onLanguageChange) {
@@ -88,4 +96,10 @@ export function LibI18nProvider({ language, onLanguageChange, children }: LibI18
   );
 
   return <LibI18nContext.Provider value={value}>{children}</LibI18nContext.Provider>;
+}
+
+// Hook conveniente para inyectar automáticamente el proveedor padre
+// Este hook puede ser usado por la app padre para conectar su sistema de idioma
+export function useParentLanguageInjection(parentProvider: GenericLanguageProvider | null) {
+  return parentProvider ? { parentLanguageProvider: parentProvider } : {};
 }
