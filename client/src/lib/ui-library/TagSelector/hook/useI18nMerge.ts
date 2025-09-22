@@ -16,10 +16,18 @@ export function useI18nMerge(
   // Obtener traducciones locales del componente (carpeta i18n/)
   const local = getLocalDict(lang);
   
+  // Obtener traducciones externas del provider
+  const external = libI18n.getExternalTranslations();
+  
+  // Determinar el orden de prioridad
+  // 1. Si se pasa localmente, usar esa preferencia
+  // 2. Si no, usar la configuración del provider
+  // 3. Por defecto, component-first (local-first)
+  const effectiveOrder = opts?.order ?? 
+    (libI18n.translationPriority === 'component-first' ? 'local-first' : 'global-first');
+  
   // Crear traductor que combina traducciones locales con externas
-  // El orden se hereda del provider, pero se puede overridear localmente
-  const order = opts?.order ?? 'local-first';
-  const t = makeTranslator(local as any, undefined, order);
+  const t = makeTranslator(local as any, external, effectiveOrder);
   
   return { lang, t };
 }
