@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import TagSelectorComponent from '@/lib/ui-library/TagSelector';
+import TagSelectorComponent from '@/lib/ui-library/components/TagSelector';
 import { CodePreview } from '@/components/code-preview';
 import { PropsTable } from '@/components/props-table';
-// TagItem is already imported from language types
-import type { TagItem } from '@/lib/ui-library/types/tag-selector.types';
-import type { TagSelectorSize } from '@/lib/ui-library/TagSelector/types';
+// TagItem is already imported from tag-selector types
+import type { TagItem } from '@/lib/ui-library/components/TagSelector/types/tag-selector.types';
+import type { TagSelectorSize } from '@/lib/ui-library/components/TagSelector/types';
 import { useLibI18n } from '@/lib/ui-library/providers/LibI18n.provider';
 import { useTagSelectorDemo } from '../hooks/TagSelectorDemo.hook';
 import styles from '../css/TagSelectorDemo.module.css';

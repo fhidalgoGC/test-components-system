@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { VisibilityConfig } from '../../types/shared.types';
+import type { VisibilityConfig } from '../../../types/shared.types';
 import { detectWidth, detectOrientation, detectDevice, isVisibleByConfig } from '../utils';
 
 export function useVisibility(configFromProps?: VisibilityConfig) {

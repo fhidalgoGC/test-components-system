@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { TagSelectorProps} from './types';
-import type { TagItem } from '../types/tag-selector.types';
+import type { TagItem } from './types/tag-selector.types';
 import { TagSelectorProvider } from './provider';
 import { TagSelectorView } from './view';
 
@@ -181,7 +181,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
 
 export default TagSelector;
 export * from './types';
-export { LibI18nProvider, useLibI18n } from '../providers/LibI18n.provider';
-export type { TagItem, TagsFunction, TagMetadata, TagStateColors } from '../types/tag-selector.types';
-export type { MultiLanguageLabel } from '../types/language.types';
+export { LibI18nProvider, useLibI18n } from '../../providers/LibI18n.provider';
+export type { TagItem, TagsFunction, TagMetadata, TagStateColors } from './types/tag-selector.types';
+export type { MultiLanguageLabel } from '../../types/language.types';
 export type { TagSelectorSize } from './types/component';
