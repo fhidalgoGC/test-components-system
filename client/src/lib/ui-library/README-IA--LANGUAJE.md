@@ -555,44 +555,92 @@ interface LibI18nContextValue {
 }
 ```
 
-## 🚨 Solución de Problemas de Providers
+## 🚨 Implementación: Con Provider Padre vs Sin Provider Padre
 
-### **Error: "useLibI18n must be used within LibI18nProvider"**
+### **Opción 1: Sin Provider Padre (Librería Independiente)**
+
+**Cuándo usar:** Cuando quieres que la librería maneje su propio idioma sin sincronizarse con la aplicación padre.
 
 ```jsx
-// ❌ MAL - Sin provider
-function App() {
-  return <ComponenteDeLaLibreria />;
-}
+import { LibI18nProvider } from 'GC-UI-COMPONENTS';
 
-// ✅ BIEN - Con provider
 function App() {
   return (
     <LibI18nProvider language="en">
-      <ComponenteDeLaLibreria />
+      {/* La librería controla su propio idioma */}
+      <ComponentesDeLaLibreria />
     </LibI18nProvider>
   );
 }
 ```
 
-### **Provider padre no conectado**
+**Características:**
+- ✅ **Fácil de implementar** - Solo un provider
+- ✅ **Independiente** - No depende de la aplicación padre
+- ❌ **No sincronizado** - Cambios de idioma no se propagan a la app padre
+- ❌ **Aislado** - La app y librería pueden tener idiomas diferentes
+
+### **Opción 2: Con Provider Padre (Sincronizado - Recomendado)**
+
+**Cuándo usar:** Cuando quieres que la librería esté sincronizada con el idioma global de tu aplicación.
 
 ```jsx
-// ❌ MAL - Provider padre no conectado
-<LibI18nProvider language="en">
-  <MisComponentes />
-</LibI18nProvider>
+import { LibI18nProvider } from 'GC-UI-COMPONENTS';
 
-// ✅ BIEN - Provider padre conectado
-function MiApp() {
-  const appLanguage = useAppLanguage();
+// 1. Crear provider padre en tu aplicación
+const AppLanguageContext = createContext();
+
+function AppLanguageProvider({ children }) {
+  const [language, setLanguage] = useState('en');
   
   return (
-    <LibI18nProvider parentLanguageProvider={appLanguage}>
-      <MisComponentes />
+    <AppLanguageContext.Provider value={{ lang: language, setLanguage }}>
+      {children}
+    </AppLanguageContext.Provider>
+  );
+}
+
+function useAppLanguage() {
+  return useContext(AppLanguageContext);
+}
+
+// 2. Conectar providers
+function App() {
+  return (
+    <AppLanguageProvider>              {/* Provider padre */}
+      <MyComponent />
+    </AppLanguageProvider>
+  );
+}
+
+function MyComponent() {
+  const appLanguage = useAppLanguage(); // Obtener provider padre
+  
+  return (
+    <LibI18nProvider parentLanguageProvider={appLanguage}>  {/* Provider hijo conectado */}
+      <ComponentesDeLaLibreria />
     </LibI18nProvider>
   );
 }
+```
+
+**Características:**
+- ✅ **Sincronizado** - App y librería comparten el mismo idioma
+- ✅ **Centralizado** - Un solo lugar para controlar idioma global
+- ✅ **Flexible** - Permite traducciones globales y locales
+- ✅ **Escalable** - Funciona con múltiples librerías y componentes
+- ⚠️ **Más setup** - Requiere crear el provider padre
+
+### **Flujo de Comunicación:**
+
+```
+Sin Provider Padre:
+LibI18nProvider (independiente) → Componentes de la librería
+
+Con Provider Padre:
+AppLanguageProvider → LibI18nProvider → Componentes de la librería
+      ↑                      ↓
+   setLanguage()          parentLanguageProvider
 ```
 
 ## 📚 Documentación Relacionada
