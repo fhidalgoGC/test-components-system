@@ -3,21 +3,13 @@
 // ---------------------------------------------
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import type { GenericLanguageProvider } from '../types/language-provider';
+import { makeTranslator, type TranslationOrder } from '../TagSelector/utils';
 
 type Lang = 'es' | 'en';
 
-type Dict = Record<string, Record<Lang, string>>;
-const DICT: Dict = {
-  all: { es: 'Todos', en: 'All' },
-  loading: { es: 'Cargando...', en: 'Loading...' },
-  no_tags: { es: 'No hay etiquetas', en: 'No tags' },
-  hello: { es: 'Hola', en: 'Hello' },
-  bye: { es: 'Adiós', en: 'Bye' },
-};
-
 type LibI18nContextValue = {
   lang: Lang;
-  t: (key: keyof typeof DICT) => string;
+  t: (key: string, params?: Record<string, string | number>) => string;
   setLanguage: (next: Lang) => void;
   resolveLabel: (label: { [key: string]: string; default: string }) => string;
 };
@@ -38,6 +30,10 @@ type LibI18nProviderProps = {
   onLanguageChange?: (next: Lang) => void;
   /** Proveedor padre inyectado (opcional) - permite conectar con cualquier sistema de idioma */
   parentLanguageProvider?: GenericLanguageProvider;
+  /** Traducciones externas que se pueden combinar con las locales del componente */
+  externalTranslations?: Record<string, string>;
+  /** Orden de prioridad: 'component-first' (por defecto) o 'external-first' */
+  translationPriority?: 'component-first' | 'external-first';
   children: React.ReactNode;
 };
 
@@ -54,7 +50,9 @@ type LibI18nProviderProps = {
 export function LibI18nProvider({ 
   language, 
   onLanguageChange, 
-  parentLanguageProvider, 
+  parentLanguageProvider,
+  externalTranslations,
+  translationPriority = 'component-first',
   children 
 }: LibI18nProviderProps) {
   const [internal, setInternal] = useState<Lang>(language ?? 'en');
@@ -69,7 +67,17 @@ export function LibI18nProvider({
     }
   }, [parentLanguageProvider, language, internal]);
 
-  const t = (key: keyof typeof DICT) => DICT[key]?.[effectiveLang] ?? key;
+  // Crear traductor usando el sistema jerárquico existente
+  const t = useMemo(() => {
+    // Convertir orden de prioridad al formato esperado por makeTranslator
+    const order: TranslationOrder = translationPriority === 'component-first' ? 'local-first' : 'global-first';
+    
+    // Por ahora sin traducciones locales específicas del provider (se pueden agregar después)
+    // Las traducciones locales vendrán de cada componente individual
+    const localTranslations: Record<string, string> = {};
+    
+    return makeTranslator(localTranslations, externalTranslations, order);
+  }, [externalTranslations, translationPriority]);
 
   const resolveLabel = (label: { [key: string]: string; default: string }) => {
     return label[effectiveLang] ?? label.default;
