@@ -36,23 +36,15 @@ npm install git+https://github.com/tu-usuario/GC-UI-COMPONENTS.git
 npm install git+https://github.com/tu-usuario/GC-UI-COMPONENTS.git#main
 ```
 
-### **Método 3: Descargar Carpeta ui-library**
-
-```bash
-# Descargar solo la librería UI
-wget https://github.com/tu-usuario/GC-UI-COMPONENTS/archive/main.zip
-unzip main.zip
-cp -r GC-UI-COMPONENTS-main/client/src/lib/ui-library ./src/lib/
-```
 
 ## 🏗️ Configuración del Proyecto
 
-### **1. Configurar Vite en tu Aplicación Padre**
+### **1. Configurar Vite (Solo si copiaste la carpeta ui-library)**
 
-⚠️ **IMPORTANTE**: Esta configuración va en tu proyecto/aplicación que usará la librería, NO en la librería misma.
+⚠️ **NOTA**: Esta configuración solo es necesaria si copiaste manualmente la carpeta `ui-library` a tu proyecto. Si instalaste como dependencia de npm/GitHub, puedes saltarte este paso.
 
 ```javascript
-// vite.config.ts (EN TU APLICACIÓN PADRE)
+// vite.config.ts (SOLO SI COPIASTE LA CARPETA ui-library)
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -68,12 +60,17 @@ export default defineConfig({
 });
 ```
 
-### **2. Configurar TypeScript en tu Aplicación Padre**
+**Si instalaste como dependencia npm/GitHub**, importa directamente:
+```jsx
+import { LibI18nProvider } from 'GC-UI-COMPONENTS';
+```
 
-⚠️ **IMPORTANTE**: Esta configuración también va en tu proyecto/aplicación que usará la librería.
+### **2. Configurar TypeScript (Solo si copiaste la carpeta ui-library)**
+
+⚠️ **NOTA**: Esta configuración solo es necesaria si copiaste manualmente la carpeta `ui-library`. Si instalaste como dependencia, TypeScript la resolverá automáticamente.
 
 ```json
-// tsconfig.json (EN TU APLICACIÓN PADRE)
+// tsconfig.json (SOLO SI COPIASTE LA CARPETA ui-library)
 {
   "compilerOptions": {
     "baseUrl": ".",
@@ -86,7 +83,7 @@ export default defineConfig({
 }
 ```
 
-### **3. Instalar Dependencias Peer**
+### **3. Instalar Dependencias Peer (Requerido siempre)**
 
 ```bash
 npm install react react-dom typescript
