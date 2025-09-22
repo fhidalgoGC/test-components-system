@@ -4,7 +4,7 @@
 
 ## 📖 Descripción
 
-GC-UI-COMPONENTS es una librería de componentes React frontend-only construida con React 18, TypeScript y Vite. Incluye un sistema completo de componentes UI con TagSelector avanzado, sistema de temas, internacionalización y diseño responsivo.
+GC-UI-COMPONENTS es una librería de componentes React frontend-only construida con React 18, TypeScript y Vite. Incluye un sistema completo de componentes UI, sistema de temas, internacionalización y diseño responsivo.
 
 ## 📦 Repositorio
 
@@ -100,20 +100,20 @@ npm install framer-motion date-fns
 ### **Opción 1: Importación Principal (Recomendada)**
 
 ```jsx
-import { TagSelector, LibI18nProvider, useLibI18n } from 'GC-UI-COMPONENTS';
+import { LibI18nProvider, useLibI18n } from 'GC-UI-COMPONENTS';
 ```
 
 ### **Opción 2: Importaciones Específicas**
 
 ```jsx
 // Componentes
-import { TagSelector } from 'GC-UI-COMPONENTS/components';
+import { /* Componentes disponibles */ } from 'GC-UI-COMPONENTS/components';
 
 // Providers
 import { LibI18nProvider, useLibI18n } from 'GC-UI-COMPONENTS/providers';
 
 // Tipos
-import type { TagSelectorProps, TagSelectorContext } from 'GC-UI-COMPONENTS';
+import type { /* Tipos disponibles */ } from 'GC-UI-COMPONENTS';
 
 // Utilidades
 import { cn, makeTranslator } from 'GC-UI-COMPONENTS/utils';
@@ -125,39 +125,32 @@ import { lightTheme, darkTheme } from 'GC-UI-COMPONENTS/theme';
 ### **Opción 3: Importaciones Directas (Para Casos Específicos)**
 
 ```jsx
-import TagSelector from 'GC-UI-COMPONENTS/components/TagSelector/views/TagSelector.view';
+import { ComponenteEspecifico } from 'GC-UI-COMPONENTS/components/ComponenteEspecifico/views/ComponenteEspecifico.view';
 import { LibI18nProvider } from 'GC-UI-COMPONENTS/providers/LibI18n.provider';
 ```
 
-## 🎯 Uso Básico
+## 🎯 Configuración de Providers
 
-### **1. Configuración Mínima**
+### **1. LibI18nProvider - Configuración Mínima**
 
 ```jsx
 import React from 'react';
-import { TagSelector, LibI18nProvider } from 'GC-UI-COMPONENTS';
+import { LibI18nProvider } from 'GC-UI-COMPONENTS';
 
 function App() {
   return (
     <LibI18nProvider language="en">
-      <TagSelector
-        availableTags={[
-          { id: '1', name: 'React' },
-          { id: '2', name: 'TypeScript' },
-          { id: '3', name: 'Vite' }
-        ]}
-        onTagsChange={(tags) => console.log('Selected:', tags)}
-      />
+      {/* Tus componentes de la librería aquí */}
     </LibI18nProvider>
   );
 }
 ```
 
-### **2. Configuración con Provider Padre**
+### **2. LibI18nProvider - Configuración con Provider Padre**
 
 ```jsx
 import React, { createContext, useContext, useState } from 'react';
-import { TagSelector, LibI18nProvider } from 'GC-UI-COMPONENTS';
+import { LibI18nProvider } from 'GC-UI-COMPONENTS';
 
 // Crear provider de aplicación
 const AppLanguageContext = createContext();
@@ -190,17 +183,13 @@ function MyComponent() {
   
   return (
     <LibI18nProvider parentLanguageProvider={appLanguage}>
-      <TagSelector
-        availableTags={tags}
-        onTagsChange={handleChange}
-        defaultSelectedTags={['1', '2']}
-      />
+      {/* Tus componentes de la librería aquí */}
     </LibI18nProvider>
   );
 }
 ```
 
-### **3. Configuración Avanzada con Traducciones Globales**
+### **3. LibI18nProvider - Configuración Avanzada con Traducciones Globales**
 
 ```jsx
 function AdvancedApp() {
@@ -218,13 +207,7 @@ function AdvancedApp() {
       globalTranslationPaths={globalTranslationPaths}
       translationPriority="component-first"
     >
-      <TagSelector
-        availableTags={tags}
-        onTagsChange={handleChange}
-        theme="dark"
-        size="lg"
-        variant="default"
-      />
+      {/* Tus componentes de la librería aquí */}
     </LibI18nProvider>
   );
 }
@@ -336,26 +319,7 @@ function MyComponent() {
 }
 ```
 
-## 🔧 API de Componentes
-
-### **TagSelector Props**
-
-```typescript
-interface TagSelectorProps {
-  availableTags: Array<{ id: string; name: string; [key: string]: any }>;
-  onTagsChange: (selectedTags: string[]) => void;
-  defaultSelectedTags?: string[];
-  theme?: 'light' | 'dark' | 'auto';
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'outline' | 'ghost';
-  disabled?: boolean;
-  placeholder?: string;
-  maxSelectedTags?: number;
-  searchable?: boolean;
-  clearable?: boolean;
-  className?: string;
-}
-```
+## 🔧 API de Providers
 
 ### **LibI18nProvider Props**
 
@@ -377,14 +341,14 @@ interface LibI18nProviderProps {
 ```jsx
 // ❌ MAL - Sin provider
 function App() {
-  return <TagSelector />;
+  return <ComponenteDeLaLibreria />;
 }
 
 // ✅ BIEN - Con provider
 function App() {
   return (
     <LibI18nProvider language="en">
-      <TagSelector />
+      <ComponenteDeLaLibreria />
     </LibI18nProvider>
   );
 }
@@ -409,10 +373,10 @@ npm install
 
 ## 📚 Documentación Adicional
 
-- **TagSelector README**: `./ui-library/components/TagSelector/README-IA.md`
-- **Sistema de Idiomas**: `./ui-library/README-IA--LANGUAJE.md`
-- **LibI18nProvider**: `./ui-library/providers/README-LibI18n.provider.md`
-- **Guía de Desarrollo**: `./ui-library/README-BUILD-NEW-COMPONENTS.md`
+- **Sistema de Idiomas**: `./README-IA--LANGUAJE.md`
+- **LibI18nProvider**: `./providers/README-LibI18n.provider.md`
+- **Guía de Desarrollo**: `../README-BUILD-NEW-COMPONENTS.md`
+- **Componentes Específicos**: Ver documentación individual en cada carpeta de componente
 
 ## 🤝 Contribución
 
