@@ -2,7 +2,7 @@ import React, { createContext, useContext, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import type { TagSelectorContext } from '../types';
 import type { VisibilityConfig } from '../../../types/shared.types';
-import { useThemeSafe, useI18nMerge, useVisibility } from '../hook';
+import { useThemeSafe, useI18nMerge, useVisibility } from '../hooks';
 
 const Ctx = createContext<TagSelectorContext | null>(null);
 

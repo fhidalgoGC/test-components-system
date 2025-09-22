@@ -1,5 +1,5 @@
 import { getLocalDict } from '../i18n';
-import { makeTranslator, type TranslationOrder } from '../utils';
+import { makeTranslator, type TranslationOrder } from '../../../utils';
 import { useLibI18n } from '../../../providers/LibI18n.provider';
 
 export function useI18nMerge(

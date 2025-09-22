@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { VisibilityConfig } from '../../../types/shared.types';
-import { detectWidth, detectOrientation, detectDevice, isVisibleByConfig } from '../utils';
+import { detectWidth, detectOrientation, detectDevice, isVisibleByConfig } from '../../../utils';
 
 export function useVisibility(configFromProps?: VisibilityConfig) {
   const [width, setWidth] = useState(detectWidth());
