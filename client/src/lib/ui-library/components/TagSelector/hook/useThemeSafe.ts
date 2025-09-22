@@ -1,4 +1,4 @@
-import { useTheme } from '../../theme';
+import { useTheme } from '../../../theme';
 
 export function useThemeSafe() {
   // Always call useTheme - no conditional hook calls
