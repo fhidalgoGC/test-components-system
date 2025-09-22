@@ -31,8 +31,8 @@ export interface TagMetadata {
   };
 }
 
-// Import MultiLanguageLabel from language types
-import type { MultiLanguageLabel } from './language.types';
+// Import MultiLanguageLabel from library language types
+import type { MultiLanguageLabel } from '../../../types/language.types';
 
 export interface TagItem {
   id: string;

@@ -54,10 +54,7 @@ export const TagSelectorView: React.FC<{
     // If all tags are selected, clear selection; otherwise select all
     const allSelected = tags.length > 0 && tags.every(tag => selectedTags.includes(tag.id));
     if (allSelected) {
-      // Check if requireSelection prevents clearing all tags
-      if (requireSelection && selectedTags.length > 0) {
-        return; // Don't allow clearing if requireSelection is active
-      }
+      // When allowAll is true, always allow clearing all tags
       onSelectionChange([]);
     } else {
       // Return TagItem[] format with complete label data
@@ -71,11 +68,28 @@ export const TagSelectorView: React.FC<{
     if (allowMultiple) {
       const isSelected = selectedTags.includes(tagId);
       if (!isSelected) {
-        // Only add to selection if not already selected - never remove
+        // Add to selection
         const newSelection = [...selectedTags, tagId];
         onSelectionChange(idsToTagItems(newSelection));
+      } else {
+        // Tag is currently selected - check deselection rules
+        if (allowAll) {
+          // With "All" button: always allow deselection
+          const newSelection = selectedTags.filter(id => id !== tagId);
+          onSelectionChange(idsToTagItems(newSelection));
+        } else if (requireSelection) {
+          // Without "All" + requireSelection: don't deselect if it's the only one
+          if (selectedTags.length > 1) {
+            const newSelection = selectedTags.filter(id => id !== tagId);
+            onSelectionChange(idsToTagItems(newSelection));
+          }
+          // If it's the only selected tag, do nothing (maintain minimum 1)
+        } else {
+          // Without "All" but no requireSelection: allow deselection
+          const newSelection = selectedTags.filter(id => id !== tagId);
+          onSelectionChange(idsToTagItems(newSelection));
+        }
       }
-      // If already selected, do nothing (don't deselect)
     } else {
       // Single selection mode - always select the clicked tag
       const selectedItem = findTagById(tagId);
