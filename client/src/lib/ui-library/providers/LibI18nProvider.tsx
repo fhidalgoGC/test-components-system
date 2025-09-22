@@ -4,6 +4,7 @@
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import type { GenericLanguageProvider } from '../types/language-provider';
 import { makeTranslator, type TranslationOrder } from '../TagSelector/utils';
+import type { SupportedLanguage } from '../../../i18n';
 
 type Lang = 'es' | 'en';
 
@@ -12,7 +13,7 @@ type LibI18nContextValue = {
   t: (key: string, params?: Record<string, string | number>) => string;
   setLanguage: (next: Lang) => void;
   resolveLabel: (label: { [key: string]: string; default: string }) => string;
-  getExternalTranslations: () => Record<string, string> | undefined;
+  getExternalTranslations: () => Record<string, string>;
   translationPriority: 'component-first' | 'external-first';
 };
 
@@ -25,6 +26,11 @@ export function useLibI18n() {
   return ctx;
 }
 
+type GlobalTranslationFile = {
+  lang: SupportedLanguage;
+  translations: Record<string, any>; // JSON anidado como { "common": { "loading": "..." }, ... }
+};
+
 type LibI18nProviderProps = {
   /** Si lo pasas, la librería se vuelve controlada por props (o por el padre si existe) */
   language?: Lang;
@@ -32,8 +38,8 @@ type LibI18nProviderProps = {
   onLanguageChange?: (next: Lang) => void;
   /** Proveedor padre inyectado (opcional) - permite conectar con cualquier sistema de idioma */
   parentLanguageProvider?: GenericLanguageProvider;
-  /** Traducciones externas que se pueden combinar con las locales del componente */
-  externalTranslations?: Record<string, string>;
+  /** Array de archivos JSON de traducciones globales (es.json, en.json, etc.) */
+  globalTranslations?: GlobalTranslationFile[];
   /** Orden de prioridad: 'component-first' (por defecto) o 'external-first' */
   translationPriority?: 'component-first' | 'external-first';
   children: React.ReactNode;
@@ -49,11 +55,28 @@ type LibI18nProviderProps = {
  *    - En su defecto, dispara onLanguageChange si fue provisto
  *    - Y si nada existe, cambia su estado interno
  */
+// Función auxiliar para aplanar JSON anidado
+const flattenTranslations = (obj: Record<string, any>, prefix = ''): Record<string, string> => {
+  const flattened: Record<string, string> = {};
+  
+  for (const [key, value] of Object.entries(obj)) {
+    const newKey = prefix ? `${prefix}.${key}` : key;
+    
+    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      Object.assign(flattened, flattenTranslations(value, newKey));
+    } else if (typeof value === 'string') {
+      flattened[newKey] = value;
+    }
+  }
+  
+  return flattened;
+};
+
 export function LibI18nProvider({ 
   language, 
   onLanguageChange, 
   parentLanguageProvider,
-  externalTranslations,
+  globalTranslations = [],
   translationPriority = 'component-first',
   children 
 }: LibI18nProviderProps) {
@@ -69,6 +92,15 @@ export function LibI18nProvider({
     }
   }, [parentLanguageProvider, language, internal]);
 
+  // Procesar traducciones globales para el idioma actual
+  const processedGlobalTranslations = useMemo(() => {
+    const globalFile = globalTranslations.find(gt => gt.lang === effectiveLang);
+    if (!globalFile) return {};
+    
+    // Aplanar la estructura anidada para compatibilidad con makeTranslator
+    return flattenTranslations(globalFile.translations);
+  }, [globalTranslations, effectiveLang]);
+
   // Crear traductor usando el sistema jerárquico existente
   const t = useMemo(() => {
     // Convertir orden de prioridad al formato esperado por makeTranslator
@@ -78,11 +110,11 @@ export function LibI18nProvider({
     // Las traducciones locales vendrán de cada componente individual via useI18nMerge
     const localTranslations: Record<string, string> = {};
     
-    return makeTranslator(localTranslations, externalTranslations, order);
-  }, [externalTranslations, translationPriority]);
+    return makeTranslator(localTranslations, processedGlobalTranslations, order);
+  }, [processedGlobalTranslations, translationPriority]);
 
-  // Exponemos las traducciones externas para que los componentes las puedan usar
-  const getExternalTranslations = () => externalTranslations;
+  // Exponemos las traducciones globales para que los componentes las puedan usar
+  const getExternalTranslations = () => processedGlobalTranslations;
 
   const resolveLabel = (label: { [key: string]: string; default: string }) => {
     return label[effectiveLang] ?? label.default;
