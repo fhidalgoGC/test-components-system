@@ -5,16 +5,17 @@ import {
   getExpandedItems, 
   toggleTheme, 
   getStoredTheme,
-  getStoredLanguage,
-  setStoredLanguage
+  getStoredLanguage
 } from '../utils/Sidebar.utils';
+import { useAppLanguage } from '../../../providers/AppLanguageProvider';
 
 export const useSidebar = (props: SidebarProps) => {
   const { menuItems, currentPath = '', onNavigate } = props;
+  const appLanguage = useAppLanguage();
   
   const [state, setState] = useState<SidebarState>({
     expandedItems: new Set(),
-    currentLanguage: getStoredLanguage(),
+    currentLanguage: appLanguage?.lang || getStoredLanguage(),
     currentTheme: getStoredTheme()
   });
 
@@ -35,6 +36,13 @@ export const useSidebar = (props: SidebarProps) => {
     const expandedItems = getExpandedItems(menuItems, currentPath);
     setState(prev => ({ ...prev, expandedItems }));
   }, [menuItems, currentPath]);
+
+  // Sync with AppLanguageProvider
+  useEffect(() => {
+    if (appLanguage) {
+      setState(prev => ({ ...prev, currentLanguage: appLanguage.lang }));
+    }
+  }, [appLanguage?.lang]);
 
   const processedMenuItems = updateMenuActiveStates(menuItems, currentPath);
 
@@ -62,11 +70,11 @@ export const useSidebar = (props: SidebarProps) => {
   }, []);
 
   const handleLanguageChange = useCallback((language: string) => {
-    setStoredLanguage(language);
+    if (appLanguage) {
+      appLanguage.setLang(language as 'es' | 'en');
+    }
     setState(prev => ({ ...prev, currentLanguage: language }));
-    // Trigger a page refresh or emit an event for other components to react
-    window.dispatchEvent(new CustomEvent('languageChange', { detail: { language } }));
-  }, []);
+  }, [appLanguage]);
 
   return {
     processedMenuItems,
