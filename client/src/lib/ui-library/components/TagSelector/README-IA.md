@@ -1,5 +1,5 @@
 # TagSelector - AI Implementation Guide
-**Version: 1.0.4**
+**Version: 1.0.5**
 
 ## Overview
 
@@ -319,4 +319,4 @@ For internationalization and language support, see [README-IA--LANGUAJE.md](./RE
 - **Major**: For breaking changes (1.9.x → 2.0.0)
 
 ### Future Updates
-Next version will be **1.0.5** when documentation changes are made.
+Next version will be **1.0.6** when documentation changes are made.

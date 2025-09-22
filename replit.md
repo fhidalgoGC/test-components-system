@@ -11,7 +11,7 @@ Preferred communication style: Simple, everyday language.
 ## Frontend Architecture
 - **Framework**: React 18 with TypeScript and Vite as the build tool
 - **Routing**: Wouter for client-side routing
-- **State Management**: TanStack Query (React Query) for server state management
+- **State Management**: React state with callback-based data management (removed TanStack Query)
 - **Styling**: Tailwind CSS with CSS variables for theming
 - **UI Components**: 
   - shadcn/ui component library with Radix UI primitives
@@ -35,7 +35,6 @@ Preferred communication style: Simple, everyday language.
 
 ### UI and Component Libraries
 - **@radix-ui/***: Comprehensive set of unstyled, accessible UI primitives
-- **@tanstack/react-query**: Server state management and caching
 - **tailwindcss**: Utility-first CSS framework
 - **class-variance-authority**: Component variant management
 - **clsx**: Utility for conditional CSS classes
@@ -125,6 +124,19 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
 - **Removed ComponentLayout**: No longer uses component layout system, shows preview directly in page
 - **Maintained Full Functionality**: Preview with props controls, live demo, generated code, and async/multilingual features
 - **Streamlined Architecture**: Faster loading and simpler maintenance without separate documentation components
+
+## Library Optimization and Code Organization (September 22, 2025)
+- **TanStack Query Removal**: Eliminated unnecessary TanStack Query dependency from frontend-only component library
+  - Removed `@tanstack/react-query` package and `client/src/lib/queryClient.ts`
+  - Simplified App.tsx provider structure for better performance
+  - Components now use pure callback-based data management approach
+- **Utils Reorganization**: Moved CSS utility functions to proper library location
+  - Relocated `client/src/lib/utils.ts` to `client/src/lib/ui-library/utils/cn.util.ts`
+  - Updated all shadcn/ui component imports to use library utils path
+  - Follows naming conventions with singular file prefixes
+- **Architecture Cleanup**: Removed unnecessary index.ts files and optimized import structure
+  - Direct imports to component view files without intermediate index files
+  - Cleaner dependency graph and better development experience
 
 ## Known Issues & Future Improvements
 - **i18n Array/Object Support**: Current hierarchical i18n system works for strings but needs enhancement for arrays and objects
