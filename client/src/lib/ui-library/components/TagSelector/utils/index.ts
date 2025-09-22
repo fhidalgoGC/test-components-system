@@ -1,3 +1,3 @@
-export * from './dom';
-export * from './visibility';
-export * from './i18n';
+export * from './dom.util';
+export * from './visibility.util';
+export * from './i18n.util';
