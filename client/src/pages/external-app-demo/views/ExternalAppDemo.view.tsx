@@ -90,7 +90,7 @@ function ExternalAppContent() {
             setSelectedTags(tags.map((t: TagItem) => t.id));
             console.log("Selected tags:", tags);
           }}
-          requireSelection={true}
+          requireSelection={false}
           allowMultiple={true}
           allowAll={true}
           allLabel={{
