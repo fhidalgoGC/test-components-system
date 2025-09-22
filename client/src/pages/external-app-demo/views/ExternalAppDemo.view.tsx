@@ -3,6 +3,7 @@ import { AppLanguageProvider, useAppLanguage } from '../../../providers/AppLangu
 import { LibI18nProvider } from '../../../lib/ui-library/providers/LibI18nProvider';
 import TagSelector from '@/lib/ui-library/TagSelector';
 import type { TagItem } from '@/lib/ui-library/types/language';
+import { globalTranslations } from '../../../i18n';
 
 function LanguageSwitcher() {
   const app = useAppLanguage();
@@ -51,15 +52,11 @@ function ExternalAppContent() {
     return <div>Loading app context...</div>;
   }
   
-  // Traducciones externas personalizadas que se pueden combinar con las del componente
-  const externalTranslations = {
-    all: app.lang === 'es' ? 'TODOS (Externa)' : 'ALL (External)',
-    loading: app.lang === 'es' ? 'Cargando desde externa...' : 'Loading from external...',
-    no_tags: app.lang === 'es' ? 'Sin etiquetas (Externa)' : 'No tags (External)',
-    select_all: app.lang === 'es' ? 'Seleccionar Todo (Externa)' : 'Select All (External)',
-    clear_selection: app.lang === 'es' ? 'Limpiar (Externa)' : 'Clear (External)',
-    custom_external: app.lang === 'es' ? 'Solo en Externa' : 'External Only'
-  };
+  // Usar las traducciones globales del sistema (es.json, en.json)
+  const globalTranslationFiles = [
+    { lang: 'es' as const, translations: globalTranslations.es },
+    { lang: 'en' as const, translations: globalTranslations.en }
+  ];
 
   // Función async para cargar tags
   const getTags = useCallback(async (): Promise<TagItem[]> => {
@@ -162,14 +159,15 @@ function ExternalAppContent() {
       <div>
         <h1 className="text-2xl font-bold mb-4">External App Demo</h1>
         <p className="text-gray-600 mb-4">
-          Demostrando la integración de traducciones jerárquicas: componente vs externas con prioridad configurable.
+          Demostrando la integración de traducciones jerárquicas usando archivos JSON globales (es.json, en.json) 
+          con componentes locales y prioridad configurable.
         </p>
       </div>
 
       {/* La librería recibe el proveedor padre como prop - completamente portable */}
       <LibI18nProvider 
         parentLanguageProvider={app}
-        externalTranslations={externalTranslations}
+        globalTranslations={globalTranslationFiles}
         translationPriority={translationPriority}
       >
         <TagSelector
