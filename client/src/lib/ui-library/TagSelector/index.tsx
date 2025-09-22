@@ -3,7 +3,6 @@ import type { TagSelectorProps} from './types';
 import type { TagItem } from '../types/language';
 import { TagSelectorProvider } from './provider';
 import { TagSelectorView } from './view';
-import { LibI18nProvider } from '../providers/LibI18nProvider';
 
 const TagSelector: React.FC<TagSelectorProps> = ({
   id, 
@@ -149,36 +148,34 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   const combinedClassName = theme ? (className ? `${className} ${theme}` : theme) : className;
 
   return (
-    <LibI18nProvider language={langOverride as 'es' | 'en' | undefined}>
-      <TagSelectorProvider config={config} langOverride={langOverride} i18nOrder={i18nOrder}>
-        <div id={id} className={combinedClassName} style={combinedStyle}>
-          {error ? (
-            <div 
-              className="text-red-500 text-sm p-2"
-              data-testid="tag-selector-error"
-            >
-              Error: {error}
-            </div>
-          ) : (
-            <TagSelectorView
-              className={className}
-              tags={resolvedTags}
-              selectedTags={selectedTags}
-              onSelectionChange={directCallback}
-              allLabel={allLabel}
-              defaultLabel={defaultLabel}
-              defaultTagLabels={defaultTagLabels}
-              allowMultiple={allowMultiple}
-              allowAll={allowAll}
-              requireSelection={requireSelection}
-              size={size}
-              disabled={disabled || isLoading}
-              isLoading={isLoading}
-            />
-          )}
-        </div>
-      </TagSelectorProvider>
-    </LibI18nProvider>
+    <TagSelectorProvider config={config} langOverride={langOverride} i18nOrder={i18nOrder}>
+      <div id={id} className={combinedClassName} style={combinedStyle}>
+        {error ? (
+          <div 
+            className="text-red-500 text-sm p-2"
+            data-testid="tag-selector-error"
+          >
+            Error: {error}
+          </div>
+        ) : (
+          <TagSelectorView
+            className={className}
+            tags={resolvedTags}
+            selectedTags={selectedTags}
+            onSelectionChange={directCallback}
+            allLabel={allLabel}
+            defaultLabel={defaultLabel}
+            defaultTagLabels={defaultTagLabels}
+            allowMultiple={allowMultiple}
+            allowAll={allowAll}
+            requireSelection={requireSelection}
+            size={size}
+            disabled={disabled || isLoading}
+            isLoading={isLoading}
+          />
+        )}
+      </div>
+    </TagSelectorProvider>
   );
 };
 
