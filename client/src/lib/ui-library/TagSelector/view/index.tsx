@@ -178,17 +178,7 @@ export const TagSelectorView: React.FC<{
       className={containerClasses(theme, isVisible, className)}
       data-testid="tag-selector-container"
     >
-      {/* Default chip - shows when no selection and defaultLabel is provided */}
-      {defaultLabel && hasNoSelection && tags.length > 0 && (
-        <button
-          className={chipClasses(theme, isVisible, true, size, false)}
-          onClick={handleDefaultClick}
-          disabled={disabled}
-          data-testid="tag-default"
-        >
-          {resolveLabel(defaultLabel)}
-        </button>
-      )}
+      {/* Default chip removed - should never show */}
       
       {allowAll && tags.length > 0 && (
         <button
