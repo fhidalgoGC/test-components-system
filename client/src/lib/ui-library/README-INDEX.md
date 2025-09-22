@@ -69,37 +69,37 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 🧩 **Componentes Específicos**
 
-### **`./components/TagSelector/README-IA.md`**
-**Cuándo usar:** Para implementar y configurar el componente TagSelector.
+### **`./components/[ComponentName]/README-IA.md`**
+**Cuándo usar:** Para implementar y configurar componentes específicos de la librería.
 
-**Contiene:**
-- 📖 Props completos del TagSelector
-- 🎯 Ejemplos de uso (básico, avanzado, async)
+**Estructura general de documentación de componentes:**
+- 📖 Props completos del componente
+- 🎯 Ejemplos de uso (básico, avanzado, casos específicos)
 - 🔧 API detallada del componente
 - 🌐 Integración con sistema i18n
-- ⚡ Funcionalidades (preselección, async loading, etc.)
-- 🎨 Variantes y temas disponibles
+- ⚡ Funcionalidades específicas del componente
+- 🎨 Variantes y configuraciones disponibles
 
 **Buscar aquí para:**
-- Implementar TagSelector en un proyecto
-- Configurar props específicos (defaultSelectedTags, etc.)
-- Entender funcionalidades async
-- Integrar con sistema de idiomas
-- Personalizar comportamiento del componente
+- Implementar cualquier componente en un proyecto
+- Configurar props específicos de componentes
+- Entender funcionalidades particulares
+- Integrar componentes con sistema de idiomas
+- Personalizar comportamiento de componentes
 
-### **`./components/TagSelector/README-IA--STYLES.md`**
-**Cuándo usar:** Para personalizar estilos y temas del TagSelector.
+### **`./components/[ComponentName]/README-IA--STYLES.md`**
+**Cuándo usar:** Para personalizar estilos y temas de componentes específicos.
 
-**Contiene:**
+**Estructura general de documentación de estilos:**
 - 🎨 Sistema de temas (light, dark, auto)
-- 📏 Variantes de tamaño (sm, md, lg)
-- 🎭 Variantes visuales (default, outline, ghost)
+- 📏 Variantes de tamaño disponibles
+- 🎭 Variantes visuales y estados
 - 🔧 CSS modules y customización
 - 🌈 Tokens de diseño y variables CSS
-- 📱 Diseño responsivo
+- 📱 Diseño responsivo y breakpoints
 
 **Buscar aquí para:**
-- Personalizar estilos del TagSelector
+- Personalizar estilos de componentes
 - Configurar temas light/dark
 - Ajustar tamaños y variantes
 - Modificar CSS modules
@@ -133,12 +133,12 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🧩 Componentes**
 ```
-./components/TagSelector/README-IA.md
-├── Props y API del TagSelector
+./components/[ComponentName]/README-IA.md
+├── Props y API del componente
 ├── Ejemplos de implementación
 └── Funcionalidades específicas
 
-./components/TagSelector/README-IA--STYLES.md
+./components/[ComponentName]/README-IA--STYLES.md
 ├── Personalización de estilos
 ├── Temas y variantes
 └── CSS modules
@@ -153,11 +153,15 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 |-----------------|-------------|
 | Instalar la librería | `./README-IA.md` |
 | Configurar idiomas | `./README-IA--LANGUAJE.md` |
-| Usar TagSelector | `./components/TagSelector/README-IA.md` |
-| Personalizar estilos | `./components/TagSelector/README-IA--STYLES.md` |
 | API de LibI18nProvider | `./providers/README-LibI18n.provider.md` |
 | Resolver errores de imports | `./README-IA.md` |
 | Implementar provider padre | `./README-IA--LANGUAJE.md` |
+
+### **🧩 Componentes Específicos:**
+| **Componente** | **Documentación** | **Estilos** |
+|----------------|-------------------|-------------|
+| TagSelector | `./components/TagSelector/README-IA.md` | `./components/TagSelector/README-IA--STYLES.md` |
+| [Futuros componentes] | `./components/[ComponentName]/README-IA.md` | `./components/[ComponentName]/README-IA--STYLES.md` |
 
 ---
 
