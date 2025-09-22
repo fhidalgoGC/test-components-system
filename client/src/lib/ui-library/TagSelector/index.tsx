@@ -181,6 +181,6 @@ const TagSelector: React.FC<TagSelectorProps> = ({
 
 export default TagSelector;
 export * from './types';
-export { LibI18nProvider, useLibI18n } from '../providers/LibI18nProvider';
+export { LibI18nProvider, useLibI18n } from '../providers/LibI18n.provider';
 export type { TagItem, MultiLanguageLabel, TagsFunction, TagMetadata, TagStateColors } from '../types/language';
 export type { TagSelectorSize } from './types/component';

@@ -4,7 +4,7 @@ import { containerClasses, chipClasses } from '../css/TagSelector.module';
 import type { SelectedTagItem, TagSelectorSize } from '../types';
 import type { TagItem } from '../../types/language';
 import type { MultiLanguageLabel } from '../../types/language';
-import { useLibI18n } from '../../providers/LibI18nProvider';
+import { useLibI18n } from '../../providers/LibI18n.provider';
 
 export const TagSelectorView: React.FC<{
   className?: string;

@@ -10,7 +10,7 @@ import { PropsTable } from '@/components/props-table';
 // TagItem is already imported from language types
 import type { TagItem } from '@/lib/ui-library/types/language';
 import type { TagSelectorSize } from '@/lib/ui-library/TagSelector/types';
-import { useLibI18n } from '@/lib/ui-library/providers/LibI18nProvider';
+import { useLibI18n } from '@/lib/ui-library/providers/LibI18n.provider';
 import { useTagSelectorDemo } from '../hooks/TagSelectorDemo.hook';
 import styles from '../css/TagSelectorDemo.module.css';
 import { containerClasses } from '../css/TagSelectorDemo.module';
