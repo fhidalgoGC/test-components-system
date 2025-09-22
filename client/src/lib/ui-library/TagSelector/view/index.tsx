@@ -70,32 +70,16 @@ export const TagSelectorView: React.FC<{
     
     if (allowMultiple) {
       const isSelected = selectedTags.includes(tagId);
-      if (isSelected) {
-        // Check if requireSelection prevents deselecting the last tag
-        if (requireSelection && selectedTags.length === 1) {
-          return; // Don't allow deselecting the last tag if requireSelection is active
-        }
-        // Remove from selection - convert remaining IDs to TagItem format
-        const remaining = selectedTags.filter(id => id !== tagId);
-        onSelectionChange(idsToTagItems(remaining));
-      } else {
-        // Add to selection - convert all IDs to TagItem format
+      if (!isSelected) {
+        // Only add to selection if not already selected - never remove
         const newSelection = [...selectedTags, tagId];
         onSelectionChange(idsToTagItems(newSelection));
       }
+      // If already selected, do nothing (don't deselect)
     } else {
-      // Single selection mode
-      const isSelected = selectedTags.includes(tagId);
-      if (isSelected) {
-        // Check if requireSelection prevents deselecting in single mode
-        if (requireSelection) {
-          return; // Don't allow deselecting if requireSelection is active in single mode
-        }
-        onSelectionChange([]); // Deselect if already selected
-      } else {
-        const selectedItem = findTagById(tagId);
-        onSelectionChange(selectedItem ? [selectedItem] : []); // Select only this tag
-      }
+      // Single selection mode - always select the clicked tag
+      const selectedItem = findTagById(tagId);
+      onSelectionChange(selectedItem ? [selectedItem] : []);
     }
   };
 
