@@ -53,26 +53,35 @@ npm install framer-motion date-fns
 ### **Opción 1: Importación Principal (Recomendada)**
 
 ```jsx
-import { /* Componentes y Providers */ } from 'GC-UI-COMPONENTS';
+// Componentes principales
+import { 
+  TagSelector,
+  AppLanguageProvider,
+  LibI18nProvider,
+  ThemeProvider 
+} from 'GC-UI-COMPONENTS';
+
+// Hooks
+import { 
+  useAppLanguage,
+  useLibI18n 
+} from 'GC-UI-COMPONENTS';
+
+// Tipos
+import type { 
+  TagItem,
+  TagSelectorProps,
+  MultiLanguageLabel 
+} from 'GC-UI-COMPONENTS';
 ```
 
 ### **Opción 2: Importaciones Específicas**
 
 ```jsx
-// Componentes
-import { /* Componentes disponibles */ } from 'GC-UI-COMPONENTS/components';
-
-// Providers
-import { LibI18nProvider, useLibI18n } from 'GC-UI-COMPONENTS/providers';
-
-// Tipos
-import type { /* Tipos disponibles */ } from 'GC-UI-COMPONENTS';
-
-// Utilidades
-import { cn, makeTranslator } from 'GC-UI-COMPONENTS/utils';
-
-// Tema
-import { lightTheme, darkTheme } from 'GC-UI-COMPONENTS/theme';
+// Si prefieres importaciones más específicas
+import { TagSelector } from 'GC-UI-COMPONENTS';
+import { AppLanguageProvider, LibI18nProvider } from 'GC-UI-COMPONENTS';
+import type { TagItem, TagSelectorProps } from 'GC-UI-COMPONENTS';
 ```
 
 
@@ -149,10 +158,19 @@ npm install
 
 ## 📚 Documentación Adicional
 
-- **Sistema de Idiomas y Providers**: `./README-IA--LANGUAJE.md`
-- **LibI18nProvider Detallado**: `./providers/README-LibI18n.provider.md`
-- **Guía de Desarrollo**: `../README-BUILD-NEW-COMPONENTS.md`
-- **Componentes Específicos**: Ver documentación individual en cada carpeta de componente
+Para acceder a la documentación después de la instalación:
+
+```bash
+# La documentación está disponible en:
+node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library/
+```
+
+### **Archivos de Documentación:**
+- **Sistema de Idiomas**: `README-IA--LANGUAJE.md`
+- **TagSelector**: `components/TagSelector/README-IA.md`
+- **Estilos TagSelector**: `components/TagSelector/README-IA--STYLES.md`
+- **LibI18nProvider**: `providers/README-LibI18n.provider.md`
+- **Índice General**: `README-INDEX.md`
 
 ## 🤝 Contribución
 

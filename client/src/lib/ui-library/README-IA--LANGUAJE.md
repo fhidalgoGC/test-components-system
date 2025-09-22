@@ -28,24 +28,51 @@ App Level (PADRE)
 
 ---
 
-## 🎯 1. Crear AppLanguageProvider (OBLIGATORIO)
+## 🎯 1. Usar AppLanguageProvider Incluido (RECOMENDADO)
 
-**La aplicación debe implementar su propio provider padre:**
+**La librería incluye un AppLanguageProvider listo para usar:**
 
 ```jsx
-// En la aplicación principal
+// Opción 1: Usar el provider incluido (FÁCIL)
+import { AppLanguageProvider, useAppLanguage } from 'GC-UI-COMPONENTS';
+
+function App() {
+  return (
+    <AppLanguageProvider initial="en">
+      <MyAppContent />
+    </AppLanguageProvider>
+  );
+}
+
+function MyComponent() {
+  const { lang, setLang } = useAppLanguage();
+  
+  return (
+    <div>
+      <button onClick={() => setLang('es')}>Español</button>
+      <button onClick={() => setLang('en')}>English</button>
+      <p>Current: {lang}</p>
+    </div>
+  );
+}
+```
+
+## 🎯 2. Crear AppLanguageProvider Personalizado (OPCIONAL)
+
+**Si prefieres tu propia implementación:**
+
+```jsx
+// Opción 2: Implementación personalizada
 import { createContext, useContext, useState } from 'react';
 
-// Context para el idioma de la aplicación
 const AppLanguageContext = createContext();
 
-// Provider padre que controla el idioma global
 export function AppLanguageProvider({ children }) {
-  const [language, setLanguage] = useState('en'); // Idioma por defecto
+  const [language, setLanguage] = useState('en');
   
   const value = {
-    language,
-    setLanguage
+    lang: language,
+    setLang: setLanguage
   };
   
   return (
@@ -55,7 +82,6 @@ export function AppLanguageProvider({ children }) {
   );
 }
 
-// Hook para usar el idioma en la app
 export function useAppLanguage() {
   const context = useContext(AppLanguageContext);
   if (!context) {

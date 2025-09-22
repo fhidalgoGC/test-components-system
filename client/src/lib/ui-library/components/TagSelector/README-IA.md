@@ -17,11 +17,15 @@ TagSelector is a comprehensive React component designed for selecting multiple t
 ## Installation & Imports
 
 ```typescript
-import TagSelector from '@/lib/ui-library/TagSelector';
+// Instalación desde GitHub
+npm install git+https://github.com/tu-usuario/GC-UI-COMPONENTS.git
+
+// Importación en tu aplicación
+import { TagSelector } from 'GC-UI-COMPONENTS';
 import type { 
   TagItem, 
-  TagSelectorSize
-} from '@/lib/ui-library/TagSelector';
+  TagSelectorProps
+} from 'GC-UI-COMPONENTS';
 ```
 
 ## Core Types
@@ -70,8 +74,8 @@ interface TagSelectorProps {
 
 ```typescript
 import { useState } from 'react';
-import TagSelector from '@/lib/ui-library/TagSelector';
-import type { TagItem } from '@/lib/ui-library/TagSelector';
+import { TagSelector } from 'GC-UI-COMPONENTS';
+import type { TagItem } from 'GC-UI-COMPONENTS';
 
 // Define async function to load tags
 const getFoodTags = async (): Promise<TagItem[]> => {

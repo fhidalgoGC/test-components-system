@@ -191,17 +191,17 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 | **Necesito...** | **Ir a...** |
 |-----------------|-------------|
-| Instalar la librería | `./README-IA.md` |
-| Configurar idiomas | `./README-IA--LANGUAJE.md` |
-| API de LibI18nProvider | `./providers/README-LibI18n.provider.md` |
-| Resolver errores de imports | `./README-IA.md` |
-| Implementar provider padre | `./README-IA--LANGUAJE.md` |
+| Instalar la librería | `README-IA.md` |
+| Configurar idiomas | `README-IA--LANGUAJE.md` |
+| API de LibI18nProvider | `providers/README-LibI18n.provider.md` |
+| Resolver errores de imports | `README-IA.md` |
+| Implementar provider padre | `README-IA--LANGUAJE.md` |
 
 ### **🧩 Componentes Específicos:**
 | **Componente** | **Documentación** | **Estilos** |
 |----------------|-------------------|-------------|
-| TagSelector | `./components/TagSelector/README-IA.md` | `./components/TagSelector/README-IA--STYLES.md` |
-| [Futuros componentes] | `./components/[ComponentName]/README-IA.md` | `./components/[ComponentName]/README-IA--STYLES.md` |
+| TagSelector | `components/TagSelector/README-IA.md` | `components/TagSelector/README-IA--STYLES.md` |
+| [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` |
 
 ---
 
