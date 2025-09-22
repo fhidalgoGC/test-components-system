@@ -99,7 +99,7 @@ function ExternalAppContent() {
             fr: "Tous",
             default: "All",
           }}
-          defaultSelectedTags={['typescript', 'react']}
+          defaultSelectedTags={["react", "typescript"]}
         />
       </LibI18nProvider>
 
