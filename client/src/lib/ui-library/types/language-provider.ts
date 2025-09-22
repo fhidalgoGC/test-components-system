@@ -1,7 +1,8 @@
 // Interfaz genérica para cualquier proveedor de idioma compatible
+// Acepta cualquier string compatible con lang
 export interface GenericLanguageProvider {
   lang: string;
-  setLang: (lang: string) => void;
+  setLang: (lang: any) => void; // Acepta cualquier tipo para máxima compatibilidad
 }
 
 // Función para detectar automáticamente cualquier proveedor de idioma
