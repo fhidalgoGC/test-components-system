@@ -42,10 +42,11 @@
 
 ## 🔧 Lógica de Prioridades
 
-### **requireSelection tiene prioridad sobre allowAll**
+### **requireSelection tiene prioridad ABSOLUTA sobre allowAll**
 
 Cuando `requireSelection={true}`:
 - Se **elimina automáticamente** el botón "All" aunque `allowAll={true}`
+- **NUNCA** permite deseleccionar el último tag, sin importar el valor de `allowAll`
 - **Razón:** Es contradictorio requerir "al menos 1 seleccionado" y permitir "deseleccionar todo"
 
 ### **Implementación técnica:**
@@ -56,17 +57,17 @@ Cuando `requireSelection={true}`:
   <button>All</button>
 )}
 
-// Lógica de deselección individual
-if (allowAll) {
-  // Con "All": deselección libre
-} else if (requireSelection) {
-  // Sin "All" + requireSelection: solo deselecciona si hay más de 1
+// Lógica de deselección individual (CORREGIDA)
+if (requireSelection) {
+  // requireSelection tiene PRIORIDAD: solo deselecciona si hay más de 1
   if (selectedTags.length > 1) {
     // Permitir deselección
   }
-  // Si es la única, mantenerla seleccionada
+  // Si es la única, mantenerla seleccionada (NO IMPORTA allowAll)
+} else if (allowAll) {
+  // Sin requireSelection + allowAll: deselección libre
 } else {
-  // Sin restricciones: deselección libre
+  // Sin requireSelection + sin allowAll: deselección libre
 }
 ```
 
@@ -76,4 +77,5 @@ if (allowAll) {
 
 - **✅ Implementado** - Todas las reglas funcionan correctamente
 - **✅ Verificado** - Comportamiento probado en la aplicación
-- **✅ Prioridades** - requireSelection tiene precedencia sobre allowAll
+- **✅ Prioridades** - requireSelection tiene precedencia ABSOLUTA sobre allowAll
+- **🔧 Corregido** - Error en lógica de prioridades donde allowAll tenía precedencia incorrecta

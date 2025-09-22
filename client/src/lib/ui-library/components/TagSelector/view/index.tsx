@@ -73,19 +73,19 @@ export const TagSelectorView: React.FC<{
         onSelectionChange(idsToTagItems(newSelection));
       } else {
         // Tag is currently selected - check deselection rules
-        if (allowAll) {
-          // With "All" button: always allow deselection
-          const newSelection = selectedTags.filter(id => id !== tagId);
-          onSelectionChange(idsToTagItems(newSelection));
-        } else if (requireSelection) {
-          // Without "All" + requireSelection: don't deselect if it's the only one
+        if (requireSelection) {
+          // requireSelection has priority: don't deselect if it's the only one
           if (selectedTags.length > 1) {
             const newSelection = selectedTags.filter(id => id !== tagId);
             onSelectionChange(idsToTagItems(newSelection));
           }
           // If it's the only selected tag, do nothing (maintain minimum 1)
+        } else if (allowAll) {
+          // No requireSelection + allowAll: always allow deselection
+          const newSelection = selectedTags.filter(id => id !== tagId);
+          onSelectionChange(idsToTagItems(newSelection));
         } else {
-          // Without "All" but no requireSelection: allow deselection
+          // No requireSelection + no allowAll: allow deselection
           const newSelection = selectedTags.filter(id => id !== tagId);
           onSelectionChange(idsToTagItems(newSelection));
         }
