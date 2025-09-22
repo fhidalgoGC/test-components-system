@@ -149,7 +149,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   const combinedClassName = theme ? (className ? `${className} ${theme}` : theme) : className;
 
   return (
-    <LibI18nProvider language={langOverride}>
+    <LibI18nProvider language={langOverride as 'es' | 'en' | undefined}>
       <TagSelectorProvider config={config} langOverride={langOverride} i18nOrder={i18nOrder}>
         <div id={id} className={combinedClassName} style={combinedStyle}>
           {error ? (

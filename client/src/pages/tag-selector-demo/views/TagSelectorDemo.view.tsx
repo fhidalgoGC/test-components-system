@@ -10,7 +10,7 @@ import { PropsTable } from '@/components/props-table';
 // TagItem is already imported from language types
 import type { TagItem } from '@/lib/ui-library/types/language';
 import type { TagSelectorSize } from '@/lib/ui-library/TagSelector/types';
-import { useLanguage } from '@/lib/ui-library/context/LanguageContext';
+import { useLibI18n } from '@/lib/ui-library/providers/LibI18nProvider';
 import { useTagSelectorDemo } from '../hooks/TagSelectorDemo.hook';
 import styles from '../css/TagSelectorDemo.module.css';
 import { containerClasses } from '../css/TagSelectorDemo.module';
@@ -193,7 +193,7 @@ export function TagSelectorDemoView() {
   const [demoType, setDemoType] = useState<'async-food' | 'async-tech' | 'async-error'>('async-tech');
 
   // Get language context for the demo
-  const { currentLanguage, setLanguage } = useLanguage();
+  const { lang: currentLanguage, setLanguage } = useLibI18n();
 
   // Memoized async functions to avoid re-triggering loads
   const getAsyncFoodTags = useCallback(getStaticTags, []);
