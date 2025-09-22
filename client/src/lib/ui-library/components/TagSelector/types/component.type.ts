@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../../types/shared.types';
-import type { TagItem, TagsFunction, TagMetadata } from './tag-selector.types';
+import type { TagItem, TagsFunction, TagMetadata } from './tag-selector.type';
 import type { MultiLanguageLabel } from '../../../types/language.types';
 
 // Unified size type for TagSelector
