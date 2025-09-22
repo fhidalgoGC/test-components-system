@@ -12,6 +12,8 @@ type LibI18nContextValue = {
   t: (key: string, params?: Record<string, string | number>) => string;
   setLanguage: (next: Lang) => void;
   resolveLabel: (label: { [key: string]: string; default: string }) => string;
+  getExternalTranslations: () => Record<string, string> | undefined;
+  translationPriority: 'component-first' | 'external-first';
 };
 
 // Nota: el default es opcional; usamos undefined para forzar el uso dentro del provider
@@ -72,12 +74,15 @@ export function LibI18nProvider({
     // Convertir orden de prioridad al formato esperado por makeTranslator
     const order: TranslationOrder = translationPriority === 'component-first' ? 'local-first' : 'global-first';
     
-    // Por ahora sin traducciones locales específicas del provider (se pueden agregar después)
-    // Las traducciones locales vendrán de cada componente individual
+    // Por ahora sin traducciones locales específicas del provider
+    // Las traducciones locales vendrán de cada componente individual via useI18nMerge
     const localTranslations: Record<string, string> = {};
     
     return makeTranslator(localTranslations, externalTranslations, order);
   }, [externalTranslations, translationPriority]);
+
+  // Exponemos las traducciones externas para que los componentes las puedan usar
+  const getExternalTranslations = () => externalTranslations;
 
   const resolveLabel = (label: { [key: string]: string; default: string }) => {
     return label[effectiveLang] ?? label.default;
@@ -99,8 +104,15 @@ export function LibI18nProvider({
   };
 
   const value = useMemo<LibI18nContextValue>(
-    () => ({ lang: effectiveLang, t, setLanguage, resolveLabel }),
-    [effectiveLang]
+    () => ({ 
+      lang: effectiveLang, 
+      t, 
+      setLanguage, 
+      resolveLabel,
+      getExternalTranslations,
+      translationPriority 
+    }),
+    [effectiveLang, t, getExternalTranslations, translationPriority]
   );
 
   return <LibI18nContext.Provider value={value}>{children}</LibI18nContext.Provider>;
