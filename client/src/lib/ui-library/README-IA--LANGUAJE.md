@@ -1,9 +1,9 @@
-# Sistema de Idiomas - UI Library
-**Version: 1.0.4**
+# Sistema de Idiomas y Providers - GC-UI-COMPONENTS
+**Version: 1.0.5**
 
-## 📋 Sistema de traducciones para todos los componentes
+## 📋 Sistema Completo de Idiomas y Providers
 
-Este sistema de idiomas se aplica de manera **uniforme** a todos los componentes de la librería UI.
+Esta documentación cubre el sistema completo de internacionalización y providers de lenguaje para GC-UI-COMPONENTS. Incluye configuración de providers, traducciones, hooks y ejemplos completos de implementación.
 
 ---
 
@@ -123,6 +123,20 @@ function App() {
   return (
     <AppLanguageProvider>         // 🎯 Controla idioma global
       <MainContent />
+    </AppLanguageProvider>
+  );
+}
+
+// 2. Contenido principal que usa la librería
+function MainContent() {
+  const appLanguage = useAppLanguage();
+  
+  return (
+    <LibI18nProvider parentLanguageProvider={appLanguage}>
+      {/* Componentes de la librería */}
+    </LibI18nProvider>
+  );
+}
     </AppLanguageProvider>
   );
 }
@@ -370,3 +384,223 @@ function MyComponents() {
 - **✅ Documentado** - Guía completa con flujo padre-hijo
 - **⚠️ Requerido** - AppLanguageProvider obligatorio en la aplicación
 - **🔧 Extensible** - Preparado para nuevos componentes e idiomas
+
+---
+
+## 🎯 Configuración de LibI18nProvider 
+
+### **1. Configuración Mínima**
+
+```jsx
+import React from 'react';
+import { LibI18nProvider } from 'GC-UI-COMPONENTS';
+
+function App() {
+  return (
+    <LibI18nProvider language="en">
+      {/* Tus componentes de la librería aquí */}
+    </LibI18nProvider>
+  );
+}
+```
+
+### **2. Configuración con Provider Padre (Recomendada)**
+
+```jsx
+import React, { createContext, useContext, useState } from 'react';
+import { LibI18nProvider } from 'GC-UI-COMPONENTS';
+
+// Crear provider de aplicación
+const AppLanguageContext = createContext();
+
+function AppLanguageProvider({ children }) {
+  const [language, setLanguage] = useState('en');
+  
+  return (
+    <AppLanguageContext.Provider value={{ lang: language, setLanguage }}>
+      {children}
+    </AppLanguageContext.Provider>
+  );
+}
+
+function useAppLanguage() {
+  return useContext(AppLanguageContext);
+}
+
+// Usar en la aplicación
+function App() {
+  return (
+    <AppLanguageProvider>
+      <MyComponent />
+    </AppLanguageProvider>
+  );
+}
+
+function MyComponent() {
+  const appLanguage = useAppLanguage();
+  
+  return (
+    <LibI18nProvider parentLanguageProvider={appLanguage}>
+      {/* Tus componentes de la librería aquí */}
+    </LibI18nProvider>
+  );
+}
+```
+
+### **3. Configuración Avanzada con Traducciones Globales**
+
+```jsx
+function AdvancedApp() {
+  const appLanguage = useAppLanguage();
+  
+  // Rutas a archivos de traducción globales
+  const globalTranslationPaths = [
+    { lang: "es", path: "./i18n/es.json" },
+    { lang: "en", path: "./i18n/en.json" }
+  ];
+  
+  return (
+    <LibI18nProvider 
+      parentLanguageProvider={appLanguage}
+      globalTranslationPaths={globalTranslationPaths}
+      translationPriority="component-first"
+    >
+      {/* Tus componentes de la librería aquí */}
+    </LibI18nProvider>
+  );
+}
+```
+
+## 🌐 Estructura de Archivos de Traducción
+
+### **1. Archivos de Traducción Globales**
+
+```json
+// i18n/es.json
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar"
+  },
+  "messages": {
+    "loading": "Cargando...",
+    "error": "Error al cargar",
+    "success": "Operación exitosa"
+  }
+}
+```
+
+```json
+// i18n/en.json
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel", 
+    "delete": "Delete"
+  },
+  "messages": {
+    "loading": "Loading...",
+    "error": "Error loading",
+    "success": "Operation successful"
+  }
+}
+```
+
+### **2. Uso del Hook de Traducción**
+
+```jsx
+import { useLibI18n } from 'GC-UI-COMPONENTS';
+
+function MyComponent() {
+  const { t, lang, setLanguage } = useLibI18n();
+  
+  return (
+    <div>
+      <h1>{t('common.save')}</h1>
+      <p>Current language: {lang}</p>
+      <button onClick={() => setLanguage('es')}>
+        Cambiar a Español
+      </button>
+    </div>
+  );
+}
+```
+
+## 🔧 API Completa de Providers
+
+### **LibI18nProvider Props**
+
+```typescript
+interface LibI18nProviderProps {
+  language?: 'es' | 'en';
+  onLanguageChange?: (lang: 'es' | 'en') => void;
+  parentLanguageProvider?: GenericLanguageProvider;
+  globalTranslationPaths?: Array<{ lang: string; path: string }>;
+  translationPriority?: 'component-first' | 'external-first';
+  children: React.ReactNode;
+}
+```
+
+### **useLibI18n Hook**
+
+```typescript
+interface LibI18nContextValue {
+  lang: 'es' | 'en';
+  t: (key: string, params?: Record<string, string | number>) => string;
+  setLanguage: (next: 'es' | 'en') => void;
+  resolveLabel: (label: { [key: string]: string; default: string }) => string;
+  getExternalTranslations: () => Record<string, string>;
+  translationPriority: 'component-first' | 'external-first';
+}
+```
+
+## 🚨 Solución de Problemas de Providers
+
+### **Error: "useLibI18n must be used within LibI18nProvider"**
+
+```jsx
+// ❌ MAL - Sin provider
+function App() {
+  return <ComponenteDeLaLibreria />;
+}
+
+// ✅ BIEN - Con provider
+function App() {
+  return (
+    <LibI18nProvider language="en">
+      <ComponenteDeLaLibreria />
+    </LibI18nProvider>
+  );
+}
+```
+
+### **Provider padre no conectado**
+
+```jsx
+// ❌ MAL - Provider padre no conectado
+<LibI18nProvider language="en">
+  <MisComponentes />
+</LibI18nProvider>
+
+// ✅ BIEN - Provider padre conectado
+function MiApp() {
+  const appLanguage = useAppLanguage();
+  
+  return (
+    <LibI18nProvider parentLanguageProvider={appLanguage}>
+      <MisComponentes />
+    </LibI18nProvider>
+  );
+}
+```
+
+## 📚 Documentación Relacionada
+
+- **LibI18nProvider Detallado**: `./providers/README-LibI18n.provider.md`
+- **Instalación y Rutas**: `./README-IA.md`
+- **Guía de Desarrollo**: `../README-BUILD-NEW-COMPONENTS.md`
+
+---
+
+**Version: 1.0.5** | **Última actualización: Septiembre 2025**

@@ -53,7 +53,7 @@ npm install framer-motion date-fns
 ### **Opción 1: Importación Principal (Recomendada)**
 
 ```jsx
-import { LibI18nProvider, useLibI18n } from 'GC-UI-COMPONENTS';
+import { /* Componentes y Providers */ } from 'GC-UI-COMPONENTS';
 ```
 
 ### **Opción 2: Importaciones Específicas**
@@ -75,89 +75,6 @@ import { cn, makeTranslator } from 'GC-UI-COMPONENTS/utils';
 import { lightTheme, darkTheme } from 'GC-UI-COMPONENTS/theme';
 ```
 
-## 🎯 Configuración de Providers
-
-### **1. LibI18nProvider - Configuración Mínima**
-
-```jsx
-import React from 'react';
-import { LibI18nProvider } from 'GC-UI-COMPONENTS';
-
-function App() {
-  return (
-    <LibI18nProvider language="en">
-      {/* Tus componentes de la librería aquí */}
-    </LibI18nProvider>
-  );
-}
-```
-
-### **2. LibI18nProvider - Configuración con Provider Padre**
-
-```jsx
-import React, { createContext, useContext, useState } from 'react';
-import { LibI18nProvider } from 'GC-UI-COMPONENTS';
-
-// Crear provider de aplicación
-const AppLanguageContext = createContext();
-
-function AppLanguageProvider({ children }) {
-  const [language, setLanguage] = useState('en');
-  
-  return (
-    <AppLanguageContext.Provider value={{ lang: language, setLanguage }}>
-      {children}
-    </AppLanguageContext.Provider>
-  );
-}
-
-function useAppLanguage() {
-  return useContext(AppLanguageContext);
-}
-
-// Usar en la aplicación
-function App() {
-  return (
-    <AppLanguageProvider>
-      <MyComponent />
-    </AppLanguageProvider>
-  );
-}
-
-function MyComponent() {
-  const appLanguage = useAppLanguage();
-  
-  return (
-    <LibI18nProvider parentLanguageProvider={appLanguage}>
-      {/* Tus componentes de la librería aquí */}
-    </LibI18nProvider>
-  );
-}
-```
-
-### **3. LibI18nProvider - Configuración Avanzada con Traducciones Globales**
-
-```jsx
-function AdvancedApp() {
-  const appLanguage = useAppLanguage();
-  
-  // Rutas a archivos de traducción globales
-  const globalTranslationPaths = [
-    { lang: "es", path: "./i18n/es.json" },
-    { lang: "en", path: "./i18n/en.json" }
-  ];
-  
-  return (
-    <LibI18nProvider 
-      parentLanguageProvider={appLanguage}
-      globalTranslationPaths={globalTranslationPaths}
-      translationPriority="component-first"
-    >
-      {/* Tus componentes de la librería aquí */}
-    </LibI18nProvider>
-  );
-}
-```
 
 ## 🎨 CSS y Estilos
 
@@ -209,76 +126,6 @@ module.exports = {
 };
 ```
 
-## 🌐 Internacionalización
-
-### **1. Estructura de Archivos de Traducción**
-
-```json
-// i18n/es.json
-{
-  "common": {
-    "save": "Guardar",
-    "cancel": "Cancelar",
-    "delete": "Eliminar"
-  },
-  "tagSelector": {
-    "selectAll": "Seleccionar todo",
-    "clearAll": "Limpiar todo",
-    "loading": "Cargando..."
-  }
-}
-```
-
-```json
-// i18n/en.json
-{
-  "common": {
-    "save": "Save",
-    "cancel": "Cancel", 
-    "delete": "Delete"
-  },
-  "tagSelector": {
-    "selectAll": "Select all",
-    "clearAll": "Clear all",
-    "loading": "Loading..."
-  }
-}
-```
-
-### **2. Uso del Hook de Traducción**
-
-```jsx
-import { useLibI18n } from 'GC-UI-COMPONENTS';
-
-function MyComponent() {
-  const { t, lang, setLanguage } = useLibI18n();
-  
-  return (
-    <div>
-      <h1>{t('tagSelector.selectAll')}</h1>
-      <p>Current language: {lang}</p>
-      <button onClick={() => setLanguage('es')}>
-        Cambiar a Español
-      </button>
-    </div>
-  );
-}
-```
-
-## 🔧 API de Providers
-
-### **LibI18nProvider Props**
-
-```typescript
-interface LibI18nProviderProps {
-  language?: 'es' | 'en';
-  onLanguageChange?: (lang: 'es' | 'en') => void;
-  parentLanguageProvider?: GenericLanguageProvider;
-  globalTranslationPaths?: Array<{ lang: string; path: string }>;
-  translationPriority?: 'component-first' | 'external-first';
-  children: React.ReactNode;
-}
-```
 
 ## 🐛 Solución de Problemas Comunes
 
@@ -302,8 +149,8 @@ npm install
 
 ## 📚 Documentación Adicional
 
-- **Sistema de Idiomas**: `./README-IA--LANGUAJE.md`
-- **LibI18nProvider**: `./providers/README-LibI18n.provider.md`
+- **Sistema de Idiomas y Providers**: `./README-IA--LANGUAJE.md`
+- **LibI18nProvider Detallado**: `./providers/README-LibI18n.provider.md`
 - **Guía de Desarrollo**: `../README-BUILD-NEW-COMPONENTS.md`
 - **Componentes Específicos**: Ver documentación individual en cada carpeta de componente
 
