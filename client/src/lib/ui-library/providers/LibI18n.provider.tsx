@@ -3,7 +3,7 @@
 // ---------------------------------------------
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import type { GenericLanguageProvider } from '../types/language.types';
-import { makeTranslator, type TranslationOrder } from '../TagSelector/utils';
+import { makeTranslator, type TranslationOrder } from '../components/TagSelector/utils';
 
 type Lang = 'es' | 'en';
 

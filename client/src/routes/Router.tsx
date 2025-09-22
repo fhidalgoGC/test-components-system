@@ -2,7 +2,7 @@ import { Switch, Route, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import AppLayout from "@/layouts/app-layout";
 import LibraryDashboard from "@/pages/library-dashboard";
-import TagSelectorDemo from "@/tag-selector-demo";
+import TagSelectorDemo from "@/pages/external-app-demo";
 import ExternalAppDemo from "@/pages/external-app-demo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
