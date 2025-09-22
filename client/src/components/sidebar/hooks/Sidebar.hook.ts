@@ -7,7 +7,7 @@ import {
   getStoredTheme,
   getStoredLanguage
 } from '../utils/Sidebar.utils';
-import { useAppLanguage } from '../../../providers/AppLanguageProvider';
+import { useAppLanguage } from '@/lib/ui-library/providers';
 
 export const useSidebar = (props: SidebarProps) => {
   const { menuItems, currentPath = '', onNavigate } = props;
