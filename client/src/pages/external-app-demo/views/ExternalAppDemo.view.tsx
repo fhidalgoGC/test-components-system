@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { AppLanguageProvider, useAppLanguage } from '../../../providers/AppLanguageProvider';
+import { useAppLanguage } from '../../../providers/AppLanguageProvider';
 import { LibI18nProvider } from '../../../lib/ui-library/providers/LibI18nProvider';
 import TagSelector from '@/lib/ui-library/TagSelector';
 import type { TagItem } from '@/lib/ui-library/types/language';
@@ -114,9 +114,5 @@ function ExternalAppContent() {
 }
 
 export default function ExternalAppDemo() {
-  return (
-    <AppLanguageProvider initial="en">
-      <ExternalAppContent />
-    </AppLanguageProvider>
-  );
+  return <ExternalAppContent />;
 }
