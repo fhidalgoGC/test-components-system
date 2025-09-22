@@ -39,51 +39,7 @@ npm install git+https://github.com/tu-usuario/GC-UI-COMPONENTS.git#main
 
 ## 🏗️ Configuración del Proyecto
 
-### **1. Configurar Vite (Solo si copiaste la carpeta ui-library)**
-
-⚠️ **NOTA**: Esta configuración solo es necesaria si copiaste manualmente la carpeta `ui-library` a tu proyecto. Si instalaste como dependencia de npm/GitHub, puedes saltarte este paso.
-
-```javascript
-// vite.config.ts (SOLO SI COPIASTE LA CARPETA ui-library)
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
-
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-      "GC-UI-COMPONENTS": path.resolve(__dirname, "src/lib/ui-library"),
-    },
-  },
-});
-```
-
-**Si instalaste como dependencia npm/GitHub**, importa directamente:
-```jsx
-import { LibI18nProvider } from 'GC-UI-COMPONENTS';
-```
-
-### **2. Configurar TypeScript (Solo si copiaste la carpeta ui-library)**
-
-⚠️ **NOTA**: Esta configuración solo es necesaria si copiaste manualmente la carpeta `ui-library`. Si instalaste como dependencia, TypeScript la resolverá automáticamente.
-
-```json
-// tsconfig.json (SOLO SI COPIASTE LA CARPETA ui-library)
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "GC-UI-COMPONENTS": ["src/lib/ui-library"],
-      "GC-UI-COMPONENTS/*": ["src/lib/ui-library/*"]
-    }
-  }
-}
-```
-
-### **3. Instalar Dependencias Peer (Requerido siempre)**
+### **Instalar Dependencias Peer**
 
 ```bash
 npm install react react-dom typescript
@@ -117,13 +73,6 @@ import { cn, makeTranslator } from 'GC-UI-COMPONENTS/utils';
 
 // Tema
 import { lightTheme, darkTheme } from 'GC-UI-COMPONENTS/theme';
-```
-
-### **Opción 3: Importaciones Directas (Para Casos Específicos)**
-
-```jsx
-import { ComponenteEspecifico } from 'GC-UI-COMPONENTS/components/ComponenteEspecifico/views/ComponenteEspecifico.view';
-import { LibI18nProvider } from 'GC-UI-COMPONENTS/providers/LibI18n.provider';
 ```
 
 ## 🎯 Configuración de Providers
@@ -215,7 +164,7 @@ function AdvancedApp() {
 ### **1. Importar Estilos Base de Tailwind**
 
 ```css
-/* src/index.css */
+/* src/index.css (en tu aplicación) */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -239,11 +188,11 @@ function AdvancedApp() {
 ### **2. Configurar Tailwind**
 
 ```javascript
-// tailwind.config.js
+// tailwind.config.js (en tu aplicación)
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./src/lib/ui-library/**/*.{js,ts,jsx,tsx}"
+    "./node_modules/GC-UI-COMPONENTS/**/*.{js,ts,jsx,tsx}"
   ],
   darkMode: ["class"],
   theme: {
