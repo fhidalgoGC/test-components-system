@@ -47,10 +47,12 @@ cp -r GC-UI-COMPONENTS-main/client/src/lib/ui-library ./src/lib/
 
 ## 🏗️ Configuración del Proyecto
 
-### **1. Configurar Vite (Si usas Vite)**
+### **1. Configurar Vite en tu Aplicación Padre**
+
+⚠️ **IMPORTANTE**: Esta configuración va en tu proyecto/aplicación que usará la librería, NO en la librería misma.
 
 ```javascript
-// vite.config.ts
+// vite.config.ts (EN TU APLICACIÓN PADRE)
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -66,10 +68,12 @@ export default defineConfig({
 });
 ```
 
-### **2. Configurar TypeScript**
+### **2. Configurar TypeScript en tu Aplicación Padre**
+
+⚠️ **IMPORTANTE**: Esta configuración también va en tu proyecto/aplicación que usará la librería.
 
 ```json
-// tsconfig.json
+// tsconfig.json (EN TU APLICACIÓN PADRE)
 {
   "compilerOptions": {
     "baseUrl": ".",
