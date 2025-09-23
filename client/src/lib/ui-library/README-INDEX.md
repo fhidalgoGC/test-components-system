@@ -16,14 +16,14 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 **Contiene:**
 - 🚀 Instalación desde GitHub (2 métodos)
 - 📋 Opciones de importación (principal, específicas)
-- 🎨 Configuración de CSS y Tailwind
-- 🐛 Problemas comunes (módulos, estilos)
+- 🏗️ Configuración de dependencias peer
+- 🐛 Problemas comunes (módulos no encontrados)
 - 📚 Enlaces a documentación específica
 
 **Buscar aquí para:**
 - Instalar la librería en un proyecto
 - Configurar imports de `GC-UI-COMPONENTS`
-- Configurar Tailwind para la librería
+- Instalar dependencias requeridas
 - Resolver errores de módulos no encontrados
 
 ---

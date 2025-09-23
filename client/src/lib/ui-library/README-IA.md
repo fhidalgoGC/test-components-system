@@ -85,57 +85,6 @@ import type { TagItem, TagSelectorProps } from 'GC-UI-COMPONENTS';
 ```
 
 
-## 🎨 CSS y Estilos
-
-### **1. Importar Estilos Base de Tailwind**
-
-```css
-/* src/index.css (en tu aplicación) */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Variables CSS para temas personalizados */
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-}
-
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-}
-```
-
-### **2. Configurar Tailwind**
-
-```javascript
-// tailwind.config.js (en tu aplicación)
-module.exports = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/GC-UI-COMPONENTS/**/*.{js,ts,jsx,tsx}"
-  ],
-  darkMode: ["class"],
-  theme: {
-    extend: {
-      colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: "hsl(var(--primary))",
-        "primary-foreground": "hsl(var(--primary-foreground))",
-      }
-    }
-  },
-  plugins: []
-};
-```
-
-
 ## 🐛 Solución de Problemas Comunes
 
 
@@ -148,14 +97,6 @@ module.exports = {
 npm install
 ```
 
-### **Estilos no aplicándose**
-
-```jsx
-// Verificar importación de CSS de Tailwind
-// Asegurar configuración correcta de tailwind.config.js
-// Importar estilos base en index.css
-```
-
 ## 📚 Documentación Adicional
 
 Para acceder a la documentación después de la instalación:
@@ -166,6 +107,7 @@ node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library/
 ```
 
 ### **Archivos de Documentación:**
+- **Sistema de Estilos Global**: `README-IA--STYLES.md`
 - **Sistema de Idiomas**: `README-IA--LANGUAJE.md`
 - **TagSelector**: `components/TagSelector/README-IA.md`
 - **Estilos TagSelector**: `components/TagSelector/README-IA--STYLES.md`
