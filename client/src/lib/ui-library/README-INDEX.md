@@ -11,7 +11,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 ## 📦 **Instalación y Configuración General**
 
 ### **`./README-IA.md`**
-**Cuándo usar:** Para instalar la librería, configurar rutas de importación y estilos.
+**Cuándo usar:** Para instalar la librería y configurar rutas de importación.
 
 **Contiene:**
 - 🚀 Instalación desde GitHub (2 métodos)
