@@ -55,8 +55,19 @@ const TagSelectorViewInternal: React.FC<{
       // When allowAll is true, always allow clearing all tags
       onSelectionChange([]);
     } else {
-      // Return TagItem[] format with complete label data
-      onSelectionChange(tags); // Pass all tags directly
+      // Create special "all" tag item
+      const allTag: TagItem = {
+        id: '__all__',
+        label: allLabel || {
+          en: 'All',
+          es: 'Todos',
+          default: 'All'
+        }
+      };
+      
+      // Return all individual tags PLUS the special "all" tag
+      // This gives the parent component full flexibility to decide what to use
+      onSelectionChange([...tags, allTag]);
     }
   };
 
@@ -68,19 +79,39 @@ const TagSelectorViewInternal: React.FC<{
       if (!isSelected) {
         // Add to selection
         const newSelection = [...selectedTags, tagId];
-        onSelectionChange(idsToTagItems(newSelection));
+        const newTagItems = idsToTagItems(newSelection);
+        
+        // Check if after adding this tag, all individual tags are selected
+        const allIndividualSelected = tags.length > 0 && tags.every(tag => newSelection.includes(tag.id));
+        
+        if (allIndividualSelected && allowAll) {
+          // If all individual tags are now selected, also include the "all" tag
+          const allTag: TagItem = {
+            id: '__all__',
+            label: allLabel || {
+              en: 'All',
+              es: 'Todos',
+              default: 'All'
+            }
+          };
+          onSelectionChange([...newTagItems, allTag]);
+        } else {
+          onSelectionChange(newTagItems);
+        }
       } else {
         // Tag is currently selected - check deselection rules
         if (requireSelection) {
           // requireSelection has priority: don't deselect if it's the only one
           if (selectedTags.length > 1) {
             const newSelection = selectedTags.filter(id => id !== tagId);
+            // When deselecting, never include the "all" tag since not all are selected
             onSelectionChange(idsToTagItems(newSelection));
           }
           // If it's the only selected tag, do nothing (maintain minimum 1)
         } else if (allowAll) {
           // No requireSelection + allowAll: always allow deselection
           const newSelection = selectedTags.filter(id => id !== tagId);
+          // When deselecting, never include the "all" tag since not all are selected
           onSelectionChange(idsToTagItems(newSelection));
         } else {
           // No requireSelection + no allowAll: allow deselection
