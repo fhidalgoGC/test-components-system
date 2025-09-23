@@ -196,3 +196,33 @@
 .hidden {
   display: none !important;
 }
+
+/* Hybrid CSS Strategy - Lower specificity variants for Tailwind compatibility */
+/* These classes allow parent Tailwind classes to override specific properties */
+
+.chip-layout-only {
+  /* Only layout properties - colors can be overridden by Tailwind */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border-width: 1px;
+  border-style: solid;
+  user-select: none;
+}
+
+.chip-layout-only:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Data attribute selectors for hybrid mode (lower specificity) */
+[data-theme-mode="hybrid"] .chip {
+  /* Reduced specificity for better Tailwind integration */
+  background-color: var(--tag-bg, inherit);
+  color: var(--tag-text, inherit);
+  border-color: var(--tag-border, transparent);
+}

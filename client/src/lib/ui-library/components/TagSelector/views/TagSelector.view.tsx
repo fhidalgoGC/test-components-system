@@ -10,6 +10,7 @@ import { useLibI18n } from '../../../providers/LibI18n.provider';
 // Internal view component that handles rendering
 const TagSelectorViewInternal: React.FC<{
   className?: string;
+  chipClassName?: string;
   tags: TagItem[];
   selectedTags: string[];
   onSelectionChange: (selectedTags: TagItem[]) => void;
@@ -21,7 +22,8 @@ const TagSelectorViewInternal: React.FC<{
   isLoading?: boolean;
   allLabel?: MultiLanguageLabel;
 }> = ({ 
-  className, 
+  className,
+  chipClassName,
   tags, 
   selectedTags, 
   onSelectionChange, 
@@ -225,7 +227,7 @@ const TagSelectorViewInternal: React.FC<{
       
       {allowAll && !requireSelection && tags.length > 0 && (
         <button
-          className={chipClasses(theme, isVisible, allSelected, size, false)}
+          className={chipClasses(theme, isVisible, allSelected, size, true, undefined, chipClassName)}
           onClick={handleAllClick}
           disabled={disabled}
           data-testid="tag-all"
@@ -266,7 +268,7 @@ const TagSelectorViewInternal: React.FC<{
         return (
           <button
             key={tag.id}
-            className={chipClasses(theme, isVisible, isSelected, size, false)}
+            className={chipClasses(theme, isVisible, isSelected, size, false, undefined, chipClassName)}
             style={{ ...baseStyles, ...sizingStyles }}
             onClick={() => handleTagClick(tag.id)}
             onMouseEnter={handleMouseEnter}
@@ -303,7 +305,8 @@ const TagSelectorViewInternal: React.FC<{
 // Main unified component that includes both logic and rendering
 export const TagSelectorView: React.FC<TagSelectorProps> = ({
   id, 
-  className, 
+  className,
+  chipClassName, 
   style, 
   getTagsFunction, // Required async function
   selectedTags, 
@@ -479,6 +482,7 @@ export const TagSelectorView: React.FC<TagSelectorProps> = ({
         ) : (
           <TagSelectorViewInternal
             className={className}
+            chipClassName={chipClassName}
             tags={resolvedTags}
             selectedTags={selectedTags}
             onSelectionChange={directCallback}
