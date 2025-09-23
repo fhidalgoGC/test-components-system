@@ -90,16 +90,16 @@ function ExternalAppContent() {
             setSelectedTags(tags.map((t: TagItem) => t.id));
             console.log("Selected tags:", tags);
           }}
-          requireSelection={true}
+          requireSelection={false}
           allowMultiple={true}
-          allowAll={false}
+          allowAll={true}
           allLabel={{
             en: "All",
             es: "Todos",
             fr: "Tous",
             default: "All",
           }}
-          defaultSelectedTags={["react", "typescript"]}
+          defaultSelectedTags={["react"]}
         />
       </LibI18nProvider>
 
