@@ -12,13 +12,20 @@ export function containerClasses(
   return parts.join(' ');
 }
 
+// Utility function to combine CSS module classes with parent Tailwind classes
+export function combineWithParentClasses(moduleClasses: string, parentClasses?: string): string {
+  if (!parentClasses) return moduleClasses;
+  return `${moduleClasses} ${parentClasses}`;
+}
+
 export function chipClasses(
   theme: 'light' | 'dark',
   visible: boolean,
   selected: boolean,
   size: TagSelectorSize,
   isAll?: boolean,
-  extra?: string
+  extra?: string,
+  parentChipClasses?: string
 ) {
   const parts = [styles.chip, styles[theme]];
   
@@ -38,7 +45,10 @@ export function chipClasses(
   
   if (!visible) parts.push(styles.hidden);
   if (extra) parts.push(extra);
-  return parts.join(' ');
+  
+  // Combine with parent classes using utility function
+  const baseClasses = parts.join(' ');
+  return combineWithParentClasses(baseClasses, parentChipClasses);
 }
 
 export default styles;
