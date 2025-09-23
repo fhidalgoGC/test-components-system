@@ -2,8 +2,11 @@
 
 Este documento cubre completamente el sistema de estilos, theming y personalización visual del TagSelector.
 
+> **🚀 ACTUALIZACIÓN IMPORTANTE**: TagSelector ahora incluye un **Sistema Híbrido** que permite combinar CSS modules, Tailwind, y props para máxima flexibilidad. [Ver detalles](#-sistema-híbrido-de-estilos-nuevo).
+
 ## 📋 Tabla de Contenidos
 
+0. [🆕 Sistema Híbrido de Estilos (NUEVO)](#-sistema-híbrido-de-estilos-nuevo)
 1. [Interfaces de Estilos](#interfaces-de-estilos)
 2. [Sistema de Colores](#sistema-de-colores)
 3. [Sistema de Tamaños](#sistema-de-tamaños)
@@ -12,6 +15,294 @@ Este documento cubre completamente el sistema de estilos, theming y personalizac
 6. [CSS Custom Properties](#css-custom-properties)
 7. [Ejemplos Prácticos](#ejemplos-prácticos)
 8. [Integración Reactiva](#integración-reactiva)
+
+## 🆕 Sistema Híbrido de Estilos (NUEVO)
+
+> **🚀 NUEVA FUNCIONALIDAD**: TagSelector ahora soporta un sistema híbrido que combina CSS modules, Tailwind, y props para ofrecer máxima flexibilidad y compatibilidad.
+
+### **Nueva Prop: `chipClassName`**
+
+```typescript
+interface TagSelectorProps {
+  className?: string;      // Estilos del contenedor principal
+  chipClassName?: string;  // 🆕 Estilos de cada chip individual (Tailwind-friendly)
+  customColors?: TagCustomColors;  // Colores via props (existente)
+  // ... resto de props
+}
+```
+
+### **⚖️ Orden de Precedencia CSS**
+
+**Entender la precedencia es crucial** para personalización efectiva:
+
+1. **🥇 Metadata Individual (Máxima Prioridad)**
+   - `metadata.colors` en cada tag
+   - Se aplica como `style={{ backgroundColor: '#color' }}`
+   - **Siempre gana** sobre cualquier clase CSS
+
+2. **🥈 Props customColors (Alta Prioridad)**
+   - `customColors` prop global
+   - Se aplica como CSS variables inline
+   - **Gana sobre** CSS modules y Tailwind
+
+3. **🥉 CSS Modules (Media-Alta Especificidad)**
+   - `.TagSelector_chip__abc123` (especificidad de modules)
+   - Estilos base del componente
+   - **Puede ser sobrescrito** por inline styles o `!important`
+
+4. **🏅 chipClassName - Tailwind (Media Especificidad)**
+   - `.bg-blue-500`, `.p-2`, etc.
+   - Clases del padre aplicadas a cada chip
+   - **Necesita `!important`** para sobrescribir CSS modules en colores
+
+5. **🏆 className - Contenedor (Baja Especificidad)**
+   - `.flex`, `.gap-2`, `.p-4`, etc.
+   - Se aplica al contenedor principal
+   - **Funciona bien** para layout y espaciado
+
+### **🎯 Tres Estrategias de Personalización**
+
+#### **Estrategia 1: Solo Metadata (Existente - FUNCIONA IGUAL)**
+
+```jsx
+// ✅ Tu código actual sigue funcionando sin cambios
+<TagSelector 
+  getTagsFunction={async () => [
+    {
+      id: 'tag1',
+      label: { default: 'Tag 1' },
+      metadata: {
+        colors: {
+          light: {
+            selected: { 
+              background: "#dbeafe",
+              text: "#1e3a8a",
+              border: "#3b82f6",
+              hoverBackground: "#bfdbfe"
+            },
+            unselected: {
+              background: "#ffffff",
+              text: "#2563eb", 
+              border: "#93c5fd"
+            }
+          }
+        }
+      }
+    }
+  ]}
+  selectedTags={selectedTags}
+  onSelectionChange={handleChange}
+/>
+```
+
+#### **Estrategia 2: Solo Tailwind del Padre (NUEVO)**
+
+```jsx
+// ✅ NUEVO: Personalización con solo clases Tailwind
+<TagSelector 
+  className="space-x-3 p-4 bg-gray-50 rounded-lg"          // Layout contenedor
+  chipClassName="shadow-sm rounded-md !bg-blue-500 !text-white hover:!bg-blue-600" // Chips
+  getTagsFunction={getTags}
+  selectedTags={selectedTags}
+  onSelectionChange={handleChange}
+/>
+```
+
+**⚠️ Nota:** Para colores, usa `!important` (`!bg-blue-500`) para sobrescribir CSS modules.
+
+#### **Estrategia 3: Sistema Híbrido (NUEVO - RECOMENDADO)**
+
+```jsx
+// ✅ RECOMENDADO: Lo mejor de ambos mundos
+<TagSelector 
+  // Layout y espaciado con Tailwind del padre
+  className="flex flex-wrap gap-3 p-4 bg-white rounded-lg shadow-sm"
+  chipClassName="shadow-md rounded-lg transition-all duration-200"
+  
+  // Colores específicos con props/metadata
+  customColors={{
+    light: {
+      selected: { 
+        background: '#059669',
+        text: 'white',
+        border: '#047857'
+      },
+      unselected: { 
+        background: '#f0fdf4',
+        text: '#166534',
+        border: '#bbf7d0'
+      }
+    },
+    dark: {
+      selected: { background: '#10b981', text: '#064e3b' },
+      unselected: { background: '#1f2937', text: '#10b981' }
+    }
+  }}
+  
+  getTagsFunction={getTags}
+  selectedTags={selectedTags}
+  onSelectionChange={handleChange}
+/>
+```
+
+### **📋 Casos de Uso por Estrategia**
+
+| **Caso de Uso** | **Estrategia Recomendada** | **Por Qué** |
+|-------------------|----------------------------|-------------|
+| Colores únicos por tag | Solo Metadata | Control individual perfecto |
+| Layout responsive | chipClassName | Tailwind es ideal para layout |
+| Prototipos rápidos | Solo Tailwind | Desarrollo ágil |
+| Apps complejas | Híbrido | Máxima flexibilidad |
+| Temas corporativos | customColors | Consistencia global |
+
+### **🔧 Ejemplos Prácticos por Caso**
+
+#### **E-commerce: Filtros de Producto**
+```jsx
+<TagSelector 
+  className="mb-6 p-4 bg-white rounded-lg border shadow-sm"
+  chipClassName="border-2 hover:shadow-md transition-all font-medium"
+  customColors={{
+    light: {
+      selected: { background: '#059669', border: '#047857', text: 'white' },
+      unselected: { background: 'white', border: '#d1d5db', text: '#374151' }
+    }
+  }}
+  getTagsFunction={getProductFilters}
+  selectedTags={filters}
+  onSelectionChange={setFilters}
+/>
+```
+
+#### **Dashboard: Tags por Estado**
+```jsx
+// Tags con colores individuales por estado
+const getStatusTags = async () => [
+  {
+    id: 'active',
+    label: { default: 'Active' },
+    metadata: {
+      colors: {
+        light: {
+          selected: { background: '#16a34a', text: 'white' },  // Verde
+          unselected: { background: '#f0fdf4', text: '#166534' }
+        }
+      }
+    }
+  },
+  {
+    id: 'pending', 
+    label: { default: 'Pending' },
+    metadata: {
+      colors: {
+        light: {
+          selected: { background: '#eab308', text: 'white' },  // Amarillo
+          unselected: { background: '#fefce8', text: '#a16207' }
+        }
+      }
+    }
+  },
+  {
+    id: 'inactive',
+    label: { default: 'Inactive' },
+    metadata: {
+      colors: {
+        light: {
+          selected: { background: '#dc2626', text: 'white' },  // Rojo
+          unselected: { background: '#fef2f2', text: '#b91c1c' }
+        }
+      }
+    }
+  }
+];
+
+<TagSelector 
+  className="flex flex-wrap gap-2"
+  chipClassName="font-semibold rounded-full px-4 py-2"
+  getTagsFunction={getStatusTags}
+  selectedTags={selectedStatus}
+  onSelectionChange={setSelectedStatus}
+/>
+```
+
+#### **Mobile-First: Diseño Responsivo**
+```jsx
+<TagSelector 
+  className="flex-col sm:flex-row gap-2 sm:gap-3 p-2 sm:p-4"
+  chipClassName="w-full sm:w-auto text-center sm:text-left rounded-md"
+  customColors={{
+    light: {
+      selected: { background: '#3b82f6', text: 'white' },
+      unselected: { background: '#f8fafc', text: '#475569' }
+    }
+  }}
+  size="tam-5"  // Tamaño optimizado para móvil
+  getTagsFunction={getTags}
+  selectedTags={selected}
+  onSelectionChange={setSelected}
+/>
+```
+
+### **⚠️ Configuración Requerida en App Padre**
+
+Para que las clases Tailwind funcionen, **debes configurar** tu `tailwind.config.js`:
+
+```javascript
+// tailwind.config.js (OBLIGATORIO)
+module.exports = {
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    // ✅ CRÍTICO: Incluir la librería
+    "./node_modules/GC-UI-COMPONENTS/**/*.{js,ts,jsx,tsx}"
+  ],
+  // ... resto de configuración
+}
+```
+
+### **🔍 Troubleshooting Común**
+
+#### **❌ Problema: chipClassName no funciona**
+```jsx
+// ❌ Error común - Tailwind no configurado
+<TagSelector chipClassName="bg-blue-500" />  // No funciona
+```
+
+```javascript
+// ✅ Solución - Configurar Tailwind correctamente
+// tailwind.config.js
+content: ["./node_modules/GC-UI-COMPONENTS/**/*.{js,ts,jsx,tsx}"]
+```
+
+#### **❌ Problema: Los colores no cambian**
+```jsx
+// ❌ CSS modules ganan por especificidad
+<TagSelector chipClassName="bg-blue-500" />
+
+// ✅ Usar !important o props
+<TagSelector chipClassName="!bg-blue-500" />
+// O mejor:
+<TagSelector customColors={{ light: { selected: { background: '#3b82f6' } } }} />
+```
+
+#### **❌ Problema: Metadata no funciona**
+```jsx
+// ❌ Error - metadata debe estar en cada tag
+<TagSelector 
+  metadata={{ colors: { /* ... */ } }}  // ❌ No existe esta prop
+/>
+
+// ✅ Correcto - metadata va en cada tag
+const getTags = async () => [
+  {
+    id: 'tag1',
+    metadata: { colors: { /* ... */ } }  // ✅ Aquí va metadata
+  }
+];
+```
+
+---
+
+> **📖 DOCUMENTACIÓN GLOBAL**: Para estrategias generales que se aplican a todos los componentes de GC-UI-COMPONENTS, consulta [`/README-IA--STYLES.md`](../README-IA--STYLES.md).
 
 ## 🔗 Interfaces de Estilos
 
