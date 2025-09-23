@@ -28,6 +28,29 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ---
 
+## 🌍 **Sistema de Variables de Entorno**
+
+### **`./README-IA--ENVIROMENTS.md`**
+**Cuándo usar:** Para configurar variables de entorno y gestión híbrida de configuración entre aplicaciones padre y librería.
+
+**Contiene:**
+- 🏗️ Arquitectura del sistema de configuración híbrida
+- ⚖️ 3 estrategias de precedencia (auto, parent, library)
+- 🚀 Configuración en aplicaciones padre con ConfigProvider
+- 🎯 Variables de entorno disponibles (API, Auth0, moneda, formato)
+- 🔧 Uso en componentes (hooks useConfig y funciones directas)
+- 🚨 Problemas comunes y migración desde configuración antigua
+
+**Buscar aquí para:**
+- Configurar variables de entorno con precedencia personalizable
+- Implementar ConfigProvider en aplicaciones padre
+- Sobrescribir configuración de la librería desde el padre
+- Usar hooks useConfig y useConfigValue en componentes
+- Migrar desde configuración estática a sistema híbrido
+- Resolver problemas de configuración y precedencia
+
+---
+
 ## 🌐 **Sistema de Idiomas y Providers**
 
 ### **`./README-IA--LANGUAJE.md`**
