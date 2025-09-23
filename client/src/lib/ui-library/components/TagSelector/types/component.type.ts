@@ -52,6 +52,7 @@ export interface TagCustomColors {
 export interface TagSelectorProps {
   id?: string;
   className?: string;
+  chipClassName?: string; // Additional CSS classes for individual tag chips (Tailwind-friendly)
   style?: CSSProperties;
   
   // Tags input - only async function
