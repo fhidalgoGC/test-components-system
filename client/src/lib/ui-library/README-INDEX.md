@@ -67,6 +67,30 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ---
 
+## 🎨 **Sistema Global de Estilos**
+
+### **`./README-IA--STYLES.md`**
+**Cuándo usar:** Para entender las estrategias globales de personalización de estilos que se aplican a todos los componentes.
+
+**Contiene:**
+- 🎯 4 estrategias principales de personalización (CSS Variables, CSS Modules, Tailwind, Props)
+- ⚖️ Orden de precedencia CSS (crítico para personalización exitosa)
+- 🛠️ Configuración obligatoria de Tailwind en aplicaciones padre
+- 🔀 Estrategias híbridas (combinar múltiples enfoques)
+- 🎯 Mejores prácticas por tipo de estilo
+- 📋 Casos de uso comunes con ejemplos
+- 🔧 Troubleshooting de problemas frecuentes
+
+**Buscar aquí para:**
+- Entender cómo funcionan los estilos en toda la librería
+- Configurar Tailwind correctamente en tu aplicación
+- Decidir qué estrategia de personalización usar
+- Resolver conflictos de especificidad CSS
+- Combinar CSS modules, Tailwind y props efectivamente
+- Solucionar problemas de estilos que no se aplican
+
+---
+
 ## 🧩 **Componentes Específicos**
 
 ### **TagSelector (Disponible Actualmente)**
@@ -93,19 +117,23 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 **Cuándo usar:** Para personalizar estilos y temas del TagSelector.
 
 **Contiene:**
-- 🎨 Sistema de temas (light, dark, auto)
-- 📏 Variantes de tamaño (sm, md, lg)
-- 🎭 Variantes visuales (default, outline, ghost)
-- 🔧 CSS modules y customización
+- 🆕 **Sistema Híbrido de Estilos (NUEVO)** - chipClassName prop y estrategias combinadas
+- 🎨 Sistema de temas (light, dark, auto) 
+- 📏 Variantes de tamaño (sm, md, lg, tam-1 a tam-12)
+- 🎭 Colores individuales por tag vía metadata
+- 🔧 CSS modules y customización avanzada
 - 🌈 Tokens de diseño y variables CSS
-- 📱 Diseño responsivo
+- 📱 Diseño responsivo y mobile-first
+- ⚖️ Orden de precedencia CSS específico del TagSelector
 
 **Buscar aquí para:**
-- Personalizar estilos del TagSelector
-- Configurar temas light/dark
-- Ajustar tamaños y variantes
-- Modificar CSS modules
-- Implementar diseño responsivo
+- 🆕 Usar el nuevo sistema híbrido (CSS modules + Tailwind + props)
+- 🆕 Aplicar chipClassName para personalización individual de tags
+- Personalizar estilos con metadata individual por tag
+- Configurar temas light/dark y colores customizados
+- Ajustar tamaños granulares con tam-1 a tam-12
+- Entender precedencia CSS en TagSelector
+- Implementar diseño responsivo y casos de uso específicos
 
 ### **Futuros Componentes (Estructura General)**
 
