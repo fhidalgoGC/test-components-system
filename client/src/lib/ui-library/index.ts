@@ -12,6 +12,7 @@ export { getConfig, getConfigValue, updateGlobalConfig, resetGlobalConfig } from
 export * from './types';
 export * from './theme';
 export type { LibraryConfig, ConfigPriority, ConfigProviderProps, ConfigContextType } from './enviorments/config.types';
+export type { LanguageConfig } from './enviorments/enviroment.types';
 
 // Utils (para uso interno y externo)
 export * from './utils';

@@ -1,9 +1,4 @@
-// Language configuration type
-type LanguageConfig = {
-  locale: string;
-  dateFormat: string;
-  twoDigits: boolean;
-};
+import type { LanguageConfig } from './enviroment.types';
 
 // Available languages configuration - can be overridden via environment
 const availableLanguagesEnv =
