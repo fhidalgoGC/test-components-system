@@ -1,7 +1,12 @@
-import { createContext, useState, useCallback, useRef, useEffect } from 'react';
-import SessionValidator from '@/lib/ui-library/components/SessionValidator';
-import { saveSessionToStorage, clearSessionFromStorage, getSessionFromStorage, isSessionExpired } from '@/lib/ui-library/components/SessionValidator/utils';
-import type { AppAuthContextValue, AppAuthProviderProps } from '../types';
+import { createContext, useState, useCallback, useRef, useEffect } from "react";
+import SessionValidator from "@/lib/ui-library/components/SessionValidator";
+import {
+  saveSessionToStorage,
+  clearSessionFromStorage,
+  getSessionFromStorage,
+  isSessionExpired,
+} from "@/lib/ui-library/components/SessionValidator/utils";
+import type { AppAuthContextValue, AppAuthProviderProps } from "../types";
 
 export const AppAuthContext = createContext<AppAuthContextValue | null>(null);
 
@@ -17,21 +22,9 @@ export function AppAuthProvider({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const isLoggingOut = useRef(false);
 
-  useEffect(() => {
-    const existingSession = getSessionFromStorage();
-    if (existingSession && !isSessionExpired(existingSession, sessionDuration)) {
-      setIsAuthenticated(true);
-      isLoggingOut.current = false;
-    } else if (existingSession) {
-      clearSessionFromStorage();
-      setIsAuthenticated(false);
-      onSessionInvalid?.();
-    }
-  }, [sessionDuration, onSessionInvalid]);
-
   const login = useCallback(() => {
     const sessionId = generateSessionId();
-    
+
     saveSessionToStorage({
       sessionId,
       sessionStartTime: Date.now(),
@@ -50,6 +43,19 @@ export function AppAuthProvider({
     setIsAuthenticated(false);
     onSessionInvalid?.();
   }, [onSessionInvalid]);
+
+  useEffect(() => {
+    const existingSession = getSessionFromStorage();
+    if (
+      existingSession &&
+      !isSessionExpired(existingSession, sessionDuration)
+    ) {
+      setIsAuthenticated(true);
+      isLoggingOut.current = false;
+    } else if (existingSession) {
+      logout();
+    }
+  }, [sessionDuration, onSessionInvalid]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
