@@ -22,7 +22,8 @@ export function getDefaultMenuItems(): MenuItem[] {
       label: 'Utilities', 
       icon: 'Layout',
       children: [
-        { id: 'date-demo', label: 'Date Demo', path: '/date-demo', icon: 'Calendar' }
+        { id: 'date-demo', label: 'Date Demo', path: '/date-demo', icon: 'Calendar' },
+        { id: 'auth-test', label: 'Auth Test', path: '/auth-test', icon: 'Shield' }
       ]
     }
   ];
