@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useLanguageProviderResolver } from '../../providers/AppProviderLanguageResolver';
+import { useLanguageProviderResolver } from '../../providers/utils/AppProviderLanguageResolver';
 
 /**
  * Normaliza diferentes tipos de entrada de fecha a un objeto Date válido o null

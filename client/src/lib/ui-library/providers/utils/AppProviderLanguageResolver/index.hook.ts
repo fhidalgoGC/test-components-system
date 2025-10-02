@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { useAppLanguage } from '../AppLanguageProvider/index.hook';
-import { useLibI18n } from '../AppLanguageLibUiProvider/index.hook';
-import { ConfigContext } from '../AppEnviromentProvider/index.hook';
+import { useAppLanguage } from '../../AppLanguageProvider/index.hook';
+import { useLibI18n } from '../../AppLanguageLibUiProvider/index.hook';
+import { ConfigContext } from '../../AppEnviromentProvider/index.hook';
 import type { ResolvedLanguageProvider } from './index.types';
 
 /**
