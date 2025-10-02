@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { useAppLanguage, ConfigProvider, useConfig } from "@/lib/ui-library/providers";
+import { useAppLanguage, useConfig, AppLanguageLibUiProvider } from "@/lib/ui-library/providers";
 import { useDateFormatter, useFormattedDate } from "@/lib/ui-library/utils/dates/dates.util";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/ui-library/utils";
-import { environment } from "@/enviorments/enviroment";
 
 function DateDemoContent() {
   const [date, setDate] = useState<Date>(new Date());
@@ -215,6 +214,10 @@ function DateDemoContent() {
 }
 
 export function DateDemoView() {
-  // ConfigProvider is now at App level, no need to wrap here
-  return <DateDemoContent />;
+  // Wrap with AppLanguageLibUiProvider since we're using library utilities
+  return (
+    <AppLanguageLibUiProvider>
+      <DateDemoContent />
+    </AppLanguageLibUiProvider>
+  );
 }
