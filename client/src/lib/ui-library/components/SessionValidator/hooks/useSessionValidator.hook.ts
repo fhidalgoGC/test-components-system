@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import type { SessionData, SessionValidatorProps } from '../types';
+import { useState, useEffect, useCallback, useRef } from "react";
+import type { SessionData, SessionValidatorProps } from "../types";
 import {
   getSessionFromStorage,
   saveSessionToStorage,
@@ -7,7 +7,7 @@ import {
   isSessionExpired,
   hasValidSession,
   updateLastActivity,
-} from '../utils';
+} from "../utils";
 
 const DEFAULT_SESSION_DURATION = 3600000; // 1 hour
 const DEFAULT_CHECK_INTERVAL = 60000; // 1 minute
@@ -18,7 +18,7 @@ export function useSessionValidator({
   checkInterval = DEFAULT_CHECK_INTERVAL,
   autoActivateIfSession = true,
   onSessionInvalid,
-}: Omit<SessionValidatorProps, 'children'>) {
+}: Omit<SessionValidatorProps, "children">) {
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -32,7 +32,7 @@ export function useSessionValidator({
     if (!isActive) return;
 
     const storedSession = getSessionFromStorage();
-    
+
     if (storedSession) {
       setSessionData(storedSession);
     } else {
@@ -117,14 +117,13 @@ export function useSessionValidator({
 
     saveSessionToStorage(newSession);
     setSessionData(newSession);
-    
+
     // Reset flag when initializing new session
     hasCalledInvalidRef.current = false;
   }, []);
 
   // Public API for clearing session
   const clearSession = useCallback(() => {
-    clearSessionFromStorage();
     setSessionData(null);
   }, []);
 
