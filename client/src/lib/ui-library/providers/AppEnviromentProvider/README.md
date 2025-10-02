@@ -1,26 +1,26 @@
-# 🌍 Sistema de Variables de Entorno - GC-UI-COMPONENTS
+# 🌍 AppEnviromentProvider - Sistema de Configuración Híbrida
 
-**Version: 1.0.5**
+**Version: 2.0.0**
 
 ## 📖 Descripción
 
-Sistema híbrido de gestión de variables de entorno que permite a las aplicaciones padre sobrescribir la configuración por defecto de la librería con precedencia configurable.
+AppEnviromentProvider (ConfigProvider) es un sistema híbrido de gestión de configuración que permite a las aplicaciones padre sobrescribir la configuración por defecto de la librería con precedencia configurable.
 
 ---
 
 ## 🏗️ Arquitectura del Sistema
 
-### **Componentes Principales**
+### **Estructura Modular:**
 
 ```
-client/src/lib/ui-library/enviorments/
-├── config.types.ts          # Interfaces TypeScript
-├── config.provider.tsx      # ConfigProvider + Hooks React
-├── config.ts                # Funciones sin React Context
-└── enviroment.ts            # Variables base (defaults)
+AppEnviromentProvider/
+├── index.provider.tsx   # ConfigProvider component
+├── index.types.ts       # TypeScript types
+├── index.hook.ts        # React hooks (useConfig, useConfigValue)
+└── index.utils.ts       # Non-React utilities (getConfig, mergeConfigs)
 ```
 
-### **Flujo de Configuración**
+### **Flujo de Configuración:**
 
 ```
 ┌─────────────────────────────────────────┐
@@ -232,6 +232,66 @@ function fetchData() {
 
 ---
 
+## 📋 Casos de Uso Comunes
+
+### **Caso 1: Ambiente Development vs Production**
+
+```jsx
+const isDev = import.meta.env.DEV;
+
+const config = {
+  CRM_BASE_URL: isDev 
+    ? 'http://localhost:3000'
+    : 'https://api.production.com',
+  IS_DEVELOPMENT: isDev
+};
+
+<ConfigProvider parentConfig={config} priority="parent">
+  <App />
+</ConfigProvider>
+```
+
+### **Caso 2: Multi-tenant con diferentes configuraciones**
+
+```jsx
+function TenantApp({ tenantId }) {
+  const tenantConfig = {
+    CRM_BASE_URL: `https://${tenantId}.api.com`,
+    DEFAULT_CURRENCY: tenantId === 'mx' ? 'mxn' : 'usd'
+  };
+
+  return (
+    <ConfigProvider parentConfig={tenantConfig}>
+      <App />
+    </ConfigProvider>
+  );
+}
+```
+
+### **Caso 3: Configuración desde API**
+
+```jsx
+function App() {
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/config')
+      .then(res => res.json())
+      .then(setConfig);
+  }, []);
+
+  if (!config) return <Loading />;
+
+  return (
+    <ConfigProvider parentConfig={config}>
+      <MainApp />
+    </ConfigProvider>
+  );
+}
+```
+
+---
+
 ## 🚨 Problemas Comunes
 
 ### **Error: "useConfig must be used within a ConfigProvider"**
@@ -313,66 +373,6 @@ function MyComponent() {
 
 ---
 
-## 📋 Casos de Uso Comunes
-
-### **Caso 1: Ambiente Development vs Production**
-
-```jsx
-const isDev = import.meta.env.DEV;
-
-const config = {
-  CRM_BASE_URL: isDev 
-    ? 'http://localhost:3000'
-    : 'https://api.production.com',
-  IS_DEVELOPMENT: isDev
-};
-
-<ConfigProvider parentConfig={config} priority="parent">
-  <App />
-</ConfigProvider>
-```
-
-### **Caso 2: Multi-tenant con diferentes configuraciones**
-
-```jsx
-function TenantApp({ tenantId }) {
-  const tenantConfig = {
-    CRM_BASE_URL: `https://${tenantId}.api.com`,
-    DEFAULT_CURRENCY: tenantId === 'mx' ? 'mxn' : 'usd'
-  };
-
-  return (
-    <ConfigProvider parentConfig={tenantConfig}>
-      <App />
-    </ConfigProvider>
-  );
-}
-```
-
-### **Caso 3: Configuración desde API**
-
-```jsx
-function App() {
-  const [config, setConfig] = useState(null);
-
-  useEffect(() => {
-    fetch('/api/config')
-      .then(res => res.json())
-      .then(setConfig);
-  }, []);
-
-  if (!config) return <Loading />;
-
-  return (
-    <ConfigProvider parentConfig={config}>
-      <MainApp />
-    </ConfigProvider>
-  );
-}
-```
-
----
-
 ## 🎯 Mejores Prácticas
 
 1. **Usa "auto" por defecto**: Es la estrategia más flexible y segura
@@ -383,13 +383,46 @@ function App() {
 
 ---
 
-## 📚 Ver También
+## 🔗 API Reference
 
-- **Sistema de Estilos**: `./README-IA--STYLES.md`
-- **Sistema de Idiomas**: `./README-IA--LANGUAJE.md`
-- **Instalación**: `./README-IA.md`
-- **Índice General**: `./README-INDEX.md`
+### **ConfigProvider Props**
+
+```typescript
+interface ConfigProviderProps {
+  children: React.ReactNode;
+  parentConfig?: Partial<LibraryConfig>;
+  priority?: ConfigPriority; // "parent" | "library" | "auto"
+  enableOverrides?: boolean;
+}
+```
+
+### **useConfig Hook**
+
+```typescript
+interface ConfigContextType {
+  config: LibraryConfig;
+  updateConfig: (newConfig: Partial<LibraryConfig>) => void;
+  resetConfig: () => void;
+  priority: ConfigPriority;
+}
+```
+
+### **Utility Functions (Non-React)**
+
+```typescript
+// Get full configuration
+getConfig(): LibraryConfig
+
+// Get specific value
+getConfigValue<K extends keyof LibraryConfig>(key: K): LibraryConfig[K]
+
+// Update global config
+updateGlobalConfig(newConfig: Partial<LibraryConfig>): void
+
+// Reset to defaults
+resetGlobalConfig(): void
+```
 
 ---
 
-**Version: 1.0.5** | **Última actualización: Octubre 2025**
+**Version: 2.0.0** | **Última actualización: Octubre 2025**

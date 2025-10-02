@@ -30,22 +30,24 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 🌍 **Sistema de Variables de Entorno**
 
-### **`./README-IA--ENVIROMENTS.md`**
+### **`./providers/AppEnviromentProvider/README.md`**
 **Cuándo usar:** Para configurar variables de entorno y gestión híbrida de configuración entre aplicaciones padre y librería.
 
 **Contiene:**
-- 🏗️ Arquitectura del sistema de configuración híbrida
+- 🏗️ Arquitectura modular del sistema de configuración híbrida
 - ⚖️ 3 estrategias de precedencia (auto, parent, library)
 - 🚀 Configuración en aplicaciones padre con ConfigProvider
 - 🎯 Variables de entorno disponibles (API, Auth0, moneda, formato)
 - 🔧 Uso en componentes (hooks useConfig y funciones directas)
 - 🚨 Problemas comunes y migración desde configuración antigua
+- 🔗 API Reference completa (props, hooks, utilities)
 
 **Buscar aquí para:**
 - Configurar variables de entorno con precedencia personalizable
 - Implementar ConfigProvider en aplicaciones padre
 - Sobrescribir configuración de la librería desde el padre
 - Usar hooks useConfig y useConfigValue en componentes
+- Utilizar funciones no-React (getConfig, getConfigValue)
 - Migrar desde configuración estática a sistema híbrido
 - Resolver problemas de configuración y precedencia
 
@@ -71,7 +73,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Resolver problemas de providers
 - Crear traducciones globales y locales
 
-### **`./providers/README-LibI18n.provider.md`**
+### **`./providers/AppLanguageLibUiProvider/README.md`**
 **Cuándo usar:** Para documentación técnica detallada del LibI18nProvider.
 
 **Contiene:**
@@ -211,12 +213,13 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🌍 Variables de Entorno**
 ```
-./README-IA--ENVIROMENTS.md
+./providers/AppEnviromentProvider/README.md
 ├── Sistema híbrido de configuración
 ├── 3 estrategias de precedencia
 ├── ConfigProvider para aplicaciones padre
 ├── Variables disponibles (API, Auth0, etc.)
-└── Uso en componentes (hooks y funciones)
+├── Uso en componentes (hooks y funciones)
+└── API Reference (props, hooks, utilities)
 ```
 
 ### **🎨 Estilos Globales**
@@ -235,7 +238,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 ├── Configuración AppLanguageProvider
 └── LibI18nProvider setup
 
-./providers/README-LibI18n.provider.md
+./providers/AppLanguageLibUiProvider/README.md
 ├── API detallada de LibI18nProvider
 ├── useLibI18n hook
 └── Casos de uso avanzados
@@ -262,11 +265,11 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | **Necesito...** | **Ir a...** |
 |-----------------|-------------|
 | Instalar la librería | `README-IA.md` |
-| Configurar variables de entorno | `README-IA--ENVIROMENTS.md` |
-| Sobrescribir config desde padre | `README-IA--ENVIROMENTS.md` |
+| Configurar variables de entorno | `providers/AppEnviromentProvider/README.md` |
+| Sobrescribir config desde padre | `providers/AppEnviromentProvider/README.md` |
 | Personalizar estilos globales | `README-IA--STYLES.md` |
 | Configurar idiomas | `README-IA--LANGUAJE.md` |
-| API de LibI18nProvider | `providers/README-LibI18n.provider.md` |
+| API de LibI18nProvider | `providers/AppLanguageLibUiProvider/README.md` |
 | Resolver errores de imports | `README-IA.md` |
 | Implementar provider padre | `README-IA--LANGUAJE.md` |
 

@@ -152,17 +152,25 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
       - `useTranslationLoader` - Dynamic translation loading
       - `useTranslator` - Translation processing and creation
       - `useLanguageHandlers` - Language change handlers and label resolution
+    - `README.md` - Complete documentation with API reference and usage examples
   - **AppEnviromentProvider/** - Library configuration provider (27 lines)
     - `index.provider.tsx` - Provider component
     - `index.types.ts` - Type definitions (LibraryConfig, ConfigPriority, context types)
     - `index.hook.ts` - Custom hooks (useConfig, useConfigValue, useConfigState, useConfigHandlers)
     - `index.utils.ts` - Non-React utilities (getConfig, mergeConfigs, updateGlobalConfig, etc.)
+    - `README.md` - Complete documentation with use cases and API reference
 - **Consistent Architecture Pattern**: All providers follow the same modular structure
   - `index.provider.tsx` - Clean provider components (20-67 lines)
   - `index.types.ts` - TypeScript type definitions
   - `index.hook.ts` - Custom hooks and context
   - `index.utils.ts` - Utility functions (when needed)
+  - `README.md` - Provider-specific documentation
 - **Centralized Exports**: All providers exported from `providers/index.ts`
+- **Documentation Reorganization**:
+  - Moved environment docs to `providers/AppEnviromentProvider/README.md`
+  - Removed `README-IA--ENVIROMENTS.md` (consolidated into provider folder)
+  - Updated `README-INDEX.md` with correct provider paths
+  - Updated `README-IA--LANGUAJE.md` with new provider locations
 - **Removed Legacy Files**: Cleaned up old provider files and empty directories
 
 ## Import Path Optimization and Library Structure (September 22, 2025)
