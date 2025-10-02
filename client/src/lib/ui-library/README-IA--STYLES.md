@@ -317,7 +317,7 @@ const getTags = async () => [
 
 - **Componentes Específicos:** Cada componente tiene su propio `README-IA--STYLES.md`
 - **Documentación Principal:** `README-IA.md` para uso básico
-- **Guía de Idiomas:** `README-IA--LANGUAJE.md` para i18n
+- **Sistema de Idiomas:** `providers/AppLanguageProvider/README.md` y `providers/AppLanguageLibUiProvider/README.md`
 - **Índice General:** `README-INDEX.md` para navegación completa
 
 ---

@@ -168,10 +168,12 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
 - **Centralized Exports**: All providers exported from `providers/index.ts`
 - **Documentation Reorganization**:
   - Moved environment docs to `providers/AppEnviromentProvider/README.md`
-  - Removed `README-IA--ENVIROMENTS.md` (consolidated into provider folder)
+  - Created language docs in `providers/AppLanguageProvider/README.md`
+  - Removed `README-IA--ENVIROMENTS.md` (consolidated into AppEnviromentProvider folder)
+  - Removed `README-IA--LANGUAJE.md` (split into provider-specific READMEs)
   - Updated `README-INDEX.md` with correct provider paths
-  - Updated `README-IA--LANGUAJE.md` with new provider locations
-- **Removed Legacy Files**: Cleaned up old provider files and empty directories
+  - Updated all cross-references in documentation files
+- **Removed Legacy Files**: Cleaned up old provider files, empty directories, and centralized documentation
 
 ## Import Path Optimization and Library Structure (September 22, 2025)
 - **Export Structure Reorganization**: Created comprehensive export system for easy imports

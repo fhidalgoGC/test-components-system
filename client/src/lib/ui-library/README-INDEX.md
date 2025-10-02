@@ -55,23 +55,23 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 🌐 **Sistema de Idiomas y Providers**
 
-### **`./README-IA--LANGUAJE.md`**
-**Cuándo usar:** Para implementar internacionalización y configurar providers de lenguaje.
+### **`./providers/AppLanguageProvider/README.md`**
+**Cuándo usar:** Para implementar el provider de idioma principal de la aplicación.
 
 **Contiene:**
-- 🏗️ Arquitectura padre-hijo de providers
-- 🎯 Configuración de LibI18nProvider (3 niveles)
-- 🔄 Flujo de comunicación entre providers
-- 🌐 Estructura de archivos de traducción
-- 🔧 API completa de providers y hooks
-- 📝 Ejemplos de implementación
+- 🏗️ Arquitectura del provider padre de idioma
+- 🎯 Props y API del AppLanguageProvider
+- 🚀 Ejemplos de uso (básico, con localStorage, dinámico)
+- 🔧 Configuración de idiomas disponibles
+- 🔄 Integración con LibI18nProvider
+- 🌐 Configuración regional y formatos de fecha
 
 **Buscar aquí para:**
-- Configurar el sistema de idiomas
-- Implementar AppLanguageProvider padre
-- Conectar LibI18nProvider con la app
-- Resolver problemas de providers
-- Crear traducciones globales y locales
+- Implementar AppLanguageProvider en la aplicación
+- Configurar idioma inicial y persistencia
+- Agregar nuevos idiomas al sistema
+- Usar useAppLanguage hook
+- Integrar con componentes de la librería
 
 ### **`./providers/AppLanguageLibUiProvider/README.md`**
 **Cuándo usar:** Para documentación técnica detallada del LibI18nProvider.
@@ -233,15 +233,17 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🌐 Idiomas**
 ```
-./README-IA--LANGUAJE.md
-├── Arquitectura de providers
-├── Configuración AppLanguageProvider
-└── LibI18nProvider setup
+./providers/AppLanguageProvider/README.md
+├── Provider de idioma principal (padre)
+├── Configuración de idiomas disponibles
+├── useAppLanguage hook
+└── Integración con la aplicación
 
 ./providers/AppLanguageLibUiProvider/README.md
+├── Provider de traducciones de librería (hijo)
 ├── API detallada de LibI18nProvider
 ├── useLibI18n hook
-└── Casos de uso avanzados
+└── Sistema de prioridades de traducción
 ```
 
 ### **🧩 Componentes**
@@ -268,10 +270,10 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | Configurar variables de entorno | `providers/AppEnviromentProvider/README.md` |
 | Sobrescribir config desde padre | `providers/AppEnviromentProvider/README.md` |
 | Personalizar estilos globales | `README-IA--STYLES.md` |
-| Configurar idiomas | `README-IA--LANGUAJE.md` |
-| API de LibI18nProvider | `providers/AppLanguageLibUiProvider/README.md` |
+| Configurar idioma de aplicación | `providers/AppLanguageProvider/README.md` |
+| Traducciones de componentes | `providers/AppLanguageLibUiProvider/README.md` |
 | Resolver errores de imports | `README-IA.md` |
-| Implementar provider padre | `README-IA--LANGUAJE.md` |
+| Agregar nuevos idiomas | `providers/AppLanguageProvider/README.md` |
 
 ### **🧩 Componentes Específicos:**
 | **Componente** | **Documentación** | **Estilos** |
