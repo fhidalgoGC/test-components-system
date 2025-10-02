@@ -39,6 +39,7 @@ export function useSessionValidator({
       // No session in storage, mark as invalid
       if (!hasCalledInvalidRef.current) {
         hasCalledInvalidRef.current = true;
+        clearSessionFromStorage();
         onSessionInvalid?.();
       }
     }
