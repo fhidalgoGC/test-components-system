@@ -1,6 +1,6 @@
 # Overview
 
-This is a frontend-only React component library project built with React, TypeScript, and Vite. The project features a comprehensive UI component library built on top of shadcn/ui with custom components, complete theming system, internationalization support, and responsive design. This is a standalone frontend library without backend dependencies.
+This project is a frontend-only React component library built with React, TypeScript, and Vite. Its primary purpose is to provide a comprehensive UI component library, featuring custom components built on shadcn/ui, a complete theming system, internationalization support, and a responsive design. This is a standalone frontend library with no backend dependencies, designed for integration into other frontend applications.
 
 # User Preferences
 
@@ -9,209 +9,49 @@ Preferred communication style: Simple, everyday language.
 # System Architecture
 
 ## Frontend Architecture
-- **Framework**: React 18 with TypeScript and Vite as the build tool
-- **Routing**: Wouter for client-side routing
-- **State Management**: React state with callback-based data management (removed TanStack Query)
-- **Styling**: Tailwind CSS with CSS variables for theming
-- **UI Components**: 
-  - shadcn/ui component library with Radix UI primitives
-  - Custom UI library with TagSelector component featuring async loading, multilingual support, and responsive design
-- **Theme System**: Custom theme provider with light/dark mode support and CSS variable-based theming
+- **Framework**: React 18 with TypeScript and Vite.
+- **Routing**: Wouter for client-side routing.
+- **State Management**: React state with callback-based data management.
+- **Styling**: Tailwind CSS with CSS variables for theming.
+- **UI Components**:
+  - shadcn/ui library with Radix UI primitives.
+  - Custom UI library including a `TagSelector` component with async loading, multilingual support, and responsive design.
+- **Theme System**: Custom theme provider with light/dark mode and CSS variable-based theming.
+- **Internationalization (i18n)**: Hierarchical i18n system with global and component-specific translations, supporting English (en) and Spanish (es). It includes a fallback mechanism and dynamic language selection.
+- **Modular Architecture**: Codebase follows a classified folder pattern for layouts, pages, and UI components, including `css/`, `types/`, `hooks/`, `utils/`, and `i18n/` subdirectories.
+- **Provider Architecture**: All providers (e.g., `AppLanguageProvider`, `AppEnviromentProvider`, `AppLanguageLibUiProvider`) follow a consistent modular structure with dedicated files for provider components, types, hooks, and documentation.
+- **Environment Configuration**: External environment configuration support at the application level, allowing parent applications to override library defaults for aspects like language settings.
 
 ## Development Setup
-- **Build Tool**: Vite for fast development and building
-- **Development Server**: Custom Vite server setup for component library development
-- **Hot Reloading**: Instant updates during development
-- **Component Demo**: Interactive component playground with live preview
-- **Documentation**: Built-in component documentation with usage examples
+- **Build Tool**: Vite for fast development and building.
+- **Development Server**: Custom Vite server setup for component library development with hot reloading.
+- **Component Demo**: Interactive component playground with live preview and built-in documentation.
 
-## External Dependencies
+# External Dependencies
 
 ### Core Framework Dependencies
-- **vite**: Build tool and development server
-- **react**: Core React library
-- **react-dom**: React DOM rendering
-- **typescript**: TypeScript language support
+- `vite`: Build tool and development server.
+- `react`: Core React library.
+- `react-dom`: React DOM rendering.
+- `typescript`: TypeScript language support.
 
 ### UI and Component Libraries
-- **@radix-ui/***: Comprehensive set of unstyled, accessible UI primitives
-- **tailwindcss**: Utility-first CSS framework
-- **class-variance-authority**: Component variant management
-- **clsx**: Utility for conditional CSS classes
+- `@radix-ui/*`: Unstyled, accessible UI primitives.
+- `tailwindcss`: Utility-first CSS framework.
+- `class-variance-authority`: Component variant management.
+- `clsx`: Utility for conditional CSS classes.
+- `embla-carousel-react`: Carousel component.
+- `cmdk`: Command palette component.
+- `framer-motion`: Animation library.
+- `lucide-react`: Icon library.
 
 ### Development and Build Tools
-- **@replit/vite-plugin-***: Replit-specific development plugins
-- **wouter**: Lightweight client-side routing library
-- **postcss**: CSS processing
-- **autoprefixer**: CSS vendor prefixing
+- `@replit/vite-plugin-*`: Replit-specific development plugins.
+- `wouter`: Lightweight client-side routing library.
+- `postcss`: CSS processing.
+- `autoprefixer`: CSS vendor prefixing.
 
 ### Additional Libraries
-- **date-fns**: Date utility library
-- **react-hook-form**: Form handling with validation
-- **embla-carousel-react**: Carousel component
-- **cmdk**: Command palette component
-- **framer-motion**: Animation library
-- **lucide-react**: Icon library
-- **zod**: Schema validation (for frontend forms)
-
-# Recent Changes
-
-## Backend Removal and Frontend-Only Conversion (September 18, 2025)
-- **Architecture Conversion**: Converted from full-stack application to frontend-only React component library
-- **Eliminated Dependencies**: Removed all backend-related dependencies:
-  - Database: `@neondatabase/serverless`, `drizzle-orm`, `drizzle-kit`
-  - Server: `express`, `express-session`, `passport`, `passport-local`
-  - Development tools: `tsx`, `esbuild`, WebSockets (`ws`)
-  - Session storage: `connect-pg-simple`, `memorystore`
-- **Removed Directories**: 
-  - `server/` - Express.js backend implementation
-  - `shared/` - Shared schema and types
-  - `drizzle.config.ts` - Database configuration
-- **Development Setup**: Created `start-frontend.mjs` script for running Vite development server
-- **Documentation Update**: Updated replit.md to reflect frontend-only architecture
-- **CSS Module Organization**: Moved all `*.module.css` and `*.module.ts` files to respective `css/` directories
-
-## How to Run the Application
-Since the project is now frontend-only, use the custom startup script:
-```bash
-node start-frontend.mjs
-```
-This runs the Vite development server on `http://localhost:5000` with all UI components and documentation.
-
-## Component Organization Restructuring (September 18, 2025)
-- **Page-Scoped Component Architecture**: Restructured component organization to follow page-scoped pattern:
-  - **Removed**: `client/src/pages/component-demo` directory and all references (including /demo route)
-  - **Moved**: Components from centralized `client/src/pages/components/*` to page-specific locations:
-    - `tag-selector-demo`: moved to `client/src/pages/tag-selector-demo/components/tag-selector-demo/`
-- **Enhanced Page Structure**: Each page now contains its own `components/` subdirectory for better encapsulation
-- **Updated Import System**: Created page-level index.ts files that re-export from component subdirectories
-- **Router Optimization**: Simplified route imports and removed obsolete component-demo references
-- **Type Compatibility**: Fixed LibraryDashboardView to be compatible with wouter's RouteComponentProps
-
-## Architectural Restructuring (September 2025)
-- **Complete Modular Architecture**: Restructured entire codebase to follow classified folder pattern:
-  - **Layouts**: app-layout, component-layout now use css/, types/, hooks/, utils/, i18n/ subdirectories
-  - **Pages**: library-dashboard, tag-selector-demo, not-found restructured to modular pattern
-  - **UI Components**: Maintained existing shadcn/ui structure per requirements
-- **Hierarchical i18n System**: Implemented comprehensive internationalization:
-  - Global translations at client/src/i18n/ level
-  - Component/page/layout specific translations take priority over globals
-  - Uses useHierarchicalTranslations hook with fallback mechanism
-  - Supports Spanish (es) and English (en) languages
-- **CSS Modules Integration**: All restructured components use CSS modules with theme-aware styling
-- **Consistent Hook Patterns**: Standardized hooks across all components for theme, i18n, and state management
-
-## Project Structure Updates
-- **Modular Architecture**: Components, layouts, and pages follow classified folder pattern:
-  - `css/` - CSS modules and styling utilities
-  - `types/` - TypeScript type definitions
-  - `hooks/` - React hooks and custom logic
-  - `utils/` - Utility functions and helpers
-  - `i18n/` - Localized translations with hierarchical fallback
-- **UI Library**: shadcn/ui components maintained in original flat structure
-- **Global Systems**: Centralized i18n, theme management, and shared utilities
-
-## Button Component and Demo Removal (September 18, 2025)
-- **Removed Components**: Eliminated Button component from UI library (`client/src/lib/ui-library/Button/`)
-- **Removed Pages**: Eliminated button-demo page (`client/src/pages/button-demo/`)
-- **Updated Navigation**: Removed Button menu item from sidebar navigation
-- **Updated Routes**: Removed `/components/button` route from Router configuration
-- **Focused Library**: Project now focuses solely on TagSelector component with comprehensive async and multilingual features
-
-## TagSelector Demo Simplification (September 18, 2025)
-- **Removed Documentation Folder**: Eliminated `client/src/lib/ui-library/TagSelector/documentation/` directory
-- **Simplified Demo Page**: Integrated live preview directly into `client/src/pages/tag-selector-demo/views/TagSelectorDemo.view.tsx`
-- **Removed ComponentLayout**: No longer uses component layout system, shows preview directly in page
-- **Maintained Full Functionality**: Preview with props controls, live demo, generated code, and async/multilingual features
-- **Streamlined Architecture**: Faster loading and simpler maintenance without separate documentation components
-
-## Library Optimization and Code Organization (September 22, 2025)
-- **TanStack Query Removal**: Eliminated unnecessary TanStack Query dependency from frontend-only component library
-  - Removed `@tanstack/react-query` package and `client/src/lib/queryClient.ts`
-  - Simplified App.tsx provider structure for better performance
-  - Components now use pure callback-based data management approach
-- **Utils Reorganization**: Moved CSS utility functions to proper library location
-  - Relocated `client/src/lib/utils.ts` to `client/src/lib/ui-library/utils/cn.util.ts`
-  - Updated all shadcn/ui component imports to use library utils path
-  - Follows naming conventions with singular file prefixes
-- **Architecture Cleanup**: Removed unnecessary index.ts files and optimized import structure
-  - Direct imports to component view files without intermediate index files
-  - Cleaner dependency graph and better development experience
-
-## External Environment Configuration (October 2, 2025)
-- **App-Level Environment Setup**: Created external environment configuration at `client/src/enviorments/`
-  - Moved language configuration from library to application level
-  - Enables testing how library components work with external environment configs
-  - Structure: `client/src/enviorments/enviroment.ts` and `enviroment.types.ts`
-  - Contains: `AVAILABLE_LANGUAGES`, `DEFAULT_LANGUAGE`, `LANGUAGE_CONFIG`, `NUMBER_FORMAT_CONFIG`
-- **Sidebar Uses External Environment**: Updated Sidebar to consume environment from app level
-  - Import changed from `@/lib/ui-library/enviorments/enviroment` to `@/enviorments/enviroment`
-  - Demonstrates how parent application can override library defaults
-  - Language selector now uses external `AVAILABLE_LANGUAGES` configuration
-
-## Date Utilities & Language Selector Enhancement (October 2, 2025)
-- **Multi-Provider Support for Date Utilities**: Enhanced `utils/dates/dates.util.ts` to work with multiple providers
-  - Supports AppLanguageProvider (preferred), LibI18nProvider, or standalone usage
-  - Automatic fallback system: AppLanguageProvider > LibI18nProvider + environment config > default config
-  - Added `useDateConfig()` internal hook for intelligent provider detection
-  - Added `getDateConfigForLanguage()` utility for manual date formatting
-  - No breaking changes - existing code continues to work
-  - Enables library usage without requiring AppLanguageProvider when using LibI18nProvider
-- **Dynamic Language Selector**: Updated Sidebar language selector to load from environment configuration
-  - Language options now populated from `AVAILABLE_LANGUAGES`
-  - Configurable via `VITE_AVAILABLE_LANGUAGES` environment variable (default: "es,en")
-  - Removes hardcoded language options for better flexibility
-
-## Provider Architecture Modularization (October 2, 2025)
-- **Complete Provider Restructuring**: Applied modular folder pattern to all providers
-  - **AppLanguageProvider/** - Parent app language provider (20 lines)
-    - `index.provider.tsx` - Provider component
-    - `index.types.ts` - Type definitions (AppLanguage, LanguageConfig, context types)
-    - `index.hook.ts` - Custom hooks (useAppLanguage, useValidatedLanguage, useLanguageConfig)
-  - **AppLanguageLibUiProvider/** - Library translation provider (67 lines)
-    - `index.provider.tsx` - Provider component
-    - `index.types.ts` - Type definitions (Lang, LibI18nContextValue, props)
-    - `index.hook.ts` - Specialized hooks:
-      - `useEffectiveLanguage` - Language synchronization and state management
-      - `useTranslationLoader` - Dynamic translation loading
-      - `useTranslator` - Translation processing and creation
-      - `useLanguageHandlers` - Language change handlers and label resolution
-    - `README.md` - Complete documentation with API reference and usage examples
-  - **AppEnviromentProvider/** - Library configuration provider (27 lines)
-    - `index.provider.tsx` - Provider component
-    - `index.types.ts` - Type definitions (LibraryConfig, ConfigPriority, context types)
-    - `index.hook.ts` - Custom hooks (useConfig, useConfigValue, useConfigState, useConfigHandlers)
-    - `index.utils.ts` - Non-React utilities (getConfig, mergeConfigs, updateGlobalConfig, etc.)
-    - `README.md` - Complete documentation with use cases and API reference
-- **Consistent Architecture Pattern**: All providers follow the same modular structure
-  - `index.provider.tsx` - Clean provider components (20-67 lines)
-  - `index.types.ts` - TypeScript type definitions
-  - `index.hook.ts` - Custom hooks and context
-  - `index.utils.ts` - Utility functions (when needed)
-  - `README.md` - Provider-specific documentation
-- **Centralized Exports**: All providers exported from `providers/index.ts`
-- **Documentation Reorganization**:
-  - Moved environment docs to `providers/AppEnviromentProvider/README.md`
-  - Created language docs in `providers/AppLanguageProvider/README.md`
-  - Removed `README-IA--ENVIROMENTS.md` (consolidated into AppEnviromentProvider folder)
-  - Removed `README-IA--LANGUAJE.md` (split into provider-specific READMEs)
-  - Updated `README-INDEX.md` with correct provider paths
-  - Updated all cross-references in documentation files
-- **Removed Legacy Files**: Cleaned up old provider files, empty directories, and centralized documentation
-
-## Import Path Optimization and Library Structure (September 22, 2025)
-- **Export Structure Reorganization**: Created comprehensive export system for easy imports
-  - Main library export: `client/src/lib/ui-library/index.ts` exports all components, providers, types
-  - Components export: `client/src/lib/ui-library/components/index.ts` for component-specific imports
-  - Providers export: `client/src/lib/ui-library/providers/index.ts` for provider-specific imports
-  - Root entry point: `index.ts` for direct library access from external projects
-- **Vite Alias Configuration**: Added "GC-UI-COMPONENTS" alias for simplified imports
-  - External imports: `import { TagSelector, LibI18nProvider } from 'GC-UI-COMPONENTS'`
-  - Internal imports: Consistent relative path resolution
-- **Package Name Update**: Changed from "rest-express" to "GC-UI-COMPONENTS" for better identification
-- **Route Resolution Fix**: Solved "useLibI18n must be used within LibI18nProvider" error caused by import path issues
-
-## Known Issues & Future Improvements
-- **i18n Array/Object Support**: Current hierarchical i18n system works for strings but needs enhancement for arrays and objects
-- **Font Awesome Dependencies**: Some components reference Font Awesome icons that may need resolution
-- **Type Safety**: Minor LSP diagnostics remaining in Router.tsx
+- `date-fns`: Date utility library.
+- `react-hook-form`: Form handling with validation.
+- `zod`: Schema validation.
