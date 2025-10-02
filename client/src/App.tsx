@@ -29,6 +29,10 @@ function AppContent() {
 }
 
 function App() {
+  const handleLogging = () => {
+    alert("Inicio sesión");
+  };
+
   const handleSessionInvalid = () => {
     alert("Salio");
   };
@@ -37,6 +41,7 @@ function App() {
     <ThemeProvider>
       <AppAuthProvider 
         sessionDuration={60000}
+        onLogging={handleLogging}
         onSessionInvalid={handleSessionInvalid}
       >
         <ConfigProvider parentConfig={environment} priority="auto">
