@@ -1,20 +1,14 @@
 // ---------------------------------------------
-// LibI18nProvider (PROVIDER HIJO - DENTRO DE LA LIBRERÍA)
+// AppLanguageLibUiProvider (PROVIDER HIJO - DENTRO DE LA LIBRERÍA)
 // ---------------------------------------------
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
-import type { GenericLanguageProvider } from '../types/language.types';
-import { makeTranslator, type TranslationOrder } from '../utils';
-
-type Lang = 'es' | 'en';
-
-type LibI18nContextValue = {
-  lang: Lang;
-  t: (key: string, params?: Record<string, string | number>) => string;
-  setLanguage: (next: Lang) => void;
-  resolveLabel: (label: { [key: string]: string; default: string }) => string;
-  getExternalTranslations: () => Record<string, string>;
-  translationPriority: 'component-first' | 'external-first';
-};
+import type { GenericLanguageProvider } from '../../types/language.types';
+import { makeTranslator, type TranslationOrder } from '../../utils';
+import type { 
+  Lang, 
+  LibI18nContextValue, 
+  LibI18nProviderProps 
+} from './AppLanguageLibUiProvider.types';
 
 // Nota: el default es opcional; usamos undefined para forzar el uso dentro del provider
 const LibI18nContext = createContext<LibI18nContextValue | undefined>(undefined);
@@ -24,25 +18,6 @@ export function useLibI18n() {
   if (!ctx) throw new Error('useLibI18n must be used within LibI18nProvider');
   return ctx;
 }
-
-type GlobalTranslationPath = {
-  lang: string; // Idioma como string genérico
-  path: string; // Ruta relativa o absoluta al archivo JSON
-};
-
-type LibI18nProviderProps = {
-  /** Si lo pasas, la librería se vuelve controlada por props (o por el padre si existe) */
-  language?: Lang;
-  /** Callback para cambios de idioma disparados desde la librería */
-  onLanguageChange?: (next: Lang) => void;
-  /** Proveedor padre inyectado (opcional) - permite conectar con cualquier sistema de idioma */
-  parentLanguageProvider?: GenericLanguageProvider;
-  /** Array de rutas a archivos JSON de traducciones globales */
-  globalTranslationPaths?: GlobalTranslationPath[];
-  /** Orden de prioridad: 'component-first' (por defecto) o 'external-first' */
-  translationPriority?: 'component-first' | 'external-first';
-  children: React.ReactNode;
-};
 
 /**
  * Comportamiento INDEPENDIENTE:
@@ -54,6 +29,7 @@ type LibI18nProviderProps = {
  *    - En su defecto, dispara onLanguageChange si fue provisto
  *    - Y si nada existe, cambia su estado interno
  */
+
 // Función auxiliar para aplanar JSON anidado
 const flattenTranslations = (obj: Record<string, any>, prefix = ''): Record<string, string> => {
   const flattened: Record<string, string> = {};

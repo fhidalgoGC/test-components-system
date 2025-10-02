@@ -1,6 +1,6 @@
 import { getLocalDict } from '../i18n';
 import { makeTranslator, type TranslationOrder } from '../../../utils';
-import { useLibI18n } from '../../../providers/LibI18n.provider';
+import { useLibI18n } from '../../../providers/AppLanguageLibUiProvider/AppLanguageLibUiProvider.provider';
 
 export function useI18nMerge(
   langOverride?: string,
