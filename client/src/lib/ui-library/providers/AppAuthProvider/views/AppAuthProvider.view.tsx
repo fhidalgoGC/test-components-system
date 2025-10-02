@@ -17,6 +17,7 @@ function generateSessionId(): string {
 export function AppAuthProvider({
   children,
   sessionDuration = 3600000,
+  onLogging,
   onSessionInvalid,
 }: AppAuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -24,7 +25,7 @@ export function AppAuthProvider({
   const isProcessingEvent = useRef(false);
   const broadcastChannel = useRef<BroadcastChannel | null>(null);
 
-  const login = useCallback(() => {
+  const login = useCallback((fromBroadcastChannel: boolean = false) => {
     const sessionId = generateSessionId();
 
     saveSessionToStorage({
@@ -35,8 +36,13 @@ export function AppAuthProvider({
 
     setIsAuthenticated(true);
     isLoggingOut.current = false;
+    onLogging?.();
 
-    if (!isProcessingEvent.current && broadcastChannel.current) {
+    if (
+      !fromBroadcastChannel &&
+      !isProcessingEvent.current &&
+      broadcastChannel.current
+    ) {
       broadcastChannel.current.postMessage({
         type: "session_login",
         sessionId,
@@ -45,7 +51,7 @@ export function AppAuthProvider({
     }
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback((fromBroadcastChannel: boolean = false) => {
     if (isLoggingOut.current) return;
     isLoggingOut.current = true;
 
@@ -53,13 +59,17 @@ export function AppAuthProvider({
     setIsAuthenticated(false);
     onSessionInvalid?.();
 
-    if (!isProcessingEvent.current && broadcastChannel.current) {
+    if (
+      !fromBroadcastChannel &&
+      !isProcessingEvent.current &&
+      broadcastChannel.current
+    ) {
       broadcastChannel.current.postMessage({
         type: "session_logout",
         timestamp: Date.now(),
       });
     }
-  }, [onSessionInvalid]);
+  }, []);
 
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
@@ -71,13 +81,13 @@ export function AppAuthProvider({
         isProcessingEvent.current = true;
         const existingSession = getSessionFromStorage();
         if (existingSession) {
-          login();
+          login(true);
           isLoggingOut.current = false;
         }
         isProcessingEvent.current = false;
       } else if (type === "session_logout") {
         isProcessingEvent.current = true;
-        logout();
+        logout(true);
         isProcessingEvent.current = false;
       }
     };
@@ -100,8 +110,9 @@ export function AppAuthProvider({
     ) {
       setIsAuthenticated(true);
       isLoggingOut.current = false;
+      login(true);
     } else if (existingSession) {
-      logout();
+      logout(true);
     }
   }, [sessionDuration, logout]);
 
