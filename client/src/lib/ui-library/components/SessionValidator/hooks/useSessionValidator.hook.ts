@@ -39,7 +39,6 @@ export function useSessionValidator({
       // No session in storage, mark as invalid
       if (!hasCalledInvalidRef.current) {
         hasCalledInvalidRef.current = true;
-        clearSessionFromStorage();
         onSessionInvalid?.();
       }
     }
@@ -57,7 +56,6 @@ export function useSessionValidator({
       // Session missing - invalid
       if (!hasCalledInvalidRef.current) {
         hasCalledInvalidRef.current = true;
-        clearSessionFromStorage();
         onSessionInvalid?.();
       }
       setIsValidating(false);
@@ -68,7 +66,6 @@ export function useSessionValidator({
     if (isSessionExpired(storedSession, sessionDuration)) {
       if (!hasCalledInvalidRef.current) {
         hasCalledInvalidRef.current = true;
-        clearSessionFromStorage();
         onSessionInvalid?.();
       }
       setIsValidating(false);
