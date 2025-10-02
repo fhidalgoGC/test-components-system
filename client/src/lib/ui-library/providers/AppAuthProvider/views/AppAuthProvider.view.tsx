@@ -87,14 +87,7 @@ export function AppAuthProvider({
 
     const handleLogoutEvent = () => {
       isProcessingEvent.current = true;
-      if (isLoggingOut.current) {
-        isProcessingEvent.current = false;
-        return;
-      }
-      isLoggingOut.current = true;
-      clearSessionFromStorage();
-      setIsAuthenticated(false);
-      onSessionInvalid?.();
+      logout();
       isProcessingEvent.current = false;
     };
 
@@ -105,7 +98,7 @@ export function AppAuthProvider({
       window.removeEventListener("session_login", handleLoginEvent);
       window.removeEventListener("session_logout", handleLogoutEvent);
     };
-  }, [onSessionInvalid]);
+  }, [logout]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
