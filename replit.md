@@ -138,6 +138,17 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
   - Direct imports to component view files without intermediate index files
   - Cleaner dependency graph and better development experience
 
+## External Environment Configuration (October 2, 2025)
+- **App-Level Environment Setup**: Created external environment configuration at `client/src/enviorments/`
+  - Moved language configuration from library to application level
+  - Enables testing how library components work with external environment configs
+  - Structure: `client/src/enviorments/enviroment.ts` and `enviroment.types.ts`
+  - Contains: `AVAILABLE_LANGUAGES`, `DEFAULT_LANGUAGE`, `LANGUAGE_CONFIG`, `NUMBER_FORMAT_CONFIG`
+- **Sidebar Uses External Environment**: Updated Sidebar to consume environment from app level
+  - Import changed from `@/lib/ui-library/enviorments/enviroment` to `@/enviorments/enviroment`
+  - Demonstrates how parent application can override library defaults
+  - Language selector now uses external `AVAILABLE_LANGUAGES` configuration
+
 ## Date Utilities & Language Selector Enhancement (October 2, 2025)
 - **Multi-Provider Support for Date Utilities**: Enhanced `utils/dates/dates.util.ts` to work with multiple providers
   - Supports AppLanguageProvider (preferred), LibI18nProvider, or standalone usage
@@ -147,7 +158,7 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
   - No breaking changes - existing code continues to work
   - Enables library usage without requiring AppLanguageProvider when using LibI18nProvider
 - **Dynamic Language Selector**: Updated Sidebar language selector to load from environment configuration
-  - Language options now populated from `AVAILABLE_LANGUAGES` (enviorments/enviroment.ts)
+  - Language options now populated from `AVAILABLE_LANGUAGES`
   - Configurable via `VITE_AVAILABLE_LANGUAGES` environment variable (default: "es,en")
   - Removes hardcoded language options for better flexibility
 

@@ -4,7 +4,7 @@ import { getSidebarTranslations } from '../i18n';
 import type { SidebarProps } from '../types/Sidebar.types';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AVAILABLE_LANGUAGES } from '@/lib/ui-library/enviorments/enviroment';
+import { AVAILABLE_LANGUAGES } from '@/enviorments/enviroment';
 
 // Simple icon mapping - you can expand this as needed
 const iconMap: Record<string, any> = {
