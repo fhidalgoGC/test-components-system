@@ -1,14 +1,15 @@
 // ---------------------------------------------
 // AppLanguageLibUiProvider (PROVIDER HIJO - DENTRO DE LA LIBRERÍA)
 // ---------------------------------------------
-import React, { useMemo, useState, useEffect } from 'react';
-import { makeTranslator, type TranslationOrder } from '../../utils';
-import type { 
-  Lang, 
-  LibI18nContextValue, 
-  LibI18nProviderProps 
-} from './index.types';
-import { LibI18nContext } from './index.hook';
+import React, { useMemo } from 'react';
+import type { LibI18nContextValue, LibI18nProviderProps } from './index.types';
+import { 
+  LibI18nContext, 
+  useEffectiveLanguage, 
+  useTranslationLoader, 
+  useTranslator, 
+  useLanguageHandlers 
+} from './index.hook';
 
 /**
  * Comportamiento INDEPENDIENTE:
@@ -21,23 +22,6 @@ import { LibI18nContext } from './index.hook';
  *    - Y si nada existe, cambia su estado interno
  */
 
-// Función auxiliar para aplanar JSON anidado
-const flattenTranslations = (obj: Record<string, any>, prefix = ''): Record<string, string> => {
-  const flattened: Record<string, string> = {};
-  
-  for (const [key, value] of Object.entries(obj)) {
-    const newKey = prefix ? `${prefix}.${key}` : key;
-    
-    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-      Object.assign(flattened, flattenTranslations(value, newKey));
-    } else if (typeof value === 'string') {
-      flattened[newKey] = value;
-    }
-  }
-  
-  return flattened;
-};
-
 export function LibI18nProvider({ 
   language, 
   onLanguageChange, 
@@ -46,85 +30,26 @@ export function LibI18nProvider({
   translationPriority = 'component-first',
   children 
 }: LibI18nProviderProps) {
-  const [internal, setInternal] = useState<Lang>(language ?? 'en');
-  const [loadedTranslations, setLoadedTranslations] = useState<Record<string, Record<string, any>>>({});
+  // Hook para manejar el idioma efectivo
+  const { effectiveLang, setInternal } = useEffectiveLanguage(language, parentLanguageProvider);
 
-  // Determinar la fuente de verdad (prioridad: padre inyectado > prop controlada > interno)
-  const effectiveLang: Lang = (parentLanguageProvider?.lang as Lang) ?? language ?? internal;
+  // Hook para cargar traducciones
+  const loadedTranslations = useTranslationLoader(globalTranslationPaths);
 
-  // Si la prop `language` cambia desde afuera y no hay padre, reflejamos en interno para mantener consistencia
-  useEffect(() => {
-    if (!parentLanguageProvider && language && language !== internal) {
-      setInternal(language);
-    }
-  }, [parentLanguageProvider, language, internal]);
+  // Hook para crear el traductor
+  const { t, getExternalTranslations } = useTranslator(
+    loadedTranslations, 
+    effectiveLang, 
+    translationPriority
+  );
 
-  // Cargar traducciones dinámicamente desde las rutas
-  useEffect(() => {
-    const loadTranslations = async () => {
-      const loaded: Record<string, Record<string, any>> = {};
-      
-      for (const translationPath of globalTranslationPaths) {
-        try {
-          // Usar import dinámico para cargar el JSON
-          const module = await import(/* @vite-ignore */ translationPath.path);
-          loaded[translationPath.lang] = module.default || module;
-        } catch (error) {
-          console.warn(`Failed to load translation file for ${translationPath.lang} from ${translationPath.path}:`, error);
-          loaded[translationPath.lang] = {};
-        }
-      }
-      
-      setLoadedTranslations(loaded);
-    };
-
-    if (globalTranslationPaths.length > 0) {
-      loadTranslations();
-    }
-  }, [globalTranslationPaths]);
-
-  // Procesar traducciones globales para el idioma actual
-  const processedGlobalTranslations = useMemo(() => {
-    const globalTranslationsForLang = loadedTranslations[effectiveLang];
-    if (!globalTranslationsForLang) return {};
-    
-    // Aplanar la estructura anidada para compatibilidad con makeTranslator
-    return flattenTranslations(globalTranslationsForLang);
-  }, [loadedTranslations, effectiveLang]);
-
-  // Crear traductor usando el sistema jerárquico existente
-  const t = useMemo(() => {
-    // Convertir orden de prioridad al formato esperado por makeTranslator
-    const order: TranslationOrder = translationPriority === 'component-first' ? 'local-first' : 'global-first';
-    
-    // Por ahora sin traducciones locales específicas del provider
-    // Las traducciones locales vendrán de cada componente individual via useI18nMerge
-    const localTranslations: Record<string, string> = {};
-    
-    return makeTranslator(localTranslations, processedGlobalTranslations, order);
-  }, [processedGlobalTranslations, translationPriority]);
-
-  // Exponemos las traducciones globales para que los componentes las puedan usar
-  const getExternalTranslations = () => processedGlobalTranslations;
-
-  const resolveLabel = (label: { [key: string]: string; default: string }) => {
-    return label[effectiveLang] ?? label.default;
-  };
-
-  const setLanguage = (next: Lang) => {
-    if (parentLanguageProvider?.setLang) {
-      // Empujar hacia el provider padre inyectado
-      parentLanguageProvider.setLang(next);
-      return;
-    }
-    if (onLanguageChange) {
-      // Avisar a quien controla por props
-      onLanguageChange(next);
-      return;
-    }
-    // Modo autónomo
-    setInternal(next);
-  };
+  // Hook para manejar las funciones de idioma
+  const { setLanguage, resolveLabel } = useLanguageHandlers(
+    effectiveLang,
+    setInternal,
+    parentLanguageProvider,
+    onLanguageChange
+  );
 
   const value = useMemo<LibI18nContextValue>(
     () => ({ 
@@ -135,7 +60,7 @@ export function LibI18nProvider({
       getExternalTranslations,
       translationPriority 
     }),
-    [effectiveLang, t, getExternalTranslations, translationPriority]
+    [effectiveLang, t, setLanguage, resolveLabel, getExternalTranslations, translationPriority]
   );
 
   return <LibI18nContext.Provider value={value}>{children}</LibI18nContext.Provider>;
