@@ -1,7 +1,6 @@
-import { useMemo, useContext } from 'react';
+import { useMemo } from 'react';
 import { useAppLanguage } from '../../providers/AppLanguageProvider/index.hook';
 import { useLibI18n } from '../../providers/AppLanguageLibUiProvider/index.hook';
-import { ConfigContext } from '../../providers/AppEnviromentProvider/index.hook';
 import { LANGUAGE_CONFIG as INTERNAL_LANGUAGE_CONFIG, DEFAULT_LANGUAGE as INTERNAL_DEFAULT_LANGUAGE } from '../../enviorments/enviroment';
 
 /**
@@ -35,13 +34,16 @@ function formatDateWithPattern(date: Date, pattern: string, twoDigits: boolean):
 
 /**
  * Hook interno para obtener configuración de fecha desde cualquier provider disponible
- * Prioridad: AppLanguageProvider > LibI18nProvider > ConfigProvider > Config interno por defecto
+ * Prioridad: AppLanguageProvider > LibI18nProvider > Config interno por defecto
+ * 
+ * NOTA: AppLanguageProvider ya lee del ConfigProvider merged, por lo que este hook
+ * solo necesita leer de los providers, no directamente del ConfigContext.
  */
 function useDateConfig() {
-  // Intentar obtener de AppLanguageProvider (provider padre)
+  // Prioridad 1: AppLanguageProvider (ya incluye config merged del ConfigProvider)
   const appLang = useAppLanguage();
   
-  // Intentar obtener de LibI18nProvider (provider de librería)
+  // Prioridad 2: LibI18nProvider (también lee del ConfigProvider via useOptionalConfig)
   let libI18n;
   try {
     libI18n = useLibI18n();
@@ -50,16 +52,9 @@ function useDateConfig() {
     libI18n = null;
   }
 
-  // Intentar obtener LANGUAGE_CONFIG del ConfigProvider merged
-  const configContext = useContext(ConfigContext);
-  const mergedConfig = configContext?.config;
-
   return useMemo(() => {
-    // Determinar qué LANGUAGE_CONFIG usar (merged o interno)
-    const LANGUAGE_CONFIG = mergedConfig?.LANGUAGE_CONFIG || INTERNAL_LANGUAGE_CONFIG;
-    const DEFAULT_LANGUAGE = mergedConfig?.DEFAULT_LANGUAGE || INTERNAL_DEFAULT_LANGUAGE;
-
-    // Prioridad 1: Si existe AppLanguageProvider, usar su configuración (ya lee del ConfigProvider merged)
+    // Prioridad 1: Si existe AppLanguageProvider, usar su configuración
+    // (AppLanguageProvider ya leyó del ConfigProvider merged)
     if (appLang) {
       return {
         dateFormat: appLang.dateFormat,
@@ -68,9 +63,10 @@ function useDateConfig() {
       };
     }
 
-    // Prioridad 2: Si existe LibI18nProvider, obtener config del merged o interno
+    // Prioridad 2: Si existe LibI18nProvider, obtener config del environment interno
+    // (LibI18nProvider lee del ConfigProvider via useOptionalConfig si está disponible)
     if (libI18n) {
-      const config = LANGUAGE_CONFIG[libI18n.lang] || LANGUAGE_CONFIG[DEFAULT_LANGUAGE];
+      const config = INTERNAL_LANGUAGE_CONFIG[libI18n.lang] || INTERNAL_LANGUAGE_CONFIG[INTERNAL_DEFAULT_LANGUAGE];
       return {
         dateFormat: config.dateFormat,
         twoDigits: config.twoDigits,
@@ -78,14 +74,14 @@ function useDateConfig() {
       };
     }
 
-    // Prioridad 3: Usar configuración del ConfigProvider merged o interno por defecto
-    const defaultConfig = LANGUAGE_CONFIG[DEFAULT_LANGUAGE];
+    // Prioridad 3: Usar configuración del environment interno por defecto
+    const defaultConfig = INTERNAL_LANGUAGE_CONFIG[INTERNAL_DEFAULT_LANGUAGE];
     return {
       dateFormat: defaultConfig.dateFormat,
       twoDigits: defaultConfig.twoDigits,
-      lang: DEFAULT_LANGUAGE,
+      lang: INTERNAL_DEFAULT_LANGUAGE,
     };
-  }, [appLang, libI18n, mergedConfig]);
+  }, [appLang, libI18n]);
 }
 
 /**
