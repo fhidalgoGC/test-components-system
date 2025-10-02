@@ -7,6 +7,7 @@ import {
   LibI18nProvider,
   useAppLanguage,
 } from "@/lib/ui-library/providers";
+import { AppAuthProvider } from "@/lib/ui-library/providers/AppAuthProvider";
 import { Router } from "@/routes";
 import { environment } from "@/enviorments/enviroment";
 
@@ -28,13 +29,22 @@ function AppContent() {
 }
 
 function App() {
+  const handleSessionInvalid = () => {
+    alert("Salio");
+  };
+
   return (
     <ThemeProvider>
-      <ConfigProvider parentConfig={environment} priority="auto">
-        <AppLanguageProvider initial="en">
-          <AppContent />
-        </AppLanguageProvider>
-      </ConfigProvider>
+      <AppAuthProvider 
+        sessionDuration={60000}
+        onSessionInvalid={handleSessionInvalid}
+      >
+        <ConfigProvider parentConfig={environment} priority="auto">
+          <AppLanguageProvider initial="en">
+            <AppContent />
+          </AppLanguageProvider>
+        </ConfigProvider>
+      </AppAuthProvider>
     </ThemeProvider>
   );
 }
