@@ -1,4 +1,4 @@
-import type { LanguageConfig } from './enviroment.types';
+import type { LanguageConfig } from "./enviroment.types";
 
 // Available languages configuration - can be overridden via environment
 const availableLanguagesEnv =
@@ -26,26 +26,10 @@ export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
   // pero solo los definidos en AVAILABLE_LANGUAGES estarán activos
 };
 
-// Number format configuration
-export const NUMBER_FORMAT_CONFIG = {
-  NUMBER_FORMAT_PATTERN:
-    import.meta.env.VITE_NUMBER_FORMAT_PATTERN || ("0,000.00" as const),
-  NUMBER_ROUND_MODE:
-    import.meta.env.VITE_NUMBER_ROUND_MODE || ("truncate" as const),
-
-  NUMBER_LOCATE: import.meta.env.VITE_NUMBER_LOCATE || "en-US",
-
-  NUMBER_MIN_DECIMALS: Number(import.meta.env.VITE_NUMBER_MIN_DECIMALS) || 2,
-
-  NUMBER_MAX_DECIMALS: Number(import.meta.env.VITE_NUMBER_MAX_DECIMALS) || 4,
-};
-
 export const environment = {
   // Language Configuration
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE,
-  LANGUAGE_CONFIG,
-  NUMBER_FORMAT_CONFIG,
 
   // Development environment detection
   IS_DEVELOPMENT:
