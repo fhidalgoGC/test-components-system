@@ -1,0 +1,58 @@
+// useFormattedDate.ts
+import { useMemo } from "react";
+import { useLanguage } from "./language-context";
+
+type FormatOpts = Intl.DateTimeFormatOptions & {
+  /**
+   * Si quieres forzar una TZ distinta a la del navegador,
+   * puedes pasarla aquí (tiene prioridad sobre el provider).
+   */
+  timeZone?: string;
+};
+
+function normalizeDate(input: Date | string | number | null | undefined): Date | null {
+  if (!input && input !== 0) return null;
+  if (input instanceof Date) return isNaN(input.getTime()) ? null : input;
+  const d = new Date(input);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+/**
+ * Devuelve una función estable para formatear fechas según el idioma del provider.
+ * Útil cuando vas a formatear muchas fechas en una lista.
+ */
+export function useDateFormatter(defaultOpts?: FormatOpts) {
+  const { locale, timeZone } = useLanguage();
+
+  // Clave estable para las opciones (evita recrear el formatter si no cambian realmente)
+  const optsKey = useMemo(() => JSON.stringify({ ...(defaultOpts || {}), timeZone: defaultOpts?.timeZone ?? timeZone }), [defaultOpts, timeZone]);
+
+  const formatter = useMemo(() => {
+    const base: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      ...(defaultOpts || {}),
+    };
+    // prioridad: opts.timeZone > provider.timeZone > (TZ local)
+    if (defaultOpts?.timeZone) base.timeZone = defaultOpts.timeZone;
+    else if (timeZone) base.timeZone = timeZone;
+
+    return new Intl.DateTimeFormat(locale, base);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale, optsKey]); // usamos la clave estable para evitar dependencias profundas
+
+  return (dateInput: Date | string | number | null | undefined) => {
+    const d = normalizeDate(dateInput);
+    return d ? formatter.format(d) : "";
+  };
+}
+
+/**
+ * Devuelve directamente el string formateado para una fecha específica.
+ */
+export function useFormattedDate(dateInput: Date | string | number | null | undefined, opts?: FormatOpts) {
+  const format = useDateFormatter(opts);
+  const d = useMemo(() => normalizeDate(dateInput), [dateInput]);
+  return useMemo(() => (d ? format(d) : ""), [d, format]);
+}
