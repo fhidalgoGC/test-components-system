@@ -5,6 +5,7 @@ import LibraryDashboard from "@/pages/library-dashboard";
 import TagSelectorDemo from "@/pages/external-app-demo";
 import ExternalAppDemo from "@/pages/external-app-demo";
 import DateDemo from "@/pages/date-demo";
+import { AuthTestPage } from "@/pages/auth-test";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -52,6 +53,12 @@ export function Router() {
           headerDescription: "Testing date formatting with different languages",
           showActionButtons: false
         };
+      case '/auth-test':
+        return {
+          headerTitle: "Auth Test",
+          headerDescription: "Testing AppAuthProvider and SessionValidator",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -68,6 +75,7 @@ export function Router() {
         <Route path="/components/tag-selector" component={TagSelectorDemo} />
         <Route path="/external-app-demo" component={ExternalAppDemo} />
         <Route path="/date-demo" component={DateDemo} />
+        <Route path="/auth-test" component={AuthTestPage} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>
