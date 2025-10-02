@@ -1,10 +1,20 @@
-# LibI18nProvider - Documentación de Uso
+# AppLanguageLibUiProvider (LibI18nProvider) - Documentación de Uso
 
-**Version: 1.0.5**
+**Version: 2.0.0**
 
 ## 📖 Descripción
 
 `LibI18nProvider` es el proveedor de internacionalización específico de la librería UI. Maneja traducciones locales de componentes y se integra con proveedores de idioma externos de la aplicación padre.
+
+## 🏗️ Estructura Modular
+
+```
+AppLanguageLibUiProvider/
+├── index.provider.tsx   # LibI18nProvider component
+├── index.types.ts       # TypeScript types
+├── index.hook.ts        # Custom hooks (useLibI18n, useParentLanguageInjection)
+└── README.md           # This documentation
+```
 
 ## 🏗️ Arquitectura
 
@@ -69,7 +79,7 @@ type LibI18nContextValue = {
 ### **1. Uso Básico (Sin Provider Padre)**
 
 ```jsx
-import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers/LibI18n.provider';
+import { LibI18nProvider, useLibI18n } from 'GC-UI-COMPONENTS';
 
 function MyApp() {
   return (
@@ -97,8 +107,7 @@ function MyLibraryComponent() {
 ### **2. Uso con Provider Padre (Recomendado)**
 
 ```jsx
-import { LibI18nProvider } from '@/lib/ui-library/providers/LibI18n.provider';
-import { useAppLanguage } from './providers/AppLanguageProvider';
+import { LibI18nProvider, useAppLanguage } from 'GC-UI-COMPONENTS';
 
 function MyComponentWithLibrary() {
   const app = useAppLanguage(); // Obtener provider padre
@@ -351,6 +360,11 @@ function ConditionalTranslations() {
 
 ## 🔗 Enlaces Relacionados
 
-- **README-IA--LANGUAJE.md**: Documentación completa del sistema de idiomas
-- **TagSelector README-IA.md**: Ejemplo de uso en componentes específicos
-- **language.types.ts**: Definiciones de tipos TypeScript
+- **../../README-IA--LANGUAJE.md**: Documentación completa del sistema de idiomas
+- **../AppLanguageProvider/**: Provider padre de aplicación
+- **../AppEnviromentProvider/**: Sistema de configuración de la librería
+- **../../components/TagSelector/README-IA.md**: Ejemplo de uso en componentes específicos
+
+---
+
+**Version: 2.0.0** | **Última actualización: Octubre 2025**
