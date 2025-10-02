@@ -22,6 +22,7 @@ export function AppAuthProvider({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const isLoggingOut = useRef(false);
   const isProcessingEvent = useRef(false);
+  const broadcastChannel = useRef<BroadcastChannel | null>(null);
 
   const login = useCallback(() => {
     const sessionId = generateSessionId();
@@ -35,12 +36,12 @@ export function AppAuthProvider({
     setIsAuthenticated(true);
     isLoggingOut.current = false;
 
-    if (!isProcessingEvent.current) {
-      window.dispatchEvent(
-        new CustomEvent("session_login", {
-          detail: { sessionId, timestamp: Date.now() },
-        })
-      );
+    if (!isProcessingEvent.current && broadcastChannel.current) {
+      broadcastChannel.current.postMessage({
+        type: "session_login",
+        sessionId,
+        timestamp: Date.now(),
+      });
     }
   }, []);
 
@@ -52,12 +53,11 @@ export function AppAuthProvider({
     setIsAuthenticated(false);
     onSessionInvalid?.();
 
-    if (!isProcessingEvent.current) {
-      window.dispatchEvent(
-        new CustomEvent("session_logout", {
-          detail: { timestamp: Date.now() },
-        })
-      );
+    if (!isProcessingEvent.current && broadcastChannel.current) {
+      broadcastChannel.current.postMessage({
+        type: "session_logout",
+        timestamp: Date.now(),
+      });
     }
   }, [onSessionInvalid]);
 
@@ -75,28 +75,31 @@ export function AppAuthProvider({
   }, [sessionDuration, logout]);
 
   useEffect(() => {
-    const handleLoginEvent = () => {
-      isProcessingEvent.current = true;
-      const existingSession = getSessionFromStorage();
-      if (existingSession) {
-        setIsAuthenticated(true);
-        isLoggingOut.current = false;
+    broadcastChannel.current = new BroadcastChannel("app_auth_channel");
+
+    broadcastChannel.current.onmessage = (event) => {
+      const { type } = event.data;
+
+      if (type === "session_login") {
+        isProcessingEvent.current = true;
+        const existingSession = getSessionFromStorage();
+        if (existingSession) {
+          setIsAuthenticated(true);
+          isLoggingOut.current = false;
+        }
+        isProcessingEvent.current = false;
+      } else if (type === "session_logout") {
+        isProcessingEvent.current = true;
+        logout();
+        isProcessingEvent.current = false;
       }
-      isProcessingEvent.current = false;
     };
-
-    const handleLogoutEvent = () => {
-      isProcessingEvent.current = true;
-      logout();
-      isProcessingEvent.current = false;
-    };
-
-    window.addEventListener("session_login", handleLoginEvent);
-    window.addEventListener("session_logout", handleLogoutEvent);
 
     return () => {
-      window.removeEventListener("session_login", handleLoginEvent);
-      window.removeEventListener("session_logout", handleLogoutEvent);
+      if (broadcastChannel.current) {
+        broadcastChannel.current.close();
+        broadcastChannel.current = null;
+      }
     };
   }, [logout]);
 
