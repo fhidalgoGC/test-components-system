@@ -2,6 +2,7 @@
 // AppLanguageProvider (PROVIDER PADRE - APLICACIÓN)
 // ---------------------------------------------
 import React, { createContext, useContext, useMemo, useState } from 'react';
+import { LANGUAGE_CONFIG } from '../enviorments/enviroment';
 
 type AppLanguage = 'es' | 'en';
 
@@ -17,19 +18,6 @@ type AppLanguageContextValue = {
   dateFormat: string;
   twoDigits: boolean;
   config: LanguageConfig;
-};
-
-const LANGUAGE_CONFIG: Record<AppLanguage, LanguageConfig> = {
-  es: {
-    locale: 'es',
-    dateFormat: 'dd/MM/yyyy',
-    twoDigits: true,
-  },
-  en: {
-    locale: 'en',
-    dateFormat: 'MM/dd/yyyy',
-    twoDigits: true,
-  },
 };
 
 const AppLanguageContext = createContext<AppLanguageContextValue | undefined>(undefined);

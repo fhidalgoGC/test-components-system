@@ -1,10 +1,17 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { ConfigProviderProps, ConfigContextType, LibraryConfig, ConfigPriority } from './config.types';
-import { environment } from './enviroment';
+import { createContext, useContext, useState, useEffect } from "react";
+import {
+  ConfigProviderProps,
+  ConfigContextType,
+  LibraryConfig,
+  ConfigPriority,
+} from "./config.types";
+import { environment } from "./enviroment";
 
 // Default configuration from library with safe fallbacks
 const defaultLibraryConfig: LibraryConfig = {
-  // API Config
+  // Language Configuration
+  LANGUAGE_CONFIG: environment.LANGUAGE_CONFIG,
+  
   // Development environment
   IS_DEVELOPMENT: environment.IS_DEVELOPMENT || false,
 };
@@ -16,23 +23,28 @@ const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 function mergeConfigs(
   libraryConfig: LibraryConfig,
   parentConfig: Partial<LibraryConfig> = {},
-  priority: ConfigPriority = 'auto'
+  priority: ConfigPriority = "auto",
 ): LibraryConfig {
   switch (priority) {
-    case 'parent':
+    case "parent":
       // Parent always wins when defined
       return { ...libraryConfig, ...parentConfig };
-    
-    case 'library':
+
+    case "library":
       // Library always wins, parent is ignored
       return libraryConfig;
-    
-    case 'auto':
+
+    case "auto":
     default:
       // Intelligent merging: parent wins only for defined non-empty values
       const merged = { ...libraryConfig };
       Object.entries(parentConfig).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== '') {
+        // Check if value is defined and not null
+        if (value !== undefined && value !== null) {
+          // For string values, also check if not empty
+          if (typeof value === 'string' && value === "") {
+            return; // Skip empty strings
+          }
           (merged as any)[key] = value;
         }
       });
@@ -44,11 +56,11 @@ function mergeConfigs(
 export function ConfigProvider({
   children,
   parentConfig = {},
-  priority = 'auto',
-  enableOverrides = true
+  priority = "auto",
+  enableOverrides = true,
 }: ConfigProviderProps) {
   const [config, setConfig] = useState<LibraryConfig>(() =>
-    mergeConfigs(defaultLibraryConfig, parentConfig, priority)
+    mergeConfigs(defaultLibraryConfig, parentConfig, priority),
   );
 
   // Update config when parent config or priority changes
@@ -60,7 +72,7 @@ export function ConfigProvider({
 
   const updateConfig = (newConfig: Partial<LibraryConfig>) => {
     if (enableOverrides) {
-      setConfig(prev => mergeConfigs(prev, newConfig, 'parent'));
+      setConfig((prev) => mergeConfigs(prev, newConfig, "parent"));
     }
   };
 
@@ -72,7 +84,7 @@ export function ConfigProvider({
     config,
     updateConfig,
     resetConfig,
-    priority
+    priority,
   };
 
   return (
@@ -86,7 +98,7 @@ export function ConfigProvider({
 export function useConfig(): ConfigContextType {
   const context = useContext(ConfigContext);
   if (!context) {
-    throw new Error('useConfig must be used within a ConfigProvider');
+    throw new Error("useConfig must be used within a ConfigProvider");
   }
   return context;
 }
@@ -94,7 +106,7 @@ export function useConfig(): ConfigContextType {
 // Hook to get specific config value with fallback
 export function useConfigValue<K extends keyof LibraryConfig>(
   key: K,
-  fallback?: LibraryConfig[K]
+  fallback?: LibraryConfig[K],
 ): LibraryConfig[K] {
   const { config } = useConfig();
   return config[key] ?? fallback ?? defaultLibraryConfig[key];

@@ -1,5 +1,15 @@
+// Language configuration type
+export type LanguageConfig = {
+  locale: string;
+  dateFormat: string;
+  twoDigits: boolean;
+};
+
 // Configuration types for hybrid environment management
 export interface LibraryConfig {
+  // Language Configuration
+  LANGUAGE_CONFIG: Record<string, LanguageConfig>;
+  
   // Development environment detection
   IS_DEVELOPMENT: boolean;
 }

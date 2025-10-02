@@ -1,4 +1,28 @@
+// Language configuration type
+type LanguageConfig = {
+  locale: string;
+  dateFormat: string;
+  twoDigits: boolean;
+};
+
+// Language configurations
+export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
+  es: {
+    locale: import.meta.env.VITE_LOCALE_ES || 'es',
+    dateFormat: import.meta.env.VITE_DATE_FORMAT_ES || 'dd/MM/yyyy',
+    twoDigits: import.meta.env.VITE_DATE_TWO_DIGITS_ES !== 'false',
+  },
+  en: {
+    locale: import.meta.env.VITE_LOCALE_EN || 'en',
+    dateFormat: import.meta.env.VITE_DATE_FORMAT_EN || 'MM/dd/yyyy',
+    twoDigits: import.meta.env.VITE_DATE_TWO_DIGITS_EN !== 'false',
+  },
+};
+
 export const environment = {
+  // Language Configuration
+  LANGUAGE_CONFIG,
+  
   // Number Formatting
   NUMBER_FORMAT_PATTERN:
     import.meta.env.VITE_NUMBER_FORMAT_PATTERN || ("0,000.00" as const),
