@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import { useAppLanguage } from '../../providers/AppLanguageProvider/index.hook';
+import { useLibI18n } from '../../providers/AppLanguageLibUiProvider/index.hook';
+import { LANGUAGE_CONFIG, DEFAULT_LANGUAGE } from '../../enviorments/enviroment';
 
 /**
  * Normaliza diferentes tipos de entrada de fecha a un objeto Date válido o null
@@ -31,23 +33,73 @@ function formatDateWithPattern(date: Date, pattern: string, twoDigits: boolean):
 }
 
 /**
- * Hook que devuelve una función estable para formatear fechas según el idioma del provider.
- * Útil cuando vas a formatear muchas fechas en una lista.
+ * Hook interno para obtener configuración de fecha desde cualquier provider disponible
+ * Prioridad: AppLanguageProvider > LibI18nProvider > Config por defecto
+ */
+function useDateConfig() {
+  // Intentar obtener de AppLanguageProvider (provider padre)
+  const appLang = useAppLanguage();
+  
+  // Intentar obtener de LibI18nProvider (provider de librería)
+  let libI18n;
+  try {
+    libI18n = useLibI18n();
+  } catch {
+    // LibI18nProvider no está disponible
+    libI18n = null;
+  }
+
+  return useMemo(() => {
+    // Prioridad 1: Si existe AppLanguageProvider, usar su configuración
+    if (appLang) {
+      return {
+        dateFormat: appLang.dateFormat,
+        twoDigits: appLang.twoDigits,
+        lang: appLang.lang,
+      };
+    }
+
+    // Prioridad 2: Si existe LibI18nProvider, obtener config del environment
+    if (libI18n) {
+      const config = LANGUAGE_CONFIG[libI18n.lang] || LANGUAGE_CONFIG[DEFAULT_LANGUAGE];
+      return {
+        dateFormat: config.dateFormat,
+        twoDigits: config.twoDigits,
+        lang: libI18n.lang,
+      };
+    }
+
+    // Prioridad 3: Usar configuración por defecto
+    const defaultConfig = LANGUAGE_CONFIG[DEFAULT_LANGUAGE];
+    return {
+      dateFormat: defaultConfig.dateFormat,
+      twoDigits: defaultConfig.twoDigits,
+      lang: DEFAULT_LANGUAGE,
+    };
+  }, [appLang, libI18n]);
+}
+
+/**
+ * Hook que devuelve una función estable para formatear fechas.
+ * Funciona con AppLanguageProvider, LibI18nProvider o standalone.
  * 
  * @example
  * ```tsx
+ * // Con AppLanguageProvider
+ * const formatter = useDateFormatter();
+ * const formattedDate = formatter(new Date());
+ * 
+ * // Con LibI18nProvider (obtiene config del environment)
+ * const formatter = useDateFormatter();
+ * const formattedDate = formatter(new Date());
+ * 
+ * // Sin provider (usa config por defecto)
  * const formatter = useDateFormatter();
  * const formattedDate = formatter(new Date());
  * ```
  */
 export function useDateFormatter() {
-  const appLang = useAppLanguage();
-  
-  if (!appLang) {
-    throw new Error('useDateFormatter must be used within AppLanguageProvider');
-  }
-
-  const { dateFormat, twoDigits } = appLang;
+  const { dateFormat, twoDigits } = useDateConfig();
 
   return useMemo(
     () => (dateInput: Date | string | number | null | undefined) => {
@@ -61,13 +113,14 @@ export function useDateFormatter() {
 
 /**
  * Hook que devuelve directamente el string formateado para una fecha específica.
- * Reactivo al cambio de idioma del AppLanguageProvider.
+ * Funciona con AppLanguageProvider, LibI18nProvider o standalone.
  * 
  * @example
  * ```tsx
  * const formattedDate = useFormattedDate(new Date());
- * // Español: "05/01/2024"
- * // Inglés: "01/05/2024"
+ * // Con AppLanguageProvider español: "05/01/2024"
+ * // Con LibI18nProvider español: "05/01/2024"
+ * // Sin provider (default inglés): "01/05/2024"
  * ```
  */
 export function useFormattedDate(
@@ -95,4 +148,18 @@ export function formatDate(
   const date = normalizeDate(dateInput);
   if (!date) return '';
   return formatDateWithPattern(date, dateFormat, twoDigits);
+}
+
+/**
+ * Obtener configuración de fecha para un idioma específico
+ * Útil para formateo manual sin hooks
+ * 
+ * @example
+ * ```ts
+ * const esConfig = getDateConfigForLanguage('es');
+ * const formatted = formatDate(new Date(), esConfig.dateFormat, esConfig.twoDigits);
+ * ```
+ */
+export function getDateConfigForLanguage(lang: string) {
+  return LANGUAGE_CONFIG[lang] || LANGUAGE_CONFIG[DEFAULT_LANGUAGE];
 }

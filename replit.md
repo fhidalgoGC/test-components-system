@@ -138,6 +138,15 @@ This runs the Vite development server on `http://localhost:5000` with all UI com
   - Direct imports to component view files without intermediate index files
   - Cleaner dependency graph and better development experience
 
+## Date Utilities Flexibility Enhancement (October 2, 2025)
+- **Multi-Provider Support for Date Utilities**: Enhanced `utils/dates/dates.util.ts` to work with multiple providers
+  - Supports AppLanguageProvider (preferred), LibI18nProvider, or standalone usage
+  - Automatic fallback system: AppLanguageProvider > LibI18nProvider + environment config > default config
+  - Added `useDateConfig()` internal hook for intelligent provider detection
+  - Added `getDateConfigForLanguage()` utility for manual date formatting
+  - No breaking changes - existing code continues to work
+  - Enables library usage without requiring AppLanguageProvider when using LibI18nProvider
+
 ## Provider Architecture Modularization (October 2, 2025)
 - **Complete Provider Restructuring**: Applied modular folder pattern to all providers
   - **AppLanguageProvider/** - Parent app language provider (20 lines)
