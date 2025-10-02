@@ -24,8 +24,10 @@ export function AppAuthProvider({
       isLoggingOut.current = false;
     } else if (existingSession) {
       clearSessionFromStorage();
+      setIsAuthenticated(false);
+      onSessionInvalid?.();
     }
-  }, [sessionDuration]);
+  }, [sessionDuration, onSessionInvalid]);
 
   const login = useCallback(() => {
     const sessionId = generateSessionId();
