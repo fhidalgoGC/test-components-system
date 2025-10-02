@@ -1,23 +1,14 @@
 // ---------------------------------------------
 // AppLanguageLibUiProvider (PROVIDER HIJO - DENTRO DE LA LIBRERÍA)
 // ---------------------------------------------
-import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
-import type { GenericLanguageProvider } from '../../types/language.types';
+import React, { useMemo, useState, useEffect } from 'react';
 import { makeTranslator, type TranslationOrder } from '../../utils';
 import type { 
   Lang, 
   LibI18nContextValue, 
   LibI18nProviderProps 
 } from './index.types';
-
-// Nota: el default es opcional; usamos undefined para forzar el uso dentro del provider
-const LibI18nContext = createContext<LibI18nContextValue | undefined>(undefined);
-
-export function useLibI18n() {
-  const ctx = useContext(LibI18nContext);
-  if (!ctx) throw new Error('useLibI18n must be used within LibI18nProvider');
-  return ctx;
-}
+import { LibI18nContext } from './index.hook';
 
 /**
  * Comportamiento INDEPENDIENTE:
@@ -148,10 +139,4 @@ export function LibI18nProvider({
   );
 
   return <LibI18nContext.Provider value={value}>{children}</LibI18nContext.Provider>;
-}
-
-// Hook conveniente para inyectar automáticamente el proveedor padre
-// Este hook puede ser usado por la app padre para conectar su sistema de idioma
-export function useParentLanguageInjection(parentProvider: GenericLanguageProvider | null) {
-  return parentProvider ? { parentLanguageProvider: parentProvider } : {};
 }
