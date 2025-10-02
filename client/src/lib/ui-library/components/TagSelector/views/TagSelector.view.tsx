@@ -5,7 +5,7 @@ import type { SelectedTagItem, TagSelectorSize } from '../types';
 import type { MultiLanguageLabel } from '../../../types/language.types';
 import { TagSelectorProvider, useTagSelectorContext } from '../providers';
 import { containerClasses, chipClasses } from '../css/TagSelector.module';
-import { useLibI18n } from '../../../providers/AppLanguageLibUiProvider/AppLanguageLibUiProvider.provider';
+import { useLibI18n } from '../../../providers/AppLanguageLibUiProvider/index.provider';
 
 // Internal view component that handles rendering
 const TagSelectorViewInternal: React.FC<{

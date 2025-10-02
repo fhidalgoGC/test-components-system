@@ -8,7 +8,7 @@ import type {
   Lang, 
   LibI18nContextValue, 
   LibI18nProviderProps 
-} from './AppLanguageLibUiProvider.types';
+} from './index.types';
 
 // Nota: el default es opcional; usamos undefined para forzar el uso dentro del provider
 const LibI18nContext = createContext<LibI18nContextValue | undefined>(undefined);
