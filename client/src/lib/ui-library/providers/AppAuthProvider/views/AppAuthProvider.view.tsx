@@ -62,17 +62,6 @@ export function AppAuthProvider({
   }, [onSessionInvalid]);
 
   useEffect(() => {
-    broadcastChannel.current = new BroadcastChannel("app_auth_channel");
-
-    return () => {
-      if (broadcastChannel.current) {
-        broadcastChannel.current.close();
-        broadcastChannel.current = null;
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     const existingSession = getSessionFromStorage();
     if (
       existingSession &&
@@ -86,9 +75,9 @@ export function AppAuthProvider({
   }, [sessionDuration, logout]);
 
   useEffect(() => {
-    if (!broadcastChannel.current) return;
+    broadcastChannel.current = new BroadcastChannel("app_auth_channel");
 
-    const handleMessage = (event: MessageEvent) => {
+    broadcastChannel.current.onmessage = (event) => {
       const { type } = event.data;
 
       if (type === "session_login") {
@@ -106,7 +95,12 @@ export function AppAuthProvider({
       }
     };
 
-    broadcastChannel.current.onmessage = handleMessage;
+    return () => {
+      if (broadcastChannel.current) {
+        broadcastChannel.current.close();
+        broadcastChannel.current = null;
+      }
+    };
   }, [logout]);
 
   const contextValue: AppAuthContextValue = {
