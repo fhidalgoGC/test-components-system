@@ -215,10 +215,6 @@ function DateDemoContent() {
 }
 
 export function DateDemoView() {
-  // Wrap with ConfigProvider to test environment override
-  return (
-    <ConfigProvider parentConfig={environment} priority="auto">
-      <DateDemoContent />
-    </ConfigProvider>
-  );
+  // ConfigProvider is now at App level, no need to wrap here
+  return <DateDemoContent />;
 }

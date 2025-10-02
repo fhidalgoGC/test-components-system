@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
 import { useAppLanguage } from '../../providers/AppLanguageProvider/index.hook';
 import { useLibI18n } from '../../providers/AppLanguageLibUiProvider/index.hook';
-import { LANGUAGE_CONFIG, DEFAULT_LANGUAGE } from '../../enviorments/enviroment';
+import { ConfigContext } from '../../providers/AppEnviromentProvider/index.hook';
+import { LANGUAGE_CONFIG as INTERNAL_LANGUAGE_CONFIG, DEFAULT_LANGUAGE as INTERNAL_DEFAULT_LANGUAGE } from '../../enviorments/enviroment';
 
 /**
  * Normaliza diferentes tipos de entrada de fecha a un objeto Date válido o null
@@ -34,7 +35,7 @@ function formatDateWithPattern(date: Date, pattern: string, twoDigits: boolean):
 
 /**
  * Hook interno para obtener configuración de fecha desde cualquier provider disponible
- * Prioridad: AppLanguageProvider > LibI18nProvider > Config por defecto
+ * Prioridad: AppLanguageProvider > LibI18nProvider > ConfigProvider > Config interno por defecto
  */
 function useDateConfig() {
   // Intentar obtener de AppLanguageProvider (provider padre)
@@ -49,8 +50,16 @@ function useDateConfig() {
     libI18n = null;
   }
 
+  // Intentar obtener LANGUAGE_CONFIG del ConfigProvider merged
+  const configContext = useContext(ConfigContext);
+  const mergedConfig = configContext?.config;
+
   return useMemo(() => {
-    // Prioridad 1: Si existe AppLanguageProvider, usar su configuración
+    // Determinar qué LANGUAGE_CONFIG usar (merged o interno)
+    const LANGUAGE_CONFIG = mergedConfig?.LANGUAGE_CONFIG || INTERNAL_LANGUAGE_CONFIG;
+    const DEFAULT_LANGUAGE = mergedConfig?.DEFAULT_LANGUAGE || INTERNAL_DEFAULT_LANGUAGE;
+
+    // Prioridad 1: Si existe AppLanguageProvider, usar su configuración (ya lee del ConfigProvider merged)
     if (appLang) {
       return {
         dateFormat: appLang.dateFormat,
@@ -59,7 +68,7 @@ function useDateConfig() {
       };
     }
 
-    // Prioridad 2: Si existe LibI18nProvider, obtener config del environment
+    // Prioridad 2: Si existe LibI18nProvider, obtener config del merged o interno
     if (libI18n) {
       const config = LANGUAGE_CONFIG[libI18n.lang] || LANGUAGE_CONFIG[DEFAULT_LANGUAGE];
       return {
@@ -69,14 +78,14 @@ function useDateConfig() {
       };
     }
 
-    // Prioridad 3: Usar configuración por defecto
+    // Prioridad 3: Usar configuración del ConfigProvider merged o interno por defecto
     const defaultConfig = LANGUAGE_CONFIG[DEFAULT_LANGUAGE];
     return {
       dateFormat: defaultConfig.dateFormat,
       twoDigits: defaultConfig.twoDigits,
       lang: DEFAULT_LANGUAGE,
     };
-  }, [appLang, libI18n]);
+  }, [appLang, libI18n, mergedConfig]);
 }
 
 /**
@@ -152,7 +161,8 @@ export function formatDate(
 
 /**
  * Obtener configuración de fecha para un idioma específico
- * Útil para formateo manual sin hooks
+ * NOTA: Esta función usa el environment interno. Para usar el merged, usa hooks de React.
+ * Útil para formateo manual sin hooks fuera de componentes React.
  * 
  * @example
  * ```ts
@@ -161,5 +171,5 @@ export function formatDate(
  * ```
  */
 export function getDateConfigForLanguage(lang: string) {
-  return LANGUAGE_CONFIG[lang] || LANGUAGE_CONFIG[DEFAULT_LANGUAGE];
+  return INTERNAL_LANGUAGE_CONFIG[lang] || INTERNAL_LANGUAGE_CONFIG[INTERNAL_DEFAULT_LANGUAGE];
 }
