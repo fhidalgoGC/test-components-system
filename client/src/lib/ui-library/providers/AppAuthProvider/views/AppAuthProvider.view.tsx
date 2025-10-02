@@ -92,7 +92,7 @@ export function AppAuthProvider({
         broadcastChannel.current = null;
       }
     };
-  }, [onSessionInvalid]);
+  }, []);
 
   useEffect(() => {
     const existingSession = getSessionFromStorage();
