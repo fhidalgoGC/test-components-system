@@ -43,11 +43,17 @@ function formatDateWithPattern(date: Date, pattern: string, twoDigits: boolean):
 function useDateConfig() {
   const { lang, config } = useLanguageProviderResolver();
   
-  return useMemo(() => ({
-    dateFormat: config?.dateFormat || 'MM/dd/yyyy',
-    twoDigits: config?.twoDigits ?? true,
-    lang,
-  }), [config, lang]);
+  return useMemo(() => {
+    // Fallback de configuración de fechas si no existe en el config
+    const dateFormat = config?.dateFormat || 'MM/dd/yyyy';
+    const twoDigits = config?.twoDigits ?? true;
+    
+    return {
+      dateFormat,
+      twoDigits,
+      lang,
+    };
+  }, [config, lang]);
 }
 
 /**

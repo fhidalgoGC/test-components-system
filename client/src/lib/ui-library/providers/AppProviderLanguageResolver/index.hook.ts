@@ -95,10 +95,6 @@ export function useLanguageProviderResolver(): ResolvedLanguageProvider {
   // Fallback final si nada existe (no debería pasar en condiciones normales)
   return {
     lang: 'en',
-    config: {
-      dateFormat: 'MM/dd/yyyy',
-      twoDigits: true,
-      locale: 'en-US',
-    },
+    config: {},
   };
 }
