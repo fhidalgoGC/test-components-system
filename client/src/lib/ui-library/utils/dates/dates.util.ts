@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useAppLanguage } from '../../providers/AppLanguageProvider';
+import { useAppLanguage } from '../../providers/AppLanguageProvider/index.hook';
 
 /**
  * Normaliza diferentes tipos de entrada de fecha a un objeto Date válido o null
