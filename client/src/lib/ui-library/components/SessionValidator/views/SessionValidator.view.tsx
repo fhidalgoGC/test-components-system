@@ -7,18 +7,14 @@ export const SessionValidatorView = ({
   sessionDuration,
   checkInterval,
   autoActivateIfSession = true,
-  onSessionExpired,
   onSessionInvalid,
-  onSessionValidated,
 }: SessionValidatorProps) => {
   useSessionValidator({
     enabled,
     sessionDuration,
     checkInterval,
     autoActivateIfSession,
-    onSessionExpired,
     onSessionInvalid,
-    onSessionValidated,
   });
 
   return <>{children}</>;

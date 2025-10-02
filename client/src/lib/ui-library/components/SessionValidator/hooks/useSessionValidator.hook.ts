@@ -17,14 +17,11 @@ export function useSessionValidator({
   sessionDuration = DEFAULT_SESSION_DURATION,
   checkInterval = DEFAULT_CHECK_INTERVAL,
   autoActivateIfSession = true,
-  onSessionExpired,
   onSessionInvalid,
-  onSessionValidated,
 }: Omit<SessionValidatorProps, 'children'>) {
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const hasCalledExpiredRef = useRef(false);
   const hasCalledInvalidRef = useRef(false);
 
   // Determine if validation should be active
@@ -38,7 +35,6 @@ export function useSessionValidator({
     
     if (storedSession) {
       setSessionData(storedSession);
-      onSessionValidated?.(storedSession);
     } else {
       // No session in storage, mark as invalid
       if (!hasCalledInvalidRef.current) {
@@ -46,7 +42,7 @@ export function useSessionValidator({
         onSessionInvalid?.();
       }
     }
-  }, [isActive, onSessionValidated, onSessionInvalid]);
+  }, [isActive, onSessionInvalid]);
 
   // Validation function
   const validateSession = useCallback(() => {
@@ -69,10 +65,10 @@ export function useSessionValidator({
 
     // Check if session is expired
     if (isSessionExpired(storedSession, sessionDuration)) {
-      if (!hasCalledExpiredRef.current) {
-        hasCalledExpiredRef.current = true;
+      if (!hasCalledInvalidRef.current) {
+        hasCalledInvalidRef.current = true;
         clearSessionFromStorage();
-        onSessionExpired?.();
+        onSessionInvalid?.();
       }
       setIsValidating(false);
       return;
@@ -82,7 +78,7 @@ export function useSessionValidator({
     updateLastActivity();
     setSessionData(storedSession);
     setIsValidating(false);
-  }, [isActive, sessionDuration, onSessionExpired, onSessionInvalid]);
+  }, [isActive, sessionDuration, onSessionInvalid]);
 
   // Start validation interval
   useEffect(() => {
@@ -92,8 +88,7 @@ export function useSessionValidator({
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      // Reset flags
-      hasCalledExpiredRef.current = false;
+      // Reset flag
       hasCalledInvalidRef.current = false;
       return;
     }
@@ -125,12 +120,9 @@ export function useSessionValidator({
     saveSessionToStorage(newSession);
     setSessionData(newSession);
     
-    // Reset flags when initializing new session
-    hasCalledExpiredRef.current = false;
+    // Reset flag when initializing new session
     hasCalledInvalidRef.current = false;
-
-    onSessionValidated?.(newSession);
-  }, [onSessionValidated]);
+  }, []);
 
   // Public API for clearing session
   const clearSession = useCallback(() => {

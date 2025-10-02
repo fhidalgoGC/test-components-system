@@ -12,9 +12,7 @@ export interface SessionValidatorProps {
   sessionDuration?: number;
   checkInterval?: number;
   autoActivateIfSession?: boolean;
-  onSessionExpired?: () => void;
   onSessionInvalid?: () => void;
-  onSessionValidated?: (sessionData: SessionData) => void;
 }
 
 export interface SessionValidatorState {
