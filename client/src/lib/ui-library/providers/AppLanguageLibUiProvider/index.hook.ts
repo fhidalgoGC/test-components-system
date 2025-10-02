@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useMemo, useCallback } 
 import { makeTranslator, type TranslationOrder } from '../../utils';
 import type { LibI18nContextValue, Lang, GlobalTranslationPath } from './index.types';
 import type { GenericLanguageProvider } from '../../types/language.types';
+import { ConfigContext } from '../AppEnviromentProvider/index.hook';
 
 // Context - exported for provider usage
 export const LibI18nContext = createContext<LibI18nContextValue | undefined>(undefined);
@@ -18,14 +19,31 @@ export function useParentLanguageInjection(parentProvider: GenericLanguageProvid
   return parentProvider ? { parentLanguageProvider: parentProvider } : {};
 }
 
+// Hook para intentar obtener configuración de ConfigProvider (opcional)
+export function useOptionalConfig() {
+  try {
+    const configContext = useContext(ConfigContext);
+    return configContext?.config || null;
+  } catch {
+    return null;
+  }
+}
+
 // Hook para manejar el idioma efectivo y su sincronización
 export function useEffectiveLanguage(
   language: Lang | undefined,
   parentLanguageProvider: GenericLanguageProvider | undefined
 ) {
-  const [internal, setInternal] = useState<Lang>(language ?? 'en');
+  // Intentar obtener configuración de ConfigProvider si está disponible
+  const externalConfig = useOptionalConfig();
+  const defaultLangFromConfig = externalConfig?.DEFAULT_LANGUAGE as Lang | undefined;
+  
+  const [internal, setInternal] = useState<Lang>(
+    language ?? defaultLangFromConfig ?? 'en'
+  );
   
   // Determinar la fuente de verdad
+  // Prioridad: parentLanguageProvider > language prop > config externa > internal
   const effectiveLang: Lang = (parentLanguageProvider?.lang as Lang) ?? language ?? internal;
 
   // Sincronizar con prop language cuando cambia
@@ -34,6 +52,13 @@ export function useEffectiveLanguage(
       setInternal(language);
     }
   }, [parentLanguageProvider, language, internal]);
+
+  // Sincronizar con configuración externa cuando cambia
+  useEffect(() => {
+    if (!parentLanguageProvider && !language && defaultLangFromConfig && defaultLangFromConfig !== internal) {
+      setInternal(defaultLangFromConfig);
+    }
+  }, [parentLanguageProvider, language, defaultLangFromConfig, internal]);
 
   return { effectiveLang, internal, setInternal };
 }
