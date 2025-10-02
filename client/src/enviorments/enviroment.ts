@@ -19,7 +19,7 @@ export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
   },
   en: {
     locale: import.meta.env.VITE_LOCALE_EN || "en",
-    dateFormat: import.meta.env.VITE_DATE_FORMAT_EN || "yyyy",
+    dateFormat: import.meta.env.VITE_DATE_FORMAT_EN || "MM/yyyy",
     twoDigits: import.meta.env.VITE_DATE_TWO_DIGITS_EN !== "false",
   },
   // Puedes agregar más idiomas aquí que estén disponibles en los archivos de traducción
@@ -33,7 +33,6 @@ export const environment = {
   // Language Configuration
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE,
-  LANGUAGE_CONFIG,
 
   // Development environment detection
   IS_DEVELOPMENT:

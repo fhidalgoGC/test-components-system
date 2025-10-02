@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useLanguageProviderResolver } from './dates.provider-resolver';
+import { useLanguageProviderResolver } from '../../providers/AppProviderLanguageResolver';
 
 /**
  * Normaliza diferentes tipos de entrada de fecha a un objeto Date válido o null
@@ -41,13 +41,13 @@ function formatDateWithPattern(date: Date, pattern: string, twoDigits: boolean):
  * Toda la configuración viene del ConfigProvider merged.
  */
 function useDateConfig() {
-  const resolvedConfig = useLanguageProviderResolver();
+  const { lang, config } = useLanguageProviderResolver();
   
   return useMemo(() => ({
-    dateFormat: resolvedConfig.dateFormat,
-    twoDigits: resolvedConfig.twoDigits,
-    lang: resolvedConfig.lang,
-  }), [resolvedConfig]);
+    dateFormat: config?.dateFormat || 'MM/dd/yyyy',
+    twoDigits: config?.twoDigits ?? true,
+    lang,
+  }), [config, lang]);
 }
 
 /**
