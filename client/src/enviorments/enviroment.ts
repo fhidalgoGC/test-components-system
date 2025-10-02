@@ -33,7 +33,7 @@ export const environment = {
   // Language Configuration
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE,
-  LANGUAGE_CONFIG, // ✅ Export this so it can override internal library config
+  LANGUAGE_CONFIG,
 
   // Development environment detection
   IS_DEVELOPMENT:
