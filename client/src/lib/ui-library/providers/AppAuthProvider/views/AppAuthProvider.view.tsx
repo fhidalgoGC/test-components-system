@@ -1,6 +1,6 @@
-import { createContext, useState, useCallback, useRef } from 'react';
+import { createContext, useState, useCallback, useRef, useEffect } from 'react';
 import SessionValidator from '@/lib/ui-library/components/SessionValidator';
-import { saveSessionToStorage, clearSessionFromStorage } from '@/lib/ui-library/components/SessionValidator/utils';
+import { saveSessionToStorage, clearSessionFromStorage, getSessionFromStorage } from '@/lib/ui-library/components/SessionValidator/utils';
 import type { AppAuthContextValue, AppAuthProviderProps } from '../types';
 
 export const AppAuthContext = createContext<AppAuthContextValue | null>(null);
@@ -16,6 +16,14 @@ export function AppAuthProvider({
 }: AppAuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const isLoggingOut = useRef(false);
+
+  useEffect(() => {
+    const existingSession = getSessionFromStorage();
+    if (existingSession) {
+      setIsAuthenticated(true);
+      isLoggingOut.current = false;
+    }
+  }, []);
 
   const login = useCallback(() => {
     const sessionId = generateSessionId();
