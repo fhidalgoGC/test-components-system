@@ -1,5 +1,5 @@
-import { LibraryConfig } from './config.types';
-import { environment } from './enviroment';
+import { LibraryConfig } from '../types/AppEnviroment.types';
+import { environment } from '../../enviorments/enviroment';
 
 // Single point of access for configuration
 // This file provides the configuration without requiring React context

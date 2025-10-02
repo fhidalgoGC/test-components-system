@@ -4,7 +4,7 @@ import {
   ConfigContextType,
   LibraryConfig,
   ConfigPriority,
-} from "../enviorments/config.types";
+} from "./types/AppEnviroment.types";
 import { environment } from "../enviorments/enviroment";
 
 // Default configuration from library - automatically includes all environment properties
@@ -66,7 +66,7 @@ export function ConfigProvider({
 
   const updateConfig = (newConfig: Partial<LibraryConfig>) => {
     if (enableOverrides) {
-      setConfig((prev) => mergeConfigs(prev, newConfig, "parent"));
+      setConfig((prev: LibraryConfig) => mergeConfigs(prev, newConfig, "parent"));
     }
   };
 
