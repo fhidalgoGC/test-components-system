@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
-import { useAppLanguage } from '../../providers/AppLanguageProvider/index.hook';
-import { useLibI18n } from '../../providers/AppLanguageLibUiProvider/index.hook';
-import { LANGUAGE_CONFIG as INTERNAL_LANGUAGE_CONFIG, DEFAULT_LANGUAGE as INTERNAL_DEFAULT_LANGUAGE } from '../../enviorments/enviroment';
+import { useLanguageProviderResolver } from './dates.provider-resolver';
 
 /**
  * Normaliza diferentes tipos de entrada de fecha a un objeto Date válido o null
@@ -34,54 +32,22 @@ function formatDateWithPattern(date: Date, pattern: string, twoDigits: boolean):
 
 /**
  * Hook interno para obtener configuración de fecha desde cualquier provider disponible
- * Prioridad: AppLanguageProvider > LibI18nProvider > Config interno por defecto
  * 
- * NOTA: AppLanguageProvider ya lee del ConfigProvider merged, por lo que este hook
- * solo necesita leer de los providers, no directamente del ConfigContext.
+ * Prioridad (manejada por useLanguageProviderResolver):
+ * 1. LibI18nProvider (provider de la librería) - si existe
+ * 2. AppLanguageProvider (provider padre) - si existe  
+ * 3. ConfigProvider merged - como fallback
+ * 
+ * Toda la configuración viene del ConfigProvider merged.
  */
 function useDateConfig() {
-  // Prioridad 1: AppLanguageProvider (ya incluye config merged del ConfigProvider)
-  const appLang = useAppLanguage();
+  const resolvedConfig = useLanguageProviderResolver();
   
-  // Prioridad 2: LibI18nProvider (también lee del ConfigProvider via useOptionalConfig)
-  let libI18n;
-  try {
-    libI18n = useLibI18n();
-  } catch {
-    // LibI18nProvider no está disponible
-    libI18n = null;
-  }
-
-  return useMemo(() => {
-    // Prioridad 1: Si existe AppLanguageProvider, usar su configuración
-    // (AppLanguageProvider ya leyó del ConfigProvider merged)
-    if (appLang) {
-      return {
-        dateFormat: appLang.dateFormat,
-        twoDigits: appLang.twoDigits,
-        lang: appLang.lang,
-      };
-    }
-
-    // Prioridad 2: Si existe LibI18nProvider, obtener config del environment interno
-    // (LibI18nProvider lee del ConfigProvider via useOptionalConfig si está disponible)
-    if (libI18n) {
-      const config = INTERNAL_LANGUAGE_CONFIG[libI18n.lang] || INTERNAL_LANGUAGE_CONFIG[INTERNAL_DEFAULT_LANGUAGE];
-      return {
-        dateFormat: config.dateFormat,
-        twoDigits: config.twoDigits,
-        lang: libI18n.lang,
-      };
-    }
-
-    // Prioridad 3: Usar configuración del environment interno por defecto
-    const defaultConfig = INTERNAL_LANGUAGE_CONFIG[INTERNAL_DEFAULT_LANGUAGE];
-    return {
-      dateFormat: defaultConfig.dateFormat,
-      twoDigits: defaultConfig.twoDigits,
-      lang: INTERNAL_DEFAULT_LANGUAGE,
-    };
-  }, [appLang, libI18n]);
+  return useMemo(() => ({
+    dateFormat: resolvedConfig.dateFormat,
+    twoDigits: resolvedConfig.twoDigits,
+    lang: resolvedConfig.lang,
+  }), [resolvedConfig]);
 }
 
 /**
@@ -136,12 +102,19 @@ export function useFormattedDate(
   return useMemo(() => (date ? formatter(date) : ''), [date, formatter]);
 }
 
+
 /**
- * Función de formateo de fecha sin hooks (para uso fuera de componentes React)
- * Requiere pasar manualmente el dateFormat y twoDigits
+ * Obtener configuración de fecha para un idioma específico
+ * 
+ * NOTA: Esta función NO puede acceder al ConfigProvider merged porque no es un hook.
+ * Solo usa el environment interno de la librería.
+ * Para usar el config merged, debes usar los hooks de React (useDateFormatter, useFormattedDate).
+ * 
+ * @deprecated Considera usar hooks de React para acceder al config merged.
  * 
  * @example
  * ```ts
+ * // Solo para uso fuera de componentes React
  * const formatted = formatDate(new Date(), 'dd/MM/yyyy', true);
  * ```
  */
@@ -153,19 +126,4 @@ export function formatDate(
   const date = normalizeDate(dateInput);
   if (!date) return '';
   return formatDateWithPattern(date, dateFormat, twoDigits);
-}
-
-/**
- * Obtener configuración de fecha para un idioma específico
- * NOTA: Esta función usa el environment interno. Para usar el merged, usa hooks de React.
- * Útil para formateo manual sin hooks fuera de componentes React.
- * 
- * @example
- * ```ts
- * const esConfig = getDateConfigForLanguage('es');
- * const formatted = formatDate(new Date(), esConfig.dateFormat, esConfig.twoDigits);
- * ```
- */
-export function getDateConfigForLanguage(lang: string) {
-  return INTERNAL_LANGUAGE_CONFIG[lang] || INTERNAL_LANGUAGE_CONFIG[INTERNAL_DEFAULT_LANGUAGE];
 }
