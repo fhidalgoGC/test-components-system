@@ -21,6 +21,7 @@ export function AppAuthProvider({
 }: AppAuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const isLoggingOut = useRef(false);
+  const isProcessingEvent = useRef(false);
 
   const login = useCallback(() => {
     const sessionId = generateSessionId();
@@ -33,6 +34,14 @@ export function AppAuthProvider({
 
     setIsAuthenticated(true);
     isLoggingOut.current = false;
+
+    if (!isProcessingEvent.current) {
+      window.dispatchEvent(
+        new CustomEvent("session_login", {
+          detail: { sessionId, timestamp: Date.now() },
+        })
+      );
+    }
   }, []);
 
   const logout = useCallback(() => {
@@ -42,6 +51,14 @@ export function AppAuthProvider({
     clearSessionFromStorage();
     setIsAuthenticated(false);
     onSessionInvalid?.();
+
+    if (!isProcessingEvent.current) {
+      window.dispatchEvent(
+        new CustomEvent("session_logout", {
+          detail: { timestamp: Date.now() },
+        })
+      );
+    }
   }, [onSessionInvalid]);
 
   useEffect(() => {
@@ -55,7 +72,40 @@ export function AppAuthProvider({
     } else if (existingSession) {
       logout();
     }
-  }, [sessionDuration, onSessionInvalid]);
+  }, [sessionDuration, logout]);
+
+  useEffect(() => {
+    const handleLoginEvent = () => {
+      isProcessingEvent.current = true;
+      const existingSession = getSessionFromStorage();
+      if (existingSession) {
+        setIsAuthenticated(true);
+        isLoggingOut.current = false;
+      }
+      isProcessingEvent.current = false;
+    };
+
+    const handleLogoutEvent = () => {
+      isProcessingEvent.current = true;
+      if (isLoggingOut.current) {
+        isProcessingEvent.current = false;
+        return;
+      }
+      isLoggingOut.current = true;
+      clearSessionFromStorage();
+      setIsAuthenticated(false);
+      onSessionInvalid?.();
+      isProcessingEvent.current = false;
+    };
+
+    window.addEventListener("session_login", handleLoginEvent);
+    window.addEventListener("session_logout", handleLogoutEvent);
+
+    return () => {
+      window.removeEventListener("session_login", handleLoginEvent);
+      window.removeEventListener("session_logout", handleLogoutEvent);
+    };
+  }, [onSessionInvalid]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
