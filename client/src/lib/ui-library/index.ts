@@ -3,7 +3,6 @@ export * from './components';
 
 // Providers
 export * from './providers';
-export { ConfigProvider, useConfig, useConfigValue } from './enviorments/config.provider';
 
 // Config Utils (for non-React usage)
 export { getConfig, getConfigValue, updateGlobalConfig, resetGlobalConfig } from './enviorments/config.util';

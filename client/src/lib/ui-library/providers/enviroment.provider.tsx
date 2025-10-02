@@ -4,8 +4,8 @@ import {
   ConfigContextType,
   LibraryConfig,
   ConfigPriority,
-} from "./config.types";
-import { environment } from "./enviroment";
+} from "../enviorments/config.types";
+import { environment } from "../enviorments/enviroment";
 
 // Default configuration from library - automatically includes all environment properties
 const defaultLibraryConfig: LibraryConfig = environment;
