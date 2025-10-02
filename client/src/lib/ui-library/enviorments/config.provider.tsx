@@ -7,16 +7,8 @@ import {
 } from "./config.types";
 import { environment } from "./enviroment";
 
-// Default configuration from library with safe fallbacks
-const defaultLibraryConfig: LibraryConfig = {
-  // Language Configuration
-  AVAILABLE_LANGUAGES: environment.AVAILABLE_LANGUAGES,
-  DEFAULT_LANGUAGE: environment.DEFAULT_LANGUAGE,
-  LANGUAGE_CONFIG: environment.LANGUAGE_CONFIG,
-  
-  // Development environment
-  IS_DEVELOPMENT: environment.IS_DEVELOPMENT || false,
-};
+// Default configuration from library - automatically includes all environment properties
+const defaultLibraryConfig: LibraryConfig = environment;
 
 // Create context
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);

@@ -5,15 +5,8 @@ import { environment } from './enviroment';
 // This file provides the configuration without requiring React context
 // Useful for utility functions and non-component code
 
-let globalConfig: LibraryConfig = {
-  // Language Configuration
-  AVAILABLE_LANGUAGES: environment.AVAILABLE_LANGUAGES,
-  DEFAULT_LANGUAGE: environment.DEFAULT_LANGUAGE,
-  LANGUAGE_CONFIG: environment.LANGUAGE_CONFIG,
-  
-  // Development environment
-  IS_DEVELOPMENT: environment.IS_DEVELOPMENT || false,
-};
+// Global configuration - automatically includes all environment properties
+let globalConfig: LibraryConfig = environment;
 
 // Get current configuration
 export function getConfig(): LibraryConfig {
@@ -34,15 +27,7 @@ export function updateGlobalConfig(newConfig: Partial<LibraryConfig>): void {
 
 // Reset to default configuration
 export function resetGlobalConfig(): void {
-  globalConfig = {
-    // Language Configuration
-    AVAILABLE_LANGUAGES: environment.AVAILABLE_LANGUAGES,
-    DEFAULT_LANGUAGE: environment.DEFAULT_LANGUAGE,
-    LANGUAGE_CONFIG: environment.LANGUAGE_CONFIG,
-    
-    // Development environment
-    IS_DEVELOPMENT: environment.IS_DEVELOPMENT || false,
-  };
+  globalConfig = environment;
 }
 
 // Legacy export for backward compatibility

@@ -1,3 +1,5 @@
+import { environment } from './enviroment';
+
 // Language configuration type
 export type LanguageConfig = {
   locale: string;
@@ -6,15 +8,8 @@ export type LanguageConfig = {
 };
 
 // Configuration types for hybrid environment management
-export interface LibraryConfig {
-  // Language Configuration
-  AVAILABLE_LANGUAGES: string[];
-  DEFAULT_LANGUAGE: string;
-  LANGUAGE_CONFIG: Record<string, LanguageConfig>;
-  
-  // Development environment detection
-  IS_DEVELOPMENT: boolean;
-}
+// Automatically inferred from environment - no manual typing needed!
+export type LibraryConfig = typeof environment;
 
 // Priority levels for configuration merging
 export type ConfigPriority = "parent" | "library" | "auto";
