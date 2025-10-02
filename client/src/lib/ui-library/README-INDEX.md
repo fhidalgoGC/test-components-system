@@ -209,6 +209,25 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 └── Configuración de imports
 ```
 
+### **🌍 Variables de Entorno**
+```
+./README-IA--ENVIROMENTS.md
+├── Sistema híbrido de configuración
+├── 3 estrategias de precedencia
+├── ConfigProvider para aplicaciones padre
+├── Variables disponibles (API, Auth0, etc.)
+└── Uso en componentes (hooks y funciones)
+```
+
+### **🎨 Estilos Globales**
+```
+./README-IA--STYLES.md
+├── 4 estrategias de personalización
+├── Orden de precedencia CSS
+├── Configuración Tailwind obligatoria
+└── Estrategias híbridas
+```
+
 ### **🌐 Idiomas**
 ```
 ./README-IA--LANGUAJE.md
@@ -243,6 +262,9 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | **Necesito...** | **Ir a...** |
 |-----------------|-------------|
 | Instalar la librería | `README-IA.md` |
+| Configurar variables de entorno | `README-IA--ENVIROMENTS.md` |
+| Sobrescribir config desde padre | `README-IA--ENVIROMENTS.md` |
+| Personalizar estilos globales | `README-IA--STYLES.md` |
 | Configurar idiomas | `README-IA--LANGUAJE.md` |
 | API de LibI18nProvider | `providers/README-LibI18n.provider.md` |
 | Resolver errores de imports | `README-IA.md` |

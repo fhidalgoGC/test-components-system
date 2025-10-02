@@ -4,344 +4,392 @@
 
 ## 📖 Descripción
 
-El sistema de variables de entorno de GC-UI-COMPONENTS permite configuración flexible y jerárquica donde las aplicaciones padre pueden sobrescribir los valores por defecto de la librería con precedencia configurable.
+Sistema híbrido de gestión de variables de entorno que permite a las aplicaciones padre sobrescribir la configuración por defecto de la librería con precedencia configurable.
+
+---
 
 ## 🏗️ Arquitectura del Sistema
 
 ### **Componentes Principales**
 
-1. **`enviroment.ts`** - Configuración base de la librería desde variables de entorno
-2. **`config.types.ts`** - Interfaces y tipos para la configuración híbrida
-3. **`config.provider.tsx`** - Provider React para gestión de configuración
-4. **`config.ts`** - Punto único de acceso sin React Context
-
-### **Estrategias de Precedencia**
-
-El sistema soporta 3 estrategias de precedencia:
-
-- **`'auto'` (Por defecto)**: Inteligente - padre gana solo para valores definidos y no vacíos
-- **`'parent'`**: Padre siempre gana cuando está definido
-- **`'library'`**: Librería siempre gana, padre es ignorado
-
-## 🚀 Configuración en Aplicaciones Padre
-
-### **Método 1: Usando ConfigProvider (Recomendado)**
-
-```jsx
-import { 
-  ConfigProvider, 
-  TagSelector, 
-  LibI18nProvider 
-} from 'GC-UI-COMPONENTS';
-
-// Configuración personalizada de la aplicación padre
-const parentConfig = {
-  API_LIMIT: 200,
-  DEFAULT_CURRENCY: 'mxn',
-  AUTH0_SCOPE: 'openid profile email',
-  CRM_BASE_URL: 'https://mi-api.ejemplo.com',
-  NUMBER_FORMAT_PATTERN: '0,000.000',
-  IS_DEVELOPMENT: false
-};
-
-function App() {
-  return (
-    <ConfigProvider 
-      parentConfig={parentConfig}
-      priority="auto"
-      enableOverrides={true}
-    >
-      <LibI18nProvider language="es">
-        <TagSelector 
-          items={[]}
-          onSelectionChange={() => {}}
-        />
-      </LibI18nProvider>
-    </ConfigProvider>
-  );
-}
+```
+client/src/lib/ui-library/enviorments/
+├── config.types.ts          # Interfaces TypeScript
+├── config.provider.tsx      # ConfigProvider + Hooks React
+├── config.ts                # Funciones sin React Context
+└── enviroment.ts            # Variables base (defaults)
 ```
 
-### **Método 2: Configuración Dinámica**
+### **Flujo de Configuración**
+
+```
+┌─────────────────────────────────────────┐
+│  Aplicación Padre                       │
+│  ┌──────────────────────────────────┐  │
+│  │ ConfigProvider                    │  │
+│  │  parentConfig={{                 │  │
+│  │    API_LIMIT: 200,               │  │
+│  │    DEFAULT_CURRENCY: 'mxn'       │  │
+│  │  }}                              │  │
+│  │  priority="auto"                 │  │
+│  └──────────────────────────────────┘  │
+└─────────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────────┐
+│  Sistema de Precedencia                 │
+│  1. Padre (si definido y no vacío)      │
+│  2. Librería (defaults)                 │
+│  3. Fallback seguro                     │
+└─────────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────────┐
+│  Componentes de la Librería             │
+│  useConfig() / useConfigValue()         │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## ⚖️ Estrategias de Precedencia
+
+### **1. Auto (Recomendado)**
+Precedencia inteligente: el padre gana solo si el valor está definido y no está vacío.
 
 ```jsx
-import { ConfigProvider, useConfig } from 'GC-UI-COMPONENTS';
+<ConfigProvider parentConfig={config} priority="auto">
+  {/* Padre gana solo para valores definidos */}
+</ConfigProvider>
+```
 
-function ConfigurableApp() {
-  const [dynamicConfig, setDynamicConfig] = useState({
-    API_LIMIT: 150,
-    DEFAULT_CURRENCY: 'eur'
-  });
+### **2. Parent (Padre Primero)**
+El padre siempre gana cuando define un valor, incluso si está vacío.
 
-  return (
-    <ConfigProvider 
-      parentConfig={dynamicConfig}
-      priority="parent"
-    >
-      <MyComponents />
-      <ConfigControls onConfigChange={setDynamicConfig} />
-    </ConfigProvider>
-  );
-}
+```jsx
+<ConfigProvider parentConfig={config} priority="parent">
+  {/* Padre tiene prioridad absoluta */}
+</ConfigProvider>
+```
 
-function ConfigControls({ onConfigChange }) {
-  const { config, updateConfig } = useConfig();
-  
-  const changeApiLimit = (newLimit) => {
-    updateConfig({ API_LIMIT: newLimit });
-    onConfigChange(prev => ({ ...prev, API_LIMIT: newLimit }));
+### **3. Library (Solo Librería)**
+Ignora la configuración del padre, usa solo los valores de la librería.
+
+```jsx
+<ConfigProvider parentConfig={config} priority="library">
+  {/* Solo valores de la librería */}
+</ConfigProvider>
+```
+
+---
+
+## 🚀 Uso en Aplicaciones Padre
+
+### **Instalación Básica**
+
+```jsx
+import { ConfigProvider } from 'GC-UI-COMPONENTS';
+
+function App() {
+  const myConfig = {
+    API_LIMIT: 200,
+    DEFAULT_CURRENCY: 'mxn',
+    CRM_BASE_URL: 'https://mi-api.com'
   };
 
   return (
-    <div>
-      <p>API Limit actual: {config.API_LIMIT}</p>
-      <button onClick={() => changeApiLimit(300)}>
-        Cambiar a 300
-      </button>
-    </div>
+    <ConfigProvider parentConfig={myConfig} priority="auto">
+      <YourApp />
+    </ConfigProvider>
   );
 }
 ```
 
-## 🎯 Configuración de Variables de Entorno
+### **Con Variables de Entorno del Padre**
 
-### **Variables Disponibles**
+```jsx
+// .env del padre
+VITE_API_LIMIT=500
+VITE_CRM_BASE_URL=https://production.com
+VITE_DEFAULT_CURRENCY=eur
 
-#### **APIs y URLs Base**
-```bash
-VITE_API_LIMIT=100
-VITE_URL_CRM=https://api.crm.ejemplo.com
-VITE_TRM_BASE_URL=https://api.trm.ejemplo.com
-VITE_URL_IDENTITY=https://auth.ejemplo.com
-VITE_CRAFTMYPDF_BASE_URL=https://api.craftmypdf.com
-VITE_SSM_BASE_URL=https://api.ssm.ejemplo.com
+// En tu app
+const parentConfig = {
+  API_LIMIT: Number(import.meta.env.VITE_API_LIMIT),
+  CRM_BASE_URL: import.meta.env.VITE_CRM_BASE_URL,
+  DEFAULT_CURRENCY: import.meta.env.VITE_DEFAULT_CURRENCY,
+};
+
+<ConfigProvider parentConfig={parentConfig}>
+  <App />
+</ConfigProvider>
 ```
 
-#### **Configuración Auth0**
-```bash
-VITE_AUTH0_URL=https://mi-tenant.auth0.com
-VITE_AUTH0_AUDIENCE=https://api.mi-app.com
-VITE_AUTH0_CLIENT_ID=tu_client_id_aqui
-VITE_AUTH0_SCOPE=openid offline_access
-VITE_AUTH0_GRANT_TYPE=password
-VITE_AUTH0_REALM=Username-Password-Authentication
+### **Configuración Dinámica**
+
+```jsx
+function AppWrapper() {
+  const [config, setConfig] = useState({
+    API_LIMIT: 100,
+    DEFAULT_CURRENCY: 'usd'
+  });
+
+  const updateLimit = () => {
+    setConfig(prev => ({ ...prev, API_LIMIT: 500 }));
+  };
+
+  return (
+    <ConfigProvider parentConfig={config} enableOverrides={true}>
+      <button onClick={updateLimit}>Cambiar Límite</button>
+      <App />
+    </ConfigProvider>
+  );
+}
 ```
 
-#### **Moneda y Formato**
-```bash
-VITE_DEFAULT_CURRENCY=usd
-VITE_NUMBER_FORMAT_PATTERN=0,000.00
-VITE_NUMBER_ROUND_MODE=truncate
-VITE_NUMBER_LOCATE=en-US
-VITE_NUMBER_MIN_DECIMALS=2
-VITE_NUMBER_MAX_DECIMALS=4
-```
+---
 
-#### **Thresholds de Precios**
-```bash
-VITE_PRICE_THRESHOLD_MIN=0
-VITE_PRICE_THRESHOLD_MAX=0
-VITE_SHOW_THRESHOLDS=false
-```
+## 🎯 Variables de Entorno Disponibles
+
+### **API Configuration**
+- `API_LIMIT`: Límite de resultados por petición (default: 100)
+
+### **Base URLs**
+- `CRM_BASE_URL`: URL base del CRM
+- `TRM_BASE_URL`: URL base del TRM
+- `IDENTITY_BASE_URL`: URL base de identidad
+- `CRAFTMYPDF_BASE_URL`: URL base de CraftMyPDF
+- `SSM_BASE_URL`: URL base de SSM
+
+### **Auth0 Configuration**
+- `AUTH0_URL`: URL de Auth0
+- `AUTH0_AUDIENCE`: Audiencia de Auth0
+- `AUTH0_GRANT_TYPE`: Tipo de grant
+- `AUTH0_REALM`: Realm de Auth0
+- `AUTH0_CLIENT_ID`: Client ID de Auth0
+- `AUTH0_SCOPE`: Scope de Auth0 (default: "openid offline_access")
+
+### **Currency & Formatting**
+- `DEFAULT_CURRENCY`: Moneda por defecto (default: "usd")
+- `NUMBER_FORMAT_PATTERN`: Patrón de formato (default: "0,000.00")
+- `NUMBER_ROUND_MODE`: Modo de redondeo (default: "truncate")
+- `NUMBER_LOCATE`: Locale para números (default: "en-US")
+- `NUMBER_MIN_DECIMALS`: Decimales mínimos (default: 2)
+- `NUMBER_MAX_DECIMALS`: Decimales máximos (default: 4)
+
+### **Price Thresholds**
+- `PRICE_THRESHOLD_MIN`: Umbral mínimo de precio (default: 0)
+- `PRICE_THRESHOLD_MAX`: Umbral máximo de precio (default: 0)
+- `SHOW_THRESHOLDS`: Mostrar umbrales (default: false)
+
+### **Session Configuration**
+- `MAX_SESSION_DURATION_MINUTES`: Duración máxima de sesión (default: 1440)
+- `INACTIVITY_TIMEOUT_MINUTES`: Timeout de inactividad (default: 480)
+
+### **Development**
+- `IS_DEVELOPMENT`: Detección de ambiente de desarrollo
+
+---
 
 ## 🔧 Uso en Componentes
 
-### **Opción 1: Hook useConfig (Con Context)**
+### **Con Hooks React (Recomendado)**
 
 ```jsx
 import { useConfig, useConfigValue } from 'GC-UI-COMPONENTS';
 
 function MyComponent() {
-  // Obtener toda la configuración
+  // Obtener configuración completa
   const { config, updateConfig, resetConfig } = useConfig();
   
-  // Obtener valor específico con fallback
-  const apiLimit = useConfigValue('API_LIMIT', 50);
-  const currency = useConfigValue('DEFAULT_CURRENCY');
-
-  const handleApiCall = async () => {
-    const response = await fetch(`${config.CRM_BASE_URL}/api/data`, {
-      headers: {
-        'X-API-Limit': config.API_LIMIT.toString()
-      }
-    });
-  };
+  // Obtener valor específico
+  const apiLimit = useConfigValue('API_LIMIT');
+  const currency = useConfigValue('DEFAULT_CURRENCY', 'usd'); // con fallback
 
   return (
     <div>
-      <p>API Limit: {config.API_LIMIT}</p>
-      <p>Moneda: {config.DEFAULT_CURRENCY}</p>
+      <p>API Limit: {apiLimit}</p>
+      <p>Currency: {currency}</p>
       <button onClick={() => updateConfig({ API_LIMIT: 200 })}>
-        Cambiar límite API
-      </button>
-      <button onClick={resetConfig}>
-        Resetear configuración
+        Actualizar Límite
       </button>
     </div>
   );
 }
 ```
 
-### **Opción 2: Funciones de Configuración (Sin Context)**
+### **Sin React Context (Utilidades)**
 
 ```jsx
 import { getConfig, getConfigValue } from 'GC-UI-COMPONENTS';
 
-// En utilidades o servicios
-export class ApiService {
-  static async fetchData() {
-    const config = getConfig();
-    const apiLimit = getConfigValue('API_LIMIT');
-    
-    return fetch(`${config.CRM_BASE_URL}/api/data?limit=${apiLimit}`);
-  }
+// En funciones fuera de componentes
+function fetchData() {
+  const config = getConfig();
+  const apiLimit = getConfigValue('API_LIMIT');
   
-  static getAuthHeaders() {
-    const config = getConfig();
-    return {
-      'Authorization': `Bearer ${config.AUTH0_CLIENT_ID}`,
-      'X-Audience': config.AUTH0_AUDIENCE
-    };
-  }
-}
-
-// En componentes funcionales
-function DataDisplay() {
-  const [data, setData] = useState([]);
-  
-  useEffect(() => {
-    const currency = getConfigValue('DEFAULT_CURRENCY');
-    fetchPricesInCurrency(currency).then(setData);
-  }, []);
-
-  return <div>{/* render data */}</div>;
+  fetch(`${config.CRM_BASE_URL}/data?limit=${apiLimit}`);
 }
 ```
 
-## ⚖️ Estrategias de Precedencia
+---
 
-### **Auto (Recomendado)**
-```jsx
-<ConfigProvider 
-  parentConfig={{ 
-    API_LIMIT: 200,           // ✅ Se aplica (valor válido)
-    DEFAULT_CURRENCY: '',     // ❌ Se ignora (cadena vacía)
-    AUTH0_SCOPE: undefined    // ❌ Se ignora (undefined)
-  }}
-  priority="auto"
->
-```
-
-### **Parent (Fuerza)**
-```jsx
-<ConfigProvider 
-  parentConfig={{ 
-    API_LIMIT: 200,           // ✅ Se aplica
-    DEFAULT_CURRENCY: '',     // ✅ Se aplica (sobrescribe con vacío)
-    AUTH0_SCOPE: undefined    // ✅ Se aplica (sobrescribe con undefined)
-  }}
-  priority="parent"
->
-```
-
-### **Library (Solo Librería)**
-```jsx
-<ConfigProvider 
-  parentConfig={{ 
-    API_LIMIT: 200,           // ❌ Se ignora
-    DEFAULT_CURRENCY: 'eur'   // ❌ Se ignora
-  }}
-  priority="library"
->
-```
-
-## 🚨 Problemas Comunes y Soluciones
+## 🚨 Problemas Comunes
 
 ### **Error: "useConfig must be used within a ConfigProvider"**
 
 ```jsx
-// ❌ Incorrecto - useConfig fuera del provider
+// ❌ Incorrecto
 function App() {
   const config = useConfig(); // Error!
   return <div>...</div>;
 }
 
-// ✅ Correcto - useConfig dentro del provider
+// ✅ Correcto
 function App() {
   return (
-    <ConfigProvider>
-      <MyComponent />
+    <ConfigProvider parentConfig={{}}>
+      <MyComponent /> {/* Aquí sí puedes usar useConfig */}
     </ConfigProvider>
   );
 }
-
-function MyComponent() {
-  const config = useConfig(); // ✅ Funciona
-  return <div>...</div>;
-}
 ```
 
-### **Variables de entorno no se actualizan**
-
-```bash
-# Asegurar prefijo VITE_ para variables frontend
-VITE_API_LIMIT=100          # ✅ Correcto
-API_LIMIT=100               # ❌ No funcionará
-
-# Reiniciar servidor después de cambiar .env
-npm run dev
-```
-
-### **Configuración no se propaga**
+### **Variables no se sobrescriben**
 
 ```jsx
-// ✅ Asegurar enableOverrides está habilitado
+// Verificar que priority sea "auto" o "parent"
 <ConfigProvider 
-  parentConfig={config}
-  enableOverrides={true}  // ✅ Importante
+  parentConfig={myConfig}
+  priority="auto"  // ← Verificar esto
+>
+
+// Verificar que enableOverrides esté en true (default)
+<ConfigProvider 
+  parentConfig={myConfig}
+  enableOverrides={true}  // ← Verificar esto
 >
 ```
 
+### **Valores undefined en configuración del padre**
+
+```jsx
+// ❌ Valores undefined son ignorados
+const config = {
+  API_LIMIT: undefined  // Se usará el default de la librería
+};
+
+// ✅ Usar valores explícitos o condicionales
+const config = {
+  API_LIMIT: import.meta.env.VITE_API_LIMIT 
+    ? Number(import.meta.env.VITE_API_LIMIT)
+    : 100  // Valor explícito
+};
+```
+
+---
+
 ## 🔄 Migración desde Configuración Antigua
 
-### **Antes (Directo a environment)**
+### **Antes (Configuración Estática)**
+
 ```jsx
 import { environment } from './enviroment';
 
 function MyComponent() {
-  const apiLimit = environment.API_LIMIT;
-  return <div>{apiLimit}</div>;
+  const limit = environment.API_LIMIT;
+  // ...
 }
 ```
 
-### **Después (Con ConfigProvider)**
-```jsx
-import { ConfigProvider, useConfigValue } from 'GC-UI-COMPONENTS';
+### **Después (Configuración Híbrida)**
 
-function App() {
-  return (
-    <ConfigProvider parentConfig={{ API_LIMIT: 200 }}>
-      <MyComponent />
-    </ConfigProvider>
-  );
-}
+```jsx
+import { useConfigValue } from 'GC-UI-COMPONENTS';
 
 function MyComponent() {
-  const apiLimit = useConfigValue('API_LIMIT');
-  return <div>{apiLimit}</div>;
+  const limit = useConfigValue('API_LIMIT');
+  // Reactivo a cambios del padre
 }
 ```
-
-## 📋 Checklist de Implementación
-
-- [ ] Envolver aplicación con `ConfigProvider`
-- [ ] Definir `parentConfig` con valores específicos
-- [ ] Elegir estrategia de `priority` apropiada
-- [ ] Usar `useConfig` o `useConfigValue` en componentes
-- [ ] Configurar variables de entorno con prefijo `VITE_`
-- [ ] Probar precedencia con diferentes valores
-- [ ] Documentar configuración específica del proyecto
 
 ---
 
-**Version: 1.0.5** | **Última actualización: Septiembre 2025**
+## 📋 Casos de Uso Comunes
+
+### **Caso 1: Ambiente Development vs Production**
+
+```jsx
+const isDev = import.meta.env.DEV;
+
+const config = {
+  CRM_BASE_URL: isDev 
+    ? 'http://localhost:3000'
+    : 'https://api.production.com',
+  IS_DEVELOPMENT: isDev
+};
+
+<ConfigProvider parentConfig={config} priority="parent">
+  <App />
+</ConfigProvider>
+```
+
+### **Caso 2: Multi-tenant con diferentes configuraciones**
+
+```jsx
+function TenantApp({ tenantId }) {
+  const tenantConfig = {
+    CRM_BASE_URL: `https://${tenantId}.api.com`,
+    DEFAULT_CURRENCY: tenantId === 'mx' ? 'mxn' : 'usd'
+  };
+
+  return (
+    <ConfigProvider parentConfig={tenantConfig}>
+      <App />
+    </ConfigProvider>
+  );
+}
+```
+
+### **Caso 3: Configuración desde API**
+
+```jsx
+function App() {
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/config')
+      .then(res => res.json())
+      .then(setConfig);
+  }, []);
+
+  if (!config) return <Loading />;
+
+  return (
+    <ConfigProvider parentConfig={config}>
+      <MainApp />
+    </ConfigProvider>
+  );
+}
+```
+
+---
+
+## 🎯 Mejores Prácticas
+
+1. **Usa "auto" por defecto**: Es la estrategia más flexible y segura
+2. **Centraliza configuración**: Define config en un solo lugar del padre
+3. **Valida valores**: Asegúrate de que las variables de entorno sean válidas
+4. **Documenta overrides**: Anota qué valores sobrescribes y por qué
+5. **Usa TypeScript**: Aprovecha el tipado para evitar errores
+
+---
+
+## 📚 Ver También
+
+- **Sistema de Estilos**: `./README-IA--STYLES.md`
+- **Sistema de Idiomas**: `./README-IA--LANGUAJE.md`
+- **Instalación**: `./README-IA.md`
+- **Índice General**: `./README-INDEX.md`
+
+---
+
+**Version: 1.0.5** | **Última actualización: Octubre 2025**
