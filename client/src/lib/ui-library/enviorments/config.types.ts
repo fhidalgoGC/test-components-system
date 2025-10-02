@@ -8,6 +8,8 @@ export type LanguageConfig = {
 // Configuration types for hybrid environment management
 export interface LibraryConfig {
   // Language Configuration
+  AVAILABLE_LANGUAGES: string[];
+  DEFAULT_LANGUAGE: string;
   LANGUAGE_CONFIG: Record<string, LanguageConfig>;
   
   // Development environment detection

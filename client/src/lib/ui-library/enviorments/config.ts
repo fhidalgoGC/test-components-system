@@ -7,6 +7,8 @@ import { environment } from './enviroment';
 
 let globalConfig: LibraryConfig = {
   // Language Configuration
+  AVAILABLE_LANGUAGES: environment.AVAILABLE_LANGUAGES,
+  DEFAULT_LANGUAGE: environment.DEFAULT_LANGUAGE,
   LANGUAGE_CONFIG: environment.LANGUAGE_CONFIG,
   
   // Development environment
@@ -34,6 +36,8 @@ export function updateGlobalConfig(newConfig: Partial<LibraryConfig>): void {
 export function resetGlobalConfig(): void {
   globalConfig = {
     // Language Configuration
+    AVAILABLE_LANGUAGES: environment.AVAILABLE_LANGUAGES,
+    DEFAULT_LANGUAGE: environment.DEFAULT_LANGUAGE,
     LANGUAGE_CONFIG: environment.LANGUAGE_CONFIG,
     
     // Development environment

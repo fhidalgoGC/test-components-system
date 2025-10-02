@@ -5,6 +5,13 @@ type LanguageConfig = {
   twoDigits: boolean;
 };
 
+// Available languages configuration - can be overridden via environment
+const availableLanguagesEnv = import.meta.env.VITE_AVAILABLE_LANGUAGES || 'es,en';
+export const AVAILABLE_LANGUAGES = availableLanguagesEnv.split(',').map((lang: string) => lang.trim());
+
+// Default language - can be overridden via environment
+export const DEFAULT_LANGUAGE = import.meta.env.VITE_DEFAULT_LANGUAGE || 'en';
+
 // Language configurations
 export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
   es: {
@@ -17,10 +24,14 @@ export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
     dateFormat: import.meta.env.VITE_DATE_FORMAT_EN || 'MM/dd/yyyy',
     twoDigits: import.meta.env.VITE_DATE_TWO_DIGITS_EN !== 'false',
   },
+  // Puedes agregar más idiomas aquí que estén disponibles en los archivos de traducción
+  // pero solo los definidos en AVAILABLE_LANGUAGES estarán activos
 };
 
 export const environment = {
   // Language Configuration
+  AVAILABLE_LANGUAGES,
+  DEFAULT_LANGUAGE,
   LANGUAGE_CONFIG,
   
   // Number Formatting
