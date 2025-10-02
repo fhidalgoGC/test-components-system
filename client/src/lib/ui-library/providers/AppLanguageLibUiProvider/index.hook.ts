@@ -20,13 +20,10 @@ export function useParentLanguageInjection(parentProvider: GenericLanguageProvid
 }
 
 // Hook para intentar obtener configuración de ConfigProvider (opcional)
+// Retorna null si ConfigProvider no está disponible
 export function useOptionalConfig() {
-  try {
-    const configContext = useContext(ConfigContext);
-    return configContext?.config || null;
-  } catch {
-    return null;
-  }
+  const configContext = useContext(ConfigContext);
+  return configContext?.config || null;
 }
 
 // Hook para manejar el idioma efectivo y su sincronización
