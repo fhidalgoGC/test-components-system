@@ -71,15 +71,13 @@ export function AppAuthProvider({
         isProcessingEvent.current = true;
         const existingSession = getSessionFromStorage();
         if (existingSession) {
-          setIsAuthenticated(true);
+          login();
           isLoggingOut.current = false;
         }
         isProcessingEvent.current = false;
       } else if (type === "session_logout") {
         isProcessingEvent.current = true;
-        clearSessionFromStorage();
-        setIsAuthenticated(false);
-        onSessionInvalid?.();
+        logout();
         isProcessingEvent.current = false;
       }
     };
