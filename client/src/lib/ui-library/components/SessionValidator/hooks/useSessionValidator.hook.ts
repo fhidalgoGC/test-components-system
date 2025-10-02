@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import type { SessionData, SessionValidatorProps } from "../types";
 import {
   getSessionFromStorage,
-  saveSessionToStorage,
-  clearSessionFromStorage,
   isSessionExpired,
   hasValidSession,
   updateLastActivity,
@@ -107,31 +105,9 @@ export function useSessionValidator({
     };
   }, [isActive, checkInterval, validateSession]);
 
-  // Public API for initializing session
-  const initializeSession = useCallback((sessionId: string) => {
-    const newSession: SessionData = {
-      sessionId,
-      sessionStartTime: Date.now(),
-      lastActivityTime: Date.now(),
-    };
-
-    saveSessionToStorage(newSession);
-    setSessionData(newSession);
-
-    // Reset flag when initializing new session
-    hasCalledInvalidRef.current = false;
-  }, []);
-
-  // Public API for clearing session
-  const clearSession = useCallback(() => {
-    setSessionData(null);
-  }, []);
-
   return {
     isActive,
     sessionData,
     isValidating,
-    initializeSession,
-    clearSession,
   };
 }
