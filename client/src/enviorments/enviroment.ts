@@ -26,6 +26,9 @@ export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
   // pero solo los definidos en AVAILABLE_LANGUAGES estarán activos
 };
 
+// External environment can have MORE keys than internal library environment
+// Only keys that exist in the internal environment will be overridden during merge
+// Additional keys are safely ignored
 export const environment = {
   // Language Configuration
   AVAILABLE_LANGUAGES,

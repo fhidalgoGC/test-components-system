@@ -15,9 +15,11 @@ export type LibraryConfig = typeof environment;
 export type ConfigPriority = "parent" | "library" | "auto";
 
 // Configuration provider props
+// parentConfig can have additional keys beyond LibraryConfig
+// Only keys that exist in LibraryConfig will be merged
 export interface ConfigProviderProps {
   children: React.ReactNode;
-  parentConfig?: Partial<LibraryConfig>;
+  parentConfig?: Record<string, any>; // Accepts any keys, merge will filter
   priority?: ConfigPriority;
   enableOverrides?: boolean;
 }
@@ -25,7 +27,7 @@ export interface ConfigProviderProps {
 // Configuration context type
 export interface ConfigContextType {
   config: LibraryConfig;
-  updateConfig: (newConfig: Partial<LibraryConfig>) => void;
+  updateConfig: (newConfig: Record<string, any>) => void; // Accepts any keys, merge will filter
   resetConfig: () => void;
   priority: ConfigPriority;
 }

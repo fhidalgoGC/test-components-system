@@ -8,15 +8,23 @@ export const defaultLibraryConfig: LibraryConfig = environment;
 let globalConfig: LibraryConfig = environment;
 
 // Merge configurations based on priority
+// parentConfig can have additional keys beyond LibraryConfig
+// Only keys that exist in libraryConfig will be overridden
 export function mergeConfigs(
   libraryConfig: LibraryConfig,
-  parentConfig: Partial<LibraryConfig> = {},
+  parentConfig: Record<string, any> = {},
   priority: ConfigPriority = "auto",
 ): LibraryConfig {
   switch (priority) {
     case "parent":
-      // Parent always wins when defined
-      return { ...libraryConfig, ...parentConfig };
+      // Parent always wins when defined (only for keys that exist in library)
+      const parentMerged = { ...libraryConfig };
+      Object.keys(libraryConfig).forEach((key) => {
+        if (key in parentConfig && parentConfig[key] !== undefined) {
+          (parentMerged as any)[key] = parentConfig[key];
+        }
+      });
+      return parentMerged;
 
     case "library":
       // Library always wins, parent is ignored
@@ -25,15 +33,19 @@ export function mergeConfigs(
     case "auto":
     default:
       // Intelligent merging: parent wins only for defined non-empty values
+      // and only for keys that exist in libraryConfig
       const merged = { ...libraryConfig };
-      Object.entries(parentConfig).forEach(([key, value]) => {
-        // Check if value is defined and not null
-        if (value !== undefined && value !== null) {
-          // For string values, also check if not empty
-          if (typeof value === 'string' && value === "") {
-            return; // Skip empty strings
+      Object.keys(libraryConfig).forEach((key) => {
+        if (key in parentConfig) {
+          const value = parentConfig[key];
+          // Check if value is defined and not null
+          if (value !== undefined && value !== null) {
+            // For string values, also check if not empty
+            if (typeof value === 'string' && value === "") {
+              return; // Skip empty strings
+            }
+            (merged as any)[key] = value;
           }
-          (merged as any)[key] = value;
         }
       });
       return merged;
@@ -53,8 +65,15 @@ export function getConfigValue<K extends keyof LibraryConfig>(
 }
 
 // Update global configuration (used internally by ConfigProvider)
-export function updateGlobalConfig(newConfig: Partial<LibraryConfig>): void {
-  globalConfig = { ...globalConfig, ...newConfig };
+// Only keys that exist in LibraryConfig will be updated
+export function updateGlobalConfig(newConfig: Record<string, any>): void {
+  const filtered: Partial<LibraryConfig> = {};
+  Object.keys(globalConfig).forEach((key) => {
+    if (key in newConfig && newConfig[key] !== undefined) {
+      (filtered as any)[key] = newConfig[key];
+    }
+  });
+  globalConfig = { ...globalConfig, ...filtered };
 }
 
 // Reset to default configuration
