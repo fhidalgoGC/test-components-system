@@ -96,7 +96,7 @@ export function useAppLanguage() {
 ## 🌐 Arquitectura de Idiomas
 
 ### **LibI18nProvider (Proveedor hijo de la librería)**
-**Ubicación:** `client/src/lib/ui-library/providers/LibI18n.provider.tsx`
+**Ubicación:** `client/src/lib/ui-library/providers/AppLanguageLibUiProvider/index.provider.tsx`
 
 ```jsx
 // Integración completa en la aplicación
@@ -312,7 +312,7 @@ Prioridad: Archivos JSON externos > Props del componente > default
 
 ### **useLibI18n() - Para cualquier componente:**
 ```jsx
-import { useLibI18n } from '../providers/LibI18n.provider';
+import { useLibI18n } from 'GC-UI-COMPONENTS';
 
 function AnyComponent({ label, title, description }) {
   const { resolveLabel, t } = useLibI18n();
@@ -584,7 +584,8 @@ interface LibI18nContextValue {
 
 ## 📚 Documentación Relacionada
 
-- **LibI18nProvider Detallado**: `./providers/README-LibI18n.provider.md`
+- **LibI18nProvider Detallado**: `./providers/AppLanguageLibUiProvider/`
+- **AppLanguageProvider**: `./providers/AppLanguageProvider/`
 - **Instalación y Rutas**: `./README-IA.md`
 - **Guía de Desarrollo**: `../README-BUILD-NEW-COMPONENTS.md`
 
