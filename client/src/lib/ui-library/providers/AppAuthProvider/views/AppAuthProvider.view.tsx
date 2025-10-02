@@ -64,30 +64,6 @@ export function AppAuthProvider({
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
 
-    return () => {
-      if (broadcastChannel.current) {
-        broadcastChannel.current.close();
-        broadcastChannel.current = null;
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const existingSession = getSessionFromStorage();
-    if (
-      existingSession &&
-      !isSessionExpired(existingSession, sessionDuration)
-    ) {
-      setIsAuthenticated(true);
-      isLoggingOut.current = false;
-    } else if (existingSession) {
-      logout();
-    }
-  }, [sessionDuration, logout]);
-
-  useEffect(() => {
-    if (!broadcastChannel.current) return;
-
     const handleMessage = (event: MessageEvent) => {
       const { type } = event.data;
 
@@ -101,13 +77,35 @@ export function AppAuthProvider({
         isProcessingEvent.current = false;
       } else if (type === "session_logout") {
         isProcessingEvent.current = true;
-        logout();
+        clearSessionFromStorage();
+        setIsAuthenticated(false);
+        onSessionInvalid?.();
         isProcessingEvent.current = false;
       }
     };
 
     broadcastChannel.current.onmessage = handleMessage;
-  }, [logout]);
+
+    return () => {
+      if (broadcastChannel.current) {
+        broadcastChannel.current.close();
+        broadcastChannel.current = null;
+      }
+    };
+  }, [onSessionInvalid]);
+
+  useEffect(() => {
+    const existingSession = getSessionFromStorage();
+    if (
+      existingSession &&
+      !isSessionExpired(existingSession, sessionDuration)
+    ) {
+      setIsAuthenticated(true);
+      isLoggingOut.current = false;
+    } else if (existingSession) {
+      logout();
+    }
+  }, [sessionDuration, logout]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
