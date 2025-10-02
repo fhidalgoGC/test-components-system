@@ -53,30 +53,106 @@ AppEnviromentProvider/
 ## ⚖️ Estrategias de Precedencia
 
 ### **1. Auto (Recomendado)**
-Precedencia inteligente: el padre gana solo si el valor está definido y no está vacío.
+Merge inteligente: sobrescribe solo valores definidos y no vacíos del padre.
+- ✅ Solo procesa keys que existen en el config interno de la librería
+- ✅ Keys extras del padre son ignoradas
+- ✅ Valida que valores no sean `undefined`, `null`, o strings vacíos
+- ✅ Keys que no existen en el padre mantienen valores internos por defecto
 
 ```jsx
 <ConfigProvider parentConfig={config} priority="auto">
-  {/* Padre gana solo para valores definidos */}
+  {/* Merge inteligente: padre sobrescribe solo valores válidos */}
 </ConfigProvider>
 ```
 
 ### **2. Parent (Padre Primero)**
-El padre siempre gana cuando define un valor, incluso si está vacío.
+El padre siempre gana para keys que define.
+- ✅ Solo procesa keys que existen en el config interno de la librería
+- ✅ Keys extras del padre son ignoradas
+- ✅ Sobrescribe incluso con valores vacíos (menos estricto que "auto")
+- ✅ Keys que no existen en el padre mantienen valores internos por defecto
 
 ```jsx
 <ConfigProvider parentConfig={config} priority="parent">
-  {/* Padre tiene prioridad absoluta */}
+  {/* Padre tiene prioridad para keys que existen en la librería */}
 </ConfigProvider>
 ```
 
 ### **3. Library (Solo Librería)**
-Ignora la configuración del padre, usa solo los valores de la librería.
+Ignora completamente la configuración del padre, usa solo valores internos.
+- ✅ parentConfig es completamente ignorado
+- ✅ Siempre usa valores por defecto de la librería
 
 ```jsx
 <ConfigProvider parentConfig={config} priority="library">
-  {/* Solo valores de la librería */}
+  {/* 100% valores internos de la librería */}
 </ConfigProvider>
+```
+
+---
+
+## 🔑 Sistema de Keys y Tipado
+
+### **Tipado Flexible**
+El `parentConfig` acepta `Record<string, any>`, permitiendo que tu aplicación tenga keys adicionales:
+
+```typescript
+// ✅ Correcto - parentConfig puede tener MÁS keys que LibraryConfig
+const myAppConfig = {
+  // Keys de la librería (serán procesadas)
+  AVAILABLE_LANGUAGES: ['es', 'en'],
+  DEFAULT_LANGUAGE: 'es',
+  IS_DEVELOPMENT: true,
+  
+  // Keys propias de tu app (ignoradas por la librería)
+  MY_API_URL: 'https://api.example.com',
+  MY_FEATURE_FLAG: true,
+  MY_CUSTOM_DATA: { foo: 'bar' }
+};
+
+<ConfigProvider parentConfig={myAppConfig} priority="auto">
+  {/* La librería solo lee las keys que conoce */}
+</ConfigProvider>
+```
+
+### **Comportamiento del Merge**
+
+#### **Ejemplo Práctico:**
+
+**Config INTERNO (librería):**
+```typescript
+{
+  AVAILABLE_LANGUAGES: ['es', 'en', 'fr'],
+  DEFAULT_LANGUAGE: 'en',
+  LANGUAGE_CONFIG: {...},
+  NUMBER_FORMAT_CONFIG: {...},
+  IS_DEVELOPMENT: false
+}
+```
+
+**Config EXTERNO (tu app):**
+```typescript
+{
+  AVAILABLE_LANGUAGES: ['es', 'en'],
+  DEFAULT_LANGUAGE: 'es',
+  // Nota: No incluye LANGUAGE_CONFIG ni NUMBER_FORMAT_CONFIG
+  
+  // Keys adicionales de tu app
+  MY_CUSTOM_SETTING: true
+}
+```
+
+**Resultado con `priority="auto"`:**
+```typescript
+{
+  AVAILABLE_LANGUAGES: ['es', 'en'],      // ✅ Sobrescrito por el padre
+  DEFAULT_LANGUAGE: 'es',                  // ✅ Sobrescrito por el padre
+  LANGUAGE_CONFIG: {...},                  // ✅ Mantenido del interno (no existe en externo)
+  NUMBER_FORMAT_CONFIG: {...},             // ✅ Mantenido del interno (no existe en externo)
+  IS_DEVELOPMENT: false                    // ✅ Mantenido del interno (no existe en externo)
+  
+  // MY_CUSTOM_SETTING es ignorado (no existe en LibraryConfig)
+}
 ```
 
 ---
@@ -89,10 +165,17 @@ Ignora la configuración del padre, usa solo los valores de la librería.
 import { ConfigProvider } from 'GC-UI-COMPONENTS';
 
 function App() {
+  // El parentConfig puede tener MÁS keys que el config interno de la librería
+  // Solo las keys que existen en el config interno serán sobrescritas
+  // Keys adicionales son ignoradas sin errores de tipado
   const myConfig = {
-    API_LIMIT: 200,
-    DEFAULT_CURRENCY: 'mxn',
-    CRM_BASE_URL: 'https://mi-api.com'
+    // Keys que existen en la librería (serán sobrescritas)
+    AVAILABLE_LANGUAGES: ['es', 'en'],
+    DEFAULT_LANGUAGE: 'es',
+    
+    // Keys adicionales de tu aplicación (serán ignoradas por la librería)
+    MY_CUSTOM_API: 'https://mi-api.com',
+    MY_APP_SETTING: true
   };
 
   return (
@@ -390,10 +473,15 @@ function MyComponent() {
 ```typescript
 interface ConfigProviderProps {
   children: React.ReactNode;
-  parentConfig?: Partial<LibraryConfig>;
+  
+  // Acepta cualquier objeto - solo keys que existen en LibraryConfig serán procesadas
+  parentConfig?: Record<string, any>;
+  
   priority?: ConfigPriority; // "parent" | "library" | "auto"
   enableOverrides?: boolean;
 }
+
+type ConfigPriority = "parent" | "library" | "auto";
 ```
 
 ### **useConfig Hook**
@@ -401,7 +489,10 @@ interface ConfigProviderProps {
 ```typescript
 interface ConfigContextType {
   config: LibraryConfig;
-  updateConfig: (newConfig: Partial<LibraryConfig>) => void;
+  
+  // Acepta cualquier objeto - solo keys que existen en LibraryConfig serán actualizadas
+  updateConfig: (newConfig: Record<string, any>) => void;
+  
   resetConfig: () => void;
   priority: ConfigPriority;
 }
@@ -417,10 +508,18 @@ getConfig(): LibraryConfig
 getConfigValue<K extends keyof LibraryConfig>(key: K): LibraryConfig[K]
 
 // Update global config
-updateGlobalConfig(newConfig: Partial<LibraryConfig>): void
+// Acepta cualquier objeto - solo keys que existen en LibraryConfig serán actualizadas
+updateGlobalConfig(newConfig: Record<string, any>): void
 
 // Reset to defaults
 resetGlobalConfig(): void
+
+// Merge configurations (used internally)
+mergeConfigs(
+  libraryConfig: LibraryConfig,
+  parentConfig: Record<string, any>,
+  priority: ConfigPriority
+): LibraryConfig
 ```
 
 ---

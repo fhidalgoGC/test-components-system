@@ -18,16 +18,23 @@ AppLanguageLibUiProvider/
 
 ## 🏗️ Arquitectura
 
-### **Arquitectura Padre-Hijo**
+### **Arquitectura Padre-Hijo con ConfigProvider**
 ```
 App Level (PADRE)
-├── AppLanguageProvider        # Proveedor principal de la aplicación
+├── ConfigProvider                    # Sistema de configuración híbrida (opcional)
+│   ├── Permite override de config interna de la librería
+│   ├── Proporciona AVAILABLE_LANGUAGES
+│   └── Priority modes: auto | parent | library
+│
+├── AppLanguageProvider               # Proveedor principal de la aplicación
 │   ├── Control de idioma global
 │   ├── Estado del idioma actual  
 │   └── Función setLanguage()
 │
 └── Library Level (HIJO)
-    └── LibI18nProvider         # Proveedor específico de la librería
+    └── LibI18nProvider               # Proveedor específico de la librería
+        ├── Lee AVAILABLE_LANGUAGES de ConfigProvider (cuando existe)
+        ├── Falls back a environment interno si no hay ConfigProvider
         ├── Recibe parentLanguageProvider
         ├── Maneja traducciones locales
         └── Combina con traducciones globales
@@ -117,6 +124,36 @@ function MyComponentWithLibrary() {
       <TagSelector {...props} />
       <Button {...props} />
     </LibI18nProvider>
+  );
+}
+```
+
+### **2b. Uso con ConfigProvider + Provider Padre**
+
+```jsx
+import { 
+  ConfigProvider, 
+  LibI18nProvider, 
+  useAppLanguage 
+} from 'GC-UI-COMPONENTS';
+
+function MyApp() {
+  const app = useAppLanguage();
+  
+  // Environment externo puede sobrescribir config interno de la librería
+  const externalConfig = {
+    AVAILABLE_LANGUAGES: ['es', 'en'],  // Sobrescribe idiomas disponibles
+    DEFAULT_LANGUAGE: 'es',
+    IS_DEVELOPMENT: true
+  };
+  
+  return (
+    <ConfigProvider parentConfig={externalConfig} priority="auto">
+      <LibI18nProvider parentLanguageProvider={app}>
+        {/* LibI18nProvider lee AVAILABLE_LANGUAGES del config merged */}
+        <TagSelector {...props} />
+      </LibI18nProvider>
+    </ConfigProvider>
   );
 }
 ```
@@ -261,11 +298,21 @@ const externalTranslations = getExternalTranslations();
 2. **Prop controlada** (`language`)
 3. **Estado interno** (default: 'en')
 
+### **Prioridad para AVAILABLE_LANGUAGES:**
+1. **ConfigProvider merged config** (cuando ConfigProvider existe)
+2. **Environment interno de la librería** (fallback)
+
 ### **Flujo de Cambio de Idioma:**
 1. Se llama `setLanguage('es')`
 2. Si hay **provider padre**: `parentLanguageProvider.setLanguage('es')`
 3. Si no hay padre pero hay **onLanguageChange**: `onLanguageChange('es')`
 4. Si nada existe: actualiza **estado interno**
+
+### **Integración con ConfigProvider:**
+LibI18nProvider usa `useOptionalConfig()` para acceder a ConfigProvider de forma segura:
+- Si ConfigProvider existe: lee `AVAILABLE_LANGUAGES` del config merged
+- Si ConfigProvider NO existe: usa `AVAILABLE_LANGUAGES` del environment interno
+- Respeta las reglas de React hooks (sin try-catch con useContext)
 
 ## ⚠️ Consideraciones Importantes
 
@@ -358,12 +405,51 @@ function ConditionalTranslations() {
 
 ---
 
+## 🔧 Integración con ConfigProvider
+
+### **Lectura de AVAILABLE_LANGUAGES**
+
+LibI18nProvider detecta automáticamente si ConfigProvider está disponible:
+
+```jsx
+// Uso interno (dentro de LibI18nProvider)
+import { useOptionalConfig } from './index.hook';
+
+function LibI18nProvider({ children }) {
+  const optionalConfig = useOptionalConfig();
+  
+  // Si ConfigProvider existe, usa config.AVAILABLE_LANGUAGES
+  // Si no existe, usa AVAILABLE_LANGUAGES del environment interno
+  const availableLanguages = optionalConfig?.AVAILABLE_LANGUAGES || 
+                              INTERNAL_AVAILABLE_LANGUAGES;
+  
+  // ... resto de la lógica
+}
+```
+
+### **Hook useOptionalConfig()**
+
+Hook seguro para acceder a ConfigProvider sin lanzar errores:
+
+```typescript
+// Retorna config merged si ConfigProvider existe, null si no
+function useOptionalConfig(): LibraryConfig | null;
+```
+
+**Características:**
+- ✅ No lanza error si ConfigProvider no existe
+- ✅ Respeta reglas de React hooks (sin try-catch)
+- ✅ Retorna null cuando ConfigProvider no está disponible
+- ✅ Permite que LibI18nProvider funcione standalone
+
+---
+
 ## 🔗 Enlaces Relacionados
 
-- **../../README-IA--LANGUAJE.md**: Documentación completa del sistema de idiomas
-- **../AppLanguageProvider/**: Provider padre de aplicación
-- **../AppEnviromentProvider/**: Sistema de configuración de la librería
-- **../../components/TagSelector/README-IA.md**: Ejemplo de uso en componentes específicos
+- **../AppLanguageProvider/README.md**: Provider padre de aplicación
+- **../AppEnviromentProvider/README.md**: Sistema de configuración de la librería (ConfigProvider)
+- **../../enviorments/enviroment.ts**: Configuración interna de idiomas
+- **../../components/TagSelector/**: Ejemplo de componente que usa LibI18nProvider
 
 ---
 
