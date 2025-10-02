@@ -3,4 +3,6 @@ export { useAppLanguage } from './AppLanguageProvider/index.hook';
 export { LibI18nProvider } from './AppLanguageLibUiProvider/index.provider';
 export { useLibI18n, useParentLanguageInjection } from './AppLanguageLibUiProvider/index.hook';
 export { ThemeProvider } from './Theme.provider';
-export { ConfigProvider, useConfig, useConfigValue } from './AppEnviromentProvider';
+export { ConfigProvider } from './AppEnviromentProvider/index.provider';
+export { useConfig, useConfigValue } from './AppEnviromentProvider/index.hook';
+export { getConfig, getConfigValue, updateGlobalConfig, resetGlobalConfig, config, APP_CONFIG } from './AppEnviromentProvider/index.utils';

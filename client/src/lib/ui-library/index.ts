@@ -4,13 +4,10 @@ export * from './components';
 // Providers
 export * from './providers';
 
-// Config Utils (for non-React usage)
-export { getConfig, getConfigValue, updateGlobalConfig, resetGlobalConfig } from './providers/utils/AppEnviroment.util';
-
 // Types and Theme
 export * from './types';
 export * from './theme';
-export type { LibraryConfig, ConfigPriority, ConfigProviderProps, ConfigContextType } from './providers/types/AppEnviroment.types';
+export type { LibraryConfig, ConfigPriority, ConfigProviderProps, ConfigContextType } from './providers/AppEnviromentProvider/index.types';
 export type { LanguageConfig } from './enviorments/enviroment.types';
 export type { Lang, LibI18nContextValue, GlobalTranslationPath, LibI18nProviderProps } from './providers/AppLanguageLibUiProvider/index.types';
 

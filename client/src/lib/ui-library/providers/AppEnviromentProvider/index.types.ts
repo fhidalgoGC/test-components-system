@@ -1,4 +1,4 @@
-import { environment } from './enviroment';
+import { environment } from '../../enviorments/enviroment';
 
 // Language configuration type
 export type LanguageConfig = {
