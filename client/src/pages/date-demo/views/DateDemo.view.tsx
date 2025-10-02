@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { useAppLanguage, useConfig, AppLanguageLibUiProvider } from "@/lib/ui-library/providers";
+import { useAppLanguage, useConfig } from "@/lib/ui-library/providers";
 import { useDateFormatter, useFormattedDate } from "@/lib/ui-library/utils/dates/dates.util";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -214,10 +214,6 @@ function DateDemoContent() {
 }
 
 export function DateDemoView() {
-  // Wrap with AppLanguageLibUiProvider since we're using library utilities
-  return (
-    <AppLanguageLibUiProvider>
-      <DateDemoContent />
-    </AppLanguageLibUiProvider>
-  );
+  // No need to wrap - LibI18nProvider is already at App level
+  return <DateDemoContent />;
 }
