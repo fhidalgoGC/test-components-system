@@ -68,7 +68,7 @@ export function AppAuthProvider({
         timestamp: Date.now(),
       });
     }
-  }, []);
+  }, [onLogging]);
 
   const logout = useCallback((fromBroadcastChannel: boolean = false) => {
     if (isLoggingOut.current) return;
@@ -88,7 +88,7 @@ export function AppAuthProvider({
         timestamp: Date.now(),
       });
     }
-  }, []);
+  }, [onSessionInvalid]);
 
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
