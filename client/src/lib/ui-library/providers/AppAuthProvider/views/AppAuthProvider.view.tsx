@@ -80,6 +80,35 @@ export function AppAuthProvider({
     [onLogging],
   );
 
+  const loginCallback = useCallback(
+    (customOnLogging?: () => void, fromBroadcastChannel: boolean = false) => {
+      const sessionId = generateSessionId();
+
+      saveSessionToStorage({
+        sessionId,
+        sessionStartTime: Date.now(),
+        lastActivityTime: Date.now(),
+      });
+
+      setIsAuthenticated(true);
+      isLoggingOut.current = false;
+      customOnLogging?.();
+
+      if (
+        !fromBroadcastChannel &&
+        !isProcessingEvent.current &&
+        broadcastChannel.current
+      ) {
+        broadcastChannel.current.postMessage({
+          type: "session_login",
+          sessionId,
+          timestamp: Date.now(),
+        });
+      }
+    },
+    [],
+  );
+
   const logout = useCallback(
     (fromBroadcastChannel: boolean = false) => {
       if (isLoggingOut.current) return;
@@ -153,6 +182,7 @@ export function AppAuthProvider({
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
     login,
+    loginCallback,
     logout,
   };
 
