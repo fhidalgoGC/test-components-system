@@ -62,57 +62,51 @@ export function AppAuthProvider({
     onSessionInvalidRef.current = onSessionInvalid;
   }, [onSessionInvalid]);
 
-  const login = useCallback(
-    (fromBroadcastChannel: boolean = false) => {
-      const sessionId = generateSessionId();
+  const login = useCallback((fromBroadcastChannel: boolean = false) => {
+    const sessionId = generateSessionId();
 
-      saveSessionToStorage({
+    saveSessionToStorage({
+      sessionId,
+      sessionStartTime: Date.now(),
+      lastActivityTime: Date.now(),
+    });
+
+    setIsAuthenticated(true);
+    isLoggingOut.current = false;
+    onLoggingRef.current?.();
+
+    if (
+      !fromBroadcastChannel &&
+      !isProcessingEvent.current &&
+      broadcastChannel.current
+    ) {
+      broadcastChannel.current.postMessage({
+        type: "session_login",
         sessionId,
-        sessionStartTime: Date.now(),
-        lastActivityTime: Date.now(),
+        timestamp: Date.now(),
       });
+    }
+  }, []);
 
-      setIsAuthenticated(true);
-      isLoggingOut.current = false;
-      onLoggingRef.current?.();
+  const logout = useCallback((fromBroadcastChannel: boolean = false) => {
+    if (isLoggingOut.current) return;
+    isLoggingOut.current = true;
 
-      if (
-        !fromBroadcastChannel &&
-        !isProcessingEvent.current &&
-        broadcastChannel.current
-      ) {
-        broadcastChannel.current.postMessage({
-          type: "session_login",
-          sessionId,
-          timestamp: Date.now(),
-        });
-      }
-    },
-    [],
-  );
+    clearSessionFromStorage();
+    setIsAuthenticated(false);
+    onSessionInvalidRef.current?.();
 
-  const logout = useCallback(
-    (fromBroadcastChannel: boolean = false) => {
-      if (isLoggingOut.current) return;
-      isLoggingOut.current = true;
-
-      clearSessionFromStorage();
-      setIsAuthenticated(false);
-      onSessionInvalidRef.current?.();
-
-      if (
-        !fromBroadcastChannel &&
-        !isProcessingEvent.current &&
-        broadcastChannel.current
-      ) {
-        broadcastChannel.current.postMessage({
-          type: "session_logout",
-          timestamp: Date.now(),
-        });
-      }
-    },
-    [],
-  );
+    if (
+      !fromBroadcastChannel &&
+      !isProcessingEvent.current &&
+      broadcastChannel.current
+    ) {
+      broadcastChannel.current.postMessage({
+        type: "session_logout",
+        timestamp: Date.now(),
+      });
+    }
+  }, []);
 
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
@@ -156,13 +150,11 @@ export function AppAuthProvider({
       !isSessionExpired(existingSession, finalSessionDuration)
     ) {
       console.log("useEffect-getSessionFromStorage");
-      setIsAuthenticated(true);
-      isLoggingOut.current = false;
-      onLoggingRef.current?.();
+      login(true);
     } else if (existingSession) {
       logout(true);
     }
-  }, [finalSessionDuration, logout]);
+  }, []);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
