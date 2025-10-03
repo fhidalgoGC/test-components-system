@@ -155,6 +155,7 @@ export function AppAuthProvider({
       existingSession &&
       !isSessionExpired(existingSession, finalSessionDuration)
     ) {
+      console.log("useEffect-getSessionFromStorage");
       setIsAuthenticated(true);
       isLoggingOut.current = false;
       onLoggingRef.current?.();
