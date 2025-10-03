@@ -16,6 +16,15 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector', icon: 'Tags' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
       ]
+    },
+    { 
+      id: 'utils', 
+      label: 'Utilities', 
+      icon: 'Layout',
+      children: [
+        { id: 'date-demo', label: 'Date Demo', path: '/date-demo', icon: 'Calendar' },
+        { id: 'auth-test', label: 'Auth Test', path: '/auth-test', icon: 'Shield' }
+      ]
     }
   ];
 }

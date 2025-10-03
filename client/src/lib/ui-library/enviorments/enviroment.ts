@@ -1,48 +1,35 @@
-export const environment = {
-  // API Config
-  API_LIMIT: Number(import.meta.env.VITE_API_LIMIT) || 100,
+import type { LanguageConfig } from "./enviroment.types";
 
-  // Base URLs
-  CRM_BASE_URL: import.meta.env.VITE_URL_CRM,
+// Available languages configuration - can be overridden via environment
+const availableLanguagesEnv =
+  import.meta.env.VITE_AVAILABLE_LANGUAGES || "es,en";
+const AVAILABLE_LANGUAGES = availableLanguagesEnv
+  .split(",")
+  .map((lang: string) => lang.trim());
 
-  TRM_BASE_URL: import.meta.env.VITE_TRM_BASE_URL,
+// Default language - can be overridden via environment
+const DEFAULT_LANGUAGE = import.meta.env.VITE_DEFAULT_LANGUAGE || "en";
 
-  IDENTITY_BASE_URL: import.meta.env.VITE_URL_IDENTITY,
+// Language configurations
+const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
+  es: {
+    locale: import.meta.env.VITE_LOCALE_ES || "es",
+    dateFormat: import.meta.env.VITE_DATE_FORMAT_ES || "dd/MM/yyyy",
+    twoDigits: import.meta.env.VITE_DATE_TWO_DIGITS_ES !== "false",
+  },
+  en: {
+    locale: import.meta.env.VITE_LOCALE_EN || "en",
+    dateFormat: import.meta.env.VITE_DATE_FORMAT_EN || "MM/dd/yyyy",
+    twoDigits: import.meta.env.VITE_DATE_TWO_DIGITS_EN !== "false",
+  },
+  // Puedes agregar más idiomas aquí que estén disponibles en los archivos de traducción
+  // pero solo los definidos en AVAILABLE_LANGUAGES estarán activos
+};
 
-  UNIT_CONVERSIONS_ENDPOINT: "/unit-conversions/units",
-
-  CRAFTMYPDF_BASE_URL: import.meta.env.VITE_CRAFTMYPDF_BASE_URL,
-
-  SSM_BASE_URL: import.meta.env.VITE_SSM_BASE_URL,
-
-  // Origins for CORS
-  CONTRACTS_ORIGIN: import.meta.env.VITE_CONTRACTS_ORIGIN,
-
-  // Auth0 Config
-  AUTH0_URL: import.meta.env.VITE_AUTH0_URL,
-
-  AUTH0_AUDIENCE: import.meta.env.VITE_AUTH0_AUDIENCE,
-
-  AUTH0_GRANT_TYPE: import.meta.env.VITE_AUTH0_GRANT_TYPE,
-
-  AUTH0_REALM: import.meta.env.VITE_AUTH0_REALM,
-
-  AUTH0_CLIENT_ID: import.meta.env.VITE_AUTH0_CLIENT_ID,
-
-  AUTH0_SCOPE: import.meta.env.VITE_AUTH0_SCOPE || "openid offline_access",
-
-  // Currency
-  DEFAULT_CURRENCY: import.meta.env.VITE_DEFAULT_CURRENCY || "usd",
-
-  // CraftMyPDF Config
-  TEMPLATE_ID: import.meta.env.VITE_TEMPLATE_ID,
-
-  CRAFTMYPDF_API_KEY: import.meta.env.VITE_CRAFTMYPDF_API_KEY,
-
-  // Number Formatting
+// Number format configuration
+const NUMBER_FORMAT_CONFIG = {
   NUMBER_FORMAT_PATTERN:
     import.meta.env.VITE_NUMBER_FORMAT_PATTERN || ("0,000.00" as const),
-
   NUMBER_ROUND_MODE:
     import.meta.env.VITE_NUMBER_ROUND_MODE || ("truncate" as const),
 
@@ -51,18 +38,23 @@ export const environment = {
   NUMBER_MIN_DECIMALS: Number(import.meta.env.VITE_NUMBER_MIN_DECIMALS) || 2,
 
   NUMBER_MAX_DECIMALS: Number(import.meta.env.VITE_NUMBER_MAX_DECIMALS) || 4,
+};
 
-  // Price Thresholds
-  PRICE_THRESHOLD_MIN: Number(import.meta.env.VITE_PRICE_THRESHOLD_MIN) || 0,
+// Session configuration
+export const SESSION_CONFIG = {
+  SESSION_DURATION:
+    Number(import.meta.env.VITE_SESSION_DURATION) || 8 * (60 * 60 * 1000),
+  VALIDATION_INTERVAL:
+    Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 60 * 1000,
+};
 
-  PRICE_THRESHOLD_MAX: Number(import.meta.env.VITE_PRICE_THRESHOLD_MAX) || 0,
-
-  SHOW_THRESHOLDS: import.meta.env.VITE_SHOW_THRESHOLDS === "true" || false,
-
-  // Session timeout configuration (in minutes)
-  MAX_SESSION_DURATION_MINUTES: 24 * 60, // 24 horas = 1440 minutos
-  INACTIVITY_TIMEOUT_MINUTES: 8 * 60, // 8 horas = 480 minutos
-
+export const environment = {
+  // Language Configuration
+  AVAILABLE_LANGUAGES,
+  DEFAULT_LANGUAGE,
+  LANGUAGE_CONFIG,
+  NUMBER_FORMAT_CONFIG,
+  SESSION_CONFIG,
   // Development environment detection
   IS_DEVELOPMENT:
     import.meta.env.DEV ||
@@ -71,24 +63,3 @@ export const environment = {
 };
 
 export const APP_CONFIG = environment;
-
-// Number format configuration
-export const NUMBER_FORMAT_CONFIG = {
-  locale: "en-US",
-  formatPattern: "0,000.00" as const,
-  roundMode: "truncate" as const,
-  minDecimals: 2,
-  maxDecimals: 4,
-};
-
-// Currency options
-export const CURRENCY_OPTIONS = [
-  { key: "usd", value: "USD", label: "USD" },
-  { key: "mxn", value: "MXN", label: "MXN" },
-];
-
-// Pricing type options
-export const PRICING_TYPE_OPTIONS = [
-  { key: "fixed", value: "fixed", label: "Fixed" },
-  { key: "basis", value: "basis", label: "Basis" },
-];

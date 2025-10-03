@@ -165,7 +165,8 @@ For comprehensive styling, theming, and visual customization, see:
 
 ### 🌐 **Internationalization and Languages**  
 For complete language support, translations, and i18n setup, see:
-**[README-IA--LANGUAJE.md](./README-IA--LANGUAJE.md)**
+- **[AppLanguageProvider](../../providers/AppLanguageProvider/README.md)** - Provider de idioma principal
+- **[AppLanguageLibUiProvider](../../providers/AppLanguageLibUiProvider/README.md)** - Provider de traducciones
 
 ## Advanced Usage
 
@@ -297,13 +298,13 @@ const getTagsWithErrorHandling = async (): Promise<TagItem[]> => {
 This implementation guide provides everything needed to use the TagSelector component effectively. The component handles all complex logic internally while providing a simple, powerful API for various use cases.
 
 For advanced styling and theming, see [README-IA-STYLES.md](./README-IA-STYLES.md).
-For internationalization and language support, see [README-IA--LANGUAJE.md](./README-IA--LANGUAJE.md).
+For internationalization and language support, see [AppLanguageProvider](../../providers/AppLanguageProvider/README.md) and [AppLanguageLibUiProvider](../../providers/AppLanguageLibUiProvider/README.md).
 
 ## Version History
 
 ### Version 1.0.4 (Current)
 - ✅ Separated styling documentation into README-IA-STYLES.md
-- ✅ Separated language documentation into README-IA--LANGUAJE.md  
+- ✅ Separated language documentation into provider-specific READMEs  
 - ✅ Simplified main README to focus on core functionality
 - ✅ Streamlined examples and removed complex styling content
 
