@@ -26,16 +26,17 @@ export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
   // pero solo los definidos en AVAILABLE_LANGUAGES estarán activos
 };
 
-// External environment can have MORE keys than internal library environment
-// Only keys that exist in the internal environment will be overridden during merge
-// Additional keys are safely ignored
+export const SESSION_CONFIG = {
+  SESSION_DURATION: Number(import.meta.env.VITE_SESSION_DURATION) || 60000,
+  VALIDATION_INTERVAL:
+    Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 10000,
+};
+
 export const environment = {
-  // Language Configuration
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE,
   LANGUAGE_CONFIG,
-
-  // Development environment detection
+  SESSION_CONFIG,
   IS_DEVELOPMENT:
     import.meta.env.DEV ||
     import.meta.env.VITE_NODE_ENV === "development" ||

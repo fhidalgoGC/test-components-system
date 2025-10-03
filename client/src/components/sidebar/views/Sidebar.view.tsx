@@ -4,7 +4,7 @@ import { getSidebarTranslations } from '../i18n';
 import type { SidebarProps } from '../types/Sidebar.types';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AVAILABLE_LANGUAGES } from '@/enviorments/enviroment';
+import { environment } from '@/enviorments/enviroment';
 
 // Simple icon mapping - you can expand this as needed
 const iconMap: Record<string, any> = {
@@ -202,7 +202,7 @@ export function SidebarView(props: SidebarProps) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {AVAILABLE_LANGUAGES.map((lang: string) => (
+              {environment.AVAILABLE_LANGUAGES.map((lang: string) => (
                 <SelectItem 
                   key={lang} 
                   value={lang} 
