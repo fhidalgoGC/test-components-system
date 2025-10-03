@@ -6,12 +6,12 @@ import {
   hasValidSession,
   updateLastActivity,
 } from "../utils";
-import { SESSION_CONFIG } from "@/lib/ui-library/enviorments/enviroment";
+import { environment } from "@/lib/ui-library/enviorments/enviroment";
 
 export function useSessionValidator({
   enabled = false,
-  sessionDuration = SESSION_CONFIG.SESSION_DURATION,
-  checkInterval = SESSION_CONFIG.VALIDATION_INTERVAL,
+  sessionDuration = environment.SESSION_CONFIG.SESSION_DURATION,
+  checkInterval = environment.SESSION_CONFIG.VALIDATION_INTERVAL,
   autoActivateIfSession = true,
   onSessionInvalid,
 }: Omit<SessionValidatorProps, "children">) {

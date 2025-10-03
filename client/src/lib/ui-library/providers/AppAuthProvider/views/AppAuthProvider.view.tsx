@@ -7,7 +7,7 @@ import {
   isSessionExpired,
 } from "@/lib/ui-library/components/SessionValidator/utils";
 import type { AppAuthContextValue, AppAuthProviderProps } from "../types";
-import { SESSION_CONFIG } from "@/lib/ui-library/enviorments/enviroment";
+import { environment } from "@/lib/ui-library/enviorments/enviroment";
 
 export const AppAuthContext = createContext<AppAuthContextValue | null>(null);
 
@@ -17,8 +17,8 @@ function generateSessionId(): string {
 
 export function AppAuthProvider({
   children,
-  sessionDuration = SESSION_CONFIG.SESSION_DURATION,
-  validationInterval = SESSION_CONFIG.VALIDATION_INTERVAL,
+  sessionDuration = environment.SESSION_CONFIG.SESSION_DURATION,
+  validationInterval = environment.SESSION_CONFIG.VALIDATION_INTERVAL,
   onLogging,
   onSessionInvalid,
 }: AppAuthProviderProps) {
