@@ -11,7 +11,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 ## 📦 **Instalación y Configuración General**
 
 ### **`./README-IA.md`**
-**Cuándo usar:** Para instalar la librería, configurar rutas de importación y estilos.
+**Cuándo usar:** Para instalar la librería y configurar rutas de importación.
 
 **Contiene:**
 - 🚀 Instalación desde GitHub (2 métodos)
@@ -26,29 +26,98 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Instalar dependencias requeridas
 - Resolver errores de módulos no encontrados
 
+### **`../README-IA-IMPORTS.md`**
+**Cuándo usar:** Para entender cómo hacer imports correctamente DENTRO de la librería (para desarrollo interno).
+
+**Contiene:**
+- 🚫 Regla principal: NO usar alias @ dentro de la librería
+- 📁 Estructura de carpetas y cómo calcular rutas relativas
+- ✅ Ejemplos correctos vs ❌ incorrectos de imports
+- 🎯 Patrones comunes (provider a provider, componente a hook, etc.)
+- 🧪 Verificación de imports correctos
+- ⚠️ Errores comunes a evitar
+
+**Buscar aquí para:**
+- Implementar nuevos providers o componentes dentro de la librería
+- Resolver errores de imports con alias @
+- Calcular rutas relativas correctamente
+- Verificar que los imports funcionarán en aplicaciones externas
+- Evitar problemas de resolución de módulos
+
+---
+
+## 🌍 **Sistema de Variables de Entorno**
+
+### **`./providers/AppEnviromentProvider/README.md`**
+**Cuándo usar:** Para configurar variables de entorno y gestión híbrida de configuración entre aplicaciones padre y librería.
+
+**Contiene:**
+- 🏗️ Arquitectura modular del sistema de configuración híbrida
+- ⚖️ 3 estrategias de precedencia (auto, parent, library)
+- 🚀 Configuración en aplicaciones padre con ConfigProvider
+- 🎯 Variables de entorno disponibles (API, Auth0, moneda, formato)
+- 🔧 Uso en componentes (hooks useConfig y funciones directas)
+- 🚨 Problemas comunes y migración desde configuración antigua
+- 🔗 API Reference completa (props, hooks, utilities)
+
+**Buscar aquí para:**
+- Configurar variables de entorno con precedencia personalizable
+- Implementar ConfigProvider en aplicaciones padre
+- Sobrescribir configuración de la librería desde el padre
+- Usar hooks useConfig y useConfigValue en componentes
+- Utilizar funciones no-React (getConfig, getConfigValue)
+- Migrar desde configuración estática a sistema híbrido
+- Resolver problemas de configuración y precedencia
+
+---
+
+## 🔐 **Sistema de Autenticación y Sesiones**
+
+### **`./providers/AppAuthProvider/README.md`**
+**Cuándo usar:** Para implementar gestión de autenticación y sesiones con expiración automática.
+
+**Contiene:**
+- 🏗️ Arquitectura del sistema de autenticación
+- 🎯 Props y API del AppAuthProvider
+- 🚀 Ejemplos de uso (básico, con callbacks, con API)
+- ⏰ Sistema de expiración de sesión basado en tiempo real
+- 🔄 Sincronización cross-tab con BroadcastChannel
+- ⚙️ Integración con ConfigProvider para configuración jerárquica
+- 🗄️ Persistencia automática en sessionStorage
+- 📊 Callbacks de ciclo de vida (onLogging, onSessionInvalid)
+
+**Buscar aquí para:**
+- Implementar AppAuthProvider en la aplicación
+- Configurar duración de sesión personalizada
+- Usar callbacks para notificaciones de sesión
+- Integrar con sistemas de autenticación externos
+- Sincronizar estado de sesión entre pestañas
+- Manejar expiración automática de sesiones
+- Usar useAppAuth hook
+
 ---
 
 ## 🌐 **Sistema de Idiomas y Providers**
 
-### **`./README-IA--LANGUAJE.md`**
-**Cuándo usar:** Para implementar internacionalización y configurar providers de lenguaje.
+### **`./providers/AppLanguageProvider/README.md`**
+**Cuándo usar:** Para implementar el provider de idioma principal de la aplicación.
 
 **Contiene:**
-- 🏗️ Arquitectura padre-hijo de providers
-- 🎯 Configuración de LibI18nProvider (3 niveles)
-- 🔄 Flujo de comunicación entre providers
-- 🌐 Estructura de archivos de traducción
-- 🔧 API completa de providers y hooks
-- 📝 Ejemplos de implementación
+- 🏗️ Arquitectura del provider padre de idioma
+- 🎯 Props y API del AppLanguageProvider
+- 🚀 Ejemplos de uso (básico, con localStorage, dinámico)
+- 🔧 Configuración de idiomas disponibles
+- 🔄 Integración con LibI18nProvider
+- 🌐 Configuración regional y formatos de fecha
 
 **Buscar aquí para:**
-- Configurar el sistema de idiomas
-- Implementar AppLanguageProvider padre
-- Conectar LibI18nProvider con la app
-- Resolver problemas de providers
-- Crear traducciones globales y locales
+- Implementar AppLanguageProvider en la aplicación
+- Configurar idioma inicial y persistencia
+- Agregar nuevos idiomas al sistema
+- Usar useAppLanguage hook
+- Integrar con componentes de la librería
 
-### **`./providers/README-LibI18n.provider.md`**
+### **`./providers/AppLanguageLibUiProvider/README.md`**
 **Cuándo usar:** Para documentación técnica detallada del LibI18nProvider.
 
 **Contiene:**
@@ -186,17 +255,62 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 └── Configuración de imports
 ```
 
+### **🌍 Variables de Entorno**
+```
+./providers/AppEnviromentProvider/README.md
+├── Sistema híbrido de configuración
+├── 3 estrategias de precedencia
+├── ConfigProvider para aplicaciones padre
+├── Variables disponibles (API, Auth0, etc.)
+├── Uso en componentes (hooks y funciones)
+└── API Reference (props, hooks, utilities)
+```
+
+### **🔐 Autenticación y Sesiones**
+```
+./providers/AppAuthProvider/README.md
+├── Sistema de autenticación global
+├── Expiración de sesión basada en tiempo real
+├── Sincronización cross-tab con BroadcastChannel
+├── Callbacks de ciclo de vida (onLogging, onSessionInvalid)
+├── Integración con ConfigProvider
+├── Persistencia automática en sessionStorage
+└── API Reference (props, hooks)
+```
+
+### **🎨 Estilos Globales**
+```
+./README-IA--STYLES.md
+├── 4 estrategias de personalización
+├── Orden de precedencia CSS
+├── Configuración Tailwind obligatoria
+└── Estrategias híbridas
+```
+
 ### **🌐 Idiomas**
 ```
-./README-IA--LANGUAJE.md
-├── Arquitectura de providers
-├── Configuración AppLanguageProvider
-└── LibI18nProvider setup
+./providers/AppLanguageProvider/README.md
+├── Provider de idioma principal (padre)
+├── Configuración de idiomas disponibles
+├── useAppLanguage hook
+└── Integración con la aplicación
 
-./providers/README-LibI18n.provider.md
+./providers/AppLanguageLibUiProvider/README.md
+├── Provider de traducciones de librería (hijo)
 ├── API detallada de LibI18nProvider
 ├── useLibI18n hook
-└── Casos de uso avanzados
+└── Sistema de prioridades de traducción
+```
+
+### **📅 Utilidades de Fechas**
+```
+./utils/dates/README.md
+├── Sistema flexible de formateo de fechas
+├── AppProviderLanguageResolver (detección automática de providers)
+├── useDateFormatter hook
+├── Integración con AppLanguageProvider/LibI18nProvider
+├── Configuración externa desde aplicación padre
+└── Ejemplos de uso (con/sin providers, standalone)
 ```
 
 ### **🧩 Componentes**
@@ -220,10 +334,18 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | **Necesito...** | **Ir a...** |
 |-----------------|-------------|
 | Instalar la librería | `README-IA.md` |
-| Configurar idiomas | `README-IA--LANGUAJE.md` |
-| API de LibI18nProvider | `providers/README-LibI18n.provider.md` |
-| Resolver errores de imports | `README-IA.md` |
-| Implementar provider padre | `README-IA--LANGUAJE.md` |
+| Implementar nuevos providers o componentes | `../README-IA-IMPORTS.md` |
+| Configurar variables de entorno | `providers/AppEnviromentProvider/README.md` |
+| Sobrescribir config desde padre | `providers/AppEnviromentProvider/README.md` |
+| Implementar autenticación y sesiones | `providers/AppAuthProvider/README.md` |
+| Configurar expiración de sesión | `providers/AppAuthProvider/README.md` |
+| Sincronizar sesión entre pestañas | `providers/AppAuthProvider/README.md` |
+| Personalizar estilos globales | `README-IA--STYLES.md` |
+| Configurar idioma de aplicación | `providers/AppLanguageProvider/README.md` |
+| Traducciones de componentes | `providers/AppLanguageLibUiProvider/README.md` |
+| Formatear fechas con providers | `utils/dates/README.md` |
+| Resolver errores de imports con alias | `../README-IA-IMPORTS.md` |
+| Agregar nuevos idiomas | `providers/AppLanguageProvider/README.md` |
 
 ### **🧩 Componentes Específicos:**
 | **Componente** | **Documentación** | **Estilos** |
