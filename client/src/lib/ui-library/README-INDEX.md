@@ -53,6 +53,32 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ---
 
+## 🔐 **Sistema de Autenticación y Sesiones**
+
+### **`./providers/AppAuthProvider/README.md`**
+**Cuándo usar:** Para implementar gestión de autenticación y sesiones con expiración automática.
+
+**Contiene:**
+- 🏗️ Arquitectura del sistema de autenticación
+- 🎯 Props y API del AppAuthProvider
+- 🚀 Ejemplos de uso (básico, con callbacks, con API)
+- ⏰ Sistema de expiración de sesión basado en tiempo real
+- 🔄 Sincronización cross-tab con BroadcastChannel
+- ⚙️ Integración con ConfigProvider para configuración jerárquica
+- 🗄️ Persistencia automática en sessionStorage
+- 📊 Callbacks de ciclo de vida (onLogging, onSessionInvalid)
+
+**Buscar aquí para:**
+- Implementar AppAuthProvider en la aplicación
+- Configurar duración de sesión personalizada
+- Usar callbacks para notificaciones de sesión
+- Integrar con sistemas de autenticación externos
+- Sincronizar estado de sesión entre pestañas
+- Manejar expiración automática de sesiones
+- Usar useAppAuth hook
+
+---
+
 ## 🌐 **Sistema de Idiomas y Providers**
 
 ### **`./providers/AppLanguageProvider/README.md`**
@@ -222,6 +248,18 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 └── API Reference (props, hooks, utilities)
 ```
 
+### **🔐 Autenticación y Sesiones**
+```
+./providers/AppAuthProvider/README.md
+├── Sistema de autenticación global
+├── Expiración de sesión basada en tiempo real
+├── Sincronización cross-tab con BroadcastChannel
+├── Callbacks de ciclo de vida (onLogging, onSessionInvalid)
+├── Integración con ConfigProvider
+├── Persistencia automática en sessionStorage
+└── API Reference (props, hooks)
+```
+
 ### **🎨 Estilos Globales**
 ```
 ./README-IA--STYLES.md
@@ -244,6 +282,17 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 ├── API detallada de LibI18nProvider
 ├── useLibI18n hook
 └── Sistema de prioridades de traducción
+```
+
+### **📅 Utilidades de Fechas**
+```
+./utils/dates/README.md
+├── Sistema flexible de formateo de fechas
+├── AppProviderLanguageResolver (detección automática de providers)
+├── useDateFormatter hook
+├── Integración con AppLanguageProvider/LibI18nProvider
+├── Configuración externa desde aplicación padre
+└── Ejemplos de uso (con/sin providers, standalone)
 ```
 
 ### **🧩 Componentes**
@@ -269,9 +318,13 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | Instalar la librería | `README-IA.md` |
 | Configurar variables de entorno | `providers/AppEnviromentProvider/README.md` |
 | Sobrescribir config desde padre | `providers/AppEnviromentProvider/README.md` |
+| Implementar autenticación y sesiones | `providers/AppAuthProvider/README.md` |
+| Configurar expiración de sesión | `providers/AppAuthProvider/README.md` |
+| Sincronizar sesión entre pestañas | `providers/AppAuthProvider/README.md` |
 | Personalizar estilos globales | `README-IA--STYLES.md` |
 | Configurar idioma de aplicación | `providers/AppLanguageProvider/README.md` |
 | Traducciones de componentes | `providers/AppLanguageLibUiProvider/README.md` |
+| Formatear fechas con providers | `utils/dates/README.md` |
 | Resolver errores de imports | `README-IA.md` |
 | Agregar nuevos idiomas | `providers/AppLanguageProvider/README.md` |
 

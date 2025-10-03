@@ -30,11 +30,11 @@ function AppContent() {
 
 function App() {
   const handleLogging = () => {
-    alert("Inicio sesión");
+    console.log("Inicio sesión");
   };
 
   const handleSessionInvalid = () => {
-    alert("Cieeee de Sesion");
+    console.log("Cieeee de Sesion");
   };
 
   return (

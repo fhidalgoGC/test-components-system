@@ -19,7 +19,8 @@ Preferred communication style: Simple, everyday language.
 - **Theme System**: Custom theme provider with light/dark mode and CSS variable-based theming.
 - **Internationalization (i18n)**: Hierarchical i18n system with global and component-specific translations, supporting English (en) and Spanish (es). It includes a fallback mechanism and dynamic language selection.
 - **Modular Architecture**: Codebase follows a classified folder pattern for layouts, pages, and UI components, including `css/`, `types/`, `hooks/`, `utils/`, and `i18n/` subdirectories.
-- **Provider Architecture**: All providers (e.g., `AppLanguageProvider`, `AppEnviromentProvider`, `AppLanguageLibUiProvider`) follow a consistent modular structure with dedicated files for provider components, types, hooks, and documentation.
+- **Provider Architecture**: All providers (e.g., `AppAuthProvider`, `AppLanguageProvider`, `AppEnviromentProvider`, `AppLanguageLibUiProvider`) follow a consistent modular structure with dedicated files for provider components, types, hooks, and documentation.
+  - `AppAuthProvider`: Authentication and session management with real-time expiration (not inactivity-based), cross-tab synchronization via BroadcastChannel API, optional lifecycle callbacks (onLogging/onSessionInvalid), and hierarchical configuration through ConfigProvider.
 - **Environment Configuration**: External environment configuration support at the application level, allowing parent applications to override library defaults for aspects like language settings.
 
 ## Development Setup

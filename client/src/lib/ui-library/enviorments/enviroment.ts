@@ -43,9 +43,9 @@ const NUMBER_FORMAT_CONFIG = {
 // Session configuration
 export const SESSION_CONFIG = {
   SESSION_DURATION:
-    Number(import.meta.env.VITE_SESSION_DURATION) || 8 * (60 * 60 * 1000),
+    Number(import.meta.env.VITE_SESSION_DURATION) || 8 * 60 * 60 * 1000, // 8 horas
   VALIDATION_INTERVAL:
-    Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 60 * 1000,
+    Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 10000, // 10 segundos
 };
 
 export const environment = {
