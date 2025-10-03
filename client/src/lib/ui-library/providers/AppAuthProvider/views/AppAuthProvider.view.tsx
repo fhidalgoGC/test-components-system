@@ -6,15 +6,15 @@ import {
   useEffect,
   useContext,
 } from "react";
-import SessionValidator from "@/lib/ui-library/components/SessionValidator";
+import SessionValidator from "../../../components/SessionValidator";
 import {
   saveSessionToStorage,
   clearSessionFromStorage,
   getSessionFromStorage,
   isSessionExpired,
-} from "@/lib/ui-library/components/SessionValidator/utils";
+} from "../../../components/SessionValidator/utils";
 import type { AppAuthContextValue, AppAuthProviderProps } from "../types";
-import { environment } from "@/lib/ui-library/enviorments/enviroment";
+import { environment } from "../../../enviorments/enviroment";
 import { ConfigContext } from "../../AppEnviromentProvider/index.hook";
 
 export const AppAuthContext = createContext<AppAuthContextValue | null>(null);
