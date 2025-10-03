@@ -80,34 +80,27 @@ export function AppAuthProvider({
     [onLogging],
   );
 
-  const loginCallback = useCallback(
-    (customOnLogging?: () => void, fromBroadcastChannel: boolean = false) => {
-      const sessionId = generateSessionId();
+  const loginCallback = useCallback((customOnLogging?: () => void) => {
+    const sessionId = generateSessionId();
 
-      saveSessionToStorage({
+    saveSessionToStorage({
+      sessionId,
+      sessionStartTime: Date.now(),
+      lastActivityTime: Date.now(),
+    });
+
+    setIsAuthenticated(true);
+    isLoggingOut.current = false;
+    customOnLogging?.();
+
+    if (!isProcessingEvent.current && broadcastChannel.current) {
+      broadcastChannel.current.postMessage({
+        type: "session_login",
         sessionId,
-        sessionStartTime: Date.now(),
-        lastActivityTime: Date.now(),
+        timestamp: Date.now(),
       });
-
-      setIsAuthenticated(true);
-      isLoggingOut.current = false;
-      customOnLogging?.();
-
-      if (
-        !fromBroadcastChannel &&
-        !isProcessingEvent.current &&
-        broadcastChannel.current
-      ) {
-        broadcastChannel.current.postMessage({
-          type: "session_login",
-          sessionId,
-          timestamp: Date.now(),
-        });
-      }
-    },
-    [],
-  );
+    }
+  }, []);
 
   const logout = useCallback(
     (fromBroadcastChannel: boolean = false) => {
@@ -132,28 +125,21 @@ export function AppAuthProvider({
     [onSessionInvalid],
   );
 
-  const logoutCallback = useCallback(
-    (customOnSessionInvalid?: () => void, fromBroadcastChannel: boolean = false) => {
-      if (isLoggingOut.current) return;
-      isLoggingOut.current = true;
+  const logoutCallback = useCallback((customOnSessionInvalid?: () => void) => {
+    if (isLoggingOut.current) return;
+    isLoggingOut.current = true;
 
-      clearSessionFromStorage();
-      setIsAuthenticated(false);
-      customOnSessionInvalid?.();
+    clearSessionFromStorage();
+    setIsAuthenticated(false);
+    customOnSessionInvalid?.();
 
-      if (
-        !fromBroadcastChannel &&
-        !isProcessingEvent.current &&
-        broadcastChannel.current
-      ) {
-        broadcastChannel.current.postMessage({
-          type: "session_logout",
-          timestamp: Date.now(),
-        });
-      }
-    },
-    [],
-  );
+    if (!isProcessingEvent.current && broadcastChannel.current) {
+      broadcastChannel.current.postMessage({
+        type: "session_logout",
+        timestamp: Date.now(),
+      });
+    }
+  }, []);
 
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
