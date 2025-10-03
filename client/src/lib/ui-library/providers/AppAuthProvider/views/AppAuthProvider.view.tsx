@@ -1,4 +1,11 @@
-import { createContext, useState, useCallback, useRef, useEffect, useContext } from "react";
+import {
+  createContext,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useContext,
+} from "react";
 import SessionValidator from "@/lib/ui-library/components/SessionValidator";
 import {
   saveSessionToStorage,
@@ -29,66 +36,72 @@ export function AppAuthProvider({
   onSessionInvalid,
 }: AppAuthProviderProps) {
   const optionalConfig = useOptionalConfig();
-  
-  const finalSessionDuration = 
-    sessionDuration ?? 
-    optionalConfig?.SESSION_CONFIG?.SESSION_DURATION ?? 
+
+  const finalSessionDuration =
+    sessionDuration ??
+    optionalConfig?.SESSION_CONFIG?.SESSION_DURATION ??
     environment.SESSION_CONFIG.SESSION_DURATION;
-    
-  const finalValidationInterval = 
-    validationInterval ?? 
-    optionalConfig?.SESSION_CONFIG?.VALIDATION_INTERVAL ?? 
+
+  const finalValidationInterval =
+    validationInterval ??
+    optionalConfig?.SESSION_CONFIG?.VALIDATION_INTERVAL ??
     environment.SESSION_CONFIG.VALIDATION_INTERVAL;
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const isLoggingOut = useRef(false);
   const isProcessingEvent = useRef(false);
   const broadcastChannel = useRef<BroadcastChannel | null>(null);
 
-  const login = useCallback((fromBroadcastChannel: boolean = false) => {
-    const sessionId = generateSessionId();
+  const login = useCallback(
+    (fromBroadcastChannel: boolean = false) => {
+      const sessionId = generateSessionId();
 
-    saveSessionToStorage({
-      sessionId,
-      sessionStartTime: Date.now(),
-      lastActivityTime: Date.now(),
-    });
-
-    setIsAuthenticated(true);
-    isLoggingOut.current = false;
-    onLogging?.();
-
-    if (
-      !fromBroadcastChannel &&
-      !isProcessingEvent.current &&
-      broadcastChannel.current
-    ) {
-      broadcastChannel.current.postMessage({
-        type: "session_login",
+      saveSessionToStorage({
         sessionId,
-        timestamp: Date.now(),
+        sessionStartTime: Date.now(),
+        lastActivityTime: Date.now(),
       });
-    }
-  }, [onLogging]);
 
-  const logout = useCallback((fromBroadcastChannel: boolean = false) => {
-    if (isLoggingOut.current) return;
-    isLoggingOut.current = true;
+      setIsAuthenticated(true);
+      isLoggingOut.current = false;
+      onLogging?.();
 
-    clearSessionFromStorage();
-    setIsAuthenticated(false);
-    onSessionInvalid?.();
+      if (
+        !fromBroadcastChannel &&
+        !isProcessingEvent.current &&
+        broadcastChannel.current
+      ) {
+        broadcastChannel.current.postMessage({
+          type: "session_login",
+          sessionId,
+          timestamp: Date.now(),
+        });
+      }
+    },
+    [onLogging],
+  );
 
-    if (
-      !fromBroadcastChannel &&
-      !isProcessingEvent.current &&
-      broadcastChannel.current
-    ) {
-      broadcastChannel.current.postMessage({
-        type: "session_logout",
-        timestamp: Date.now(),
-      });
-    }
-  }, [onSessionInvalid]);
+  const logout = useCallback(
+    (fromBroadcastChannel: boolean = false) => {
+      if (isLoggingOut.current) return;
+      isLoggingOut.current = true;
+
+      clearSessionFromStorage();
+      setIsAuthenticated(false);
+      onSessionInvalid?.();
+
+      if (
+        !fromBroadcastChannel &&
+        !isProcessingEvent.current &&
+        broadcastChannel.current
+      ) {
+        broadcastChannel.current.postMessage({
+          type: "session_logout",
+          timestamp: Date.now(),
+        });
+      }
+    },
+    [onSessionInvalid],
+  );
 
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
@@ -99,7 +112,10 @@ export function AppAuthProvider({
       if (type === "session_login") {
         isProcessingEvent.current = true;
         const existingSession = getSessionFromStorage();
-        if (existingSession) {
+        if (
+          existingSession &&
+          !isSessionExpired(existingSession, finalSessionDuration)
+        ) {
           login(true);
           isLoggingOut.current = false;
         }
