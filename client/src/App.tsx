@@ -3,11 +3,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/ui-library/theme";
 import {
   AppLanguageProvider,
+  AppAuthProvider,
   ConfigProvider,
   LibI18nProvider,
   useAppLanguage,
 } from "@/lib/ui-library/providers";
-import { AppAuthProvider } from "@/lib/ui-library/providers/AppAuthProvider";
 import { Router } from "@/routes";
 import { environment } from "@/enviorments/enviroment";
 
