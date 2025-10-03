@@ -26,8 +26,10 @@ AppAuthProvider/
 AppAuthProvider
 ├── 🔐 Control de autenticación global
 │   ├── Estado isAuthenticated
-│   ├── Función login()
-│   └── Función logout()
+│   ├── Función login() - usa onLogging del provider
+│   ├── Función loginCallback() - recibe onLogging personalizado
+│   ├── Función logout() - usa onSessionInvalid del provider
+│   └── Función logoutCallback() - recibe onSessionInvalid personalizado
 │
 ├── ⏰ Gestión automática de sesión
 │   ├── Expiración basada en tiempo REAL (no inactividad)
@@ -41,8 +43,10 @@ AppAuthProvider
 │   └── Persistencia en sessionStorage
 │
 ├── 🎯 Callbacks de ciclo de vida
-│   ├── onLogging (al iniciar sesión)
-│   └── onSessionInvalid (al expirar sesión)
+│   ├── onLogging (al iniciar sesión con login())
+│   ├── onSessionInvalid (al expirar sesión con logout())
+│   ├── loginCallback() - callback personalizado por llamada
+│   └── logoutCallback() - callback personalizado por llamada
 │
 └── ⚙️ Integración con ConfigProvider
     ├── Configuración jerárquica (props → ConfigProvider → defaults)
@@ -64,7 +68,9 @@ interface AppAuthProviderProps {
 interface AppAuthContextValue {
   isAuthenticated: boolean;
   login: () => void;
+  loginCallback: (customOnLogging?: () => void, fromBroadcastChannel?: boolean) => void;
   logout: () => void;
+  logoutCallback: (customOnSessionInvalid?: () => void, fromBroadcastChannel?: boolean) => void;
 }
 ```
 
@@ -354,6 +360,189 @@ function App() {
 }
 ```
 
+### **Caso 8: Login/Logout con Callbacks Personalizados**
+
+> **NUEVO:** Usa `loginCallback` y `logoutCallback` cuando necesites callbacks específicos por llamada en lugar de usar los callbacks del provider.
+
+**¿Cuándo usar loginCallback/logoutCallback?**
+- Cuando necesitas diferentes acciones para diferentes tipos de login/logout
+- Cuando necesitas pasar parámetros específicos al callback
+- Cuando el callback depende del contexto de la llamada
+
+**Diferencia clave:**
+```typescript
+login()       // Usa onLogging del AppAuthProvider (prop del provider)
+loginCallback(customCallback)  // Usa el callback que pasas como parámetro
+
+logout()      // Usa onSessionInvalid del AppAuthProvider (prop del provider)
+logoutCallback(customCallback) // Usa el callback que pasas como parámetro
+```
+
+**Ejemplo: Diferentes tipos de login**
+
+```jsx
+import { useAppAuth } from 'GC-UI-COMPONENTS';
+import { useNavigate } from 'wouter';
+
+function MultiLoginButton() {
+  const { loginCallback } = useAppAuth();
+  const [, navigate] = useNavigate();
+  
+  const handleGoogleLogin = async () => {
+    try {
+      // Autenticación con Google
+      // const googleAuth = await signInWithGoogle();
+      
+      // Callback específico para Google login
+      loginCallback(() => {
+        console.log('Login exitoso con Google');
+        analytics.track('google_login');
+        navigate('/dashboard');
+      });
+    } catch (error) {
+      console.error('Error en Google login:', error);
+    }
+  };
+  
+  const handleEmailLogin = async (email, password) => {
+    try {
+      // Autenticación con email
+      // const emailAuth = await signInWithEmail(email, password);
+      
+      // Callback específico para Email login
+      loginCallback(() => {
+        console.log('Login exitoso con Email');
+        analytics.track('email_login');
+        navigate('/onboarding'); // Ruta diferente
+      });
+    } catch (error) {
+      console.error('Error en Email login:', error);
+    }
+  };
+  
+  const handleGuestLogin = () => {
+    // Login como invitado sin autenticación
+    loginCallback(() => {
+      console.log('Acceso como invitado');
+      analytics.track('guest_login');
+      navigate('/limited-access'); // Ruta para invitados
+    });
+  };
+  
+  return (
+    <div>
+      <button onClick={handleGoogleLogin}>Login con Google</button>
+      <button onClick={() => handleEmailLogin('user@email.com', 'password')}>
+        Login con Email
+      </button>
+      <button onClick={handleGuestLogin}>Continuar como Invitado</button>
+    </div>
+  );
+}
+```
+
+**Ejemplo: Diferentes tipos de logout**
+
+```jsx
+import { useAppAuth } from 'GC-UI-COMPONENTS';
+import { useNavigate } from 'wouter';
+
+function LogoutOptions() {
+  const { logout, logoutCallback } = useAppAuth();
+  const [, navigate] = useNavigate();
+  
+  // Logout normal - usa onSessionInvalid del provider
+  const handleNormalLogout = () => {
+    logout();
+  };
+  
+  // Logout con redirección específica
+  const handleLogoutToHome = () => {
+    logoutCallback(() => {
+      console.log('Cerrando sesión y volviendo al home');
+      localStorage.removeItem('userPreferences');
+      navigate('/');
+    });
+  };
+  
+  // Logout con limpieza total
+  const handleLogoutAndClear = () => {
+    logoutCallback(() => {
+      console.log('Cerrando sesión y limpiando todos los datos');
+      localStorage.clear();
+      sessionStorage.clear();
+      // Limpiar cookies
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+      navigate('/login');
+    });
+  };
+  
+  // Logout por inactividad (diferente del logout manual)
+  const handleInactivityLogout = () => {
+    logoutCallback(() => {
+      console.log('Sesión cerrada por inactividad');
+      showNotification('Tu sesión se cerró por inactividad');
+      analytics.track('inactivity_logout');
+      navigate('/login');
+    });
+  };
+  
+  return (
+    <div>
+      <button onClick={handleNormalLogout}>Cerrar Sesión</button>
+      <button onClick={handleLogoutToHome}>Salir al Home</button>
+      <button onClick={handleLogoutAndClear}>Cerrar y Limpiar Todo</button>
+      <button onClick={handleInactivityLogout}>Logout por Inactividad</button>
+    </div>
+  );
+}
+```
+
+**Ejemplo: Combinando con login/logout normales**
+
+```jsx
+import { useAppAuth } from 'GC-UI-COMPONENTS';
+
+function SmartAuthButton() {
+  const { isAuthenticated, login, loginCallback, logout, logoutCallback } = useAppAuth();
+  
+  const handleQuickLogin = () => {
+    // Login rápido - usa callback del provider
+    login();
+  };
+  
+  const handleCustomLogin = () => {
+    // Login con lógica personalizada
+    loginCallback(() => {
+      console.log('Login personalizado con acciones específicas');
+      // Acciones específicas para este tipo de login
+    });
+  };
+  
+  return (
+    <div>
+      {!isAuthenticated ? (
+        <>
+          <button onClick={handleQuickLogin}>Login Rápido</button>
+          <button onClick={handleCustomLogin}>Login Personalizado</button>
+        </>
+      ) : (
+        <>
+          <button onClick={logout}>Logout Normal</button>
+          <button onClick={() => logoutCallback(() => {
+            console.log('Logout con callback inline');
+          })}>
+            Logout Personalizado
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+```
+
 ## ⚙️ Configuración
 
 ### **Orden de Precedencia de Configuración**
@@ -579,26 +768,63 @@ function App() {
 ```typescript
 interface AppAuthContextValue {
   isAuthenticated: boolean;  // Estado de autenticación
-  login: () => void;         // Iniciar sesión
-  logout: () => void;        // Cerrar sesión
+  login: () => void;         // Iniciar sesión (usa onLogging del provider)
+  loginCallback: (customOnLogging?: () => void, fromBroadcastChannel?: boolean) => void;  // Login con callback personalizado
+  logout: () => void;        // Cerrar sesión (usa onSessionInvalid del provider)
+  logoutCallback: (customOnSessionInvalid?: () => void, fromBroadcastChannel?: boolean) => void;  // Logout con callback personalizado
 }
 ```
 
 ### **Funciones de Login/Logout**
 
+**`login()`**
 ```typescript
-// login()
 // - Genera un nuevo sessionId único
 // - Guarda sessionStartTime en sessionStorage
 // - Establece isAuthenticated = true
-// - Ejecuta callback onLogging (si existe)
+// - Ejecuta callback onLogging del provider (si existe)
 // - Sincroniza el estado con otras pestañas
 
-// logout()
+const { login } = useAppAuth();
+login(); // Usa onLogging del AppAuthProvider
+```
+
+**`loginCallback(customOnLogging?, fromBroadcastChannel?)`**
+```typescript
+// - Genera un nuevo sessionId único
+// - Guarda sessionStartTime en sessionStorage
+// - Establece isAuthenticated = true
+// - Ejecuta el callback customOnLogging pasado como parámetro
+// - Sincroniza el estado con otras pestañas
+
+const { loginCallback } = useAppAuth();
+loginCallback(() => {
+  console.log('Callback personalizado para este login');
+}); // Usa el callback del parámetro, NO el del provider
+```
+
+**`logout()`**
+```typescript
 // - Limpia sessionStorage
 // - Establece isAuthenticated = false
-// - Ejecuta callback onSessionInvalid (si existe)
+// - Ejecuta callback onSessionInvalid del provider (si existe)
 // - Sincroniza el estado con otras pestañas
+
+const { logout } = useAppAuth();
+logout(); // Usa onSessionInvalid del AppAuthProvider
+```
+
+**`logoutCallback(customOnSessionInvalid?, fromBroadcastChannel?)`**
+```typescript
+// - Limpia sessionStorage
+// - Establece isAuthenticated = false
+// - Ejecuta el callback customOnSessionInvalid pasado como parámetro
+// - Sincroniza el estado con otras pestañas
+
+const { logoutCallback } = useAppAuth();
+logoutCallback(() => {
+  console.log('Callback personalizado para este logout');
+}); // Usa el callback del parámetro, NO el del provider
 ```
 
 ## 🎯 Mejores Prácticas
@@ -610,6 +836,8 @@ interface AppAuthContextValue {
 5. **Combinar con autenticación real**: AppAuthProvider solo maneja el estado, no la autenticación
 6. **Usar useCallback para callbacks**: Evita re-renders innecesarios
 7. **Probar sincronización cross-tab**: Abre múltiples pestañas para verificar
+8. **Usar loginCallback/logoutCallback cuando necesites diferentes acciones**: Para diferentes tipos de login/logout con acciones específicas
+9. **Preferir login/logout normales para callbacks globales**: Usa loginCallback/logoutCallback solo cuando necesites comportamiento diferente por llamada
 
 ## 📊 Ejemplos de Duración de Sesión
 
@@ -638,4 +866,4 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 
 ---
 
-**Version: 1.0.0** | **Última actualización: Octubre 2025**
+**Version: 1.1.0** | **Última actualización: Octubre 2025**
