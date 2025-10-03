@@ -5,6 +5,7 @@ export interface AppAuthContextValue {
   login: () => void;
   loginCallback: (customOnLogging?: () => void, fromBroadcastChannel?: boolean) => void;
   logout: () => void;
+  logoutCallback: (customOnSessionInvalid?: () => void, fromBroadcastChannel?: boolean) => void;
 }
 
 export interface AppAuthProviderProps {

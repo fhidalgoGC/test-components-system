@@ -132,6 +132,29 @@ export function AppAuthProvider({
     [onSessionInvalid],
   );
 
+  const logoutCallback = useCallback(
+    (customOnSessionInvalid?: () => void, fromBroadcastChannel: boolean = false) => {
+      if (isLoggingOut.current) return;
+      isLoggingOut.current = true;
+
+      clearSessionFromStorage();
+      setIsAuthenticated(false);
+      customOnSessionInvalid?.();
+
+      if (
+        !fromBroadcastChannel &&
+        !isProcessingEvent.current &&
+        broadcastChannel.current
+      ) {
+        broadcastChannel.current.postMessage({
+          type: "session_logout",
+          timestamp: Date.now(),
+        });
+      }
+    },
+    [],
+  );
+
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
 
@@ -184,6 +207,7 @@ export function AppAuthProvider({
     login,
     loginCallback,
     logout,
+    logoutCallback,
   };
 
   return (
