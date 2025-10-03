@@ -109,6 +109,7 @@ export function AppAuthProvider({
     const handleMessage = (event: MessageEvent) => {
       const { type } = event.data;
 
+      console.log("recibiendo eventos");
       if (type === "session_login") {
         isProcessingEvent.current = true;
         const existingSession = getSessionFromStorage();
