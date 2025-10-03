@@ -26,7 +26,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Instalar dependencias requeridas
 - Resolver errores de módulos no encontrados
 
-### **`./README-IA-IMPORTS.md`**
+### **`../README-IA-IMPORTS.md`**
 **Cuándo usar:** Para entender cómo hacer imports correctamente DENTRO de la librería (para desarrollo interno).
 
 **Contiene:**
@@ -334,7 +334,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | **Necesito...** | **Ir a...** |
 |-----------------|-------------|
 | Instalar la librería | `README-IA.md` |
-| Implementar nuevos providers o componentes | `README-IA-IMPORTS.md` |
+| Implementar nuevos providers o componentes | `../README-IA-IMPORTS.md` |
 | Configurar variables de entorno | `providers/AppEnviromentProvider/README.md` |
 | Sobrescribir config desde padre | `providers/AppEnviromentProvider/README.md` |
 | Implementar autenticación y sesiones | `providers/AppAuthProvider/README.md` |
@@ -344,7 +344,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | Configurar idioma de aplicación | `providers/AppLanguageProvider/README.md` |
 | Traducciones de componentes | `providers/AppLanguageLibUiProvider/README.md` |
 | Formatear fechas con providers | `utils/dates/README.md` |
-| Resolver errores de imports con alias | `README-IA-IMPORTS.md` |
+| Resolver errores de imports con alias | `../README-IA-IMPORTS.md` |
 | Agregar nuevos idiomas | `providers/AppLanguageProvider/README.md` |
 
 ### **🧩 Componentes Específicos:**
