@@ -27,9 +27,10 @@ export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
 };
 
 export const SESSION_CONFIG = {
-  SESSION_DURATION: Number(import.meta.env.VITE_SESSION_DURATION) || 8 * 60 * 60 * 1000, // 8 horas
+  SESSION_DURATION:
+    Number(import.meta.env.VITE_SESSION_DURATION) || 8 * (60 * 60 * 1000),
   VALIDATION_INTERVAL:
-    Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 10000,
+    Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 60 * 1000,
 };
 
 export const environment = {
