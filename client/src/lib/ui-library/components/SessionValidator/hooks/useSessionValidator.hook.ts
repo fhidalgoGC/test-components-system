@@ -76,8 +76,7 @@ export function useSessionValidator({
       return;
     }
 
-    // Session is valid - update activity
-    updateLastActivity();
+    // Session is valid
     setSessionData(storedSession);
     setIsValidating(false);
   }, [isActive, sessionDuration, onSessionInvalid]);

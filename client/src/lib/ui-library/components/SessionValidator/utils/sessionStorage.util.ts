@@ -48,7 +48,7 @@ export function updateLastActivity(): void {
 
 export function isSessionExpired(sessionData: SessionData, duration: number): boolean {
   const now = Date.now();
-  const elapsed = now - sessionData.lastActivityTime;
+  const elapsed = now - sessionData.sessionStartTime;
   return elapsed > duration;
 }
 
