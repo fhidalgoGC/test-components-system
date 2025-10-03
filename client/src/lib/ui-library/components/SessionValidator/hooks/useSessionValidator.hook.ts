@@ -23,11 +23,13 @@ export function useSessionValidator({
 }: Omit<SessionValidatorProps, "children">) {
   const optionalConfig = useOptionalConfig();
   
-  const finalSessionDuration = sessionDuration ?? 
+  const finalSessionDuration = 
+    sessionDuration ?? 
     optionalConfig?.SESSION_CONFIG?.SESSION_DURATION ?? 
     environment.SESSION_CONFIG.SESSION_DURATION;
     
-  const finalCheckInterval = checkInterval ?? 
+  const finalCheckInterval = 
+    checkInterval ?? 
     optionalConfig?.SESSION_CONFIG?.VALIDATION_INTERVAL ?? 
     environment.SESSION_CONFIG.VALIDATION_INTERVAL;
   const [sessionData, setSessionData] = useState<SessionData | null>(null);

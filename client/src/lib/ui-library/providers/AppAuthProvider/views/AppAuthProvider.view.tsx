@@ -30,11 +30,13 @@ export function AppAuthProvider({
 }: AppAuthProviderProps) {
   const optionalConfig = useOptionalConfig();
   
-  const finalSessionDuration = sessionDuration ?? 
+  const finalSessionDuration = 
+    sessionDuration ?? 
     optionalConfig?.SESSION_CONFIG?.SESSION_DURATION ?? 
     environment.SESSION_CONFIG.SESSION_DURATION;
     
-  const finalValidationInterval = validationInterval ?? 
+  const finalValidationInterval = 
+    validationInterval ?? 
     optionalConfig?.SESSION_CONFIG?.VALIDATION_INTERVAL ?? 
     environment.SESSION_CONFIG.VALIDATION_INTERVAL;
   const [isAuthenticated, setIsAuthenticated] = useState(false);
