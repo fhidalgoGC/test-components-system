@@ -146,11 +146,10 @@ export function AppAuthProvider({
     ) {
       setIsAuthenticated(true);
       isLoggingOut.current = false;
-      onLogging?.();
     } else if (existingSession) {
       logout(true);
     }
-  }, [finalSessionDuration, logout, onLogging]);
+  }, [finalSessionDuration, logout]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
