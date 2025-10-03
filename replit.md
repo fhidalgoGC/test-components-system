@@ -56,6 +56,27 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## Replit Environment Setup (October 3, 2025)
+- **Package.json Scripts Update**: Updated npm scripts to work in Replit environment:
+  - `dev`: Changed to use `node start-frontend.mjs` (removed tsx dependency)
+  - `build`: Simplified to `vite build`
+  - `start`: Updated to use `vite preview --host 0.0.0.0 --port 5000` for production preview
+  - `check`: Kept TypeScript checking with `tsc`
+  - Removed `db:push` script (no database in this project)
+- **Development Configuration**: 
+  - `start-frontend.mjs` configured with proper host (0.0.0.0) and port (5000)
+  - `vite.config.ts` updated with HMR configuration (clientPort: 443)
+- **Workflow Setup**: 
+  - Configured workflow "Start application" to run `npm run dev`
+  - Workflow uses webview output type on port 5000
+- **Deployment Configuration**: 
+  - Set up autoscale deployment target
+  - Build command: `npm run build`
+  - Start command: `npm run start`
+- **Environment Compatibility**: 
+  - All configurations optimized for Replit's proxy-based architecture
+  - Frontend serves on 0.0.0.0:5000 with proper host allowance
+
 ## Backend Removal and Frontend-Only Conversion (September 18, 2025)
 - **Architecture Conversion**: Converted from full-stack application to frontend-only React component library
 - **Eliminated Dependencies**: Removed all backend-related dependencies:
@@ -72,11 +93,25 @@ Preferred communication style: Simple, everyday language.
 - **CSS Module Organization**: Moved all `*.module.css` and `*.module.ts` files to respective `css/` directories
 
 ## How to Run the Application
-Since the project is now frontend-only, use the custom startup script:
+Since the project is now frontend-only, you can run it using npm scripts:
+
+### Development Mode
 ```bash
-node start-frontend.mjs
+npm run dev
 ```
-This runs the Vite development server on `http://localhost:5000` with all UI components and documentation.
+This runs the Vite development server on `http://0.0.0.0:5000` with all UI components and documentation. The workflow "Start application" is configured to run this automatically.
+
+### Production Preview
+```bash
+npm run start
+```
+This runs the production build preview on `http://0.0.0.0:5000`.
+
+### Build for Production
+```bash
+npm run build
+```
+This creates an optimized production build in the `dist/public` directory.
 
 ## Component Organization Restructuring (September 18, 2025)
 - **Page-Scoped Component Architecture**: Restructured component organization to follow page-scoped pattern:
