@@ -39,16 +39,16 @@ function App() {
 
   return (
     <ThemeProvider>
-      {/* <ConfigProvider parentConfig={environment} priority="auto"> */}
-      <AppAuthProvider
-        onLogging={handleLogging}
-        onSessionInvalid={handleSessionInvalid}
-      >
-        <AppLanguageProvider initial="en">
-          <AppContent />
-        </AppLanguageProvider>
-      </AppAuthProvider>
-      {/* </ConfigProvider> */}
+      <ConfigProvider parentConfig={environment} priority="auto">
+        <AppAuthProvider
+          onLogging={handleLogging}
+          onSessionInvalid={handleSessionInvalid}
+        >
+          <AppLanguageProvider initial="en">
+            <AppContent />
+          </AppLanguageProvider>
+        </AppAuthProvider>
+      </ConfigProvider>
     </ThemeProvider>
   );
 }
