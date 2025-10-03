@@ -44,6 +44,8 @@ export function useSessionValidator({
   const validateSession = useCallback(() => {
     if (!isActive) return;
 
+    console.log('[SessionValidator] Validando sesión...', new Date().toLocaleTimeString());
+
     setIsValidating(true);
 
     const storedSession = getSessionFromStorage();
