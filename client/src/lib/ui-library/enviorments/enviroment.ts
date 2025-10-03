@@ -1,17 +1,17 @@
-import type { LanguageConfig } from './enviroment.types';
+import type { LanguageConfig } from "./enviroment.types";
 
 // Available languages configuration - can be overridden via environment
 const availableLanguagesEnv =
   import.meta.env.VITE_AVAILABLE_LANGUAGES || "es,en";
-export const AVAILABLE_LANGUAGES = availableLanguagesEnv
+const AVAILABLE_LANGUAGES = availableLanguagesEnv
   .split(",")
   .map((lang: string) => lang.trim());
 
 // Default language - can be overridden via environment
-export const DEFAULT_LANGUAGE = import.meta.env.VITE_DEFAULT_LANGUAGE || "en";
+const DEFAULT_LANGUAGE = import.meta.env.VITE_DEFAULT_LANGUAGE || "en";
 
 // Language configurations
-export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
+const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
   es: {
     locale: import.meta.env.VITE_LOCALE_ES || "es",
     dateFormat: import.meta.env.VITE_DATE_FORMAT_ES || "dd/MM/yyyy",
@@ -27,7 +27,7 @@ export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
 };
 
 // Number format configuration
-export const NUMBER_FORMAT_CONFIG = {
+const NUMBER_FORMAT_CONFIG = {
   NUMBER_FORMAT_PATTERN:
     import.meta.env.VITE_NUMBER_FORMAT_PATTERN || ("0,000.00" as const),
   NUMBER_ROUND_MODE:
@@ -43,7 +43,8 @@ export const NUMBER_FORMAT_CONFIG = {
 // Session configuration
 export const SESSION_CONFIG = {
   SESSION_DURATION: Number(import.meta.env.VITE_SESSION_DURATION) || 3600000,
-  VALIDATION_INTERVAL: Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 60000,
+  VALIDATION_INTERVAL:
+    Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 60000,
 };
 
 export const environment = {
@@ -52,10 +53,7 @@ export const environment = {
   DEFAULT_LANGUAGE,
   LANGUAGE_CONFIG,
   NUMBER_FORMAT_CONFIG,
-
-  // Session Configuration
   SESSION_CONFIG,
-
   // Development environment detection
   IS_DEVELOPMENT:
     import.meta.env.DEV ||
