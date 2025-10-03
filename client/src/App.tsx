@@ -40,7 +40,6 @@ function App() {
   return (
     <ThemeProvider>
       <AppAuthProvider
-        sessionDuration={60000}
         onLogging={handleLogging}
         onSessionInvalid={handleSessionInvalid}
       >

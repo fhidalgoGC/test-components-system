@@ -40,12 +40,21 @@ export const NUMBER_FORMAT_CONFIG = {
   NUMBER_MAX_DECIMALS: Number(import.meta.env.VITE_NUMBER_MAX_DECIMALS) || 4,
 };
 
+// Session configuration
+export const SESSION_CONFIG = {
+  SESSION_DURATION: Number(import.meta.env.VITE_SESSION_DURATION) || 3600000,
+  VALIDATION_INTERVAL: Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 60000,
+};
+
 export const environment = {
   // Language Configuration
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE,
   LANGUAGE_CONFIG,
   NUMBER_FORMAT_CONFIG,
+
+  // Session Configuration
+  SESSION_CONFIG,
 
   // Development environment detection
   IS_DEVELOPMENT:
