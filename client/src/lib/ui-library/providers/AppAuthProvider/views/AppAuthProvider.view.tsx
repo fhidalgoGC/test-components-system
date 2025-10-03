@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback, useRef, useEffect } from "react";
+import { createContext, useState, useCallback, useRef, useEffect, useContext } from "react";
 import SessionValidator from "@/lib/ui-library/components/SessionValidator";
 import {
   saveSessionToStorage,
@@ -8,6 +8,7 @@ import {
 } from "@/lib/ui-library/components/SessionValidator/utils";
 import type { AppAuthContextValue, AppAuthProviderProps } from "../types";
 import { environment } from "@/lib/ui-library/enviorments/enviroment";
+import { ConfigContext } from "../../AppEnviromentProvider/index.hook";
 
 export const AppAuthContext = createContext<AppAuthContextValue | null>(null);
 
@@ -15,13 +16,27 @@ function generateSessionId(): string {
   return `session-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 }
 
+function useOptionalConfig() {
+  const configContext = useContext(ConfigContext);
+  return configContext?.config || null;
+}
+
 export function AppAuthProvider({
   children,
-  sessionDuration = environment.SESSION_CONFIG.SESSION_DURATION,
-  validationInterval = environment.SESSION_CONFIG.VALIDATION_INTERVAL,
+  sessionDuration,
+  validationInterval,
   onLogging,
   onSessionInvalid,
 }: AppAuthProviderProps) {
+  const optionalConfig = useOptionalConfig();
+  
+  const finalSessionDuration = sessionDuration ?? 
+    optionalConfig?.SESSION_CONFIG?.SESSION_DURATION ?? 
+    environment.SESSION_CONFIG.SESSION_DURATION;
+    
+  const finalValidationInterval = validationInterval ?? 
+    optionalConfig?.SESSION_CONFIG?.VALIDATION_INTERVAL ?? 
+    environment.SESSION_CONFIG.VALIDATION_INTERVAL;
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const isLoggingOut = useRef(false);
   const isProcessingEvent = useRef(false);
@@ -108,7 +123,7 @@ export function AppAuthProvider({
     const existingSession = getSessionFromStorage();
     if (
       existingSession &&
-      !isSessionExpired(existingSession, sessionDuration)
+      !isSessionExpired(existingSession, finalSessionDuration)
     ) {
       setIsAuthenticated(true);
       isLoggingOut.current = false;
@@ -116,7 +131,7 @@ export function AppAuthProvider({
     } else if (existingSession) {
       logout(true);
     }
-  }, [sessionDuration, logout]);
+  }, [finalSessionDuration, logout]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
@@ -128,8 +143,8 @@ export function AppAuthProvider({
     <AppAuthContext.Provider value={contextValue}>
       <SessionValidator
         enabled={isAuthenticated}
-        sessionDuration={sessionDuration}
-        checkInterval={validationInterval}
+        sessionDuration={finalSessionDuration}
+        checkInterval={finalValidationInterval}
         onSessionInvalid={logout}
       >
         {children}

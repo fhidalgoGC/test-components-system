@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useContext } from "react";
 import type { SessionData, SessionValidatorProps } from "../types";
 import {
   getSessionFromStorage,
@@ -7,14 +7,29 @@ import {
   updateLastActivity,
 } from "../utils";
 import { environment } from "@/lib/ui-library/enviorments/enviroment";
+import { ConfigContext } from "@/lib/ui-library/providers/AppEnviromentProvider/index.hook";
+
+function useOptionalConfig() {
+  const configContext = useContext(ConfigContext);
+  return configContext?.config || null;
+}
 
 export function useSessionValidator({
   enabled = false,
-  sessionDuration = environment.SESSION_CONFIG.SESSION_DURATION,
-  checkInterval = environment.SESSION_CONFIG.VALIDATION_INTERVAL,
+  sessionDuration,
+  checkInterval,
   autoActivateIfSession = true,
   onSessionInvalid,
 }: Omit<SessionValidatorProps, "children">) {
+  const optionalConfig = useOptionalConfig();
+  
+  const finalSessionDuration = sessionDuration ?? 
+    optionalConfig?.SESSION_CONFIG?.SESSION_DURATION ?? 
+    environment.SESSION_CONFIG.SESSION_DURATION;
+    
+  const finalCheckInterval = checkInterval ?? 
+    optionalConfig?.SESSION_CONFIG?.VALIDATION_INTERVAL ?? 
+    environment.SESSION_CONFIG.VALIDATION_INTERVAL;
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -61,7 +76,7 @@ export function useSessionValidator({
     }
 
     // Check if session is expired
-    if (isSessionExpired(storedSession, sessionDuration)) {
+    if (isSessionExpired(storedSession, finalSessionDuration)) {
       if (!hasCalledInvalidRef.current) {
         hasCalledInvalidRef.current = true;
         onSessionInvalid?.();
@@ -74,7 +89,7 @@ export function useSessionValidator({
     updateLastActivity();
     setSessionData(storedSession);
     setIsValidating(false);
-  }, [isActive, sessionDuration, onSessionInvalid]);
+  }, [isActive, finalSessionDuration, onSessionInvalid]);
 
   // Start validation interval
   useEffect(() => {
@@ -95,7 +110,7 @@ export function useSessionValidator({
     // Setup interval
     intervalRef.current = setInterval(() => {
       validateSession();
-    }, checkInterval);
+    }, finalCheckInterval);
 
     return () => {
       if (intervalRef.current) {
@@ -103,7 +118,7 @@ export function useSessionValidator({
         intervalRef.current = null;
       }
     };
-  }, [isActive, checkInterval, validateSession]);
+  }, [isActive, finalCheckInterval, validateSession]);
 
   return {
     isActive,
