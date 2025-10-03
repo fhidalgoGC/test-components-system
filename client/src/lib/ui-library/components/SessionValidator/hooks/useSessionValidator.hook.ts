@@ -6,14 +6,12 @@ import {
   hasValidSession,
   updateLastActivity,
 } from "../utils";
-
-const DEFAULT_SESSION_DURATION = 3600000; // 1 hour
-const DEFAULT_CHECK_INTERVAL = 60000; // 1 minute
+import { SESSION_CONFIG } from "@/lib/ui-library/enviorments/enviroment";
 
 export function useSessionValidator({
   enabled = false,
-  sessionDuration = DEFAULT_SESSION_DURATION,
-  checkInterval = DEFAULT_CHECK_INTERVAL,
+  sessionDuration = SESSION_CONFIG.SESSION_DURATION,
+  checkInterval = SESSION_CONFIG.VALIDATION_INTERVAL,
   autoActivateIfSession = true,
   onSessionInvalid,
 }: Omit<SessionValidatorProps, "children">) {
