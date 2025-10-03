@@ -46,10 +46,21 @@ export function AppAuthProvider({
     validationInterval ??
     optionalConfig?.SESSION_CONFIG?.VALIDATION_INTERVAL ??
     environment.SESSION_CONFIG.VALIDATION_INTERVAL;
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const isLoggingOut = useRef(false);
   const isProcessingEvent = useRef(false);
   const broadcastChannel = useRef<BroadcastChannel | null>(null);
+  const onLoggingRef = useRef(onLogging);
+  const onSessionInvalidRef = useRef(onSessionInvalid);
+
+  useEffect(() => {
+    onLoggingRef.current = onLogging;
+  }, [onLogging]);
+
+  useEffect(() => {
+    onSessionInvalidRef.current = onSessionInvalid;
+  }, [onSessionInvalid]);
 
   const login = useCallback(
     (fromBroadcastChannel: boolean = false) => {
@@ -63,7 +74,7 @@ export function AppAuthProvider({
 
       setIsAuthenticated(true);
       isLoggingOut.current = false;
-      onLogging?.();
+      onLoggingRef.current?.();
 
       if (
         !fromBroadcastChannel &&
@@ -77,7 +88,7 @@ export function AppAuthProvider({
         });
       }
     },
-    [onLogging],
+    [],
   );
 
   const logout = useCallback(
@@ -87,7 +98,7 @@ export function AppAuthProvider({
 
       clearSessionFromStorage();
       setIsAuthenticated(false);
-      onSessionInvalid?.();
+      onSessionInvalidRef.current?.();
 
       if (
         !fromBroadcastChannel &&
@@ -100,7 +111,7 @@ export function AppAuthProvider({
         });
       }
     },
-    [onSessionInvalid],
+    [],
   );
 
   useEffect(() => {
@@ -146,6 +157,7 @@ export function AppAuthProvider({
     ) {
       setIsAuthenticated(true);
       isLoggingOut.current = false;
+      onLoggingRef.current?.();
     } else if (existingSession) {
       logout(true);
     }
