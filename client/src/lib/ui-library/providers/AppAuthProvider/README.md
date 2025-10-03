@@ -185,29 +185,56 @@ function App() {
 }
 ```
 
-### **Caso 4: Con ConfigProvider (Configuración Jerárquica)**
+### **Caso 4: Con ConfigProvider (Configuración Jerárquica) - RECOMENDADO para Apps**
+
+> **IMPORTANTE PARA IA:** Este es el patrón recomendado a nivel de aplicación. El `ConfigProvider` debe envolver al `AppAuthProvider` para proporcionar configuración centralizada.
+
+**Jerarquía de Configuración:**
+```
+Props directos > ConfigProvider > Defaults de la librería
+```
+
+**Paso 1: Crear archivo de configuración de la aplicación**
+
+```typescript
+// src/enviorments/enviroment.ts
+export const SESSION_CONFIG = {
+  SESSION_DURATION: 4 * 60 * 60 * 1000,  // 4 horas
+  VALIDATION_INTERVAL: 15000              // 15 segundos
+};
+
+export const environment = {
+  SESSION_CONFIG,
+  // ... otras configuraciones
+};
+
+export const APP_CONFIG = environment;
+```
+
+**Paso 2: Implementar en App.tsx**
 
 ```jsx
+// App.tsx
 import { ConfigProvider, AppAuthProvider } from 'GC-UI-COMPONENTS';
+import { APP_CONFIG } from './enviorments/enviroment';
 
 function App() {
-  const myConfig = {
-    SESSION_CONFIG: {
-      SESSION_DURATION: 4 * 60 * 60 * 1000, // 4 horas
-      VALIDATION_INTERVAL: 15000,           // 15 segundos
-    }
-  };
-  
   return (
-    <ConfigProvider config={myConfig}>
+    <ConfigProvider config={APP_CONFIG}>
       <AppAuthProvider>
-        {/* La configuración de sesión se toma del ConfigProvider */}
+        {/* AppAuthProvider toma SESSION_CONFIG del ConfigProvider automáticamente */}
         <MyApp />
       </AppAuthProvider>
     </ConfigProvider>
   );
 }
 ```
+
+**¿Por qué usar ConfigProvider?**
+- ✅ Centraliza toda la configuración de la aplicación
+- ✅ Permite override desde variables de entorno
+- ✅ Evita prop drilling (pasar props manualmente)
+- ✅ Facilita cambios de configuración sin modificar componentes
 
 ### **Caso 5: Login con Integración de API**
 
@@ -224,21 +251,18 @@ function LoginForm() {
     e.preventDefault();
     
     try {
-      // Llamar a tu API de autenticación
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
+      // 1. Aquí va tu llamada a la API de autenticación
+      // const response = await fetch('/api/login', {...})
       
-      if (response.ok) {
-        const data = await response.json();
-        // Guardar token o datos del usuario
-        localStorage.setItem('authToken', data.token);
-        
-        // Activar la sesión en AppAuthProvider
-        login();
-      }
+      // 2. Validar la respuesta del servidor
+      // if (response.ok) {
+      //   const data = await response.json();
+      //   // Guardar token o datos según tu implementación
+      // }
+      
+      // 3. Solo después de validación exitosa, activar la sesión
+      login();
+      
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
     }
@@ -263,6 +287,8 @@ function LoginForm() {
   );
 }
 ```
+
+> **Nota:** El `AppAuthProvider` solo maneja el estado de sesión (activa/inactiva). La autenticación con tu backend es responsabilidad de tu aplicación.
 
 ### **Caso 6: Logout con Limpieza de Datos**
 
