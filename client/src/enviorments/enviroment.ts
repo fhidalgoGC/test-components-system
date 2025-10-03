@@ -27,16 +27,17 @@ export const LANGUAGE_CONFIG: Record<string, LanguageConfig> = {
 };
 
 export const SESSION_CONFIG = {
-  SESSION_DURATION: Number(import.meta.env.VITE_SESSION_DURATION) || 60000,
-  VALIDATION_INTERVAL:
-    Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 10000,
+  SESSION_DURATION: Number(import.meta.env.VITE_SESSION_DURATION) || 20000,
+  VALIDATION_INTERVAL: Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 5000,
 };
 
 export const environment = {
+  // Language Configuration
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE,
   LANGUAGE_CONFIG,
   SESSION_CONFIG,
+  // Development environment detection
   IS_DEVELOPMENT:
     import.meta.env.DEV ||
     import.meta.env.VITE_NODE_ENV === "development" ||

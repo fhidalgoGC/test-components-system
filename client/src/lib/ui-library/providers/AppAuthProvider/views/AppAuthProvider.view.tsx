@@ -129,7 +129,6 @@ export function AppAuthProvider({
     ) {
       setIsAuthenticated(true);
       isLoggingOut.current = false;
-      login(true);
     } else if (existingSession) {
       logout(true);
     }
