@@ -34,12 +34,12 @@ function App() {
   };
 
   const handleSessionInvalid = () => {
-    alert("Salio");
+    alert("Cieeee de Sesion");
   };
 
   return (
     <ThemeProvider>
-      <AppAuthProvider 
+      <AppAuthProvider
         sessionDuration={60000}
         onLogging={handleLogging}
         onSessionInvalid={handleSessionInvalid}

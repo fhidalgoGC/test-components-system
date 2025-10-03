@@ -17,6 +17,7 @@ function generateSessionId(): string {
 export function AppAuthProvider({
   children,
   sessionDuration = 3600000,
+  validationInterval = 60000,
   onLogging,
   onSessionInvalid,
 }: AppAuthProviderProps) {
@@ -127,6 +128,7 @@ export function AppAuthProvider({
       <SessionValidator
         enabled={isAuthenticated}
         sessionDuration={sessionDuration}
+        checkInterval={validationInterval}
         onSessionInvalid={logout}
       >
         {children}

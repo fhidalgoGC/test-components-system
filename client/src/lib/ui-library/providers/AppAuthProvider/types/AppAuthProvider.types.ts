@@ -9,6 +9,7 @@ export interface AppAuthContextValue {
 export interface AppAuthProviderProps {
   children: ReactNode;
   sessionDuration?: number;
+  validationInterval?: number;
   onLogging?: () => void;
   onSessionInvalid?: () => void;
 }
