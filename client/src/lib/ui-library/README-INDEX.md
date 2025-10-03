@@ -26,6 +26,24 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Instalar dependencias requeridas
 - Resolver errores de módulos no encontrados
 
+### **`./README-IA-IMPORTS.md`**
+**Cuándo usar:** Para entender cómo hacer imports correctamente DENTRO de la librería (para desarrollo interno).
+
+**Contiene:**
+- 🚫 Regla principal: NO usar alias @ dentro de la librería
+- 📁 Estructura de carpetas y cómo calcular rutas relativas
+- ✅ Ejemplos correctos vs ❌ incorrectos de imports
+- 🎯 Patrones comunes (provider a provider, componente a hook, etc.)
+- 🧪 Verificación de imports correctos
+- ⚠️ Errores comunes a evitar
+
+**Buscar aquí para:**
+- Implementar nuevos providers o componentes dentro de la librería
+- Resolver errores de imports con alias @
+- Calcular rutas relativas correctamente
+- Verificar que los imports funcionarán en aplicaciones externas
+- Evitar problemas de resolución de módulos
+
 ---
 
 ## 🌍 **Sistema de Variables de Entorno**
@@ -316,6 +334,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | **Necesito...** | **Ir a...** |
 |-----------------|-------------|
 | Instalar la librería | `README-IA.md` |
+| Implementar nuevos providers o componentes | `README-IA-IMPORTS.md` |
 | Configurar variables de entorno | `providers/AppEnviromentProvider/README.md` |
 | Sobrescribir config desde padre | `providers/AppEnviromentProvider/README.md` |
 | Implementar autenticación y sesiones | `providers/AppAuthProvider/README.md` |
@@ -325,7 +344,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | Configurar idioma de aplicación | `providers/AppLanguageProvider/README.md` |
 | Traducciones de componentes | `providers/AppLanguageLibUiProvider/README.md` |
 | Formatear fechas con providers | `utils/dates/README.md` |
-| Resolver errores de imports | `README-IA.md` |
+| Resolver errores de imports con alias | `README-IA-IMPORTS.md` |
 | Agregar nuevos idiomas | `providers/AppLanguageProvider/README.md` |
 
 ### **🧩 Componentes Específicos:**
