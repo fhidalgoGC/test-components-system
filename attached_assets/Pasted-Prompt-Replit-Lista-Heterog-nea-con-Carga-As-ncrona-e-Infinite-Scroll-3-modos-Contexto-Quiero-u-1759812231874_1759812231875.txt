@@ -1,0 +1,285 @@
+Prompt Replit — Lista Heterogénea con Carga Asíncrona e Infinite Scroll (3 modos)
+Contexto
+
+Quiero un componente de lista en React que pueda renderizar cualquier tipo de contenedor (no solo “cards”).
+Debe soportar tres modos de trabajo mutuamente excluyentes:
+
+mode: 'registry' — Paso items + un registry que mapea kindComponent → Componente; la lista decide qué renderizar según kindComponent.
+
+mode: 'renderItem' — Paso items + una función renderItem(item) que construye el JSX de cada item.
+
+mode: 'elements' — Paso elements ya pre-renderizados; la lista solo gestiona scroll/paginación/estados.
+
+Debe poder cargar data asíncrona por props (paginada o completa) y soportar scroll infinito (activable por prop).
+Si el infinito está desactivado, carga todo de una sola vez.
+El componente debe re-renderizar inmediatamente cuando cambie la data o los props visuales.
+
+Objetivo
+
+Generar una librería con un componente principal HeterogeneousList que implemente los 3 modos, con carga asíncrona, scroll infinito opcional, estilos configurables, divisores, preservación de scroll, validaciones claras y docs + demo + tests.
+
+Entregables
+
+Componente HeterogeneousList con su API, tipos/exportaciones y validaciones de modo.
+
+Hooks internos (sentinel/intersection, preservación de scroll).
+
+Ejemplo en /examples mostrando los 3 modos con y sin infinite scroll.
+
+README con guía de uso, tabla de props, ejemplos y buenas prácticas.
+
+Tests unitarios básicos (render, paging, errores, reactividad).
+
+Configuración de build para importarlo fácil en un proyecto existente.
+
+No escribas código en esta respuesta del prompt.
+Al generarlo, incluye todo lo anterior con el código completo.
+
+API (Props)
+Selección de modo (obligatorio)
+
+mode: 'registry' | 'renderItem' | 'elements'
+
+Carga asíncrona (dos rutas, no se mezclan)
+
+Para data (modes registry y renderItem)
+dataLoader?: (params: { page: number; limit: number }) => Promise<{ items: any[]; hasMore: boolean }>
+
+Para componentes pre-render (mode elements)
+elementsLoader?: (params: { page: number; limit: number }) => Promise<{ elements: React.ReactElement[]; hasMore: boolean }>
+
+Semillas opcionales:
+initialItems?: any[] (A/B), initialElements?: React.ReactElement[] (C)
+
+Datos por modo
+
+mode: 'registry'
+
+items?: Array<{ id: string|number; kindComponent: string; [k: string]: any }>
+
+registry?: Record<string, React.ComponentType<{ item: any; index: number }>>
+
+itemKey?: (item: any, index: number) => string|number
+
+Permitido: dataLoader
+
+Prohibido: elementsLoader
+
+mode: 'renderItem'
+
+items?: any[]
+
+renderItem?: (item: any, index: number) => React.ReactElement
+
+itemKey?: (item: any, index: number) => string|number
+
+Permitido: dataLoader
+
+Prohibido: elementsLoader
+
+mode: 'elements'
+
+elements?: React.ReactElement[]
+
+Permitido: elementsLoader
+
+Prohibido: dataLoader, items, registry, renderItem
+
+Paginación / Scroll
+
+infiniteScroll?: boolean (default true)
+
+pageSize?: number (default 10)
+
+preserveScrollPosition?: boolean (default true)
+
+Estilo / Layout
+
+className?: string (contenedor externo)
+
+listClassName?: string (ul/list wrapper)
+
+itemClassName?: string (wrapper de cada ítem)
+
+itemWrapperProps?: Record<string, any> (atributos extra por ítem)
+
+Espaciados:
+
+gap?: number | string (espacio entre ítems)
+
+paddingStart?: number | string (espacio antes del primer ítem)
+
+paddingEnd?: number | string (espacio después del último ítem)
+
+Divisores:
+
+dividerVariant?: 'none' | 'line' | 'component' (default 'none')
+
+dividerEvery?: number (default 1) — frecuencia (1 = entre cada par)
+
+dividerInset?: number | string
+
+renderDivider?: (index: number) => React.ReactNode (solo si component)
+
+Estados/UX
+
+empty?: React.ReactNode
+
+emptySpacing?: number | string
+
+endRender?: React.ReactNode (p. ej. “No hay más”)
+
+endSpacing?: number | string
+
+loading?: React.ReactNode
+
+errorRender?: (error: unknown, retry: () => void) => React.ReactNode
+
+onLoad?: (page: number, received: number) => void
+
+onEnd?: () => void
+
+Reglas de Validación (estrictas)
+
+mode determina qué props son válidos.
+
+Error si:
+
+mode='registry' y faltan registry o items/dataLoader.
+
+mode='renderItem' y faltan renderItem o items/dataLoader.
+
+mode='elements' y faltan elements/elementsLoader.
+
+Se pasan ambos dataLoader y elementsLoader.
+
+Se usan props de otro modo (p. ej., registry en elements).
+
+Mensajes de error deben ser claros con sugerencia de corrección.
+
+Comportamiento y Ciclo de Vida
+Carga
+
+Con infiniteScroll === true:
+
+Usa IntersectionObserver con sentinel al final.
+
+Al entrar en viewport, invoca el loader activo (dataLoader o elementsLoader) con { page, limit: pageSize }.
+
+Hace append de lo nuevo y actualiza hasMore.
+
+Con infiniteScroll === false:
+
+Llama el loader una sola vez y renderiza todo.
+
+Si no hay loader:
+
+Solo renderiza lo pasado en items o elements.
+
+Reactividad (re-render inmediato)
+
+Re-render inmediato ante cambios en:
+
+items, elements, registry, renderItem, itemKey,
+
+dataLoader/elementsLoader, pageSize, infiniteScroll,
+
+props de estilo (gap, paddingStart, paddingEnd, divider*, classNames, etc.).
+
+No cachear de forma que bloquee el render.
+
+itemKey o item.id deben ser claves únicas y estables.
+
+Divisores y espaciado
+
+Los divisores no cuentan para paginación.
+
+No colocar divisor antes del primero ni después del último.
+
+gap puede coexistir con divisor; documentar cómo interactúan.
+
+Estados y callbacks
+
+Estados internos: page, isLoading, hasMore, error.
+
+onLoad(page, received) tras cada carga exitosa.
+
+onEnd() cuando hasMore === false.
+
+errorRender(error, retry) debe permitir reintentar el loader activo.
+
+Accesibilidad y Rendimiento
+
+Roles/ARIA apropiados para lista.
+
+aria-busy y aria-live para estados de carga o fin.
+
+Uso de useMemo y useCallback para optimizar.
+
+Documentar/implementar virtualización activable por prop:
+
+virtualize?: boolean
+
+estimatedItemSize?: number
+
+Compatible con divisores y gap.
+
+Matriz de Props por Modo
+
+Comunes: mode, infiniteScroll, pageSize, preserveScrollPosition, estilos, divisores, UX, callbacks.
+
+Registry: requiere registry y items o dataLoader.
+
+RenderItem: requiere renderItem y items o dataLoader.
+
+Elements: requiere elements o elementsLoader.
+
+Prohibido:
+
+elementsLoader fuera de elements.
+
+dataLoader en elements.
+
+Mezclar ambos loaders.
+
+Usar registry/renderItem/items en elements.
+
+Demo
+
+A: mode='registry' con dataLoader paginado, pageSize=10; alternar infiniteScroll.
+
+B: mode='renderItem' con dataLoader, alternar dividerVariant.
+
+C: mode='elements' con elementsLoader, probar renderDivider.
+
+Mostrar loading, empty, endRender, errorRender, onLoad, onEnd.
+
+Incluir ejemplos con initialItems/initialElements.
+
+Tests
+
+Render básico por modo y validaciones de error.
+
+Paginación con sentinel (fetchMore se dispara).
+
+infiniteScroll=false: carga única.
+
+Reactividad: cambios en items/elements y props de estilo reflejados inmediatamente.
+
+Divisores: frecuencia/inset correctos, sin divisor al inicio/fin.
+
+errorRender + retry reinvoca el loader activo.
+
+Documentación (README)
+
+Ejemplos claros de los 3 modos.
+
+Tabla de props con defaults y exclusiones.
+
+Ejemplos de dataLoader/elementsLoader.
+
+Guía de estilos (gap, padding, divisores, empty, endRender).
+
+Recomendaciones de keys estables y virtualización.
+
+Errores comunes y soluciones.
