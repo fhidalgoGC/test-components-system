@@ -4,7 +4,7 @@ Esta guía establece las convenciones y estructura estándar para crear componen
 
 ## 📁 Estructura de Carpetas
 
-### Estructura Principal
+### Estructura Principal (Estándar)
 ```
 client/src/lib/ui-library/
 ├── components/
@@ -23,6 +23,39 @@ client/src/lib/ui-library/
 ├── types/                         ← Tipos globales compartidos
 └── README-BUILD-NEW-COMPONENTS.md ← Este archivo
 ```
+
+### Estructura Multi-Plataforma (Opcional: Web/Mobile)
+**Usar solo cuando el componente requiera implementaciones específicas para web y mobile.**
+
+```
+client/src/lib/ui-library/
+├── components/
+│   └── [ComponentName]/           ← PascalCase para nombre del componente
+│       ├── web/                   ← Implementación específica para web
+│       │   ├── css/               ← Estilos web
+│       │   ├── hooks/             ← Hooks específicos web
+│       │   ├── i18n/              ← Traducciones web (opcional)
+│       │   ├── providers/         ← Providers web (opcional)
+│       │   ├── types/             ← Tipos web
+│       │   ├── views/             ← Componentes de vista web
+│       │   └── index.tsx          ← Entry point web
+│       ├── mobile/                ← Implementación específica para mobile
+│       │   ├── css/               ← Estilos mobile
+│       │   ├── hooks/             ← Hooks específicos mobile
+│       │   ├── i18n/              ← Traducciones mobile (opcional)
+│       │   ├── providers/         ← Providers mobile (opcional)
+│       │   ├── types/             ← Tipos mobile
+│       │   ├── views/             ← Componentes de vista mobile
+│       │   └── index.tsx          ← Entry point mobile
+│       ├── index.tsx              ← Entry principal que exporta ambas versiones
+│       ├── README-IA.md           ← Guía de implementación para IA
+│       └── README-IA--STYLES.md   ← Sistema de estilos y theming
+```
+
+**Nota:** La estructura web/mobile es **opcional** y debe usarse solo cuando:
+- El componente requiere lógica diferente entre plataformas
+- Los estilos son significativamente distintos
+- La experiencia de usuario debe ser específica por plataforma
 
 ## 🎯 Convenciones de Nombres
 
@@ -76,6 +109,8 @@ components/MyComponent/
 ```
 
 ### 2. Ejemplo de `index.tsx` Principal
+
+#### Estructura Estándar
 ```typescript
 // Re-export the unified component
 export { MyComponentView as default } from './views';
@@ -86,6 +121,18 @@ export type { MyComponentProps } from './types/MyComponent.type';
 
 // Re-export the component with original name
 export { MyComponentView as MyComponent } from './views';
+```
+
+#### Estructura Multi-Plataforma (Web/Mobile)
+```typescript
+// Export web version as default
+export { default } from './web';
+export { MyComponent } from './web';
+export type { MyComponentProps } from './web/types';
+
+// Also export mobile version
+export { MyComponent as MyComponentMobile } from './mobile';
+export type { MyComponentProps as MyComponentMobileProps } from './mobile/types';
 ```
 
 ### 3. Ejemplo de `views/MyComponent.view.tsx`
@@ -401,6 +448,10 @@ components/MyComponent/
 
 ---
 
-## 🎯 Ejemplo Completo: Componente TagSelector
+## 🎯 Ejemplos Completos
 
+### Estructura Estándar: Componente TagSelector
 Consulta el componente `TagSelector` como referencia completa de implementación siguiendo todas estas convenciones. Incluye ambos archivos README-IA para entender la estructura completa.
+
+### Estructura Multi-Plataforma: Componente HeterogeneousList
+Consulta el componente `HeterogeneousList` como referencia de implementación con carpetas `web/` y `mobile/` separadas. Cada carpeta contiene su propia implementación completa siguiendo las mismas convenciones de estructura interna.
