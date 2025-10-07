@@ -63,6 +63,40 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## HeterogeneousList Component Implementation (October 7, 2025)
+- **New Mobile Component**: Created `HeterogeneousList` component in `/client/src/lib/ui-library/components/HeterogeneousList/mobile/`
+- **Three Operational Modes**:
+  - **Registry Mode**: Maps items via `registry` object based on `kindComponent` property
+  - **RenderItem Mode**: Uses custom `renderItem` function for each item
+  - **Elements Mode**: Renders pre-built ReactElements directly
+- **Advanced Features**:
+  - Infinite scroll with IntersectionObserver
+  - Async data loading with `dataLoader`/`elementsLoader`
+  - Scroll position preservation
+  - Configurable dividers (none, line, component)
+  - Empty, loading, and error state handling
+  - Strict prop validation with helpful error messages
+- **CSS Modules**: Proper styling structure in `css/` folder with theme support
+- **Architecture**: Follows project conventions with types/, hooks/, views/, css/, utils/ folders
+
+## Enhanced Sidebar with Collapse and Mobile Support (October 7, 2025)
+- **Collapse Functionality**:
+  - Desktop: Toggle button to collapse/expand sidebar
+  - Collapsed state shows only icons with tooltips
+  - Smooth transitions with CSS animations
+  - Maintains full functionality when collapsed
+- **Mobile Responsive Design**:
+  - Mobile: Sidebar hidden by default
+  - Hamburger menu button (fixed position, top-left)
+  - Overlay backdrop when mobile menu is open
+  - Auto-close on navigation
+- **State Management**:
+  - Both controlled and uncontrolled modes supported
+  - Props: `isCollapsed`, `onToggleCollapse`, `isMobileMenuOpen`, `onToggleMobileMenu`
+  - Internal state management when props not provided
+- **Updated Hook**: `useSidebar` now handles collapse and mobile menu state
+- **CSS Updates**: Responsive breakpoints, transitions, and mobile-specific styles
+
 ## Replit Environment Setup (October 3, 2025)
 - **Package.json Scripts Update**: Updated npm scripts to work in Replit environment:
   - `dev`: Changed to use `node start-frontend.mjs` (removed tsx dependency)

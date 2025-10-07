@@ -10,13 +10,23 @@ import {
 import { useAppLanguage } from '@/lib/ui-library/providers';
 
 export const useSidebar = (props: SidebarProps) => {
-  const { menuItems, currentPath = '', onNavigate } = props;
+  const { 
+    menuItems, 
+    currentPath = '', 
+    onNavigate,
+    isCollapsed: controlledCollapsed,
+    onToggleCollapse,
+    isMobileMenuOpen: controlledMobileMenuOpen,
+    onToggleMobileMenu
+  } = props;
   const appLanguage = useAppLanguage();
   
   const [state, setState] = useState<SidebarState>({
     expandedItems: new Set(),
     currentLanguage: appLanguage?.lang || getStoredLanguage(),
-    currentTheme: getStoredTheme()
+    currentTheme: getStoredTheme(),
+    isCollapsed: controlledCollapsed ?? false,
+    isMobileMenuOpen: controlledMobileMenuOpen ?? false
   });
 
   // Initialize theme on mount
@@ -76,14 +86,37 @@ export const useSidebar = (props: SidebarProps) => {
     setState(prev => ({ ...prev, currentLanguage: language }));
   }, [appLanguage]);
 
+  const handleToggleCollapse = useCallback(() => {
+    if (onToggleCollapse) {
+      onToggleCollapse();
+    } else {
+      setState(prev => ({ ...prev, isCollapsed: !prev.isCollapsed }));
+    }
+  }, [onToggleCollapse]);
+
+  const handleToggleMobileMenu = useCallback(() => {
+    if (onToggleMobileMenu) {
+      onToggleMobileMenu();
+    } else {
+      setState(prev => ({ ...prev, isMobileMenuOpen: !prev.isMobileMenuOpen }));
+    }
+  }, [onToggleMobileMenu]);
+
+  const isCollapsed = controlledCollapsed ?? state.isCollapsed;
+  const isMobileMenuOpen = controlledMobileMenuOpen ?? state.isMobileMenuOpen;
+
   return {
     processedMenuItems,
     expandedItems: state.expandedItems,
     currentLanguage: state.currentLanguage,
     currentTheme: state.currentTheme,
+    isCollapsed,
+    isMobileMenuOpen,
     toggleItemExpansion,
     handleNavigation,
     handleThemeToggle,
-    handleLanguageChange
+    handleLanguageChange,
+    handleToggleCollapse,
+    handleToggleMobileMenu
   };
 };

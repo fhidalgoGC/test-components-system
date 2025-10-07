@@ -14,7 +14,11 @@ export function AppLayoutView(props: AppLayoutProps) {
     headerTitle,
     headerDescription,
     showActionButtons,
-    handleNavigation
+    handleNavigation,
+    isCollapsed,
+    isMobileMenuOpen,
+    toggleCollapse,
+    toggleMobileMenu
   } = useAppLayout(props);
 
   return (
@@ -27,10 +31,22 @@ export function AppLayoutView(props: AppLayoutProps) {
         brandTitle="UI Library"
         brandSubtitle="React + TS Components"
         version="v1.2.0"
+        isCollapsed={isCollapsed}
+        onToggleCollapse={toggleCollapse}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={toggleMobileMenu}
       />
 
       {/* Main Content Area */}
-      <main className={mainClasses(currentTheme)}>
+      <main 
+        className={mainClasses(currentTheme)}
+        style={{
+          marginLeft: isCollapsed ? '80px' : '280px',
+          width: isCollapsed ? 'calc(100% - 80px)' : 'calc(100% - 280px)',
+          transition: 'margin-left 0.3s ease-in-out, width 0.3s ease-in-out'
+        }}
+        data-testid="main-content"
+      >
         {/* Navbar */}
         <Navbar
           title={headerTitle}

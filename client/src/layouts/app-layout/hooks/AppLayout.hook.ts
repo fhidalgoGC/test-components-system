@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLocation } from 'wouter';
 import { useTheme } from 'next-themes';
 import { useHierarchicalTranslations, type SupportedLanguage } from '@/i18n';
@@ -21,7 +22,14 @@ export function useAppLayout(props: AppLayoutProps) {
   const { resolvedTheme } = useTheme();
   const currentTheme: 'light' | 'dark' = resolvedTheme === 'dark' ? 'dark' : 'light';
 
+  // Sidebar state management
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const menuItems = getDefaultMenuItems();
+
+  const toggleCollapse = () => setIsCollapsed(!isCollapsed);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return {
     location,
@@ -32,6 +40,10 @@ export function useAppLayout(props: AppLayoutProps) {
     showActionButtons,
     language,
     changeLanguage,
-    handleNavigation
+    handleNavigation,
+    isCollapsed,
+    isMobileMenuOpen,
+    toggleCollapse,
+    toggleMobileMenu
   };
 }

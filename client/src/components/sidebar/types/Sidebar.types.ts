@@ -25,12 +25,18 @@ export interface SidebarProps {
   brandSubtitle?: string;
   version?: string;
   BrandIcon?: React.FC<{className?: string}>;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
+  isMobileMenuOpen?: boolean;
+  onToggleMobileMenu?: () => void;
 }
 
 export interface SidebarState {
   expandedItems: Set<string>;
   currentLanguage: string;
   currentTheme: 'light' | 'dark';
+  isCollapsed: boolean;
+  isMobileMenuOpen: boolean;
 }
 
 export interface SidebarConfig {
