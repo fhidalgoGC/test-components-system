@@ -185,7 +185,7 @@ export function AsyncLoadingDemo() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-3 md:p-6 space-y-3 md:space-y-6">
+    <div className="w-full max-w-4xl mx-auto p-1.5 md:p-6 space-y-3 md:space-y-6">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold mb-2">Carga Asíncrona - Demo</h1>
         <p className="text-sm md:text-base text-muted-foreground">
