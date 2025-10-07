@@ -259,23 +259,29 @@ export function AsyncLoadingDemo() {
 
       {/* Lista */}
       <div data-testid="list-container">
-        <HeterogeneousList
-          key={`list-${enableLoader ? 'enabled' : 'disabled'}`}
-          mode="registry"
-          registry={componentRegistry}
-          initialItems={[]}
-          dataLoader={enableLoader ? asyncLoader : undefined}
-          pageSize={itemsPerPage}
-          onLoadingStart={handleLoadingStart}
-          onEnd={handleEnd}
-          loading={<CustomLoading />}
-          empty={showEmpty ? <EmptyState /> : undefined}
-          endRender={<EndComponent />}
-          infiniteScroll={true}
-          preserveScrollPosition={true}
-          gap={16}
-          dividerVariant="line"
-        />
+        {enableLoader && (
+          <HeterogeneousList
+            key="loader-enabled"
+            mode="registry"
+            registry={componentRegistry}
+            dataLoader={asyncLoader}
+            pageSize={itemsPerPage}
+            onLoadingStart={handleLoadingStart}
+            onEnd={handleEnd}
+            loading={<CustomLoading />}
+            empty={showEmpty ? <EmptyState /> : undefined}
+            endRender={<EndComponent />}
+            infiniteScroll={true}
+            preserveScrollPosition={true}
+            gap={16}
+            dividerVariant="line"
+          />
+        )}
+        {!enableLoader && (
+          <div className="text-center py-8 text-muted-foreground">
+            Presiona "Iniciar Carga" para comenzar
+          </div>
+        )}
       </div>
     </div>
   );

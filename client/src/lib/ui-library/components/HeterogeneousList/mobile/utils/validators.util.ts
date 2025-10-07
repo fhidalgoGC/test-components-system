@@ -29,7 +29,8 @@ export function validateProps(props: HeterogeneousListProps): void {
       );
     }
 
-    if (!registryProps.items && !registryProps.dataLoader && !registryProps.initialItems) {
+    // Only require data if no loader is present
+    if (!registryProps.dataLoader && !registryProps.items && !registryProps.initialItems) {
       throw new ValidationError(
         'mode="registry" requires either items, dataLoader, or initialItems',
         'Provide items array, a dataLoader function, or initialItems for the initial render'
@@ -55,7 +56,8 @@ export function validateProps(props: HeterogeneousListProps): void {
   if (mode === 'elements') {
     const elementsProps = props as any;
     
-    if (!elementsProps.elements && !elementsProps.elementsLoader && !elementsProps.initialElements) {
+    // Only require data if no loader is present
+    if (!elementsProps.elementsLoader && !elementsProps.elements && !elementsProps.initialElements) {
       throw new ValidationError(
         'mode="elements" requires either elements, elementsLoader, or initialElements',
         'Provide elements array, an elementsLoader function, or initialElements for the initial render'
