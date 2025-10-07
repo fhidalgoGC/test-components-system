@@ -46,6 +46,7 @@ export function AsyncLoadingDemo() {
   const [hasReachedEnd, setHasReachedEnd] = useState(false);
   const [showEmpty, setShowEmpty] = useState(false);
   const [loadHistory, setLoadHistory] = useState<string[]>([]);
+  const [enableLoader, setEnableLoader] = useState(false);
 
   const totalItems = 50;
   const itemsPerPage = 10;
@@ -89,6 +90,7 @@ export function AsyncLoadingDemo() {
     setHasReachedEnd(false);
     setItems([]);
     setCurrentPage(0);
+    setEnableLoader(true);
     setLoadHistory(['🚀 Iniciando carga...']);
   };
 
@@ -96,6 +98,7 @@ export function AsyncLoadingDemo() {
     setItems([]);
     setCurrentPage(0);
     setHasReachedEnd(false);
+    setEnableLoader(false);
     setLoadHistory(['🗑️ Lista limpiada']);
   };
 
@@ -104,6 +107,7 @@ export function AsyncLoadingDemo() {
     setItems([]);
     setCurrentPage(0);
     setHasReachedEnd(false);
+    setEnableLoader(false);
     setLoadHistory(['👁️ Mostrando estado vacío']);
   };
 
@@ -192,7 +196,7 @@ export function AsyncLoadingDemo() {
           mode="registry"
           items={items}
           registry={componentRegistry}
-          dataLoader={asyncLoader}
+          dataLoader={enableLoader ? asyncLoader : undefined}
           pageSize={itemsPerPage}
           onEnd={handleEnd}
           loading={<CustomLoading />}
