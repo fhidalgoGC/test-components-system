@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import type {
   HeterogeneousListProps,
   RegistryModeProps,
-  RenderItemModeProps,
   ElementsModeProps,
 } from '../types';
 import { useHeterogeneousList } from '../hooks';
@@ -74,13 +73,6 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
       }
       return item.id ?? index;
     }
-    if (mode === 'renderItem') {
-      const renderProps = props as RenderItemModeProps;
-      if (renderProps.itemKey) {
-        return renderProps.itemKey(item, index);
-      }
-      return (item as any).id ?? index;
-    }
     return index;
   };
 
@@ -96,11 +88,6 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
       }
       
       return <Component item={item} index={index} />;
-    }
-
-    if (mode === 'renderItem') {
-      const renderProps = props as RenderItemModeProps;
-      return renderProps.renderItem(item, index);
     }
 
     return null;

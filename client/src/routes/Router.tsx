@@ -7,7 +7,6 @@ import ExternalAppDemo from "@/pages/external-app-demo";
 import DateDemo from "@/pages/date-demo";
 import { AuthTestPage } from "@/pages/auth-test";
 import RegistryMode from "@/pages/heterogeneous-list-registry";
-import RenderItemMode from "@/pages/heterogeneous-list-renderitem";
 import ElementsMode from "@/pages/heterogeneous-list-elements";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
@@ -68,12 +67,6 @@ export function Router() {
           headerDescription: "Mapea items a componentes usando kindComponent",
           showActionButtons: false
         };
-      case '/components/heterogeneous-list/render-item':
-        return {
-          headerTitle: "HeterogeneousList - RenderItem Mode",
-          headerDescription: "Usa una función para renderizar cada item",
-          showActionButtons: false
-        };
       case '/components/heterogeneous-list/elements':
         return {
           headerTitle: "HeterogeneousList - Elements Mode",
@@ -98,7 +91,6 @@ export function Router() {
         <Route path="/date-demo" component={DateDemo} />
         <Route path="/auth-test" component={AuthTestPage} />
         <Route path="/components/heterogeneous-list/registry" component={RegistryMode} />
-        <Route path="/components/heterogeneous-list/render-item" component={RenderItemMode} />
         <Route path="/components/heterogeneous-list/elements" component={ElementsMode} />
         <Route component={NotFound} />
       </Switch>

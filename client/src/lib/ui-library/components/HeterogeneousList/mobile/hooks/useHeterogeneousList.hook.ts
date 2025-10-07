@@ -4,7 +4,6 @@ import type {
   ListState,
   UseHeterogeneousListReturn,
   RegistryModeProps,
-  RenderItemModeProps,
   ElementsModeProps,
 } from '../types';
 import { validateProps } from '../utils';
@@ -41,7 +40,7 @@ export function useHeterogeneousList(
         error: null,
       };
     } else {
-      const dataProps = props as RegistryModeProps | RenderItemModeProps;
+      const dataProps = props as RegistryModeProps;
       return {
         items: (dataProps.initialItems || dataProps.items || []) as any[],
         elements: [],
@@ -58,7 +57,7 @@ export function useHeterogeneousList(
     if (mode === 'elements') {
       return (props as ElementsModeProps).elementsLoader;
     } else {
-      return (props as RegistryModeProps | RenderItemModeProps).dataLoader;
+      return (props as RegistryModeProps).dataLoader;
     }
   }, [mode, props]);
 
@@ -132,7 +131,7 @@ export function useHeterogeneousList(
         }));
       }
     } else {
-      const dataProps = props as RegistryModeProps | RenderItemModeProps;
+      const dataProps = props as RegistryModeProps;
       if (dataProps.items) {
         setState(prev => ({
           ...prev,

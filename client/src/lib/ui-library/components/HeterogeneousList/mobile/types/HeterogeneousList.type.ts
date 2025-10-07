@@ -1,7 +1,7 @@
 import type { ReactNode, ReactElement, ComponentType } from 'react';
 
 // Mode types
-export type ListMode = 'registry' | 'renderItem' | 'elements';
+export type ListMode = 'registry' | 'elements';
 
 // Divider types
 export type DividerVariant = 'none' | 'line' | 'component';
@@ -84,23 +84,6 @@ export interface RegistryModeProps<T extends RegistryItem = RegistryItem> extend
   
   // Prohibited
   elementsLoader?: never;
-  renderItem?: never;
-  elements?: never;
-  initialElements?: never;
-}
-
-// RenderItem mode props
-export interface RenderItemModeProps<T = any> extends BaseListProps {
-  mode: 'renderItem';
-  items?: T[];
-  renderItem: (item: T, index: number) => ReactElement;
-  itemKey?: (item: T, index: number) => string | number;
-  dataLoader?: (params: LoaderParams) => Promise<DataLoaderResponse<T>>;
-  initialItems?: T[];
-  
-  // Prohibited
-  elementsLoader?: never;
-  registry?: never;
   elements?: never;
   initialElements?: never;
 }
@@ -116,7 +99,6 @@ export interface ElementsModeProps extends BaseListProps {
   dataLoader?: never;
   items?: never;
   registry?: never;
-  renderItem?: never;
   itemKey?: never;
   initialItems?: never;
 }
@@ -124,7 +106,6 @@ export interface ElementsModeProps extends BaseListProps {
 // Union type for all modes (without generic to avoid constraint issues)
 export type HeterogeneousListProps = 
   | RegistryModeProps<any>
-  | RenderItemModeProps<any>
   | ElementsModeProps;
 
 // Internal state

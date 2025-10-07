@@ -23,7 +23,6 @@ export function getDefaultMenuItems(): MenuItem[] {
       icon: 'Layout',
       children: [
         { id: 'registry-mode', label: 'Registry Mode', path: '/components/heterogeneous-list/registry' },
-        { id: 'renderitem-mode', label: 'RenderItem Mode', path: '/components/heterogeneous-list/render-item' },
         { id: 'elements-mode', label: 'Elements Mode', path: '/components/heterogeneous-list/elements' }
       ]
     },
