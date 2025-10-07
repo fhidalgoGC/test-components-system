@@ -104,28 +104,25 @@ const generateItems = (startId: number, count: number): BaseItem[] => {
 };
 
 export function AsyncLoadingDemo() {
-  const [items, setItems] = useState<BaseItem[]>([]);
-  const [isLoadingData, setIsLoadingData] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
   const [hasReachedEnd, setHasReachedEnd] = useState(false);
   const [showEmpty, setShowEmpty] = useState(false);
   const [loadHistory, setLoadHistory] = useState<string[]>([]);
   const [enableLoader, setEnableLoader] = useState(false);
+  const [loadedCount, setLoadedCount] = useState(0);
 
   const totalItems = 50;
   const itemsPerPage = 10;
 
   // Loader asíncrono
   const asyncLoader = async ({ page, limit }: { page: number; limit: number }) => {
-    const startId = page * limit;
+    const startId = (page - 1) * limit; // page empieza en 1
     const remainingItems = totalItems - startId;
     
     if (remainingItems <= 0) {
       return { items: [], hasMore: false };
     }
 
-    setIsLoadingData(true);
-    setLoadHistory(prev => [...prev, `Página ${page + 1} solicitada`]);
+    setLoadHistory(prev => [...prev, `📥 Página ${page} solicitada`]);
 
     // Simular delay de red
     await new Promise(resolve => setTimeout(resolve, 1500));
@@ -133,13 +130,19 @@ export function AsyncLoadingDemo() {
     const itemsToLoad = Math.min(limit, remainingItems);
     const newItems = generateItems(startId, itemsToLoad);
     
-    setIsLoadingData(false);
-    setCurrentPage(page + 1);
-    setLoadHistory(prev => [...prev, `Cargados ${itemsToLoad} elementos (total: ${startId + itemsToLoad}/${totalItems})`]);
+    const totalLoaded = startId + itemsToLoad;
+    setLoadedCount(totalLoaded);
+    
+    const hasMore = totalLoaded < totalItems;
+    
+    setLoadHistory(prev => [
+      ...prev,
+      `✅ Cargados ${itemsToLoad} elementos (total: ${totalLoaded}/${totalItems})`
+    ]);
 
     return {
       items: newItems,
-      hasMore: startId + itemsToLoad < totalItems,
+      hasMore,
     };
   };
 
@@ -156,16 +159,13 @@ export function AsyncLoadingDemo() {
   const handleStart = () => {
     setShowEmpty(false);
     setHasReachedEnd(false);
-    setEnableLoader(true);
-    setCurrentPage(0);
+    setLoadedCount(0);
     setLoadHistory(['🚀 Iniciando carga...']);
-    // Force reset by setting items to empty array after enabling loader
-    setItems([]);
+    setEnableLoader(true);
   };
 
   const handleClear = () => {
-    setItems([]);
-    setCurrentPage(0);
+    setLoadedCount(0);
     setHasReachedEnd(false);
     setEnableLoader(false);
     setLoadHistory(['🗑️ Lista limpiada']);
@@ -173,8 +173,7 @@ export function AsyncLoadingDemo() {
 
   const handleShowEmpty = () => {
     setShowEmpty(true);
-    setItems([]);
-    setCurrentPage(0);
+    setLoadedCount(0);
     setHasReachedEnd(false);
     setEnableLoader(false);
     setLoadHistory(['👁️ Mostrando estado vacío']);
@@ -193,7 +192,6 @@ export function AsyncLoadingDemo() {
       <div className="border rounded-lg p-4 bg-card">
         <h2 className="font-semibold mb-3 flex items-center gap-2">
           Panel de Control
-          {isLoadingData && <Badge variant="secondary">Cargando...</Badge>}
         </h2>
         
         <div className="flex flex-wrap gap-2 mb-4">
@@ -231,11 +229,11 @@ export function AsyncLoadingDemo() {
         <div className="space-y-2 text-sm">
           <div className="flex gap-4">
             <span className="text-muted-foreground">Elementos cargados:</span>
-            <span className="font-medium" data-testid="text-items-count">{items.length}/{totalItems}</span>
+            <span className="font-medium" data-testid="text-items-count">{loadedCount}/{totalItems}</span>
           </div>
           <div className="flex gap-4">
             <span className="text-muted-foreground">Página actual:</span>
-            <span className="font-medium" data-testid="text-current-page">{currentPage}/{Math.ceil(totalItems / itemsPerPage)}</span>
+            <span className="font-medium" data-testid="text-current-page">{Math.ceil(loadedCount / itemsPerPage)}/{Math.ceil(totalItems / itemsPerPage)}</span>
           </div>
           {hasReachedEnd && (
             <div className="flex gap-4">
@@ -264,8 +262,8 @@ export function AsyncLoadingDemo() {
         <HeterogeneousList
           key={`list-${enableLoader ? 'enabled' : 'disabled'}`}
           mode="registry"
-          items={items}
           registry={componentRegistry}
+          initialItems={[]}
           dataLoader={enableLoader ? asyncLoader : undefined}
           pageSize={itemsPerPage}
           onLoadingStart={handleLoadingStart}
