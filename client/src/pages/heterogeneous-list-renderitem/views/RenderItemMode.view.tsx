@@ -39,8 +39,8 @@ export function RenderItemModeView() {
   );
 
   return (
-    <div className="p-6 max-w-4xl mx-auto" data-testid="renderitem-mode-page">
-      <div className="mb-8">
+    <div data-testid="renderitem-mode-page">
+      <div className="p-6 max-w-4xl mx-auto mb-8">
         <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">RenderItem Mode</h1>
         <p className="text-gray-600 dark:text-gray-400">
           El modo RenderItem usa una función personalizada para renderizar cada item.
@@ -48,45 +48,14 @@ export function RenderItemModeView() {
         </p>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Ejemplo de Código</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto">
-            <code className="text-sm">{`const renderMovie = (movie, index) => (
-  <Card>
-    <CardHeader>
-      <CardTitle>{movie.title}</CardTitle>
-      <CardDescription>
-        {movie.genre} • {movie.year}
-      </CardDescription>
-    </CardHeader>
-  </Card>
-);
-
-<HeterogeneousList
-  mode="renderItem"
-  items={movies}
-  renderItem={renderMovie}
-  dividerVariant="none"
-  gap={12}
-/>`}</code>
-          </pre>
-        </CardContent>
-      </Card>
-
-      <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Demo en vivo</h2>
-        <HeterogeneousList
-          mode="renderItem"
-          items={movies}
-          renderItem={renderMovie}
-          dividerVariant="none"
-          gap={12}
-          data-testid="renderitem-list"
-        />
-      </div>
+      <HeterogeneousList
+        mode="renderItem"
+        items={movies}
+        renderItem={renderMovie}
+        dividerVariant="none"
+        gap={12}
+        data-testid="renderitem-list"
+      />
     </div>
   );
 }

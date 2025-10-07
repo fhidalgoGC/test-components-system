@@ -59,8 +59,8 @@ export function RegistryModeView() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto" data-testid="registry-mode-page">
-      <div className="mb-8">
+    <div data-testid="registry-mode-page">
+      <div className="p-6 max-w-4xl mx-auto mb-8">
         <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Registry Mode</h1>
         <p className="text-gray-600 dark:text-gray-400">
           El modo Registry mapea items a componentes basándose en la propiedad `kindComponent`.
@@ -68,39 +68,14 @@ export function RegistryModeView() {
         </p>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Ejemplo de Código</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto">
-            <code className="text-sm">{`const registry = {
-  product: ProductCard,
-  user: UserCard,
-};
-
-<HeterogeneousList
-  mode="registry"
-  items={items}
-  registry={registry}
-  dividerVariant="line"
-  gap={16}
-/>`}</code>
-          </pre>
-        </CardContent>
-      </Card>
-
-      <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Demo en vivo</h2>
-        <HeterogeneousList
-          mode="registry"
-          items={items}
-          registry={registry}
-          dividerVariant="line"
-          gap={16}
-          data-testid="registry-list"
-        />
-      </div>
+      <HeterogeneousList
+        mode="registry"
+        items={items}
+        registry={registry}
+        dividerVariant="line"
+        gap={16}
+        data-testid="registry-list"
+      />
     </div>
   );
 }
