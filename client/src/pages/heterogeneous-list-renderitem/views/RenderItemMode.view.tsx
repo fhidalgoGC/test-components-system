@@ -18,6 +18,16 @@ export function RenderItemModeView() {
     { id: 3, title: 'Interstellar', year: 2014, rating: 8.6, genre: 'Sci-Fi' },
     { id: 4, title: 'The Dark Knight', year: 2008, rating: 9.0, genre: 'Action' },
     { id: 5, title: 'Pulp Fiction', year: 1994, rating: 8.9, genre: 'Crime' },
+    { id: 6, title: 'Fight Club', year: 1999, rating: 8.8, genre: 'Drama' },
+    { id: 7, title: 'Forrest Gump', year: 1994, rating: 8.8, genre: 'Drama' },
+    { id: 8, title: 'The Shawshank Redemption', year: 1994, rating: 9.3, genre: 'Drama' },
+    { id: 9, title: 'The Godfather', year: 1972, rating: 9.2, genre: 'Crime' },
+    { id: 10, title: 'Parasite', year: 2019, rating: 8.5, genre: 'Thriller' },
+    { id: 11, title: 'Gladiator', year: 2000, rating: 8.5, genre: 'Action' },
+    { id: 12, title: 'The Prestige', year: 2006, rating: 8.5, genre: 'Mystery' },
+    { id: 13, title: 'Memento', year: 2000, rating: 8.4, genre: 'Mystery' },
+    { id: 14, title: 'The Departed', year: 2006, rating: 8.5, genre: 'Crime' },
+    { id: 15, title: 'Whiplash', year: 2014, rating: 8.5, genre: 'Drama' },
   ];
 
   const renderMovie = (movie: MovieItem, index: number) => (
@@ -40,14 +50,6 @@ export function RenderItemModeView() {
 
   return (
     <div data-testid="renderitem-mode-page">
-      <div className="p-6 max-w-4xl mx-auto mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">RenderItem Mode</h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          El modo RenderItem usa una función personalizada para renderizar cada item.
-          Tienes control total sobre cómo se muestra cada elemento de la lista.
-        </p>
-      </div>
-
       <HeterogeneousList
         mode="renderItem"
         items={movies}

@@ -51,6 +51,16 @@ export function RegistryModeView() {
     { id: 3, kindComponent: 'product', name: 'Mouse', price: 29, category: 'Accessories' },
     { id: 4, kindComponent: 'user', name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
     { id: 5, kindComponent: 'product', name: 'Keyboard', price: 79, category: 'Accessories' },
+    { id: 6, kindComponent: 'product', name: 'Monitor 27"', price: 349, category: 'Electronics' },
+    { id: 7, kindComponent: 'user', name: 'Michael Chen', email: 'michael@example.com', role: 'Developer' },
+    { id: 8, kindComponent: 'product', name: 'Webcam HD', price: 89, category: 'Electronics' },
+    { id: 9, kindComponent: 'user', name: 'Sarah Johnson', email: 'sarah@example.com', role: 'Designer' },
+    { id: 10, kindComponent: 'product', name: 'USB-C Cable', price: 19, category: 'Accessories' },
+    { id: 11, kindComponent: 'product', name: 'Headphones', price: 159, category: 'Audio' },
+    { id: 12, kindComponent: 'user', name: 'David Martinez', email: 'david@example.com', role: 'Manager' },
+    { id: 13, kindComponent: 'product', name: 'Desk Lamp', price: 45, category: 'Office' },
+    { id: 14, kindComponent: 'user', name: 'Emma Wilson', email: 'emma@example.com', role: 'Analyst' },
+    { id: 15, kindComponent: 'product', name: 'External SSD 1TB', price: 129, category: 'Storage' },
   ];
 
   const registry = {
@@ -60,14 +70,6 @@ export function RegistryModeView() {
 
   return (
     <div data-testid="registry-mode-page">
-      <div className="p-6 max-w-4xl mx-auto mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Registry Mode</h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          El modo Registry mapea items a componentes basándose en la propiedad `kindComponent`.
-          Cada tipo de item se renderiza con su componente correspondiente definido en el registry.
-        </p>
-      </div>
-
       <HeterogeneousList
         mode="registry"
         items={items}
