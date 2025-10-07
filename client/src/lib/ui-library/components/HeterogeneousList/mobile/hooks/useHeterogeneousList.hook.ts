@@ -116,44 +116,45 @@ export function useHeterogeneousList(
     loadMore();
   }, [loadMore]);
 
-  // Load all at once if infinite scroll is disabled, or initial load with loader
-  useEffect(() => {
-    if (!infiniteScroll && loader && state.hasMore && !state.isLoading && state.page === 1) {
-      loadMore();
-    }
-    // Initial load when loader becomes available
-    if (infiniteScroll && loader && state.hasMore && !state.isLoading && state.page === 1 && state.items.length === 0 && state.elements.length === 0) {
-      loadMore();
-    }
-  }, [infiniteScroll, loader, state.hasMore, state.isLoading, state.page, state.items.length, state.elements.length, loadMore]);
-
   // Update items/elements when props change (reactivity)
-  // Only update if there's no active loader or if we're resetting
+  // Priority: if items/elements exist, use them (static mode), otherwise use loader
   useEffect(() => {
     if (mode === 'elements') {
       const elementsProps = props as ElementsModeProps;
-      // Solo actualizar si no hay loader activo o si los elementos del prop tienen contenido
-      if (elementsProps.elements !== undefined && (!elementsProps.elementsLoader || elementsProps.elements.length > 0)) {
+      // Priority: elements > elementsLoader
+      if (elementsProps.elements !== undefined) {
         setState(prev => ({
           ...prev,
           elements: elementsProps.elements || [],
-          hasMore: !!elementsProps.elementsLoader,
+          hasMore: false, // Static elements, no loader
           page: 1,
         }));
       }
     } else {
       const dataProps = props as RegistryModeProps;
-      // Solo actualizar si no hay loader activo o si los items del prop tienen contenido
-      if (dataProps.items !== undefined && (!dataProps.dataLoader || dataProps.items.length > 0)) {
+      // Priority: items > dataLoader
+      if (dataProps.items !== undefined) {
         setState(prev => ({
           ...prev,
           items: dataProps.items || [],
-          hasMore: !!dataProps.dataLoader,
+          hasMore: false, // Static items, no loader
           page: 1,
         }));
       }
     }
   }, [mode, (props as any).items, (props as any).elements]);
+
+  // Auto-load with dataLoader only if no items/elements are provided
+  useEffect(() => {
+    const hasStaticData = mode === 'elements' 
+      ? (props as ElementsModeProps).elements !== undefined
+      : (props as RegistryModeProps).items !== undefined;
+    
+    // Only load if: has loader, no static data, has more to load, not loading, first page
+    if (loader && !hasStaticData && state.hasMore && !state.isLoading && state.page === 1) {
+      loadMore();
+    }
+  }, [loader, mode, props, state.hasMore, state.isLoading, state.page, loadMore]);
 
   // Intersection observer for infinite scroll
   const sentinelRef = useIntersectionObserver({
