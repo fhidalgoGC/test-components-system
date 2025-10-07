@@ -9,6 +9,7 @@ import { EventCard } from "@/pages/heterogeneous-list-registry/components/EventC
 import { MessageCard } from "@/pages/heterogeneous-list-registry/components/MessageCard";
 import { CustomLoading } from "../components/CustomLoading";
 import { EmptyState } from "../components/EmptyState";
+import { EndComponent } from "../components/EndComponent";
 import { Play, Trash2, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -256,6 +257,7 @@ export function AsyncLoadingDemo() {
           onEnd={handleEnd}
           loading={<CustomLoading />}
           empty={showEmpty ? <EmptyState /> : undefined}
+          endRender={<EndComponent />}
           infiniteScroll={true}
           preserveScrollPosition={true}
           gap={16}

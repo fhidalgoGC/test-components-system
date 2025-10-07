@@ -123,24 +123,26 @@ export function useHeterogeneousList(
   useEffect(() => {
     if (mode === 'elements') {
       const elementsProps = props as ElementsModeProps;
-      if (elementsProps.elements) {
+      if (elementsProps.elements !== undefined) {
         setState(prev => ({
           ...prev,
           elements: elementsProps.elements || [],
           hasMore: !!elementsProps.elementsLoader,
+          page: elementsProps.elements?.length === 0 ? 1 : prev.page,
         }));
       }
     } else {
       const dataProps = props as RegistryModeProps;
-      if (dataProps.items) {
+      if (dataProps.items !== undefined) {
         setState(prev => ({
           ...prev,
           items: dataProps.items || [],
           hasMore: !!dataProps.dataLoader,
+          page: dataProps.items?.length === 0 ? 1 : prev.page,
         }));
       }
     }
-  }, [mode, (props as any).items, (props as any).elements]);
+  }, [mode, (props as any).items, (props as any).elements, (props as any).dataLoader, (props as any).elementsLoader]);
 
   // Intersection observer for infinite scroll
   const sentinelRef = useIntersectionObserver({

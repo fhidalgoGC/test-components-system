@@ -148,6 +148,11 @@ export function ElementsModeView() {
         dividerVariant="line"
         dividerInset={16}
         gap={16}
+        endRender={
+          <div className="text-center py-8 text-sm text-muted-foreground border-t border-dashed">
+            Fin de la lista
+          </div>
+        }
         data-testid="elements-list"
       />
     </div>
