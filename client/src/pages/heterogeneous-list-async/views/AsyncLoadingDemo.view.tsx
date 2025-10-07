@@ -185,10 +185,10 @@ export function AsyncLoadingDemo() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
+    <div className="w-full max-w-4xl mx-auto p-3 md:p-6 space-y-3 md:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Carga Asíncrona - Demo</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold mb-2">Carga Asíncrona - Demo</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           Demostración de carga asíncrona con 50 elementos, paginación de 10 en 10
         </p>
       </div>
