@@ -30,13 +30,68 @@ const componentRegistry = {
   message: MessageCard,
 };
 
-// Generador de items de ejemplo
+// Generador de items de ejemplo con datos completos
 const generateItems = (startId: number, count: number): BaseItem[] => {
   const kinds: ItemKind[] = ['notification', 'product', 'task', 'user', 'event', 'message'];
-  return Array.from({ length: count }, (_, i) => ({
-    id: startId + i,
-    kindComponent: kinds[(startId + i) % kinds.length],
-  }));
+  
+  return Array.from({ length: count }, (_, i) => {
+    const itemId = startId + i;
+    const kind = kinds[itemId % kinds.length];
+    
+    const baseItem: any = {
+      id: itemId,
+      kindComponent: kind,
+    };
+
+    // Agregar datos específicos según el tipo
+    switch (kind) {
+      case 'notification':
+        return {
+          ...baseItem,
+          title: `Notificación ${itemId + 1}`,
+          message: `Este es el mensaje de la notificación número ${itemId + 1}`,
+          time: 'Hace 5 min',
+        };
+      case 'product':
+        return {
+          ...baseItem,
+          name: `Producto ${itemId + 1}`,
+          price: Math.floor(Math.random() * 1000) + 50,
+          category: ['Electrónica', 'Ropa', 'Hogar', 'Deportes'][itemId % 4],
+        };
+      case 'task':
+        return {
+          ...baseItem,
+          title: `Tarea ${itemId + 1}`,
+          status: itemId % 3 === 0 ? 'completed' : 'pending',
+          priority: itemId % 4 === 0 ? 'high' : 'normal',
+        };
+      case 'user':
+        return {
+          ...baseItem,
+          name: `Usuario ${itemId + 1}`,
+          email: `usuario${itemId + 1}@example.com`,
+          role: ['Admin', 'Editor', 'Viewer'][itemId % 3],
+        };
+      case 'event':
+        return {
+          ...baseItem,
+          name: `Evento ${itemId + 1}`,
+          date: '15 Nov 2024',
+          location: `Sala ${String.fromCharCode(65 + (itemId % 5))}`,
+        };
+      case 'message':
+        return {
+          ...baseItem,
+          sender: `Usuario ${itemId + 1}`,
+          content: `Este es el contenido del mensaje número ${itemId + 1}`,
+          timestamp: 'Hace 2h',
+          unread: itemId % 5 === 0,
+        };
+      default:
+        return baseItem;
+    }
+  });
 };
 
 export function AsyncLoadingDemo() {
@@ -203,6 +258,8 @@ export function AsyncLoadingDemo() {
           empty={showEmpty ? <EmptyState /> : undefined}
           infiniteScroll={true}
           preserveScrollPosition={true}
+          gap={16}
+          dividerVariant="line"
         />
       </div>
     </div>
