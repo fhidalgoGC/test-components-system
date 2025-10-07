@@ -8,6 +8,7 @@ import DateDemo from "@/pages/date-demo";
 import { AuthTestPage } from "@/pages/auth-test";
 import RegistryMode from "@/pages/heterogeneous-list-registry";
 import ElementsMode from "@/pages/heterogeneous-list-elements";
+import { AsyncLoadingDemo } from "@/pages/heterogeneous-list-async";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -73,6 +74,12 @@ export function Router() {
           headerDescription: "Renderiza ReactElements pre-construidos",
           showActionButtons: false
         };
+      case '/components/heterogeneous-list/async':
+        return {
+          headerTitle: "HeterogeneousList - Async Loading",
+          headerDescription: "Demostración de carga asíncrona y controles",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -92,6 +99,7 @@ export function Router() {
         <Route path="/auth-test" component={AuthTestPage} />
         <Route path="/components/heterogeneous-list/registry" component={RegistryMode} />
         <Route path="/components/heterogeneous-list/elements" component={ElementsMode} />
+        <Route path="/components/heterogeneous-list/async" component={AsyncLoadingDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

@@ -23,7 +23,8 @@ export function getDefaultMenuItems(): MenuItem[] {
       icon: 'Layout',
       children: [
         { id: 'registry-mode', label: 'Registry Mode', path: '/components/heterogeneous-list/registry' },
-        { id: 'elements-mode', label: 'Elements Mode', path: '/components/heterogeneous-list/elements' }
+        { id: 'elements-mode', label: 'Elements Mode', path: '/components/heterogeneous-list/elements' },
+        { id: 'async-loading', label: 'Async Loading', path: '/components/heterogeneous-list/async' }
       ]
     },
     { 

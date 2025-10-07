@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { HeterogeneousList } from "@/lib/ui-library/components/HeterogeneousList";
 import { Button } from "@/components/ui/button";
-import { NotificationItem } from "@/pages/heterogeneous-list-registry/components/NotificationItem";
-import { ProductItem } from "@/pages/heterogeneous-list-registry/components/ProductItem";
-import { TaskItem } from "@/pages/heterogeneous-list-registry/components/TaskItem";
-import { UserItem } from "@/pages/heterogeneous-list-registry/components/UserItem";
-import { EventItem } from "@/pages/heterogeneous-list-registry/components/EventItem";
-import { MessageItem } from "@/pages/heterogeneous-list-registry/components/MessageItem";
+import { NotificationCard } from "@/pages/heterogeneous-list-registry/components/NotificationCard";
+import { ProductCard } from "@/pages/heterogeneous-list-registry/components/ProductCard";
+import { TaskCard } from "@/pages/heterogeneous-list-registry/components/TaskCard";
+import { UserCard } from "@/pages/heterogeneous-list-registry/components/UserCard";
+import { EventCard } from "@/pages/heterogeneous-list-registry/components/EventCard";
+import { MessageCard } from "@/pages/heterogeneous-list-registry/components/MessageCard";
 import { CustomLoading } from "../components/CustomLoading";
 import { EmptyState } from "../components/EmptyState";
 import { Play, Trash2, RefreshCw } from "lucide-react";
@@ -17,17 +17,17 @@ type ItemKind = 'notification' | 'product' | 'task' | 'user' | 'event' | 'messag
 
 interface BaseItem {
   id: number;
-  kind: ItemKind;
+  kindComponent: ItemKind;
 }
 
 // Registro de componentes
-const kindComponent = {
-  notification: NotificationItem,
-  product: ProductItem,
-  task: TaskItem,
-  user: UserItem,
-  event: EventItem,
-  message: MessageItem,
+const componentRegistry = {
+  notification: NotificationCard,
+  product: ProductCard,
+  task: TaskCard,
+  user: UserCard,
+  event: EventCard,
+  message: MessageCard,
 };
 
 // Generador de items de ejemplo
@@ -35,7 +35,7 @@ const generateItems = (startId: number, count: number): BaseItem[] => {
   const kinds: ItemKind[] = ['notification', 'product', 'task', 'user', 'event', 'message'];
   return Array.from({ length: count }, (_, i) => ({
     id: startId + i,
-    kind: kinds[(startId + i) % kinds.length],
+    kindComponent: kinds[(startId + i) % kinds.length],
   }));
 };
 
@@ -51,12 +51,12 @@ export function AsyncLoadingDemo() {
   const itemsPerPage = 10;
 
   // Loader asíncrono
-  const asyncLoader = async (page: number, pageSize: number) => {
-    const startId = page * pageSize;
+  const asyncLoader = async ({ page, limit }: { page: number; limit: number }) => {
+    const startId = page * limit;
     const remainingItems = totalItems - startId;
     
     if (remainingItems <= 0) {
-      return { data: [], hasMore: false };
+      return { items: [], hasMore: false };
     }
 
     setIsLoadingData(true);
@@ -65,7 +65,7 @@ export function AsyncLoadingDemo() {
     // Simular delay de red
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const itemsToLoad = Math.min(pageSize, remainingItems);
+    const itemsToLoad = Math.min(limit, remainingItems);
     const newItems = generateItems(startId, itemsToLoad);
     
     setIsLoadingData(false);
@@ -73,7 +73,7 @@ export function AsyncLoadingDemo() {
     setLoadHistory(prev => [...prev, `Cargados ${itemsToLoad} elementos (total: ${startId + itemsToLoad}/${totalItems})`]);
 
     return {
-      data: newItems,
+      items: newItems,
       hasMore: startId + itemsToLoad < totalItems,
     };
   };
@@ -191,12 +191,12 @@ export function AsyncLoadingDemo() {
         <HeterogeneousList
           mode="registry"
           items={items}
-          kindComponent={kindComponent}
+          registry={componentRegistry}
           dataLoader={asyncLoader}
           pageSize={itemsPerPage}
           onEnd={handleEnd}
-          LoadingComponent={CustomLoading}
-          EmptyComponent={showEmpty ? EmptyState : undefined}
+          loading={<CustomLoading />}
+          empty={showEmpty ? <EmptyState /> : undefined}
           infiniteScroll={true}
           preserveScrollPosition={true}
         />
