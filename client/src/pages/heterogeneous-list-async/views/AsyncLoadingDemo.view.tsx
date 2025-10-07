@@ -115,6 +115,11 @@ export function AsyncLoadingDemo() {
 
   // Loader asíncrono
   const asyncLoader = async ({ page, limit }: { page: number; limit: number }) => {
+    // Si showEmpty está activado, retornar vacío
+    if (showEmpty) {
+      return { items: [], hasMore: false };
+    }
+    
     const startId = (page - 1) * limit; // page empieza en 1
     const remainingItems = totalItems - startId;
     
@@ -175,7 +180,7 @@ export function AsyncLoadingDemo() {
     setShowEmpty(true);
     setLoadedCount(0);
     setHasReachedEnd(false);
-    setEnableLoader(false);
+    setEnableLoader(true);
     setLoadHistory(['👁️ Mostrando estado vacío']);
   };
 
@@ -261,7 +266,7 @@ export function AsyncLoadingDemo() {
       <div data-testid="list-container">
         {enableLoader && (
           <HeterogeneousList
-            key="loader-enabled"
+            key={`loader-${showEmpty ? 'empty' : 'enabled'}`}
             mode="registry"
             registry={componentRegistry}
             dataLoader={asyncLoader}
