@@ -1,0 +1,100 @@
+/* HeterogeneousList - Mobile Styles */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+}
+
+.dividerLine {
+  height: 1px;
+  background-color: var(--divider-color, #e5e7eb);
+  margin: 0.5rem 0;
+}
+
+.dividerComponent {
+  display: flex;
+  width: 100%;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--text-muted, #6b7280);
+  text-align: center;
+}
+
+.loadingIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: var(--text-muted, #6b7280);
+}
+
+.endRender {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: var(--text-muted, #6b7280);
+  text-align: center;
+}
+
+.errorState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--error-color, #ef4444);
+  text-align: center;
+}
+
+.sentinel {
+  height: 1px;
+  margin-top: 10px;
+  visibility: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 0;
+  }
+  
+  .item {
+    padding: 0;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dividerLine {
+    background-color: var(--divider-color-dark, #374151);
+  }
+  
+  .emptyState,
+  .loadingIndicator,
+  .endRender {
+    color: var(--text-muted-dark, #9ca3af);
+  }
+  
+  .errorState {
+    color: var(--error-color-dark, #f87171);
+  }
+}

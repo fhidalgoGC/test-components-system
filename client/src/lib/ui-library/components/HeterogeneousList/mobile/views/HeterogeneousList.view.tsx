@@ -6,6 +6,18 @@ import type {
   ElementsModeProps,
 } from '../types';
 import { useHeterogeneousList } from '../hooks';
+import {
+  containerClasses,
+  listClasses,
+  itemClasses,
+  dividerLineClasses,
+  dividerComponentClasses,
+  emptyStateClasses,
+  loadingIndicatorClasses,
+  endRenderClasses,
+  errorStateClasses,
+  sentinelClasses,
+} from '../css';
 
 export const HeterogeneousListView = (props: HeterogeneousListProps) => {
   const {
@@ -49,8 +61,6 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
     const style: React.CSSProperties = {};
     if (gap !== undefined && dividerVariant === 'none') {
       style.gap = typeof gap === 'number' ? `${gap}px` : gap;
-      style.display = 'flex';
-      style.flexDirection = 'column';
     }
     return style;
   }, [gap, dividerVariant]);
@@ -103,18 +113,22 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
 
     if (dividerVariant === 'component' && renderDivider) {
       return (
-        <div key={`divider-${index}`} data-testid={`divider-${index}`}>
+        <div 
+          key={`divider-${index}`} 
+          className={dividerComponentClasses()} 
+          data-testid={`divider-${index}`}
+        >
           {renderDivider(index)}
         </div>
       );
     }
 
     if (dividerVariant === 'line') {
-      const dividerStyle: React.CSSProperties = {
-        height: '1px',
-        backgroundColor: '#e5e7eb',
-        margin: gap ? `${typeof gap === 'number' ? gap / 2 : '0.5rem'} 0` : '0.5rem 0',
-      };
+      const dividerStyle: React.CSSProperties = {};
+      
+      if (gap) {
+        dividerStyle.margin = `${typeof gap === 'number' ? gap / 2 : '0.5rem'} 0`;
+      }
 
       if (dividerInset !== undefined) {
         dividerStyle.marginLeft = typeof dividerInset === 'number' ? `${dividerInset}px` : dividerInset;
@@ -124,7 +138,8 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
       return (
         <div
           key={`divider-${index}`}
-          style={dividerStyle}
+          className={dividerLineClasses()}
+          style={Object.keys(dividerStyle).length > 0 ? dividerStyle : undefined}
           data-testid={`divider-${index}`}
           aria-hidden="true"
         />
@@ -146,7 +161,7 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
       result.push(
         <div
           key={key}
-          className={itemClassName}
+          className={itemClasses(itemClassName)}
           {...itemWrapperProps}
           data-testid={`list-item-${index}`}
         >
@@ -174,8 +189,12 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
     }
 
     return (
-      <div className={className} data-testid="heterogeneous-list-mobile">
-        <div style={emptyStyle} data-testid="empty-state">
+      <div className={containerClasses(className)} data-testid="heterogeneous-list-mobile">
+        <div 
+          className={emptyStateClasses()} 
+          style={Object.keys(emptyStyle).length > 0 ? emptyStyle : undefined} 
+          data-testid="empty-state"
+        >
           {empty || <div>No items to display</div>}
         </div>
       </div>
@@ -185,29 +204,32 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
   // Show error state
   if (state.error && errorRender) {
     return (
-      <div className={className} data-testid="heterogeneous-list-mobile">
-        <div data-testid="error-state">
+      <div className={containerClasses(className)} data-testid="heterogeneous-list-mobile">
+        <div className={errorStateClasses()} data-testid="error-state">
           {errorRender(state.error, retry)}
         </div>
       </div>
     );
   }
 
+  const finalContainerStyle = Object.keys(containerStyle).length > 0 ? containerStyle : undefined;
+  const finalListStyle = Object.keys(listStyle).length > 0 ? listStyle : undefined;
+
   return (
     <div
-      className={className}
-      style={containerStyle}
+      className={containerClasses(className)}
+      style={finalContainerStyle}
       data-testid="heterogeneous-list-mobile"
       role="list"
       aria-busy={state.isLoading}
     >
-      <div className={listClassName} style={listStyle}>
+      <div className={listClasses(listClassName)} style={finalListStyle}>
         {itemsList}
       </div>
 
       {/* Loading indicator */}
       {state.isLoading && (
-        <div data-testid="loading-indicator" aria-live="polite">
+        <div className={loadingIndicatorClasses()} data-testid="loading-indicator" aria-live="polite">
           {loadingElement || <div>Loading...</div>}
         </div>
       )}
@@ -215,6 +237,7 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
       {/* End render */}
       {!state.hasMore && !state.isLoading && itemsList.length > 0 && (
         <div
+          className={endRenderClasses()}
           data-testid="end-render"
           style={{
             padding: endSpacing
@@ -233,7 +256,7 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
       {infiniteScroll && state.hasMore && !state.isLoading && (
         <div
           ref={sentinelRef}
-          style={{ height: '1px', marginTop: '10px' }}
+          className={sentinelClasses()}
           data-testid="scroll-sentinel"
           aria-hidden="true"
         />
