@@ -10,11 +10,12 @@ import { MessageCard } from "@/pages/heterogeneous-list-registry/components/Mess
 import { CustomLoading } from "../components/CustomLoading";
 import { EmptyState } from "../components/EmptyState";
 import { EndComponent } from "../components/EndComponent";
+import { FormItem } from "../components/FormItem";
 import { Play, Trash2, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 // Tipos de items
-type ItemKind = 'notification' | 'product' | 'task' | 'user' | 'event' | 'message';
+type ItemKind = 'notification' | 'product' | 'task' | 'user' | 'event' | 'message' | 'form';
 
 interface BaseItem {
   id: number;
@@ -29,11 +30,12 @@ const componentRegistry = {
   user: UserCard,
   event: EventCard,
   message: MessageCard,
+  form: FormItem,
 };
 
 // Generador de items de ejemplo con datos completos
 const generateItems = (startId: number, count: number): BaseItem[] => {
-  const kinds: ItemKind[] = ['notification', 'product', 'task', 'user', 'event', 'message'];
+  const kinds: ItemKind[] = ['notification', 'product', 'task', 'user', 'event', 'message', 'form'];
   
   return Array.from({ length: count }, (_, i) => {
     const itemId = startId + i;
@@ -89,6 +91,12 @@ const generateItems = (startId: number, count: number): BaseItem[] => {
           timestamp: 'Hace 2h',
           unread: itemId % 5 === 0,
         };
+      case 'form':
+        return {
+          ...baseItem,
+          title: `Campo ${itemId + 1}`,
+          description: `Ingresa el valor para el campo ${itemId + 1}`,
+        };
       default:
         return baseItem;
     }
@@ -136,6 +144,10 @@ export function AsyncLoadingDemo() {
   };
 
   // Callbacks
+  const handleLoadingStart = (page: number) => {
+    setLoadHistory(prev => [...prev, `🔄 Iniciando carga de página ${page}...`]);
+  };
+
   const handleEnd = () => {
     setHasReachedEnd(true);
     setLoadHistory(prev => [...prev, '🎉 Fin de la lista alcanzado']);
@@ -144,10 +156,11 @@ export function AsyncLoadingDemo() {
   const handleStart = () => {
     setShowEmpty(false);
     setHasReachedEnd(false);
-    setItems([]);
-    setCurrentPage(0);
     setEnableLoader(true);
+    setCurrentPage(0);
     setLoadHistory(['🚀 Iniciando carga...']);
+    // Force reset by setting items to empty array after enabling loader
+    setItems([]);
   };
 
   const handleClear = () => {
@@ -249,11 +262,13 @@ export function AsyncLoadingDemo() {
       {/* Lista */}
       <div data-testid="list-container">
         <HeterogeneousList
+          key={`list-${enableLoader ? 'enabled' : 'disabled'}`}
           mode="registry"
           items={items}
           registry={componentRegistry}
           dataLoader={enableLoader ? asyncLoader : undefined}
           pageSize={itemsPerPage}
+          onLoadingStart={handleLoadingStart}
           onEnd={handleEnd}
           loading={<CustomLoading />}
           empty={showEmpty ? <EmptyState /> : undefined}

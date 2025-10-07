@@ -66,6 +66,7 @@ export interface BaseListProps {
   
   // Callbacks
   onLoad?: (page: number, received: number) => void;
+  onLoadingStart?: (page: number) => void;
   onEnd?: () => void;
   
   // Virtualization (future)
