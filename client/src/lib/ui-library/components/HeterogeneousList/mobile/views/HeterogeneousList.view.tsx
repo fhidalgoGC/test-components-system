@@ -52,9 +52,6 @@ export const HeterogeneousListView = (props: HeterogeneousListProps) => {
     if (paddingEnd !== undefined) {
       style.paddingBottom = typeof paddingEnd === 'number' ? `${paddingEnd}px` : paddingEnd;
     }
-    // Add horizontal padding
-    style.paddingLeft = '4px';
-    style.paddingRight = '4px';
     return style;
   }, [paddingStart, paddingEnd]);
 
