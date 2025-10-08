@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -9,12 +13,16 @@ const componentName = args[0];
 
 if (!componentName) {
   console.error('❌ Error: Component name is required');
-  console.log('Usage: npm run new-component <ComponentName> [options]');
-  console.log('Options:');
+  console.log('Usage: npm run new-component -- <ComponentName> [options]');
+  console.log('\nOptions:');
   console.log('  -all-folders    Create i18n, utils, and provider folders');
   console.log('  -readme         Generate README-IA.md in component');
   console.log('  -mobile         Create mobile version (default)');
   console.log('  -web            Create web version');
+  console.log('\nExamples:');
+  console.log('  npm run new-component -- Modal');
+  console.log('  npm run new-component -- Modal -all-folders -readme');
+  console.log('  npm run new-component -- Dialog -mobile -web');
   process.exit(1);
 }
 

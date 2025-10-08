@@ -5,14 +5,16 @@ Generador automático de componentes para la biblioteca de UI.
 ## Uso básico
 
 ```bash
-npm run new-component <ComponentName> [opciones]
+npm run new-component -- <ComponentName> [opciones]
 ```
+
+⚠️ **Importante**: El `--` es necesario para pasar las opciones al script.
 
 ## Ejemplos
 
 ### Componente básico (solo estructura mínima)
 ```bash
-npm run new-component Modal
+npm run new-component -- Modal
 ```
 
 Genera:
@@ -28,7 +30,7 @@ Modal/
 
 ### Componente completo con todas las carpetas
 ```bash
-npm run new-component Modal -all-folders
+npm run new-component -- Modal -all-folders
 ```
 
 Genera además:
@@ -38,21 +40,21 @@ Genera además:
 
 ### Con README de IA
 ```bash
-npm run new-component Modal -readme
+npm run new-component -- Modal -readme
 ```
 
 Genera un archivo `README-IA.md` dentro del componente con documentación inicial.
 
 ### Versión web
 ```bash
-npm run new-component Modal -web
+npm run new-component -- Modal -web
 ```
 
 Por defecto crea versión mobile. Usa `-web` para web, o ambos flags para crear ambas versiones.
 
 ### Comando completo
 ```bash
-npm run new-component Modal -all-folders -readme -mobile -web
+npm run new-component -- Modal -all-folders -readme -mobile -web
 ```
 
 ## Opciones disponibles
