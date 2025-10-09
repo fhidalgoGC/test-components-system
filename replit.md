@@ -17,7 +17,7 @@ Preferred communication style: Simple, everyday language.
 - **Routing**: Wouter for client-side routing.
 - **State Management**: React state with callback-based data management.
 - **Styling**: Tailwind CSS with CSS variables for theming.
-- **UI Components**: shadcn/ui library with Radix UI primitives, and custom components like `TagSelector` and `HeterogeneousList`.
+- **UI Components**: shadcn/ui library with Radix UI primitives, and custom components like `TagSelector`, `HeterogeneousList`, and `BottomNavigationBar`.
 - **Theme System**: Custom theme provider with light/dark mode and CSS variable-based theming.
 - **Internationalization (i18n)**: Hierarchical i18n system with global and component-specific translations, supporting English (en) and Spanish (es), with fallback and dynamic language selection.
 - **Modular Architecture**: Codebase follows a classified folder pattern for layouts, pages, and UI components, including `css/`, `types/`, `hooks/`, `utils/`, and `i18n/` subdirectories.
@@ -39,6 +39,17 @@ Preferred communication style: Simple, everyday language.
 - Follows TagSelector pattern: useI18nMerge hook + Provider with Context + i18n support
 - Dynamic language selection logic generated based on `--languages` parameter
 - Templates support variable replacement: `{{ComponentName}}`, `{{componentname}}`, etc.
+
+### BottomNavigationBar Component
+- Mobile navigation component using ItemWithMultiLanguageLabel for items
+- Supports both controlled (selectedId) and uncontrolled (defaultSelectedId) selection
+- Features:
+  - `onSelect` callback triggered on manual selection and external changes
+  - `triggerOnMount` option to invoke callback on initial mount
+  - Item metadata includes: icon, isDisabled, dataTestId
+  - Reactive i18n support with resolveMultiLanguageLabel utility
+  - Full accessibility support (aria-current, aria-disabled)
+- Pattern: Provider + Context + Hook architecture with i18n integration
 
 # External Dependencies
 

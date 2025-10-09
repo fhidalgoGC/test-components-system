@@ -9,6 +9,7 @@ import { AuthTestPage } from "@/pages/auth-test";
 import RegistryMode from "@/pages/heterogeneous-list-registry";
 import ElementsMode from "@/pages/heterogeneous-list-elements";
 import { AsyncLoadingDemo } from "@/pages/heterogeneous-list-async";
+import BottomNavDemo from "@/pages/bottom-nav-demo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -80,6 +81,12 @@ export function Router() {
           headerDescription: "Demostración de carga asíncrona y controles",
           showActionButtons: false
         };
+      case '/components/bottom-nav':
+        return {
+          headerTitle: "BottomNavigationBar",
+          headerDescription: "Barra de navegación inferior móvil con i18n reactivo",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -100,6 +107,7 @@ export function Router() {
         <Route path="/components/heterogeneous-list/registry" component={RegistryMode} />
         <Route path="/components/heterogeneous-list/elements" component={ElementsMode} />
         <Route path="/components/heterogeneous-list/async" component={AsyncLoadingDemo} />
+        <Route path="/components/bottom-nav" component={BottomNavDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

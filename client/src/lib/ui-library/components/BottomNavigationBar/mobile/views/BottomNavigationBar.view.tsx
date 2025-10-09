@@ -16,7 +16,9 @@ export const BottomNavigationBarView = (props: BottomNavigationBarProps) => {
     <nav className={cn(styles.container, className)} data-testid="bottomnavigationbar">
       {items.map((item) => {
         const isSelected = selectedId === item.id;
-        const isDisabled = item.isDisabled;
+        const isDisabled = item.metadata?.isDisabled;
+        const icon = item.metadata?.icon;
+        const dataTestId = item.metadata?.dataTestId || `nav-item-${item.id}`;
         const label = resolveMultiLanguageLabel(item.label, lang);
 
         return (
@@ -30,16 +32,16 @@ export const BottomNavigationBarView = (props: BottomNavigationBarProps) => {
               isSelected && styles.navItemSelected,
               isDisabled && styles.navItemDisabled
             )}
-            data-testid={`nav-item-${item.id}`}
+            data-testid={dataTestId}
             aria-current={isSelected ? 'page' : undefined}
             aria-disabled={isDisabled}
           >
-            {item.icon && (
-              <span className={styles.navIcon} data-testid={`nav-icon-${item.id}`}>
-                {item.icon}
+            {icon && (
+              <span className={styles.navIcon} data-testid={`${dataTestId}-icon`}>
+                {icon}
               </span>
             )}
-            <span className={styles.navLabel} data-testid={`nav-label-${item.id}`}>
+            <span className={styles.navLabel} data-testid={`${dataTestId}-label`}>
               {label}
             </span>
           </button>

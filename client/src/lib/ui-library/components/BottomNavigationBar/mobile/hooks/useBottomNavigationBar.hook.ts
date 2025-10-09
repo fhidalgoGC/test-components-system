@@ -17,10 +17,10 @@ export const useBottomNavigationBar = (props: BottomNavigationBarProps) => {
   // Find first enabled item for default selection
   const getDefaultItem = (): string | null => {
     if (defaultSelectedId) {
-      const item = items.find(i => i.id === defaultSelectedId && !i.isDisabled);
+      const item = items.find(i => i.id === defaultSelectedId && !i.metadata?.isDisabled);
       if (item) return defaultSelectedId;
     }
-    const firstEnabled = items.find(i => !i.isDisabled);
+    const firstEnabled = items.find(i => !i.metadata?.isDisabled);
     return firstEnabled?.id || null;
   };
 
@@ -61,7 +61,7 @@ export const useBottomNavigationBar = (props: BottomNavigationBarProps) => {
 
   // Handle item click
   const handleItemClick = (item: NavItem) => {
-    if (item.isDisabled) return;
+    if (item.metadata?.isDisabled) return;
 
     // Update internal state if uncontrolled
     if (!isControlled) {

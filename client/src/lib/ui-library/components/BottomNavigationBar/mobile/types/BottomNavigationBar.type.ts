@@ -1,21 +1,36 @@
-import type { MultiLanguageLabel } from '../../../../types';
+import type { ItemWithMultiLanguageLabel } from '../../../../types';
 
-export interface NavItem {
-  id: string;
-  label: MultiLanguageLabel;
+export interface NavItemMetadata {
   icon?: React.ReactNode;
   isDisabled?: boolean;
-  metadata?: any;
+  dataTestId?: string;
 }
 
+export interface NavItem extends ItemWithMultiLanguageLabel<NavItemMetadata> {}
+
 export interface BottomNavigationBarProps {
+  /** Lista de items de navegación */
   items: NavItem[];
-  selectedId?: string;
-  defaultSelectedId?: string;
-  triggerOnMount?: boolean;
+  
+  /** Callback al seleccionar un item (manual o por cambio externo) */
   onSelect?: (item: NavItem) => void;
+  
+  /** Controlado: define externamente el ítem seleccionado actual */
+  selectedId?: string;
+  
+  /** No controlado: ítem seleccionado inicial */
+  defaultSelectedId?: string;
+  
+  /** Si es true, al montar el componente se invoca el callback del ítem seleccionado */
+  triggerOnMount?: boolean;
+  
+  /** Clase CSS adicional */
   className?: string;
+  
+  /** Override de idioma */
   langOverride?: string;
+  
+  /** Orden de prioridad de traducciones */
   i18nOrder?: 'global-first' | 'local-first';
 }
 

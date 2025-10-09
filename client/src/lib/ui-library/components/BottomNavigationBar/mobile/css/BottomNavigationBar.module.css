@@ -6,7 +6,7 @@
   @apply shadow-lg;
   @apply h-16;
   @apply z-50;
-  @apply safe-area-inset-bottom;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .navItem {
