@@ -162,7 +162,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 🧩 **Componentes Específicos**
 
-### **TagSelector (Disponible Actualmente)**
+### **TagSelector**
 
 #### **`./components/TagSelector/README-IA.md`**
 **Cuándo usar:** Para implementar y configurar el componente TagSelector.
@@ -203,6 +203,63 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Ajustar tamaños granulares con tam-1 a tam-12
 - Entender precedencia CSS en TagSelector
 - Implementar diseño responsivo y casos de uso específicos
+
+### **BottomNavigationBar**
+
+#### **`./components/BottomNavigationBar/README-IA.md`**
+**Cuándo usar:** Para implementar navegación inferior móvil con soporte multiidioma y configuración externa.
+
+**Contiene:**
+- 📖 Props completos del BottomNavigationBar (items, selectedId, disabledIds, callbacks)
+- 🎯 Ejemplos de uso (modo controlado, no controlado, deshabilitación dinámica)
+- 🔧 API detallada con tipos TypeScript (NavItem, ItemWithMultiLanguageLabel, ErrorEvent)
+- 🌐 Sistema i18n reactivo con resolución automática de labels multiidioma
+- ⚡ Funcionalidades (callbacks onSelect/onError, triggerOnMount, protección UX)
+- 🎛️ Integración con ConfigProvider y cascada de configuración (Props → ConfigProvider → Environment)
+- ♿ Accesibilidad completa con ARIA attributes
+- 🧪 Data test IDs para testing
+
+**Buscar aquí para:**
+- Implementar barra de navegación inferior móvil
+- Usar ItemWithMultiLanguageLabel para labels multiidioma
+- Configurar modo controlado vs no controlado
+- Deshabilitar items dinámicamente con disabledIds
+- Manejar errores con callback onError
+- Integrar con ConfigProvider para configuración externa
+- Configurar TRIGGER_ON_MOUNT vía environment
+- Entender regla de UX: no se puede deshabilitar item seleccionado
+- Usar callbacks onSelect para navegación
+- Implementar testing con data-testid
+
+### **HeterogeneousList**
+
+#### **`./components/HeterogeneousList/README-IA.md`**
+**Cuándo usar:** Para renderizar listas heterogéneas con diferentes tipos de items, infinite scroll y lazy loading.
+
+**Contiene:**
+- 📖 Dos modos de renderizado (Registry mode y Elements mode)
+- 🎯 Ejemplos completos (chat, social feed, feeds con infinite scroll)
+- 🔧 API detallada con tipos TypeScript (RegistryItem, LoaderParams, DataLoaderResponse)
+- ⚡ Infinite scroll con intersection observer automático
+- 📡 Lazy loading con paginación asíncrona (dataLoader/elementsLoader)
+- 🎨 Dividers personalizables (line, component, none)
+- 📊 Estados manejados (loading, empty, error) con renderers customizables
+- 📜 Preservación de scroll position automática
+- 🎭 Component registry para items data-driven
+- ♿ Accesibilidad completa con ARIA y semantic HTML
+- 🧪 Data test IDs para testing
+
+**Buscar aquí para:**
+- Renderizar listas con items de diferentes tipos/componentes
+- Implementar feeds con infinite scroll (social, chat, noticias)
+- Usar component registry para items data-driven
+- Configurar lazy loading con paginación asíncrona
+- Personalizar dividers (líneas, componentes custom)
+- Manejar estados de carga, vacío y error
+- Preservar scroll position en actualizaciones
+- Implementar chat applications con mensajes heterogéneos
+- Renderizar feeds con ads intercalados
+- Testing con data-testid de items, estados y dividers
 
 ### **Futuros Componentes (Estructura General)**
 
@@ -351,6 +408,8 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | **Componente** | **Documentación** | **Estilos** |
 |----------------|-------------------|-------------|
 | TagSelector | `components/TagSelector/README-IA.md` | `components/TagSelector/README-IA--STYLES.md` |
+| BottomNavigationBar | `components/BottomNavigationBar/README-IA.md` | - |
+| HeterogeneousList | `components/HeterogeneousList/README-IA.md` | - |
 | [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` |
 
 ---
