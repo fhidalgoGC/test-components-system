@@ -7,6 +7,7 @@ export default function BottomNavDemo() {
   const [selectedItem, setSelectedItem] = useState<NavItem | null>(null);
   const [controlledId, setControlledId] = useState<string>('home');
   const [triggerOnMount, setTriggerOnMount] = useState(false);
+  const [disabledIds, setDisabledIds] = useState<string[]>([]);
 
   const navItems: NavItem[] = [
     {
@@ -42,7 +43,6 @@ export default function BottomNavDemo() {
       },
       metadata: {
         icon: <Bell size={24} />,
-        isDisabled: true, // Disabled item
         dataTestId: 'nav-notifications',
       },
     },
@@ -108,6 +108,16 @@ export default function BottomNavDemo() {
                 {triggerOnMount ? 'Activado' : 'Desactivado'}
               </span>
             </p>
+            <p className="text-sm dark:text-gray-300">
+              <strong>Items deshabilitados:</strong>{' '}
+              {disabledIds.length > 0 ? (
+                <span className="text-red-600 dark:text-red-400">
+                  [{disabledIds.join(', ')}]
+                </span>
+              ) : (
+                <span className="text-gray-500">Ninguno</span>
+              )}
+            </p>
           </div>
         </div>
 
@@ -132,16 +142,49 @@ export default function BottomNavDemo() {
 
             <div>
               <p className="text-sm font-medium mb-2 dark:text-gray-300">
+                Habilitar/Deshabilitar items (disabledIds):
+              </p>
+              <div className="space-y-2">
+                {navItems.map((item) => {
+                  const isDisabled = disabledIds.includes(item.id);
+                  return (
+                    <label key={item.id} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={isDisabled}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setDisabledIds([...disabledIds, item.id]);
+                          } else {
+                            setDisabledIds(disabledIds.filter(id => id !== item.id));
+                          }
+                        }}
+                        className="w-4 h-4 text-red-600 rounded focus:ring-red-500"
+                      />
+                      <span className="text-sm dark:text-gray-300">
+                        Deshabilitar "{item.label.en}"
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium mb-2 dark:text-gray-300">
                 Cambiar selección externa (controlado):
               </p>
               <div className="flex flex-wrap gap-2">
-                {navItems.filter(item => !item.metadata?.isDisabled).map((item) => (
+                {navItems.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setControlledId(item.id)}
+                    disabled={disabledIds.includes(item.id)}
                     className={`px-3 py-1 rounded text-sm transition-colors ${
                       controlledId === item.id
                         ? 'bg-blue-600 text-white'
+                        : disabledIds.includes(item.id)
+                        ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
                     }`}
                   >
@@ -161,12 +204,12 @@ export default function BottomNavDemo() {
             <li>✅ Selección controlada y no controlada</li>
             <li>✅ Callback onSelect al hacer click y al cambiar externamente</li>
             <li>✅ triggerOnMount para disparar callback inicial</li>
+            <li>✅ Control dinámico con prop disabledIds (habilitar/deshabilitar en tiempo real)</li>
             <li>✅ i18n reactivo (cambia el idioma global para ver)</li>
             <li>✅ Estados: seleccionado, hover, disabled</li>
             <li>✅ Iconos con lucide-react en metadata</li>
             <li>✅ Labels con MultiLanguageLabel</li>
             <li>✅ dataTestId personalizado por item</li>
-            <li>🔴 Item "Notifications" está deshabilitado</li>
           </ul>
         </div>
 
@@ -207,6 +250,7 @@ const items: NavItem[] = [
 {`<BottomNavigationBar
   items={navItems}
   selectedId={controlledId}
+  disabledIds={['search', 'notifications']}
   triggerOnMount={true}
   onSelect={(item) => console.log(item)}
 />`}
@@ -219,6 +263,7 @@ const items: NavItem[] = [
         items={navItems}
         selectedId={controlledId}
         triggerOnMount={triggerOnMount}
+        disabledIds={disabledIds}
         onSelect={handleSelect}
       />
     </div>
