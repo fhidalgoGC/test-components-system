@@ -45,6 +45,7 @@ export default function BottomNavDemo() {
       metadata: {
         icon: <Bell size={24} />,
         dataTestId: 'nav-notifications',
+        isDisabled: true,
       },
     },
     {
@@ -132,10 +133,20 @@ export default function BottomNavDemo() {
               </span>
             </p>
             <p className="text-sm dark:text-gray-300">
-              <strong>Items deshabilitados:</strong>{' '}
+              <strong>Items deshabilitados (prop disabledIds):</strong>{' '}
               {disabledIds.length > 0 ? (
                 <span className="text-red-600 dark:text-red-400">
                   [{disabledIds.join(', ')}]
+                </span>
+              ) : (
+                <span className="text-gray-500">Ninguno</span>
+              )}
+            </p>
+            <p className="text-sm dark:text-gray-300">
+              <strong>Items deshabilitados (metadata):</strong>{' '}
+              {navItems.filter(item => item.metadata?.isDisabled).length > 0 ? (
+                <span className="text-orange-600 dark:text-orange-400">
+                  [{navItems.filter(item => item.metadata?.isDisabled).map(item => item.id).join(', ')}]
                 </span>
               ) : (
                 <span className="text-gray-500">Ninguno</span>
