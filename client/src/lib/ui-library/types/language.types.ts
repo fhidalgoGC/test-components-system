@@ -2,18 +2,38 @@
 
 /**
  * MultiLanguageLabel - Object with translations for multiple languages
- * @example
+ * Can include optional metadata and additional properties
+ * 
+ * @example Basic usage
  * const label: MultiLanguageLabel = {
  *   en: "Hello",
  *   es: "Hola",
  *   fr: "Bonjour",
  *   default: "Hello"
  * }
+ * 
+ * @example With metadata
+ * const labelWithMetadata: MultiLanguageLabel = {
+ *   en: "Hello",
+ *   es: "Hola",
+ *   default: "Hello",
+ *   metadata: { tone: "formal", context: "greeting" }
+ * }
+ * 
+ * @example With additional properties
+ * const extendedLabel: MultiLanguageLabel = {
+ *   en: "Hello",
+ *   es: "Hola",
+ *   default: "Hello",
+ *   metadata: { tone: "formal" },
+ *   isPlural: false,
+ *   category: "greeting"
+ * }
  */
-export interface MultiLanguageLabel<T = any> {
-  [languageCode: string]: string;
-  metadata?: T; // Generic metadata for customization
+export interface MultiLanguageLabel {
+  [languageCode: string]: any; // Allow language codes and additional properties
   default: string; // Required fallback
+  metadata?: any; // Optional metadata for customization
 }
 
 /**

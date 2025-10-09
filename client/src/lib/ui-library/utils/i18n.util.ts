@@ -34,6 +34,15 @@ export function makeTranslator(
  * resolveMultiLanguageLabel(label, "es"); // Returns "Hola"
  * resolveMultiLanguageLabel(label, "fr"); // Returns "Hello" (default)
  * resolveMultiLanguageLabel("Simple text", "es"); // Returns "Simple text"
+ * 
+ * @example With metadata (ignored during resolution)
+ * const label = { 
+ *   en: "Hello", 
+ *   es: "Hola", 
+ *   default: "Hello",
+ *   metadata: { tone: "formal" }
+ * };
+ * resolveMultiLanguageLabel(label, "es"); // Returns "Hola"
  */
 export function resolveMultiLanguageLabel(
   label: LabelOrMultiLanguage,
@@ -47,27 +56,41 @@ export function resolveMultiLanguageLabel(
   // If it's a MultiLanguageLabel object
   const normalizedLang = lang.toLowerCase();
   
-  // Try exact match first
-  if (label[normalizedLang]) {
+  // Reserved keys that are not language codes
+  const reservedKeys = ['default', 'metadata'];
+  
+  // Try exact match first (excluding reserved keys)
+  if (label[normalizedLang] && typeof label[normalizedLang] === 'string') {
     return label[normalizedLang];
   }
 
   // Try language prefix (e.g., "en" for "en-US")
   const langPrefix = normalizedLang.split('-')[0];
-  if (langPrefix !== normalizedLang && label[langPrefix]) {
+  if (langPrefix !== normalizedLang && label[langPrefix] && typeof label[langPrefix] === 'string') {
     return label[langPrefix];
   }
 
   // Try finding any key that starts with the language prefix
   const matchingKey = Object.keys(label).find(key => 
-    key !== 'default' && key.toLowerCase().startsWith(langPrefix)
+    !reservedKeys.includes(key) && 
+    typeof label[key] === 'string' &&
+    key.toLowerCase().startsWith(langPrefix)
   );
   if (matchingKey) {
     return label[matchingKey];
   }
 
   // Fallback to default
-  return label.default || Object.values(label)[0] || '';
+  if (typeof label.default === 'string') {
+    return label.default;
+  }
+
+  // Last resort: find first string value
+  const firstStringValue = Object.entries(label).find(
+    ([key, value]) => !reservedKeys.includes(key) && typeof value === 'string'
+  );
+  
+  return firstStringValue?.[1] || '';
 }
 
 /**

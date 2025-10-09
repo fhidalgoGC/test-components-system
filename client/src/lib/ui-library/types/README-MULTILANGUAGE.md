@@ -6,16 +6,17 @@ Sistema de tipos y utilidades para manejar etiquetas con múltiples idiomas en l
 
 ### `MultiLanguageLabel`
 
-Objeto con traducciones para múltiples idiomas. **Requiere** un fallback `default`.
+Objeto con traducciones para múltiples idiomas. **Requiere** un fallback `default`. Opcionalmente puede incluir `metadata` y propiedades adicionales.
 
 ```typescript
 interface MultiLanguageLabel {
-  [languageCode: string]: string;
+  [languageCode: string]: any; // Language codes and additional properties
   default: string; // Required fallback
+  metadata?: any; // Optional metadata
 }
 ```
 
-**Ejemplo:**
+**Ejemplo básico:**
 ```typescript
 const label: MultiLanguageLabel = {
   en: "Hello",
@@ -23,6 +24,33 @@ const label: MultiLanguageLabel = {
   fr: "Bonjour",
   de: "Hallo",
   default: "Hello" // ⚠️ Obligatorio
+};
+```
+
+**Ejemplo con metadata:**
+```typescript
+const labelWithMetadata: MultiLanguageLabel = {
+  en: "Hello",
+  es: "Hola",
+  default: "Hello",
+  metadata: {
+    tone: "formal",
+    context: "greeting",
+    category: "common"
+  }
+};
+```
+
+**Ejemplo con propiedades adicionales:**
+```typescript
+const extendedLabel: MultiLanguageLabel = {
+  en: "Users",
+  es: "Usuarios",
+  default: "Users",
+  metadata: { category: "navigation" },
+  isPlural: true,        // ✅ Propiedad adicional
+  icon: "users",         // ✅ Propiedad adicional
+  translationNote: "UI navigation menu"  // ✅ Propiedad adicional
 };
 ```
 
@@ -128,7 +156,7 @@ type ResolveLabelFn = (
 
 ### `resolveMultiLanguageLabel()`
 
-Resuelve una etiqueta multiidioma a un string en el idioma actual.
+Resuelve una etiqueta multiidioma a un string en el idioma actual. **Ignora automáticamente** las claves reservadas como `metadata` y otras propiedades no-string.
 
 ```typescript
 import { resolveMultiLanguageLabel } from '@/lib/ui-library/utils';
@@ -144,13 +172,27 @@ resolveMultiLanguageLabel(label, "es"); // "Hola"
 resolveMultiLanguageLabel(label, "fr"); // "Bonjour"
 resolveMultiLanguageLabel(label, "de"); // "Hello" (fallback a default)
 resolveMultiLanguageLabel("Simple", "es"); // "Simple" (devuelve string tal cual)
+
+// Con metadata (ignorada durante resolución)
+const labelWithMetadata = {
+  en: "Hello",
+  es: "Hola",
+  default: "Hello",
+  metadata: { tone: "formal" },
+  icon: "wave"
+};
+
+resolveMultiLanguageLabel(labelWithMetadata, "es"); // "Hola" (ignora metadata e icon)
 ```
 
 **Lógica de resolución:**
-1. Busca coincidencia exacta (`es`)
-2. Busca por prefijo de idioma (`en` para `en-US`)
-3. Busca cualquier clave que empiece con el prefijo
-4. Fallback a `default`
+1. Ignora claves reservadas: `default`, `metadata`
+2. Ignora valores no-string (objetos, arrays, etc.)
+3. Busca coincidencia exacta del idioma (`es`)
+4. Busca por prefijo de idioma (`en` para `en-US`)
+5. Busca cualquier clave que empiece con el prefijo
+6. Fallback a `default`
+7. Como último recurso, devuelve el primer string encontrado
 
 ### `createSimpleLabel()`
 
