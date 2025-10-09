@@ -74,6 +74,7 @@ export default function BottomNavDemo() {
 
   const handleSelect = (item: NavItem) => {
     setSelectedItem(item);
+    setControlledId(item.id); // ✅ Actualizar el ID controlado
     console.log('Selected item:', item);
   };
 
