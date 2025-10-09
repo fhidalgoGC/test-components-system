@@ -9,7 +9,7 @@ const BottomNavigationBarCtx = createContext<BottomNavigationBarContext | undefi
 
 function useOptionalConfig() {
   const configContext = useContext(ConfigContext);
-  return configContext?.config || null;
+  return configContext ? { environment: configContext.environment } : null;
 }
 
 export const useBottomNavigationBarContext = () => {
