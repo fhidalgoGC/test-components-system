@@ -144,9 +144,19 @@ export default function BottomNavDemo() {
               <p className="text-sm font-medium mb-2 dark:text-gray-300">
                 Habilitar/Deshabilitar items (disabledIds):
               </p>
+              
+              {/* Warning message */}
+              <div className="mb-3 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                <p className="text-xs text-amber-800 dark:text-amber-200">
+                  ⚠️ <strong>Regla:</strong> No se puede deshabilitar el item actualmente seleccionado. 
+                  Primero cambia la selección y luego podrás deshabilitarlo.
+                </p>
+              </div>
+
               <div className="space-y-2">
                 {navItems.map((item) => {
                   const isDisabled = disabledIds.includes(item.id);
+                  const isCurrentlySelected = controlledId === item.id;
                   return (
                     <label key={item.id} className="flex items-center space-x-2 cursor-pointer">
                       <input
@@ -161,8 +171,12 @@ export default function BottomNavDemo() {
                         }}
                         className="w-4 h-4 text-red-600 rounded focus:ring-red-500"
                       />
-                      <span className="text-sm dark:text-gray-300">
-                        Deshabilitar "{item.label.en}"
+                      <span className={`text-sm ${
+                        isCurrentlySelected 
+                          ? 'dark:text-blue-400 text-blue-600 font-medium' 
+                          : 'dark:text-gray-300'
+                      }`}>
+                        Deshabilitar "{item.label.en}" {isCurrentlySelected && '(seleccionado)'}
                       </span>
                     </label>
                   );
@@ -205,6 +219,7 @@ export default function BottomNavDemo() {
             <li>✅ Callback onSelect al hacer click y al cambiar externamente</li>
             <li>✅ triggerOnMount para disparar callback inicial</li>
             <li>✅ Control dinámico con prop disabledIds (habilitar/deshabilitar en tiempo real)</li>
+            <li>✅ Protección UX: no se puede deshabilitar el item seleccionado (primero cambia la selección)</li>
             <li>✅ i18n reactivo (cambia el idioma global para ver)</li>
             <li>✅ Estados: seleccionado, hover, disabled</li>
             <li>✅ Iconos con lucide-react en metadata</li>

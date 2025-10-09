@@ -50,7 +50,10 @@ Preferred communication style: Simple, everyday language.
 - Features:
   - `onSelect` callback triggered on manual selection and external changes
   - `triggerOnMount` option to invoke callback on initial mount
+  - **`disabledIds` prop**: Dynamic array to disable items in real-time
+  - **UX Protection Rule**: Cannot disable currently selected item (must change selection first)
   - Item metadata includes: icon, isDisabled, dataTestId
+  - Disable priority: disabledIds prop > item.metadata.isDisabled
   - Reactive i18n support with resolveMultiLanguageLabel utility
   - Full accessibility support (aria-current, aria-disabled)
   - **ConfigProvider Integration**: Uses cascada de prioridades (Props → ConfigProvider → Environment)

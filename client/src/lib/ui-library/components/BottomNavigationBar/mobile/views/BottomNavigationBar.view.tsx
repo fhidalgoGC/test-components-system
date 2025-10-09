@@ -17,7 +17,8 @@ export const BottomNavigationBarView = (props: BottomNavigationBarProps) => {
       {items.map((item) => {
         const isSelected = selectedId === item.id;
         // Priority: disabledIds prop > item.metadata.isDisabled
-        const isDisabled = disabledIds.includes(item.id) || item.metadata?.isDisabled || false;
+        // RULE: Cannot disable a currently selected item (must change selection first)
+        const isDisabled = !isSelected && (disabledIds.includes(item.id) || item.metadata?.isDisabled || false);
         const icon = item.metadata?.icon;
         const dataTestId = item.metadata?.dataTestId || `nav-item-${item.id}`;
         const label = resolveMultiLanguageLabel(item.label, lang);
