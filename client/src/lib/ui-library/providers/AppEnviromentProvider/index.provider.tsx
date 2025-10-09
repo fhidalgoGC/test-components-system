@@ -22,6 +22,7 @@ export function ConfigProvider({
 
   const contextValue = useMemo<ConfigContextType>(() => ({
     config,
+    environment: config, // Expose config as 'environment' for standardized access
     updateConfig,
     resetConfig,
     priority,
