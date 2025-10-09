@@ -25,7 +25,7 @@ interface ProviderProps extends BottomNavigationBarProps {
 }
 
 export const BottomNavigationBarProvider = (props: ProviderProps) => {
-  const { children, langOverride, i18nOrder = 'local-first', items = [] } = props;
+  const { children, langOverride, i18nOrder = 'local-first', items = [], disabledIds = [] } = props;
   
   const optionalConfig = useOptionalConfig();
   
@@ -46,6 +46,7 @@ export const BottomNavigationBarProvider = (props: ProviderProps) => {
     lang,
     items,
     selectedId,
+    disabledIds,
     onItemClick,
   };
 
