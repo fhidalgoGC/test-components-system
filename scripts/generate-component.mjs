@@ -95,15 +95,15 @@ function generateLanguageSelectionLogic(languages) {
     return `  return localDictionaries['${languages[0]}'];`;
   }
   
-  const conditions = languages.map((lang, index) => {
-    if (index === 0) {
-      return `  const pick = (lang || '${lang}')`;
-    }
-    return `.toLowerCase().startsWith('${lang}') ? '${lang}'`;
-  }).join('\n    ');
-  
   const defaultLang = languages[0];
-  return `${conditions}\n    : '${defaultLang}';\n  return localDictionaries[pick];`;
+  const langLower = '(lang || \'' + defaultLang + '\').toLowerCase()';
+  
+  // Build ternary chain: lang.startsWith('es') ? 'es' : lang.startsWith('fr') ? 'fr' : 'en'
+  const conditions = languages.slice(1).reverse().reduce((acc, lang) => {
+    return `${langLower}.startsWith('${lang}') ? '${lang}' : ${acc}`;
+  }, `'${defaultLang}'`);
+  
+  return `  const pick = ${conditions};\n  return localDictionaries[pick];`;
 }
 
 // Create component structure
