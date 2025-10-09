@@ -8,12 +8,21 @@ export interface NavItemMetadata {
 
 export interface NavItem extends ItemWithMultiLanguageLabel<NavItemMetadata> {}
 
+export interface BottomNavigationBarError {
+  type: 'disable-selected-item';
+  itemId: string;
+  message: string;
+}
+
 export interface BottomNavigationBarProps {
   /** Lista de items de navegación */
   items: NavItem[];
   
   /** Callback al seleccionar un item (manual o por cambio externo) */
   onSelect?: (item: NavItem) => void;
+  
+  /** Callback cuando ocurre un error (ej: intento de deshabilitar item seleccionado) */
+  onError?: (error: BottomNavigationBarError) => void;
   
   /** Controlado: define externamente el ítem seleccionado actual */
   selectedId?: string;
