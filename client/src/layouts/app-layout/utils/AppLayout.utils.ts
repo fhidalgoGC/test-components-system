@@ -14,6 +14,8 @@ export function getDefaultMenuItems(): MenuItem[] {
       icon: 'Package',
       children: [
         { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector', icon: 'Tags' },
+        { id: 'bottom-nav', label: 'BottomNavigationBar', path: '/components/bottom-nav', icon: 'Navigation' },
+        { id: 'bottom-nav-config', label: 'BottomNav + Config', path: '/components/bottom-nav-config', icon: 'Settings' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
       ]
     },
