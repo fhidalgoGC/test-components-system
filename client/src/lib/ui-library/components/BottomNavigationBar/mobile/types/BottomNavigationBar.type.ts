@@ -24,6 +24,9 @@ export interface BottomNavigationBarProps {
   /** Si es true, al montar el componente se invoca el callback del ítem seleccionado */
   triggerOnMount?: boolean;
   
+  /** IDs de items que estarán deshabilitados (tiene prioridad sobre metadata.isDisabled) */
+  disabledIds?: string[];
+  
   /** Clase CSS adicional */
   className?: string;
   
@@ -39,5 +42,6 @@ export interface BottomNavigationBarContext {
   lang: string;
   items: NavItem[];
   selectedId: string | null;
+  disabledIds: string[];
   onItemClick: (item: NavItem) => void;
 }
