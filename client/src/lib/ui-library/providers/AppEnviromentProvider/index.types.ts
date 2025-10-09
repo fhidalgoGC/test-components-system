@@ -27,6 +27,7 @@ export interface ConfigProviderProps {
 // Configuration context type
 export interface ConfigContextType {
   config: LibraryConfig;
+  environment: LibraryConfig; // Exposes the full merged config as 'environment'
   updateConfig: (newConfig: Record<string, any>) => void; // Accepts any keys, merge will filter
   resetConfig: () => void;
   priority: ConfigPriority;
