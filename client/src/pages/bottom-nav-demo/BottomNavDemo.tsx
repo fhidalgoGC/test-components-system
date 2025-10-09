@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { BottomNavigationBar } from '@/lib/ui-library/components/BottomNavigationBar';
-import type { NavItem } from '@/lib/ui-library/components/BottomNavigationBar/mobile/types';
-import { Home, Search, User, Settings, Bell } from 'lucide-react';
+import type { NavItem, BottomNavigationBarError } from '@/lib/ui-library/components/BottomNavigationBar/mobile/types';
+import { Home, Search, User, Settings, Bell, AlertCircle } from 'lucide-react';
 
 export default function BottomNavDemo() {
   const [selectedItem, setSelectedItem] = useState<NavItem | null>(null);
   const [controlledId, setControlledId] = useState<string>('home');
   const [triggerOnMount, setTriggerOnMount] = useState(false);
   const [disabledIds, setDisabledIds] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const navItems: NavItem[] = [
     {
@@ -78,6 +79,16 @@ export default function BottomNavDemo() {
     console.log('Selected item:', item);
   };
 
+  const handleError = (error: BottomNavigationBarError) => {
+    console.error('BottomNavigationBar error:', error);
+    setErrorMessage(`❌ ${error.message}`);
+    
+    // Auto-hide error after 3 seconds
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 3000);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-20">
       <div className="container mx-auto p-6 space-y-8">
@@ -87,6 +98,18 @@ export default function BottomNavDemo() {
             Barra de navegación inferior móvil con i18n reactivo usando ItemWithMultiLanguageLabel
           </p>
         </div>
+
+        {/* Error Alert */}
+        {errorMessage && (
+          <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r-lg animate-in slide-in-from-top-5 duration-300">
+            <div className="flex items-center">
+              <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+              <p className="text-sm font-medium text-red-800 dark:text-red-200">
+                {errorMessage}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Status Display */}
         <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-800">
@@ -220,6 +243,7 @@ export default function BottomNavDemo() {
             <li>✅ triggerOnMount para disparar callback inicial</li>
             <li>✅ Control dinámico con prop disabledIds (habilitar/deshabilitar en tiempo real)</li>
             <li>✅ Protección UX: no se puede deshabilitar el item seleccionado (primero cambia la selección)</li>
+            <li>✅ Callback onError cuando falla una operación (intento de deshabilitar item seleccionado)</li>
             <li>✅ i18n reactivo (cambia el idioma global para ver)</li>
             <li>✅ Estados: seleccionado, hover, disabled</li>
             <li>✅ Iconos con lucide-react en metadata</li>
@@ -268,6 +292,10 @@ const items: NavItem[] = [
   disabledIds={['search', 'notifications']}
   triggerOnMount={true}
   onSelect={(item) => console.log(item)}
+  onError={(error) => {
+    console.error(error.type, error.itemId);
+    alert(error.message);
+  }}
 />`}
           </pre>
         </div>
@@ -280,6 +308,7 @@ const items: NavItem[] = [
         triggerOnMount={triggerOnMount}
         disabledIds={disabledIds}
         onSelect={handleSelect}
+        onError={handleError}
       />
     </div>
   );
