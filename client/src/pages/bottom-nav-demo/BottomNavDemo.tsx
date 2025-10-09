@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { BottomNavigationBar } from '@/lib/ui-library/components/BottomNavigationBar';
 import type { NavItem, BottomNavigationBarError } from '@/lib/ui-library/components/BottomNavigationBar/mobile/types';
 import { Home, Search, User, Settings, Bell, AlertCircle } from 'lucide-react';
@@ -80,7 +80,7 @@ export default function BottomNavDemo() {
     console.log('Selected item:', item);
   };
 
-  const handleError = (error: BottomNavigationBarError) => {
+  const handleError = useCallback((error: BottomNavigationBarError) => {
     console.error('BottomNavigationBar error:', error);
     setErrorMessage(`❌ ${error.message}`);
     
@@ -88,7 +88,7 @@ export default function BottomNavDemo() {
     setTimeout(() => {
       setErrorMessage(null);
     }, 3000);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-20">
