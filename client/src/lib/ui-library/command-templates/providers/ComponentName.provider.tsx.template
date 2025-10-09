@@ -9,7 +9,7 @@ const {{ComponentName}}Ctx = createContext<{{ComponentName}}Context | undefined>
 // Hook to safely access ConfigProvider (optional)
 function useOptionalConfig() {
   const configContext = useContext(ConfigContext);
-  return configContext?.config || null;
+  return configContext ? { environment: configContext.environment } : null;
 }
 
 export const use{{ComponentName}}Context = () => {
@@ -39,9 +39,9 @@ export const {{ComponentName}}Provider = ({
   // Uncomment and customize as needed:
   /*
   const finalConfigValue =
-    props.configProp ??                                          // 1️⃣ Props (highest priority)
-    optionalConfig?.{{COMPONENT_NAME_UPPER}}_CONFIG?.SOME_VALUE ??  // 2️⃣ ConfigProvider
-    environment.{{COMPONENT_NAME_UPPER}}_CONFIG.SOME_VALUE;         // 3️⃣ Default (fallback)
+    props.configProp ??                                                    // 1️⃣ Props (highest priority)
+    optionalConfig?.environment.{{COMPONENT_NAME_UPPER}}_CONFIG?.SOME_VALUE ??  // 2️⃣ ConfigProvider
+    environment.{{COMPONENT_NAME_UPPER}}_CONFIG.SOME_VALUE;                     // 3️⃣ Default (fallback)
   */
 
   const value: {{ComponentName}}Context = {
