@@ -33,6 +33,7 @@ El script `generate-component.mjs` reemplaza estas variables en las plantillas:
 |----------|-------------|---------|
 | `{{ComponentName}}` | Nombre en PascalCase | `Modal` |
 | `{{componentname}}` | Nombre en lowercase | `modal` |
+| `{{COMPONENT_NAME_UPPER}}` | Nombre en UPPERCASE | `MODAL` |
 | `{{LANGUAGES_IMPORTS}}` | Imports dinámicos de idiomas | `import en from './en.json';` |
 | `{{LANGUAGES_KEYS}}` | Keys del objeto localDictionaries | `en, es, fr` |
 | `{{LANGUAGE_SELECTION_LOGIC}}` | Lógica de selección de idioma | Código ternario generado |
@@ -164,6 +165,57 @@ Para cambiar cómo se generan los componentes:
 2. Usa las variables `{{...}}` donde sea necesario
 3. El script las reemplazará automáticamente al generar
 
+## 🔧 ConfigProvider Integration
+
+Los componentes generados incluyen soporte para **ConfigProvider** siguiendo el patrón de cascada de prioridades:
+
+### Hook `useOptionalConfig`
+```typescript
+// Dentro del provider (incluido automáticamente)
+function useOptionalConfig() {
+  const configContext = useContext(ConfigContext);
+  return configContext?.config || null;
+}
+```
+
+### Cascada de Prioridades (Props → ConfigProvider → Environment)
+```typescript
+const optionalConfig = useOptionalConfig();
+
+const finalConfigValue =
+  props.configProp ??                                          // 1️⃣ Props (máxima prioridad)
+  optionalConfig?.COMPONENT_NAME_CONFIG?.SOME_VALUE ??        // 2️⃣ ConfigProvider
+  environment.COMPONENT_NAME_CONFIG.SOME_VALUE;               // 3️⃣ Default (fallback)
+```
+
+### Agregar configuración al environment:
+```typescript
+// client/src/lib/ui-library/enviorments/enviroment.ts
+export const COMPONENT_NAME_CONFIG = {
+  SOME_VALUE: import.meta.env.VITE_COMPONENT_SOME_VALUE || defaultValue,
+};
+
+export const environment = {
+  // ... otras configs
+  COMPONENT_NAME_CONFIG,
+};
+```
+
+### Uso desde la aplicación padre:
+```tsx
+// Sin ConfigProvider (usa defaults)
+<MyComponent />
+
+// Con ConfigProvider (configuración externa)
+<ConfigProvider config={{ 
+  COMPONENT_NAME_CONFIG: { 
+    SOME_VALUE: customValue 
+  } 
+}}>
+  <MyComponent />
+</ConfigProvider>
+```
+
 ## ✨ Características automáticas
 
 Todos los componentes generados incluyen:
@@ -171,6 +223,7 @@ Todos los componentes generados incluyen:
 ✅ **i18n reactivo** - Cambian automáticamente con el idioma  
 ✅ **Traducciones combinadas** - Local + Global con prioridad configurable  
 ✅ **Provider pattern** - Context para compartir estado  
+✅ **ConfigProvider integration** - Hook useOptionalConfig y cascada de prioridades  
 ✅ **TypeScript completo** - Tipos para Props y Context  
 ✅ **CSS Modules** - Estilos encapsulados  
 ✅ **Test IDs** - data-testid automático para testing  

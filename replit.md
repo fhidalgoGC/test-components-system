@@ -39,6 +39,10 @@ Preferred communication style: Simple, everyday language.
 - Follows TagSelector pattern: useI18nMerge hook + Provider with Context + i18n support
 - Dynamic language selection logic generated based on `--languages` parameter
 - Templates support variable replacement: `{{ComponentName}}`, `{{componentname}}`, etc.
+- **NEW**: All generated components include ConfigProvider integration by default
+  - Includes `useOptionalConfig` hook in provider template
+  - Ready for cascada de prioridades (Props → ConfigProvider → Environment)
+  - Commented examples show how to implement config cascade
 
 ### BottomNavigationBar Component
 - Mobile navigation component using ItemWithMultiLanguageLabel for items

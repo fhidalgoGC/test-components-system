@@ -117,6 +117,7 @@ function createComponent(variant) {
   const replacements = {
     ComponentName: componentName,
     componentname: componentNameLower,
+    COMPONENT_NAME_UPPER: componentNameLower.toUpperCase(),
   };
 
   // Create directories
