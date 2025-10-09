@@ -44,6 +44,16 @@ Preferred communication style: Simple, everyday language.
   - Ready for cascada de prioridades (Props → ConfigProvider → Environment)
   - Commented examples show how to implement config cascade
 
+### ConfigProvider Standardization (October 2025)
+- **Standardized Access Pattern**: All components use `optionalConfig?.environment` to access configuration
+- **ConfigContextType Enhancement**: Added `environment` property that exposes full merged config
+- **useOptionalConfig Pattern**: Returns `{ environment: LibraryConfig }` or `null`
+  - Enables consistent access: `optionalConfig?.environment.SECTION_CONFIG.VALUE`
+  - Works for all config sections: `BOTTOM_NAV_CONFIG`, `SESSION_CONFIG`, `LANGUAGE_CONFIG`, etc.
+- **Cascade Priority**: Props → ConfigProvider environment → Internal library environment
+- **Template Updates**: All component generator templates follow standardized pattern
+- **Benefits**: Single, predictable way to access all configuration across components
+
 ### BottomNavigationBar Component
 - Mobile navigation component using ItemWithMultiLanguageLabel for items
 - Supports both controlled (selectedId) and uncontrolled (defaultSelectedId) selection
@@ -60,9 +70,8 @@ Preferred communication style: Simple, everyday language.
   - Disable priority: disabledIds prop > item.metadata.isDisabled
   - Reactive i18n support with resolveMultiLanguageLabel utility
   - Full accessibility support (aria-current, aria-disabled)
-  - **ConfigProvider Integration**: Uses cascada de prioridades (Props → ConfigProvider → Environment)
-  - Internal `useOptionalConfig` hook for safe ConfigProvider access
-  - Configuration: `BOTTOM_NAV_CONFIG.TRIGGER_ON_MOUNT` in environment.ts
+  - **ConfigProvider Integration**: Uses standardized `optionalConfig?.environment` pattern
+  - Configuration: `optionalConfig?.environment.BOTTOM_NAV_CONFIG.TRIGGER_ON_MOUNT`
 - Pattern: Provider + Context + Hook architecture with i18n and environment config integration
 
 # External Dependencies
