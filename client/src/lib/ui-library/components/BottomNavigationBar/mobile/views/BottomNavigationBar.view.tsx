@@ -6,7 +6,7 @@ import styles from '../css/BottomNavigationBar.module';
 
 export const BottomNavigationBarView = (props: BottomNavigationBarProps) => {
   const { className } = props;
-  const { items, selectedId, onItemClick, lang } = useBottomNavigationBarContext();
+  const { items, selectedId, onItemClick, lang, disabledIds } = useBottomNavigationBarContext();
 
   if (!items || items.length === 0) {
     return <nav className={cn(styles.container, className)} data-testid="bottomnavigationbar" />;
@@ -16,7 +16,8 @@ export const BottomNavigationBarView = (props: BottomNavigationBarProps) => {
     <nav className={cn(styles.container, className)} data-testid="bottomnavigationbar">
       {items.map((item) => {
         const isSelected = selectedId === item.id;
-        const isDisabled = item.metadata?.isDisabled;
+        // Priority: disabledIds prop > item.metadata.isDisabled
+        const isDisabled = disabledIds.includes(item.id) || item.metadata?.isDisabled || false;
         const icon = item.metadata?.icon;
         const dataTestId = item.metadata?.dataTestId || `nav-item-${item.id}`;
         const label = resolveMultiLanguageLabel(item.label, lang);
