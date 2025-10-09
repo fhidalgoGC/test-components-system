@@ -50,6 +50,7 @@ const languages = languagesArg.split(',').map(lang => lang.trim());
 // Paths
 const componentsPath = path.join(process.cwd(), 'client/src/lib/ui-library/components');
 const componentPath = path.join(componentsPath, componentName);
+const templatesPath = path.join(process.cwd(), 'client/src/lib/ui-library/command-templates');
 
 // Check if component already exists
 if (fs.existsSync(componentPath)) {
@@ -69,116 +70,173 @@ function createFile(filePath, content) {
   fs.writeFileSync(filePath, content.trim() + '\n');
 }
 
-// Templates
-const templates = {
-  // Types
-  types: (name) => `export interface ${name}Props {
-  children?: React.ReactNode;
-  className?: string;
-}`,
-
-  // Hook
-  hook: (name) => `import { useState } from 'react';
-import type { ${name}Props } from '../types';
-
-export const use${name} = (props: ${name}Props) => {
-  const [state, setState] = useState({});
-
-  return {
-    state,
-  };
-};`,
-
-  // View
-  view: (name) => `import type { ${name}Props } from '../types';
-
-export const ${name}View = (props: ${name}Props) => {
-  const { children, className } = props;
-
-  return (
-    <div className={className} data-testid="${name.toLowerCase()}">
-      {children || '${name}'}
-    </div>
-  );
-};`,
-
-  // CSS Module
-  cssModule: (name) => `.${name.toLowerCase()} {
-  /* Add your styles here */
-}`,
-
-  // CSS TS
-  cssTS: (name) => `import styles from './${name}.module.css';
-
-export const containerClasses = (className?: string) => {
-  return [styles.${name.toLowerCase()}, className].filter(Boolean).join(' ');
-};`,
-
-  // Index files
-  indexTypes: () => `export * from './${componentName}.type';`,
-  indexHooks: (name) => `export * from './use${name}.hook';`,
-  indexViews: (name) => `export * from './${name}.view';`,
-  indexCss: () => `export * from './${componentName}.module';`,
-
-  // Main index
-  mainIndex: (name, variant) => `export { ${name}View as ${name} } from './${variant}/views';
-export type { ${name}Props } from './${variant}/types';`,
-
-  // Root index
-  rootIndex: (name) => `export { ${name} } from './mobile';
-export type { ${name}Props } from './mobile/types';`,
-
-  // Provider
-  provider: (name) => `import { createContext, useContext, useState } from 'react';
-
-interface ${name}ContextValue {
-  // Add context values here
+// Helper to read template
+function readTemplate(templatePath) {
+  const fullPath = path.join(templatesPath, templatePath);
+  if (!fs.existsSync(fullPath)) {
+    throw new Error(`Template not found: ${templatePath}`);
+  }
+  return fs.readFileSync(fullPath, 'utf-8');
 }
 
-const ${name}Context = createContext<${name}ContextValue | undefined>(undefined);
+// Helper to replace variables in template
+function processTemplate(template, replacements) {
+  let result = template;
+  for (const [key, value] of Object.entries(replacements)) {
+    const regex = new RegExp(`{{${key}}}`, 'g');
+    result = result.replace(regex, value);
+  }
+  return result;
+}
 
-export const ${name}Provider = ({ children }: { children: React.ReactNode }) => {
-  const [state, setState] = useState({});
+// Generate language selection logic
+function generateLanguageSelectionLogic(languages) {
+  if (languages.length === 1) {
+    return `  return localDictionaries['${languages[0]}'];`;
+  }
+  
+  const conditions = languages.map((lang, index) => {
+    if (index === 0) {
+      return `  const pick = (lang || '${lang}')`;
+    }
+    return `.toLowerCase().startsWith('${lang}') ? '${lang}'`;
+  }).join('\n    ');
+  
+  const defaultLang = languages[0];
+  return `${conditions}\n    : '${defaultLang}';\n  return localDictionaries[pick];`;
+}
 
-  return (
-    <${name}Context.Provider value={{ }}>
-      {children}
-    </${name}Context.Provider>
+// Create component structure
+function createComponent(variant) {
+  const variantPath = path.join(componentPath, variant);
+  const componentNameLower = componentName.toLowerCase();
+  
+  console.log(`📁 Creating ${variant} structure...`);
+
+  // Prepare replacements
+  const replacements = {
+    ComponentName: componentName,
+    componentname: componentNameLower,
+  };
+
+  // Create directories
+  createDir(path.join(variantPath, 'css'));
+  createDir(path.join(variantPath, 'hooks'));
+  createDir(path.join(variantPath, 'types'));
+  createDir(path.join(variantPath, 'views'));
+
+  // Create CSS files
+  createFile(
+    path.join(variantPath, 'css', `${componentName}.module.css`),
+    processTemplate(readTemplate('css/ComponentName.module.css.template'), replacements)
   );
-};
+  createFile(
+    path.join(variantPath, 'css', `${componentName}.module.ts`),
+    processTemplate(readTemplate('css/ComponentName.module.ts.template'), replacements)
+  );
+  createFile(
+    path.join(variantPath, 'css', 'index.ts'),
+    `export * from './${componentName}.module';`
+  );
 
-export const use${name}Context = () => {
-  const context = useContext(${name}Context);
-  if (!context) {
-    throw new Error('use${name}Context must be used within ${name}Provider');
+  // Create types
+  createFile(
+    path.join(variantPath, 'types', `${componentName}.type.ts`),
+    processTemplate(readTemplate('types/ComponentName.type.ts.template'), replacements)
+  );
+  createFile(
+    path.join(variantPath, 'types', 'index.ts'),
+    `export * from './${componentName}.type';`
+  );
+
+  // Create hooks
+  createFile(
+    path.join(variantPath, 'hooks', `use${componentName}.hook.ts`),
+    processTemplate(readTemplate('hooks/useComponentName.hook.ts.template'), replacements)
+  );
+  
+  // Create useI18nMerge hook (always, for i18n support)
+  createFile(
+    path.join(variantPath, 'hooks', 'useI18nMerge.hook.ts'),
+    readTemplate('hooks/useI18nMerge.hook.ts.template')
+  );
+  
+  createFile(
+    path.join(variantPath, 'hooks', 'index.ts'),
+    `export * from './use${componentName}.hook';\nexport * from './useI18nMerge.hook';`
+  );
+
+  // Create view
+  createFile(
+    path.join(variantPath, 'views', `${componentName}.view.tsx`),
+    processTemplate(readTemplate('views/ComponentName.view.tsx.template'), replacements)
+  );
+  createFile(
+    path.join(variantPath, 'views', 'index.ts'),
+    `export * from './${componentName}.view';`
+  );
+
+  // Create variant index
+  createFile(
+    path.join(variantPath, 'index.tsx'),
+    `export { ${componentName}View as ${componentName} } from './${variant}/views';\nexport type { ${componentName}Props } from './${variant}/types';`
+  );
+
+  // Optional folders
+  if (flags.allFolders) {
+    // Utils
+    createDir(path.join(variantPath, 'utils'));
+    createFile(
+      path.join(variantPath, 'utils', `${componentNameLower}.util.ts`),
+      processTemplate(readTemplate('utils/componentname.util.ts.template'), replacements)
+    );
+    createFile(
+      path.join(variantPath, 'utils', 'index.ts'),
+      `export * from './${componentNameLower}.util';`
+    );
+
+    // Provider
+    createDir(path.join(variantPath, 'providers'));
+    createFile(
+      path.join(variantPath, 'providers', `${componentName}.provider.tsx`),
+      processTemplate(readTemplate('providers/ComponentName.provider.tsx.template'), replacements)
+    );
+    createFile(
+      path.join(variantPath, 'providers', 'index.ts'),
+      `export * from './${componentName}.provider';`
+    );
+
+    // i18n
+    createDir(path.join(variantPath, 'i18n'));
+    
+    // Create JSON files for each language
+    languages.forEach(lang => {
+      createFile(
+        path.join(variantPath, 'i18n', `${lang}.json`),
+        processTemplate(readTemplate('i18n/lang.json.template'), replacements)
+      );
+    });
+    
+    // Create i18n index with dynamic imports
+    const languagesImports = languages.map(lang => `import ${lang} from './${lang}.json';`).join('\n');
+    const languagesKeys = languages.join(', ');
+    const languageSelectionLogic = generateLanguageSelectionLogic(languages);
+    
+    const i18nIndexReplacements = {
+      LANGUAGES_IMPORTS: languagesImports,
+      LANGUAGES_KEYS: languagesKeys,
+      LANGUAGE_SELECTION_LOGIC: languageSelectionLogic,
+    };
+    
+    createFile(
+      path.join(variantPath, 'i18n', 'index.ts'),
+      processTemplate(readTemplate('i18n/index.ts.template'), i18nIndexReplacements)
+    );
   }
-  return context;
-};`,
+}
 
-  // i18n file (generic)
-  i18nFile: (name) => `{
-  "${name.toLowerCase()}": {
-  }
-}`,
-
-  // i18n index
-  i18nIndex: () => `import en from './en.json';
-import es from './es.json';
-
-export const i18n = {
-  en,
-  es,
-};
-
-export default i18n;`,
-
-  // Utils
-  utils: (name) => `export const ${name.toLowerCase()}Utils = {
-  // Add utility functions here
-};`,
-
-  // README
-  readme: (name) => `# ${name} Component
+// README template
+const readmeTemplate = (name) => `# ${name} Component
 
 ## Overview
 ${name} component description.
@@ -203,131 +261,18 @@ function Example() {
 |------|------|---------|-------------|
 | children | React.ReactNode | - | Component content |
 | className | string | - | Additional CSS classes |
+| langOverride | string | - | Override language (e.g., 'en', 'es') |
+| i18nOrder | 'global-first' \\| 'local-first' | 'local-first' | Translation priority order |
 
 ## Features
 
-- Feature 1
-- Feature 2
+- Reactive to language changes
+- Supports i18n with local and global translations
+- Customizable with CSS classes
 
 ## Development Notes
 
-Add development notes here...`,
-};
-
-// Create component structure
-function createComponent(variant) {
-  const variantPath = path.join(componentPath, variant);
-  
-  console.log(`📁 Creating ${variant} structure...`);
-
-  // Create directories
-  createDir(path.join(variantPath, 'css'));
-  createDir(path.join(variantPath, 'hooks'));
-  createDir(path.join(variantPath, 'types'));
-  createDir(path.join(variantPath, 'views'));
-
-  // Create CSS files
-  createFile(
-    path.join(variantPath, 'css', `${componentName}.module.css`),
-    templates.cssModule(componentName)
-  );
-  createFile(
-    path.join(variantPath, 'css', `${componentName}.module.ts`),
-    templates.cssTS(componentName)
-  );
-  createFile(
-    path.join(variantPath, 'css', 'index.ts'),
-    templates.indexCss()
-  );
-
-  // Create types
-  createFile(
-    path.join(variantPath, 'types', `${componentName}.type.ts`),
-    templates.types(componentName)
-  );
-  createFile(
-    path.join(variantPath, 'types', 'index.ts'),
-    templates.indexTypes()
-  );
-
-  // Create hook
-  createFile(
-    path.join(variantPath, 'hooks', `use${componentName}.hook.ts`),
-    templates.hook(componentName)
-  );
-  createFile(
-    path.join(variantPath, 'hooks', 'index.ts'),
-    templates.indexHooks(componentName)
-  );
-
-  // Create view
-  createFile(
-    path.join(variantPath, 'views', `${componentName}.view.tsx`),
-    templates.view(componentName)
-  );
-  createFile(
-    path.join(variantPath, 'views', 'index.ts'),
-    templates.indexViews(componentName)
-  );
-
-  // Create variant index
-  createFile(
-    path.join(variantPath, 'index.tsx'),
-    templates.mainIndex(componentName, variant)
-  );
-
-  // Optional folders
-  if (flags.allFolders) {
-    // Utils
-    createDir(path.join(variantPath, 'utils'));
-    createFile(
-      path.join(variantPath, 'utils', `${componentName.toLowerCase()}.util.ts`),
-      templates.utils(componentName)
-    );
-    createFile(
-      path.join(variantPath, 'utils', 'index.ts'),
-      `export * from './${componentName.toLowerCase()}.util';`
-    );
-
-    // Provider
-    createDir(path.join(variantPath, 'providers'));
-    createFile(
-      path.join(variantPath, 'providers', `${componentName}.provider.tsx`),
-      templates.provider(componentName)
-    );
-    createFile(
-      path.join(variantPath, 'providers', 'index.ts'),
-      `export * from './${componentName}.provider';`
-    );
-
-    // i18n
-    createDir(path.join(variantPath, 'i18n'));
-    
-    // Create JSON files for each language
-    languages.forEach(lang => {
-      createFile(
-        path.join(variantPath, 'i18n', `${lang}.json`),
-        templates.i18nFile(componentName)
-      );
-    });
-    
-    // Create i18n index with imports for all languages
-    const i18nImports = languages.map(lang => `import ${lang} from './${lang}.json';`).join('\n');
-    const i18nExports = languages.map(lang => `  ${lang},`).join('\n');
-    const i18nIndexContent = `${i18nImports}
-
-export const i18n = {
-${i18nExports}
-};
-
-export default i18n;`;
-    
-    createFile(
-      path.join(variantPath, 'i18n', 'index.ts'),
-      i18nIndexContent
-    );
-  }
-}
+Add development notes here...`;
 
 // Main execution
 console.log(`\n🚀 Generating component: ${componentName}\n`);
@@ -341,9 +286,10 @@ if (flags.web) {
 }
 
 // Create root index
+const defaultVariant = flags.mobile ? 'mobile' : 'web';
 createFile(
   path.join(componentPath, 'index.tsx'),
-  templates.rootIndex(componentName)
+  `export { ${componentName} } from './${defaultVariant}';\nexport type { ${componentName}Props } from './${defaultVariant}/types';`
 );
 
 // Create README if requested
@@ -351,7 +297,7 @@ if (flags.readme) {
   console.log('📝 Creating README-IA.md...');
   createFile(
     path.join(componentPath, 'README-IA.md'),
-    templates.readme(componentName)
+    readmeTemplate(componentName)
   );
 }
 
@@ -373,6 +319,11 @@ if (flags.mobile) console.log('   ├── mobile/');
 if (flags.web) console.log('   ├── web/');
 if (flags.readme) console.log('   ├── README-IA.md');
 console.log('   └── index.tsx');
+
+if (flags.allFolders) {
+  console.log(`\n🌐 i18n enabled with languages: ${languages.join(', ')}`);
+  console.log('   Component is now reactive to language changes!');
+}
 
 console.log(`\n💡 Import it with:`);
 console.log(`   import { ${componentName} } from '@/lib/ui-library/components/${componentName}';\n`);
