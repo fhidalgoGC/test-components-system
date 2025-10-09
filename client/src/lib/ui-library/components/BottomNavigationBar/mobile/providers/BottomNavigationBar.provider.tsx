@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useRef } from 'react';
 import type { BottomNavigationBarContext, BottomNavigationBarProps, NavItem } from '../types';
 import { useI18nMerge } from '../hooks';
 import { useBottomNavigationBar } from '../hooks';
@@ -25,9 +25,10 @@ interface ProviderProps extends BottomNavigationBarProps {
 }
 
 export const BottomNavigationBarProvider = (props: ProviderProps) => {
-  const { children, langOverride, i18nOrder = 'local-first', items = [], disabledIds = [] } = props;
+  const { children, langOverride, i18nOrder = 'local-first', items = [], disabledIds = [], onError } = props;
   
   const optionalConfig = useOptionalConfig();
+  const prevDisabledIdsRef = useRef<string[]>([]);
   
   // Apply cascade: props → ConfigProvider → environment defaults
   const finalTriggerOnMount =
@@ -40,6 +41,23 @@ export const BottomNavigationBarProvider = (props: ProviderProps) => {
     ...props,
     triggerOnMount: finalTriggerOnMount,
   });
+
+  // Detect when trying to disable the currently selected item
+  useEffect(() => {
+    if (!selectedId || !onError) return;
+
+    const newlyDisabledIds = disabledIds.filter(id => !prevDisabledIdsRef.current.includes(id));
+    
+    if (newlyDisabledIds.includes(selectedId)) {
+      onError({
+        type: 'disable-selected-item',
+        itemId: selectedId,
+        message: `Cannot disable the currently selected item: ${selectedId}`,
+      });
+    }
+
+    prevDisabledIdsRef.current = disabledIds;
+  }, [disabledIds, selectedId, onError]);
 
   const value: BottomNavigationBarContext = {
     t,
