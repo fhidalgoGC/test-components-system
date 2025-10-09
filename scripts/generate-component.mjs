@@ -11,18 +11,32 @@ const __dirname = path.dirname(__filename);
 const args = process.argv.slice(2);
 const componentName = args[0];
 
+// Helper to get argument value
+function getArgValue(flag) {
+  const index = args.indexOf(flag);
+  if (index !== -1 && index + 1 < args.length) {
+    return args[index + 1];
+  }
+  return null;
+}
+
 if (!componentName) {
   console.error('❌ Error: Component name is required');
   console.log('Usage: npm run new-component -- <ComponentName> [options]');
   console.log('\nOptions:');
-  console.log('  -all-folders    Create i18n, utils, and provider folders');
-  console.log('  -readme         Generate README-IA.md in component');
-  console.log('  -mobile         Create mobile version (default)');
-  console.log('  -web            Create web version');
+  console.log('  -all-folders        Create i18n, utils, and provider folders');
+  console.log('  -readme             Generate README-IA.md in component');
+  console.log('  -mobile             Create mobile version (default)');
+  console.log('  -web                Create web version');
+  console.log('\nTranslation Options (requires -all-folders):');
+  console.log('  --en-title <text>   English title');
+  console.log('  --en-desc <text>    English description');
+  console.log('  --es-title <text>   Spanish title');
+  console.log('  --es-desc <text>    Spanish description');
   console.log('\nExamples:');
   console.log('  npm run new-component -- Modal');
   console.log('  npm run new-component -- Modal -all-folders -readme');
-  console.log('  npm run new-component -- Dialog -mobile -web');
+  console.log('  npm run new-component -- Dialog -all-folders --en-title "Dialog" --en-desc "A dialog component" --es-title "Diálogo" --es-desc "Un componente de diálogo"');
   process.exit(1);
 }
 
@@ -31,6 +45,18 @@ const flags = {
   readme: args.includes('-readme'),
   mobile: args.includes('-mobile') || !args.includes('-web'),
   web: args.includes('-web'),
+};
+
+// Parse translations
+const translations = {
+  en: {
+    title: getArgValue('--en-title') || componentName,
+    description: getArgValue('--en-desc') || `${componentName} description`,
+  },
+  es: {
+    title: getArgValue('--es-title') || componentName,
+    description: getArgValue('--es-desc') || `Descripción de ${componentName}`,
+  },
 };
 
 // Paths
@@ -142,18 +168,18 @@ export const use${name}Context = () => {
 };`,
 
   // i18n EN
-  i18nEN: (name) => `{
+  i18nEN: (name, trans) => `{
   "${name.toLowerCase()}": {
-    "title": "${name}",
-    "description": "${name} description"
+    "title": "${trans.en.title}",
+    "description": "${trans.en.description}"
   }
 }`,
 
   // i18n ES
-  i18nES: (name) => `{
+  i18nES: (name, trans) => `{
   "${name.toLowerCase()}": {
-    "title": "${name}",
-    "description": "Descripción de ${name}"
+    "title": "${trans.es.title}",
+    "description": "${trans.es.description}"
   }
 }`,
 
@@ -300,11 +326,11 @@ function createComponent(variant) {
     createDir(path.join(variantPath, 'i18n'));
     createFile(
       path.join(variantPath, 'i18n', 'en.json'),
-      templates.i18nEN(componentName)
+      templates.i18nEN(componentName, translations)
     );
     createFile(
       path.join(variantPath, 'i18n', 'es.json'),
-      templates.i18nES(componentName)
+      templates.i18nES(componentName, translations)
     );
     createFile(
       path.join(variantPath, 'i18n', 'index.ts'),

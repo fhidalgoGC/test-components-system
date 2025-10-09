@@ -23,6 +23,15 @@ npm run new-component -- <ComponentName> [opciones]
 | `-mobile` | Crea versión mobile (activado por defecto) |
 | `-web` | Crea versión web |
 
+### Opciones de Traducción (requiere `-all-folders`)
+
+| Opción | Descripción |
+|--------|-------------|
+| `--en-title <text>` | Título en inglés para el archivo i18n |
+| `--en-desc <text>` | Descripción en inglés para el archivo i18n |
+| `--es-title <text>` | Título en español para el archivo i18n |
+| `--es-desc <text>` | Descripción en español para el archivo i18n |
+
 ## 📚 Ejemplos
 
 ### Componente básico (estructura mínima)
@@ -42,9 +51,9 @@ Modal/
 └── index.tsx
 ```
 
-### Componente completo
+### Componente completo con traducciones personalizadas
 ```bash
-npm run new-component -- Modal -all-folders -readme
+npm run new-component -- Modal -all-folders --en-title "Modal Dialog" --en-desc "A customizable modal dialog" --es-title "Diálogo Modal" --es-desc "Un diálogo modal personalizable"
 ```
 
 Genera además:
@@ -154,7 +163,26 @@ export const ComponentNameProvider = ({ children }: { children: React.ReactNode 
 };
 ```
 
-### i18n Files
+### i18n Files (con traducciones personalizadas)
+```json
+// en.json (con --en-title "Modal Dialog" --en-desc "A modal dialog")
+{
+  "modal": {
+    "title": "Modal Dialog",
+    "description": "A modal dialog"
+  }
+}
+
+// es.json (con --es-title "Diálogo Modal" --es-desc "Un diálogo modal")
+{
+  "modal": {
+    "title": "Diálogo Modal",
+    "description": "Un diálogo modal"
+  }
+}
+```
+
+**Valores por defecto** (sin opciones de traducción):
 ```json
 // en.json
 {
@@ -229,6 +257,11 @@ client/src/lib/ui-library/components/<ComponentName>/
 ### No se crean las carpetas opcionales
 - Verifica que estés usando el flag `-all-folders`
 - El flag debe escribirse exactamente así (con guión)
+
+### Las traducciones no se aplican
+- Las traducciones personalizadas solo funcionan con `-all-folders`
+- Usa `--en-title`, `--en-desc`, `--es-title`, `--es-desc` (con doble guión)
+- Los valores deben ir entre comillas si contienen espacios: `--en-title "My Title"`
 
 ## 🔗 Referencias
 
