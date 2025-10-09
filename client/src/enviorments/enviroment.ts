@@ -32,12 +32,17 @@ export const SESSION_CONFIG = {
     Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 4 * 1000,
 };
 
+export const BOTTOM_NAV_CONFIG = {
+  TRIGGER_ON_MOUNT: true,
+};
+
 export const environment = {
   // Language Configuration
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE,
   LANGUAGE_CONFIG,
   SESSION_CONFIG,
+  BOTTOM_NAV_CONFIG,
 
   // Development environment detection
   IS_DEVELOPMENT:

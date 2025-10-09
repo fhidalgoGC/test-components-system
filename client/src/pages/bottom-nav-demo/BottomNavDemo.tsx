@@ -1,75 +1,78 @@
-import { useState, useCallback } from 'react';
-import { BottomNavigationBar } from '@/lib/ui-library/components/BottomNavigationBar';
-import type { NavItem, BottomNavigationBarError } from '@/lib/ui-library/components/BottomNavigationBar/mobile/types';
-import { Home, Search, User, Settings, Bell, AlertCircle } from 'lucide-react';
+import { useState, useCallback } from "react";
+import { BottomNavigationBar } from "@/lib/ui-library/components/BottomNavigationBar";
+import type {
+  NavItem,
+  BottomNavigationBarError,
+} from "@/lib/ui-library/components/BottomNavigationBar/mobile/types";
+import { Home, Search, User, Settings, Bell, AlertCircle } from "lucide-react";
 
 export default function BottomNavDemo() {
   const [selectedItem, setSelectedItem] = useState<NavItem | null>(null);
-  const [controlledId, setControlledId] = useState<string>('home');
+  const [controlledId, setControlledId] = useState<string>("home");
   const [triggerOnMount, setTriggerOnMount] = useState(false);
   const [disabledIds, setDisabledIds] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const navItems: NavItem[] = [
     {
-      id: 'home',
+      id: "home",
       label: {
-        en: 'Home',
-        es: 'Inicio',
-        default: 'Home',
+        en: "Home",
+        es: "Inicio",
+        default: "Home",
       },
       metadata: {
         icon: <Home size={24} />,
-        dataTestId: 'nav-home',
+        dataTestId: "nav-home",
       },
     },
     {
-      id: 'search',
+      id: "search",
       label: {
-        en: 'Search',
-        es: 'Buscar',
-        default: 'Search',
+        en: "Search",
+        es: "Buscar",
+        default: "Search",
       },
       metadata: {
         icon: <Search size={24} />,
-        dataTestId: 'nav-search',
+        dataTestId: "nav-search",
       },
     },
     {
-      id: 'notifications',
+      id: "notifications",
       label: {
-        en: 'Notifications',
-        es: 'Notificaciones',
-        default: 'Notifications',
+        en: "Notifications",
+        es: "Notificaciones",
+        default: "Notifications",
       },
       metadata: {
         icon: <Bell size={24} />,
-        dataTestId: 'nav-notifications',
+        dataTestId: "nav-notifications",
         isDisabled: true,
       },
     },
     {
-      id: 'profile',
+      id: "profile",
       label: {
-        en: 'Profile',
-        es: 'Perfil',
-        default: 'Profile',
+        en: "Profile",
+        es: "Perfil",
+        default: "Profile",
       },
       metadata: {
         icon: <User size={24} />,
-        dataTestId: 'nav-profile',
+        dataTestId: "nav-profile",
       },
     },
     {
-      id: 'settings',
+      id: "settings",
       label: {
-        en: 'Settings',
-        es: 'Ajustes',
-        default: 'Settings',
+        en: "Settings",
+        es: "Ajustes",
+        default: "Settings",
       },
       metadata: {
         icon: <Settings size={24} />,
-        dataTestId: 'nav-settings',
+        dataTestId: "nav-settings",
       },
     },
   ];
@@ -77,13 +80,13 @@ export default function BottomNavDemo() {
   const handleSelect = (item: NavItem) => {
     setSelectedItem(item);
     setControlledId(item.id); // ✅ Actualizar el ID controlado
-    console.log('Selected item:', item);
+    console.log("Selected item:", item);
   };
 
   const handleError = useCallback((error: BottomNavigationBarError) => {
-    console.error('BottomNavigationBar error:', error);
+    console.error("BottomNavigationBar error:", error);
     setErrorMessage(`❌ ${error.message}`);
-    
+
     // Auto-hide error after 3 seconds
     setTimeout(() => {
       setErrorMessage(null);
@@ -94,9 +97,12 @@ export default function BottomNavDemo() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-20">
       <div className="container mx-auto p-6 space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2 dark:text-white">BottomNavigationBar Demo</h1>
+          <h1 className="text-3xl font-bold mb-2 dark:text-white">
+            BottomNavigationBar Demo
+          </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Barra de navegación inferior móvil con i18n reactivo usando ItemWithMultiLanguageLabel
+            Barra de navegación inferior móvil con i18n reactivo usando
+            ItemWithMultiLanguageLabel
           </p>
         </div>
 
@@ -114,10 +120,12 @@ export default function BottomNavDemo() {
 
         {/* Status Display */}
         <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-          <h2 className="text-xl font-semibold mb-4 dark:text-white">Estado Actual</h2>
+          <h2 className="text-xl font-semibold mb-4 dark:text-white">
+            Estado Actual
+          </h2>
           <div className="space-y-2">
             <p className="text-sm dark:text-gray-300">
-              <strong>Último seleccionado:</strong>{' '}
+              <strong>Último seleccionado:</strong>{" "}
               {selectedItem ? (
                 <span className="text-blue-600 dark:text-blue-400">
                   {selectedItem.id} - {selectedItem.label.en}
@@ -127,26 +135,34 @@ export default function BottomNavDemo() {
               )}
             </p>
             <p className="text-sm dark:text-gray-300">
-              <strong>triggerOnMount:</strong>{' '}
-              <span className={triggerOnMount ? 'text-green-600' : 'text-gray-500'}>
-                {triggerOnMount ? 'Activado' : 'Desactivado'}
+              <strong>triggerOnMount:</strong>{" "}
+              <span
+                className={triggerOnMount ? "text-green-600" : "text-gray-500"}
+              >
+                {triggerOnMount ? "Activado" : "Desactivado"}
               </span>
             </p>
             <p className="text-sm dark:text-gray-300">
-              <strong>Items deshabilitados (prop disabledIds):</strong>{' '}
+              <strong>Items deshabilitados (prop disabledIds):</strong>{" "}
               {disabledIds.length > 0 ? (
                 <span className="text-red-600 dark:text-red-400">
-                  [{disabledIds.join(', ')}]
+                  [{disabledIds.join(", ")}]
                 </span>
               ) : (
                 <span className="text-gray-500">Ninguno</span>
               )}
             </p>
             <p className="text-sm dark:text-gray-300">
-              <strong>Items deshabilitados (metadata):</strong>{' '}
-              {navItems.filter(item => item.metadata?.isDisabled).length > 0 ? (
+              <strong>Items deshabilitados (metadata):</strong>{" "}
+              {navItems.filter((item) => item.metadata?.isDisabled).length >
+              0 ? (
                 <span className="text-orange-600 dark:text-orange-400">
-                  [{navItems.filter(item => item.metadata?.isDisabled).map(item => item.id).join(', ')}]
+                  [
+                  {navItems
+                    .filter((item) => item.metadata?.isDisabled)
+                    .map((item) => item.id)
+                    .join(", ")}
+                  ]
                 </span>
               ) : (
                 <span className="text-gray-500">Ninguno</span>
@@ -157,8 +173,10 @@ export default function BottomNavDemo() {
 
         {/* Controls */}
         <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-          <h2 className="text-xl font-semibold mb-4 dark:text-white">Controles</h2>
-          
+          <h2 className="text-xl font-semibold mb-4 dark:text-white">
+            Controles
+          </h2>
+
           <div className="space-y-4">
             <div>
               <label className="flex items-center space-x-2 cursor-pointer">
@@ -178,12 +196,13 @@ export default function BottomNavDemo() {
               <p className="text-sm font-medium mb-2 dark:text-gray-300">
                 Habilitar/Deshabilitar items (disabledIds):
               </p>
-              
+
               {/* Warning message */}
               <div className="mb-3 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <p className="text-xs text-amber-800 dark:text-amber-200">
-                  ⚠️ <strong>Regla:</strong> No se puede deshabilitar el item actualmente seleccionado. 
-                  Primero cambia la selección y luego podrás deshabilitarlo.
+                  ⚠️ <strong>Regla:</strong> No se puede deshabilitar el item
+                  actualmente seleccionado. Primero cambia la selección y luego
+                  podrás deshabilitarlo.
                 </p>
               </div>
 
@@ -192,7 +211,10 @@ export default function BottomNavDemo() {
                   const isDisabled = disabledIds.includes(item.id);
                   const isCurrentlySelected = controlledId === item.id;
                   return (
-                    <label key={item.id} className="flex items-center space-x-2 cursor-pointer">
+                    <label
+                      key={item.id}
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
                       <input
                         type="checkbox"
                         checked={isDisabled}
@@ -200,17 +222,22 @@ export default function BottomNavDemo() {
                           if (e.target.checked) {
                             setDisabledIds([...disabledIds, item.id]);
                           } else {
-                            setDisabledIds(disabledIds.filter(id => id !== item.id));
+                            setDisabledIds(
+                              disabledIds.filter((id) => id !== item.id),
+                            );
                           }
                         }}
                         className="w-4 h-4 text-red-600 rounded focus:ring-red-500"
                       />
-                      <span className={`text-sm ${
-                        isCurrentlySelected 
-                          ? 'dark:text-blue-400 text-blue-600 font-medium' 
-                          : 'dark:text-gray-300'
-                      }`}>
-                        Deshabilitar "{item.label.en}" {isCurrentlySelected && '(seleccionado)'}
+                      <span
+                        className={`text-sm ${
+                          isCurrentlySelected
+                            ? "dark:text-blue-400 text-blue-600 font-medium"
+                            : "dark:text-gray-300"
+                        }`}
+                      >
+                        Deshabilitar "{item.label.en}"{" "}
+                        {isCurrentlySelected && "(seleccionado)"}
                       </span>
                     </label>
                   );
@@ -230,10 +257,10 @@ export default function BottomNavDemo() {
                     disabled={disabledIds.includes(item.id)}
                     className={`px-3 py-1 rounded text-sm transition-colors ${
                       controlledId === item.id
-                        ? 'bg-blue-600 text-white'
+                        ? "bg-blue-600 text-white"
                         : disabledIds.includes(item.id)
-                        ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                          ? "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                          : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
                     }`}
                   >
                     {item.label.en}
@@ -246,15 +273,28 @@ export default function BottomNavDemo() {
 
         {/* Features */}
         <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-          <h2 className="text-xl font-semibold mb-4 dark:text-white">Características</h2>
+          <h2 className="text-xl font-semibold mb-4 dark:text-white">
+            Características
+          </h2>
           <ul className="space-y-2 text-sm dark:text-gray-300">
             <li>✅ Usa ItemWithMultiLanguageLabel para items</li>
             <li>✅ Selección controlada y no controlada</li>
-            <li>✅ Callback onSelect al hacer click y al cambiar externamente</li>
+            <li>
+              ✅ Callback onSelect al hacer click y al cambiar externamente
+            </li>
             <li>✅ triggerOnMount para disparar callback inicial</li>
-            <li>✅ Control dinámico con prop disabledIds (habilitar/deshabilitar en tiempo real)</li>
-            <li>✅ Protección UX: no se puede deshabilitar el item seleccionado (primero cambia la selección)</li>
-            <li>✅ Callback onError cuando falla una operación (intento de deshabilitar item seleccionado)</li>
+            <li>
+              ✅ Control dinámico con prop disabledIds (habilitar/deshabilitar
+              en tiempo real)
+            </li>
+            <li>
+              ✅ Protección UX: no se puede deshabilitar el item seleccionado
+              (primero cambia la selección)
+            </li>
+            <li>
+              ✅ Callback onError cuando falla una operación (intento de
+              deshabilitar item seleccionado)
+            </li>
             <li>✅ i18n reactivo (cambia el idioma global para ver)</li>
             <li>✅ Estados: seleccionado, hover, disabled</li>
             <li>✅ Iconos con lucide-react en metadata</li>
@@ -265,9 +305,11 @@ export default function BottomNavDemo() {
 
         {/* Type Structure */}
         <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-          <h2 className="text-xl font-semibold mb-4 dark:text-white">Estructura de Tipos</h2>
+          <h2 className="text-xl font-semibold mb-4 dark:text-white">
+            Estructura de Tipos
+          </h2>
           <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded text-xs overflow-x-auto">
-{`interface NavItem extends ItemWithMultiLanguageLabel<NavItemMetadata> {}
+            {`interface NavItem extends ItemWithMultiLanguageLabel<NavItemMetadata> {}
 
 interface NavItemMetadata {
   icon?: React.ReactNode;
@@ -297,7 +339,7 @@ const items: NavItem[] = [
         <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-800">
           <h2 className="text-xl font-semibold mb-4 dark:text-white">Uso</h2>
           <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded text-xs overflow-x-auto">
-{`<BottomNavigationBar
+            {`<BottomNavigationBar
   items={navItems}
   selectedId={controlledId}
   disabledIds={['search', 'notifications']}
@@ -316,7 +358,6 @@ const items: NavItem[] = [
       <BottomNavigationBar
         items={navItems}
         selectedId={controlledId}
-        triggerOnMount={triggerOnMount}
         disabledIds={disabledIds}
         onSelect={handleSelect}
         onError={handleError}

@@ -39,7 +39,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <ConfigProvider parentConfig={environment} priority="auto">
+      <ConfigProvider parentConfig={environment} priority="parent">
         <AppAuthProvider
           onLogging={handleLogging}
           onSessionInvalid={handleSessionInvalid}
