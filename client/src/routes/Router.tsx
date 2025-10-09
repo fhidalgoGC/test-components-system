@@ -10,6 +10,7 @@ import RegistryMode from "@/pages/heterogeneous-list-registry";
 import ElementsMode from "@/pages/heterogeneous-list-elements";
 import { AsyncLoadingDemo } from "@/pages/heterogeneous-list-async";
 import BottomNavDemo from "@/pages/bottom-nav-demo";
+import BottomNavConfigDemo from "@/pages/bottom-nav-config-demo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -87,6 +88,12 @@ export function Router() {
           headerDescription: "Barra de navegación inferior móvil con i18n reactivo",
           showActionButtons: false
         };
+      case '/components/bottom-nav-config':
+        return {
+          headerTitle: "BottomNavigationBar - ConfigProvider",
+          headerDescription: "Prueba la integración con ConfigProvider",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -108,6 +115,7 @@ export function Router() {
         <Route path="/components/heterogeneous-list/elements" component={ElementsMode} />
         <Route path="/components/heterogeneous-list/async" component={AsyncLoadingDemo} />
         <Route path="/components/bottom-nav" component={BottomNavDemo} />
+        <Route path="/components/bottom-nav-config" component={BottomNavConfigDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>
