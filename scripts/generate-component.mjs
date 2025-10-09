@@ -24,19 +24,15 @@ if (!componentName) {
   console.error('❌ Error: Component name is required');
   console.log('Usage: npm run new-component -- <ComponentName> [options]');
   console.log('\nOptions:');
-  console.log('  -all-folders        Create i18n, utils, and provider folders');
-  console.log('  -readme             Generate README-IA.md in component');
-  console.log('  -mobile             Create mobile version (default)');
-  console.log('  -web                Create web version');
-  console.log('\nTranslation Options (requires -all-folders):');
-  console.log('  --en-title <text>   English title');
-  console.log('  --en-desc <text>    English description');
-  console.log('  --es-title <text>   Spanish title');
-  console.log('  --es-desc <text>    Spanish description');
+  console.log('  -all-folders            Create i18n, utils, and provider folders');
+  console.log('  -readme                 Generate README-IA.md in component');
+  console.log('  -mobile                 Create mobile version (default)');
+  console.log('  -web                    Create web version');
+  console.log('  --languages <langs>     i18n languages (comma-separated, e.g., en,es,fr)');
   console.log('\nExamples:');
   console.log('  npm run new-component -- Modal');
   console.log('  npm run new-component -- Modal -all-folders -readme');
-  console.log('  npm run new-component -- Dialog -all-folders --en-title "Dialog" --en-desc "A dialog component" --es-title "Diálogo" --es-desc "Un componente de diálogo"');
+  console.log('  npm run new-component -- Dialog -all-folders --languages en,es,fr');
   process.exit(1);
 }
 
@@ -47,17 +43,9 @@ const flags = {
   web: args.includes('-web'),
 };
 
-// Parse translations
-const translations = {
-  en: {
-    title: getArgValue('--en-title') || componentName,
-    description: getArgValue('--en-desc') || `${componentName} description`,
-  },
-  es: {
-    title: getArgValue('--es-title') || componentName,
-    description: getArgValue('--es-desc') || `Descripción de ${componentName}`,
-  },
-};
+// Parse languages (default: en,es)
+const languagesArg = getArgValue('--languages') || 'en,es';
+const languages = languagesArg.split(',').map(lang => lang.trim());
 
 // Paths
 const componentsPath = path.join(process.cwd(), 'client/src/lib/ui-library/components');
@@ -167,19 +155,9 @@ export const use${name}Context = () => {
   return context;
 };`,
 
-  // i18n EN
-  i18nEN: (name, trans) => `{
+  // i18n file (generic)
+  i18nFile: (name) => `{
   "${name.toLowerCase()}": {
-    "title": "${trans.en.title}",
-    "description": "${trans.en.description}"
-  }
-}`,
-
-  // i18n ES
-  i18nES: (name, trans) => `{
-  "${name.toLowerCase()}": {
-    "title": "${trans.es.title}",
-    "description": "${trans.es.description}"
   }
 }`,
 
@@ -324,17 +302,29 @@ function createComponent(variant) {
 
     // i18n
     createDir(path.join(variantPath, 'i18n'));
-    createFile(
-      path.join(variantPath, 'i18n', 'en.json'),
-      templates.i18nEN(componentName, translations)
-    );
-    createFile(
-      path.join(variantPath, 'i18n', 'es.json'),
-      templates.i18nES(componentName, translations)
-    );
+    
+    // Create JSON files for each language
+    languages.forEach(lang => {
+      createFile(
+        path.join(variantPath, 'i18n', `${lang}.json`),
+        templates.i18nFile(componentName)
+      );
+    });
+    
+    // Create i18n index with imports for all languages
+    const i18nImports = languages.map(lang => `import ${lang} from './${lang}.json';`).join('\n');
+    const i18nExports = languages.map(lang => `  ${lang},`).join('\n');
+    const i18nIndexContent = `${i18nImports}
+
+export const i18n = {
+${i18nExports}
+};
+
+export default i18n;`;
+    
     createFile(
       path.join(variantPath, 'i18n', 'index.ts'),
-      templates.i18nIndex()
+      i18nIndexContent
     );
   }
 }

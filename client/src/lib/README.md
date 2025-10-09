@@ -35,33 +35,31 @@ npm run new-component -- Modal -all-folders
 ```
 
 Genera además:
-- `i18n/` - Archivos de internacionalización (en.json, es.json)
+- `i18n/` - Archivos de internacionalización (en.json, es.json por defecto)
 - `utils/` - Utilidades y funciones auxiliares
 - `providers/` - Context provider del componente
 
-### Con traducciones personalizadas
+### Con idiomas personalizados
 ```bash
-npm run new-component -- Modal -all-folders --en-title "Modal Dialog" --en-desc "A modal dialog component" --es-title "Diálogo Modal" --es-desc "Un componente de diálogo modal"
+npm run new-component -- Modal -all-folders --languages en,es,fr,de
 ```
 
-Genera archivos i18n con las traducciones especificadas:
+Genera archivos i18n para los idiomas especificados:
+```
+Modal/
+├── mobile/
+│   ├── i18n/
+│   │   ├── en.json
+│   │   ├── es.json
+│   │   ├── fr.json
+│   │   ├── de.json
+│   │   └── index.ts
+```
 
-**en.json:**
+Cada archivo JSON tiene la estructura:
 ```json
 {
   "modal": {
-    "title": "Modal Dialog",
-    "description": "A modal dialog component"
-  }
-}
-```
-
-**es.json:**
-```json
-{
-  "modal": {
-    "title": "Diálogo Modal",
-    "description": "Un componente de diálogo modal"
   }
 }
 ```
@@ -82,7 +80,7 @@ Por defecto crea versión mobile. Usa `-web` para web, o ambos flags para crear 
 
 ### Comando completo
 ```bash
-npm run new-component -- Modal -all-folders -readme -mobile -web --en-title "Modal" --en-desc "Modal component" --es-title "Modal" --es-desc "Componente modal"
+npm run new-component -- Modal -all-folders -readme -mobile -web --languages en,es,fr
 ```
 
 ## Opciones disponibles
@@ -93,17 +91,44 @@ npm run new-component -- Modal -all-folders -readme -mobile -web --en-title "Mod
 | `-readme` | Genera archivo `README-IA.md` con documentación base |
 | `-mobile` | Crea versión mobile (activado por defecto) |
 | `-web` | Crea versión web |
+| `--languages <langs>` | Idiomas i18n separados por comas (por defecto: `en,es`) |
 
-### Opciones de traducción (requiere `-all-folders`)
+## Archivos i18n
 
-| Opción | Descripción |
-|--------|-------------|
-| `--en-title <text>` | Título en inglés |
-| `--en-desc <text>` | Descripción en inglés |
-| `--es-title <text>` | Título en español |
-| `--es-desc <text>` | Descripción en español |
+### Por defecto (sin --languages)
+Genera `en.json` y `es.json`:
 
-**Nota:** Si no se proporcionan traducciones personalizadas, se usan valores por defecto basados en el nombre del componente.
+```json
+{
+  "componentname": {
+  }
+}
+```
+
+### Con --languages personalizados
+```bash
+npm run new-component -- Button -all-folders --languages en,es,fr,pt
+```
+
+Genera `en.json`, `es.json`, `fr.json`, `pt.json` con la misma estructura.
+
+El archivo `index.ts` se genera automáticamente importando todos los idiomas:
+
+```typescript
+import en from './en.json';
+import es from './es.json';
+import fr from './fr.json';
+import pt from './pt.json';
+
+export const i18n = {
+  en,
+  es,
+  fr,
+  pt,
+};
+
+export default i18n;
+```
 
 ## Plantillas generadas
 
@@ -163,7 +188,7 @@ import { ComponentName } from '@/lib/ui-library/components/ComponentName';
 ## Notas
 
 - Los nombres de componentes deben estar en **PascalCase**
-- Las traducciones se generan con la key en **lowercase** (ej: `"modal"`)
+- Las keys i18n se generan en **lowercase** (ej: `"modal"`)
 - El `data-testid` se genera en **lowercase** automáticamente
 - Si `-all-folders` no está presente, no se crean i18n, utils ni providers
-- Las traducciones personalizadas solo funcionan cuando se usa `-all-folders`
+- Los archivos JSON se generan vacíos, listos para que agregues tus traducciones
