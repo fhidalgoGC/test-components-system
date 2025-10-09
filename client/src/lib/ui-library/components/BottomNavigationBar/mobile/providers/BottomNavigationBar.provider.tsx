@@ -33,7 +33,7 @@ export const BottomNavigationBarProvider = (props: ProviderProps) => {
   // Apply cascade: props → ConfigProvider → environment defaults
   const finalTriggerOnMount =
     props.triggerOnMount ??
-    optionalConfig?.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT ??
+    optionalConfig?.environment.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT ??
     environment.BOTTOM_NAV_CONFIG.TRIGGER_ON_MOUNT;
   
   const { lang, t } = useI18nMerge(langOverride, { order: i18nOrder });
