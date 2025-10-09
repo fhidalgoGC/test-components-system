@@ -211,9 +211,17 @@ function createComponent(variant) {
     
     // Create JSON files for each language
     languages.forEach(lang => {
+      // Try to use language-specific template first, fallback to generic
+      let templatePath = `i18n/${lang}.json.template`;
+      const specificTemplatePath = path.join(templatesPath, templatePath);
+      
+      if (!fs.existsSync(specificTemplatePath)) {
+        templatePath = 'i18n/lang.json.template';
+      }
+      
       createFile(
         path.join(variantPath, 'i18n', `${lang}.json`),
-        processTemplate(readTemplate('i18n/lang.json.template'), replacements)
+        processTemplate(readTemplate(templatePath), replacements)
       );
     });
     

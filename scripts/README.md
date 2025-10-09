@@ -161,15 +161,49 @@ export const ComponentNameProvider = ({ children }: { children: React.ReactNode 
 ```
 
 ### i18n Files
-Los archivos JSON se generan vacíos, listos para agregar tus traducciones:
+Los archivos JSON se generan con traducciones de ejemplo para probar la reactividad:
 
+**Inglés (en.json):**
 ```json
-// en.json, es.json, fr.json, etc.
 {
-  "componentname": {
+  "modal": {
+    "label": "Modal",
+    "description": "Modal component description"
   }
 }
 ```
+
+**Español (es.json):**
+```json
+{
+  "modal": {
+    "label": "Modal",
+    "description": "Descripción del componente Modal"
+  }
+}
+```
+
+**Francés (fr.json):**
+```json
+{
+  "modal": {
+    "label": "Modal",
+    "description": "Description du composant Modal"
+  }
+}
+```
+
+**Alemán (de.json):**
+```json
+{
+  "modal": {
+    "label": "Modal",
+    "description": "Modal Komponentenbeschreibung"
+  }
+}
+```
+
+**Otros idiomas:** Usan plantilla genérica en inglés.
 
 El archivo `index.ts` importa todos los idiomas especificados:
 

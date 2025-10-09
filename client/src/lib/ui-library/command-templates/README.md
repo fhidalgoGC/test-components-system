@@ -42,8 +42,36 @@ El script `generate-component.mjs` reemplaza estas variables en las plantillas:
 Los componentes generados siguen el patrón de **TagSelector**:
 
 ### 1. **Traducciones locales** (`i18n/`)
+
+**Archivos JSON** - Incluyen traducciones de ejemplo:
+```json
+// en.json
+{
+  "componentname": {
+    "label": "ComponentName",
+    "description": "ComponentName component description"
+  }
+}
+
+// es.json
+{
+  "componentname": {
+    "label": "ComponentName",
+    "description": "Descripción del componente ComponentName"
+  }
+}
+```
+
+**Plantillas específicas por idioma:**
+- ✅ `en.json.template` - Inglés
+- ✅ `es.json.template` - Español
+- ✅ `fr.json.template` - Francés
+- ✅ `de.json.template` - Alemán
+- ⚠️ Otros idiomas usan `lang.json.template` (inglés genérico)
+
+**Index dinámico:**
 ```typescript
-// i18n/index.ts (generado dinámicamente)
+// i18n/index.ts (generado automáticamente)
 import en from './en.json';
 import es from './es.json';
 

@@ -211,27 +211,31 @@ import { Alert } from '@/lib/ui-library/components/Alert';
 <Alert i18nOrder="global-first">Contenido</Alert>
 ```
 
-### Agregar traducciones:
+### Traducciones incluidas:
+
+Los componentes generados ya incluyen traducciones de ejemplo:
 
 ```json
-// en.json
+// en.json (generado automáticamente)
 {
   "alert": {
-    "title": "Alert",
-    "close": "Close"
+    "label": "Alert",
+    "description": "Alert component description"
   }
 }
 
-// es.json  
+// es.json (generado automáticamente)
 {
   "alert": {
-    "title": "Alerta",
-    "close": "Cerrar"
+    "label": "Alert",
+    "description": "Descripción del componente Alert"
   }
 }
 ```
 
-Usa `t('title')` en el componente para acceder a las traducciones.
+El componente base usa `t('label')` y `t('description')` para demostrar la traducción reactiva.
+
+**Plantillas disponibles:** `en`, `es`, `fr`, `de` - otros idiomas usan plantilla genérica en inglés.
 
 ## Plantillas
 

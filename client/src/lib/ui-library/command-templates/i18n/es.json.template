@@ -1,6 +1,6 @@
 {
   "{{componentname}}": {
     "label": "{{ComponentName}}",
-    "description": "{{ComponentName}} component description"
+    "description": "Descripción del componente {{ComponentName}}"
   }
 }
