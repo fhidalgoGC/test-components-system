@@ -1,3 +1,68 @@
-.bottomnavigationbar {
-  /* Add your styles here */
+.container {
+  @apply fixed bottom-0 left-0 right-0;
+  @apply flex items-center justify-around;
+  @apply bg-white dark:bg-gray-900;
+  @apply border-t border-gray-200 dark:border-gray-800;
+  @apply shadow-lg;
+  @apply h-16;
+  @apply z-50;
+  @apply safe-area-inset-bottom;
+}
+
+.navItem {
+  @apply flex flex-col items-center justify-center;
+  @apply flex-1;
+  @apply h-full;
+  @apply gap-1;
+  @apply transition-all duration-200;
+  @apply text-gray-600 dark:text-gray-400;
+  @apply cursor-pointer;
+  @apply border-none bg-transparent;
+  @apply outline-none;
+}
+
+.navItem:hover:not(.navItemDisabled) {
+  @apply text-gray-900 dark:text-gray-100;
+  @apply bg-gray-50 dark:bg-gray-800;
+}
+
+.navItem:active:not(.navItemDisabled) {
+  @apply scale-95;
+}
+
+.navItem:focus-visible {
+  @apply ring-2 ring-blue-500 ring-inset;
+}
+
+.navItemSelected {
+  @apply text-blue-600 dark:text-blue-400;
+  @apply font-medium;
+}
+
+.navItemDisabled {
+  @apply text-gray-300 dark:text-gray-700;
+  @apply cursor-not-allowed;
+  @apply opacity-50;
+}
+
+.navIcon {
+  @apply text-xl;
+  @apply transition-transform duration-200;
+}
+
+.navItemSelected .navIcon {
+  @apply scale-110;
+}
+
+.navLabel {
+  @apply text-xs;
+  @apply transition-all duration-200;
+  @apply text-center;
+  @apply max-w-full;
+  @apply truncate;
+  @apply px-1;
+}
+
+.navItemSelected .navLabel {
+  @apply font-semibold;
 }

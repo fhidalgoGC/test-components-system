@@ -1,5 +1,10 @@
 import styles from './BottomNavigationBar.module.css';
 
-export const containerClasses = (className?: string) => {
-  return [styles.bottomnavigationbar, className].filter(Boolean).join(' ');
+export default {
+  container: styles.container,
+  navItem: styles.navItem,
+  navItemSelected: styles.navItemSelected,
+  navItemDisabled: styles.navItemDisabled,
+  navIcon: styles.navIcon,
+  navLabel: styles.navLabel,
 };
