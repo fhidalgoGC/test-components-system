@@ -52,6 +52,10 @@ Preferred communication style: Simple, everyday language.
   - `triggerOnMount` option to invoke callback on initial mount
   - **`disabledIds` prop**: Dynamic array to disable items in real-time
   - **UX Protection Rule**: Cannot disable currently selected item (must change selection first)
+  - **`onError` callback**: Notifies when operations fail (e.g., attempting to disable selected item)
+    - Error type: `{ type: 'disable-selected-item', itemId: string, message: string }`
+    - Triggered via useEffect when selectedId is added to disabledIds array
+    - Demo includes visual error alerts with auto-dismiss after 3 seconds
   - Item metadata includes: icon, isDisabled, dataTestId
   - Disable priority: disabledIds prop > item.metadata.isDisabled
   - Reactive i18n support with resolveMultiLanguageLabel utility
