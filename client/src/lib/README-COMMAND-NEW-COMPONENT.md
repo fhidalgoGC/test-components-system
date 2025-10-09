@@ -1,8 +1,8 @@
 # Component Generator
 
-Generador automático de componentes para la biblioteca de UI.
+Generador automático de componentes para la biblioteca de UI con soporte completo de i18n reactivo.
 
-## Uso básico
+## 🚀 Uso básico
 
 ```bash
 npm run new-component -- <ComponentName> [opciones]
@@ -10,7 +10,7 @@ npm run new-component -- <ComponentName> [opciones]
 
 ⚠️ **Importante**: El `--` es necesario para pasar las opciones al script.
 
-## Ejemplos
+## 📚 Ejemplos
 
 ### Componente básico (solo estructura mínima)
 ```bash
@@ -20,30 +20,43 @@ npm run new-component -- Modal
 Genera:
 ```
 Modal/
-  mobile/
-    css/
-    hooks/
-    types/
-    views/
-  index.tsx
+├── mobile/
+│   ├── css/
+│   ├── hooks/
+│   ├── types/
+│   ├── views/
+│   └── index.tsx
+└── index.tsx
 ```
 
-### Componente completo con todas las carpetas
+### Componente con i18n reactivo (recomendado)
 ```bash
 npm run new-component -- Modal -all-folders
 ```
 
 Genera además:
-- `i18n/` - Archivos de internacionalización (en.json, es.json)
-- `utils/` - Utilidades y funciones auxiliares
-- `providers/` - Context provider del componente
+- ✅ `i18n/` - Archivos de traducción con ejemplos (en.json, es.json)
+- ✅ `hooks/useI18nMerge.hook.ts` - Hook para combinar traducciones locales + globales
+- ✅ `providers/` - Context provider con función `t()` para traducir
+- ✅ `utils/` - Utilidades del componente
+
+### Con idiomas personalizados
+```bash
+npm run new-component -- Modal -all-folders --languages en,es,fr,de
+```
+
+Genera archivos i18n con traducciones de ejemplo en 4 idiomas:
+- `en.json` - Inglés
+- `es.json` - Español  
+- `fr.json` - Francés
+- `de.json` - Alemán
 
 ### Con README de IA
 ```bash
 npm run new-component -- Modal -readme
 ```
 
-Genera un archivo `README-IA.md` dentro del componente con documentación inicial.
+Genera un archivo `README-IA.md` dentro del componente.
 
 ### Versión web
 ```bash
@@ -54,19 +67,20 @@ Por defecto crea versión mobile. Usa `-web` para web, o ambos flags para crear 
 
 ### Comando completo
 ```bash
-npm run new-component -- Modal -all-folders -readme -mobile -web
+npm run new-component -- Modal -all-folders -readme -mobile -web --languages en,es,fr
 ```
 
-## Opciones disponibles
+## 🎯 Opciones disponibles
 
 | Opción | Descripción |
 |--------|-------------|
-| `-all-folders` | Crea i18n + utils + provider automáticamente |
+| `-all-folders` | Crea i18n + utils + provider automáticamente (⭐ recomendado) |
 | `-readme` | Genera README-IA.md dentro del componente |
 | `-mobile` | Crea versión mobile (por defecto si no se especifica `-web`) |
 | `-web` | Crea versión web |
+| `--languages <langs>` | Idiomas separados por comas (por defecto: `en,es`) |
 
-## Estructura generada
+## 📁 Estructura generada
 
 ### Estructura mínima (sin flags)
 
@@ -90,53 +104,138 @@ ComponentName/
 └── index.tsx
 ```
 
-### Con `-all-folders`
+### Con `-all-folders` (⭐ recomendado)
 
-Agrega:
+Agrega soporte i18n reactivo completo:
 ```
 ComponentName/
 ├── mobile/
 │   ├── ... (estructura básica)
+│   ├── hooks/
+│   │   ├── useComponentName.hook.ts
+│   │   ├── useI18nMerge.hook.ts          # ⭐ Hook i18n
+│   │   └── index.ts
 │   ├── i18n/
-│   │   ├── en.json
-│   │   ├── es.json
+│   │   ├── en.json                        # Traducciones inglés
+│   │   ├── es.json                        # Traducciones español
+│   │   └── index.ts                       # localDictionaries + getLocalDict
+│   ├── providers/
+│   │   ├── ComponentName.provider.tsx     # ⭐ Provider con Context + i18n
 │   │   └── index.ts
-│   ├── utils/
-│   │   ├── componentname.util.ts
+│   ├── types/
+│   │   ├── ComponentName.type.ts          # ⭐ Incluye Context con 't'
 │   │   └── index.ts
-│   └── providers/
-│       ├── ComponentName.provider.tsx
+│   └── utils/
+│       ├── componentname.util.ts
 │       └── index.ts
 ```
 
-### Con `-readme`
+## 🌐 i18n Reactivo
 
-Agrega:
-```
-ComponentName/
-├── README-IA.md
-└── ...
-```
+Los componentes generados con `-all-folders` son **automáticamente reactivos al idioma**, siguiendo el patrón de TagSelector.
 
-## Componente por defecto
+### Traducciones incluidas automáticamente
 
-El componente base generado es un div simple:
-
-```tsx
-export function ComponentName() {
-  return <div>ComponentName</div>;
+**Inglés (en.json):**
+```json
+{
+  "modal": {
+    "label": "Modal",
+    "description": "Modal component description"
+  }
 }
 ```
 
-A partir de aquí puedes desarrollar la funcionalidad específica del componente.
+**Español (es.json):**
+```json
+{
+  "modal": {
+    "label": "Modal",
+    "description": "Descripción del componente Modal"
+  }
+}
+```
 
-## Archivos generados
+**Francés (fr.json):**
+```json
+{
+  "modal": {
+    "label": "Modal",
+    "description": "Description du composant Modal"
+  }
+}
+```
+
+**Alemán (de.json):**
+```json
+{
+  "modal": {
+    "label": "Modal",
+    "description": "Modal Komponentenbeschreibung"
+  }
+}
+```
+
+### Vista con traducciones reactivas
+
+El componente generado automáticamente muestra las traducciones:
+
+```tsx
+export const ModalView = (props: ModalProps) => {
+  const { children, className } = props;
+  const { t } = useModalContext();  // ⭐ Función de traducción
+
+  return (
+    <div className={className} data-testid="modal">
+      <div>
+        <strong>{t('label')}</strong>       {/* Reactivo! */}
+        <p>{t('description')}</p>            {/* Reactivo! */}
+      </div>
+      {children}
+    </div>
+  );
+};
+```
+
+### Uso del componente
+
+```tsx
+import { Modal } from '@/lib/ui-library/components/Modal';
+
+// Usa idioma global (reactivo automáticamente)
+<Modal>Contenido</Modal>
+
+// Override de idioma específico
+<Modal langOverride="es">Contenido</Modal>
+
+// Cambiar prioridad de traducciones
+<Modal i18nOrder="global-first">Contenido</Modal>
+```
+
+## 📦 Archivos generados
 
 ### 1. Types (`ComponentName.type.ts`)
+
+**Sin `-all-folders`:**
 ```tsx
 export interface ComponentNameProps {
   children?: React.ReactNode;
   className?: string;
+}
+```
+
+**Con `-all-folders` (incluye i18n):**
+```tsx
+export interface ComponentNameProps {
+  children?: React.ReactNode;
+  className?: string;
+  langOverride?: string;                              // ⭐ Override de idioma
+  i18nOrder?: 'global-first' | 'local-first';        // ⭐ Prioridad de traducciones
+}
+
+export interface ComponentNameContext {
+  t: (key: string, params?: Record<string, string | number>) => string;  // ⭐ Función de traducción
+  lang: string;                                       // ⭐ Idioma actual
 }
 ```
 
@@ -154,74 +253,168 @@ export const useComponentName = (props: ComponentNameProps) => {
 };
 ```
 
-### 3. View (`ComponentName.view.tsx`)
+### 3. Hook i18n (`useI18nMerge.hook.ts`) - Solo con `-all-folders`
 ```tsx
-import type { ComponentNameProps } from '../types';
+import { getLocalDict } from '../i18n';
+import { makeTranslator, type TranslationOrder } from '../../../utils';
+import { useLibI18n } from '../../../providers/AppLanguageLibUiProvider/index.hook';
 
-export const ComponentNameView = (props: ComponentNameProps) => {
-  const { children, className } = props;
-
-  return (
-    <div className={className} data-testid="componentname">
-      {children || 'ComponentName'}
-    </div>
-  );
-};
+export function useI18nMerge(
+  langOverride?: string,
+  opts?: { order?: TranslationOrder }
+) {
+  const libI18n = useLibI18n();
+  const lang = langOverride ?? libI18n.lang;
+  const local = getLocalDict(lang);
+  const external = libI18n.getExternalTranslations();
+  
+  const effectiveOrder = opts?.order ?? 
+    (libI18n.translationPriority === 'component-first' ? 'local-first' : 'global-first');
+  
+  const t = makeTranslator(local as any, external, effectiveOrder);
+  
+  return { lang, t };
+}
 ```
 
-### 4. CSS Module (`ComponentName.module.css` y `.ts`)
-Estilos CSS Modules con Tailwind + exportaciones TypeScript
-
-### 5. Provider (con `-all-folders`)
+### 4. Provider (con `-all-folders`)
 ```tsx
 import { createContext, useContext, useState } from 'react';
+import type { ComponentNameContext } from '../types';
+import { useI18nMerge } from '../hooks';
 
-const ComponentNameContext = createContext(undefined);
-
-export const ComponentNameProvider = ({ children }) => {
-  const [state, setState] = useState({});
-
-  return (
-    <ComponentNameContext.Provider value={{ }}>
-      {children}
-    </ComponentNameContext.Provider>
-  );
-};
+const ComponentNameCtx = createContext<ComponentNameContext | undefined>(undefined);
 
 export const useComponentNameContext = () => {
-  const context = useContext(ComponentNameContext);
+  const context = useContext(ComponentNameCtx);
   if (!context) {
     throw new Error('useComponentNameContext must be used within ComponentNameProvider');
   }
   return context;
 };
+
+export const ComponentNameProvider = ({ 
+  children,
+  langOverride,
+  i18nOrder = 'local-first'
+}: { 
+  children: React.ReactNode;
+  langOverride?: string;
+  i18nOrder?: 'global-first' | 'local-first';
+}) => {
+  const [state, setState] = useState({});
+  const { lang, t } = useI18nMerge(langOverride, { order: i18nOrder });  // ⭐ Hook i18n
+
+  const value: ComponentNameContext = {
+    t,      // ⭐ Función de traducción
+    lang,   // ⭐ Idioma actual
+  };
+
+  return (
+    <ComponentNameCtx.Provider value={value}>
+      {children}
+    </ComponentNameCtx.Provider>
+  );
+};
 ```
 
-### 6. i18n (con `-all-folders`)
-Archivos JSON para inglés y español con estructura base
+### 5. i18n Index (con `-all-folders`)
+```tsx
+import en from './en.json';
+import es from './es.json';
+
+export const localDictionaries = { en, es } as const;
+
+export const getLocalDict = (lang?: string) => {
+  const pick = (lang || 'en').toLowerCase().startsWith('es') ? 'es' : 'en';
+  return localDictionaries[pick];
+};
+```
+
+### 6. CSS Module (`ComponentName.module.css` y `.ts`)
+Estilos CSS Modules con Tailwind + exportaciones TypeScript
 
 ### 7. Utils (con `-all-folders`)
 Archivo de utilidades para funciones auxiliares del componente
 
-## Importación
+## 🎨 Sistema de Plantillas
+
+Las plantillas están centralizadas en `client/src/lib/ui-library/command-templates/`:
+
+```
+command-templates/
+├── hooks/
+│   ├── useComponentName.hook.ts.template
+│   └── useI18nMerge.hook.ts.template        # Copiado de TagSelector
+├── providers/
+│   └── ComponentName.provider.tsx.template   # Con i18n
+├── types/
+│   └── ComponentName.type.ts.template        # Con Context + 't'
+├── views/
+│   └── ComponentName.view.tsx.template       # Con traducciones
+├── css/
+│   ├── ComponentName.module.css.template
+│   └── ComponentName.module.ts.template
+├── i18n/
+│   ├── en.json.template                      # Inglés
+│   ├── es.json.template                      # Español
+│   ├── fr.json.template                      # Francés
+│   ├── de.json.template                      # Alemán
+│   ├── lang.json.template                    # Genérico (fallback)
+│   └── index.ts.template                     # localDictionaries
+└── utils/
+    └── componentname.util.ts.template
+```
+
+### Variables de reemplazo
+
+El generador reemplaza automáticamente:
+
+- `{{ComponentName}}` → Nombre en PascalCase (`Modal`)
+- `{{componentname}}` → Nombre en lowercase (`modal`)
+- `{{LANGUAGES_IMPORTS}}` → Imports dinámicos de idiomas
+- `{{LANGUAGES_KEYS}}` → Keys del objeto localDictionaries
+- `{{LANGUAGE_SELECTION_LOGIC}}` → Lógica ternaria de selección
+
+## 📝 Importación
 
 El componente se exporta automáticamente en `components/index.ts`:
 
 ```tsx
-import { ComponentName } from '@/lib/ui-library/components/ComponentName';
+import { Modal } from '@/lib/ui-library/components/Modal';
 
 function Example() {
   return (
-    <ComponentName>
-      Content
-    </ComponentName>
+    <Modal langOverride="es">
+      Contenido
+    </Modal>
   );
 }
 ```
 
-## Notas
+## ✨ Características
 
-- Los nombres de componentes deben estar en PascalCase
-- El generador actualiza automáticamente el index de componentes
-- Todas las carpetas y archivos siguen la estructura establecida del proyecto
-- El componente por defecto es un div simple, listo para personalizar
+✅ **i18n reactivo** - Cambian automáticamente con el idioma (con `-all-folders`)  
+✅ **Traducciones de ejemplo** - Listas para probar la reactividad  
+✅ **Traducciones combinadas** - Local + Global con prioridad configurable  
+✅ **Provider pattern** - Context para compartir estado  
+✅ **TypeScript completo** - Tipos para Props y Context  
+✅ **CSS Modules** - Estilos encapsulados  
+✅ **Test IDs** - data-testid automático para testing  
+✅ **Plantillas centralizadas** - Fácil mantenimiento y actualización  
+
+## 📖 Notas
+
+- Los nombres de componentes deben estar en **PascalCase**
+- Las keys i18n se generan en **lowercase** (ej: `"modal"`)
+- El `data-testid` se genera en **lowercase** automáticamente
+- **Plantillas de idiomas disponibles:** en, es, fr, de (otros usan genérico en inglés)
+- El componente base usa `t('label')` y `t('description')` para demostrar la traducción reactiva
+- Modifica las plantillas en `command-templates/` para cambiar cómo se generan todos los componentes
+
+## 🔗 Referencias
+
+- **Plantillas**: `client/src/lib/ui-library/command-templates/`
+- **Script generador**: `scripts/generate-component.mjs`
+- **Componente de referencia**: `client/src/lib/ui-library/components/TagSelector`
+- **Documentación técnica**: `scripts/README.md`
