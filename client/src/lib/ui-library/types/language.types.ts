@@ -10,8 +10,9 @@
  *   default: "Hello"
  * }
  */
-export interface MultiLanguageLabel {
+export interface MultiLanguageLabel<T = any> {
   [languageCode: string]: string;
+  metadata?: T; // Generic metadata for customization
   default: string; // Required fallback
 }
 
@@ -25,20 +26,20 @@ export type LabelOrMultiLanguage = string | MultiLanguageLabel;
  * ItemWithMultiLanguageLabel - Generic item with multi-language label
  * Use this for any item that needs translated labels
  * Can be extended with additional properties as needed
- * 
+ *
  * @example Basic usage
  * const item: ItemWithMultiLanguageLabel = {
  *   id: "1",
  *   label: { en: "Option 1", es: "Opción 1", default: "Option 1" },
  *   metadata: { color: "blue" }
  * }
- * 
+ *
  * @example Extended with custom properties
  * interface CustomItem extends ItemWithMultiLanguageLabel {
  *   icon: string;
  *   isActive: boolean;
  * }
- * 
+ *
  * const customItem: CustomItem = {
  *   id: "1",
  *   label: { en: "Option 1", es: "Opción 1", default: "Option 1" },
@@ -60,7 +61,7 @@ export interface ItemWithMultiLanguageLabel<T = any> {
  */
 export type ResolveLabelFn = (
   label: LabelOrMultiLanguage,
-  lang?: string
+  lang?: string,
 ) => string;
 
 /**
