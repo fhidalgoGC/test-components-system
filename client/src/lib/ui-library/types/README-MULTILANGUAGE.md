@@ -43,24 +43,62 @@ const multiLabel: LabelOrMultiLanguage = { en: "Hello", es: "Hola", default: "He
 
 ### `ItemWithMultiLanguageLabel<T>`
 
-Item genérico con etiqueta multiidioma y metadata opcional.
+Item genérico con etiqueta multiidioma, metadata opcional y **propiedades adicionales extensibles**.
 
 ```typescript
 interface ItemWithMultiLanguageLabel<T = any> {
   id: string;
   label: MultiLanguageLabel;
   metadata?: T;
+  [key: string]: any; // ✨ Permite propiedades adicionales
 }
 ```
 
-**Ejemplo:**
+**Ejemplo básico:**
+```typescript
+const item: ItemWithMultiLanguageLabel = {
+  id: "1",
+  label: {
+    en: "Important",
+    es: "Importante",
+    default: "Important"
+  },
+  metadata: { color: "red" },
+  icon: "star",        // ✅ Propiedad adicional permitida
+  isActive: true       // ✅ Propiedad adicional permitida
+};
+```
+
+**Ejemplo con extensión de interfaz:**
+```typescript
+interface CustomTag extends ItemWithMultiLanguageLabel {
+  icon: string;
+  isActive: boolean;
+  priority: number;
+}
+
+const tag: CustomTag = {
+  id: "1",
+  label: {
+    en: "Important",
+    es: "Importante",
+    default: "Important"
+  },
+  metadata: { color: "red" },
+  icon: "star",
+  isActive: true,
+  priority: 5
+};
+```
+
+**Ejemplo con metadata tipada:**
 ```typescript
 interface TagMetadata {
   color: string;
-  icon?: string;
+  backgroundColor?: string;
 }
 
-const tag: ItemWithMultiLanguageLabel<TagMetadata> = {
+const tagWithTypedMetadata: ItemWithMultiLanguageLabel<TagMetadata> = {
   id: "1",
   label: {
     en: "Important",
@@ -69,8 +107,9 @@ const tag: ItemWithMultiLanguageLabel<TagMetadata> = {
   },
   metadata: {
     color: "red",
-    icon: "star"
-  }
+    backgroundColor: "white"
+  },
+  icon: "star"  // ✅ Todavía puedes agregar propiedades adicionales
 };
 ```
 
