@@ -2,6 +2,10 @@
 
 This project is a frontend-only React component library built with React, TypeScript, and Vite. Its primary purpose is to provide a comprehensive UI component library, featuring custom components built on shadcn/ui, a complete theming system, internationalization support, and a responsive design. This is a standalone frontend library with no backend dependencies, designed for integration into other frontend applications.
 
+## Component Generator
+
+The project includes an automated component generator (`npm run new-component`) that creates complete component structures with i18n support. All generated components follow the same pattern as TagSelector, with automatic language reactivity and translation merging.
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -24,6 +28,17 @@ Preferred communication style: Simple, everyday language.
 - **Build Tool**: Vite for fast development and building.
 - **Development Server**: Custom Vite server setup with hot reloading.
 - **Component Demo**: Interactive component playground with live preview and built-in documentation.
+- **Component Generator**: Automated script (`scripts/generate-component.mjs`) that creates components from templates in `client/src/lib/ui-library/command-templates/`.
+
+## Recent Changes (October 2025)
+
+### Component Generator with i18n Templates
+- Created template-based component generator using files instead of hardcoded strings
+- All templates stored in `client/src/lib/ui-library/command-templates/`
+- Components generated with `-all-folders` are automatically reactive to language changes
+- Follows TagSelector pattern: useI18nMerge hook + Provider with Context + i18n support
+- Dynamic language selection logic generated based on `--languages` parameter
+- Templates support variable replacement: `{{ComponentName}}`, `{{componentname}}`, etc.
 
 # External Dependencies
 

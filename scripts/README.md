@@ -256,6 +256,49 @@ client/src/lib/ui-library/components/<ComponentName>/
 - **Comando npm**: Definido en `package.json` como `"new-component": "node scripts/generate-component.mjs"`
 - **Componentes generados**: `client/src/lib/ui-library/components/`
 
+## 🎨 Sistema de Plantillas
+
+Las plantillas están en `client/src/lib/ui-library/command-templates/`:
+
+```
+command-templates/
+├── hooks/           # useComponentName.hook.ts + useI18nMerge.hook.ts
+├── providers/       # Provider con Context e i18n
+├── types/          # Interfaces (Props + Context con 't')
+├── views/          # Vista del componente
+├── css/            # CSS Modules
+├── i18n/           # Traducciones dinámicas
+└── utils/          # Utilidades
+```
+
+### Variables de reemplazo:
+- `{{ComponentName}}` → Nombre en PascalCase
+- `{{componentname}}` → Nombre en lowercase
+- `{{LANGUAGES_IMPORTS}}` → Imports dinámicos de idiomas
+- `{{LANGUAGES_KEYS}}` → Keys del objeto localDictionaries
+
+## 🌐 i18n Reactivo
+
+Todos los componentes generados con `-all-folders` incluyen:
+
+✅ **Hook useI18nMerge** - Combina traducciones locales + globales (copiado de TagSelector)  
+✅ **Provider con traductor** - Context incluye `t()` para traducir  
+✅ **Reactivo al idioma** - Cambia automáticamente cuando cambia el idioma global  
+✅ **Prioridad configurable** - `local-first` o `global-first`  
+
+### Ejemplo de componente generado:
+
+```tsx
+// Uso del componente
+<Alert langOverride="es" i18nOrder="local-first">
+  Contenido
+</Alert>
+
+// Dentro del componente (generado automáticamente)
+const { t } = useAlertContext();
+return <div>{t('title')}</div>; // Reactivo!
+```
+
 ## 📄 Licencia
 
 Este script es parte del proyecto UI Component Library.

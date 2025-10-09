@@ -185,6 +185,58 @@ El componente generado se exporta automáticamente y puede importarse así:
 import { ComponentName } from '@/lib/ui-library/components/ComponentName';
 ```
 
+## i18n Reactivo
+
+Los componentes generados con `-all-folders` son **automáticamente reactivos al idioma**, siguiendo el patrón de TagSelector:
+
+### Cómo funciona:
+
+1. **Hook useI18nMerge** - Combina traducciones locales + globales
+2. **Provider con Context** - Incluye función `t()` para traducir
+3. **Vista reactiva** - Usa `t()` del contexto, cambia automáticamente con el idioma
+
+### Ejemplo de uso:
+
+```tsx
+// El componente generado ya incluye todo esto:
+import { Alert } from '@/lib/ui-library/components/Alert';
+
+// Uso básico (usa idioma global)
+<Alert>Contenido</Alert>
+
+// Con idioma específico
+<Alert langOverride="es">Contenido</Alert>
+
+// Cambiar prioridad de traducciones
+<Alert i18nOrder="global-first">Contenido</Alert>
+```
+
+### Agregar traducciones:
+
+```json
+// en.json
+{
+  "alert": {
+    "title": "Alert",
+    "close": "Close"
+  }
+}
+
+// es.json  
+{
+  "alert": {
+    "title": "Alerta",
+    "close": "Cerrar"
+  }
+}
+```
+
+Usa `t('title')` en el componente para acceder a las traducciones.
+
+## Plantillas
+
+Las plantillas están en `client/src/lib/ui-library/command-templates/`. Modifica estos archivos para cambiar cómo se generan todos los componentes futuros.
+
 ## Notas
 
 - Los nombres de componentes deben estar en **PascalCase**
@@ -192,3 +244,4 @@ import { ComponentName } from '@/lib/ui-library/components/ComponentName';
 - El `data-testid` se genera en **lowercase** automáticamente
 - Si `-all-folders` no está presente, no se crean i18n, utils ni providers
 - Los archivos JSON se generan vacíos, listos para que agregues tus traducciones
+- Todos los componentes con `-all-folders` son **reactivos al idioma** automáticamente
