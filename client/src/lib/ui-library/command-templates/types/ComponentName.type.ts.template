@@ -1,0 +1,11 @@
+export interface {{ComponentName}}Props {
+  children?: React.ReactNode;
+  className?: string;
+  langOverride?: string;
+  i18nOrder?: 'global-first' | 'local-first';
+}
+
+export interface {{ComponentName}}Context {
+  t: (key: string, params?: Record<string, string | number>) => string;
+  lang: string;
+}

@@ -1,0 +1,13 @@
+import type { {{ComponentName}}Props } from '../types';
+import { use{{ComponentName}}Context } from '../providers';
+
+export const {{ComponentName}}View = (props: {{ComponentName}}Props) => {
+  const { children, className } = props;
+  const { t } = use{{ComponentName}}Context();
+
+  return (
+    <div className={className} data-testid="{{componentname}}">
+      {children || '{{ComponentName}}'}
+    </div>
+  );
+};

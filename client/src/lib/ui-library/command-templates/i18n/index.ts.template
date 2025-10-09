@@ -1,0 +1,7 @@
+{{LANGUAGES_IMPORTS}}
+
+export const localDictionaries = { {{LANGUAGES_KEYS}} } as const;
+
+export const getLocalDict = (lang?: string) => {
+{{LANGUAGE_SELECTION_LOGIC}}
+};

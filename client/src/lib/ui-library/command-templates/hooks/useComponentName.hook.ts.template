@@ -1,0 +1,10 @@
+import { useState } from 'react';
+import type { {{ComponentName}}Props } from '../types';
+
+export const use{{ComponentName}} = (props: {{ComponentName}}Props) => {
+  const [state, setState] = useState({});
+
+  return {
+    state,
+  };
+};
