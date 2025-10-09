@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from 'react';
-import type { BottomNavigationBarContext } from '../types';
+import { createContext, useContext } from 'react';
+import type { BottomNavigationBarContext, BottomNavigationBarProps, NavItem } from '../types';
 import { useI18nMerge } from '../hooks';
+import { useBottomNavigationBar } from '../hooks';
 
 const BottomNavigationBarCtx = createContext<BottomNavigationBarContext | undefined>(undefined);
 
@@ -12,21 +13,22 @@ export const useBottomNavigationBarContext = () => {
   return context;
 };
 
-export const BottomNavigationBarProvider = ({ 
-  children,
-  langOverride,
-  i18nOrder = 'local-first'
-}: { 
+interface ProviderProps extends BottomNavigationBarProps {
   children: React.ReactNode;
-  langOverride?: string;
-  i18nOrder?: 'global-first' | 'local-first';
-}) => {
-  const [state, setState] = useState({});
+}
+
+export const BottomNavigationBarProvider = (props: ProviderProps) => {
+  const { children, langOverride, i18nOrder = 'local-first', items = [] } = props;
+  
   const { lang, t } = useI18nMerge(langOverride, { order: i18nOrder });
+  const { selectedId, onItemClick } = useBottomNavigationBar(props);
 
   const value: BottomNavigationBarContext = {
     t,
     lang,
+    items,
+    selectedId,
+    onItemClick,
   };
 
   return (
