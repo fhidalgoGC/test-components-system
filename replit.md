@@ -49,7 +49,10 @@ Preferred communication style: Simple, everyday language.
   - Item metadata includes: icon, isDisabled, dataTestId
   - Reactive i18n support with resolveMultiLanguageLabel utility
   - Full accessibility support (aria-current, aria-disabled)
-- Pattern: Provider + Context + Hook architecture with i18n integration
+  - **ConfigProvider Integration**: Uses cascada de prioridades (Props → ConfigProvider → Environment)
+  - Internal `useOptionalConfig` hook for safe ConfigProvider access
+  - Configuration: `BOTTOM_NAV_CONFIG.TRIGGER_ON_MOUNT` in environment.ts
+- Pattern: Provider + Context + Hook architecture with i18n and environment config integration
 
 # External Dependencies
 
