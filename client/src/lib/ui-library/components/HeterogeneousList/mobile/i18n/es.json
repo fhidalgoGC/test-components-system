@@ -1,0 +1,7 @@
+{
+  "emptyState": "No hay elementos para mostrar",
+  "loadingMore": "Cargando más...",
+  "errorLoading": "Error al cargar elementos",
+  "retryButton": "Reintentar",
+  "endOfList": "Fin de la lista"
+}
