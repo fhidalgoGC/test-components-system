@@ -4,7 +4,40 @@ This project is a frontend-only React component library built with React, TypeSc
 
 ## Component Generator
 
-The project includes an automated component generator (`npm run new-component`) that creates complete component structures with i18n support and responsive wrapper pattern. All generated components follow the same pattern as TagSelector, with automatic language reactivity, translation merging, and automatic mobile/web switching.
+The project includes an automated component generator (`npm run new-component`) that creates complete component structures with i18n support and responsive wrapper pattern. The generator supports **incremental development** with three modes:
+
+### Generator Modes
+1. **Root Structure** (no flags): Creates component directly in root folder without mobile/web variants
+   - Usage: `npm run new-component -- ComponentName`
+   - Structure: `ComponentName/views/`, `ComponentName/types/`, etc.
+   - Best for: Components that don't need responsive variants
+
+2. **Mobile Variant** (`--mobile`): Creates mobile-specific implementation in `mobile/` folder
+   - Usage: `npm run new-component -- ComponentName --mobile`
+   - Structure: `ComponentName/mobile/views/`, `ComponentName/mobile/types/`, etc.
+   - Creates wrapper with `NotImplemented` fallback for web
+
+3. **Web Variant** (`--web`): Creates web-specific implementation in `web/` folder
+   - Usage: `npm run new-component -- ComponentName --web`
+   - Can be added incrementally to existing mobile variant
+   - Updates wrapper to use both mobile and web when both exist
+
+4. **Both Variants** (`--mobile --web`): Creates both mobile and web at once
+   - Usage: `npm run new-component -- ComponentName --mobile --web`
+   - Creates responsive wrapper that switches based on viewport
+
+### Incremental Development
+- **Add variants later**: Create mobile first, add web later (or vice versa)
+- **Automatic wrapper updates**: Wrapper adjusts based on available variants
+- **Smart detection**: Skips creating variants that already exist
+- **Examples**:
+  ```bash
+  # Step 1: Create mobile version
+  npm run new-component -- MyComponent --mobile
+  
+  # Step 2: Later, add web version (updates wrapper automatically)
+  npm run new-component -- MyComponent --web
+  ```
 
 # User Preferences
 
