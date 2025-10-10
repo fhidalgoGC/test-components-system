@@ -100,6 +100,10 @@ npm run new-component -- Dialog -mobile -web -all-folders
 
 ### Carpetas Opcionales (con `-all-folders`)
 
+#### `environment/`
+- `config.ts` - Configuración específica del componente
+- `index.ts` - Barrel export
+
 #### `i18n/`
 - `en.json` - Traducciones en inglés
 - `es.json` - Traducciones en español
@@ -302,6 +306,7 @@ command-templates/
 ├── views/          # Vista del componente
 ├── css/            # CSS Modules
 ├── i18n/           # Traducciones dinámicas
+├── environment/     # Configuración local del componente
 └── utils/          # Utilidades
 ```
 
@@ -332,6 +337,50 @@ Todos los componentes generados con `-all-folders` incluyen:
 const { t } = useAlertContext();
 return <div>{t('title')}</div>; // Reactivo!
 ```
+
+## ⚙️ Environment Config (Configuración Local)
+
+Cada componente generado con `-all-folders` incluye su propia carpeta `environment/` con configuración específica:
+
+### Estructura generada:
+
+```typescript
+// environment/config.ts
+export interface ComponentNameConfig {
+  // Add your component-specific configuration here
+  // Example: TRIGGER_ON_MOUNT: boolean;
+}
+
+export const COMPONENT_NAME_CONFIG: ComponentNameConfig = {
+  // Add default values here
+  // Example: TRIGGER_ON_MOUNT: false,
+};
+```
+
+### ¿Por qué usar environment local?
+
+✅ **Evita crecimiento del archivo global** - `environments/environment.ts` no crece infinitamente  
+✅ **Modularidad** - Cada componente tiene su configuración aislada  
+✅ **Fácil mantenimiento** - Configuración junto al componente  
+✅ **Cascada de prioridades** - Props → ConfigProvider → Environment local  
+
+### Integración con AppEnvironmentProvider:
+
+El archivo global solo **importa y agrupa** las configuraciones locales:
+
+```typescript
+// environments/environment.ts
+import { BOTTOM_NAV_CONFIG } from '../components/BottomNavigationBar/mobile/environment';
+import { ALERT_CONFIG } from '../components/Alert/mobile/environment';
+
+export const environment: LibraryConfig = {
+  BOTTOM_NAV_CONFIG,
+  ALERT_CONFIG,
+  // Solo agrupa, no define
+};
+```
+
+El `AppEnvironmentProvider` sigue funcionando igual, pero ahora las configuraciones están descentralizadas.
 
 ## 📄 Licencia
 
