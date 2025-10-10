@@ -1,0 +1,23 @@
+import { useIsMobile } from '../../hooks';
+import { {{ComponentName}} as {{ComponentName}}Mobile } from './mobile';
+import { NotImplemented } from '../NotImplemented';
+import type { {{ComponentName}}Props } from './mobile/types';
+
+// Web version placeholder (uncomment when implemented)
+// import { {{ComponentName}} as {{ComponentName}}Web } from './web';
+
+export const {{ComponentName}} = (props: {{ComponentName}}Props) => {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <{{ComponentName}}Mobile {...props} />;
+  }
+
+  // Return web version when implemented
+  // return <{{ComponentName}}Web {...props} />;
+  
+  // Fallback: web version not implemented
+  return <NotImplemented platform="Web" componentName="{{ComponentName}}" />;
+};
+
+export type { {{ComponentName}}Props };

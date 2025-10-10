@@ -309,12 +309,25 @@ if (flags.web) {
   createComponent('web');
 }
 
-// Create root index
-const defaultVariant = flags.mobile ? 'mobile' : 'web';
-createFile(
-  path.join(componentPath, 'index.tsx'),
-  `export { ${componentName} } from './${defaultVariant}';\nexport type { ${componentName}Props } from './${defaultVariant}/types';`
-);
+// Create root index with responsive wrapper
+const replacements = {
+  ComponentName: componentName,
+  componentname: componentName.toLowerCase(),
+};
+
+try {
+  const wrapperTemplate = readTemplate('index.tsx.template');
+  const wrapperContent = processTemplate(wrapperTemplate, replacements);
+  createFile(path.join(componentPath, 'index.tsx'), wrapperContent);
+} catch (error) {
+  // Fallback to simple export if template not found
+  console.warn('⚠️  Wrapper template not found, using simple export');
+  const defaultVariant = flags.mobile ? 'mobile' : 'web';
+  createFile(
+    path.join(componentPath, 'index.tsx'),
+    `export { ${componentName} } from './${defaultVariant}';\nexport type { ${componentName}Props } from './${defaultVariant}/types';`
+  );
+}
 
 // Create README if requested
 if (flags.readme) {
