@@ -24,14 +24,17 @@ if (!componentName) {
   console.error('❌ Error: Component name is required');
   console.log('Usage: npm run new-component -- <ComponentName> [options]');
   console.log('\nOptions:');
+  console.log('  --mobile                Create/add mobile version only');
+  console.log('  --web                   Create/add web version only');
+  console.log('  (no flag)               Create in root (no responsive wrapper)');
   console.log('  -all-folders            Create i18n, utils, and provider folders');
   console.log('  -readme                 Generate README-IA.md in component');
-  console.log('  -mobile                 Create mobile version (default)');
-  console.log('  -web                    Create web version');
   console.log('  --languages <langs>     i18n languages (comma-separated, e.g., en,es,fr)');
   console.log('\nExamples:');
-  console.log('  npm run new-component -- Modal');
-  console.log('  npm run new-component -- Modal -all-folders -readme');
+  console.log('  npm run new-component -- Modal                    # Root structure');
+  console.log('  npm run new-component -- Modal --mobile           # Mobile only');
+  console.log('  npm run new-component -- Modal --web              # Web only (if mobile exists)');
+  console.log('  npm run new-component -- Modal --mobile --web     # Both with wrapper');
   console.log('  npm run new-component -- Dialog -all-folders --languages en,es,fr');
   process.exit(1);
 }
@@ -39,8 +42,8 @@ if (!componentName) {
 const flags = {
   allFolders: args.includes('-all-folders'),
   readme: args.includes('-readme'),
-  mobile: args.includes('-mobile') || !args.includes('-web'),
-  web: args.includes('-web'),
+  mobile: args.includes('--mobile'),
+  web: args.includes('--web'),
 };
 
 // Parse languages (default: en,es)
@@ -52,10 +55,44 @@ const componentsPath = path.join(process.cwd(), 'client/src/lib/ui-library/compo
 const componentPath = path.join(componentsPath, componentName);
 const templatesPath = path.join(process.cwd(), 'client/src/lib/ui-library/command-templates');
 
-// Check if component already exists
-if (fs.existsSync(componentPath)) {
-  console.error(`❌ Error: Component "${componentName}" already exists`);
+// Detect mode: root, mobile, web, or both
+const isRootMode = !flags.mobile && !flags.web;
+const componentExists = fs.existsSync(componentPath);
+
+// Check existing variants
+let existingMobile = false;
+let existingWeb = false;
+let existingRoot = false;
+
+if (componentExists) {
+  existingMobile = fs.existsSync(path.join(componentPath, 'mobile'));
+  existingWeb = fs.existsSync(path.join(componentPath, 'web'));
+  // Check if it's a root structure (has views/ directly in root)
+  existingRoot = fs.existsSync(path.join(componentPath, 'views'));
+}
+
+// Validation: prevent mixing root with variants
+if (componentExists && existingRoot && (flags.mobile || flags.web)) {
+  console.error(`❌ Error: Component "${componentName}" exists with root structure.`);
+  console.error('   Cannot add mobile/web variants to a root-structure component.');
+  console.error('   Delete the component first or create a new one.');
   process.exit(1);
+}
+
+if (componentExists && (existingMobile || existingWeb) && isRootMode) {
+  console.error(`❌ Error: Component "${componentName}" exists with variant structure.`);
+  console.error('   Cannot create root structure for a component with variants.');
+  console.error('   Use --mobile or --web flags instead.');
+  process.exit(1);
+}
+
+// Validation: if creating new component, root mode cannot have both flags
+if (!componentExists && isRootMode) {
+  console.log(`\n🚀 Creating component: ${componentName} (root structure)\n`);
+} else if (!componentExists && (flags.mobile || flags.web)) {
+  console.log(`\n🚀 Creating component: ${componentName}\n`);
+} else if (componentExists) {
+  console.log(`\n🔄 Updating component: ${componentName}\n`);
 }
 
 // Helper to create directory
@@ -108,10 +145,11 @@ function generateLanguageSelectionLogic(languages) {
 
 // Create component structure
 function createComponent(variant) {
-  const variantPath = path.join(componentPath, variant);
+  const variantPath = variant ? path.join(componentPath, variant) : componentPath;
   const componentNameLower = componentName.toLowerCase();
   
-  console.log(`📁 Creating ${variant} structure...`);
+  const displayPath = variant ? `${componentName}/${variant}/` : `${componentName}/`;
+  console.log(`📁 Creating ${displayPath} structure...`);
 
   // Prepare replacements
   const replacements = {
@@ -177,11 +215,13 @@ function createComponent(variant) {
     `export * from './${componentName}.view';`
   );
 
-  // Create variant index
-  createFile(
-    path.join(variantPath, 'index.tsx'),
-    `export { ${componentName}View as ${componentName} } from './${variant}/views';\nexport type { ${componentName}Props } from './${variant}/types';`
-  );
+  // Create variant index (only if it's a variant, not root)
+  if (variant) {
+    createFile(
+      path.join(variantPath, 'index.tsx'),
+      `export { ${componentName}View as ${componentName} } from './views';\nexport type { ${componentName}Props } from './types';`
+    );
+  }
 
   // Optional folders
   if (flags.allFolders) {
@@ -259,6 +299,54 @@ function createComponent(variant) {
   }
 }
 
+// Create or update wrapper
+function createOrUpdateWrapper() {
+  const wrapperPath = path.join(componentPath, 'index.tsx');
+  const replacements = {
+    ComponentName: componentName,
+    componentname: componentName.toLowerCase(),
+  };
+
+  // Determine what variants exist now
+  const hasMobile = fs.existsSync(path.join(componentPath, 'mobile'));
+  const hasWeb = fs.existsSync(path.join(componentPath, 'web'));
+  const hasRoot = fs.existsSync(path.join(componentPath, 'views'));
+
+  if (hasRoot) {
+    // Root structure: simple export from root
+    createFile(
+      wrapperPath,
+      `export { ${componentName}View as ${componentName} } from './views';\nexport type { ${componentName}Props } from './types';`
+    );
+  } else if (hasMobile && hasWeb) {
+    // Both variants: create responsive wrapper
+    try {
+      const wrapperTemplate = readTemplate('index.tsx.template');
+      const wrapperContent = processTemplate(wrapperTemplate, replacements);
+      createFile(wrapperPath, wrapperContent);
+      console.log('📱💻 Created responsive wrapper (mobile + web)');
+    } catch (error) {
+      console.warn('⚠️  Wrapper template not found, using simple export');
+      createFile(
+        wrapperPath,
+        `import { useIsMobile } from '../../hooks';\nimport { ${componentName} as ${componentName}Mobile } from './mobile';\nimport { ${componentName} as ${componentName}Web } from './web';\nimport { NotImplemented } from '../NotImplemented';\n\nexport const ${componentName} = (props: any) => {\n  const isMobile = useIsMobile();\n  return isMobile ? <${componentName}Mobile {...props} /> : <${componentName}Web {...props} />;\n};\n\nexport type { ${componentName}Props } from './mobile/types';`
+      );
+    }
+  } else if (hasMobile) {
+    // Only mobile: export from mobile
+    createFile(
+      wrapperPath,
+      `export { ${componentName} } from './mobile';\nexport type { ${componentName}Props } from './mobile/types';`
+    );
+  } else if (hasWeb) {
+    // Only web: export from web
+    createFile(
+      wrapperPath,
+      `export { ${componentName} } from './web';\nexport type { ${componentName}Props } from './web/types';`
+    );
+  }
+}
+
 // README template
 const readmeTemplate = (name) => `# ${name} Component
 
@@ -299,38 +387,33 @@ function Example() {
 Add development notes here...`;
 
 // Main execution
-console.log(`\n🚀 Generating component: ${componentName}\n`);
+createDir(componentPath);
 
-if (flags.mobile) {
-  createComponent('mobile');
-}
+// Determine what to create
+if (isRootMode) {
+  // Root mode: create structure in root
+  createComponent(null);
+  createOrUpdateWrapper();
+} else {
+  // Variant mode
+  if (flags.mobile && !existingMobile) {
+    createComponent('mobile');
+  } else if (flags.mobile && existingMobile) {
+    console.log('⏭️  Mobile variant already exists, skipping...');
+  }
 
-if (flags.web) {
-  createComponent('web');
-}
+  if (flags.web && !existingWeb) {
+    createComponent('web');
+  } else if (flags.web && existingWeb) {
+    console.log('⏭️  Web variant already exists, skipping...');
+  }
 
-// Create root index with responsive wrapper
-const replacements = {
-  ComponentName: componentName,
-  componentname: componentName.toLowerCase(),
-};
-
-try {
-  const wrapperTemplate = readTemplate('index.tsx.template');
-  const wrapperContent = processTemplate(wrapperTemplate, replacements);
-  createFile(path.join(componentPath, 'index.tsx'), wrapperContent);
-} catch (error) {
-  // Fallback to simple export if template not found
-  console.warn('⚠️  Wrapper template not found, using simple export');
-  const defaultVariant = flags.mobile ? 'mobile' : 'web';
-  createFile(
-    path.join(componentPath, 'index.tsx'),
-    `export { ${componentName} } from './${defaultVariant}';\nexport type { ${componentName}Props } from './${defaultVariant}/types';`
-  );
+  // Update wrapper
+  createOrUpdateWrapper();
 }
 
 // Create README if requested
-if (flags.readme) {
+if (flags.readme && !fs.existsSync(path.join(componentPath, 'README-IA.md'))) {
   console.log('📝 Creating README-IA.md...');
   createFile(
     path.join(componentPath, 'README-IA.md'),
@@ -347,14 +430,25 @@ if (fs.existsSync(componentsIndexPath)) {
 const exportLine = `export * from './${componentName}';\n`;
 if (!componentsIndex.includes(exportLine)) {
   fs.appendFileSync(componentsIndexPath, exportLine);
+  console.log('📦 Added to components index');
 }
 
-console.log(`\n✅ Component "${componentName}" created successfully!\n`);
-console.log('📦 Structure created:');
-console.log(`   ${componentPath}/`);
-if (flags.mobile) console.log('   ├── mobile/');
-if (flags.web) console.log('   ├── web/');
-if (flags.readme) console.log('   ├── README-IA.md');
+console.log(`\n✅ Component "${componentName}" ${componentExists ? 'updated' : 'created'} successfully!\n`);
+console.log('📦 Structure:');
+console.log(`   ${componentName}/`);
+
+if (fs.existsSync(path.join(componentPath, 'mobile'))) {
+  console.log('   ├── mobile/');
+}
+if (fs.existsSync(path.join(componentPath, 'web'))) {
+  console.log('   ├── web/');
+}
+if (fs.existsSync(path.join(componentPath, 'views'))) {
+  console.log('   ├── views/ (root)');
+}
+if (flags.readme) {
+  console.log('   ├── README-IA.md');
+}
 console.log('   └── index.tsx');
 
 if (flags.allFolders) {
