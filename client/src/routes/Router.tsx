@@ -12,6 +12,7 @@ import { AsyncLoadingDemo } from "@/pages/heterogeneous-list-async";
 import BottomNavDemo from "@/pages/bottom-nav-demo";
 import BottomNavConfigDemo from "@/pages/bottom-nav-config-demo";
 import ResponsiveDemo from "@/pages/responsive-demo";
+import UniversalCardDemo from "@/pages/universal-card-demo/UniversalCardDemo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -101,6 +102,12 @@ export function Router() {
           headerDescription: "Prueba el hook useResponsive con detección de dispositivo y orientación",
           showActionButtons: false
         };
+      case '/components/universal-card':
+        return {
+          headerTitle: "UniversalCard",
+          headerDescription: "Card universal que puede renderizar cualquier componente con estilos personalizables",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -124,6 +131,7 @@ export function Router() {
         <Route path="/components/bottom-nav" component={BottomNavDemo} />
         <Route path="/components/bottom-nav-config" component={BottomNavConfigDemo} />
         <Route path="/responsive-demo" component={ResponsiveDemo} />
+        <Route path="/components/universal-card" component={UniversalCardDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>
