@@ -197,7 +197,7 @@ function createComponent(variant) {
     );
     createFile(
       path.join(variantPath, 'environment', 'index.ts'),
-      readTemplate('environment/index.ts.template')
+      processTemplate(readTemplate('environment/index.ts.template'), envReplacements)
     );
 
     // Utils
@@ -215,7 +215,7 @@ function createComponent(variant) {
     createDir(path.join(variantPath, 'providers'));
     createFile(
       path.join(variantPath, 'providers', `${componentName}.provider.tsx`),
-      processTemplate(readTemplate('providers/ComponentName.provider.tsx.template'), replacements)
+      processTemplate(readTemplate('providers/ComponentName.provider.tsx.template'), envReplacements)
     );
     createFile(
       path.join(variantPath, 'providers', 'index.ts'),

@@ -44,8 +44,12 @@ export const BottomNavigationBarProvider = (props: ProviderProps) => {
 
   const optionalConfig = useOptionalConfig();
   const prevDisabledIdsRef = useRef<string[]>([]);
-  
+
   // Apply cascade: props → ConfigProvider → environment defaults
+  console.log(
+    "que pasa",
+    optionalConfig?.environment.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT,
+  );
   const finalTriggerOnMount =
     props.triggerOnMount ??
     optionalConfig?.environment?.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT ??

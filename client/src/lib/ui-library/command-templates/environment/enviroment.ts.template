@@ -1,8 +1,16 @@
-// Component-specific environment configuration
-// Access pattern: environment.PROPERTY_NAME
-// ConfigProvider access: optionalConfig?.environment.{{COMPONENT_NAME}}_CONFIG.PROPERTY_NAME
+// Component-specific environment configuration (flat structure)
+// Local access: environment.PROPERTY_NAME
+// ConfigProvider access: optionalConfig?.environment?.{{COMPONENT_NAME}}_CONFIG?.PROPERTY_NAME
+//
+// Environment variables pattern:
+// - Use import.meta.env.VITE_{{COMPONENT_NAME}}_PROPERTY_NAME to read from .env
+// - Example: import.meta.env.VITE_{{COMPONENT_NAME}}_TRIGGER_ON_MOUNT === "true" || false
 
 export const environment = {
   // Add your component-specific configuration properties here
-  // Example: TRIGGER_ON_MOUNT: false,
+  // Example with environment variable support:
+  // TRIGGER_ON_MOUNT: import.meta.env.VITE_{{COMPONENT_NAME}}_TRIGGER_ON_MOUNT === "true" || false,
+  //
+  // Example with static default:
+  // SOME_CONFIG: false,
 };

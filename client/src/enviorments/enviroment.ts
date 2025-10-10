@@ -42,7 +42,7 @@ export const environment = {
   DEFAULT_LANGUAGE,
   LANGUAGE_CONFIG,
   SESSION_CONFIG,
-  BOTTOM_NAV_CONFIG,
+  //BOTTOM_NAV_CONFIG,
 
   // Development environment detection
   IS_DEVELOPMENT:

@@ -39,9 +39,9 @@ export const {{ComponentName}}Provider = ({
   // Uncomment and customize as needed:
   /*
   const finalConfigValue =
-    props.configProp ??                                          // 1️⃣ Props (highest priority)
-    optionalConfig?.environment.{{COMPONENT_NAME}}_CONFIG?.SOME_VALUE ??  // 2️⃣ ConfigProvider
-    environment.SOME_VALUE;                                      // 3️⃣ Default (fallback)
+    props.configProp ??                                                    // 1️⃣ Props (highest priority)
+    optionalConfig?.environment?.{{COMPONENT_NAME}}_CONFIG?.SOME_VALUE ??  // 2️⃣ ConfigProvider
+    environment.SOME_VALUE;                                                // 3️⃣ Internal environment (fallback)
   */
 
   const value: {{ComponentName}}Context = {
