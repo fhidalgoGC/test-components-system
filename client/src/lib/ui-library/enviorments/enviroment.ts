@@ -51,6 +51,7 @@ export const SESSION_CONFIG = {
 // Import component-specific configurations
 import { BOTTOM_NAV_CONFIG } from "../components/BottomNavigationBar/mobile/environment";
 import { HETEROGENEOUS_LIST_CONFIG } from "../components/HeterogeneousList/mobile/environment";
+import { TAG_SELECTOR_CONFIG } from "../components/TagSelector/environment";
 
 export const environment = {
   // Language Configuration
@@ -61,6 +62,7 @@ export const environment = {
   SESSION_CONFIG,
   BOTTOM_NAV_CONFIG,
   HETEROGENEOUS_LIST_CONFIG,
+  TAG_SELECTOR_CONFIG,
   // Development environment detection
   IS_DEVELOPMENT:
     import.meta.env.DEV ||
