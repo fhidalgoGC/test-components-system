@@ -4,7 +4,7 @@ This project is a frontend-only React component library built with React, TypeSc
 
 ## Component Generator
 
-The project includes an automated component generator (`npm run new-component`) that creates complete component structures with i18n support. All generated components follow the same pattern as TagSelector, with automatic language reactivity and translation merging.
+The project includes an automated component generator (`npm run new-component`) that creates complete component structures with i18n support and responsive wrapper pattern. All generated components follow the same pattern as TagSelector, with automatic language reactivity, translation merging, and automatic mobile/web switching.
 
 # User Preferences
 
@@ -53,6 +53,37 @@ Preferred communication style: Simple, everyday language.
 - **Cascade Priority**: Props → ConfigProvider environment → Internal library environment
 - **Template Updates**: All component generator templates follow standardized pattern
 - **Benefits**: Single, predictable way to access all configuration across components
+
+### Responsive Component Pattern (October 2025)
+- **Automatic Mobile/Web Switching**: Components automatically switch between mobile and web implementations based on screen size
+- **useIsMobile Hook**: Global hook (`client/src/lib/ui-library/hooks/use-mobile.tsx`) detects screen size changes
+  - Breakpoint: 768px (Tailwind 'md')
+  - Uses `matchMedia` API for efficient detection
+  - Returns boolean indicating mobile state
+- **Wrapper Component Pattern**: Each component has a root `index.tsx` wrapper that:
+  - Imports `useIsMobile` hook
+  - Conditionally renders mobile or web variant
+  - Shows `NotImplemented` component when variant doesn't exist
+  - Example structure:
+    ```typescript
+    export const ComponentName = (props) => {
+      const isMobile = useIsMobile();
+      return isMobile ? <ComponentNameMobile {...props} /> : <ComponentNameWeb {...props} />;
+    };
+    ```
+- **NotImplemented Component**: Reusable fallback component for unimplemented variants
+  - Located at `client/src/lib/ui-library/components/NotImplemented`
+  - Shows user-friendly message with platform and component name
+  - Provides visual feedback when variant is missing
+- **Generator Integration**: Component generator automatically creates wrapper with responsive pattern
+  - Template: `client/src/lib/ui-library/command-templates/index.tsx.template`
+  - All new components include mobile/web switching logic
+  - Commented placeholders for web implementation
+- **Benefits**: 
+  - Seamless responsive behavior without manual intervention
+  - Clear separation between mobile and web implementations
+  - Graceful degradation when variants are missing
+  - Consistent pattern across all components
 
 ### Decentralized Environment Configuration (October 2025)
 - **Component-Local Configs**: Each component has its own `environment/` folder with **flat structure** configuration
