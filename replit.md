@@ -55,12 +55,15 @@ Preferred communication style: Simple, everyday language.
 - **Benefits**: Single, predictable way to access all configuration across components
 
 ### Decentralized Environment Configuration (October 2025)
-- **Component-Local Configs**: Each component has its own `environment/` folder with configuration
+- **Component-Local Configs**: Each component has its own `environment/` folder with **flat structure** configuration
   - Structure: `ComponentName/mobile/environment/enviroment.ts` + `index.ts`
-  - Pattern in `enviroment.ts`:
+  - **Flat Pattern** in `enviroment.ts` (no nesting):
     ```typescript
-    const ComponentName: ComponentNameConfig = { SOME_CONFIG: value };
-    export const environment = { ComponentName };
+    export const environment = {
+      SOME_CONFIG: value,
+      ANOTHER_CONFIG: value2,
+      // Properties directly in environment object
+    };
     ```
   - Index re-exports: `export { environment as COMPONENT_NAME_CONFIG } from './enviroment'`
   - Prevents `enviorments/enviroment.ts` from growing infinitely
@@ -69,17 +72,17 @@ Preferred communication style: Simple, everyday language.
   - No longer defines component configs directly
   - Acts as central export point for all configurations
   - Example: `import { BOTTOM_NAV_CONFIG } from '../components/BottomNavigationBar/mobile/environment'`
-  - Result: `BOTTOM_NAV_CONFIG = { BottomNavigationBar: { TRIGGER_ON_MOUNT: false } }`
-- **Access Pattern in Components**:
+  - Result: `BOTTOM_NAV_CONFIG = { TRIGGER_ON_MOUNT: false }` (flat structure)
+- **Access Pattern in Components** (Flat Structure):
   - Local import: `import { COMPONENT_NAME_CONFIG as environment } from './../environment'`
-  - Access: `environment.ComponentName.SOME_CONFIG`
-  - With ConfigProvider: `optionalConfig?.environment.COMPONENT_NAME_CONFIG?.ComponentName.SOME_CONFIG`
+  - Access: `environment.SOME_CONFIG` (direct property access, no nesting)
+  - With ConfigProvider: `optionalConfig?.environment?.COMPONENT_NAME_CONFIG?.SOME_CONFIG`
 - **Component Generator Integration**: 
   - `-all-folders` flag automatically creates `environment/` folder
-  - Templates include config interface and default values
-  - Follows standardized export pattern
+  - Templates include flat structure pattern
+  - Follows standardized export pattern aligned with ConfigProvider usage
 - **Backward Compatibility**: AppEnvironmentProvider unchanged, ConfigProvider works identically
-- **Benefits**: Better scalability, easier maintenance, configs colocated with components
+- **Benefits**: Better scalability, easier maintenance, configs colocated with components, consistent with ConfigProvider demos
 
 ### BottomNavigationBar Component
 - Mobile navigation component using ItemWithMultiLanguageLabel for items
@@ -98,7 +101,7 @@ Preferred communication style: Simple, everyday language.
   - Reactive i18n support with resolveMultiLanguageLabel utility
   - Full accessibility support (aria-current, aria-disabled)
   - **ConfigProvider Integration**: Uses standardized `optionalConfig?.environment` pattern
-  - Configuration: `optionalConfig?.environment.BOTTOM_NAV_CONFIG.TRIGGER_ON_MOUNT`
+  - Configuration: `optionalConfig?.environment?.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT` (flat access)
 - Pattern: Provider + Context + Hook architecture with i18n and environment config integration
 
 # External Dependencies

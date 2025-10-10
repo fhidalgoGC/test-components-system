@@ -1,13 +1,8 @@
-interface {{ComponentName}}Config {
-  // Add your component-specific configuration here
-  // Example: TRIGGER_ON_MOUNT: boolean;
-}
-
-const {{ComponentName}}: {{ComponentName}}Config = {
-  // Add default values here
-  // Example: TRIGGER_ON_MOUNT: false,
-};
+// Component-specific environment configuration
+// Access pattern: environment.PROPERTY_NAME
+// ConfigProvider access: optionalConfig?.environment.{{COMPONENT_NAME}}_CONFIG.PROPERTY_NAME
 
 export const environment = {
-  {{ComponentName}},
+  // Add your component-specific configuration properties here
+  // Example: TRIGGER_ON_MOUNT: false,
 };

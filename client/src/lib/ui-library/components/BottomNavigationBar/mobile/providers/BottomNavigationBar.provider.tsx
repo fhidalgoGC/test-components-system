@@ -44,12 +44,12 @@ export const BottomNavigationBarProvider = (props: ProviderProps) => {
 
   const optionalConfig = useOptionalConfig();
   const prevDisabledIdsRef = useRef<string[]>([]);
-
+  
   // Apply cascade: props → ConfigProvider → environment defaults
   const finalTriggerOnMount =
     props.triggerOnMount ??
-    optionalConfig?.environment.BOTTOM_NAV_CONFIG?.BottomNavigationBar.TRIGGER_ON_MOUNT ??
-    environment.BottomNavigationBar.TRIGGER_ON_MOUNT;
+    optionalConfig?.environment?.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT ??
+    environment.TRIGGER_ON_MOUNT;
 
   const { lang, t } = useI18nMerge(langOverride, { order: i18nOrder });
   const { selectedId, onItemClick } = useBottomNavigationBar({

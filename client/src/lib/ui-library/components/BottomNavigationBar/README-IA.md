@@ -223,7 +223,7 @@ export const environment = {
 
 **Configuration Cascade Priority:**
 1. **Props** (highest priority) - `triggerOnMount` prop
-2. **ConfigProvider** - `optionalConfig?.environment.BOTTOM_NAV_CONFIG.TRIGGER_ON_MOUNT`
+2. **ConfigProvider** - `optionalConfig?.environment?.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT`
 3. **Internal Library Environment** (fallback) - Default `false`
 
 ## Behavior Rules
