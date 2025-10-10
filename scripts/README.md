@@ -101,8 +101,8 @@ npm run new-component -- Dialog -mobile -web -all-folders
 ### Carpetas Opcionales (con `-all-folders`)
 
 #### `environment/`
-- `config.ts` - Configuración específica del componente
-- `index.ts` - Barrel export
+- `enviroment.ts` - Configuración específica del componente
+- `index.ts` - Re-exporta con alias COMPONENT_NAME_CONFIG
 
 #### `i18n/`
 - `en.json` - Traducciones en inglés
@@ -345,16 +345,19 @@ Cada componente generado con `-all-folders` incluye su propia carpeta `environme
 ### Estructura generada:
 
 ```typescript
-// environment/config.ts
+// environment/enviroment.ts
 export interface ComponentNameConfig {
   // Add your component-specific configuration here
   // Example: TRIGGER_ON_MOUNT: boolean;
 }
 
-export const COMPONENT_NAME_CONFIG: ComponentNameConfig = {
+export const ComponentName_environment: ComponentNameConfig = {
   // Add default values here
   // Example: TRIGGER_ON_MOUNT: false,
 };
+
+// environment/index.ts
+export { ComponentName_environment as COMPONENT_NAME_CONFIG } from './enviroment';
 ```
 
 ### ¿Por qué usar environment local?

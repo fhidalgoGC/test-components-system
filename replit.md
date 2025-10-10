@@ -56,7 +56,9 @@ Preferred communication style: Simple, everyday language.
 
 ### Decentralized Environment Configuration (October 2025)
 - **Component-Local Configs**: Each component has its own `environment/` folder with configuration
-  - Structure: `ComponentName/mobile/environment/config.ts` + `index.ts`
+  - Structure: `ComponentName/mobile/environment/enviroment.ts` + `index.ts`
+  - File exports: `export const ComponentName_environment = { ... }`
+  - Index re-exports with alias: `export { ComponentName_environment as COMPONENT_NAME_CONFIG }`
   - Prevents `enviorments/enviroment.ts` from growing infinitely
   - Each config is defined where it's used (modular approach)
 - **Global Environment as Aggregator**: `enviorments/enviroment.ts` only imports and aggregates
@@ -66,7 +68,7 @@ Preferred communication style: Simple, everyday language.
 - **Component Generator Integration**: 
   - `-all-folders` flag automatically creates `environment/` folder
   - Templates include config interface and default values
-  - Pattern: `COMPONENT_NAME_CONFIG` with interface
+  - Naming pattern: `ComponentName_environment` → re-exported as `COMPONENT_NAME_CONFIG`
 - **Backward Compatibility**: AppEnvironmentProvider unchanged, ConfigProvider works identically
 - **Benefits**: Better scalability, easier maintenance, configs colocated with components
 
