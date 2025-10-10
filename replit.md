@@ -124,6 +124,22 @@ Preferred communication style: Simple, everyday language.
   - Graceful degradation when variants are missing
   - Consistent pattern across all components
 
+### Visibility System Migration (October 2025)
+- **Deprecated Legacy System**: Removed `dom.util.ts` and `visibility.util.ts` from utils
+  - Old system had TypeScript errors and used outdated patterns
+  - Functions like `detectWidth()`, `detectOrientation()`, `detectDevice()`, `isVisibleByConfig()` are now deprecated
+- **Migrated to Modern Hook**: All visibility logic now uses `useResponsive()` from `use-mobile.tsx`
+  - More powerful: supports mobile/tablet/desktop detection
+  - Better TypeScript: fully typed without errors
+  - More events: handles both 'resize' and 'orientationchange'
+  - Cleaner API: returns structured object with helpers
+- **Component Updates**: TagSelector's `useVisibility.hook.ts` migrated to use modern system
+  - Imports `useResponsive()` instead of deprecated utils
+  - Maps `deviceType` to `Device` type for backward compatibility
+  - Maintains all visibility config functionality (allowedDevices, allowedOrientations, breakpoints)
+- **Cleanup**: Removed exports from `utils/index.ts` and deleted legacy files
+- **Benefits**: Single source of truth for responsive/device detection, better maintainability, no TypeScript errors
+
 ### Decentralized Environment Configuration (October 2025)
 - **Component-Local Configs**: Each component has its own `environment/` folder with **flat structure** configuration
   - Structure: `ComponentName/mobile/environment/enviroment.ts` + `index.ts`
