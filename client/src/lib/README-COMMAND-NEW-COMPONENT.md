@@ -35,9 +35,10 @@ npm run new-component -- Modal -all-folders
 ```
 
 Genera además:
+- ✅ `environment/` - Configuración local del componente (estructura plana)
 - ✅ `i18n/` - Archivos de traducción con ejemplos (en.json, es.json)
 - ✅ `hooks/useI18nMerge.hook.ts` - Hook para combinar traducciones locales + globales
-- ✅ `providers/` - Context provider con función `t()` para traducir
+- ✅ `providers/` - Context provider con función `t()` para traducir + ConfigProvider integration
 - ✅ `utils/` - Utilidades del componente
 
 ### Con idiomas personalizados
@@ -106,11 +107,14 @@ ComponentName/
 
 ### Con `-all-folders` (⭐ recomendado)
 
-Agrega soporte i18n reactivo completo:
+Agrega soporte i18n reactivo completo + configuración:
 ```
 ComponentName/
 ├── mobile/
 │   ├── ... (estructura básica)
+│   ├── environment/
+│   │   ├── enviroment.ts                  # ⭐ Configuración (estructura plana)
+│   │   └── index.ts                       # Re-exporta como COMPONENT_NAME_CONFIG
 │   ├── hooks/
 │   │   ├── useComponentName.hook.ts
 │   │   ├── useI18nMerge.hook.ts          # ⭐ Hook i18n
@@ -120,7 +124,7 @@ ComponentName/
 │   │   ├── es.json                        # Traducciones español
 │   │   └── index.ts                       # localDictionaries + getLocalDict
 │   ├── providers/
-│   │   ├── ComponentName.provider.tsx     # ⭐ Provider con Context + i18n
+│   │   ├── ComponentName.provider.tsx     # ⭐ Provider con Context + i18n + ConfigProvider
 │   │   └── index.ts
 │   ├── types/
 │   │   ├── ComponentName.type.ts          # ⭐ Incluye Context con 't'
@@ -128,6 +132,82 @@ ComponentName/
 │   └── utils/
 │       ├── componentname.util.ts
 │       └── index.ts
+```
+
+## ⚙️ Configuración del Componente (Environment)
+
+Los componentes generados con `-all-folders` incluyen una carpeta `environment/` con configuración local usando el **patrón de estructura plana**.
+
+### Estructura de configuración
+
+**`environment/enviroment.ts`** (estructura plana, sin anidación):
+```typescript
+// Flat structure pattern - NO nesting
+export const environment = {
+  SOME_CONFIG: import.meta.env.VITE_MODAL_SOME_CONFIG || 'default-value',
+  ANOTHER_CONFIG: import.meta.env.VITE_MODAL_ANOTHER_CONFIG || true,
+  // Properties directly in environment object
+};
+```
+
+**`environment/index.ts`** (re-exporta con nombre único):
+```typescript
+export { environment as MODAL_CONFIG } from './enviroment';
+```
+
+### Acceso a la configuración
+
+**En el componente (local):**
+```typescript
+import { MODAL_CONFIG as environment } from './../environment';
+
+// Acceso directo
+const value = environment.SOME_CONFIG;
+```
+
+**Con ConfigProvider (cascada de prioridades):**
+```typescript
+// En el provider
+import { ConfigContext } from '../../../../providers/AppEnviromentProvider/index.hook';
+
+const optionalConfig = useContext(ConfigContext);
+
+// Acceso con cascada: Props → ConfigProvider → Environment
+const config = optionalConfig?.environment?.MODAL_CONFIG?.SOME_CONFIG ?? environment.SOME_CONFIG;
+```
+
+### Patrón de Cascada de Prioridades
+
+El generador crea automáticamente el patrón de prioridades:
+
+**1. Props** (máxima prioridad)
+```tsx
+<Modal someConfig="override-value" />
+```
+
+**2. ConfigProvider** (prioridad media)
+```tsx
+<ConfigProvider environment={{ MODAL_CONFIG: { SOME_CONFIG: 'global-value' } }}>
+  <Modal />
+</ConfigProvider>
+```
+
+**3. Environment local** (fallback)
+```typescript
+const environment = { SOME_CONFIG: 'default-value' };
+```
+
+### Integración con el Environment Global
+
+El archivo `enviorments/enviroment.ts` importa y agrega automáticamente:
+
+```typescript
+import { MODAL_CONFIG } from '../components/Modal/mobile/environment';
+
+export const environment = {
+  // ... otras configs
+  MODAL_CONFIG,  // ⭐ Configuración agregada
+};
 ```
 
 ## 🌐 i18n Reactivo
@@ -334,7 +414,23 @@ export const getLocalDict = (lang?: string) => {
 ### 6. CSS Module (`ComponentName.module.css` y `.ts`)
 Estilos CSS Modules con Tailwind + exportaciones TypeScript
 
-### 7. Utils (con `-all-folders`)
+### 7. Environment Config (con `-all-folders`)
+
+**`environment/enviroment.ts`** - Configuración con estructura plana:
+```typescript
+// Flat structure pattern - NO nesting
+export const environment = {
+  SOME_CONFIG: import.meta.env.VITE_MODAL_SOME_CONFIG || 'default-value',
+  ANOTHER_CONFIG: import.meta.env.VITE_MODAL_ANOTHER_CONFIG || true,
+};
+```
+
+**`environment/index.ts`** - Re-exporta con nombre único:
+```typescript
+export { environment as MODAL_CONFIG } from './enviroment';
+```
+
+### 8. Utils (con `-all-folders`)
 Archivo de utilidades para funciones auxiliares del componente
 
 ## 🎨 Sistema de Plantillas
@@ -343,11 +439,14 @@ Las plantillas están centralizadas en `client/src/lib/ui-library/command-templa
 
 ```
 command-templates/
+├── environment/
+│   ├── enviroment.ts.template                # ⭐ Configuración (estructura plana)
+│   └── index.ts.template                     # Re-exporta como COMPONENT_NAME_CONFIG
 ├── hooks/
 │   ├── useComponentName.hook.ts.template
 │   └── useI18nMerge.hook.ts.template        # Copiado de TagSelector
 ├── providers/
-│   └── ComponentName.provider.tsx.template   # Con i18n
+│   └── ComponentName.provider.tsx.template   # Con i18n + ConfigProvider
 ├── types/
 │   └── ComponentName.type.ts.template        # Con Context + 't'
 ├── views/
@@ -372,6 +471,7 @@ El generador reemplaza automáticamente:
 
 - `{{ComponentName}}` → Nombre en PascalCase (`Modal`)
 - `{{componentname}}` → Nombre en lowercase (`modal`)
+- `{{COMPONENT_NAME}}_CONFIG` → Nombre del config en UPPER_SNAKE_CASE (`MODAL_CONFIG`)
 - `{{LANGUAGES_IMPORTS}}` → Imports dinámicos de idiomas
 - `{{LANGUAGES_KEYS}}` → Keys del objeto localDictionaries
 - `{{LANGUAGE_SELECTION_LOGIC}}` → Lógica ternaria de selección
@@ -394,10 +494,14 @@ function Example() {
 
 ## ✨ Características
 
+✅ **Configuración local** - Cada componente tiene su propia carpeta `environment/` (con `-all-folders`)  
+✅ **Estructura plana** - Configuración sin anidación para fácil acceso  
+✅ **ConfigProvider integration** - Cascada de prioridades (Props → ConfigProvider → Environment)  
+✅ **Variables de entorno** - Soporte para `VITE_COMPONENT_NAME_*` vars  
 ✅ **i18n reactivo** - Cambian automáticamente con el idioma (con `-all-folders`)  
 ✅ **Traducciones de ejemplo** - Listas para probar la reactividad  
 ✅ **Traducciones combinadas** - Local + Global con prioridad configurable  
-✅ **Provider pattern** - Context para compartir estado  
+✅ **Provider pattern** - Context para compartir estado + i18n + config  
 ✅ **TypeScript completo** - Tipos para Props y Context  
 ✅ **CSS Modules** - Estilos encapsulados  
 ✅ **Test IDs** - data-testid automático para testing  

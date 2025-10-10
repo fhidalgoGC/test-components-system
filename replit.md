@@ -104,6 +104,25 @@ Preferred communication style: Simple, everyday language.
   - Configuration: `optionalConfig?.environment?.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT` (flat access)
 - Pattern: Provider + Context + Hook architecture with i18n and environment config integration
 
+### HeterogeneousList Component (October 2025)
+- **Structural Migration Completed**: Migrated to match BottomNavigationBar architecture
+- **New Folders Added**:
+  - `environment/` - Flat structure configuration with `HETEROGENEOUS_LIST_CONFIG`
+    - Config properties: `DEFAULT_PAGE_SIZE`, `DEFAULT_PRESERVE_SCROLL`
+    - Environment variable support: `VITE_HETEROGENEOUS_LIST_*`
+  - `i18n/` - Internationalization support (en.json, es.json)
+    - Translations for empty state, loading, error messages
+  - `providers/` - Provider with Context pattern
+    - Includes `useOptionalConfig` for ConfigProvider integration
+    - Exports `useHeterogeneousListContext` hook
+  - `hooks/useI18nMerge.hook.ts` - Translation merging with global i18n
+- **Integration**: Added to global environment (`HETEROGENEOUS_LIST_CONFIG`)
+- **Functionality**: All original logic preserved (hooks, types, utils, views intact)
+- **Pattern Consistency**: Now follows same architecture as BottomNavigationBar
+  - Provider + Context + Hook architecture
+  - i18n reactivity support
+  - ConfigProvider cascade (Props → ConfigProvider → Environment)
+
 # External Dependencies
 
 ### Core Framework Dependencies
