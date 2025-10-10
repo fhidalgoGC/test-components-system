@@ -1,1 +1,1 @@
-export * from './config';
+export { {{ComponentName}}_environment as {{COMPONENT_NAME}}_CONFIG } from './enviroment';

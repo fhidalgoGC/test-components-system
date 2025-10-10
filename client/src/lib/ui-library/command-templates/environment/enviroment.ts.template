@@ -3,7 +3,7 @@ export interface {{ComponentName}}Config {
   // Example: TRIGGER_ON_MOUNT: boolean;
 }
 
-export const {{COMPONENT_NAME}}_CONFIG: {{ComponentName}}Config = {
+export const {{ComponentName}}_environment: {{ComponentName}}Config = {
   // Add default values here
   // Example: TRIGGER_ON_MOUNT: false,
 };

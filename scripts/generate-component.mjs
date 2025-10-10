@@ -192,8 +192,8 @@ function createComponent(variant) {
       COMPONENT_NAME: componentNameLower.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase(),
     };
     createFile(
-      path.join(variantPath, 'environment', 'config.ts'),
-      processTemplate(readTemplate('environment/config.ts.template'), envReplacements)
+      path.join(variantPath, 'environment', 'enviroment.ts'),
+      processTemplate(readTemplate('environment/enviroment.ts.template'), envReplacements)
     );
     createFile(
       path.join(variantPath, 'environment', 'index.ts'),
