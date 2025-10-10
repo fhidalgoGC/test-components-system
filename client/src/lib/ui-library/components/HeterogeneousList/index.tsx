@@ -1,6 +1,6 @@
 import { useIsMobile } from '../../hooks';
 import { HeterogeneousList as HeterogeneousListMobile } from './mobile';
-import { NotImplemented } from '../NotImplemented';
+import { HeterogeneousList as HeterogeneousListWeb } from './web';
 import type {
   HeterogeneousListProps,
   RegistryModeProps,
@@ -14,9 +14,6 @@ import type {
   ElementsLoaderResponse,
 } from './mobile';
 
-// Web version placeholder (uncomment when implemented)
-// import { HeterogeneousList as HeterogeneousListWeb } from './web';
-
 export const HeterogeneousList = (props: HeterogeneousListProps) => {
   const isMobile = useIsMobile();
 
@@ -24,11 +21,8 @@ export const HeterogeneousList = (props: HeterogeneousListProps) => {
     return <HeterogeneousListMobile {...props} />;
   }
 
-  // Return web version when implemented
-  // return <HeterogeneousListWeb {...props} />;
-  
-  // Fallback: web version not implemented
-  return <NotImplemented platform="Web" componentName="HeterogeneousList" />;
+  // Web version
+  return <HeterogeneousListWeb {...props} />;
 };
 
 // Export types
