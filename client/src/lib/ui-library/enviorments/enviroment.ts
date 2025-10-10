@@ -48,11 +48,8 @@ export const SESSION_CONFIG = {
     Number(import.meta.env.VITE_VALIDATION_INTERVAL) || 60 * 1000,
 };
 
-// BottomNavigationBar configuration
-export const BOTTOM_NAV_CONFIG = {
-  TRIGGER_ON_MOUNT:
-    import.meta.env.VITE_BOTTOM_NAV_TRIGGER_ON_MOUNT === "true" || false,
-};
+// Import component-specific configurations
+import { BOTTOM_NAV_CONFIG } from '../components/BottomNavigationBar/mobile/environment';
 
 export const environment = {
   // Language Configuration
