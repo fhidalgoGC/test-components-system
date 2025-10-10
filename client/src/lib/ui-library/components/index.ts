@@ -14,3 +14,4 @@ export * from './SessionValidator';
 
 // Utility Components
 export { NotImplemented } from './NotImplemented';
+export * from './UniversalCard';
