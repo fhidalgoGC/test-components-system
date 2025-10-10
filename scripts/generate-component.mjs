@@ -319,31 +319,80 @@ function createOrUpdateWrapper() {
       `export { ${componentName}View as ${componentName} } from './views';\nexport type { ${componentName}Props } from './types';`
     );
   } else if (hasMobile && hasWeb) {
-    // Both variants: create responsive wrapper
-    try {
-      const wrapperTemplate = readTemplate('index.tsx.template');
-      const wrapperContent = processTemplate(wrapperTemplate, replacements);
-      createFile(wrapperPath, wrapperContent);
-      console.log('📱💻 Created responsive wrapper (mobile + web)');
-    } catch (error) {
-      console.warn('⚠️  Wrapper template not found, using simple export');
-      createFile(
-        wrapperPath,
-        `import { useIsMobile } from '../../hooks';\nimport { ${componentName} as ${componentName}Mobile } from './mobile';\nimport { ${componentName} as ${componentName}Web } from './web';\nimport { NotImplemented } from '../NotImplemented';\n\nexport const ${componentName} = (props: any) => {\n  const isMobile = useIsMobile();\n  return isMobile ? <${componentName}Mobile {...props} /> : <${componentName}Web {...props} />;\n};\n\nexport type { ${componentName}Props } from './mobile/types';`
-      );
-    }
+    // Both variants: create responsive wrapper with both active
+    const wrapperContent = `import { useIsMobile } from '../../hooks';
+import { ${componentName} as ${componentName}Mobile } from './mobile';
+import { ${componentName} as ${componentName}Web } from './web';
+import type { ${componentName}Props } from './mobile/types';
+
+export const ${componentName} = (props: ${componentName}Props) => {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <${componentName}Mobile {...props} />;
+  }
+
+  return <${componentName}Web {...props} />;
+};
+
+export type { ${componentName}Props };`;
+    
+    createFile(wrapperPath, wrapperContent);
+    console.log('📱💻 Created responsive wrapper (mobile + web)');
   } else if (hasMobile) {
-    // Only mobile: export from mobile
-    createFile(
-      wrapperPath,
-      `export { ${componentName} } from './mobile';\nexport type { ${componentName}Props } from './mobile/types';`
-    );
+    // Only mobile: export from mobile with placeholder for web
+    const wrapperContent = `import { useIsMobile } from '../../hooks';
+import { ${componentName} as ${componentName}Mobile } from './mobile';
+import { NotImplemented } from '../NotImplemented';
+import type { ${componentName}Props } from './mobile/types';
+
+// Web version placeholder (uncomment when implemented)
+// import { ${componentName} as ${componentName}Web } from './web';
+
+export const ${componentName} = (props: ${componentName}Props) => {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <${componentName}Mobile {...props} />;
+  }
+
+  // Return web version when implemented
+  // return <${componentName}Web {...props} />;
+  
+  // Fallback: web version not implemented
+  return <NotImplemented platform="Web" componentName="${componentName}" />;
+};
+
+export type { ${componentName}Props };`;
+    
+    createFile(wrapperPath, wrapperContent);
   } else if (hasWeb) {
-    // Only web: export from web
-    createFile(
-      wrapperPath,
-      `export { ${componentName} } from './web';\nexport type { ${componentName}Props } from './web/types';`
-    );
+    // Only web: export from web with placeholder for mobile
+    const wrapperContent = `import { useIsMobile } from '../../hooks';
+import { ${componentName} as ${componentName}Web } from './web';
+import { NotImplemented } from '../NotImplemented';
+import type { ${componentName}Props } from './web/types';
+
+// Mobile version placeholder (uncomment when implemented)
+// import { ${componentName} as ${componentName}Mobile } from './mobile';
+
+export const ${componentName} = (props: ${componentName}Props) => {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    // Return mobile version when implemented
+    // return <${componentName}Mobile {...props} />;
+    
+    // Fallback: mobile version not implemented
+    return <NotImplemented platform="Mobile" componentName="${componentName}" />;
+  }
+
+  return <${componentName}Web {...props} />;
+};
+
+export type { ${componentName}Props };`;
+    
+    createFile(wrapperPath, wrapperContent);
   }
 }
 
