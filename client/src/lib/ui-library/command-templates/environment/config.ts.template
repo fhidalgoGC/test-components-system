@@ -1,0 +1,9 @@
+export interface {{ComponentName}}Config {
+  // Add your component-specific configuration here
+  // Example: TRIGGER_ON_MOUNT: boolean;
+}
+
+export const {{COMPONENT_NAME}}_CONFIG: {{ComponentName}}Config = {
+  // Add default values here
+  // Example: TRIGGER_ON_MOUNT: false,
+};

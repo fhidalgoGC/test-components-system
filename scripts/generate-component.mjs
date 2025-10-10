@@ -185,6 +185,21 @@ function createComponent(variant) {
 
   // Optional folders
   if (flags.allFolders) {
+    // Environment
+    createDir(path.join(variantPath, 'environment'));
+    const envReplacements = {
+      ...replacements,
+      COMPONENT_NAME: componentNameLower.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase(),
+    };
+    createFile(
+      path.join(variantPath, 'environment', 'config.ts'),
+      processTemplate(readTemplate('environment/config.ts.template'), envReplacements)
+    );
+    createFile(
+      path.join(variantPath, 'environment', 'index.ts'),
+      readTemplate('environment/index.ts.template')
+    );
+
     // Utils
     createDir(path.join(variantPath, 'utils'));
     createFile(
