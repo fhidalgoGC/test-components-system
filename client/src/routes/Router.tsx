@@ -11,6 +11,7 @@ import ElementsMode from "@/pages/heterogeneous-list-elements";
 import { AsyncLoadingDemo } from "@/pages/heterogeneous-list-async";
 import BottomNavDemo from "@/pages/bottom-nav-demo";
 import BottomNavConfigDemo from "@/pages/bottom-nav-config-demo";
+import ResponsiveDemo from "@/pages/responsive-demo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -94,6 +95,12 @@ export function Router() {
           headerDescription: "Prueba la integración con ConfigProvider",
           showActionButtons: false
         };
+      case '/responsive-demo':
+        return {
+          headerTitle: "Responsive Hook Demo",
+          headerDescription: "Prueba el hook useResponsive con detección de dispositivo y orientación",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -116,6 +123,7 @@ export function Router() {
         <Route path="/components/heterogeneous-list/async" component={AsyncLoadingDemo} />
         <Route path="/components/bottom-nav" component={BottomNavDemo} />
         <Route path="/components/bottom-nav-config" component={BottomNavConfigDemo} />
+        <Route path="/responsive-demo" component={ResponsiveDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

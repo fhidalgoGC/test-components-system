@@ -1,19 +1,54 @@
-import * as React from "react"
+import { useEffect, useState } from 'react';
 
-const MOBILE_BREAKPOINT = 768
+type DeviceType = 'mobile' | 'tablet' | 'desktop';
+type Orientation = 'portrait' | 'landscape';
 
+export const useResponsive = () => {
+  const getDeviceType = (): DeviceType => {
+    const width = window.innerWidth;
+    if (width < 768) return 'mobile';       // Tailwind 'md'
+    if (width < 1024) return 'tablet';      // Tailwind 'lg'
+    return 'desktop';
+  };
+
+  const getOrientation = (): Orientation =>
+    window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+
+  const [deviceType, setDeviceType] = useState<DeviceType>(getDeviceType());
+  const [orientation, setOrientation] = useState<Orientation>(getOrientation());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceType(getDeviceType());
+      setOrientation(getOrientation());
+    };
+
+    const handleOrientationChange = () => {
+      setOrientation(getOrientation());
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleOrientationChange);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleOrientationChange);
+    };
+  }, []);
+
+  return {
+    deviceType,
+    orientation,
+    isMobile: deviceType === 'mobile',
+    isTablet: deviceType === 'tablet',
+    isDesktop: deviceType === 'desktop',
+    isPortrait: orientation === 'portrait',
+    isLandscape: orientation === 'landscape',
+  };
+};
+
+// Backward compatibility: export useIsMobile that returns only boolean
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
-
-  React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    }
-    mql.addEventListener("change", onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeEventListener("change", onChange)
-  }, [])
-
-  return !!isMobile
+  const { isMobile } = useResponsive();
+  return isMobile;
 }

@@ -56,10 +56,16 @@ Preferred communication style: Simple, everyday language.
 
 ### Responsive Component Pattern (October 2025)
 - **Automatic Mobile/Web Switching**: Components automatically switch between mobile and web implementations based on screen size
-- **useIsMobile Hook**: Global hook (`client/src/lib/ui-library/hooks/use-mobile.tsx`) detects screen size changes
-  - Breakpoint: 768px (Tailwind 'md')
-  - Uses `matchMedia` API for efficient detection
-  - Returns boolean indicating mobile state
+- **useResponsive Hook**: Enhanced global hook (`client/src/lib/ui-library/hooks/use-mobile.tsx`) detects device type and orientation
+  - **Device Types**: mobile (<768px), tablet (768px-1024px), desktop (≥1024px)
+  - **Orientation Detection**: portrait (height > width) vs landscape (width > height)
+  - **Event Listeners**: Handles both 'resize' and 'orientationchange' events
+  - **Return Values**:
+    - `deviceType`: 'mobile' | 'tablet' | 'desktop'
+    - `orientation`: 'portrait' | 'landscape'
+    - `isMobile`, `isTablet`, `isDesktop`: boolean helpers
+    - `isPortrait`, `isLandscape`: boolean helpers
+  - **Backward Compatibility**: `useIsMobile()` still available, returns boolean
 - **Wrapper Component Pattern**: Each component has a root `index.tsx` wrapper that:
   - Imports `useIsMobile` hook
   - Conditionally renders mobile or web variant
