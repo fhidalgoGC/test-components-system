@@ -346,18 +346,22 @@ Cada componente generado con `-all-folders` incluye su propia carpeta `environme
 
 ```typescript
 // environment/enviroment.ts
-export interface ComponentNameConfig {
+interface ComponentNameConfig {
   // Add your component-specific configuration here
   // Example: TRIGGER_ON_MOUNT: boolean;
 }
 
-export const ComponentName_environment: ComponentNameConfig = {
+const ComponentName: ComponentNameConfig = {
   // Add default values here
   // Example: TRIGGER_ON_MOUNT: false,
 };
 
+export const environment = {
+  ComponentName,
+};
+
 // environment/index.ts
-export { ComponentName_environment as COMPONENT_NAME_CONFIG } from './enviroment';
+export { environment as COMPONENT_NAME_CONFIG } from './enviroment';
 ```
 
 ### ¿Por qué usar environment local?
@@ -377,10 +381,25 @@ import { BOTTOM_NAV_CONFIG } from '../components/BottomNavigationBar/mobile/envi
 import { ALERT_CONFIG } from '../components/Alert/mobile/environment';
 
 export const environment: LibraryConfig = {
-  BOTTOM_NAV_CONFIG,
-  ALERT_CONFIG,
+  BOTTOM_NAV_CONFIG,  // = { BottomNavigationBar: { TRIGGER_ON_MOUNT: false } }
+  ALERT_CONFIG,       // = { Alert: { SHOW_ICON: true } }
   // Solo agrupa, no define
 };
+```
+
+### Uso en el Provider:
+
+```typescript
+import { BOTTOM_NAV_CONFIG as environment } from './../environment';
+
+// Acceso local (sin ConfigProvider):
+environment.BottomNavigationBar.TRIGGER_ON_MOUNT
+
+// Acceso con ConfigProvider (cascada):
+const finalValue = 
+  props.triggerOnMount ??                                                     // Props
+  optionalConfig?.environment.BOTTOM_NAV_CONFIG?.BottomNavigationBar.TRIGGER_ON_MOUNT ?? // ConfigProvider
+  environment.BottomNavigationBar.TRIGGER_ON_MOUNT;                          // Local default
 ```
 
 El `AppEnvironmentProvider` sigue funcionando igual, pero ahora las configuraciones están descentralizadas.

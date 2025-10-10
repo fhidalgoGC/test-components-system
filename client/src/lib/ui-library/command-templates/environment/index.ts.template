@@ -1,1 +1,1 @@
-export { {{ComponentName}}_environment as {{COMPONENT_NAME}}_CONFIG } from './enviroment';
+export { environment as {{COMPONENT_NAME}}_CONFIG } from './enviroment';

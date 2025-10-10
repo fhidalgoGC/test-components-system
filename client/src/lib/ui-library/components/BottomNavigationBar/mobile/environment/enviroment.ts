@@ -1,12 +1,12 @@
-export interface BottomNavigationBarConfig {
+interface BottomNavigationBarConfig {
   TRIGGER_ON_MOUNT: boolean;
 }
 
-export const BottomNavigationBar: BottomNavigationBarConfig = {
+const BottomNavigationBar: BottomNavigationBarConfig = {
   TRIGGER_ON_MOUNT:
     import.meta.env.VITE_BOTTOM_NAV_TRIGGER_ON_MOUNT === "true" || false,
 };
 
-export const BottomNavigationBar_environment = {
+export const environment = {
   BottomNavigationBar,
 };

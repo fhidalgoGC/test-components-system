@@ -49,7 +49,7 @@ export const SESSION_CONFIG = {
 };
 
 // Import component-specific configurations
-import { BottomNavigationBar_environment } from '../components/BottomNavigationBar/mobile/environment';
+import { BOTTOM_NAV_CONFIG } from "../components/BottomNavigationBar/mobile/environment";
 
 export const environment = {
   // Language Configuration
@@ -58,7 +58,7 @@ export const environment = {
   LANGUAGE_CONFIG,
   NUMBER_FORMAT_CONFIG,
   SESSION_CONFIG,
-  BottomNavigationBar_environment,
+  BOTTOM_NAV_CONFIG,
   // Development environment detection
   IS_DEVELOPMENT:
     import.meta.env.DEV ||

@@ -1,11 +1,17 @@
-import { createContext, useContext, useEffect, useRef } from 'react';
-import type { BottomNavigationBarContext, BottomNavigationBarProps, NavItem } from '../types';
-import { useI18nMerge } from '../hooks';
-import { useBottomNavigationBar } from '../hooks';
-import { ConfigContext } from '../../../../providers/AppEnviromentProvider/index.hook';
-import { environment } from '../../../../enviorments/enviroment';
+import { createContext, useContext, useEffect, useRef } from "react";
+import type {
+  BottomNavigationBarContext,
+  BottomNavigationBarProps,
+  NavItem,
+} from "../types";
+import { useI18nMerge } from "../hooks";
+import { useBottomNavigationBar } from "../hooks";
+import { ConfigContext } from "../../../../providers/AppEnviromentProvider/index.hook";
+import { BOTTOM_NAV_CONFIG as environment } from "./../environment";
 
-const BottomNavigationBarCtx = createContext<BottomNavigationBarContext | undefined>(undefined);
+const BottomNavigationBarCtx = createContext<
+  BottomNavigationBarContext | undefined
+>(undefined);
 
 function useOptionalConfig() {
   const configContext = useContext(ConfigContext);
@@ -15,7 +21,9 @@ function useOptionalConfig() {
 export const useBottomNavigationBarContext = () => {
   const context = useContext(BottomNavigationBarCtx);
   if (!context) {
-    throw new Error('useBottomNavigationBarContext must be used within BottomNavigationBarProvider');
+    throw new Error(
+      "useBottomNavigationBarContext must be used within BottomNavigationBarProvider",
+    );
   }
   return context;
 };
@@ -25,17 +33,24 @@ interface ProviderProps extends BottomNavigationBarProps {
 }
 
 export const BottomNavigationBarProvider = (props: ProviderProps) => {
-  const { children, langOverride, i18nOrder = 'local-first', items = [], disabledIds = [], onError } = props;
-  
+  const {
+    children,
+    langOverride,
+    i18nOrder = "local-first",
+    items = [],
+    disabledIds = [],
+    onError,
+  } = props;
+
   const optionalConfig = useOptionalConfig();
   const prevDisabledIdsRef = useRef<string[]>([]);
-  
+
   // Apply cascade: props → ConfigProvider → environment defaults
   const finalTriggerOnMount =
     props.triggerOnMount ??
-    optionalConfig?.environment.BOTTOM_NAV_CONFIG?.TRIGGER_ON_MOUNT ??
-    environment.BOTTOM_NAV_CONFIG.TRIGGER_ON_MOUNT;
-  
+    optionalConfig?.environment.BOTTOM_NAV_CONFIG?.BottomNavigationBar.TRIGGER_ON_MOUNT ??
+    environment.BottomNavigationBar.TRIGGER_ON_MOUNT;
+
   const { lang, t } = useI18nMerge(langOverride, { order: i18nOrder });
   const { selectedId, onItemClick } = useBottomNavigationBar({
     ...props,
@@ -46,11 +61,13 @@ export const BottomNavigationBarProvider = (props: ProviderProps) => {
   useEffect(() => {
     if (!selectedId || !onError) return;
 
-    const newlyDisabledIds = disabledIds.filter(id => !prevDisabledIdsRef.current.includes(id));
-    
+    const newlyDisabledIds = disabledIds.filter(
+      (id) => !prevDisabledIdsRef.current.includes(id),
+    );
+
     if (newlyDisabledIds.includes(selectedId)) {
       onError({
-        type: 'disable-selected-item',
+        type: "disable-selected-item",
         itemId: selectedId,
         message: `Cannot disable the currently selected item: ${selectedId}`,
       });

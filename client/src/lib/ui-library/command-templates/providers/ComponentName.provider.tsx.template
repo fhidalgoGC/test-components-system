@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import type { {{ComponentName}}Context } from '../types';
 import { useI18nMerge } from '../hooks';
 import { ConfigContext } from '../../../../providers/AppEnviromentProvider/index.hook';
-import { environment } from '../../../../enviorments/enviroment';
+import { {{COMPONENT_NAME}}_CONFIG as environment } from './../environment';
 
 const {{ComponentName}}Ctx = createContext<{{ComponentName}}Context | undefined>(undefined);
 
@@ -39,9 +39,9 @@ export const {{ComponentName}}Provider = ({
   // Uncomment and customize as needed:
   /*
   const finalConfigValue =
-    props.configProp ??                                                    // 1️⃣ Props (highest priority)
-    optionalConfig?.environment.{{COMPONENT_NAME_UPPER}}_CONFIG?.SOME_VALUE ??  // 2️⃣ ConfigProvider
-    environment.{{COMPONENT_NAME_UPPER}}_CONFIG.SOME_VALUE;                     // 3️⃣ Default (fallback)
+    props.configProp ??                                                           // 1️⃣ Props (highest priority)
+    optionalConfig?.environment.{{COMPONENT_NAME}}_CONFIG?.{{ComponentName}}.SOME_VALUE ??  // 2️⃣ ConfigProvider
+    environment.{{ComponentName}}.SOME_VALUE;                                     // 3️⃣ Default (fallback)
   */
 
   const value: {{ComponentName}}Context = {

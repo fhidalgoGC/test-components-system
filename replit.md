@@ -57,18 +57,27 @@ Preferred communication style: Simple, everyday language.
 ### Decentralized Environment Configuration (October 2025)
 - **Component-Local Configs**: Each component has its own `environment/` folder with configuration
   - Structure: `ComponentName/mobile/environment/enviroment.ts` + `index.ts`
-  - File exports: `export const ComponentName_environment = { ... }`
-  - Index re-exports with alias: `export { ComponentName_environment as COMPONENT_NAME_CONFIG }`
+  - Pattern in `enviroment.ts`:
+    ```typescript
+    const ComponentName: ComponentNameConfig = { SOME_CONFIG: value };
+    export const environment = { ComponentName };
+    ```
+  - Index re-exports: `export { environment as COMPONENT_NAME_CONFIG } from './enviroment'`
   - Prevents `enviorments/enviroment.ts` from growing infinitely
   - Each config is defined where it's used (modular approach)
 - **Global Environment as Aggregator**: `enviorments/enviroment.ts` only imports and aggregates
   - No longer defines component configs directly
   - Acts as central export point for all configurations
   - Example: `import { BOTTOM_NAV_CONFIG } from '../components/BottomNavigationBar/mobile/environment'`
+  - Result: `BOTTOM_NAV_CONFIG = { BottomNavigationBar: { TRIGGER_ON_MOUNT: false } }`
+- **Access Pattern in Components**:
+  - Local import: `import { COMPONENT_NAME_CONFIG as environment } from './../environment'`
+  - Access: `environment.ComponentName.SOME_CONFIG`
+  - With ConfigProvider: `optionalConfig?.environment.COMPONENT_NAME_CONFIG?.ComponentName.SOME_CONFIG`
 - **Component Generator Integration**: 
   - `-all-folders` flag automatically creates `environment/` folder
   - Templates include config interface and default values
-  - Naming pattern: `ComponentName_environment` → re-exported as `COMPONENT_NAME_CONFIG`
+  - Follows standardized export pattern
 - **Backward Compatibility**: AppEnvironmentProvider unchanged, ConfigProvider works identically
 - **Benefits**: Better scalability, easier maintenance, configs colocated with components
 
