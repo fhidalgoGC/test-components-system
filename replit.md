@@ -54,6 +54,22 @@ Preferred communication style: Simple, everyday language.
 - **Template Updates**: All component generator templates follow standardized pattern
 - **Benefits**: Single, predictable way to access all configuration across components
 
+### Decentralized Environment Configuration (October 2025)
+- **Component-Local Configs**: Each component has its own `environment/` folder with configuration
+  - Structure: `ComponentName/mobile/environment/config.ts` + `index.ts`
+  - Prevents `enviorments/enviroment.ts` from growing infinitely
+  - Each config is defined where it's used (modular approach)
+- **Global Environment as Aggregator**: `enviorments/enviroment.ts` only imports and aggregates
+  - No longer defines component configs directly
+  - Acts as central export point for all configurations
+  - Example: `import { BOTTOM_NAV_CONFIG } from '../components/BottomNavigationBar/mobile/environment'`
+- **Component Generator Integration**: 
+  - `-all-folders` flag automatically creates `environment/` folder
+  - Templates include config interface and default values
+  - Pattern: `COMPONENT_NAME_CONFIG` with interface
+- **Backward Compatibility**: AppEnvironmentProvider unchanged, ConfigProvider works identically
+- **Benefits**: Better scalability, easier maintenance, configs colocated with components
+
 ### BottomNavigationBar Component
 - Mobile navigation component using ItemWithMultiLanguageLabel for items
 - Supports both controlled (selectedId) and uncontrolled (defaultSelectedId) selection
