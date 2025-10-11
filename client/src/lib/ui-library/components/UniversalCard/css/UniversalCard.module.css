@@ -1,46 +1,76 @@
 .universalcard {
-  /* Base card styles */
+  /* Base card styles - More defined and visible */
   display: flex;
   flex-direction: column;
-  border: 1px solid hsl(var(--border));
-  border-radius: 0.5rem;
+  border: 1.5px solid hsl(var(--border));
+  border-radius: 12px;
   background-color: hsl(var(--card));
   color: hsl(var(--card-foreground));
   overflow: hidden;
-  transition: box-shadow 0.2s ease-in-out;
+  
+  /* Base shadow for better card definition */
+  box-shadow: 
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  
+  /* Smooth transitions */
+  transition: 
+    box-shadow 0.3s ease-in-out,
+    transform 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
 }
 
+/* More noticeable hover effect */
 .universalcard:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-color: hsl(var(--primary) / 0.3);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .universalcard {
+    box-shadow: 
+      0 1px 3px 0 rgba(0, 0, 0, 0.3),
+      0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  }
+  
+  .universalcard:hover {
+    box-shadow: 
+      0 10px 15px -3px rgba(0, 0, 0, 0.5),
+      0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .header {
-  padding: 1rem;
+  padding: 1.25rem;
   border-bottom: 1px solid hsl(var(--border));
-  background-color: hsl(var(--muted) / 0.3);
+  background-color: hsl(var(--muted) / 0.2);
 }
 
 .content {
   flex: 1;
-  padding: 1rem;
+  padding: 1.25rem;
   overflow: auto;
 }
 
 .footer {
-  padding: 1rem;
+  padding: 1.25rem;
   border-top: 1px solid hsl(var(--border));
-  background-color: hsl(var(--muted) / 0.3);
+  background-color: hsl(var(--muted) / 0.2);
 }
 
 /* Variants for different card types */
 .universalcard.compact .header,
 .universalcard.compact .content,
 .universalcard.compact .footer {
-  padding: 0.5rem;
+  padding: 0.75rem;
 }
 
 .universalcard.spacious .header,
 .universalcard.spacious .content,
 .universalcard.spacious .footer {
-  padding: 1.5rem;
+  padding: 1.75rem;
 }
