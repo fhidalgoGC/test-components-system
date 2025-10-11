@@ -4,7 +4,9 @@
   flex-direction: column;
   border: 1.5px solid hsl(var(--border));
   border-radius: 12px;
-  background-color: hsl(var(--card));
+  
+  /* White background for better contrast */
+  background-color: white;
   color: hsl(var(--card-foreground));
   overflow: hidden;
   
@@ -30,18 +32,19 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
-  .universalcard {
-    box-shadow: 
-      0 1px 3px 0 rgba(0, 0, 0, 0.3),
-      0 1px 2px -1px rgba(0, 0, 0, 0.3);
-  }
-  
-  .universalcard:hover {
-    box-shadow: 
-      0 10px 15px -3px rgba(0, 0, 0, 0.5),
-      0 4px 6px -4px rgba(0, 0, 0, 0.3);
-  }
+.dark .universalcard {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
+  box-shadow: 
+    0 1px 3px 0 rgba(0, 0, 0, 0.3),
+    0 1px 2px -1px rgba(0, 0, 0, 0.3);
+}
+
+.dark .universalcard:hover {
+  border-color: hsl(var(--primary) / 0.4);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.5),
+    0 4px 6px -4px rgba(0, 0, 0, 0.3);
 }
 
 .header {

@@ -59,7 +59,8 @@ const InteractiveComponent = () => {
 
 export default function UniversalCardDemo() {
   return (
-    <div className="container mx-auto p-6 space-y-8">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950">
+      <div className="container mx-auto p-6 space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold" data-testid="text-title">UniversalCard Demo</h1>
         <p className="text-muted-foreground" data-testid="text-description">
@@ -271,6 +272,7 @@ export default function UniversalCardDemo() {
           />
         </div>
       </section>
+      </div>
     </div>
   );
 }
