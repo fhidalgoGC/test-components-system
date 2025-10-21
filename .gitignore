@@ -1,6 +1,8 @@
 node_modules
-dist
 .DS_Store
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Note: dist/ is NOT ignored because we need it for GitHub installations
+# When installing from GitHub, npm needs the compiled files
