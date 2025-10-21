@@ -45,7 +45,10 @@ npm link gc-ui-components
 
 ```tsx
 import { Button, Card, TagSelector } from 'gc-ui-components';
-import 'gc-ui-components/styles'; // Importar estilos
+
+// Importar estilos - Elige una de estas dos opciones:
+import 'gc-ui-components/styles';           // Opción 1 (recomendada)
+// import 'gc-ui-components/dist/style.css'; // Opción 2 (ruta completa)
 
 function App() {
   return (
@@ -72,7 +75,10 @@ import {
   AppLanguageLibUiProvider, 
   AppThemeProvider 
 } from 'gc-ui-components';
+
+// Importar estilos (elige una opción)
 import 'gc-ui-components/styles';
+// import 'gc-ui-components/dist/style.css';
 
 function App() {
   return (
