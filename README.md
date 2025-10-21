@@ -64,7 +64,7 @@ function App() {
 }
 ```
 
-### Usar providers
+### Usar providers y configuración
 
 ```tsx
 import { 
@@ -76,7 +76,26 @@ import 'gc-ui-components/styles';
 
 function App() {
   return (
-    <ConfigProvider config={{ apiUrl: 'https://api.example.com' }}>
+    <ConfigProvider config={{ 
+      // Opcional: sobreescribir idiomas disponibles
+      AVAILABLE_LANGUAGES: ['es', 'en', 'fr'],
+      DEFAULT_LANGUAGE: 'es',
+      
+      // Opcional: configurar formatos por idioma
+      LANGUAGE_CONFIG: {
+        fr: {
+          locale: 'fr',
+          dateFormat: 'dd/MM/yyyy',
+          twoDigits: true
+        }
+      },
+      
+      // Opcional: configurar formato de números
+      NUMBER_FORMAT_CONFIG: {
+        NUMBER_FORMAT_PATTERN: '0.000,00',
+        NUMBER_LOCATE: 'es-ES',
+      }
+    }}>
       <AppLanguageLibUiProvider initialLanguage="es">
         <AppThemeProvider>
           <YourApp />
@@ -86,6 +105,44 @@ function App() {
   );
 }
 ```
+
+**Nota importante**: La biblioteca NO usa variables de entorno (como `import.meta.env.*`) para ser compatible con microfrontends y diferentes bundlers (Webpack, Rollup, etc.). Toda la configuración se hace mediante el `ConfigProvider` en tiempo de ejecución.
+
+## Configuraciones por defecto
+
+La biblioteca viene con estos valores hardcodeados que funcionan sin ninguna configuración:
+
+```typescript
+{
+  AVAILABLE_LANGUAGES: ["es", "en"],
+  DEFAULT_LANGUAGE: "en",
+  LANGUAGE_CONFIG: {
+    es: {
+      locale: "es",
+      dateFormat: "dd/MM/yyyy",
+      twoDigits: true
+    },
+    en: {
+      locale: "en",
+      dateFormat: "MM/dd/yyyy",
+      twoDigits: true
+    }
+  },
+  NUMBER_FORMAT_CONFIG: {
+    NUMBER_FORMAT_PATTERN: "0,000.00",
+    NUMBER_ROUND_MODE: "truncate",
+    NUMBER_LOCATE: "en-US",
+    NUMBER_MIN_DECIMALS: 2,
+    NUMBER_MAX_DECIMALS: 4
+  },
+  SESSION_CONFIG: {
+    SESSION_DURATION: 28800000, // 8 horas
+    VALIDATION_INTERVAL: 60000   // 1 minuto
+  }
+}
+```
+
+Puedes sobreescribir cualquiera de estos valores usando el `ConfigProvider`.
 
 ## Configuración de Tailwind CSS
 

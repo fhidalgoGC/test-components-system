@@ -36,6 +36,8 @@ Preferred communication style: Simple, everyday language.
 - **Build Command**: `npm run build:lib` compiles the library for distribution.
 - **Distribution Files**: Includes compiled JavaScript, CSS styles, TypeScript declarations, and source maps.
 - **NPM Publishing**: Configured with `prepublishOnly` script to ensure library is compiled before publishing.
+- **Environment Variables**: The library does NOT use `import.meta.env.*` variables to ensure compatibility with microfrontends and different bundlers (Webpack, etc.). All configurations use hardcoded defaults that can be overridden via `ConfigProvider` at runtime by the consuming application.
+- **Default Configuration**: Hardcoded defaults include languages (`["es", "en"]`), date formats, number formats, and session settings. These can all be customized by the parent application through the `ConfigProvider` component.
 
 # External Dependencies
 
