@@ -1,4 +1,4 @@
-import type { Orientation } from '../../../types/shared.types';
+import type { Orientation } from '../types/shared.types';
 
 export const detectWidth = (def = 1024) =>
   typeof window === 'undefined' ? def : (window.innerWidth || def);

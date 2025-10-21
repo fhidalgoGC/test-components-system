@@ -1,15 +1,32 @@
 {
-  "name": "GC-UI-COMPONENTS",
+  "name": "gc-ui-components",
   "version": "1.0.0",
   "type": "module",
-  "main": "client/src/lib/ui-library/index.ts",
+  "main": "./dist/gc-ui-components.cjs.js",
+  "module": "./dist/gc-ui-components.es.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/gc-ui-components.es.js",
+      "require": "./dist/gc-ui-components.cjs.js"
+    },
+    "./styles": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build:lib": "vite build --config vite.config.lib.ts && tsc --project tsconfig.lib.json",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "prepublishOnly": "npm run build:lib"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -87,5 +104,9 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }
