@@ -15,6 +15,9 @@ replit.md
 start-frontend.mjs
 components.json
 
+# Documentación extra (solo incluir README.md)
+MICROFRONTEND_USAGE.md
+
 # Node modules y caché
 node_modules/
 .npm/
