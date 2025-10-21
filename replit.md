@@ -28,6 +28,15 @@ Preferred communication style: Simple, everyday language.
 - **Development Server**: Custom Vite server setup for component library development with hot reloading.
 - **Component Demo**: Interactive component playground with live preview and built-in documentation.
 
+## Library Build Configuration (Added October 2025)
+- **Library Compilation**: Configured to build as a distributable npm package using `vite.config.lib.ts`.
+- **Output Formats**: Generates both ESM (`gc-ui-components.es.js`) and CommonJS (`gc-ui-components.cjs.js`) bundles.
+- **TypeScript Declarations**: Automatically generates complete type definitions in `dist/types/`.
+- **Peer Dependencies**: React and React-DOM are marked as peer dependencies; all other dependencies (Radix UI, lucide-react, etc.) are bundled with the library.
+- **Build Command**: `npm run build:lib` compiles the library for distribution.
+- **Distribution Files**: Includes compiled JavaScript, CSS styles, TypeScript declarations, and source maps.
+- **NPM Publishing**: Configured with `prepublishOnly` script to ensure library is compiled before publishing.
+
 # External Dependencies
 
 ### Core Framework Dependencies
