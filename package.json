@@ -1,6 +1,6 @@
 {
   "name": "gc-ui-components",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "./dist/gc-ui-components.cjs.js",
   "module": "./dist/gc-ui-components.es.js",
