@@ -16,12 +16,7 @@ export const CarouselView = (props: CarouselProps) => {
     itemHeight = '400px',
     slidesPerView = 1,
     align = 'start',
-    showPeek = false,
   } = props;
-
-  // Override settings when showPeek is enabled
-  const effectiveAlign = showPeek ? 'center' : align;
-  const effectiveShowNavButtons = showPeek ? false : showNavigationButtons;
 
   const {
     currentIndex,
@@ -46,19 +41,11 @@ export const CarouselView = (props: CarouselProps) => {
       return 'auto';
     }
     
-    // When showPeek is enabled, make slides smaller to show edges of adjacent slides
-    if (showPeek && slidesPerView === 1) {
-      return '80%'; // 80% width shows 10% on each side
-    }
-    
     const gapTotal = spaceBetweenPx * (slidesPerView - 1);
     return `calc((100% - ${gapTotal}px) / ${slidesPerView})`;
   };
 
   const slideWidth = getSlideWidth();
-  
-  // Apply spacing when showPeek is enabled
-  const effectiveSpacing = showPeek && slidesPerView === 1 ? 16 : spaceBetweenPx;
 
   // Calculate transform based on current index
   const getTransform = () => {
@@ -121,7 +108,7 @@ export const CarouselView = (props: CarouselProps) => {
     return null;
   }
 
-  const alignClass = effectiveAlign === 'center' ? styles.alignCenter : effectiveAlign === 'end' ? styles.alignEnd : styles.alignStart;
+  const alignClass = align === 'center' ? styles.alignCenter : align === 'end' ? styles.alignEnd : styles.alignStart;
 
   return (
     <div 
@@ -140,7 +127,7 @@ export const CarouselView = (props: CarouselProps) => {
           className={`${styles.carouselTrack} ${isDragging ? styles.dragging : ''}`}
           style={{
             transform: getTransform(),
-            gap: `${effectiveSpacing}px`,
+            gap: `${spaceBetweenPx}px`,
           }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
@@ -169,7 +156,7 @@ export const CarouselView = (props: CarouselProps) => {
           ))}
         </div>
 
-        {effectiveShowNavButtons && items.length > 1 && (
+        {showNavigationButtons && items.length > 1 && (
           <div className={styles.carouselControls}>
             <button
               className={styles.carouselButton}
