@@ -323,7 +323,7 @@ const CarouselDemo = () => {
           color: '#6b7280', 
           marginBottom: '24px',
         }}>
-          Los slides se muestran al 85% del ancho para revelar pedacitos de las tarjetas anterior y siguiente. 
+          Los slides se muestran al 80% del ancho para revelar aproximadamente un 10% de las tarjetas adyacentes. 
           Los botones de navegación se ocultan automáticamente para una experiencia más limpia.
         </p>
         <Carousel
