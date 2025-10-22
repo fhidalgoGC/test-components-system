@@ -14,6 +14,9 @@ export interface CarouselProps {
   showIndicators?: boolean; // Default: true if items.length > 1
   indicatorsClickable?: boolean; // Default: true
   
+  // Navigation buttons
+  showNavigationButtons?: boolean; // Default: true if items.length > 1
+  
   // Layout
   spaceBetweenPx?: number; // Default: 0
   itemHeight?: string; // Accepts %, px, rem, vh, or design token

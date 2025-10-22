@@ -290,7 +290,7 @@ const CarouselDemo = () => {
       </section>
 
       {/* Minimal carousel */}
-      <section>
+      <section style={{ marginBottom: '64px' }}>
         <h2 style={{ 
           fontSize: '24px', 
           fontWeight: '600', 
@@ -305,6 +305,27 @@ const CarouselDemo = () => {
           draggable={true}
           itemHeight="450px"
           id="carousel-minimal"
+        />
+      </section>
+
+      {/* Without navigation buttons */}
+      <section>
+        <h2 style={{ 
+          fontSize: '24px', 
+          fontWeight: '600', 
+          marginBottom: '24px',
+          color: '#374151',
+        }}>
+          Sin Botones de Navegación
+        </h2>
+        <Carousel
+          items={cardElements.slice(0, 4)}
+          showNavigationButtons={false}
+          showIndicators={true}
+          indicatorsClickable={true}
+          draggable={true}
+          itemHeight="450px"
+          id="carousel-no-buttons"
         />
       </section>
     </div>

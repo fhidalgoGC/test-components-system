@@ -11,6 +11,7 @@ export const CarouselView = (props: CarouselProps) => {
     id,
     showIndicators = items.length > 1,
     indicatorsClickable = true,
+    showNavigationButtons = items.length > 1,
     spaceBetweenPx = 0,
     itemHeight = '400px',
     slidesPerView = 1,
@@ -151,7 +152,7 @@ export const CarouselView = (props: CarouselProps) => {
           ))}
         </div>
 
-        {items.length > 1 && (
+        {showNavigationButtons && items.length > 1 && (
           <div className={styles.carouselControls}>
             <button
               className={styles.carouselButton}
