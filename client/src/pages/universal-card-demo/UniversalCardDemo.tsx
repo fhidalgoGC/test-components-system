@@ -315,9 +315,6 @@ export default function UniversalCardDemo() {
                 trend: "+12.5%"
               }}
               minWidth={200}
-              cardStyles={{
-                className: "transition-all duration-200"
-              }}
               dataTestId="card-selectable-1"
             />
 
@@ -331,9 +328,6 @@ export default function UniversalCardDemo() {
                 trend: "+8.3%"
               }}
               minWidth={200}
-              cardStyles={{
-                className: "transition-all duration-200"
-              }}
               dataTestId="card-selectable-2"
             />
 
@@ -347,9 +341,6 @@ export default function UniversalCardDemo() {
                 trend: "-2.1%"
               }}
               minWidth={200}
-              cardStyles={{
-                className: "transition-all duration-200"
-              }}
               dataTestId="card-selectable-3"
             />
           </div>
