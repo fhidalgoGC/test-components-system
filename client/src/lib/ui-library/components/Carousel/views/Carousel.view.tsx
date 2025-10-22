@@ -16,7 +16,12 @@ export const CarouselView = (props: CarouselProps) => {
     itemHeight = '400px',
     slidesPerView = 1,
     align = 'start',
+    showPeek = false,
   } = props;
+
+  // Override settings when showPeek is enabled
+  const effectiveAlign = showPeek ? 'center' : align;
+  const effectiveShowNavButtons = showPeek ? false : showNavigationButtons;
 
   const {
     currentIndex,
@@ -40,6 +45,12 @@ export const CarouselView = (props: CarouselProps) => {
     if (slidesPerView === 'auto') {
       return 'auto';
     }
+    
+    // When showPeek is enabled, make slides smaller to show edges of adjacent slides
+    if (showPeek && slidesPerView === 1) {
+      return '85%'; // 85% width shows 7.5% on each side
+    }
+    
     const gapTotal = spaceBetweenPx * (slidesPerView - 1);
     return `calc((100% - ${gapTotal}px) / ${slidesPerView})`;
   };
@@ -107,7 +118,7 @@ export const CarouselView = (props: CarouselProps) => {
     return null;
   }
 
-  const alignClass = align === 'center' ? styles.alignCenter : align === 'end' ? styles.alignEnd : styles.alignStart;
+  const alignClass = effectiveAlign === 'center' ? styles.alignCenter : effectiveAlign === 'end' ? styles.alignEnd : styles.alignStart;
 
   return (
     <div 
@@ -117,7 +128,13 @@ export const CarouselView = (props: CarouselProps) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className={styles.carouselContainer} ref={containerRef}>
+      <div 
+        className={styles.carouselContainer} 
+        ref={containerRef}
+        style={{
+          overflow: showPeek ? 'visible' : 'hidden',
+        }}
+      >
         <div
           ref={trackRef}
           className={`${styles.carouselTrack} ${isDragging ? styles.dragging : ''}`}
@@ -152,7 +169,7 @@ export const CarouselView = (props: CarouselProps) => {
           ))}
         </div>
 
-        {showNavigationButtons && items.length > 1 && (
+        {effectiveShowNavButtons && items.length > 1 && (
           <div className={styles.carouselControls}>
             <button
               className={styles.carouselButton}

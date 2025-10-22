@@ -22,6 +22,7 @@ export interface CarouselProps {
   itemHeight?: string; // Accepts %, px, rem, vh, or design token
   slidesPerView?: 1 | 2 | 3 | 'auto'; // Default: 1
   align?: 'start' | 'center' | 'end'; // Default: 'start'
+  showPeek?: boolean; // Default: false - Shows edges of adjacent slides, auto-hides nav buttons
   
   // Navigation
   keyboard?: boolean; // Default: true on desktop
