@@ -23,6 +23,10 @@
   cursor: grabbing;
 }
 
+.carouselTrack.noTransition {
+  transition: none !important;
+}
+
 .carouselSlide {
   flex-shrink: 0;
   display: flex;

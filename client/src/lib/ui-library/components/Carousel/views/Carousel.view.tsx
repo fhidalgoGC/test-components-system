@@ -16,10 +16,12 @@ export const CarouselView = (props: CarouselProps) => {
     itemHeight = '400px',
     slidesPerView = 1,
     align = 'start',
+    loop = items.length > 1,
   } = props;
 
   const {
     currentIndex,
+    internalIndex,
     isDragging,
     canGoPrev,
     canGoNext,
@@ -33,7 +35,13 @@ export const CarouselView = (props: CarouselProps) => {
     handleMouseLeave,
     containerRef,
     trackRef,
+    isTransitioning,
   } = useCarousel(props);
+
+  // Create the items array with clones for infinite loop
+  const displayItems = loop && items.length > 1 
+    ? [...items, ...items, ...items] // Clone items: [items, items, items]
+    : items;
 
   // Calculate slide width based on slidesPerView
   const getSlideWidth = () => {
@@ -47,13 +55,15 @@ export const CarouselView = (props: CarouselProps) => {
 
   const slideWidth = getSlideWidth();
 
-  // Calculate transform based on current index
+  // Calculate transform based on internal index (for infinite loop)
   const getTransform = () => {
+    const indexToUse = loop && items.length > 1 ? internalIndex : currentIndex;
+    
     if (slidesPerView === 'auto') {
-      return `translateX(-${currentIndex * 100}%)`;
+      return `translateX(-${indexToUse * 100}%)`;
     }
     const slideWidthPercent = 100 / slidesPerView;
-    const offset = currentIndex * slideWidthPercent;
+    const offset = indexToUse * slideWidthPercent;
     return `translateX(-${offset}%)`;
   };
 
@@ -124,7 +134,7 @@ export const CarouselView = (props: CarouselProps) => {
       >
         <div
           ref={trackRef}
-          className={`${styles.carouselTrack} ${isDragging ? styles.dragging : ''}`}
+          className={`${styles.carouselTrack} ${isDragging ? styles.dragging : ''} ${!isTransitioning ? styles.noTransition : ''}`}
           style={{
             transform: getTransform(),
             gap: `${spaceBetweenPx}px`,
@@ -132,7 +142,7 @@ export const CarouselView = (props: CarouselProps) => {
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
-          {items.map((item, index) => (
+          {displayItems.map((item, index) => (
             <div
               key={index}
               className={styles.carouselSlide}
