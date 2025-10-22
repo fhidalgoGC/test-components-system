@@ -134,9 +134,6 @@ export const CarouselView = (props: CarouselProps) => {
       <div 
         className={styles.carouselContainer} 
         ref={containerRef}
-        style={{
-          overflow: showPeek ? 'visible' : 'hidden',
-        }}
       >
         <div
           ref={trackRef}
