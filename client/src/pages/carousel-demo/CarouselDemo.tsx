@@ -11,6 +11,7 @@ import {
 
 const CarouselDemo = () => {
   const [controlledIndex, setControlledIndex] = useState(0);
+  const [reachedMessage, setReachedMessage] = useState<string>("");
 
   // Featured cards with different colors and content
   const featuredCards = [
@@ -224,6 +225,67 @@ const CarouselDemo = () => {
           loop={true}
           keyboard={true}
           id="carousel-autoplay"
+        />
+      </section>
+
+      {/* Carousel with onReachStart and onReachEnd callbacks */}
+      <section style={{ marginBottom: "64px", border: "3px solid #F59E0B", padding: "24px", borderRadius: "12px", background: "#FEF3C7" }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "700",
+            marginBottom: "8px",
+            color: "#92400E",
+          }}
+        >
+          🎯 Callbacks onReachStart & onReachEnd
+        </h2>
+        <p
+          style={{
+            fontSize: "14px",
+            color: "#92400E",
+            marginBottom: "16px",
+            fontWeight: "600",
+          }}
+        >
+          Este carousel SIN LOOP dispara callbacks cuando llegas al inicio o al final
+        </p>
+        
+        {reachedMessage && (
+          <div
+            style={{
+              padding: "12px 20px",
+              background: "#10B981",
+              color: "white",
+              borderRadius: "8px",
+              marginBottom: "16px",
+              fontSize: "16px",
+              fontWeight: "600",
+              textAlign: "center",
+              animation: "fadeIn 0.3s ease",
+            }}
+            data-testid="text-reached-message"
+          >
+            {reachedMessage}
+          </div>
+        )}
+
+        <Carousel
+          items={cardElements}
+          loop={false}
+          draggable={true}
+          showIndicators={true}
+          indicatorsClickable={true}
+          itemHeight="450px"
+          onReachStart={() => {
+            setReachedMessage("🎉 ¡Llegaste al INICIO del carousel!");
+            setTimeout(() => setReachedMessage(""), 2000);
+          }}
+          onReachEnd={() => {
+            setReachedMessage("🏁 ¡Llegaste al FINAL del carousel!");
+            setTimeout(() => setReachedMessage(""), 2000);
+          }}
+          id="carousel-callbacks"
         />
       </section>
 
