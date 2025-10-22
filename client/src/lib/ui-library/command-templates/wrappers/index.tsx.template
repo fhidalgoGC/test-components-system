@@ -1,0 +1,2 @@
+export { {{WrapperName}}View as {{WrapperName}} } from './views';
+export type { {{WrapperName}}Props } from './types';

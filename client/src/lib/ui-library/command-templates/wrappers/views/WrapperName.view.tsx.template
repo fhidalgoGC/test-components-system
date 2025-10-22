@@ -1,0 +1,19 @@
+import type { {{WrapperName}}Props } from '../types';
+import { use{{WrapperName}} } from '../hooks';
+
+export const {{WrapperName}}View = (props: {{WrapperName}}Props) => {
+  const { children, className } = props;
+  
+  const {
+    children: processedChildren,
+  } = use{{WrapperName}}(props);
+
+  return (
+    <div 
+      className={className}
+      data-testid="{{wrappername}}"
+    >
+      {processedChildren}
+    </div>
+  );
+};
