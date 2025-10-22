@@ -48,7 +48,7 @@ export const CarouselView = (props: CarouselProps) => {
     
     // When showPeek is enabled, make slides smaller to show edges of adjacent slides
     if (showPeek && slidesPerView === 1) {
-      return '85%'; // 85% width shows 7.5% on each side
+      return '80%'; // 80% width shows 10% on each side
     }
     
     const gapTotal = spaceBetweenPx * (slidesPerView - 1);
@@ -56,6 +56,9 @@ export const CarouselView = (props: CarouselProps) => {
   };
 
   const slideWidth = getSlideWidth();
+  
+  // Apply spacing when showPeek is enabled
+  const effectiveSpacing = showPeek && slidesPerView === 1 ? 16 : spaceBetweenPx;
 
   // Calculate transform based on current index
   const getTransform = () => {
@@ -140,7 +143,7 @@ export const CarouselView = (props: CarouselProps) => {
           className={`${styles.carouselTrack} ${isDragging ? styles.dragging : ''}`}
           style={{
             transform: getTransform(),
-            gap: `${spaceBetweenPx}px`,
+            gap: `${effectiveSpacing}px`,
           }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
