@@ -170,7 +170,7 @@ export const CarouselView = (props: CarouselProps) => {
           <div className={styles.carouselControls}>
             {canGoPrev && (
               <button
-                className={styles.carouselButton}
+                className={`${styles.carouselButton} ${styles.carouselButtonPrev}`}
                 onClick={goToPrev}
                 aria-label="Previous slide"
                 data-testid="button-prev"
@@ -180,7 +180,7 @@ export const CarouselView = (props: CarouselProps) => {
             )}
             {canGoNext && (
               <button
-                className={styles.carouselButton}
+                className={`${styles.carouselButton} ${styles.carouselButtonNext}`}
                 onClick={goToNext}
                 aria-label="Next slide"
                 data-testid="button-next"
