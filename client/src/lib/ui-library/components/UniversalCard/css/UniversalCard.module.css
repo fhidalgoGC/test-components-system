@@ -33,7 +33,7 @@
   border: 1.5px solid hsl(var(--border));
   border-radius: 12px;
   overflow: hidden;
-  transition: border-color 0.2s ease-in-out, border-width 0.2s ease-in-out;
+  /* NO transition - instant border change */
 }
 
 /* Selected state - blue border on inner div */
