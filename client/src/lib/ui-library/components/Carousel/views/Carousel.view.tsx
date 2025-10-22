@@ -168,24 +168,26 @@ export const CarouselView = (props: CarouselProps) => {
 
         {showNavigationButtons && items.length > 1 && (
           <div className={styles.carouselControls}>
-            <button
-              className={styles.carouselButton}
-              onClick={goToPrev}
-              disabled={!canGoPrev}
-              aria-label="Previous slide"
-              data-testid="button-prev"
-            >
-              <ChevronLeft />
-            </button>
-            <button
-              className={styles.carouselButton}
-              onClick={goToNext}
-              disabled={!canGoNext}
-              aria-label="Next slide"
-              data-testid="button-next"
-            >
-              <ChevronRight />
-            </button>
+            {canGoPrev && (
+              <button
+                className={styles.carouselButton}
+                onClick={goToPrev}
+                aria-label="Previous slide"
+                data-testid="button-prev"
+              >
+                <ChevronLeft />
+              </button>
+            )}
+            {canGoNext && (
+              <button
+                className={styles.carouselButton}
+                onClick={goToNext}
+                aria-label="Next slide"
+                data-testid="button-next"
+              >
+                <ChevronRight />
+              </button>
+            )}
           </div>
         )}
       </div>
