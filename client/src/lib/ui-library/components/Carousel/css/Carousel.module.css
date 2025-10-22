@@ -1,3 +1,164 @@
 .carousel {
-  /* Add your styles here */
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+.carouselContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.carouselTrack {
+  display: flex;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.carouselTrack.dragging {
+  transition: none;
+  cursor: grabbing;
+}
+
+.carouselSlide {
+  flex-shrink: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.carouselSlide > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* Navigation Buttons */
+.carouselControls {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  padding: 0 1rem;
+  z-index: 10;
+}
+
+.carouselButton {
+  pointer-events: all;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.carouselButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.carouselButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.carouselButton svg {
+  width: 20px;
+  height: 20px;
+  color: #333;
+}
+
+/* Indicators */
+.carouselIndicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+}
+
+.carouselIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carouselIndicator.clickable:hover {
+  background: rgba(0, 0, 0, 0.4);
+  transform: scale(1.2);
+}
+
+.carouselIndicator.active {
+  background: rgba(0, 0, 0, 0.8);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.carouselIndicator:not(.clickable) {
+  cursor: default;
+}
+
+/* Alignment variations */
+.carousel.alignStart .carouselTrack {
+  justify-content: flex-start;
+}
+
+.carousel.alignCenter .carouselTrack {
+  justify-content: center;
+}
+
+.carousel.alignEnd .carouselTrack {
+  justify-content: flex-end;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .carouselButton {
+    background: rgba(30, 30, 30, 0.9);
+  }
+  
+  .carouselButton:hover:not(:disabled) {
+    background: rgba(30, 30, 30, 1);
+  }
+  
+  .carouselButton svg {
+    color: #fff;
+  }
+  
+  .carouselIndicator {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .carouselIndicator.clickable:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  
+  .carouselIndicator.active {
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Accessibility */
+.carouselButton:focus-visible,
+.carouselIndicator:focus-visible {
+  outline: 2px solid #0066ff;
+  outline-offset: 2px;
 }

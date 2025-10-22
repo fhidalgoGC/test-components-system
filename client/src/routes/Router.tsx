@@ -13,6 +13,7 @@ import BottomNavDemo from "@/pages/bottom-nav-demo";
 import BottomNavConfigDemo from "@/pages/bottom-nav-config-demo";
 import ResponsiveDemo from "@/pages/responsive-demo";
 import UniversalCardDemo from "@/pages/universal-card-demo/UniversalCardDemo";
+import CarouselDemo from "@/pages/carousel-demo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -108,6 +109,12 @@ export function Router() {
           headerDescription: "Card universal que puede renderizar cualquier componente con estilos personalizables",
           showActionButtons: false
         };
+      case '/components/carousel':
+        return {
+          headerTitle: "Carousel",
+          headerDescription: "Carrusel interactivo con autoplay, gestos, navegación por teclado e indicadores",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -132,6 +139,7 @@ export function Router() {
         <Route path="/components/bottom-nav-config" component={BottomNavConfigDemo} />
         <Route path="/responsive-demo" component={ResponsiveDemo} />
         <Route path="/components/universal-card" component={UniversalCardDemo} />
+        <Route path="/components/carousel" component={CarouselDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>
