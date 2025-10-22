@@ -126,16 +126,13 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       classes.push(cardStyles.className);
     }
 
-    // Add selectable and selected classes from CSS module
+    // Add selectable class
     if (isSelectable) {
       classes.push('cursor-pointer');
     }
-    if (isSelected) {
-      classes.push(styles.selected);
-    }
 
     return cn(...classes);
-  }, [widthValue, heightValue, minWidthValue, minHeightValue, cardStyles.className, isSelectable, isSelected]);
+  }, [widthValue, heightValue, minWidthValue, minHeightValue, cardStyles.className, isSelectable, isSelected, id]);
 
   // Handle click for selectable cards
   const handleClick = () => {
@@ -149,6 +146,7 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       className={classNames}
       style={inlineStyles}
       data-testid={dataTestId}
+      data-selected={isSelected ? "true" : undefined}
       onClick={handleClick}
     >
       {headerContent && (

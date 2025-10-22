@@ -29,12 +29,12 @@
 }
 
 /* Selected state - blue border that persists during hover */
-.selected {
+.universalcard[data-selected="true"] {
   border: 2px solid hsl(var(--primary)) !important;
 }
 
 /* Selected + hover - keeps the blue border AND elevated shadow */
-.selected:hover {
+.universalcard[data-selected="true"]:hover {
   border: 2px solid hsl(var(--primary)) !important;
   box-shadow: 
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
