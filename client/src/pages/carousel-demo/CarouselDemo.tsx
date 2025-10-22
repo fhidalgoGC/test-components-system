@@ -1,6 +1,13 @@
-import { useState } from 'react';
-import { Carousel } from '@/lib/ui-library';
-import { Zap, CreditCard, Globe, Shield, Smartphone, TrendingUp } from 'lucide-react';
+import { useState } from "react";
+import { Carousel } from "@/lib/ui-library";
+import {
+  Zap,
+  CreditCard,
+  Globe,
+  Shield,
+  Smartphone,
+  TrendingUp,
+} from "lucide-react";
 
 const CarouselDemo = () => {
   const [controlledIndex, setControlledIndex] = useState(0);
@@ -9,56 +16,68 @@ const CarouselDemo = () => {
   const featuredCards = [
     {
       id: 1,
-      badge: 'DESTACADO',
-      title: 'Nómina Digital',
-      description: 'Gestiona los pagos de tu equipo de manera eficiente y cumple con todas las regulaciones.',
-      buttonText: 'Explorar Ahora',
-      gradient: 'linear-gradient(135deg, #D946A6 0%, #FF6B9D 50%, #F43F5E 100%)',
+      badge: "DESTACADO",
+      title: "Nómina Digital",
+      description:
+        "Gestiona los pagos de tu equipo de manera eficiente y cumple con todas las regulaciones.",
+      buttonText: "Explorar Ahora",
+      gradient:
+        "linear-gradient(135deg, #D946A6 0%, #FF6B9D 50%, #F43F5E 100%)",
       icon: Zap,
     },
     {
       id: 2,
-      badge: 'NUEVO',
-      title: 'Pagos Globales',
-      description: 'Realiza pagos internacionales de forma rápida y segura con las mejores tasas del mercado.',
-      buttonText: 'Comenzar',
-      gradient: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #A855F7 100%)',
+      badge: "NUEVO",
+      title: "Pagos Globales",
+      description:
+        "Realiza pagos internacionales de forma rápida y segura con las mejores tasas del mercado.",
+      buttonText: "Comenzar",
+      gradient:
+        "linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #A855F7 100%)",
       icon: Globe,
     },
     {
       id: 3,
-      badge: 'POPULAR',
-      title: 'Tarjetas Corporativas',
-      description: 'Emite tarjetas para tu equipo con límites personalizados y control total de gastos.',
-      buttonText: 'Solicitar',
-      gradient: 'linear-gradient(135deg, #0EA5E9 0%, #06B6D4 50%, #14B8A6 100%)',
+      badge: "POPULAR",
+      title: "Tarjetas Corporativas",
+      description:
+        "Emite tarjetas para tu equipo con límites personalizados y control total de gastos.",
+      buttonText: "Solicitar",
+      gradient:
+        "linear-gradient(135deg, #0EA5E9 0%, #06B6D4 50%, #14B8A6 100%)",
       icon: CreditCard,
     },
     {
       id: 4,
-      badge: 'SEGURO',
-      title: 'Protección Avanzada',
-      description: 'Mantén tus transacciones seguras con nuestro sistema de encriptación de nivel bancario.',
-      buttonText: 'Más Información',
-      gradient: 'linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%)',
+      badge: "SEGURO",
+      title: "Protección Avanzada",
+      description:
+        "Mantén tus transacciones seguras con nuestro sistema de encriptación de nivel bancario.",
+      buttonText: "Más Información",
+      gradient:
+        "linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%)",
       icon: Shield,
     },
     {
       id: 5,
-      badge: 'MÓVIL',
-      title: 'App Inteligente',
-      description: 'Gestiona tus finanzas desde cualquier lugar con nuestra aplicación móvil intuitiva.',
-      buttonText: 'Descargar',
-      gradient: 'linear-gradient(135deg, #F59E0B 0%, #F97316 50%, #EF4444 100%)',
+      badge: "MÓVIL",
+      title: "App Inteligente",
+      description:
+        "Gestiona tus finanzas desde cualquier lugar con nuestra aplicación móvil intuitiva.",
+      buttonText: "Descargar",
+      gradient:
+        "linear-gradient(135deg, #F59E0B 0%, #F97316 50%, #EF4444 100%)",
       icon: Smartphone,
     },
     {
       id: 6,
-      badge: 'ANALYTICS',
-      title: 'Reportes en Tiempo Real',
-      description: 'Visualiza el estado de tus finanzas con dashboards interactivos y reportes detallados.',
-      buttonText: 'Ver Demo',
-      gradient: 'linear-gradient(135deg, #EC4899 0%, #DB2777 50%, #BE185D 100%)',
+      badge: "ANALYTICS",
+      title: "Reportes en Tiempo Real",
+      description:
+        "Visualiza el estado de tus finanzas con dashboards interactivos y reportes detallados.",
+      buttonText: "Ver Demo",
+      gradient:
+        "linear-gradient(135deg, #EC4899 0%, #DB2777 50%, #BE185D 100%)",
       icon: TrendingUp,
     },
   ];
@@ -70,69 +89,82 @@ const CarouselDemo = () => {
         key={card.id}
         style={{
           background: card.gradient,
-          borderRadius: '24px',
-          padding: '48px 40px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          color: 'white',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2)',
-          height: '100%',
+          borderRadius: "24px",
+          padding: "48px 40px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          color: "white",
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.2)",
+          height: "100%",
         }}
         data-testid={`card-${card.id}`}
       >
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "24px",
+            }}
+          >
             <Icon size={24} />
-            <span style={{ 
-              fontSize: '14px', 
-              fontWeight: '600', 
-              letterSpacing: '1.5px',
-              textTransform: 'uppercase',
-            }}>
+            <span
+              style={{
+                fontSize: "14px",
+                fontWeight: "600",
+                letterSpacing: "1.5px",
+                textTransform: "uppercase",
+              }}
+            >
               {card.badge}
             </span>
           </div>
 
-          <h2 style={{
-            fontSize: '48px',
-            fontWeight: '700',
-            marginBottom: '16px',
-            lineHeight: '1.2',
-          }}>
+          <h2
+            style={{
+              fontSize: "48px",
+              fontWeight: "700",
+              marginBottom: "16px",
+              lineHeight: "1.2",
+            }}
+          >
             {card.title}
           </h2>
 
-          <p style={{
-            fontSize: '18px',
-            lineHeight: '1.6',
-            opacity: '0.95',
-            marginBottom: '32px',
-          }}>
+          <p
+            style={{
+              fontSize: "18px",
+              lineHeight: "1.6",
+              opacity: "0.95",
+              marginBottom: "32px",
+            }}
+          >
             {card.description}
           </p>
         </div>
 
         <button
           style={{
-            background: 'white',
-            color: '#1f2937',
-            border: 'none',
-            borderRadius: '12px',
-            padding: '16px 32px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-            alignSelf: 'flex-start',
+            background: "white",
+            color: "#1f2937",
+            border: "none",
+            borderRadius: "12px",
+            padding: "16px 32px",
+            fontSize: "16px",
+            fontWeight: "600",
+            cursor: "pointer",
+            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+            alignSelf: "flex-start",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 8px 20px rgba(0, 0, 0, 0.15)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "none";
           }}
           data-testid={`button-explore-${card.id}`}
         >
@@ -143,34 +175,41 @@ const CarouselDemo = () => {
   });
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '48px', textAlign: 'center' }}>
-        <h1 style={{ 
-          fontSize: '36px', 
-          fontWeight: '700', 
-          marginBottom: '16px',
-          color: '#1f2937',
-        }}>
+    <div style={{ padding: "40px 20px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ marginBottom: "48px", textAlign: "center" }}>
+        <h1
+          style={{
+            fontSize: "36px",
+            fontWeight: "700",
+            marginBottom: "16px",
+            color: "#1f2937",
+          }}
+        >
           Componente Carousel
         </h1>
-        <p style={{ 
-          fontSize: '18px', 
-          color: '#6b7280',
-          maxWidth: '600px',
-          margin: '0 auto',
-        }}>
-          Carrusel interactivo con autoplay, gestos táctiles, navegación por teclado e indicadores clicables.
+        <p
+          style={{
+            fontSize: "18px",
+            color: "#6b7280",
+            maxWidth: "600px",
+            margin: "0 auto",
+          }}
+        >
+          Carrusel interactivo con autoplay, gestos táctiles, navegación por
+          teclado e indicadores clicables.
         </p>
       </div>
 
       {/* Basic Carousel with Autoplay */}
-      <section style={{ marginBottom: '64px' }}>
-        <h2 style={{ 
-          fontSize: '24px', 
-          fontWeight: '600', 
-          marginBottom: '24px',
-          color: '#374151',
-        }}>
+      <section style={{ marginBottom: "64px" }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "600",
+            marginBottom: "24px",
+            color: "#374151",
+          }}
+        >
           Autoplay + Draggable (Pausar en Hover)
         </h2>
         <Carousel
@@ -189,37 +228,51 @@ const CarouselDemo = () => {
       </section>
 
       {/* Controlled Carousel */}
-      <section style={{ marginBottom: '64px' }}>
-        <h2 style={{ 
-          fontSize: '24px', 
-          fontWeight: '600', 
-          marginBottom: '16px',
-          color: '#374151',
-        }}>
+      <section style={{ marginBottom: "64px" }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "600",
+            marginBottom: "16px",
+            color: "#374151",
+          }}
+        >
           Carrusel Controlado
         </h2>
-        <p style={{ 
-          fontSize: '14px', 
-          color: '#6b7280', 
-          marginBottom: '24px',
-        }}>
-          Control externo del índice actual: <strong>Slide {controlledIndex + 1} de {cardElements.length}</strong>
+        <p
+          style={{
+            fontSize: "14px",
+            color: "#6b7280",
+            marginBottom: "24px",
+          }}
+        >
+          Control externo del índice actual:{" "}
+          <strong>
+            Slide {controlledIndex + 1} de {cardElements.length}
+          </strong>
         </p>
-        
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            marginBottom: "24px",
+            flexWrap: "wrap",
+          }}
+        >
           {cardElements.map((_, index) => (
             <button
               key={index}
               onClick={() => setControlledIndex(index)}
               style={{
-                padding: '8px 16px',
-                background: controlledIndex === index ? '#6366f1' : '#e5e7eb',
-                color: controlledIndex === index ? 'white' : '#374151',
-                border: 'none',
-                borderRadius: '8px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
+                padding: "8px 16px",
+                background: controlledIndex === index ? "#6366f1" : "#e5e7eb",
+                color: controlledIndex === index ? "white" : "#374151",
+                border: "none",
+                borderRadius: "8px",
+                fontWeight: "500",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
               }}
               data-testid={`button-goto-${index}`}
             >
@@ -244,13 +297,15 @@ const CarouselDemo = () => {
       </section>
 
       {/* Multi-slide view */}
-      <section style={{ marginBottom: '64px' }}>
-        <h2 style={{ 
-          fontSize: '24px', 
-          fontWeight: '600', 
-          marginBottom: '24px',
-          color: '#374151',
-        }}>
+      <section style={{ marginBottom: "64px" }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "600",
+            marginBottom: "24px",
+            color: "#374151",
+          }}
+        >
           Múltiples Slides Visibles (2 slides + espacio)
         </h2>
         <Carousel
@@ -267,13 +322,15 @@ const CarouselDemo = () => {
       </section>
 
       {/* No loop carousel */}
-      <section style={{ marginBottom: '64px' }}>
-        <h2 style={{ 
-          fontSize: '24px', 
-          fontWeight: '600', 
-          marginBottom: '24px',
-          color: '#374151',
-        }}>
+      <section style={{ marginBottom: "64px" }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "600",
+            marginBottom: "24px",
+            color: "#374151",
+          }}
+        >
           Sin Loop (Límites al Inicio/Final)
         </h2>
         <Carousel
@@ -283,20 +340,22 @@ const CarouselDemo = () => {
           showIndicators={true}
           indicatorsClickable={true}
           itemHeight="450px"
-          onReachStart={() => console.log('Reached start!')}
-          onReachEnd={() => console.log('Reached end!')}
+          onReachStart={() => console.log("Reached start!")}
+          onReachEnd={() => console.log("Reached end!")}
           id="carousel-no-loop"
         />
       </section>
 
       {/* Minimal carousel */}
-      <section style={{ marginBottom: '64px' }}>
-        <h2 style={{ 
-          fontSize: '24px', 
-          fontWeight: '600', 
-          marginBottom: '24px',
-          color: '#374151',
-        }}>
+      <section style={{ marginBottom: "64px" }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "600",
+            marginBottom: "24px",
+            color: "#374151",
+          }}
+        >
           Minimalista (Sin Indicadores, Solo Gestos)
         </h2>
         <Carousel
@@ -308,14 +367,53 @@ const CarouselDemo = () => {
         />
       </section>
 
+      {/* Peek effect */}
+      <section style={{ marginBottom: "64px" }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "600",
+            marginBottom: "24px",
+            color: "#374151",
+          }}
+        >
+          Efecto Peek (Vista Previa de Slides Adyacentes)
+        </h2>
+        <p
+          style={{
+            fontSize: "14px",
+            color: "#6b7280",
+            marginBottom: "24px",
+          }}
+        >
+          Los slides se muestran al 80% del ancho para revelar aproximadamente
+          un 10% de las tarjetas adyacentes. Los botones de navegación se
+          ocultan automáticamente para una experiencia más limpia.
+        </p>
+        <Carousel
+          items={cardElements}
+          autoPlay={true}
+          autoPlayIntervalMs={3500}
+          pauseOnHover={true}
+          draggable={true}
+          showIndicators={true}
+          indicatorsClickable={true}
+          itemHeight="450px"
+          loop={true}
+          id="carousel-peek"
+        />
+      </section>
+
       {/* Without navigation buttons */}
       <section>
-        <h2 style={{ 
-          fontSize: '24px', 
-          fontWeight: '600', 
-          marginBottom: '24px',
-          color: '#374151',
-        }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "600",
+            marginBottom: "24px",
+            color: "#374151",
+          }}
+        >
           Sin Botones de Navegación
         </h2>
         <Carousel
