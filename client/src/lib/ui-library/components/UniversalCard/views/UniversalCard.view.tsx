@@ -146,24 +146,29 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       className={classNames}
       style={inlineStyles}
       data-testid={dataTestId}
-      data-selected={isSelected ? "true" : undefined}
       onClick={handleClick}
     >
-      {headerContent && (
-        <div className={styles.header} data-testid={`${dataTestId}-header`}>
-          {headerContent}
-        </div>
-      )}
+      {/* Inner div that handles the selection border */}
+      <div 
+        className={styles.innerBorder}
+        data-selected={isSelected ? "true" : undefined}
+      >
+        {headerContent && (
+          <div className={styles.header} data-testid={`${dataTestId}-header`}>
+            {headerContent}
+          </div>
+        )}
 
-      <div className={styles.content} data-testid={`${dataTestId}-content`}>
-        <ChildComponent {...componentProps} />
+        <div className={styles.content} data-testid={`${dataTestId}-content`}>
+          <ChildComponent {...componentProps} />
+        </div>
+
+        {footerContent && (
+          <div className={styles.footer} data-testid={`${dataTestId}-footer`}>
+            {footerContent}
+          </div>
+        )}
       </div>
-
-      {footerContent && (
-        <div className={styles.footer} data-testid={`${dataTestId}-footer`}>
-          {footerContent}
-        </div>
-      )}
     </div>
   );
 };
