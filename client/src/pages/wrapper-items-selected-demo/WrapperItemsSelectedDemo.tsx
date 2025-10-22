@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check } from 'lucide-react';
+import { ControlExample } from './examples/ControlExample';
 
 // Selectable Card Component
 interface SelectableCardProps {
@@ -284,6 +285,20 @@ export default function WrapperItemsSelectedDemo() {
           </WrapperItemsSelected>
         </div>
 
+        {/* Example 4: Complete Controls (clearSelection, selectAll, multiSelect toggle) */}
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+              Example 4: Complete Controls
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Demonstrates clearSelection(), selectAll(), and multiSelect toggle functionality.
+            </p>
+          </div>
+
+          <ControlExample />
+        </div>
+
         {/* API Summary */}
         <Card className="mt-8">
           <CardHeader>
@@ -308,8 +323,8 @@ export default function WrapperItemsSelectedDemo() {
                 <li><code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">selectItem(id)</code> - Select an item</li>
                 <li><code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">deselectItem(id)</code> - Deselect an item</li>
                 <li><code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">isSelected(id)</code> - Check if item is selected</li>
-                <li><code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">clearSelection()</code> - Clear all selections</li>
-                <li><code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">selectAll(ids)</code> - Select multiple items</li>
+                <li><code className="bg-gray-100 dark:bg-gray-800 px-1 rounded text-green-600 dark:text-green-400 font-semibold">clearSelection()</code> - ✨ Clear all selections</li>
+                <li><code className="bg-gray-100 dark:bg-gray-800 px-1 rounded text-green-600 dark:text-green-400 font-semibold">selectAll(ids)</code> - ✨ Select multiple items</li>
               </ul>
             </div>
           </CardContent>
