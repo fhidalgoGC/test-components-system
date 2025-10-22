@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Carousel } from "@/lib/ui-library";
 import {
   Zap,
@@ -9,9 +9,74 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+// Simulación de una llamada API
+const fetchProductsFromAPI = async (): Promise<Array<{
+  id: number;
+  badge: string;
+  title: string;
+  description: string;
+  buttonText: string;
+  gradient: string;
+}>> => {
+  // Simula un delay de red
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  
+  // Simula datos de una API
+  return [
+    {
+      id: 1,
+      badge: "API DATA",
+      title: "Producto desde API #1",
+      description: "Este producto fue cargado dinámicamente desde una API simulada.",
+      buttonText: "Ver Más",
+      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    },
+    {
+      id: 2,
+      badge: "API DATA",
+      title: "Producto desde API #2",
+      description: "Los datos se cargan de forma asíncrona antes de renderizar el carousel.",
+      buttonText: "Comprar",
+      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    },
+    {
+      id: 3,
+      badge: "API DATA",
+      title: "Producto desde API #3",
+      description: "Puedes mostrar loading states mientras los datos se cargan.",
+      buttonText: "Agregar",
+      gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+    },
+  ];
+};
+
 const CarouselDemo = () => {
   const [controlledIndex, setControlledIndex] = useState(0);
   const [reachedMessage, setReachedMessage] = useState<string>("");
+  
+  // Estado para el carousel con datos de API
+  const [apiProducts, setApiProducts] = useState<any[]>([]);
+  const [isLoadingAPI, setIsLoadingAPI] = useState(true);
+  const [apiError, setApiError] = useState<string>("");
+
+  // Cargar datos de la API al montar el componente
+  useEffect(() => {
+    const loadAPIData = async () => {
+      try {
+        setIsLoadingAPI(true);
+        setApiError("");
+        const products = await fetchProductsFromAPI();
+        setApiProducts(products);
+      } catch (error) {
+        setApiError("Error al cargar productos de la API");
+        console.error(error);
+      } finally {
+        setIsLoadingAPI(false);
+      }
+    };
+
+    loadAPIData();
+  }, []);
 
   // Featured cards with different colors and content
   const featuredCards = [
@@ -82,6 +147,96 @@ const CarouselDemo = () => {
       icon: TrendingUp,
     },
   ];
+
+  // Renderizar productos de la API como elementos React
+  const apiCardElements = apiProducts.map((product) => (
+    <div
+      key={product.id}
+      style={{
+        background: product.gradient,
+        borderRadius: "24px",
+        padding: "48px 40px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        color: "white",
+        boxShadow: "0 20px 60px rgba(0, 0, 0, 0.2)",
+        height: "100%",
+      }}
+      data-testid={`api-card-${product.id}`}
+    >
+      <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginBottom: "24px",
+          }}
+        >
+          <Zap size={24} />
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: "600",
+              letterSpacing: "1.5px",
+              textTransform: "uppercase",
+            }}
+          >
+            {product.badge}
+          </span>
+        </div>
+
+        <h2
+          style={{
+            fontSize: "48px",
+            fontWeight: "700",
+            marginBottom: "16px",
+            lineHeight: "1.2",
+          }}
+        >
+          {product.title}
+        </h2>
+
+        <p
+          style={{
+            fontSize: "18px",
+            lineHeight: "1.6",
+            opacity: "0.95",
+            marginBottom: "32px",
+          }}
+        >
+          {product.description}
+        </p>
+      </div>
+
+      <button
+        style={{
+          background: "white",
+          color: "#1f2937",
+          border: "none",
+          borderRadius: "12px",
+          padding: "16px 32px",
+          fontSize: "16px",
+          fontWeight: "600",
+          cursor: "pointer",
+          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+          alignSelf: "flex-start",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-2px)";
+          e.currentTarget.style.boxShadow = "0 8px 20px rgba(0, 0, 0, 0.15)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = "none";
+        }}
+        data-testid={`button-${product.id}`}
+      >
+        {product.buttonText}
+      </button>
+    </div>
+  ));
 
   const cardElements = featuredCards.map((card) => {
     const Icon = card.icon;
@@ -200,6 +355,100 @@ const CarouselDemo = () => {
           teclado e indicadores clicables.
         </p>
       </div>
+
+      {/* Carousel with API Data */}
+      <section style={{ marginBottom: "64px", border: "3px solid #8B5CF6", padding: "24px", borderRadius: "12px", background: "#F5F3FF" }}>
+        <h2
+          style={{
+            fontSize: "24px",
+            fontWeight: "700",
+            marginBottom: "8px",
+            color: "#5B21B6",
+          }}
+        >
+          🔄 Carousel con Datos de API (Asíncrono)
+        </h2>
+        <p
+          style={{
+            fontSize: "14px",
+            color: "#5B21B6",
+            marginBottom: "16px",
+            fontWeight: "600",
+          }}
+        >
+          Los datos se cargan de forma asíncrona desde una API simulada. Observa los estados de loading y error.
+        </p>
+
+        {isLoadingAPI ? (
+          <div
+            style={{
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              borderRadius: "24px",
+              padding: "80px 40px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              minHeight: "450px",
+            }}
+            data-testid="loading-state"
+          >
+            <div
+              style={{
+                width: "60px",
+                height: "60px",
+                border: "4px solid rgba(255, 255, 255, 0.3)",
+                borderTop: "4px solid white",
+                borderRadius: "50%",
+                animation: "spin 1s linear infinite",
+                marginBottom: "24px",
+              }}
+            />
+            <h3 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "8px" }}>
+              Cargando productos...
+            </h3>
+            <p style={{ fontSize: "16px", opacity: "0.9" }}>
+              Obteniendo datos de la API
+            </p>
+          </div>
+        ) : apiError ? (
+          <div
+            style={{
+              background: "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)",
+              borderRadius: "24px",
+              padding: "80px 40px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              minHeight: "450px",
+            }}
+            data-testid="error-state"
+          >
+            <h3 style={{ fontSize: "24px", fontWeight: "600", marginBottom: "8px" }}>
+              ❌ Error al cargar
+            </h3>
+            <p style={{ fontSize: "16px", opacity: "0.9" }}>
+              {apiError}
+            </p>
+          </div>
+        ) : (
+          <Carousel
+            items={apiCardElements}
+            autoPlay={true}
+            autoPlayIntervalMs={3000}
+            pauseOnHover={true}
+            draggable={true}
+            showIndicators={true}
+            indicatorsClickable={true}
+            itemHeight="450px"
+            loop={true}
+            id="carousel-api"
+          />
+        )}
+      </section>
 
       {/* Basic Carousel with Autoplay */}
       <section style={{ marginBottom: "64px" }}>
