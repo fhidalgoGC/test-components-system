@@ -18,13 +18,11 @@
   /* Smooth transitions */
   transition: 
     box-shadow 0.3s ease-in-out,
-    transform 0.2s ease-in-out,
-    border-color 0.2s ease-in-out;
+    transform 0.2s ease-in-out;
 }
 
 /* More noticeable hover effect */
 .universalcard:hover {
-  border-color: hsl(var(--primary) / 0.3);
   box-shadow: 
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
@@ -41,7 +39,6 @@
 }
 
 .dark .universalcard:hover {
-  border-color: hsl(var(--primary) / 0.4);
   box-shadow: 
     0 10px 15px -3px rgba(0, 0, 0, 0.5),
     0 4px 6px -4px rgba(0, 0, 0, 0.3);
