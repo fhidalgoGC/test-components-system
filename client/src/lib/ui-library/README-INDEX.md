@@ -261,6 +261,39 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Renderizar feeds con ads intercalados
 - Testing con data-testid de items, estados y dividers
 
+### **Carousel**
+
+#### **`./components/Carousel/README-IA.md`**
+**Cuándo usar:** Para implementar carruseles interactivos con autoplay, gestos táctiles, navegación por teclado e indicadores.
+
+**Contiene:**
+- 📖 Props completos del Carousel (items, autoPlay, loop, callbacks)
+- 🎯 Ejemplos de uso (básico, controlado, sin loop, múltiples slides, async API)
+- 🔧 API detallada con tipos TypeScript (CarouselProps, modos controlado/no controlado)
+- 🔄 Loop infinito verdadero con técnica de clonación de slides
+- 🖱️ Gestos de drag & touch con optimización GPU y protección de scroll vertical
+- ⌨️ Navegación por teclado completa (arrow keys)
+- 🎨 Indicadores clicables y botones de navegación con ocultamiento inteligente
+- ⏯️ Autoplay con pausa en hover
+- 📊 Callbacks de ciclo de vida (onChange, onReachStart, onReachEnd)
+- 📱 Responsive design con slidesPerView y spaceBetweenPx configurables
+- 🌐 Soporte para datos asíncronos desde APIs
+- ♿ Accesibilidad completa con ARIA attributes
+- 🧪 Data test IDs para testing
+
+**Buscar aquí para:**
+- Implementar carruseles de imágenes, productos o contenido destacado
+- Usar modo controlado con navegación externa
+- Configurar infinite loop verdadero sin saltos visuales
+- Implementar drag gestures en desktop y mobile
+- Cargar datos desde APIs con estados de loading/error
+- Ocultar botones de navegación en límites (sin loop)
+- Usar callbacks onChange, onReachStart, onReachEnd
+- Mostrar múltiples slides simultáneamente
+- Personalizar autoplay y pausar en hover
+- Configurar navegación por teclado y accesibilidad
+- Testing con data-testid de slides, botones e indicadores
+
 ### **Futuros Componentes (Estructura General)**
 
 #### **`./components/[ComponentName]/README-IA.md`**
@@ -372,6 +405,27 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🧩 Componentes**
 ```
+./components/TagSelector/README-IA.md
+├── Props y API del TagSelector
+├── Ejemplos (básico, async, preselección)
+└── Sistema híbrido de estilos (README-IA--STYLES.md)
+
+./components/BottomNavigationBar/README-IA.md
+├── Props y API del BottomNavigationBar
+├── Ejemplos (controlado, no controlado, dynamic disabling)
+└── Integración con ConfigProvider e i18n
+
+./components/HeterogeneousList/README-IA.md
+├── Props y API del HeterogeneousList
+├── Ejemplos (registry mode, elements mode, infinite scroll)
+└── Lazy loading y component registry
+
+./components/Carousel/README-IA.md
+├── Props y API del Carousel
+├── Ejemplos (básico, controlado, sin loop, async API)
+├── Loop infinito y drag gestures
+└── Callbacks de ciclo de vida
+
 ./components/[ComponentName]/README-IA.md
 ├── Props y API del componente
 ├── Ejemplos de implementación
@@ -410,6 +464,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | TagSelector | `components/TagSelector/README-IA.md` | `components/TagSelector/README-IA--STYLES.md` |
 | BottomNavigationBar | `components/BottomNavigationBar/README-IA.md` | - |
 | HeterogeneousList | `components/HeterogeneousList/README-IA.md` | - |
+| Carousel | `components/Carousel/README-IA.md` | - |
 | [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` |
 
 ---
