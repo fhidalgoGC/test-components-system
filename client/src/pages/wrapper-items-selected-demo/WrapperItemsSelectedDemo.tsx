@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check } from 'lucide-react';
 import { ControlExample } from './examples/ControlExample';
+import { FlowExample } from './examples/FlowExample';
 
 // Selectable Card Component
 interface SelectableCardProps {
@@ -122,6 +123,20 @@ export default function WrapperItemsSelectedDemo() {
           <p className="text-gray-600 dark:text-gray-400">
             A versatile wrapper component for managing item selection with callbacks
           </p>
+        </div>
+
+        {/* Example 0: Flow Explanation */}
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+              🔄 Flujo de Comunicación (5 Cards)
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Cada card avisa solo de SU ID. El wrapper mantiene el array completo de seleccionados.
+            </p>
+          </div>
+
+          <FlowExample />
         </div>
 
         {/* Example 1: Uncontrolled Mode with Cards */}
