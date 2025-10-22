@@ -126,12 +126,12 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       classes.push(cardStyles.className);
     }
 
-    // Add selectable and selected classes
+    // Add selectable and selected classes from CSS module
     if (isSelectable) {
       classes.push('cursor-pointer');
     }
     if (isSelected) {
-      classes.push('border-2 border-primary');
+      classes.push(styles.selected);
     }
 
     return cn(...classes);

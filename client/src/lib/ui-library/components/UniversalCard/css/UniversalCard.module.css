@@ -15,13 +15,27 @@
     0 1px 3px 0 rgba(0, 0, 0, 0.1),
     0 1px 2px -1px rgba(0, 0, 0, 0.1);
   
-  /* Smooth transitions - removed transform to avoid interference with ring */
+  /* Smooth transitions */
   transition: 
-    box-shadow 0.3s ease-in-out;
+    box-shadow 0.3s ease-in-out,
+    border-color 0.2s ease-in-out;
 }
 
-/* More noticeable hover effect - elevation only, no transform */
+/* More noticeable hover effect - elevation only */
 .universalcard:hover {
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Selected state - blue border that persists during hover */
+.selected {
+  border: 2px solid hsl(var(--primary)) !important;
+}
+
+/* Selected + hover - keeps the blue border AND elevated shadow */
+.selected:hover {
+  border: 2px solid hsl(var(--primary)) !important;
   box-shadow: 
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
