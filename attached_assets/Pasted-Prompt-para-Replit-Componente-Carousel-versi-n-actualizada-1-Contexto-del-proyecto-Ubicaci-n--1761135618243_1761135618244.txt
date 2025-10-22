@@ -1,0 +1,150 @@
+Prompt para Replit — Componente Carousel (versión actualizada)
+1) Contexto del proyecto
+
+Ubicación: client/src/lib/ui-library/components/Carousel.
+
+Seguir convenciones de la librería (exportaciones, tests, estilos, i18n/tema si aplica).
+
+No inventes imports: el generador debe resolver rutas internas existentes.
+
+2) Objetivo
+
+Carrusel que renderiza componentes externos (React elements) con:
+
+Autoplay, gestos/drag (siempre activo por defecto), indicadores clicables, espaciado configurable, altura uniforme para todos los ítems y control externo del índice.
+
+3) API del componente (Props, sin código)
+
+items: ReactElement[]
+Lista de componentes a mostrar (orden de renderización = orden del array).
+
+draggable?: boolean
+Permite mover con la mano (touch/drag con mouse). Por defecto: true en todos los casos, independientemente de autoPlay.
+
+autoPlay?: boolean
+Cambio automático de slide. Puede convivir con draggable. No depende del estado de draggable.
+
+autoPlayIntervalMs?: number
+Intervalo entre cambios automáticos (mínimo 1000 ms; valores menores se normalizan a 1000 ms). Aplica solo si autoPlay está activo.
+
+showIndicators?: boolean
+Mostrar/ocultar indicadores (puntitos). Por defecto visible si items.length > 1.
+
+indicatorsClickable?: boolean
+Si showIndicators, permite click para saltar a un slide. Por defecto true.
+
+spaceBetweenPx?: number
+Espacio horizontal entre ítems (en píxeles) sin romper el layout.
+
+itemHeight?: string
+Altura uniforme de todos los ítems. Acepta %, px, rem, vh, u un token de diseño de la librería (e.g., "size.lg").
+
+Si es %, la altura se calcula respecto al contenedor del carrusel.
+
+Si se omite, usar un valor por defecto razonable (ej. auto o un token base).
+
+Debe forzarse de manera consistente para que todas las tarjetas mantengan el mismo alto.
+
+slidesPerView?: 1 | 2 | 3 | "auto"
+Cuántos ítems se ven simultáneamente. Con "auto", calcular según ancho y spaceBetweenPx.
+
+align?: "start" | "center" | "end"
+Alineación del viewport cuando hay espacio sobrante.
+
+keyboard?: boolean
+Navegación por teclado (izq/der, Home/End). Por defecto true en desktop.
+
+pauseOnHover?: boolean
+Si autoPlay está activo, pausa temporal al hover (desktop). Por defecto true.
+
+initialIndex?: number
+Índice inicial (no controlado). Recortar a [0, items.length - 1].
+
+currentIndex?: number
+Control externo del slide actual (modo controlado).
+
+Cuando cambie desde fuera, el carrusel debe navegar al índice indicado y mantener el autoplay si estaba activo.
+
+Reinicia el contador del autoplay tras el cambio para otorgar el intervalo completo al nuevo slide.
+
+Ignorar valores fuera de rango (recortar).
+
+onChange?(index: number): void
+Notifica cambio de slide (gesto, indicador, botones, autoplay). Úsala también en modo controlado para que el host sincronice currentIndex.
+
+onReachStart?(): void / onReachEnd?(): void
+Eventos al llegar al primer/último slide cuando loop=false.
+
+loop?: boolean
+Bucle infinito. Por defecto true si items.length > 1.
+
+id?: string
+Identificador opcional para pruebas/e2e.
+
+Elimina cualquier referencia a ariaLabel (no se usará esa prop).
+
+4) Reglas de comportamiento
+
+Prioridades
+
+draggable siempre true por defecto (aunque autoPlay esté activo).
+
+autoPlay y draggable pueden estar ambos activos. Al arrastrar, pausar temporalmente el autoplay y reanudar al soltar; al cambiar currentIndex desde afuera, no desactivar autoplay y reiniciar el intervalo.
+
+Indicadores
+
+Renderizar si showIndicators y hay >1 ítem.
+
+Si indicatorsClickable, el click navega y dispara onChange.
+
+Espaciado y layout
+
+Aplicar spaceBetweenPx entre ítems, evitar márgenes en extremos con align="start".
+
+Con slidesPerView="auto", recalcular al resize/rotación sin saltos visuales.
+
+Altura uniforme
+
+Aplicar itemHeight al contenedor de cada slide para estabilizar el layout y evitar “saltos” al cambiar de slide.
+
+Asegurar que el contenido interno haga clamp/ellipsis o scrolling interno si excede la altura.
+
+Límites
+
+Con loop=false, respetar [0, last] y emitir onReachStart/End una sola vez por borde alcanzado.
+
+Rendimiento
+
+Transiciones por GPU (transform/opacity), montar lo mínimo necesario y virtualizar si hace falta.
+
+Sin dependencias pesadas nuevas.
+
+5) Controles/Navegación
+
+Botones Prev/Next visibles si hay >1 ítem (deshabilitar en bordes si loop=false).
+
+Gestos con umbral (20–30px) y cancelación si el gesto es vertical (para no interferir con el scroll).
+
+Teclado activo si keyboard.
+
+6) Casos límite
+
+items.length <= 1: ocultar autoplay, indicadores y controles.
+
+Cambios dinámicos en items: mantener índice válido; si el índice actual queda fuera de rango, mover al último válido y notificar.
+
+autoPlayIntervalMs < 1000: normalizar a 1000.
+
+currentIndex inválido: recortar y no romper la animación.
+
+7) Pruebas (sin código)
+
+Reglas draggable por defecto y convivencia con autoPlay.
+
+Control externo: al cambiar currentIndex, el carrusel navega, autoplay sigue activo y el temporizador se reinicia.
+
+Indicadores clicables → onChange.
+
+Normalización de initialIndex/currentIndex y autoPlayIntervalMs.
+
+Layout estable con itemHeight y diferentes tipos de valor (%, px, token).
