@@ -308,6 +308,39 @@ const CarouselDemo = () => {
         />
       </section>
 
+      {/* Peek effect */}
+      <section style={{ marginBottom: '64px' }}>
+        <h2 style={{ 
+          fontSize: '24px', 
+          fontWeight: '600', 
+          marginBottom: '24px',
+          color: '#374151',
+        }}>
+          Efecto Peek (Vista Previa de Slides Adyacentes)
+        </h2>
+        <p style={{ 
+          fontSize: '14px', 
+          color: '#6b7280', 
+          marginBottom: '24px',
+        }}>
+          Los slides se muestran al 85% del ancho para revelar pedacitos de las tarjetas anterior y siguiente. 
+          Los botones de navegación se ocultan automáticamente para una experiencia más limpia.
+        </p>
+        <Carousel
+          items={cardElements}
+          showPeek={true}
+          autoPlay={true}
+          autoPlayIntervalMs={3500}
+          pauseOnHover={true}
+          draggable={true}
+          showIndicators={true}
+          indicatorsClickable={true}
+          itemHeight="450px"
+          loop={true}
+          id="carousel-peek"
+        />
+      </section>
+
       {/* Without navigation buttons */}
       <section>
         <h2 style={{ 
