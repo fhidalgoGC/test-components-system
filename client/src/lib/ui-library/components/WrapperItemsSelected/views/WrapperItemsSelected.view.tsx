@@ -1,8 +1,6 @@
 import { createContext, useContext } from 'react';
 import type { WrapperItemsSelectedProps, SelectionContextValue } from '../types';
 import { useWrapperItemsSelected } from '../hooks';
-import { wrapperItemsSelectedStyles } from '../css';
-import { cn } from '../../../utils';
 
 const SelectionContext = createContext<SelectionContextValue | null>(null);
 
@@ -40,7 +38,7 @@ export const WrapperItemsSelectedView = (props: WrapperItemsSelectedProps) => {
   return (
     <SelectionContext.Provider value={contextValue}>
       <div 
-        className={cn(wrapperItemsSelectedStyles.container, className)}
+        className={className}
         data-testid="wrapper-items-selected"
       >
         {children}
