@@ -24,13 +24,23 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
   const normalizedInterval = Math.max(autoPlayIntervalMs, MIN_AUTOPLAY_INTERVAL);
   const normalizedInitialIndex = Math.max(0, Math.min(initialIndex, items.length - 1));
 
+  // For infinite loop: we need to adjust the internal index to account for cloned slides
+  // If loop is enabled, we start at index = items.length (the first real slide after the clones)
+  const getInitialInternalIndex = () => {
+    if (loop && items.length > 1) {
+      return normalizedInitialIndex + items.length;
+    }
+    return normalizedInitialIndex;
+  };
+
   // State
-  const [internalIndex, setInternalIndex] = useState(normalizedInitialIndex);
+  const [internalIndex, setInternalIndex] = useState(getInitialInternalIndex());
   const [isAnimating, setIsAnimating] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [hasReachedStart, setHasReachedStart] = useState(false);
   const [hasReachedEnd, setHasReachedEnd] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(true);
 
   // Refs
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,9 +53,18 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
   const isDraggingRef = useRef<boolean>(false);
 
   // Current index (controlled or uncontrolled)
+  // For infinite loop, we need to map the internal index back to the real index
+  const getRealIndex = (idx: number) => {
+    if (!loop || items.length <= 1) return idx;
+    // Map the internal index (which includes clones) to the real index
+    if (idx < items.length) return items.length - 1; // First clone set
+    if (idx >= items.length * 2) return 0; // Last clone set
+    return idx - items.length;
+  };
+
   const currentIndex = isControlled 
     ? Math.max(0, Math.min(controlledIndex, items.length - 1))
-    : internalIndex;
+    : getRealIndex(internalIndex);
 
   // Can navigate
   const canGoPrev = loop || currentIndex > 0;
@@ -58,9 +77,12 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
     if (newIndex === currentIndex) return;
 
     setIsAnimating(true);
+    setIsTransitioning(true);
     
     if (!isControlled) {
-      setInternalIndex(newIndex);
+      // For infinite loop, convert real index to internal index
+      const targetInternalIndex = loop && items.length > 1 ? newIndex + items.length : newIndex;
+      setInternalIndex(targetInternalIndex);
     }
     
     onChange?.(newIndex);
@@ -88,22 +110,38 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
   const goToPrev = useCallback(() => {
     if (!canGoPrev) return;
     
-    const newIndex = currentIndex === 0 
-      ? (loop ? items.length - 1 : 0)
-      : currentIndex - 1;
-    
-    goToSlide(newIndex);
-  }, [currentIndex, canGoPrev, loop, items.length, goToSlide]);
+    if (loop && items.length > 1) {
+      // For infinite loop, just decrement the internal index
+      setIsAnimating(true);
+      setIsTransitioning(true);
+      setInternalIndex(prev => prev - 1);
+      
+      const newRealIndex = getRealIndex(internalIndex - 1);
+      onChange?.(newRealIndex);
+      setTimeout(() => setIsAnimating(false), 300);
+    } else {
+      const newIndex = currentIndex === 0 ? 0 : currentIndex - 1;
+      goToSlide(newIndex);
+    }
+  }, [currentIndex, canGoPrev, loop, items.length, goToSlide, internalIndex, onChange, getRealIndex]);
 
   const goToNext = useCallback(() => {
     if (!canGoNext) return;
     
-    const newIndex = currentIndex === items.length - 1
-      ? (loop ? 0 : items.length - 1)
-      : currentIndex + 1;
-    
-    goToSlide(newIndex);
-  }, [currentIndex, canGoNext, loop, items.length, goToSlide]);
+    if (loop && items.length > 1) {
+      // For infinite loop, just increment the internal index
+      setIsAnimating(true);
+      setIsTransitioning(true);
+      setInternalIndex(prev => prev + 1);
+      
+      const newRealIndex = getRealIndex(internalIndex + 1);
+      onChange?.(newRealIndex);
+      setTimeout(() => setIsAnimating(false), 300);
+    } else {
+      const newIndex = currentIndex === items.length - 1 ? items.length - 1 : currentIndex + 1;
+      goToSlide(newIndex);
+    }
+  }, [currentIndex, canGoNext, loop, items.length, goToSlide, internalIndex, onChange, getRealIndex]);
 
   // Autoplay logic
   useEffect(() => {
@@ -254,17 +292,42 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [keyboard, handleKeyDown]);
 
+  // Handle infinite loop: reset position after transition
+  useEffect(() => {
+    if (!loop || items.length <= 1 || isAnimating) return;
+
+    // Check if we're on a cloned slide
+    if (internalIndex >= items.length * 2) {
+      // We're on the last clone set, jump to the first real slide
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setInternalIndex(items.length);
+        // Re-enable transition after the instant jump
+        setTimeout(() => setIsTransitioning(true), 50);
+      }, 300);
+    } else if (internalIndex < items.length) {
+      // We're on the first clone set, jump to the last real slide
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setInternalIndex(items.length * 2 - 1);
+        // Re-enable transition after the instant jump
+        setTimeout(() => setIsTransitioning(true), 50);
+      }, 300);
+    }
+  }, [internalIndex, loop, items.length, isAnimating]);
+
   // Update internal index when items change
   useEffect(() => {
-    if (!isControlled && internalIndex >= items.length) {
+    if (!isControlled && internalIndex >= items.length && !loop) {
       const newIndex = Math.max(0, items.length - 1);
       setInternalIndex(newIndex);
       onChange?.(newIndex);
     }
-  }, [items.length, internalIndex, isControlled, onChange]);
+  }, [items.length, internalIndex, isControlled, onChange, loop]);
 
   return {
     currentIndex,
+    internalIndex, // For infinite loop
     isAnimating,
     isDragging,
     isPaused,
@@ -281,5 +344,6 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
     handleMouseLeave,
     containerRef,
     trackRef,
+    isTransitioning, // For controlling CSS transitions
   };
 };

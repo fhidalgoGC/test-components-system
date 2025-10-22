@@ -52,6 +52,7 @@ export interface CarouselContext {
 
 export interface UseCarouselReturn {
   currentIndex: number;
+  internalIndex: number;
   isAnimating: boolean;
   isDragging: boolean;
   isPaused: boolean;
@@ -68,4 +69,5 @@ export interface UseCarouselReturn {
   handleMouseLeave: () => void;
   containerRef: React.RefObject<HTMLDivElement>;
   trackRef: React.RefObject<HTMLDivElement>;
+  isTransitioning: boolean;
 }
