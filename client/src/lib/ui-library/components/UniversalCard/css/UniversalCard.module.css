@@ -5,7 +5,7 @@
   /* White background for better contrast */
   background-color: white;
   color: hsl(var(--card-foreground));
-  overflow: hidden;
+  /* NO overflow hidden - let the inner border be visible */
   
   /* Base shadow for better card definition */
   box-shadow: 
@@ -38,7 +38,7 @@
 
 /* Selected state - blue border on inner div */
 .innerBorderSelected {
-  border: 2px solid hsl(var(--primary)) !important;
+  border: 3px solid #2563eb !important; /* Blue 600 - hard coded for visibility */
 }
 
 /* Dark mode adjustments */
