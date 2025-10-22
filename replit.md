@@ -1,6 +1,12 @@
 # Overview
 
-This project is a frontend-only React component library built with React, TypeScript, and Vite. Its primary purpose is to provide a comprehensive UI component library, featuring custom components built on shadcn/ui, a complete theming system, internationalization support, and a responsive design. This is a standalone frontend library with no backend dependencies, designed for integration into other frontend applications. The project includes an automated component generator that supports incremental development for creating responsive components with i18n support.
+This project is a frontend-only React component library built with React, TypeScript, and Vite. Its primary purpose is to provide a comprehensive UI component library, featuring custom components built on shadcn/ui, a complete theming system, internationalization support, and a responsive design. This is a standalone frontend library with no backend dependencies, designed for integration into other frontend applications. The project includes automated component and wrapper generators that support incremental development for creating responsive components with i18n support.
+
+**Recent Updates (October 2025):**
+- Relocated command templates from `client/src/lib/ui-library/command-templates` to `client/src/command-templates`
+- Enhanced WrapperItemsSelected documentation with communication flow diagrams
+- Added interactive demo with 5 examples showing component communication patterns
+- Updated README-INDEX.md to version 1.0.6
 
 # User Preferences
 
@@ -32,7 +38,7 @@ Preferred communication style: Simple, everyday language.
 - **Carousel**: Interactive carousel component that renders React elements with autoplay, drag gestures (mouse/touch), clickable indicators, keyboard navigation, and external index control. Supports both controlled and uncontrolled modes, configurable spacing, uniform item heights, multiple slides per view, loop/no-loop modes, and pause-on-hover. Features GPU-optimized transitions, vertical-scroll cancellation for drag gestures, and automatic timer reset on external index changes. Includes comprehensive demo page with 6 configuration examples.
 - **HeterogeneousList**: Component supporting configurable page size and scroll preservation. Fully migrated to the Provider + Context + Hook architecture with i18n and ConfigProvider integration.
 - **UniversalCard**: Flexible wrapper card component that can render any React component with customizable styling, sizing (numeric, CSS units, Tailwind classes), and optional header/footer content.
-- **WrapperItemsSelected**: Universal selection wrapper that tracks item selection state by ID and provides callbacks for selection changes. Wraps any child components (cards, lists, grids) and provides a Context API via `useSelection()` hook for children to interact with selection state. Supports controlled/uncontrolled modes, multi-select/single-select, and dual callback system (`onSelectionChange` for full selection array, `onItemAction` for individual select/deselect events). Pure logic wrapper with no visual styling.
+- **WrapperItemsSelected**: Universal selection wrapper that tracks item selection state by ID and provides callbacks for selection changes. Wraps any child components (cards, lists, grids) and provides a Context API via `useSelection()` hook for children to interact with selection state. Supports controlled/uncontrolled modes, multi-select/single-select, and dual callback system (`onSelectionChange` for full selection array, `onItemAction` for individual select/deselect events). Pure logic wrapper with no visual styling. Features simple communication pattern where each child component only needs to pass its own ID via `toggleSelection(id)`, and the wrapper maintains the complete selection array and notifies all children via Context API. Includes methods: toggleSelection, selectItem, deselectItem, isSelected, clearSelection, selectAll.
 
 # External Dependencies
 

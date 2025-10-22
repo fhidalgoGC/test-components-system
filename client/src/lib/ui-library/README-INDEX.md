@@ -1,6 +1,6 @@
 # 📚 Índice de Documentación - GC-UI-COMPONENTS
 
-**Version: 1.0.5**
+**Version: 1.0.6**
 
 ## 🎯 Guía para IA: Dónde Buscar Información
 
@@ -300,6 +300,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 **Cuándo usar:** Para envolver componentes con funcionalidad de selección de items por ID con callbacks y estado de selección.
 
 **Contiene:**
+- 🔄 **Flujo de Comunicación** - Explicación visual de cómo cada hijo solo pasa SU ID y el wrapper mantiene el array completo
 - 📖 Props completos del WrapperItemsSelected (selectedIds, defaultSelectedIds, onSelectionChange, onItemAction, multiSelect)
 - 🎯 Ejemplos de uso (cards seleccionables, listas, modo controlado/no controlado, single/multi-select)
 - 🔧 API detallada con tipos TypeScript (WrapperItemsSelectedProps, ItemActionEvent, SelectionContextValue)
@@ -309,10 +310,13 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - 🎯 Métodos de selección (toggleSelection, selectItem, deselectItem, isSelected, clearSelection, selectAll)
 - 📊 Soporte para selección múltiple o simple (multiSelect true/false)
 - 🎭 Wrapper universal sin estilos (funciona con cards, listas, grids, componentes custom)
+- 💡 Quick Start con ejemplos simples
 - 🧪 Data test IDs para testing
 - ♿ Accesibilidad delegada a componentes hijos
 
 **Buscar aquí para:**
+- **Entender el flujo de comunicación entre hijos y wrapper**
+- **Implementar componentes donde cada hijo solo conoce su propio ID**
 - Implementar selección de items en listas, grids o galerías
 - Crear componentes con selección controlada externamente
 - Implementar bulk actions basadas en selección
@@ -456,11 +460,14 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 └── Callbacks de ciclo de vida
 
 ./components/WrapperItemsSelected/README-IA.md
+├── 🔄 Flujo de comunicación (diagrama visual)
+├── 💡 Quick Start (ejemplos simples)
 ├── Props y API del WrapperItemsSelected
 ├── Ejemplos (cards, listas, controlado/no controlado)
 ├── Hook useSelection para componentes hijos
 ├── Sistema dual de callbacks (onSelectionChange, onItemAction)
-└── Modos multi-select y single-select
+├── Modos multi-select y single-select
+└── Demo interactivo en /components/wrapper-items-selected
 
 ./components/[ComponentName]/README-IA.md
 ├── Props y API del componente
@@ -506,4 +513,4 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ---
 
-**Última actualización: Septiembre 2025** | **Version: 1.0.5**
+**Última actualización: Octubre 2025** | **Version: 1.0.6**

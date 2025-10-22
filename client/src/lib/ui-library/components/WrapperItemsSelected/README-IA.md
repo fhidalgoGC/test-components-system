@@ -4,16 +4,56 @@
 
 Universal selection wrapper component for React applications that tracks item selection state and provides callbacks for selection changes. Wraps any child components (cards, lists, grids) and provides a Context API for children to interact with selection state. Perfect for implementing selectable galleries, multi-select lists, choice groups, or any interface requiring item selection tracking.
 
+## 🔄 How It Works: Communication Flow
+
+The wrapper uses a **simple but powerful communication pattern**:
+
+1. **Each child component** only knows about its own ID
+2. **Child calls** `toggleSelection(id)` with its own ID
+3. **Wrapper receives** the ID and updates the complete selection array
+4. **Wrapper notifies** all children of the new state via Context API
+5. **Children verify** their own state with `isSelected(id)`
+
+### Visual Example
+
+```
+┌─────────────────────────────────────┐
+│  5 Cards (children)                 │
+│  Card 1: toggleSelection('card-1')  │
+│  Card 2: toggleSelection('card-2')  │ ← Each card only knows its ID
+│  Card 3: toggleSelection('card-3')  │
+│  Card 4: toggleSelection('card-4')  │
+│  Card 5: toggleSelection('card-5')  │
+└───────────────┬─────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────┐
+│  WrapperItemsSelected               │
+│  • Maintains: ['card-1', 'card-3']  │ ← Complete array
+│  • Notifies all children via Context│
+│  • Fires callbacks with full array  │
+└───────────────┬─────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────┐
+│  Parent Component Callbacks         │
+│  onSelectionChange(['card-1', 'card-3']) ← Full array
+└─────────────────────────────────────┘
+```
+
+**Key Point:** Each child component doesn't need to know about other children. The wrapper handles all coordination.
+
 ## Key Features
 
 - ✅ **Universal Wrapper**: Works with any child components (cards, lists, grid items, custom components)
 - ✅ **Controlled & Uncontrolled Modes**: Flexible state management for internal or external control
-- ✅ **Multi-Select & Single-Select**: Toggle between single or multiple item selection
+- ✅ **Multi-Select & Single-Select**: Toggle between single or multiple item selection with `multiSelect` prop
 - ✅ **Dual Callback System**: 
   - `onSelectionChange` - Receives complete array of selected IDs on any change
   - `onItemAction` - Receives individual action events (selected/deselected) for each item
 - ✅ **Context API**: Children use `useSelection()` hook to access selection methods
-- ✅ **Comprehensive Methods**: toggle, select, deselect, isSelected, clearSelection, selectAll
+- ✅ **Comprehensive Methods**: toggleSelection, selectItem, deselectItem, isSelected, clearSelection, selectAll
+- ✅ **Simple Communication**: Each child only needs to pass its own ID
 - ✅ **TypeScript Support**: Fully typed props and context values
 - ✅ **Zero Visual Styling**: Pure logic wrapper, styling left to children
 - ✅ **Test-Friendly**: Data-testid attributes for easy testing
@@ -23,6 +63,38 @@ Universal selection wrapper component for React applications that tracks item se
 ```tsx
 import { WrapperItemsSelected, useSelection } from '@/lib/ui-library/components/WrapperItemsSelected';
 ```
+
+## Quick Start: The Essentials
+
+### Parent Component (Wrapper)
+
+```tsx
+<WrapperItemsSelected
+  multiSelect={true}                    // Multi-select (true) or single-select (false)
+  defaultSelectedIds={['item-1']}       // Initial selection (uncontrolled mode)
+  onSelectionChange={(ids) => {         // Callback with full array
+    console.log('Selected:', ids);      // ['item-1', 'item-3']
+  }}
+>
+  {/* Your children here */}
+</WrapperItemsSelected>
+```
+
+### Child Components (Inside Wrapper)
+
+```tsx
+const MyCard = ({ id, title }) => {
+  const { isSelected, toggleSelection } = useSelection(); // Get hook
+  
+  return (
+    <div onClick={() => toggleSelection(id)}>  {/* Pass only YOUR id */}
+      {title} {isSelected(id) && '✓'}         {/* Check YOUR state */}
+    </div>
+  );
+};
+```
+
+**That's it!** Each child calls `toggleSelection(id)` with its own ID, and the wrapper handles everything else.
 
 ## Basic Usage
 
@@ -233,19 +305,24 @@ interface ItemActionEvent {
 
 ### useSelection Hook
 
-Access selection state and methods from child components:
+Access selection state and methods from child components. **This is what children use to communicate with the wrapper:**
 
 ```tsx
 const {
-  selectedIds,        // string[] - Currently selected IDs
-  toggleSelection,    // (id: string) => void - Toggle item selection
-  selectItem,         // (id: string) => void - Select an item
-  deselectItem,       // (id: string) => void - Deselect an item
+  selectedIds,        // string[] - Currently selected IDs (read-only array)
+  toggleSelection,    // (id: string) => void - Toggle item selection (most common)
+  selectItem,         // (id: string) => void - Force select an item
+  deselectItem,       // (id: string) => void - Force deselect an item
   isSelected,         // (id: string) => boolean - Check if item is selected
   clearSelection,     // () => void - Clear all selections
-  selectAll,          // (ids: string[]) => void - Select multiple items
+  selectAll,          // (ids: string[]) => void - Select multiple items at once
 } = useSelection();
 ```
+
+**How children use it:**
+1. Call `toggleSelection(id)` (or other methods) with **only their own ID**
+2. Use `isSelected(id)` to check their own state
+3. The wrapper automatically updates all children via Context
 
 ## Modes
 
@@ -694,12 +771,16 @@ const [selectedIds, setSelectedIds] = useState([]);
 
 ## Examples Repository
 
-Check out the demo page at `/components/wrapper-items-selected` for complete working examples including:
-- Selectable cards with visual feedback
-- Controlled list with external buttons
-- Single-select radio group pattern
-- Checkbox list pattern
-- Callback logging examples
+Check out the **interactive demo page** at `/components/wrapper-items-selected` for complete working examples including:
+
+- **🔄 Communication Flow Example** - 5 cards showing how each child only passes its ID and the wrapper maintains the complete array
+- **Selectable cards** with visual feedback and real-time logs
+- **Controlled list** with external buttons (Select All, Clear All)
+- **Single-select mode** (radio group pattern)
+- **Multi-select mode** with clearSelection() and selectAll()
+- **Callback logging** showing onSelectionChange and onItemAction in action
+
+Each example is fully interactive with visual explanations and real-time state inspection.
 
 ---
 
