@@ -48,7 +48,9 @@ export const UniversalCardView = (props: UniversalCardProps) => {
   // Try to use selection context (safe - won't throw if not wrapped)
   const selectionContext = useSelectionSafe();
   const isSelectable = selectable && selectionContext !== null && id !== undefined;
-  const isSelected = isSelectable ? selectionContext.isSelected(id) : false;
+  
+  // Subscribe to selectedIds to trigger re-render when selection changes
+  const isSelected = isSelectable && selectionContext.selectedIds.includes(id);
 
   // Process size values
   const widthValue = convertSizeValue(width);
