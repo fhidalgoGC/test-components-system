@@ -54,13 +54,13 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
 
   // Current index (controlled or uncontrolled)
   // For infinite loop, we need to map the internal index back to the real index
-  const getRealIndex = (idx: number) => {
+  const getRealIndex = useCallback((idx: number) => {
     if (!loop || items.length <= 1) return idx;
     // Map the internal index (which includes clones) to the real index
     if (idx < items.length) return items.length - 1; // First clone set
     if (idx >= items.length * 2) return 0; // Last clone set
     return idx - items.length;
-  };
+  }, [loop, items.length]);
 
   const currentIndex = isControlled 
     ? Math.max(0, Math.min(controlledIndex, items.length - 1))
@@ -114,16 +114,21 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
       // For infinite loop, just decrement the internal index
       setIsAnimating(true);
       setIsTransitioning(true);
-      setInternalIndex(prev => prev - 1);
+      const newInternalIndex = internalIndex - 1;
+      setInternalIndex(newInternalIndex);
       
-      const newRealIndex = getRealIndex(internalIndex - 1);
+      // Calculate real index from the new internal index
+      let newRealIndex = newInternalIndex - items.length;
+      if (newInternalIndex < items.length) newRealIndex = items.length - 1;
+      if (newInternalIndex >= items.length * 2) newRealIndex = 0;
+      
       onChange?.(newRealIndex);
       setTimeout(() => setIsAnimating(false), 300);
     } else {
       const newIndex = currentIndex === 0 ? 0 : currentIndex - 1;
       goToSlide(newIndex);
     }
-  }, [currentIndex, canGoPrev, loop, items.length, goToSlide, internalIndex, onChange, getRealIndex]);
+  }, [currentIndex, canGoPrev, loop, items.length, goToSlide, internalIndex, onChange]);
 
   const goToNext = useCallback(() => {
     if (!canGoNext) return;
@@ -132,16 +137,21 @@ export const useCarousel = (props: CarouselProps): UseCarouselReturn => {
       // For infinite loop, just increment the internal index
       setIsAnimating(true);
       setIsTransitioning(true);
-      setInternalIndex(prev => prev + 1);
+      const newInternalIndex = internalIndex + 1;
+      setInternalIndex(newInternalIndex);
       
-      const newRealIndex = getRealIndex(internalIndex + 1);
+      // Calculate real index from the new internal index
+      let newRealIndex = newInternalIndex - items.length;
+      if (newInternalIndex < items.length) newRealIndex = items.length - 1;
+      if (newInternalIndex >= items.length * 2) newRealIndex = 0;
+      
       onChange?.(newRealIndex);
       setTimeout(() => setIsAnimating(false), 300);
     } else {
       const newIndex = currentIndex === items.length - 1 ? items.length - 1 : currentIndex + 1;
       goToSlide(newIndex);
     }
-  }, [currentIndex, canGoNext, loop, items.length, goToSlide, internalIndex, onChange, getRealIndex]);
+  }, [currentIndex, canGoNext, loop, items.length, goToSlide, internalIndex, onChange]);
 
   // Autoplay logic
   useEffect(() => {
