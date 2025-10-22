@@ -24,7 +24,7 @@ if (!wrapperName) {
 // Paths
 const componentsPath = path.join(process.cwd(), 'client/src/lib/ui-library/components');
 const wrapperPath = path.join(componentsPath, wrapperName);
-const templatesPath = path.join(process.cwd(), 'client/src/lib/ui-library/command-templates/wrappers');
+const templatesPath = path.join(process.cwd(), 'client/src/command-templates/wrappers');
 
 // Check if wrapper already exists
 if (fs.existsSync(wrapperPath)) {

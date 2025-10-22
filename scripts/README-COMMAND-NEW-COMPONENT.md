@@ -435,7 +435,7 @@ Archivo de utilidades para funciones auxiliares del componente
 
 ## 🎨 Sistema de Plantillas
 
-Las plantillas están centralizadas en `client/src/lib/ui-library/command-templates/`:
+Las plantillas están centralizadas en `client/src/command-templates/`:
 
 ```
 command-templates/
@@ -518,7 +518,7 @@ function Example() {
 
 ## 🔗 Referencias
 
-- **Plantillas**: `client/src/lib/ui-library/command-templates/`
+- **Plantillas**: `client/src/command-templates/`
 - **Script generador**: `scripts/generate-component.mjs`
 - **Componente de referencia**: `client/src/lib/ui-library/components/TagSelector`
 - **Documentación técnica**: `scripts/README.md`

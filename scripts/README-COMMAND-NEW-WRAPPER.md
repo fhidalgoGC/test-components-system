@@ -139,7 +139,7 @@ export type { WrapperNameProps } from './types';
 
 ## 🎨 Sistema de Plantillas
 
-Las plantillas están en `client/src/lib/ui-library/command-templates/wrappers/`:
+Las plantillas están en `client/src/command-templates/wrappers/`:
 
 ```
 command-templates/wrappers/
@@ -303,7 +303,7 @@ export const WrapperNameView = (props: WrapperNameProps) => {
 
 ## 🔗 Referencias
 
-- **Plantillas**: `client/src/lib/ui-library/command-templates/wrappers/`
+- **Plantillas**: `client/src/command-templates/wrappers/`
 - **Script generador**: `scripts/create-wrapper.mjs`
 - **Wrapper de referencia**: `client/src/lib/ui-library/components/WrapperItemsSelected`
 - **Generador de componentes**: `scripts/README-COMMAND-NEW-COMPONENT.md`
