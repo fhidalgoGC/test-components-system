@@ -50,7 +50,9 @@ export const UniversalCardView = (props: UniversalCardProps) => {
   const isSelectable = selectable && selectionContext !== null && id !== undefined;
   
   // Subscribe to selectedIds to trigger re-render when selection changes
-  const isSelected = isSelectable && selectionContext.selectedIds.includes(id);
+  // Access selectedIds directly to ensure React detects the dependency
+  const selectedIds = selectionContext?.selectedIds || [];
+  const isSelected = isSelectable && id !== undefined && selectedIds.includes(id);
 
   // Process size values
   const widthValue = convertSizeValue(width);
