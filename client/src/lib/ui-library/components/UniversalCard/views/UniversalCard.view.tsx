@@ -141,6 +141,11 @@ export const UniversalCardView = (props: UniversalCardProps) => {
     }
   };
 
+  // Debug log
+  if (id && selectable) {
+    console.log(`Card ${id}: isSelected=${isSelected}, will apply data-selected=${isSelected ? "true" : undefined}`);
+  }
+
   return (
     <div
       className={classNames}
@@ -150,8 +155,7 @@ export const UniversalCardView = (props: UniversalCardProps) => {
     >
       {/* Inner div that handles the selection border */}
       <div 
-        className={styles.innerBorder}
-        data-selected={isSelected ? "true" : undefined}
+        className={`${styles.innerBorder} ${isSelected ? styles.innerBorderSelected : ''}`}
       >
         {headerContent && (
           <div className={styles.header} data-testid={`${dataTestId}-header`}>

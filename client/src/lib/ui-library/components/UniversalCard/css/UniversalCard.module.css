@@ -33,11 +33,11 @@
   border: 1.5px solid hsl(var(--border));
   border-radius: 12px;
   overflow: hidden;
-  transition: border-color 0.2s ease-in-out;
+  transition: border-color 0.2s ease-in-out, border-width 0.2s ease-in-out;
 }
 
 /* Selected state - blue border on inner div */
-.innerBorder[data-selected="true"] {
+.innerBorderSelected {
   border: 2px solid hsl(var(--primary)) !important;
 }
 
