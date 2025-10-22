@@ -321,28 +321,45 @@ const CarouselDemo = () => {
         />
       </section>
 
-      {/* No loop carousel */}
-      <section style={{ marginBottom: "64px" }}>
-        <h2
-          style={{
-            fontSize: "24px",
-            fontWeight: "600",
-            marginBottom: "24px",
-            color: "#374151",
-          }}
-        >
-          Sin Loop (Límites al Inicio/Final)
+      {/* No loop - PRIMER SLIDE */}
+      <section style={{ marginBottom: "48px", border: "3px solid #3B82F6", padding: "24px", borderRadius: "12px", background: "#EFF6FF" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: "700", marginBottom: "8px", color: "#1E40AF" }}>
+          ✅ Sin Loop - Inicia en PRIMER Slide
         </h2>
+        <p style={{ fontSize: "14px", color: "#1E40AF", marginBottom: "16px", fontWeight: "600" }}>
+          DEBE mostrar solo el botón derecho (→) porque estás en el inicio<br/>
+          ❌ Botón izquierdo (←) debe estar OCULTO
+        </p>
         <Carousel
           items={cardElements}
           loop={false}
+          initialIndex={0}
           draggable={true}
           showIndicators={true}
           indicatorsClickable={true}
           itemHeight="450px"
-          onReachStart={() => console.log("Reached start!")}
-          onReachEnd={() => console.log("Reached end!")}
-          id="carousel-no-loop"
+          id="carousel-no-loop-first"
+        />
+      </section>
+
+      {/* No loop - ÚLTIMO SLIDE */}
+      <section style={{ marginBottom: "64px", border: "3px solid #10B981", padding: "24px", borderRadius: "12px", background: "#ECFDF5" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: "700", marginBottom: "8px", color: "#047857" }}>
+          ✅ Sin Loop - Inicia en ÚLTIMO Slide
+        </h2>
+        <p style={{ fontSize: "14px", color: "#047857", marginBottom: "16px", fontWeight: "600" }}>
+          DEBE mostrar solo el botón izquierdo (←) porque estás en el final<br/>
+          ❌ Botón derecho (→) debe estar OCULTO
+        </p>
+        <Carousel
+          items={cardElements}
+          loop={false}
+          initialIndex={5}
+          draggable={true}
+          showIndicators={true}
+          indicatorsClickable={true}
+          itemHeight="450px"
+          id="carousel-no-loop-last"
         />
       </section>
 
