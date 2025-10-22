@@ -12,6 +12,14 @@ export const useSelection = () => {
   return context;
 };
 
+/**
+ * Safe version of useSelection that returns null if not within WrapperItemsSelected
+ * Use this when the component may or may not be wrapped
+ */
+export const useSelectionSafe = () => {
+  return useContext(SelectionContext);
+};
+
 export const WrapperItemsSelectedView = (props: WrapperItemsSelectedProps) => {
   const { children, className } = props;
   

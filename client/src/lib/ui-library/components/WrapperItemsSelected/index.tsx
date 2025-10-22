@@ -1,4 +1,4 @@
-export { WrapperItemsSelected, useSelection } from './views';
+export { WrapperItemsSelected, useSelection, useSelectionSafe } from './views';
 export type { 
   WrapperItemsSelectedProps, 
   ItemActionEvent, 

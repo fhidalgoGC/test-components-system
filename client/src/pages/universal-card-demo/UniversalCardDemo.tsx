@@ -1,4 +1,5 @@
 import { UniversalCard } from '@/lib/ui-library/components/UniversalCard';
+import { WrapperItemsSelected } from '@/lib/ui-library/components/WrapperItemsSelected';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -58,6 +59,8 @@ const InteractiveComponent = () => {
 };
 
 export default function UniversalCardDemo() {
+  const [selectedCards, setSelectedCards] = useState<string[]>([]);
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950">
       <div className="container mx-auto p-6 space-y-8">
@@ -269,6 +272,132 @@ export default function UniversalCardDemo() {
               borderRadius: "16px"
             }}
             dataTestId="card-mixed-2"
+          />
+        </div>
+      </section>
+
+      {/* Selectable Cards - With Wrapper */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold" data-testid="text-section-selectable">7. Cards Seleccionables (Con Wrapper)</h2>
+        <p className="text-muted-foreground">
+          Cards dentro de WrapperItemsSelected pueden ser seleccionadas haciendo click. El borde indica la selección.
+        </p>
+        
+        <div className="flex gap-3 items-center mb-4">
+          <Badge variant="outline" data-testid="badge-selected-count">
+            Seleccionadas: {selectedCards.length}
+          </Badge>
+          {selectedCards.length > 0 && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setSelectedCards([])}
+              data-testid="button-clear-selection"
+            >
+              Limpiar Selección
+            </Button>
+          )}
+        </div>
+
+        <WrapperItemsSelected
+          selectedIds={selectedCards}
+          onSelectionChange={setSelectedCards}
+          multiSelect={true}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <UniversalCard
+              id="card-1"
+              selectable={true}
+              component={StatCard}
+              componentProps={{
+                label: "Producto A",
+                value: "145",
+                trend: "+12.5%"
+              }}
+              minWidth={200}
+              cardStyles={{
+                className: "transition-all duration-200"
+              }}
+              dataTestId="card-selectable-1"
+            />
+
+            <UniversalCard
+              id="card-2"
+              selectable={true}
+              component={StatCard}
+              componentProps={{
+                label: "Producto B",
+                value: "289",
+                trend: "+8.3%"
+              }}
+              minWidth={200}
+              cardStyles={{
+                className: "transition-all duration-200"
+              }}
+              dataTestId="card-selectable-2"
+            />
+
+            <UniversalCard
+              id="card-3"
+              selectable={true}
+              component={StatCard}
+              componentProps={{
+                label: "Producto C",
+                value: "432",
+                trend: "-2.1%"
+              }}
+              minWidth={200}
+              cardStyles={{
+                className: "transition-all duration-200"
+              }}
+              dataTestId="card-selectable-3"
+            />
+          </div>
+        </WrapperItemsSelected>
+      </section>
+
+      {/* Non-Selectable Cards - Without Wrapper */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold" data-testid="text-section-non-selectable">8. Cards Seleccionables (Sin Wrapper)</h2>
+        <p className="text-muted-foreground">
+          Estas cards tienen selectable=true pero no están dentro de WrapperItemsSelected. No darán error, simplemente no serán seleccionables.
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <UniversalCard
+            id="card-standalone-1"
+            selectable={true}
+            component={SimpleContent}
+            componentProps={{
+              title: "Card Sin Wrapper 1",
+              description: "Esta card tiene selectable=true pero no está en un wrapper, por lo que no es seleccionable"
+            }}
+            minWidth={200}
+            dataTestId="card-standalone-1"
+          />
+
+          <UniversalCard
+            id="card-standalone-2"
+            selectable={true}
+            component={SimpleContent}
+            componentProps={{
+              title: "Card Sin Wrapper 2",
+              description: "Tampoco está en un wrapper, así que no se puede seleccionar"
+            }}
+            minWidth={200}
+            dataTestId="card-standalone-2"
+          />
+
+          <UniversalCard
+            id="card-standalone-3"
+            selectable={false}
+            component={SimpleContent}
+            componentProps={{
+              title: "Card Normal",
+              description: "Esta card tiene selectable=false, por lo que nunca será seleccionable"
+            }}
+            minWidth={200}
+            dataTestId="card-standalone-3"
           />
         </div>
       </section>

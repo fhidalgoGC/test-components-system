@@ -1,1 +1,1 @@
-export { WrapperItemsSelectedView as WrapperItemsSelected, useSelection } from './WrapperItemsSelected.view';
+export { WrapperItemsSelectedView as WrapperItemsSelected, useSelection, useSelectionSafe } from './WrapperItemsSelected.view';

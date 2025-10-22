@@ -40,6 +40,10 @@ export interface UniversalCardProps {
   component: ComponentType<any>;
   /** Props to pass to the child component */
   componentProps?: ChildComponentProps;
+  /** Unique identifier for the card (required when selectable is true) */
+  id?: string;
+  /** Whether the card can be selected (only works within WrapperItemsSelected) */
+  selectable?: boolean;
   /** Minimum width of the card */
   minWidth?: SizeValue;
   /** Minimum height of the card */

@@ -2,6 +2,7 @@ import type { UniversalCardProps, SizeValue } from '../types';
 import { useMemo } from 'react';
 import { cn } from '@/lib/ui-library/utils';
 import styles from '../css/UniversalCard.module.css';
+import { useSelectionSafe } from '@/lib/ui-library/components/WrapperItemsSelected';
 
 /**
  * Converts a size value to CSS format
@@ -32,6 +33,8 @@ export const UniversalCardView = (props: UniversalCardProps) => {
   const {
     component: ChildComponent,
     componentProps = {},
+    id,
+    selectable = false,
     minWidth,
     minHeight,
     width,
@@ -41,6 +44,11 @@ export const UniversalCardView = (props: UniversalCardProps) => {
     headerContent,
     footerContent,
   } = props;
+
+  // Try to use selection context (safe - won't throw if not wrapped)
+  const selectionContext = useSelectionSafe();
+  const isSelectable = selectable && selectionContext !== null && id !== undefined;
+  const isSelected = isSelectable ? selectionContext.isSelected(id) : false;
 
   // Process size values
   const widthValue = convertSizeValue(width);
@@ -114,14 +122,30 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       classes.push(cardStyles.className);
     }
 
+    // Add selectable and selected classes
+    if (isSelectable) {
+      classes.push('cursor-pointer');
+    }
+    if (isSelected) {
+      classes.push('ring-2 ring-primary');
+    }
+
     return cn(...classes);
-  }, [widthValue, heightValue, minWidthValue, minHeightValue, cardStyles.className]);
+  }, [widthValue, heightValue, minWidthValue, minHeightValue, cardStyles.className, isSelectable, isSelected]);
+
+  // Handle click for selectable cards
+  const handleClick = () => {
+    if (isSelectable && id && selectionContext) {
+      selectionContext.toggleSelection(id);
+    }
+  };
 
   return (
     <div
       className={classNames}
       style={inlineStyles}
       data-testid={dataTestId}
+      onClick={handleClick}
     >
       {headerContent && (
         <div className={styles.header} data-testid={`${dataTestId}-header`}>
