@@ -16,3 +16,4 @@ export * from './SessionValidator';
 export { NotImplemented } from './NotImplemented';
 export * from './UniversalCard';
 export * from './Carousel';
+export * from './WrapperItemsSelected';

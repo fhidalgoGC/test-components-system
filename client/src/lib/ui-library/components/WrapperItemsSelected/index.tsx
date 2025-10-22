@@ -1,6 +1,6 @@
-export { WrapperItemsSelected, useSelection } from './mobile';
+export { WrapperItemsSelected, useSelection } from './views';
 export type { 
   WrapperItemsSelectedProps, 
   ItemActionEvent, 
   SelectionContextValue 
-} from './mobile';
+} from './types';

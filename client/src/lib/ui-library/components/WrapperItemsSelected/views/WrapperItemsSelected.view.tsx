@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import type { WrapperItemsSelectedProps, SelectionContextValue } from '../types';
 import { useWrapperItemsSelected } from '../hooks';
 import { wrapperItemsSelectedStyles } from '../css';
-import { cn } from '../../../../utils';
+import { cn } from '../../../utils';
 
 const SelectionContext = createContext<SelectionContextValue | null>(null);
 
