@@ -16,6 +16,7 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector', icon: 'Tags' },
         { id: 'carousel', label: 'Carousel', path: '/components/carousel', icon: 'Image' },
         { id: 'universal-card', label: 'UniversalCard', path: '/components/universal-card', icon: 'Layout' },
+        { id: 'wrapper-items-selected', label: 'WrapperItemsSelected', path: '/components/wrapper-items-selected', icon: 'MousePointer' },
         { id: 'bottom-nav', label: 'BottomNavigationBar', path: '/components/bottom-nav', icon: 'Navigation' },
         { id: 'bottom-nav-config', label: 'BottomNav + Config', path: '/components/bottom-nav-config', icon: 'Settings' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
