@@ -131,7 +131,7 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       classes.push('cursor-pointer');
     }
     if (isSelected) {
-      classes.push('ring-2 ring-primary');
+      classes.push('border-2 border-primary');
     }
 
     return cn(...classes);
