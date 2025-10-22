@@ -294,6 +294,35 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Configurar navegación por teclado y accesibilidad
 - Testing con data-testid de slides, botones e indicadores
 
+### **WrapperItemsSelected**
+
+#### **`./components/WrapperItemsSelected/README-IA.md`**
+**Cuándo usar:** Para envolver componentes con funcionalidad de selección de items por ID con callbacks y estado de selección.
+
+**Contiene:**
+- 📖 Props completos del WrapperItemsSelected (selectedIds, defaultSelectedIds, onSelectionChange, onItemAction, multiSelect)
+- 🎯 Ejemplos de uso (cards seleccionables, listas, modo controlado/no controlado, single/multi-select)
+- 🔧 API detallada con tipos TypeScript (WrapperItemsSelectedProps, ItemActionEvent, SelectionContextValue)
+- 🎨 Hook useSelection para acceder al contexto de selección desde componentes hijos
+- 🔄 Modos controlado y no controlado para gestión de estado flexible
+- ⚡ Sistema dual de callbacks (onSelectionChange con array completo, onItemAction con eventos individuales)
+- 🎯 Métodos de selección (toggleSelection, selectItem, deselectItem, isSelected, clearSelection, selectAll)
+- 📊 Soporte para selección múltiple o simple (multiSelect true/false)
+- 🎭 Wrapper universal sin estilos (funciona con cards, listas, grids, componentes custom)
+- 🧪 Data test IDs para testing
+- ♿ Accesibilidad delegada a componentes hijos
+
+**Buscar aquí para:**
+- Implementar selección de items en listas, grids o galerías
+- Crear componentes con selección controlada externamente
+- Implementar bulk actions basadas en selección
+- Usar callbacks para tracking o analytics de selección
+- Implementar patrones de radio buttons o checkboxes personalizados
+- Gestionar estado de selección con control externo (keyboard shortcuts, select all, etc.)
+- Combinar con HeterogeneousList para listas seleccionables
+- Combinar con UniversalCard para grids de cards seleccionables
+- Testing de comportamiento de selección
+
 ### **Futuros Componentes (Estructura General)**
 
 #### **`./components/[ComponentName]/README-IA.md`**
@@ -426,6 +455,13 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 ├── Loop infinito y drag gestures
 └── Callbacks de ciclo de vida
 
+./components/WrapperItemsSelected/README-IA.md
+├── Props y API del WrapperItemsSelected
+├── Ejemplos (cards, listas, controlado/no controlado)
+├── Hook useSelection para componentes hijos
+├── Sistema dual de callbacks (onSelectionChange, onItemAction)
+└── Modos multi-select y single-select
+
 ./components/[ComponentName]/README-IA.md
 ├── Props y API del componente
 ├── Ejemplos de implementación
@@ -465,6 +501,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | BottomNavigationBar | `components/BottomNavigationBar/README-IA.md` | - |
 | HeterogeneousList | `components/HeterogeneousList/README-IA.md` | - |
 | Carousel | `components/Carousel/README-IA.md` | - |
+| WrapperItemsSelected | `components/WrapperItemsSelected/README-IA.md` | - |
 | [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` |
 
 ---
