@@ -65,6 +65,15 @@ export const CarouselView = (props: CarouselProps) => {
     if (slidesPerView === 'auto') {
       return `translateX(-${currentIndex * 100}%)`;
     }
+    
+    // When showPeek is enabled with 1 slide per view, calculate based on actual slide width + spacing
+    if (showPeek && slidesPerView === 1) {
+      // Each slide is 80% wide + 16px spacing
+      // We need to move by (80% of container width + 16px) per slide
+      const offsetCalc = `calc(${currentIndex} * (80% + ${effectiveSpacing}px))`;
+      return `translateX(-${offsetCalc})`;
+    }
+    
     const slideWidthPercent = 100 / slidesPerView;
     const offset = currentIndex * slideWidthPercent;
     return `translateX(-${offset}%)`;
