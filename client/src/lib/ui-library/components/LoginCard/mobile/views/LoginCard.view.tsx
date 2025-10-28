@@ -74,16 +74,15 @@ export const LoginCardView = (props: LoginCardProps) => {
 
         <div className={styles.providersGrid}>
           {providers.map((provider, index) => (
-            <Button
+            <button
               key={`${provider.provider}-${index}`}
-              variant="outline"
               className={styles.providerButton}
               onClick={() => onProviderSelect?.(provider)}
               data-testid={`button-provider-${provider.provider.toLowerCase()}`}
             >
               {provider.icon && <span className={styles.providerIcon}>{provider.icon}</span>}
-              <span>{provider.label || t('logincard.continueWith', { provider: provider.provider })}</span>
-            </Button>
+              <span className={styles.providerLabel}>{provider.label || t('logincard.continueWith', { provider: provider.provider })}</span>
+            </button>
           ))}
         </div>
 
@@ -126,27 +125,25 @@ export const LoginCardView = (props: LoginCardProps) => {
       <div className={styles.providersSection}>
         <div className={styles.providersGrid}>
           {visibleProviders.map((provider, index) => (
-            <Button
+            <button
               key={`${provider.provider}-${index}`}
-              variant="outline"
               className={styles.providerButton}
               onClick={() => onProviderSelect?.(provider)}
               data-testid={`button-provider-${provider.provider.toLowerCase()}`}
             >
               {provider.icon && <span className={styles.providerIcon}>{provider.icon}</span>}
-              <span>{provider.label || provider.provider}</span>
-            </Button>
+              <span className={styles.providerLabel}>{provider.label || provider.provider}</span>
+            </button>
           ))}
           
           {hasMoreProviders && (
-            <Button
-              variant="outline"
+            <button
               className={styles.moreButton}
               onClick={handleShowAllProviders}
               data-testid="button-more-providers"
             >
               <Plus className="w-5 h-5" />
-            </Button>
+            </button>
           )}
         </div>
       </div>
