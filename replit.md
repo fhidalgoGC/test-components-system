@@ -13,7 +13,7 @@ Preferred communication style: Simple, everyday language.
 - **Routing**: Wouter for client-side routing.
 - **State Management**: React state with callback-based data management.
 - **Styling**: Tailwind CSS with CSS variables for theming.
-- **UI Components**: shadcn/ui library with Radix UI primitives, and custom components like `TagSelector`, `HeterogeneousList`, `BottomNavigationBar`, and `UniversalCard`.
+- **UI Components**: shadcn/ui library with Radix UI primitives, and custom components like `TagSelector`, `HeterogeneousList`, `BottomNavigationBar`, `UniversalCard`, and `LoginCard`.
 - **Theme System**: Custom theme provider with light/dark mode and CSS variable-based theming.
 - **Internationalization (i18n)**: Hierarchical i18n system with global and component-specific translations, supporting English (en) and Spanish (es), with fallback and dynamic language selection.
 - **Modular Architecture**: Codebase follows a classified folder pattern for layouts, pages, and UI components, including `css/`, `types/`, `hooks/`, `utils/`, and `i18n/` subdirectories.
@@ -31,6 +31,7 @@ Preferred communication style: Simple, everyday language.
 - **BottomNavigationBar**: Mobile navigation component supporting controlled/uncontrolled selection, dynamic item disabling (`disabledIds`), and `onError` callback for UX protection. Integrates with i18n and ConfigProvider.
 - **HeterogeneousList**: Component supporting configurable page size and scroll preservation. Fully migrated to the Provider + Context + Hook architecture with i18n and ConfigProvider integration.
 - **UniversalCard**: Flexible wrapper card component that can render any React component with customizable styling, sizing (numeric, CSS units, Tailwind classes), and optional header/footer content.
+- **LoginCard**: Authentication card component with dual configurations: `with-credentials` (providers + email/password) and `providers-only` (external auth only). Supports up to 4 visible providers with expandable "more" button, custom provider data, and fully responsive design with mobile/web variants. Integrates with i18n for multi-language support.
 
 # External Dependencies
 

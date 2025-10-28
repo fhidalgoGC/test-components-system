@@ -1,0 +1,18 @@
+{
+  "logincard": {
+    "title": "Sign in to {{appName}}",
+    "subtitle": "Sign in to access your account",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "rememberMe": "Remember me",
+    "continueWithEmail": "Continue with email",
+    "signInDifferentRegion": "Sign in to a different region or a private organization",
+    "troubleSigning": "Trouble signing in? Request a magic sign in link or",
+    "resetPassword": "reset your password",
+    "moreProviders": "More providers",
+    "selectProvider": "Select a provider to continue",
+    "continueWith": "Continue with {{provider}}",
+    "back": "Back"
+  }
+}
