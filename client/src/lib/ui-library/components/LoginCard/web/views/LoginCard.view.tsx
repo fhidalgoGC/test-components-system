@@ -32,12 +32,10 @@ export const LoginCardView = (props: LoginCardProps) => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
-  const maxVisibleProviders = 4;
+  const hasMoreProviders = providers.length > 4;
   const visibleProviders = showAllProviders 
     ? providers 
-    : providers.slice(0, maxVisibleProviders - 1);
-  
-  const hasMoreProviders = providers.length > maxVisibleProviders - 1;
+    : hasMoreProviders ? providers.slice(0, 3) : providers;
 
   const handleEmailLogin = () => {
     if (onEmailLogin && email && password) {
@@ -215,31 +213,19 @@ export const LoginCardView = (props: LoginCardProps) => {
             </Button>
           </div>
 
-          {(onSignInDifferentRegion || onResetPassword) && (
+          {onResetPassword && (
             <div className={styles.footer}>
-              {onSignInDifferentRegion && (
+              <p className={styles.footerText} data-testid="text-trouble">
+                {t('logincard.troubleSigning')}{' '}
                 <button
-                  onClick={onSignInDifferentRegion}
-                  className={styles.footerLink}
-                  data-testid="button-different-region"
+                  onClick={onResetPassword}
+                  className={styles.resetLink}
+                  data-testid="button-reset-password"
                 >
-                  → {t('logincard.signInDifferentRegion')}
+                  {t('logincard.resetPassword')}
                 </button>
-              )}
-              
-              {onResetPassword && (
-                <p className={styles.footerText} data-testid="text-trouble">
-                  {t('logincard.troubleSigning')}{' '}
-                  <button
-                    onClick={onResetPassword}
-                    className={styles.resetLink}
-                    data-testid="button-reset-password"
-                  >
-                    {t('logincard.resetPassword')}
-                  </button>
-                  .
-                </p>
-              )}
+                .
+              </p>
             </div>
           )}
         </>

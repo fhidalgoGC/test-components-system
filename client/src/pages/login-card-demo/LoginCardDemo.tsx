@@ -94,7 +94,6 @@ const LoginCardDemoPage = () => {
               onProviderSelect={handleProviderSelect}
               onEmailLogin={handleEmailLogin}
               onForgotPassword={() => console.log('Forgot password')}
-              onSignInDifferentRegion={() => console.log('Different region')}
               onResetPassword={() => console.log('Reset password')}
               title="Sign in to Miro"
               dataTestId="logincard-with-credentials"

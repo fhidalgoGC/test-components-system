@@ -52,14 +52,25 @@
 }
 
 .providersGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.providerButton,
+.moreButton {
+  flex: 0 0 calc(25% - 0.75rem);
+  max-width: 120px;
 }
 
 @media (max-width: 640px) {
-  .providersGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .providerButton,
+  .moreButton {
+    flex: 0 0 calc(33.333% - 0.75rem);
+    max-width: 100px;
   }
 }
 
