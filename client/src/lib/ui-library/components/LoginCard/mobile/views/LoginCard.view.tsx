@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { LoginCardProps } from '../types';
 import { useLoginCardContext } from '../providers';
+import type { MultiLanguageLabel } from '@/lib/ui-library/types/language.types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -19,6 +20,7 @@ export const LoginCardView = (props: LoginCardProps) => {
   
   const { 
     t, 
+    lang,
     config, 
     providers, 
     onProviderSelect, 
@@ -26,6 +28,12 @@ export const LoginCardView = (props: LoginCardProps) => {
     onForgotPassword,
     onShowAllProviders
   } = useLoginCardContext();
+
+  // Helper function to resolve MultiLanguageLabel
+  const resolveLabel = (label: MultiLanguageLabel | undefined, fallback: string): string => {
+    if (!label) return fallback;
+    return label[lang] || label.default || fallback;
+  };
 
   const [showAllProviders, setShowAllProviders] = useState(false);
   const [email, setEmail] = useState('');
@@ -63,10 +71,10 @@ export const LoginCardView = (props: LoginCardProps) => {
             <Lock className={styles.icon} data-testid="icon-lock" />
           </div>
           <h2 className={styles.title} data-testid="text-title">
-            {title || t('logincard.selectProvider')}
+            {resolveLabel(title, t('logincard.selectProvider'))}
           </h2>
           {subtitle && (
-            <p className={styles.subtitle} data-testid="text-subtitle">{subtitle}</p>
+            <p className={styles.subtitle} data-testid="text-subtitle">{resolveLabel(subtitle, '')}</p>
           )}
         </div>
 
@@ -79,7 +87,7 @@ export const LoginCardView = (props: LoginCardProps) => {
               data-testid={`button-provider-${provider.provider.toLowerCase()}`}
             >
               {provider.icon && <span className={styles.providerIcon}>{provider.icon}</span>}
-              <span className={styles.providerLabel}>{provider.label || t('logincard.continueWith', { provider: provider.provider })}</span>
+              <span className={styles.providerLabel}>{provider.label ? resolveLabel(provider.label, provider.provider) : t('logincard.continueWith', { provider: provider.provider })}</span>
             </button>
           ))}
         </div>
@@ -105,42 +113,46 @@ export const LoginCardView = (props: LoginCardProps) => {
               <Lock className={styles.icon} data-testid="icon-lock" />
             </div>
             <h2 className={styles.title} data-testid="text-title">
-              {title || t('logincard.title', { appName: 'App' })}
+              {resolveLabel(title, t('logincard.title', { appName: 'App' }))}
             </h2>
             {subtitle && (
-              <p className={styles.subtitle} data-testid="text-subtitle">{subtitle}</p>
+              <p className={styles.subtitle} data-testid="text-subtitle">{resolveLabel(subtitle, '')}</p>
             )}
           </>
         )}
         
         {config === 'with-credentials' && (
           <h2 className={styles.title} data-testid="text-title">
-            {title || t('logincard.title', { appName: 'Miro' })}
+            {resolveLabel(title, t('logincard.title', { appName: 'Miro' }))}
           </h2>
         )}
       </div>
 
       <div className={styles.providersSection}>
-        <div className={styles.providersGrid}>
+        <div className={config === 'providers-only' ? styles.providersListVertical : styles.providersGrid}>
           {visibleProviders.map((provider, index) => (
             <button
               key={`${provider.provider}-${index}`}
-              className={styles.providerButton}
+              className={config === 'providers-only' ? styles.providerButtonLarge : styles.providerButton}
               onClick={() => onProviderSelect?.(provider)}
               data-testid={`button-provider-${provider.provider.toLowerCase()}`}
             >
               {provider.icon && <span className={styles.providerIcon}>{provider.icon}</span>}
-              <span className={styles.providerLabel}>{provider.label || provider.provider}</span>
+              <span className={styles.providerLabel}>{provider.label ? resolveLabel(provider.label, provider.provider) : provider.provider}</span>
             </button>
           ))}
           
           {hasMoreProviders && (
             <button
-              className={styles.moreButton}
+              className={config === 'providers-only' ? styles.moreButtonLarge : styles.moreButton}
               onClick={handleShowAllProviders}
               data-testid="button-more-providers"
             >
-              <Plus className="w-5 h-5" />
+              {config === 'providers-only' ? (
+                <span>{t('logincard.moreProviders') || 'Más Proveedores'}</span>
+              ) : (
+                <Plus className="w-5 h-5" />
+              )}
             </button>
           )}
         </div>
@@ -213,21 +225,6 @@ export const LoginCardView = (props: LoginCardProps) => {
             </Button>
           </div>
 
-          {onResetPassword && (
-            <div className={styles.footer}>
-              <p className={styles.footerText} data-testid="text-trouble">
-                {t('logincard.troubleSigning')}{' '}
-                <button
-                  onClick={onResetPassword}
-                  className={styles.resetLink}
-                  data-testid="button-reset-password"
-                >
-                  {t('logincard.resetPassword')}
-                </button>
-                .
-              </p>
-            </div>
-          )}
         </>
       )}
     </div>

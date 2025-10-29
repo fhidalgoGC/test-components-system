@@ -1,8 +1,10 @@
+import { MultiLanguageLabel } from '@/lib/ui-library/types/language.types';
+
 export type LoginProvider = {
   provider: string;
   data?: Record<string, any>;
   icon?: React.ReactNode;
-  label?: string;
+  label?: MultiLanguageLabel;
 };
 
 export type LoginConfig = 'with-credentials' | 'providers-only';
@@ -20,8 +22,8 @@ export interface LoginCardProps {
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';
   dataTestId?: string;
-  title?: string;
-  subtitle?: string;
+  title?: MultiLanguageLabel;
+  subtitle?: MultiLanguageLabel;
 }
 
 export interface LoginCardContext {
