@@ -416,7 +416,6 @@
 
 /* OR Divider */
 .orDivider {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -424,9 +423,7 @@
   gap: 1rem;
 }
 
-.orDivider::before,
-.orDivider::after {
-  content: '';
+.orLine {
   flex: 1;
   height: 1px;
   background-color: hsl(var(--border));
