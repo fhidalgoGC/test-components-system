@@ -373,3 +373,79 @@
   background: hsl(var(--background)) !important;
   border-color: hsl(var(--border)) !important;
 }
+
+/* OR Divider */
+.orDivider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.orDivider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: hsl(var(--border));
+}
+
+.orText {
+  position: relative;
+  display: inline-block;
+  padding: 0 1rem;
+  background: white;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.dark .orText {
+  background: hsl(var(--card));
+}
+
+/* Continue Button */
+.continueButton {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  background: hsl(var(--primary));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form Options */
+.formOptions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -0.5rem;
+}
+
+/* Checkbox Group */
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Button Group */
+.buttonGroup {
+  margin-top: 0.5rem;
+}

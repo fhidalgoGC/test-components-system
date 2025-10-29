@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { LoginCardProps } from '../types';
 import { useLoginCardContext } from '../providers';
 import type { MultiLanguageLabel } from '@/lib/ui-library/types/language.types';
+import { WithCredentialsLayout, ProvidersOnlyLayout } from '../layouts';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -63,6 +64,7 @@ export const LoginCardView = (props: LoginCardProps) => {
     setShowAllProviders(false);
   };
 
+  // All Providers View (when user clicks "more providers")
   if (showAllProviders && !onShowAllProviders) {
     return (
       <div className={`${styles.loginCard} ${className}`} data-testid={dataTestId}>
@@ -104,6 +106,109 @@ export const LoginCardView = (props: LoginCardProps) => {
     );
   }
 
+  // Render Providers Section
+  const renderProvidersSection = () => (
+    <div className={styles.providersSection}>
+      <div className={config === 'providers-only' ? styles.providersListVertical : styles.providersGrid}>
+        {visibleProviders.map((provider, index) => (
+          <button
+            key={`${provider.provider}-${index}`}
+            className={config === 'providers-only' ? styles.providerButtonLarge : styles.providerButton}
+            onClick={() => onProviderSelect?.(provider)}
+            data-testid={`button-provider-${provider.provider.toLowerCase()}`}
+          >
+            {provider.icon && <span className={styles.providerIcon}>{provider.icon}</span>}
+            <span className={styles.providerLabel}>{provider.label ? resolveLabel(provider.label, provider.provider) : provider.provider}</span>
+          </button>
+        ))}
+        
+        {hasMoreProviders && (
+          <button
+            className={config === 'providers-only' ? styles.moreButtonLarge : styles.moreButton}
+            onClick={handleShowAllProviders}
+            data-testid="button-more-providers"
+          >
+            {config === 'providers-only' ? (
+              <span>{t('logincard.moreProviders') || 'Más Proveedores'}</span>
+            ) : (
+              <Plus className="w-5 h-5" />
+            )}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  // Render Credentials Section
+  const renderCredentialsSection = () => (
+    <div className={styles.credentialsSection}>
+      <div className={styles.inputGroup}>
+        <label className={styles.label} htmlFor="email" data-testid="label-email">
+          {t('logincard.email')}
+        </label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="example@email.com"
+          className={styles.input}
+          data-testid="input-email"
+        />
+      </div>
+
+      <div className={styles.inputGroup}>
+        <label className={styles.label} htmlFor="password" data-testid="label-password">
+          {t('logincard.password')}
+        </label>
+        <Input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+          className={styles.input}
+          data-testid="input-password"
+        />
+      </div>
+
+      <div className={styles.formOptions}>
+        {onForgotPassword && (
+          <button
+            onClick={onForgotPassword}
+            className={styles.forgotPassword}
+            data-testid="button-forgot-password"
+          >
+            {t('logincard.forgotPassword')}
+          </button>
+        )}
+      </div>
+
+      <div className={styles.checkboxGroup}>
+        <Checkbox
+          id="remember-me"
+          checked={rememberMe}
+          onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+          data-testid="checkbox-remember-me"
+        />
+        <label htmlFor="remember-me" className={styles.checkboxLabel} data-testid="label-remember-me">
+          {t('logincard.rememberMe')}
+        </label>
+      </div>
+
+      <div className={styles.buttonGroup}>
+        <button
+          onClick={handleEmailLogin}
+          className={styles.continueButton}
+          data-testid="button-continue-email"
+        >
+          {t('logincard.continueWithEmail')}
+        </button>
+      </div>
+    </div>
+  );
+
+  // Main render with layout
   return (
     <div className={`${styles.loginCard} ${className}`} data-testid={dataTestId}>
       <div className={styles.header}>
@@ -128,104 +233,15 @@ export const LoginCardView = (props: LoginCardProps) => {
         )}
       </div>
 
-      <div className={styles.providersSection}>
-        <div className={config === 'providers-only' ? styles.providersListVertical : styles.providersGrid}>
-          {visibleProviders.map((provider, index) => (
-            <button
-              key={`${provider.provider}-${index}`}
-              className={config === 'providers-only' ? styles.providerButtonLarge : styles.providerButton}
-              onClick={() => onProviderSelect?.(provider)}
-              data-testid={`button-provider-${provider.provider.toLowerCase()}`}
-            >
-              {provider.icon && <span className={styles.providerIcon}>{provider.icon}</span>}
-              <span className={styles.providerLabel}>{provider.label ? resolveLabel(provider.label, provider.provider) : provider.provider}</span>
-            </button>
-          ))}
-          
-          {hasMoreProviders && (
-            <button
-              className={config === 'providers-only' ? styles.moreButtonLarge : styles.moreButton}
-              onClick={handleShowAllProviders}
-              data-testid="button-more-providers"
-            >
-              {config === 'providers-only' ? (
-                <span>{t('logincard.moreProviders') || 'Más Proveedores'}</span>
-              ) : (
-                <Plus className="w-5 h-5" />
-              )}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {config === 'with-credentials' && (
-        <>
-          <div className={styles.divider} />
-
-          <div className={styles.credentialsSection}>
-            <div className={styles.inputGroup}>
-              <label className={styles.label} htmlFor="email" data-testid="label-email">
-                {t('logincard.email')}
-              </label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@email.com"
-                className={styles.input}
-                data-testid="input-email"
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <label className={styles.label} htmlFor="password" data-testid="label-password">
-                {t('logincard.password')}
-              </label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••••"
-                className={styles.input}
-                data-testid="input-password"
-              />
-            </div>
-
-            {onForgotPassword && (
-              <button
-                onClick={onForgotPassword}
-                className={styles.forgotPassword}
-                data-testid="button-forgot-password"
-              >
-                {t('logincard.forgotPassword')}
-              </button>
-            )}
-
-            <div className={styles.checkboxContainer}>
-              <Checkbox
-                id="remember"
-                checked={rememberMe}
-                onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                data-testid="checkbox-remember"
-              />
-              <label htmlFor="remember" className={styles.checkboxLabel} data-testid="label-remember">
-                {t('logincard.rememberMe')}
-              </label>
-            </div>
-
-            <Button
-              className={styles.submitButton}
-              onClick={handleEmailLogin}
-              disabled={!email || !password}
-              data-testid="button-submit"
-            >
-              {t('logincard.continueWithEmail')}
-            </Button>
-          </div>
-
-        </>
+      {config === 'with-credentials' ? (
+        <WithCredentialsLayout
+          credentialsSection={renderCredentialsSection()}
+          providersSection={renderProvidersSection()}
+        />
+      ) : (
+        <ProvidersOnlyLayout
+          providersSection={renderProvidersSection()}
+        />
       )}
     </div>
   );
