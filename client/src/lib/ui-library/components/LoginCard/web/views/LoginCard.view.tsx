@@ -205,6 +205,8 @@ export const LoginCardView = (props: LoginCardProps) => {
         >
           {t('logincard.continueWithEmail')}
         </button>
+
+        
       </div>
 
       <div className={styles.signUpPrompt} data-testid="text-signup-prompt">
