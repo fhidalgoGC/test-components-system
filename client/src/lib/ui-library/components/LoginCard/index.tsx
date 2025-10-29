@@ -1,17 +1,9 @@
-import { useIsMobile } from '../../hooks';
-import { LoginCard as LoginCardMobile } from './mobile';
 import { LoginCard as LoginCardWeb } from './web';
-import type { LoginCardProps } from './mobile/types';
+import type { LoginCardProps } from './web/types';
 
 export const LoginCard = (props: LoginCardProps) => {
-  const isMobile = useIsMobile();
-
-  if (isMobile) {
-    return <LoginCardMobile {...props} />;
-  }
-
   return <LoginCardWeb {...props} />;
 };
 
-export type { LoginCardProps, LoginProvider, LoginConfig } from './mobile/types';
-export { useLoginCardContext } from './mobile';
+export type { LoginCardProps, LoginProvider, LoginConfig } from './web/types';
+export { useLoginCardContext } from './web';
