@@ -229,16 +229,16 @@ export const LoginCardView = (props: LoginCardProps) => {
   // Main render with layout
   return (
     <div className={`${styles.loginCard} ${className}`} data-testid={dataTestId}>
-      {renderHeaderSection()}
-
       {config === 'with-credentials' ? (
         <WithCredentialsLayout
+          headerSection={renderHeaderSection()}
           credentialsSection={renderCredentialsSection()}
           providersSection={renderProvidersSection()}
           orText={t('logincard.or')}
         />
       ) : (
         <ProvidersOnlyLayout
+          headerSection={renderHeaderSection()}
           providersSection={renderProvidersSection()}
         />
       )}

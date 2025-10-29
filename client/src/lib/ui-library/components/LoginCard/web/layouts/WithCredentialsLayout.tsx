@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import styles from '../css/LoginCard.module.css';
 
 interface WithCredentialsLayoutProps {
+  headerSection: ReactNode;
   credentialsSection: ReactNode;
   providersSection: ReactNode;
   showDivider?: boolean;
@@ -9,6 +10,7 @@ interface WithCredentialsLayoutProps {
 }
 
 export const WithCredentialsLayout = ({
+  headerSection,
   credentialsSection,
   providersSection,
   showDivider = true,
@@ -16,6 +18,10 @@ export const WithCredentialsLayout = ({
 }: WithCredentialsLayoutProps) => {
   return (
     <>
+      <div className={styles.headerSection}>
+        {headerSection}
+      </div>
+      
       <div className={styles.credentialsContainer}>
         {credentialsSection}
       </div>
@@ -26,7 +32,6 @@ export const WithCredentialsLayout = ({
             <span className={styles.orText}>{orText}</span>
           </div>
         )}
-        
         {providersSection}
       </div>
     </>
