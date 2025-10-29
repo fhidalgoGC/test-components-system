@@ -208,13 +208,7 @@ export const LoginCardView = (props: LoginCardProps) => {
       </div>
 
       <div className={styles.signUpPrompt} data-testid="text-signup-prompt">
-        <span className={styles.signUpText}>{t('logincard.noAccount')}</span>
-        <button 
-          className={styles.signUpLink}
-          data-testid="button-sign-up"
-        >
-          {t('logincard.signUp')}
-        </button>
+        <span className={styles.signUpText}>{t('logincard.noAccount')}</span><button className={styles.signUpLink} data-testid="button-sign-up">{t('logincard.signUp')}</button>
       </div>
     </div>
   );
