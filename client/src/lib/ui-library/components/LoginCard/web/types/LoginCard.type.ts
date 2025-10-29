@@ -24,6 +24,7 @@ export interface LoginCardProps {
   dataTestId?: string;
   title?: MultiLanguageLabel;
   subtitle?: MultiLanguageLabel;
+  icon?: React.ReactNode;
 }
 
 export interface LoginCardContext {

@@ -1,5 +1,6 @@
 import { LoginCard, type LoginProvider } from '@/lib/ui-library/components/LoginCard';
-import { SiGoogle, SiGithub, SiApple, SiFacebook, SiLinkedin } from 'react-icons/si';
+import { SiGoogle, SiGithub, SiApple, SiFacebook, SiLinkedin, SiMiro } from 'react-icons/si';
+import { Lock } from 'lucide-react';
 import { useState } from 'react';
 
 const LoginCardDemoPage = () => {
@@ -104,6 +105,11 @@ const LoginCardDemoPage = () => {
               onForgotPassword={() => console.log('Forgot password')}
               onResetPassword={() => console.log('Reset password')}
               title={{ en: 'Sign in to Miro', es: 'Iniciar sesión en Miro', default: 'Sign in to Miro' }}
+              icon={
+                <div className="w-20 h-20 bg-white rounded-2xl border-2 border-gray-200 flex items-center justify-center">
+                  <SiMiro className="text-5xl text-blue-500" />
+                </div>
+              }
               dataTestId="logincard-with-credentials"
             />
           </div>
@@ -124,6 +130,7 @@ const LoginCardDemoPage = () => {
               onProviderSelect={handleProviderSelect}
               title={{ en: 'Welcome', es: 'Bienvenido', default: 'Welcome' }}
               subtitle={{ en: 'Sign in to access your account', es: 'Inicia sesión para acceder a tu cuenta', default: 'Sign in to access your account' }}
+              icon={<Lock className="w-14 h-14 text-primary" />}
               dataTestId="logincard-providers-only"
             />
           </div>
@@ -146,6 +153,11 @@ const LoginCardDemoPage = () => {
               onForgotPassword={() => console.log('Forgot password')}
               onShowAllProviders={handleShowAllProviders}
               title={{ en: 'Sign in to App', es: 'Iniciar sesión en App', default: 'Sign in to App' }}
+              icon={
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <Lock className="w-8 h-8 text-white" />
+                </div>
+              }
               dataTestId="logincard-many-providers"
             />
           </div>
@@ -182,6 +194,11 @@ const LoginCardDemoPage = () => {
               }}
               title={{ en: 'Enterprise Login', es: 'Inicio de Sesión Empresarial', default: 'Enterprise Login' }}
               subtitle={{ en: 'Select your organization provider', es: 'Selecciona el proveedor de tu organización', default: 'Select your organization provider' }}
+              icon={
+                <div className="w-16 h-16 bg-gray-900 dark:bg-gray-100 rounded-lg flex items-center justify-center">
+                  <SiGithub className="text-3xl text-white dark:text-gray-900" />
+                </div>
+              }
               dataTestId="logincard-custom-data"
             />
           </div>

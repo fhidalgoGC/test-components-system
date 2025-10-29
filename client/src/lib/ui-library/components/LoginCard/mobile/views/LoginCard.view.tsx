@@ -15,6 +15,7 @@ export const LoginCardView = (props: LoginCardProps) => {
     dataTestId = 'logincard',
     title,
     subtitle,
+    icon,
     onSignInDifferentRegion,
     onResetPassword
   } = props;
@@ -208,30 +209,27 @@ export const LoginCardView = (props: LoginCardProps) => {
     </div>
   );
 
+  // Render Icon + Title Section
+  const renderHeaderSection = () => (
+    <div className={styles.header}>
+      {icon && (
+        <div className={styles.iconContainer} data-testid="container-icon">
+          {icon}
+        </div>
+      )}
+      <h2 className={styles.title} data-testid="text-title">
+        {resolveLabel(title, config === 'providers-only' ? t('logincard.title', { appName: 'App' }) : t('logincard.title', { appName: 'Miro' }))}
+      </h2>
+      {subtitle && (
+        <p className={styles.subtitle} data-testid="text-subtitle">{resolveLabel(subtitle, '')}</p>
+      )}
+    </div>
+  );
+
   // Main render with layout
   return (
     <div className={`${styles.loginCard} ${className}`} data-testid={dataTestId}>
-      <div className={styles.header}>
-        {config === 'providers-only' && (
-          <>
-            <div className={styles.iconContainer}>
-              <Lock className={styles.icon} data-testid="icon-lock" />
-            </div>
-            <h2 className={styles.title} data-testid="text-title">
-              {resolveLabel(title, t('logincard.title', { appName: 'App' }))}
-            </h2>
-            {subtitle && (
-              <p className={styles.subtitle} data-testid="text-subtitle">{resolveLabel(subtitle, '')}</p>
-            )}
-          </>
-        )}
-        
-        {config === 'with-credentials' && (
-          <h2 className={styles.title} data-testid="text-title">
-            {resolveLabel(title, t('logincard.title', { appName: 'Miro' }))}
-          </h2>
-        )}
-      </div>
+      {renderHeaderSection()}
 
       {config === 'with-credentials' ? (
         <WithCredentialsLayout
