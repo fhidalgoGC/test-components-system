@@ -453,7 +453,7 @@
   padding: 0.875rem 1.5rem;
   font-size: 1rem;
   font-weight: 500;
-  background: hsl(var(--primary));
+  background: #4353FF;
   color: white;
   border: none;
   border-radius: 8px;
@@ -462,9 +462,9 @@
 }
 
 .continueButton:hover:not(:disabled) {
-  opacity: 0.9;
+  background: #3646E6;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
+  box-shadow: 0 4px 12px rgba(67, 83, 255, 0.3);
 }
 
 .continueButton:disabled {
