@@ -5,12 +5,14 @@ interface WithCredentialsLayoutProps {
   credentialsSection: ReactNode;
   providersSection: ReactNode;
   showDivider?: boolean;
+  orText?: string;
 }
 
 export const WithCredentialsLayout = ({
   credentialsSection,
   providersSection,
   showDivider = true,
+  orText = 'or',
 }: WithCredentialsLayoutProps) => {
   return (
     <>
@@ -18,7 +20,7 @@ export const WithCredentialsLayout = ({
       
       {showDivider && (
         <div className={styles.orDivider}>
-          <span className={styles.orText}>or</span>
+          <span className={styles.orText}>{orText}</span>
         </div>
       )}
       

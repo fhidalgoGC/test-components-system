@@ -235,6 +235,7 @@ export const LoginCardView = (props: LoginCardProps) => {
         <WithCredentialsLayout
           credentialsSection={renderCredentialsSection()}
           providersSection={renderProvidersSection()}
+          orText={t('logincard.or')}
         />
       ) : (
         <ProvidersOnlyLayout

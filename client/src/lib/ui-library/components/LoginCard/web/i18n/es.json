@@ -10,6 +10,7 @@
     "moreProviders": "Más proveedores",
     "selectProvider": "Selecciona un proveedor para continuar",
     "continueWith": "Continuar con {{provider}}",
-    "back": "Volver"
+    "back": "Volver",
+    "or": "o"
   }
 }

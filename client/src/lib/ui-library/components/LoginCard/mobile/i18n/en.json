@@ -10,6 +10,7 @@
     "moreProviders": "More providers",
     "selectProvider": "Select a provider to continue",
     "continueWith": "Continue with {{provider}}",
-    "back": "Back"
+    "back": "Back",
+    "or": "or"
   }
 }
