@@ -31,7 +31,7 @@ Preferred communication style: Simple, everyday language.
 - **BottomNavigationBar**: Mobile navigation component supporting controlled/uncontrolled selection, dynamic item disabling (`disabledIds`), and `onError` callback for UX protection. Integrates with i18n and ConfigProvider.
 - **HeterogeneousList**: Component supporting configurable page size and scroll preservation. Fully migrated to the Provider + Context + Hook architecture with i18n and ConfigProvider integration.
 - **UniversalCard**: Flexible wrapper card component that can render any React component with customizable styling, sizing (numeric, CSS units, Tailwind classes), and optional header/footer content.
-- **LoginCard**: Authentication card component with dual configurations: `with-credentials` (providers + email/password) and `providers-only` (external auth only). Supports up to 4 visible providers with expandable "more" button, custom provider data, and fully responsive design with mobile/web variants. Integrates with i18n for multi-language support.
+- **LoginCard**: Authentication card component with dual configurations: `with-credentials` (providers + email/password) and `providers-only` (external auth only). Supports up to 4 visible providers with expandable "more" button for additional providers. All text labels (title, subtitle, provider labels) use `MultiLanguageLabel` interface for reactive i18n support. The `resolveLabel()` helper function resolves labels based on current language. In `providers-only` mode, providers display as large horizontal buttons with left-aligned icon + text. In `with-credentials` mode, providers show as square grid cards. Fully responsive design with mobile/web variants.
 
 # External Dependencies
 

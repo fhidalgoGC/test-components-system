@@ -7,23 +7,31 @@ const LoginCardDemoPage = () => {
   const [loginData, setLoginData] = useState<any>(null);
 
   const providersWithCredentials: LoginProvider[] = [
-    { provider: 'SSO', label: 'SSO', icon: <span className="text-2xl">🔐</span> },
-    { provider: 'Google', label: '', icon: <SiGoogle className="text-2xl" /> },
-    { provider: 'Microsoft', label: '', icon: <span className="text-2xl">Ⓜ️</span> },
+    { provider: 'SSO', icon: <span className="text-2xl">🔐</span> },
+    { provider: 'Google', icon: <SiGoogle className="text-2xl" /> },
+    { provider: 'Microsoft', icon: <span className="text-2xl">Ⓜ️</span> },
   ];
 
   const providersOnly: LoginProvider[] = [
-    { provider: 'Google', label: 'Continuar con Google', icon: <SiGoogle className="text-xl" /> },
-    { provider: 'GitHub', label: 'Continuar con GitHub', icon: <SiGithub className="text-xl" /> },
+    { 
+      provider: 'Google', 
+      label: { en: 'Continue with Google', es: 'Continuar con Google', default: 'Continue with Google' }, 
+      icon: <SiGoogle className="text-xl" /> 
+    },
+    { 
+      provider: 'GitHub', 
+      label: { en: 'Continue with GitHub', es: 'Continuar con GitHub', default: 'Continue with GitHub' }, 
+      icon: <SiGithub className="text-xl" /> 
+    },
   ];
 
   const manyProviders: LoginProvider[] = [
-    { provider: 'Google', label: 'Google', icon: <SiGoogle className="text-xl" /> },
-    { provider: 'Microsoft', label: 'Microsoft', icon: <span className="text-xl">Ⓜ️</span> },
-    { provider: 'GitHub', label: 'GitHub', icon: <SiGithub className="text-xl" /> },
-    { provider: 'Apple', label: 'Apple', icon: <SiApple className="text-xl" /> },
-    { provider: 'Facebook', label: 'Facebook', icon: <SiFacebook className="text-xl" /> },
-    { provider: 'LinkedIn', label: 'LinkedIn', icon: <SiLinkedin className="text-xl" /> },
+    { provider: 'Google', icon: <SiGoogle className="text-xl" /> },
+    { provider: 'Microsoft', icon: <span className="text-xl">Ⓜ️</span> },
+    { provider: 'GitHub', icon: <SiGithub className="text-xl" /> },
+    { provider: 'Apple', icon: <SiApple className="text-xl" /> },
+    { provider: 'Facebook', icon: <SiFacebook className="text-xl" /> },
+    { provider: 'LinkedIn', icon: <SiLinkedin className="text-xl" /> },
   ];
 
   const handleProviderSelect = (provider: LoginProvider) => {
@@ -95,7 +103,7 @@ const LoginCardDemoPage = () => {
               onEmailLogin={handleEmailLogin}
               onForgotPassword={() => console.log('Forgot password')}
               onResetPassword={() => console.log('Reset password')}
-              title="Sign in to Miro"
+              title={{ en: 'Sign in to Miro', es: 'Iniciar sesión en Miro', default: 'Sign in to Miro' }}
               dataTestId="logincard-with-credentials"
             />
           </div>
@@ -114,8 +122,8 @@ const LoginCardDemoPage = () => {
               config="providers-only"
               providers={providersOnly}
               onProviderSelect={handleProviderSelect}
-              title="Bienvenido"
-              subtitle="Inicia sesión para acceder a tu cuenta"
+              title={{ en: 'Welcome', es: 'Bienvenido', default: 'Welcome' }}
+              subtitle={{ en: 'Sign in to access your account', es: 'Inicia sesión para acceder a tu cuenta', default: 'Sign in to access your account' }}
               dataTestId="logincard-providers-only"
             />
           </div>
@@ -137,7 +145,7 @@ const LoginCardDemoPage = () => {
               onEmailLogin={handleEmailLogin}
               onForgotPassword={() => console.log('Forgot password')}
               onShowAllProviders={handleShowAllProviders}
-              title="Sign in to App"
+              title={{ en: 'Sign in to App', es: 'Iniciar sesión en App', default: 'Sign in to App' }}
               dataTestId="logincard-many-providers"
             />
           </div>
@@ -157,13 +165,13 @@ const LoginCardDemoPage = () => {
               providers={[
                 { 
                   provider: 'Google', 
-                  label: 'Google Workspace', 
+                  label: { en: 'Google Workspace', es: 'Google Workspace', default: 'Google Workspace' }, 
                   icon: <SiGoogle className="text-xl" />,
                   data: { domain: 'company.com', type: 'workspace' }
                 },
                 { 
                   provider: 'GitHub', 
-                  label: 'GitHub Enterprise', 
+                  label: { en: 'GitHub Enterprise', es: 'GitHub Enterprise', default: 'GitHub Enterprise' }, 
                   icon: <SiGithub className="text-xl" />,
                   data: { org: 'my-company', type: 'enterprise' }
                 },
@@ -172,8 +180,8 @@ const LoginCardDemoPage = () => {
                 console.log('Provider with data:', provider);
                 setSelectedProvider(provider);
               }}
-              title="Enterprise Login"
-              subtitle="Select your organization provider"
+              title={{ en: 'Enterprise Login', es: 'Inicio de Sesión Empresarial', default: 'Enterprise Login' }}
+              subtitle={{ en: 'Select your organization provider', es: 'Selecciona el proveedor de tu organización', default: 'Select your organization provider' }}
               dataTestId="logincard-custom-data"
             />
           </div>
