@@ -29,9 +29,7 @@ export const WithCredentialsLayout = ({
       <div className={styles.bottomSection}>
         {showDivider && (
           <div className={styles.orDivider}>
-            <div className={styles.orLine}></div>
             <span className={styles.orText}>{orText}</span>
-            <div className={styles.orLine}></div>
           </div>
         )}
         {providersSection}
