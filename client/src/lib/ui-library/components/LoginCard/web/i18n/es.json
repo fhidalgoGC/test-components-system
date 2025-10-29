@@ -11,6 +11,8 @@
     "selectProvider": "Selecciona un proveedor para continuar",
     "continueWith": "Continuar con {{provider}}",
     "back": "Volver",
-    "or": "o"
+    "or": "o",
+    "noAccount": "¿No tienes una cuenta?",
+    "signUp": "Regístrate"
   }
 }

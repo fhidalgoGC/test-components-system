@@ -464,7 +464,8 @@
 /* Form Options */
 .formOptions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: -0.5rem;
 }
 
@@ -478,4 +479,34 @@
 /* Button Group */
 .buttonGroup {
   margin-top: 0.5rem;
+}
+
+/* Sign Up Prompt */
+.signUpPrompt {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.signUpText {
+  color: hsl(var(--muted-foreground));
+}
+
+.signUpLink {
+  color: #4353FF;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.signUpLink:hover {
+  color: #3646E6;
 }

@@ -174,6 +174,18 @@ export const LoginCardView = (props: LoginCardProps) => {
       </div>
 
       <div className={styles.formOptions}>
+        <div className={styles.checkboxGroup}>
+          <Checkbox
+            id="remember-me"
+            checked={rememberMe}
+            onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+            data-testid="checkbox-remember-me"
+          />
+          <label htmlFor="remember-me" className={styles.checkboxLabel} data-testid="label-remember-me">
+            {t('logincard.rememberMe')}
+          </label>
+        </div>
+        
         {onForgotPassword && (
           <button
             onClick={onForgotPassword}
@@ -185,18 +197,6 @@ export const LoginCardView = (props: LoginCardProps) => {
         )}
       </div>
 
-      <div className={styles.checkboxGroup}>
-        <Checkbox
-          id="remember-me"
-          checked={rememberMe}
-          onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-          data-testid="checkbox-remember-me"
-        />
-        <label htmlFor="remember-me" className={styles.checkboxLabel} data-testid="label-remember-me">
-          {t('logincard.rememberMe')}
-        </label>
-      </div>
-
       <div className={styles.buttonGroup}>
         <button
           onClick={handleEmailLogin}
@@ -204,6 +204,16 @@ export const LoginCardView = (props: LoginCardProps) => {
           data-testid="button-continue-email"
         >
           {t('logincard.continueWithEmail')}
+        </button>
+      </div>
+
+      <div className={styles.signUpPrompt} data-testid="text-signup-prompt">
+        <span className={styles.signUpText}>{t('logincard.noAccount')}</span>
+        <button 
+          className={styles.signUpLink}
+          data-testid="button-sign-up"
+        >
+          {t('logincard.signUp')}
         </button>
       </div>
     </div>

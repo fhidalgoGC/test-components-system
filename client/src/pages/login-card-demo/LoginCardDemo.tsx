@@ -19,9 +19,21 @@ const LoginCardDemoPage = () => {
   const [loginData, setLoginData] = useState<any>(null);
 
   const providersWithCredentials: LoginProvider[] = [
-    { provider: "SSO", icon: <span className="text-2xl">🔐</span> },
-    { provider: "Google", icon: <SiGoogle className="text-2xl" /> },
-    { provider: "Microsoft", icon: <span className="text-2xl">Ⓜ️</span> },
+    { 
+      provider: "SSO", 
+      icon: <span className="text-2xl">🔐</span>,
+      data: { authType: "saml", domain: "company.com" }
+    },
+    { 
+      provider: "Google", 
+      icon: <SiGoogle className="text-2xl" />,
+      data: { scope: "email profile", clientId: "google-client-123" }
+    },
+    { 
+      provider: "Microsoft", 
+      icon: <span className="text-2xl">Ⓜ️</span>,
+      data: { tenant: "common", redirectUri: "/auth/callback" }
+    },
   ];
 
   const providersOnly: LoginProvider[] = [
@@ -33,6 +45,7 @@ const LoginCardDemoPage = () => {
         default: "Continue with Google",
       },
       icon: <SiGoogle className="text-xl" />,
+      data: { scope: "email profile", prompt: "consent" }
     },
     {
       provider: "GitHub",
@@ -42,16 +55,41 @@ const LoginCardDemoPage = () => {
         default: "Continue with GitHub",
       },
       icon: <SiGithub className="text-xl" />,
+      data: { scope: "user:email", allowSignup: true }
     },
   ];
 
   const manyProviders: LoginProvider[] = [
-    { provider: "Google", icon: <SiGoogle className="text-xl" /> },
-    { provider: "Microsoft", icon: <span className="text-xl">Ⓜ️</span> },
-    { provider: "GitHub", icon: <SiGithub className="text-xl" /> },
-    { provider: "Apple", icon: <SiApple className="text-xl" /> },
-    { provider: "Facebook", icon: <SiFacebook className="text-xl" /> },
-    { provider: "LinkedIn", icon: <SiLinkedin className="text-xl" /> },
+    { 
+      provider: "Google", 
+      icon: <SiGoogle className="text-xl" />,
+      data: { type: "oauth2", priority: 1 }
+    },
+    { 
+      provider: "Microsoft", 
+      icon: <span className="text-xl">Ⓜ️</span>,
+      data: { type: "oauth2", priority: 2 }
+    },
+    { 
+      provider: "GitHub", 
+      icon: <SiGithub className="text-xl" />,
+      data: { type: "oauth2", priority: 3 }
+    },
+    { 
+      provider: "Apple", 
+      icon: <SiApple className="text-xl" />,
+      data: { type: "oauth2", priority: 4 }
+    },
+    { 
+      provider: "Facebook", 
+      icon: <SiFacebook className="text-xl" />,
+      data: { type: "oauth2", priority: 5 }
+    },
+    { 
+      provider: "LinkedIn", 
+      icon: <SiLinkedin className="text-xl" />,
+      data: { type: "oauth2", priority: 6 }
+    },
   ];
 
   const handleProviderSelect = (provider: LoginProvider) => {

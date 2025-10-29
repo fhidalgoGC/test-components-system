@@ -11,6 +11,8 @@
     "selectProvider": "Select a provider to continue",
     "continueWith": "Continue with {{provider}}",
     "back": "Back",
-    "or": "or"
+    "or": "or",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up"
   }
 }
