@@ -384,7 +384,7 @@
 .orDivider {
   position: relative;
   text-align: center;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
 }
 
 .orDivider::before {
@@ -394,22 +394,23 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: hsl(var(--border));
+  background-color: hsl(var(--border));
+  transform: translateY(-50%);
 }
 
 .orText {
   position: relative;
   display: inline-block;
   padding: 0 1rem;
-  background: white;
+  background-color: white;
   color: hsl(var(--muted-foreground));
-  font-size: 0.813rem;
+  font-size: 0.875rem;
   font-weight: 400;
   z-index: 1;
 }
 
 .dark .orText {
-  background: hsl(var(--card));
+  background-color: hsl(var(--card));
 }
 
 /* Continue Button */
