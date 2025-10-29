@@ -417,34 +417,26 @@
 /* OR Divider */
 .orDivider {
   position: relative;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 1.25rem 0 1rem 0;
+  gap: 1rem;
 }
 
-.orDivider::before {
+.orDivider::before,
+.orDivider::after {
   content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
+  flex: 1;
   height: 1px;
   background-color: hsl(var(--border));
-  transform: translateY(-50%);
 }
 
 .orText {
-  position: relative;
-  display: inline-block;
-  padding: 0 1rem;
-  background-color: white;
   color: hsl(var(--muted-foreground));
   font-size: 0.875rem;
   font-weight: 400;
-  z-index: 1;
-}
-
-.dark .orText {
-  background-color: hsl(var(--card));
+  flex-shrink: 0;
 }
 
 /* Continue Button */
