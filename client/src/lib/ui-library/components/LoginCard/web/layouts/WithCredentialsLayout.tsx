@@ -16,15 +16,19 @@ export const WithCredentialsLayout = ({
 }: WithCredentialsLayoutProps) => {
   return (
     <>
-      {credentialsSection}
+      <div className={styles.credentialsContainer}>
+        {credentialsSection}
+      </div>
       
-      {showDivider && (
-        <div className={styles.orDivider}>
-          <span className={styles.orText}>{orText}</span>
-        </div>
-      )}
-      
-      {providersSection}
+      <div className={styles.bottomSection}>
+        {showDivider && (
+          <div className={styles.orDivider}>
+            <span className={styles.orText}>{orText}</span>
+          </div>
+        )}
+        
+        {providersSection}
+      </div>
     </>
   );
 };
