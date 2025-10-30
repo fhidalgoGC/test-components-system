@@ -4,6 +4,7 @@ export type LoginProvider = {
   provider: string;
   data?: Record<string, any>;
   icon?: React.ReactNode;
+  component?: React.ReactNode;
   label?: MultiLanguageLabel;
 };
 

@@ -22,7 +22,16 @@ const LoginCardDemoPage = () => {
     { 
       provider: "SSO", 
       icon: <span className="text-2xl">🔐</span>,
-      data: { authType: "saml", domain: "company.com" }
+      data: { authType: "saml", domain: "company.com" },
+      component: (
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">🔐</span>
+          <div className="flex flex-col items-start">
+            <span className="font-semibold">SSO Login</span>
+            <span className="text-xs text-gray-500">company.com</span>
+          </div>
+        </div>
+      )
     },
     { 
       provider: "Google", 
