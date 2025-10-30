@@ -45,7 +45,10 @@ export const LoginCardView = (props: LoginCardProps) => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const hasMoreProviders = providers.length > 4;
+  // Determine layout based on provider count
+  const providerCount = providers.length;
+  const useVerticalLayout = providerCount <= 2 && config === "with-credentials";
+  const hasMoreProviders = providerCount >= 5;
   const visibleProviders = showAllProviders
     ? providers
     : hasMoreProviders
@@ -136,7 +139,7 @@ export const LoginCardView = (props: LoginCardProps) => {
     <div className={styles.providersSection}>
       <div
         className={
-          config === "providers-only"
+          config === "providers-only" || useVerticalLayout
             ? styles.providersListVertical
             : styles.providersGrid
         }
@@ -145,7 +148,7 @@ export const LoginCardView = (props: LoginCardProps) => {
           <button
             key={`${provider.provider}-${index}`}
             className={
-              config === "providers-only"
+              config === "providers-only" || useVerticalLayout
                 ? styles.providerButtonLarge
                 : styles.providerButton
             }
@@ -172,14 +175,14 @@ export const LoginCardView = (props: LoginCardProps) => {
         {hasMoreProviders && (
           <button
             className={
-              config === "providers-only"
+              config === "providers-only" || useVerticalLayout
                 ? styles.moreButtonLarge
                 : styles.moreButton
             }
             onClick={handleShowAllProviders}
             data-testid="button-more-providers"
           >
-            {config === "providers-only" ? (
+            {config === "providers-only" || useVerticalLayout ? (
               <span>{t("logincard.moreProviders") || "Más Proveedores"}</span>
             ) : (
               <Plus className="w-5 h-5" />

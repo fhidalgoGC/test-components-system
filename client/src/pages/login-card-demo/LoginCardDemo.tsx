@@ -18,7 +18,20 @@ const LoginCardDemoPage = () => {
     useState<LoginProvider | null>(null);
   const [loginData, setLoginData] = useState<any>(null);
 
-  const providersWithCredentials: LoginProvider[] = [
+  const twoProviders: LoginProvider[] = [
+    { 
+      provider: "Google", 
+      icon: <SiGoogle className="text-2xl" />,
+      data: { scope: "email profile", clientId: "google-client-123" }
+    },
+    { 
+      provider: "GitHub", 
+      icon: <SiGithub className="text-2xl" />,
+      data: { scope: "user:email", allowSignup: true }
+    },
+  ];
+
+  const threeProviders: LoginProvider[] = [
     { 
       provider: "SSO", 
       icon: <span className="text-2xl">🔐</span>,
@@ -42,6 +55,34 @@ const LoginCardDemoPage = () => {
       provider: "Microsoft", 
       icon: <span className="text-2xl">Ⓜ️</span>,
       data: { tenant: "common", redirectUri: "/auth/callback" }
+    },
+  ];
+
+  const fiveProviders: LoginProvider[] = [
+    { 
+      provider: "SSO", 
+      icon: <span className="text-2xl">🔐</span>,
+      data: { authType: "saml", domain: "company.com" }
+    },
+    { 
+      provider: "Google", 
+      icon: <SiGoogle className="text-2xl" />,
+      data: { scope: "email profile", clientId: "google-client-123" }
+    },
+    { 
+      provider: "Microsoft", 
+      icon: <span className="text-2xl">Ⓜ️</span>,
+      data: { tenant: "common", redirectUri: "/auth/callback" }
+    },
+    { 
+      provider: "Apple", 
+      icon: <SiApple className="text-2xl" />,
+      data: { type: "oauth2" }
+    },
+    { 
+      provider: "Facebook", 
+      icon: <SiFacebook className="text-2xl" />,
+      data: { type: "oauth2" }
     },
   ];
 
@@ -161,28 +202,46 @@ const LoginCardDemoPage = () => {
         )}
 
         <section className="space-y-4">
-          <h2
-            className="text-2xl font-semibold"
-            data-testid="text-section-with-credentials"
-          >
-            1. Login con Proveedores + Credenciales
+          <h2 className="text-2xl font-semibold">
+            1. Con 2 Proveedores (Vertical)
           </h2>
-          <p
-            className="text-muted-foreground"
-            data-testid="text-description-with-credentials"
-          >
-            Configuración con proveedores externos (máximo 4 visibles) y campos
-            de email/password. Basado en el diseño de Miro.
+          <p className="text-muted-foreground">
+            Con 2 o menos proveedores, se muestran en botones verticales completos.
           </p>
 
           <div className="flex justify-center">
             <LoginCard
               config="with-credentials"
-              providers={providersWithCredentials}
+              providers={twoProviders}
               onProviderSelect={handleProviderSelect}
               onEmailLogin={handleEmailLogin}
               onForgotPassword={() => console.log("Forgot password")}
-              onResetPassword={() => console.log("Reset password")}
+              title={{
+                en: "Sign in to App",
+                es: "Iniciar sesión en App",
+                default: "Sign in to App",
+              }}
+              icon={<Lock className="w-12 h-12" />}
+              dataTestId="logincard-two-providers"
+            />
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-2xl font-semibold">
+            2. Con 3 Proveedores (Grid)
+          </h2>
+          <p className="text-muted-foreground">
+            Con 3-4 proveedores, se muestran en grid de cuadrados.
+          </p>
+
+          <div className="flex justify-center">
+            <LoginCard
+              config="with-credentials"
+              providers={threeProviders}
+              onProviderSelect={handleProviderSelect}
+              onEmailLogin={handleEmailLogin}
+              onForgotPassword={() => console.log("Forgot password")}
               title={{
                 en: "Sign in to Miro",
                 es: "Iniciar sesión en Miro",
@@ -193,7 +252,33 @@ const LoginCardDemoPage = () => {
                   <SiMiro className="text-5xl text-blue-500" />
                 </div>
               }
-              dataTestId="logincard-with-credentials"
+              dataTestId="logincard-three-providers"
+            />
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-2xl font-semibold">
+            3. Con 5 Proveedores (Grid + More)
+          </h2>
+          <p className="text-muted-foreground">
+            Con 5+ proveedores, se muestran 3 en grid + botón "more providers".
+          </p>
+
+          <div className="flex justify-center">
+            <LoginCard
+              config="with-credentials"
+              providers={fiveProviders}
+              onProviderSelect={handleProviderSelect}
+              onEmailLogin={handleEmailLogin}
+              onForgotPassword={() => console.log("Forgot password")}
+              title={{
+                en: "Sign in to App",
+                es: "Iniciar sesión en App",
+                default: "Sign in to App",
+              }}
+              icon={<Lock className="w-12 h-12" />}
+              dataTestId="logincard-five-providers"
             />
           </div>
         </section>
