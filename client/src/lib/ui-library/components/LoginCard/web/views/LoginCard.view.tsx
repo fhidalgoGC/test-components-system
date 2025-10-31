@@ -55,6 +55,26 @@ export const LoginCardView = (props: LoginCardProps) => {
       ? providers.slice(0, 3)
       : providers;
 
+  // Determine grid class based on provider count
+  const getGridClass = () => {
+    if (config === "providers-only" || useVerticalLayout) {
+      return styles.providersListVertical;
+    }
+    if (providerCount === 3) return styles.providersGridThree;
+    if (providerCount === 4) return styles.providersGridFour;
+    return styles.providersGrid;
+  };
+
+  // Determine button class based on provider count
+  const getButtonClass = () => {
+    if (config === "providers-only" || useVerticalLayout) {
+      return styles.providerButtonLarge;
+    }
+    if (providerCount === 3) return styles.providerButtonThree;
+    if (providerCount === 4) return styles.providerButtonFour;
+    return styles.providerButton;
+  };
+
   const handleEmailLogin = () => {
     if (onEmailLogin && email && password) {
       onEmailLogin(email, password, rememberMe);
@@ -137,21 +157,11 @@ export const LoginCardView = (props: LoginCardProps) => {
   // Render Providers Section
   const renderProvidersSection = () => (
     <div className={styles.providersSection}>
-      <div
-        className={
-          config === "providers-only" || useVerticalLayout
-            ? styles.providersListVertical
-            : styles.providersGrid
-        }
-      >
+      <div className={getGridClass()}>
         {visibleProviders.map((provider, index) => (
           <button
             key={`${provider.provider}-${index}`}
-            className={
-              config === "providers-only" || useVerticalLayout
-                ? styles.providerButtonLarge
-                : styles.providerButton
-            }
+            className={getButtonClass()}
             onClick={() => onProviderSelect?.(provider)}
             data-testid={`button-provider-${provider.provider.toLowerCase()}`}
           >
@@ -315,6 +325,7 @@ export const LoginCardView = (props: LoginCardProps) => {
           headerSection={renderHeaderSection()}
           credentialsSection={renderCredentialsSection()}
           providersSection={renderProvidersSection()}
+          showDivider={providers.length > 0}
           orText={t("logincard.or")}
         />
       ) : (
