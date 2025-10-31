@@ -184,11 +184,7 @@ export const LoginCardView = (props: LoginCardProps) => {
 
         {hasMoreProviders && (
           <button
-            className={
-              config === "providers-only" || useVerticalLayout
-                ? styles.moreButtonLarge
-                : styles.moreButton
-            }
+            className={getButtonClass()}
             onClick={handleShowAllProviders}
             data-testid="button-more-providers"
           >
