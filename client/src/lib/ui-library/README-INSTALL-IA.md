@@ -109,9 +109,10 @@ node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library/
 ### **Archivos de Documentación:**
 - **Índice General**: `README-INDEX.md`
 - **Sistema de Estilos Global**: `README-IA--STYLES.md`
-- **Sistema de Idiomas - Provider Padre**: `providers/AppLanguageProvider/README.md`
-- **Sistema de Idiomas - Provider Librería**: `providers/AppLanguageLibUiProvider/README.md`
-- **Sistema de Configuración**: `providers/AppEnviromentProvider/README.md`
+- **Sistema de Idiomas - Provider Padre**: `providers/AppLanguageProvider/README-IA.md`
+- **Sistema de Idiomas - Provider Librería**: `providers/AppLanguageLibUiProvider/README-IA.md`
+- **Sistema de Configuración**: `providers/AppEnviromentProvider/README-IA.md`
+- **Sistema de Autenticación**: `providers/AppAuthProvider/README-IA.md`
 - **TagSelector**: `components/TagSelector/README-IA.md`
 - **Estilos TagSelector**: `components/TagSelector/README-IA--STYLES.md`
 - **BottomNavigationBar**: `components/BottomNavigationBar/README-IA.md`

@@ -48,7 +48,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 🌍 **Sistema de Variables de Entorno**
 
-### **`./providers/AppEnviromentProvider/README.md`**
+### **`./providers/AppEnviromentProvider/README-IA.md`**
 **Cuándo usar:** Para configurar variables de entorno y gestión híbrida de configuración entre aplicaciones padre y librería.
 
 **Contiene:**
@@ -73,7 +73,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 🔐 **Sistema de Autenticación y Sesiones**
 
-### **`./providers/AppAuthProvider/README.md`**
+### **`./providers/AppAuthProvider/README-IA.md`**
 **Cuándo usar:** Para implementar gestión de autenticación y sesiones con expiración automática.
 
 **Contiene:**
@@ -99,7 +99,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 🌐 **Sistema de Idiomas y Providers**
 
-### **`./providers/AppLanguageProvider/README.md`**
+### **`./providers/AppLanguageProvider/README-IA.md`**
 **Cuándo usar:** Para implementar el provider de idioma principal de la aplicación.
 
 **Contiene:**
@@ -117,7 +117,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Usar useAppLanguage hook
 - Integrar con componentes de la librería
 
-### **`./providers/AppLanguageLibUiProvider/README.md`**
+### **`./providers/AppLanguageLibUiProvider/README-IA.md`**
 **Cuándo usar:** Para documentación técnica detallada del LibI18nProvider.
 
 **Contiene:**
