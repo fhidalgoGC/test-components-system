@@ -345,7 +345,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🌍 Variables de Entorno**
 ```
-./providers/AppEnviromentProvider/README.md
+./providers/AppEnviromentProvider/README-IA.md
 ├── Sistema híbrido de configuración
 ├── 3 estrategias de precedencia
 ├── ConfigProvider para aplicaciones padre
@@ -356,7 +356,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🔐 Autenticación y Sesiones**
 ```
-./providers/AppAuthProvider/README.md
+./providers/AppAuthProvider/README-IA.md
 ├── Sistema de autenticación global
 ├── Expiración de sesión basada en tiempo real
 ├── Sincronización cross-tab con BroadcastChannel
@@ -377,13 +377,13 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🌐 Idiomas**
 ```
-./providers/AppLanguageProvider/README.md
+./providers/AppLanguageProvider/README-IA.md
 ├── Provider de idioma principal (padre)
 ├── Configuración de idiomas disponibles
 ├── useAppLanguage hook
 └── Integración con la aplicación
 
-./providers/AppLanguageLibUiProvider/README.md
+./providers/AppLanguageLibUiProvider/README-IA.md
 ├── Provider de traducciones de librería (hijo)
 ├── API detallada de LibI18nProvider
 ├── useLibI18n hook
@@ -423,17 +423,17 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 |-----------------|-------------|
 | Instalar la librería | `README-INSTALL-IA.md` |
 | Implementar nuevos providers o componentes | `../README-IA-IMPORTS.md` |
-| Configurar variables de entorno | `providers/AppEnviromentProvider/README.md` |
-| Sobrescribir config desde padre | `providers/AppEnviromentProvider/README.md` |
-| Implementar autenticación y sesiones | `providers/AppAuthProvider/README.md` |
-| Configurar expiración de sesión | `providers/AppAuthProvider/README.md` |
-| Sincronizar sesión entre pestañas | `providers/AppAuthProvider/README.md` |
+| Configurar variables de entorno | `providers/AppEnviromentProvider/README-IA.md` |
+| Sobrescribir config desde padre | `providers/AppEnviromentProvider/README-IA.md` |
+| Implementar autenticación y sesiones | `providers/AppAuthProvider/README-IA.md` |
+| Configurar expiración de sesión | `providers/AppAuthProvider/README-IA.md` |
+| Sincronizar sesión entre pestañas | `providers/AppAuthProvider/README-IA.md` |
 | Personalizar estilos globales | `README-IA--STYLES.md` |
-| Configurar idioma de aplicación | `providers/AppLanguageProvider/README.md` |
-| Traducciones de componentes | `providers/AppLanguageLibUiProvider/README.md` |
+| Configurar idioma de aplicación | `providers/AppLanguageProvider/README-IA.md` |
+| Traducciones de componentes | `providers/AppLanguageLibUiProvider/README-IA.md` |
 | Formatear fechas con providers | `utils/dates/README.md` |
 | Resolver errores de imports con alias | `../README-IA-IMPORTS.md` |
-| Agregar nuevos idiomas | `providers/AppLanguageProvider/README.md` |
+| Agregar nuevos idiomas | `providers/AppLanguageProvider/README-IA.md` |
 
 ### **🧩 Componentes Específicos:**
 | **Componente** | **Documentación** | **Estilos** |
