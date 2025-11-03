@@ -14,6 +14,7 @@ import {
 } from "react-icons/si";
 import { Lock, Sparkles, Zap } from "lucide-react";
 import { useState } from "react";
+import grainchainLogo from "@assets/1_cr8JfCZLmZU3UOEPjdGfXg_1762188698471.png";
 
 const LoginCardDemoPage = () => {
   const [selectedProvider, setSelectedProvider] =
@@ -155,6 +156,29 @@ const LoginCardDemoPage = () => {
       provider: "LinkedIn", 
       icon: <SiLinkedin className="text-xl" />,
       data: { type: "oauth2", priority: 6 }
+    },
+  ];
+
+  // Single GitHub provider with internal redirect
+  const githubOnlyProvider: LoginProvider[] = [
+    {
+      provider: "GitHub",
+      component: (
+        <div className="flex items-center justify-center gap-3 w-full h-full">
+          <img 
+            src={grainchainLogo} 
+            alt="GrainChain" 
+            className="w-8 h-8 object-contain"
+          />
+          <span className="text-base font-medium">Continue with GitHub</span>
+        </div>
+      ),
+      redirect: {
+        external: false,
+        url: "auth/github",
+        newTab: false,
+      },
+      data: { authType: "oauth2", provider: "github" }
     },
   ];
 
@@ -406,7 +430,44 @@ const LoginCardDemoPage = () => {
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            6. Solo Proveedores (Sin Email)
+            6. Solo GitHub con Logo Custom (Redirect Interno)
+          </h2>
+          <p className="text-muted-foreground">
+            Un solo proveedor con logo personalizado y redirección interna a <code>auth/github</code>
+          </p>
+
+          <div className="flex justify-center">
+            <LoginCard
+              config="providers-only"
+              providers={githubOnlyProvider}
+              onProviderSelect={handleProviderSelect}
+              title={{
+                en: "Sign in to GrainChain",
+                es: "Iniciar sesión en GrainChain",
+                default: "Sign in to GrainChain",
+              }}
+              subtitle={{
+                en: "Continue with your GitHub account",
+                es: "Continúa con tu cuenta de GitHub",
+                default: "Continue with your GitHub account",
+              }}
+              icon={
+                <div className="w-16 h-16 rounded-2xl overflow-hidden">
+                  <img 
+                    src={grainchainLogo} 
+                    alt="GrainChain" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              }
+              dataTestId="logincard-github-only"
+            />
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-2xl font-semibold">
+            7. Solo Proveedores (Sin Email)
           </h2>
           <p className="text-muted-foreground">
             Configuración "providers-only" con botones horizontales grandes
@@ -435,7 +496,7 @@ const LoginCardDemoPage = () => {
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            7. Solo Email (Sin Proveedores)
+            8. Solo Email (Sin Proveedores)
           </h2>
           <p className="text-muted-foreground">
             Solo email/password sin proveedores externos
