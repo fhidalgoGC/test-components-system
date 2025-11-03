@@ -14,7 +14,6 @@ import {
 } from "react-icons/si";
 import { Lock, Sparkles, Zap } from "lucide-react";
 import { useState } from "react";
-import grainchainLogo from "@assets/1_cr8JfCZLmZU3UOEPjdGfXg_1762188698471.png";
 
 const LoginCardDemoPage = () => {
   const [selectedProvider, setSelectedProvider] =
@@ -450,12 +449,8 @@ const LoginCardDemoPage = () => {
                 default: "Continue with your GitHub account",
               }}
               icon={
-                <div className="w-16 h-16 rounded-2xl overflow-hidden">
-                  <img
-                    src={grainchainLogo}
-                    alt="GrainChain"
-                    className="w-full h-full object-cover"
-                  />
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                  <Sparkles className="w-8 h-8 text-white" />
                 </div>
               }
               dataTestId="logincard-github-only"
