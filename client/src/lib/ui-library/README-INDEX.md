@@ -444,6 +444,15 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | LoginCard | `components/LoginCard/README-IA.md` | - |
 | [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` |
 
+### **🔌 Providers del Sistema:**
+| **Provider** | **Documentación** |
+|--------------|-------------------|
+| AppLanguageProvider | `providers/AppLanguageProvider/README-IA.md` |
+| AppLanguageLibUiProvider | `providers/AppLanguageLibUiProvider/README-IA.md` |
+| AppEnviromentProvider | `providers/AppEnviromentProvider/README-IA.md` |
+| AppAuthProvider | `providers/AppAuthProvider/README-IA.md` |
+| [Futuros providers] | `providers/[ProviderName]/README-IA.md` |
+
 ---
 
 **Última actualización: Noviembre 2025** | **Version: 1.0.6**
