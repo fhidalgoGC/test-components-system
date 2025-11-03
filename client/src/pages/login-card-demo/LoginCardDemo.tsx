@@ -165,11 +165,7 @@ const LoginCardDemoPage = () => {
       provider: "GitHub",
       component: (
         <div className="flex items-center justify-center gap-3 w-full h-full">
-          <img 
-            src={grainchainLogo} 
-            alt="GrainChain" 
-            className="w-8 h-8 object-contain"
-          />
+          <SiGithub className="text-2xl" />
           <span className="text-base font-medium">Continue with GitHub</span>
         </div>
       ),
