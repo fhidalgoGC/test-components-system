@@ -53,7 +53,7 @@ const languages = languagesArg.split(',').map(lang => lang.trim());
 // Paths
 const componentsPath = path.join(process.cwd(), 'client/src/lib/ui-library/components');
 const componentPath = path.join(componentsPath, componentName);
-const templatesPath = path.join(process.cwd(), 'client/src/lib/ui-library/command-templates');
+const templatesPath = path.join(process.cwd(), 'client/src/command-templates/components');
 
 // Detect mode: root, mobile, web, or both
 const isRootMode = !flags.mobile && !flags.web;

@@ -292,6 +292,72 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Integrar con sistemas de autenticación OAuth
 - Testing de flujos de autenticación
 
+### **Carousel**
+
+#### **`./components/Carousel/README-IA.md`**
+**Cuándo usar:** Para implementar carruseles interactivos con autoplay, gestos táctiles, navegación por teclado e indicadores.
+
+**Contiene:**
+- 📖 Props completos del Carousel (items, autoPlay, loop, callbacks)
+- 🎯 Ejemplos de uso (básico, controlado, sin loop, múltiples slides, async API)
+- 🔧 API detallada con tipos TypeScript (CarouselProps, modos controlado/no controlado)
+- 🔄 Loop infinito verdadero con técnica de clonación de slides
+- 🖱️ Gestos de drag & touch con optimización GPU y protección de scroll vertical
+- ⌨️ Navegación por teclado completa (arrow keys)
+- 🎨 Indicadores clicables y botones de navegación con ocultamiento inteligente
+- ⏯️ Autoplay con pausa en hover
+- 📊 Callbacks de ciclo de vida (onChange, onReachStart, onReachEnd)
+- 📱 Responsive design con slidesPerView y spaceBetweenPx configurables
+- 🌐 Soporte para datos asíncronos desde APIs
+- ♿ Accesibilidad completa con ARIA attributes
+- 🧪 Data test IDs para testing
+
+**Buscar aquí para:**
+- Implementar carruseles de imágenes, productos o contenido destacado
+- Usar modo controlado con navegación externa
+- Configurar infinite loop verdadero sin saltos visuales
+- Implementar drag gestures en desktop y mobile
+- Cargar datos desde APIs con estados de loading/error
+- Ocultar botones de navegación en límites (sin loop)
+- Usar callbacks onChange, onReachStart, onReachEnd
+- Mostrar múltiples slides simultáneamente
+- Personalizar autoplay y pausar en hover
+- Configurar navegación por teclado y accesibilidad
+- Testing con data-testid de slides, botones e indicadores
+
+### **WrapperItemsSelected**
+
+#### **`./components/WrapperItemsSelected/README-IA.md`**
+**Cuándo usar:** Para envolver componentes con funcionalidad de selección de items por ID con callbacks y estado de selección.
+
+**Contiene:**
+- 🔄 **Flujo de Comunicación** - Explicación visual de cómo cada hijo solo pasa SU ID y el wrapper mantiene el array completo
+- 📖 Props completos del WrapperItemsSelected (selectedIds, defaultSelectedIds, onSelectionChange, onItemAction, multiSelect)
+- 🎯 Ejemplos de uso (cards seleccionables, listas, modo controlado/no controlado, single/multi-select)
+- 🔧 API detallada con tipos TypeScript (WrapperItemsSelectedProps, ItemActionEvent, SelectionContextValue)
+- 🎨 Hook useSelection para acceder al contexto de selección desde componentes hijos
+- 🔄 Modos controlado y no controlado para gestión de estado flexible
+- ⚡ Sistema dual de callbacks (onSelectionChange con array completo, onItemAction con eventos individuales)
+- 🎯 Métodos de selección (toggleSelection, selectItem, deselectItem, isSelected, clearSelection, selectAll)
+- 📊 Soporte para selección múltiple o simple (multiSelect true/false)
+- 🎭 Wrapper universal sin estilos (funciona con cards, listas, grids, componentes custom)
+- 💡 Quick Start con ejemplos simples
+- 🧪 Data test IDs para testing
+- ♿ Accesibilidad delegada a componentes hijos
+
+**Buscar aquí para:**
+- **Entender el flujo de comunicación entre hijos y wrapper**
+- **Implementar componentes donde cada hijo solo conoce su propio ID**
+- Implementar selección de items en listas, grids o galerías
+- Crear componentes con selección controlada externamente
+- Implementar bulk actions basadas en selección
+- Usar callbacks para tracking o analytics de selección
+- Implementar patrones de radio buttons o checkboxes personalizados
+- Gestionar estado de selección con control externo (keyboard shortcuts, select all, etc.)
+- Combinar con HeterogeneousList para listas seleccionables
+- Combinar con UniversalCard para grids de cards seleccionables
+- Testing de comportamiento de selección
+
 ### **Futuros Componentes (Estructura General)**
 
 #### **`./components/[ComponentName]/README-IA.md`**
@@ -403,6 +469,37 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🧩 Componentes**
 ```
+./components/TagSelector/README-IA.md
+├── Props y API del TagSelector
+├── Ejemplos (básico, async, preselección)
+└── Sistema híbrido de estilos (README-IA--STYLES.md)
+
+./components/BottomNavigationBar/README-IA.md
+├── Props y API del BottomNavigationBar
+├── Ejemplos (controlado, no controlado, dynamic disabling)
+└── Integración con ConfigProvider e i18n
+
+./components/HeterogeneousList/README-IA.md
+├── Props y API del HeterogeneousList
+├── Ejemplos (registry mode, elements mode, infinite scroll)
+└── Lazy loading y component registry
+
+./components/Carousel/README-IA.md
+├── Props y API del Carousel
+├── Ejemplos (básico, controlado, sin loop, async API)
+├── Loop infinito y drag gestures
+└── Callbacks de ciclo de vida
+
+./components/WrapperItemsSelected/README-IA.md
+├── 🔄 Flujo de comunicación (diagrama visual)
+├── 💡 Quick Start (ejemplos simples)
+├── Props y API del WrapperItemsSelected
+├── Ejemplos (cards, listas, controlado/no controlado)
+├── Hook useSelection para componentes hijos
+├── Sistema dual de callbacks (onSelectionChange, onItemAction)
+├── Modos multi-select y single-select
+└── Demo interactivo en /components/wrapper-items-selected
+
 ./components/[ComponentName]/README-IA.md
 ├── Props y API del componente
 ├── Ejemplos de implementación
@@ -436,6 +533,8 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | BottomNavigationBar | `components/BottomNavigationBar/README-IA.md` | - |
 | HeterogeneousList | `components/HeterogeneousList/README-IA.md` | - |
 | LoginCard | `components/LoginCard/README-IA.md` | - |
+| Carousel | `components/Carousel/README-IA.md` | - |
+| WrapperItemsSelected | `components/WrapperItemsSelected/README-IA.md` | - |
 | [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` |
 
 ### **🔌 Providers del Sistema:**

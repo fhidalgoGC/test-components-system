@@ -14,6 +14,8 @@ import BottomNavConfigDemo from "@/pages/bottom-nav-config-demo";
 import ResponsiveDemo from "@/pages/responsive-demo";
 import UniversalCardDemo from "@/pages/universal-card-demo/UniversalCardDemo";
 import LoginCardDemo from "@/pages/login-card-demo/LoginCardDemo";
+import CarouselDemo from "@/pages/carousel-demo";
+import WrapperItemsSelectedDemo from "@/pages/wrapper-items-selected-demo";
 import NotFound from "@/pages/not-found";
 import { usePageHeaderListener } from "@/hooks/usePageHeader";
 
@@ -115,6 +117,18 @@ export function Router() {
           headerDescription: "Card de login con soporte para proveedores externos y credenciales",
           showActionButtons: false
         };
+      case '/components/carousel':
+        return {
+          headerTitle: "Carousel",
+          headerDescription: "Carrusel interactivo con autoplay, gestos, navegación por teclado e indicadores",
+          showActionButtons: false
+        };
+      case '/components/wrapper-items-selected':
+        return {
+          headerTitle: "WrapperItemsSelected",
+          headerDescription: "Wrapper para gestionar selección de items con callbacks y modos controlado/no controlado",
+          showActionButtons: false
+        };
       default:
         return {
           headerTitle: "UI Library",
@@ -140,6 +154,8 @@ export function Router() {
         <Route path="/responsive-demo" component={ResponsiveDemo} />
         <Route path="/components/universal-card" component={UniversalCardDemo} />
         <Route path="/components/login-card" component={LoginCardDemo} />
+        <Route path="/components/carousel" component={CarouselDemo} />
+        <Route path="/components/wrapper-items-selected" component={WrapperItemsSelectedDemo} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

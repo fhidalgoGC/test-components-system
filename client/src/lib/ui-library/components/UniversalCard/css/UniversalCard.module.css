@@ -1,14 +1,11 @@
 .universalcard {
   /* Base card styles - More defined and visible */
-  display: flex;
-  flex-direction: column;
-  border: 1.5px solid hsl(var(--border));
   border-radius: 12px;
   
   /* White background for better contrast */
   background-color: white;
   color: hsl(var(--card-foreground));
-  overflow: hidden;
+  /* NO overflow hidden - let the inner border be visible */
   
   /* Base shadow for better card definition */
   box-shadow: 
@@ -17,18 +14,31 @@
   
   /* Smooth transitions */
   transition: 
-    box-shadow 0.3s ease-in-out,
-    transform 0.2s ease-in-out,
-    border-color 0.2s ease-in-out;
+    box-shadow 0.3s ease-in-out;
 }
 
-/* More noticeable hover effect */
+/* More noticeable hover effect - elevation only */
 .universalcard:hover {
-  border-color: hsl(var(--primary) / 0.3);
   box-shadow: 
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
+}
+
+/* Inner div that contains all content and handles the selection border */
+.innerBorder {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  border: 1.5px solid hsl(var(--border));
+  border-radius: 12px;
+  overflow: hidden;
+  /* NO transition - instant border change */
+}
+
+/* Selected state - blue border on inner div */
+.innerBorderSelected {
+  border: 3px solid #2563eb !important; /* Blue 600 - hard coded for visibility */
 }
 
 /* Dark mode adjustments */
@@ -41,7 +51,6 @@
 }
 
 .dark .universalcard:hover {
-  border-color: hsl(var(--primary) / 0.4);
   box-shadow: 
     0 10px 15px -3px rgba(0, 0, 0, 0.5),
     0 4px 6px -4px rgba(0, 0, 0, 0.3);

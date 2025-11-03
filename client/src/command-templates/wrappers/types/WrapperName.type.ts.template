@@ -1,0 +1,6 @@
+import type { ReactNode } from 'react';
+
+export interface {{WrapperName}}Props {
+  children: ReactNode;
+  className?: string;
+}

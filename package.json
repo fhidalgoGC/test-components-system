@@ -9,7 +9,8 @@
     "build": "vite build",
     "start": "vite preview --host 0.0.0.0 --port 5000",
     "check": "tsc",
-    "new-component": "node scripts/generate-component.mjs"
+    "new-component": "node scripts/generate-component.mjs",
+    "create-wrapper": "node scripts/create-wrapper.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

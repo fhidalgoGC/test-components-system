@@ -1,0 +1,12 @@
+import { useState, useCallback } from 'react';
+import type { {{WrapperName}}Props } from '../types';
+
+export function use{{WrapperName}}(props: {{WrapperName}}Props) {
+  const { children } = props;
+
+  // Add your wrapper logic here
+  
+  return {
+    children,
+  };
+}
