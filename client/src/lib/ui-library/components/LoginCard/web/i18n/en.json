@@ -12,7 +12,7 @@
     "continueWith": "Continue with {{provider}}",
     "back": "Back",
     "or": "or",
-    "noAccount": "Don't have an account?",
+    "noAccount": "Don't have an account? ",
     "signUp": "Sign Up"
   }
 }

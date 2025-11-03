@@ -12,7 +12,7 @@
     "continueWith": "Continuar con {{provider}}",
     "back": "Volver",
     "or": "o",
-    "noAccount": "¿No tienes una cuenta?",
+    "noAccount": "¿No tienes una cuenta? ",
     "signUp": "Regístrate"
   }
 }
