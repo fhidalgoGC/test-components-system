@@ -422,18 +422,12 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | **Necesito...** | **Ir a...** |
 |-----------------|-------------|
 | Instalar la librería | `README-INSTALL-IA.md` |
-| Implementar nuevos providers o componentes | `../README-IA-IMPORTS.md` |
-| Configurar variables de entorno | `providers/AppEnviromentProvider/README-IA.md` |
-| Sobrescribir config desde padre | `providers/AppEnviromentProvider/README-IA.md` |
-| Implementar autenticación y sesiones | `providers/AppAuthProvider/README-IA.md` |
-| Configurar expiración de sesión | `providers/AppAuthProvider/README-IA.md` |
-| Sincronizar sesión entre pestañas | `providers/AppAuthProvider/README-IA.md` |
 | Personalizar estilos globales | `README-IA--STYLES.md` |
-| Configurar idioma de aplicación | `providers/AppLanguageProvider/README-IA.md` |
-| Traducciones de componentes | `providers/AppLanguageLibUiProvider/README-IA.md` |
-| Formatear fechas con providers | `utils/dates/README.md` |
+| Implementar nuevos providers o componentes | `../README-IA-IMPORTS.md` |
 | Resolver errores de imports con alias | `../README-IA-IMPORTS.md` |
-| Agregar nuevos idiomas | `providers/AppLanguageProvider/README-IA.md` |
+| Formatear fechas con providers | `utils/dates/README.md` |
+| Ver todos los providers disponibles | Ver tabla **Providers del Sistema** ↓ |
+| Ver todos los componentes disponibles | Ver tabla **Componentes Específicos** ↓ |
 
 ### **🧩 Componentes Específicos:**
 | **Componente** | **Documentación** | **Estilos** |
