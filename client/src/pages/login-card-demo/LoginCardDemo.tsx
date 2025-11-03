@@ -9,8 +9,10 @@ import {
   SiFacebook,
   SiLinkedin,
   SiMiro,
+  SiSlack,
+  SiNotion,
 } from "react-icons/si";
-import { Lock } from "lucide-react";
+import { Lock, Sparkles, Zap } from "lucide-react";
 import { useState } from "react";
 
 const LoginCardDemoPage = () => {
@@ -156,6 +158,54 @@ const LoginCardDemoPage = () => {
     },
   ];
 
+  // Providers with custom components and redirects
+  const customComponentProviders: LoginProvider[] = [
+    {
+      provider: "Slack",
+      component: (
+        <div className="flex flex-col items-center justify-center gap-1 w-full h-full">
+          <SiSlack className="text-3xl text-purple-600" />
+          <span className="text-xs font-medium">Slack</span>
+          <span className="absolute top-1 right-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">
+            New
+          </span>
+        </div>
+      ),
+      redirect: {
+        external: true,
+        url: "https://slack.com/oauth/authorize",
+        newTab: true,
+      },
+      data: { type: "oauth2", hasCustomComponent: true }
+    },
+    {
+      provider: "Notion",
+      component: (
+        <div className="flex flex-col items-center justify-center gap-1 w-full h-full bg-gradient-to-br from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900 rounded-lg">
+          <SiNotion className="text-3xl" />
+          <span className="text-xs font-semibold">Notion</span>
+        </div>
+      ),
+      redirect: {
+        external: true,
+        url: "https://api.notion.com/v1/oauth/authorize",
+        newTab: false,
+      },
+      data: { type: "oauth2", hasCustomComponent: true }
+    },
+    {
+      provider: "Premium",
+      component: (
+        <div className="flex flex-col items-center justify-center gap-1 w-full h-full bg-gradient-to-br from-yellow-400 to-orange-500 text-white rounded-lg relative overflow-hidden">
+          <Sparkles className="text-2xl absolute top-1 left-1 animate-pulse" />
+          <Zap className="text-3xl" />
+          <span className="text-xs font-bold">Premium</span>
+        </div>
+      ),
+      data: { type: "premium", hasCustomComponent: true }
+    },
+  ];
+
   const handleProviderSelect = (provider: LoginProvider) => {
     setSelectedProvider(provider);
     console.log("Provider selected:", provider);
@@ -217,7 +267,33 @@ const LoginCardDemoPage = () => {
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            1. Con 3 Proveedores + Email (Grid)
+            1. Con 2 Proveedores + Email (Vertical)
+          </h2>
+          <p className="text-muted-foreground">
+            2 botones verticales grandes con email/password
+          </p>
+
+          <div className="flex justify-center">
+            <LoginCard
+              config="with-credentials"
+              providers={twoProviders}
+              onProviderSelect={handleProviderSelect}
+              onEmailLogin={handleEmailLogin}
+              onForgotPassword={() => console.log("Forgot password")}
+              title={{
+                en: "Sign in to App",
+                es: "Iniciar sesión en App",
+                default: "Sign in to App",
+              }}
+              icon={<Lock className="w-12 h-12" />}
+              dataTestId="logincard-two-providers"
+            />
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-2xl font-semibold">
+            2. Con 3 Proveedores + Email (Grid)
           </h2>
           <p className="text-muted-foreground">
             Grid de 3 cuadrados con email/password
@@ -243,7 +319,7 @@ const LoginCardDemoPage = () => {
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            2. Con 4 Proveedores + Email (Grid)
+            3. Con 4 Proveedores + Email (Grid)
           </h2>
           <p className="text-muted-foreground">
             Grid de 4 cuadrados con email/password
@@ -273,7 +349,7 @@ const LoginCardDemoPage = () => {
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            3. Con 5 Proveedores + Email (Grid + More)
+            4. Con 5 Proveedores + Email (Grid + More)
           </h2>
           <p className="text-muted-foreground">
             3 cuadrados + botón "more providers" + email/password
@@ -299,7 +375,38 @@ const LoginCardDemoPage = () => {
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            4. Solo Proveedores (Sin Email)
+            5. Componentes Custom con Redirect
+          </h2>
+          <p className="text-muted-foreground">
+            Grid con componentes personalizados que usan el atributo <code>component</code> y <code>redirect</code>
+          </p>
+
+          <div className="flex justify-center">
+            <LoginCard
+              config="with-credentials"
+              providers={customComponentProviders}
+              onProviderSelect={handleProviderSelect}
+              onEmailLogin={handleEmailLogin}
+              onForgotPassword={() => console.log("Forgot password")}
+              title={{
+                en: "Sign in with Custom Providers",
+                es: "Iniciar sesión con Proveedores Personalizados",
+                default: "Sign in with Custom Providers",
+              }}
+              subtitle={{
+                en: "Try custom components with redirect",
+                es: "Prueba componentes personalizados con redirección",
+                default: "Try custom components with redirect",
+              }}
+              icon={<Sparkles className="w-12 h-12 text-purple-600" />}
+              dataTestId="logincard-custom-components"
+            />
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-2xl font-semibold">
+            6. Solo Proveedores (Sin Email)
           </h2>
           <p className="text-muted-foreground">
             Configuración "providers-only" con botones horizontales grandes
@@ -328,7 +435,7 @@ const LoginCardDemoPage = () => {
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            5. Solo Email (Sin Proveedores)
+            7. Solo Email (Sin Proveedores)
           </h2>
           <p className="text-muted-foreground">
             Solo email/password sin proveedores externos

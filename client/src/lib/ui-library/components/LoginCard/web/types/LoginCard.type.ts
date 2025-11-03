@@ -6,6 +6,11 @@ export type LoginProvider = {
   icon?: React.ReactNode;
   component?: React.ReactNode;
   label?: MultiLanguageLabel;
+  redirect?: {
+    external: boolean;
+    url: string;
+    newTab: boolean;
+  };
 };
 
 export type LoginConfig = 'with-credentials' | 'providers-only';

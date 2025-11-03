@@ -93,6 +93,23 @@ export const LoginCardView = (props: LoginCardProps) => {
     setShowAllProviders(false);
   };
 
+  const handleProviderClick = (provider: typeof providers[0]) => {
+    if (provider.redirect) {
+      const { url, newTab, external } = provider.redirect;
+      if (newTab) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      } else {
+        if (external) {
+          window.location.href = url;
+        } else {
+          window.location.href = url;
+        }
+      }
+    } else {
+      onProviderSelect?.(provider);
+    }
+  };
+
   // All Providers View (when user clicks "more providers")
   if (showAllProviders && !onShowAllProviders) {
     return (
@@ -119,7 +136,7 @@ export const LoginCardView = (props: LoginCardProps) => {
             <button
               key={`${provider.provider}-${index}`}
               className={styles.providerButton}
-              onClick={() => onProviderSelect?.(provider)}
+              onClick={() => handleProviderClick(provider)}
               data-testid={`button-provider-${provider.provider.toLowerCase()}`}
             >
               {provider.component ? (
@@ -162,7 +179,7 @@ export const LoginCardView = (props: LoginCardProps) => {
           <button
             key={`${provider.provider}-${index}`}
             className={getButtonClass()}
-            onClick={() => onProviderSelect?.(provider)}
+            onClick={() => handleProviderClick(provider)}
             data-testid={`button-provider-${provider.provider.toLowerCase()}`}
           >
             {provider.component ? (
