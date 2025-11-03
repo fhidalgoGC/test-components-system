@@ -8,7 +8,8 @@ GC-UI-COMPONENTS es una librería de componentes React frontend-only construida 
 
 ## 📦 Repositorio
 
-**GitHub Repository:** `https://github.com/tu-usuario/GC-UI-COMPONENTS`
+**GitHub Repository:** `https://github.com/fhidalgoGC/test-components-system/`  
+**Rama Principal:** `version.1.0.2-mobile`
 
 ## 🚀 Instalación desde GitHub
 
@@ -16,8 +17,11 @@ GC-UI-COMPONENTS es una librería de componentes React frontend-only construida 
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/GC-UI-COMPONENTS.git
-cd GC-UI-COMPONENTS
+git clone https://github.com/fhidalgoGC/test-components-system.git
+cd test-components-system
+
+# Cambiar a la rama principal
+git checkout version.1.0.2-mobile
 
 # Instalar dependencias
 npm install
@@ -29,11 +33,8 @@ npm run dev
 ### **Método 2: Instalar como Dependencia**
 
 ```bash
-# Instalar directamente desde GitHub
-npm install git+https://github.com/tu-usuario/GC-UI-COMPONENTS.git
-
-# O especificar una rama específica
-npm install git+https://github.com/tu-usuario/GC-UI-COMPONENTS.git#main
+# Instalar directamente desde GitHub (rama version.1.0.2-mobile)
+npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile
 ```
 
 
@@ -45,7 +46,8 @@ npm install git+https://github.com/tu-usuario/GC-UI-COMPONENTS.git#main
 npm install react react-dom typescript
 npm install @radix-ui/react-slot class-variance-authority clsx
 npm install tailwindcss tailwind-merge lucide-react
-npm install framer-motion date-fns
+npm install framer-motion date-fns embla-carousel-react
+npm install wouter react-hook-form zod
 ```
 
 ## 📋 Opciones de Importación
@@ -56,32 +58,38 @@ npm install framer-motion date-fns
 // Componentes principales
 import { 
   TagSelector,
+  LoginCard,
+  Carousel,
+  WrapperItemsSelected,
   AppLanguageProvider,
   LibI18nProvider,
   ThemeProvider 
-} from 'GC-UI-COMPONENTS';
+} from 'test-components-system';
 
 // Hooks
 import { 
   useAppLanguage,
-  useLibI18n 
-} from 'GC-UI-COMPONENTS';
+  useLibI18n,
+  useSelection 
+} from 'test-components-system';
 
 // Tipos
 import type { 
   TagItem,
   TagSelectorProps,
-  MultiLanguageLabel 
-} from 'GC-UI-COMPONENTS';
+  MultiLanguageLabel,
+  CarouselProps,
+  LoginCardProps
+} from 'test-components-system';
 ```
 
 ### **Opción 2: Importaciones Específicas**
 
 ```jsx
 // Si prefieres importaciones más específicas
-import { TagSelector } from 'GC-UI-COMPONENTS';
-import { AppLanguageProvider, LibI18nProvider } from 'GC-UI-COMPONENTS';
-import type { TagItem, TagSelectorProps } from 'GC-UI-COMPONENTS';
+import { TagSelector, LoginCard, Carousel } from 'test-components-system';
+import { AppLanguageProvider, LibI18nProvider } from 'test-components-system';
+import type { TagItem, TagSelectorProps, LoginCardProps } from 'test-components-system';
 ```
 
 
@@ -103,7 +111,7 @@ Para acceder a la documentación después de la instalación:
 
 ```bash
 # La documentación está disponible en:
-node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library/
+node_modules/test-components-system/client/src/lib/ui-library/
 ```
 
 ### **Índice General de Documentación:**
