@@ -2,6 +2,13 @@
 
 **Version: 1.0.6**
 
+## 📥 Acceso Directo a Esta Guía
+
+**Ver/Descargar desde GitHub:**  
+[📄 README-INSTALL-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/README-INSTALL-IA.md)
+
+---
+
 ## 📖 Descripción
 
 GC-UI-COMPONENTS es una librería de componentes React frontend-only construida con React 18, TypeScript y Vite. Incluye un sistema completo de componentes UI, sistema de temas, internacionalización y diseño responsivo.
