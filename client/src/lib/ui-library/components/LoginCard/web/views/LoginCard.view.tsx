@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import type { LoginCardProps } from "../types";
 import { useLoginCardContext } from "../providers";
 import type { MultiLanguageLabel } from "@/lib/ui-library/types/language.types";
@@ -40,6 +41,7 @@ export const LoginCardView = (props: LoginCardProps) => {
     return label[lang] || label.default || fallback;
   };
 
+  const [, setLocation] = useLocation();
   const [showAllProviders, setShowAllProviders] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -100,9 +102,11 @@ export const LoginCardView = (props: LoginCardProps) => {
         window.open(url, '_blank', 'noopener,noreferrer');
       } else {
         if (external) {
+          // External redirect - use window.location to navigate to external URL
           window.location.href = url;
         } else {
-          window.location.href = url;
+          // Internal redirect - use wouter for client-side navigation (no page reload)
+          setLocation(url);
         }
       }
     } else {
