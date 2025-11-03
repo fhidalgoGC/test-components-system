@@ -22,84 +22,84 @@ const LoginCardDemoPage = () => {
   const [loginData, setLoginData] = useState<any>(null);
 
   const twoProviders: LoginProvider[] = [
-    { 
-      provider: "Google", 
+    {
+      provider: "Google",
       icon: <SiGoogle className="text-2xl" />,
-      data: { scope: "email profile", clientId: "google-client-123" }
+      data: { scope: "email profile", clientId: "google-client-123" },
     },
-    { 
-      provider: "GitHub", 
+    {
+      provider: "GitHub",
       icon: <SiGithub className="text-2xl" />,
-      data: { scope: "user:email", allowSignup: true }
+      data: { scope: "user:email", allowSignup: true },
     },
   ];
 
   const threeProviders: LoginProvider[] = [
-    { 
-      provider: "Google", 
+    {
+      provider: "Google",
       icon: <SiGoogle className="text-2xl" />,
-      data: { scope: "email profile", clientId: "google-client-123" }
+      data: { scope: "email profile", clientId: "google-client-123" },
     },
-    { 
-      provider: "GitHub", 
+    {
+      provider: "GitHub",
       icon: <SiGithub className="text-2xl" />,
-      data: { scope: "user:email", allowSignup: true }
+      data: { scope: "user:email", allowSignup: true },
     },
-    { 
-      provider: "Apple", 
+    {
+      provider: "Apple",
       icon: <SiApple className="text-2xl" />,
-      data: { type: "oauth2" }
+      data: { type: "oauth2" },
     },
   ];
 
   const fourProviders: LoginProvider[] = [
-    { 
-      provider: "Google", 
+    {
+      provider: "Google",
       icon: <SiGoogle className="text-2xl" />,
-      data: { scope: "email profile" }
+      data: { scope: "email profile" },
     },
-    { 
-      provider: "GitHub", 
+    {
+      provider: "GitHub",
       icon: <SiGithub className="text-2xl" />,
-      data: { scope: "user:email" }
+      data: { scope: "user:email" },
     },
-    { 
-      provider: "Apple", 
+    {
+      provider: "Apple",
       icon: <SiApple className="text-2xl" />,
-      data: { type: "oauth2" }
+      data: { type: "oauth2" },
     },
-    { 
-      provider: "Facebook", 
+    {
+      provider: "Facebook",
       icon: <SiFacebook className="text-2xl" />,
-      data: { type: "oauth2" }
+      data: { type: "oauth2" },
     },
   ];
 
   const fiveProviders: LoginProvider[] = [
-    { 
-      provider: "Google", 
+    {
+      provider: "Google",
       icon: <SiGoogle className="text-2xl" />,
-      data: { scope: "email profile", clientId: "google-client-123" }
+      data: { scope: "email profile", clientId: "google-client-123" },
     },
-    { 
-      provider: "GitHub", 
+    {
+      provider: "GitHub",
       icon: <SiGithub className="text-2xl" />,
-      data: { scope: "user:email", allowSignup: true }
+      data: { scope: "user:email", allowSignup: true },
     },
-    { 
-      provider: "Apple", 
+    {
+      provider: "Apple",
       icon: <SiApple className="text-2xl" />,
-      data: { type: "oauth2" }
+      data: { type: "oauth2" },
     },
-    { 
-      provider: "Facebook", 
+    {
+      provider: "Facebook",
       icon: <SiFacebook className="text-2xl" />,
-      data: { type: "oauth2" }
+      data: { type: "oauth2" },
     },
-    { 
-      provider: "LinkedIn", 
+    {
+      provider: "LinkedIn",
       icon: <SiLinkedin className="text-2xl" />,
-      data: { type: "oauth2" }
+      data: { type: "oauth2" },
     },
   ];
 
@@ -112,7 +112,7 @@ const LoginCardDemoPage = () => {
         default: "Continue with Google",
       },
       icon: <SiGoogle className="text-xl" />,
-      data: { scope: "email profile", prompt: "consent" }
+      data: { scope: "email profile", prompt: "consent" },
     },
     {
       provider: "GitHub",
@@ -122,40 +122,40 @@ const LoginCardDemoPage = () => {
         default: "Continue with GitHub",
       },
       icon: <SiGithub className="text-xl" />,
-      data: { scope: "user:email", allowSignup: true }
+      data: { scope: "user:email", allowSignup: true },
     },
   ];
 
   const manyProviders: LoginProvider[] = [
-    { 
-      provider: "Google", 
+    {
+      provider: "Google",
       icon: <SiGoogle className="text-xl" />,
-      data: { type: "oauth2", priority: 1 }
+      data: { type: "oauth2", priority: 1 },
     },
-    { 
-      provider: "Microsoft", 
+    {
+      provider: "Microsoft",
       icon: <span className="text-xl">Ⓜ️</span>,
-      data: { type: "oauth2", priority: 2 }
+      data: { type: "oauth2", priority: 2 },
     },
-    { 
-      provider: "GitHub", 
+    {
+      provider: "GitHub",
       icon: <SiGithub className="text-xl" />,
-      data: { type: "oauth2", priority: 3 }
+      data: { type: "oauth2", priority: 3 },
     },
-    { 
-      provider: "Apple", 
+    {
+      provider: "Apple",
       icon: <SiApple className="text-xl" />,
-      data: { type: "oauth2", priority: 4 }
+      data: { type: "oauth2", priority: 4 },
     },
-    { 
-      provider: "Facebook", 
+    {
+      provider: "Facebook",
       icon: <SiFacebook className="text-xl" />,
-      data: { type: "oauth2", priority: 5 }
+      data: { type: "oauth2", priority: 5 },
     },
-    { 
-      provider: "LinkedIn", 
+    {
+      provider: "LinkedIn",
       icon: <SiLinkedin className="text-xl" />,
-      data: { type: "oauth2", priority: 6 }
+      data: { type: "oauth2", priority: 6 },
     },
   ];
 
@@ -171,10 +171,10 @@ const LoginCardDemoPage = () => {
       ),
       redirect: {
         external: false,
-        url: "auth/github",
+        url: "/auth/github",
         newTab: false,
       },
-      data: { authType: "oauth2", provider: "github" }
+      data: { authType: "oauth2", provider: "github" },
     },
   ];
 
@@ -196,7 +196,7 @@ const LoginCardDemoPage = () => {
         url: "https://slack.com/oauth/authorize",
         newTab: true,
       },
-      data: { type: "oauth2", hasCustomComponent: true }
+      data: { type: "oauth2", hasCustomComponent: true },
     },
     {
       provider: "Notion",
@@ -211,7 +211,7 @@ const LoginCardDemoPage = () => {
         url: "https://api.notion.com/v1/oauth/authorize",
         newTab: false,
       },
-      data: { type: "oauth2", hasCustomComponent: true }
+      data: { type: "oauth2", hasCustomComponent: true },
     },
     {
       provider: "Premium",
@@ -222,7 +222,7 @@ const LoginCardDemoPage = () => {
           <span className="text-xs font-bold">Premium</span>
         </div>
       ),
-      data: { type: "premium", hasCustomComponent: true }
+      data: { type: "premium", hasCustomComponent: true },
     },
   ];
 
@@ -398,7 +398,8 @@ const LoginCardDemoPage = () => {
             5. Componentes Custom con Redirect
           </h2>
           <p className="text-muted-foreground">
-            Grid con componentes personalizados que usan el atributo <code>component</code> y <code>redirect</code>
+            Grid con componentes personalizados que usan el atributo{" "}
+            <code>component</code> y <code>redirect</code>
           </p>
 
           <div className="flex justify-center">
@@ -429,7 +430,8 @@ const LoginCardDemoPage = () => {
             6. Solo GitHub con Logo Custom (Redirect Interno)
           </h2>
           <p className="text-muted-foreground">
-            Un solo proveedor con logo personalizado y redirección interna a <code>auth/github</code>
+            Un solo proveedor con logo personalizado y redirección interna a{" "}
+            <code>auth/github</code>
           </p>
 
           <div className="flex justify-center">
@@ -449,9 +451,9 @@ const LoginCardDemoPage = () => {
               }}
               icon={
                 <div className="w-16 h-16 rounded-2xl overflow-hidden">
-                  <img 
-                    src={grainchainLogo} 
-                    alt="GrainChain" 
+                  <img
+                    src={grainchainLogo}
+                    alt="GrainChain"
                     className="w-full h-full object-cover"
                   />
                 </div>
