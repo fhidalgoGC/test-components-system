@@ -1,6 +1,6 @@
 # 📚 Índice de Documentación - GC-UI-COMPONENTS
 
-**Version: 1.0.5**
+**Version: 1.0.6**
 
 ## 🎯 Guía para IA: Dónde Buscar Información
 
@@ -261,6 +261,37 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Renderizar feeds con ads intercalados
 - Testing con data-testid de items, estados y dividers
 
+### **LoginCard**
+
+#### **`./components/LoginCard/README-IA.md`**
+**Cuándo usar:** Para implementar tarjetas de autenticación con múltiples configuraciones (email/password + OAuth providers).
+
+**Contiene:**
+- 📖 Props completos del LoginCard (config, providers, callbacks)
+- 🎯 Ejemplos de uso (with-credentials, providers-only, custom components)
+- 🔧 API detallada con tipos TypeScript (LoginProvider, LoginConfig, RedirectConfig)
+- 🎨 Layouts adaptativos según cantidad de providers (1-2 vertical, 3-4 grid, 5+ con "more")
+- 🔀 Sistema de redirects automáticos (internos y externos, con/sin new tab)
+- 🖼️ Custom components rendering vía atributo `component`
+- 🌐 Sistema i18n completo con MultiLanguageLabel para todos los textos
+- 📊 Dos configuraciones principales (with-credentials, providers-only)
+- 🏗️ Arquitectura modular con layouts separados (WithCredentialsLayout, ProvidersOnlyLayout)
+- 🎭 Metadata personalizada por provider vía atributo `data`
+- ♿ Accesibilidad completa con ARIA attributes
+- 🧪 Data test IDs para testing
+
+**Buscar aquí para:**
+- Implementar tarjetas de login con email/password
+- Agregar providers OAuth/SSO (Google, GitHub, Apple, etc.)
+- Configurar layouts adaptativos según número de providers
+- Usar custom components en botones de providers
+- Implementar redirects automáticos (auth/github, external URLs)
+- Personalizar labels con multiidioma (MultiLanguageLabel)
+- Manejar callbacks (onEmailLogin, onProviderSelect, onForgotPassword)
+- Crear experiencias de login "providers-only" (sin email/password)
+- Integrar con sistemas de autenticación OAuth
+- Testing de flujos de autenticación
+
 ### **Futuros Componentes (Estructura General)**
 
 #### **`./components/[ComponentName]/README-IA.md`**
@@ -410,8 +441,9 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | TagSelector | `components/TagSelector/README-IA.md` | `components/TagSelector/README-IA--STYLES.md` |
 | BottomNavigationBar | `components/BottomNavigationBar/README-IA.md` | - |
 | HeterogeneousList | `components/HeterogeneousList/README-IA.md` | - |
+| LoginCard | `components/LoginCard/README-IA.md` | - |
 | [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` |
 
 ---
 
-**Última actualización: Septiembre 2025** | **Version: 1.0.5**
+**Última actualización: Noviembre 2025** | **Version: 1.0.6**
