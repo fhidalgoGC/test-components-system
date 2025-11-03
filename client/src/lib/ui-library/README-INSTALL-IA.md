@@ -106,18 +106,13 @@ Para acceder a la documentación después de la instalación:
 node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library/
 ```
 
-### **Archivos de Documentación:**
-- **Índice General**: `README-INDEX.md`
-- **Sistema de Estilos Global**: `README-IA--STYLES.md`
-- **Sistema de Idiomas - Provider Padre**: `providers/AppLanguageProvider/README-IA.md`
-- **Sistema de Idiomas - Provider Librería**: `providers/AppLanguageLibUiProvider/README-IA.md`
-- **Sistema de Configuración**: `providers/AppEnviromentProvider/README-IA.md`
-- **Sistema de Autenticación**: `providers/AppAuthProvider/README-IA.md`
-- **TagSelector**: `components/TagSelector/README-IA.md`
-- **Estilos TagSelector**: `components/TagSelector/README-IA--STYLES.md`
-- **BottomNavigationBar**: `components/BottomNavigationBar/README-IA.md`
-- **HeterogeneousList**: `components/HeterogeneousList/README-IA.md`
-- **LoginCard**: `components/LoginCard/README-IA.md`
+### **Índice General de Documentación:**
+
+- **`README-INDEX.md`**: Índice maestro con toda la documentación organizada por temas
+  - Contiene referencias a todos los componentes, providers, utilidades y guías
+  - Incluye tablas de navegación rápida para encontrar lo que necesitas
+  - Documenta la arquitectura completa del sistema
+  - Proporciona enlaces directos a documentación específica de cada módulo
 
 ## 📄 Licencia
 
