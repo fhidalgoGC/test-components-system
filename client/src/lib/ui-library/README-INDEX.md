@@ -10,7 +10,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ## 📦 **Instalación y Configuración General**
 
-### **`./README-IA.md`**
+### **`./README-INSTALL-IA.md`**
 **Cuándo usar:** Para instalar la librería y configurar rutas de importación.
 
 **Contiene:**
@@ -337,7 +337,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 ### **🚀 Instalación**
 ```
-./README-IA.md
+./README-INSTALL-IA.md
 ├── Instalación desde GitHub
 ├── Dependencias peer
 └── Configuración de imports
@@ -421,7 +421,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 
 | **Necesito...** | **Ir a...** |
 |-----------------|-------------|
-| Instalar la librería | `README-IA.md` |
+| Instalar la librería | `README-INSTALL-IA.md` |
 | Implementar nuevos providers o componentes | `../README-IA-IMPORTS.md` |
 | Configurar variables de entorno | `providers/AppEnviromentProvider/README.md` |
 | Sobrescribir config desde padre | `providers/AppEnviromentProvider/README.md` |
