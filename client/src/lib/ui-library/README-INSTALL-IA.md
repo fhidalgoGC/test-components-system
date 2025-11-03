@@ -1,6 +1,6 @@
 # GC-UI-COMPONENTS - Guía de Instalación y Uso
 
-**Version: 1.0.5**
+**Version: 1.0.6**
 
 ## 📖 Descripción
 
@@ -107,31 +107,16 @@ node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library/
 ```
 
 ### **Archivos de Documentación:**
+- **Índice General**: `README-INDEX.md`
 - **Sistema de Estilos Global**: `README-IA--STYLES.md`
 - **Sistema de Idiomas - Provider Padre**: `providers/AppLanguageProvider/README.md`
 - **Sistema de Idiomas - Provider Librería**: `providers/AppLanguageLibUiProvider/README.md`
 - **Sistema de Configuración**: `providers/AppEnviromentProvider/README.md`
 - **TagSelector**: `components/TagSelector/README-IA.md`
 - **Estilos TagSelector**: `components/TagSelector/README-IA--STYLES.md`
-- **Índice General**: `README-INDEX.md`
-
-## 🤝 Contribución
-
-```bash
-# Fork del repositorio
-git clone https://github.com/tu-usuario/GC-UI-COMPONENTS.git
-cd GC-UI-COMPONENTS
-
-# Crear rama de feature
-git checkout -b feature/nueva-funcionalidad
-
-# Hacer cambios y commit
-git add .
-git commit -m "feat: agregar nueva funcionalidad"
-
-# Push y crear Pull Request
-git push origin feature/nueva-funcionalidad
-```
+- **BottomNavigationBar**: `components/BottomNavigationBar/README-IA.md`
+- **HeterogeneousList**: `components/HeterogeneousList/README-IA.md`
+- **LoginCard**: `components/LoginCard/README-IA.md`
 
 ## 📄 Licencia
 
@@ -139,4 +124,4 @@ MIT License - Ver LICENSE file para más detalles.
 
 ---
 
-**Version: 1.0.5** | **Última actualización: Septiembre 2025**
+**Version: 1.0.6** | **Última actualización: Noviembre 2025**
