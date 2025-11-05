@@ -2,7 +2,7 @@ import type { UniversalCardProps, SizeValue } from '../types';
 import { useMemo } from 'react';
 import { cn } from '../../../utils';
 import styles from '../css/UniversalCard.module.css';
-import { useSelectionSafe } from '../../WrapperItemsSelected';
+import { useSelectionSafe } from '../../WrapperItemsSelected/index';
 
 /**
  * Converts a size value to CSS format
