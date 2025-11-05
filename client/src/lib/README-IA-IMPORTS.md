@@ -297,109 +297,31 @@ Cuando trabajas dentro de `client/src/lib/ui-library/`:
 
 ---
 
-## ⚙️ Configuración de Vite para Aplicaciones Externas
+## ⚙️ Alias de Vite para Estilos (Aplicaciones Externas)
 
-Para usar los componentes de la librería en una aplicación externa, **debes configurar el alias de estilos en tu `vite.config.ts`:**
-
-### 📝 Configuración Requerida
+Para usar los componentes de la librería en una aplicación externa, **debes agregar este alias en `vite.config.ts`:**
 
 ```typescript
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
-
+// vite.config.ts
 export default defineConfig({
-  plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
-      // ⚠️ IMPORTANTE: Alias para los estilos de la librería
+      // ... tus otros alias
+      // ⚠️ IMPORTANTE: Alias para los estilos de GC-UI-COMPONENTS
       "GC-UI-COMPONENTS/styles": path.resolve(
         import.meta.dirname,
         "node_modules/GC-UI-COMPONENTS/dist/style.css",
       ),
     },
   },
-  root: path.resolve(import.meta.dirname, "client"),
-  build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
-    emptyOutDir: true,
-  },
 });
 ```
 
-### 🎨 Importar Estilos en tu Aplicación
-
-Una vez configurado el alias, importa los estilos en tu archivo principal (por ejemplo, `main.tsx` o `App.tsx`):
+Luego importa los estilos en tu archivo principal:
 
 ```typescript
-// Archivo: client/src/main.tsx o client/src/App.tsx
+// main.tsx o App.tsx
 import "GC-UI-COMPONENTS/styles";
 ```
 
-### ⚠️ Nota Importante
-
-Sin esta configuración de alias en Vite, **los estilos de la librería no se cargarán correctamente** y los componentes no se verán como esperado.
-
----
-
-## 📦 Configuración Completa de Ejemplo
-
-Aquí hay un ejemplo completo de `vite.config.ts` para una aplicación que usa GC-UI-COMPONENTS:
-
-```typescript
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
-
-export default defineConfig({
-  plugins: [
-    react(),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
-      ? [
-          await import("@replit/vite-plugin-cartographer").then((m) =>
-            m.cartographer(),
-          ),
-        ]
-      : []),
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
-      // Alias para los estilos de GC-UI-COMPONENTS
-      "GC-UI-COMPONENTS/styles": path.resolve(
-        import.meta.dirname,
-        "node_modules/GC-UI-COMPONENTS/dist/style.css",
-      ),
-    },
-  },
-  root: path.resolve(import.meta.dirname, "client"),
-  build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
-    emptyOutDir: true,
-  },
-  server: {
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
-    },
-  },
-});
-```
-
-### ✅ Checklist de Configuración
-
-Cuando instales GC-UI-COMPONENTS en una aplicación externa:
-
-- [ ] ✅ Instalar la librería desde GitHub: `npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile`
-- [ ] ✅ Agregar alias `"GC-UI-COMPONENTS/styles"` en `vite.config.ts`
-- [ ] ✅ Importar `"GC-UI-COMPONENTS/styles"` en tu archivo principal
-- [ ] ✅ Configurar Tailwind CSS (ver `README-INSTALL-IA.md`)
-- [ ] ✅ Verificar que los componentes se renderizan con estilos correctos
+> **⚠️ Sin este alias, los estilos de la librería no se cargarán correctamente.**
