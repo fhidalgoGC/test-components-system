@@ -18,29 +18,12 @@ GC-UI-COMPONENTS es una librería de componentes React frontend-only construida 
 **GitHub Repository:** `https://github.com/fhidalgoGC/test-components-system/`  
 **Rama Principal:** `version.1.0.2-mobile`
 
-## 🚀 Instalación desde GitHub
+## 🚀 Instalación como Dependencia
 
-### **Método 1: Clonar Repositorio (Recomendado para Desarrollo)**
-
-```bash
-# Clonar el repositorio
-git clone https://github.com/fhidalgoGC/test-components-system.git
-cd test-components-system
-
-# Cambiar a la rama principal
-git checkout version.1.0.2-mobile
-
-# Instalar dependencias
-npm install
-
-# Ejecutar en modo desarrollo
-npm run dev
-```
-
-### **Método 2: Instalar como Dependencia**
+Instala la librería directamente desde GitHub en tu proyecto:
 
 ```bash
-# Instalar directamente desde GitHub (rama version.1.0.2-mobile)
+# Instalar desde la rama version.1.0.2-mobile
 npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile
 ```
 
