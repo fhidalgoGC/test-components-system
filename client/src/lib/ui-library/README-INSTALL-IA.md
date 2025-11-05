@@ -37,7 +37,7 @@ npm install git+https://github.com/fhidalgoGC/test-components-system.git#version
 
 ## 🏗️ Configuración del Proyecto
 
-### **Instalar Dependencias Peer**
+### **Paso 1: Instalar Dependencias Peer**
 
 ```bash
 npm install react react-dom typescript
@@ -46,6 +46,44 @@ npm install tailwindcss tailwind-merge lucide-react
 npm install framer-motion date-fns embla-carousel-react
 npm install wouter react-hook-form zod
 ```
+
+### **Paso 2: Configurar Vite (⚠️ OBLIGATORIO)**
+
+Para que los estilos de la librería funcionen correctamente, **debes agregar un alias en tu `vite.config.ts`:**
+
+```typescript
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(import.meta.dirname, "client", "src"),
+      // ⚠️ IMPORTANTE: Alias para los estilos de la librería
+      "GC-UI-COMPONENTS/styles": path.resolve(
+        import.meta.dirname,
+        "node_modules/GC-UI-COMPONENTS/dist/style.css",
+      ),
+    },
+  },
+  // ... resto de tu configuración
+});
+```
+
+### **Paso 3: Importar Estilos**
+
+Importa los estilos en tu archivo principal (`main.tsx` o `App.tsx`):
+
+```typescript
+// main.tsx o App.tsx
+import "GC-UI-COMPONENTS/styles";
+```
+
+> **📖 Configuración Detallada:**  
+> Para ver la configuración completa de Vite con todos los plugins, consulta: [README-IA-IMPORTS.md - Configuración de Vite](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/README-IA-IMPORTS.md#%EF%B8%8F-configuraci%C3%B3n-de-vite-para-aplicaciones-externas)
 
 ## 📋 Opciones de Importación
 
