@@ -527,24 +527,24 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | Ver todos los componentes disponibles | Ver tabla **Componentes Específicos** ↓ |
 
 ### **🧩 Componentes Específicos:**
-| **Componente** | **Documentación** | **Estilos** |
-|----------------|-------------------|-------------|
-| TagSelector | `components/TagSelector/README-IA.md` | `components/TagSelector/README-IA--STYLES.md` |
-| BottomNavigationBar | `components/BottomNavigationBar/README-IA.md` | - |
-| HeterogeneousList | `components/HeterogeneousList/README-IA.md` | - |
-| LoginCard | `components/LoginCard/README-IA.md` | - |
-| Carousel | `components/Carousel/README-IA.md` | - |
-| WrapperItemsSelected | `components/WrapperItemsSelected/README-IA.md` | - |
-| [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` |
+| **Componente** | **Documentación** | **Estilos** | **Link GitHub** |
+|----------------|-------------------|-------------|-----------------|
+| TagSelector | `components/TagSelector/README-IA.md` | `components/TagSelector/README-IA--STYLES.md` | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/TagSelector/README-IA.md) |
+| BottomNavigationBar | `components/BottomNavigationBar/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/BottomNavigationBar/README-IA.md) |
+| HeterogeneousList | `components/HeterogeneousList/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/HeterogeneousList/README-IA.md) |
+| LoginCard | `components/LoginCard/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/LoginCard/README-IA.md) |
+| Carousel | `components/Carousel/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/Carousel/README-IA.md) |
+| WrapperItemsSelected | `components/WrapperItemsSelected/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/WrapperItemsSelected/README-IA.md) |
+| [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` | - |
 
 ### **🔌 Providers del Sistema:**
-| **Provider** | **Documentación** |
-|--------------|-------------------|
-| AppLanguageProvider | `providers/AppLanguageProvider/README-IA.md` |
-| AppLanguageLibUiProvider | `providers/AppLanguageLibUiProvider/README-IA.md` |
-| AppEnviromentProvider | `providers/AppEnviromentProvider/README-IA.md` |
-| AppAuthProvider | `providers/AppAuthProvider/README-IA.md` |
-| [Futuros providers] | `providers/[ProviderName]/README-IA.md` |
+| **Provider** | **Documentación** | **Link GitHub** |
+|--------------|-------------------|-----------------|
+| AppLanguageProvider | `providers/AppLanguageProvider/README-IA.md` | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/providers/AppLanguageProvider/README-IA.md) |
+| AppLanguageLibUiProvider | `providers/AppLanguageLibUiProvider/README-IA.md` | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/providers/AppLanguageLibUiProvider/README-IA.md) |
+| AppEnviromentProvider | `providers/AppEnviromentProvider/README-IA.md` | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/providers/AppEnviromentProvider/README-IA.md) |
+| AppAuthProvider | `providers/AppAuthProvider/README-IA.md` | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/providers/AppAuthProvider/README-IA.md) |
+| [Futuros providers] | `providers/[ProviderName]/README-IA.md` | - |
 
 ---
 
