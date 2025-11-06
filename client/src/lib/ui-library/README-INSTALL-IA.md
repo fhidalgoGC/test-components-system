@@ -1,6 +1,6 @@
 # GC-UI-COMPONENTS - Guía de Instalación y Uso
 
-**Version: 1.0.6**
+**Version: 1.0.7**
 
 ## 📥 Acceso Directo a Esta Guía
 
@@ -25,19 +25,19 @@ GC-UI-COMPONENTS es una librería de componentes React frontend-only construida 
 **GitHub Repository:** `https://github.com/fhidalgoGC/test-components-system/`  
 **Rama Principal:** `version.1.0.2-mobile`
 
-## 🚀 Instalación como Dependencia
+---
+
+## 🚀 Instalación Rápida
+
+### **Paso 1: Instalar la Librería**
 
 Instala la librería directamente desde GitHub en tu proyecto:
 
 ```bash
-# Instalar desde la rama version.1.0.2-mobile
 npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile
 ```
 
-
-## 🏗️ Configuración del Proyecto
-
-### **Paso 1: Instalar Dependencias Peer**
+### **Paso 2: Instalar Dependencias Peer**
 
 ```bash
 npm install react react-dom typescript
@@ -47,7 +47,9 @@ npm install framer-motion date-fns embla-carousel-react
 npm install wouter react-hook-form zod
 ```
 
-### **Paso 2: Configurar Alias de Vite (⚠️ OBLIGATORIO)**
+### **Paso 3: Configurar Alias de Vite (⚠️ OBLIGATORIO)**
+
+Este alias es necesario para el **funcionamiento interno de la librería**. Los componentes lo utilizan para importarse entre sí correctamente.
 
 Agrega este alias en tu `vite.config.ts`:
 
@@ -69,79 +71,194 @@ export default defineConfig({
 });
 ```
 
-> **⚠️ Importante:** El alias `@/lib/ui-library` es obligatorio para que los componentes internos funcionen correctamente. Sin este alias, obtendrás errores de importación.
+> **⚠️ Importante:** Este alias es para el funcionamiento interno de la librería, **NO** para que lo uses en tus imports. Tú siempre importarás directamente desde `"GC-UI-COMPONENTS"` (ver ejemplos abajo).
 
-## 📋 Opciones de Importación
+---
 
-### **Opción 1: Importación Principal (Recomendada)**
+## 📋 Cómo Usar la Librería
 
-```jsx
+Una vez instalada y configurada, importa los componentes directamente desde `"GC-UI-COMPONENTS"`:
+
+### **Importar Componentes**
+
+```typescript
 // Componentes principales
 import { 
   TagSelector,
   LoginCard,
   Carousel,
+  UniversalCard,
   WrapperItemsSelected,
+  BottomNavigationBar,
+  HeterogeneousList
+} from 'GC-UI-COMPONENTS';
+```
+
+### **Importar Providers**
+
+```typescript
+// Providers para i18n, tema y configuración
+import { 
   AppLanguageProvider,
   LibI18nProvider,
-  ThemeProvider 
-} from 'test-components-system';
+  ThemeProvider,
+  AppEnviromentProvider
+} from 'GC-UI-COMPONENTS';
+```
 
-// Hooks
+### **Importar Hooks**
+
+```typescript
+// Hooks disponibles
 import { 
   useAppLanguage,
   useLibI18n,
-  useSelection 
-} from 'test-components-system';
+  useSelection,
+  useResponsive
+} from 'GC-UI-COMPONENTS';
+```
 
-// Tipos
+### **Importar Tipos**
+
+```typescript
+// Tipos TypeScript
 import type { 
   TagItem,
   TagSelectorProps,
   MultiLanguageLabel,
   CarouselProps,
-  LoginCardProps
-} from 'test-components-system';
+  LoginCardProps,
+  UniversalCardProps,
+  WrapperItemsSelectedProps
+} from 'GC-UI-COMPONENTS';
 ```
 
-### **Opción 2: Importaciones Específicas**
+### **Ejemplo Completo de Uso**
 
-```jsx
-// Si prefieres importaciones más específicas
-import { TagSelector, LoginCard, Carousel } from 'test-components-system';
-import { AppLanguageProvider, LibI18nProvider } from 'test-components-system';
-import type { TagItem, TagSelectorProps, LoginCardProps } from 'test-components-system';
+```typescript
+import { 
+  LoginCard, 
+  LibI18nProvider, 
+  AppLanguageProvider 
+} from 'GC-UI-COMPONENTS';
+import type { LoginCardProps, MultiLanguageLabel } from 'GC-UI-COMPONENTS';
+
+function App() {
+  const handleProviderSelect = (provider: string) => {
+    console.log('Provider seleccionado:', provider);
+  };
+
+  return (
+    <AppLanguageProvider>
+      <LibI18nProvider>
+        <LoginCard
+          config="with-credentials"
+          title={{ en: "Welcome Back", es: "Bienvenido" }}
+          subtitle={{ en: "Sign in to continue", es: "Inicia sesión para continuar" }}
+          onProviderSelect={handleProviderSelect}
+        />
+      </LibI18nProvider>
+    </AppLanguageProvider>
+  );
+}
 ```
 
+---
+
+## 🔧 Configuración Técnica
+
+### **¿Por qué necesito el alias `@/lib/ui-library`?**
+
+Los componentes de la librería utilizan **rutas relativas internas** para importarse entre sí. El alias `@/lib/ui-library` permite que estas rutas internas se resuelvan correctamente cuando la librería está instalada en `node_modules`.
+
+**Tú NO usas este alias** - es solo para el funcionamiento interno. Siempre importa desde `"GC-UI-COMPONENTS"`.
+
+### **Estructura de Importación**
+
+```
+Tu aplicación
+    ↓
+import { LoginCard } from "GC-UI-COMPONENTS"
+    ↓
+LoginCard (usa internamente @/lib/ui-library para sus dependencias)
+    ↓ 
+Otros componentes internos de la librería
+```
+
+---
 
 ## 🐛 Solución de Problemas Comunes
 
+### **Error: "Could not read from file: @/lib/ui-library/components/..."**
 
-### **Error: "Module not found"**
+**Causa:** El alias `@/lib/ui-library` no está configurado en tu `vite.config.ts`.
+
+**Solución:**
+1. Verifica que el alias esté agregado en `vite.config.ts`
+2. Asegúrate de que la ruta apunte a `node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library`
+3. Reinicia tu servidor de desarrollo
 
 ```bash
-# Verificar alias en vite.config.ts o tsconfig.json
-# Asegurar que la ruta a ui-library es correcta
-# Reinstalar dependencias
-npm install
+# Detén el servidor y reinícialo
+npm run dev
 ```
+
+### **Error: "Module not found: GC-UI-COMPONENTS"**
+
+**Causa:** La librería no está instalada correctamente.
+
+**Solución:**
+```bash
+# Reinstalar la librería
+npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile
+
+# Verificar que se instaló
+npm list GC-UI-COMPONENTS
+```
+
+### **Error: "Cannot find module '@radix-ui/...' or similar"**
+
+**Causa:** Faltan dependencias peer.
+
+**Solución:**
+```bash
+# Instalar todas las dependencias peer (Paso 2 de instalación)
+npm install react react-dom typescript @radix-ui/react-slot class-variance-authority clsx tailwindcss tailwind-merge lucide-react framer-motion date-fns embla-carousel-react wouter react-hook-form zod
+```
+
+---
 
 ## 📚 Documentación Adicional
 
-Para acceder a la documentación después de la instalación:
+### **Acceso a la Documentación Completa**
+
+Después de la instalación, toda la documentación está disponible en:
 
 ```bash
-# La documentación está disponible en:
-node_modules/test-components-system/client/src/lib/ui-library/
+node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library/
 ```
 
-### **Índice General de Documentación:**
+### **Índice General de Documentación**
 
 - **`README-INDEX.md`**: Índice maestro con toda la documentación organizada por temas
-  - Contiene referencias a todos los componentes, providers, utilidades y guías
-  - Incluye tablas de navegación rápida para encontrar lo que necesitas
-  - Documenta la arquitectura completa del sistema
-  - Proporciona enlaces directos a documentación específica de cada módulo
+  - Referencias a todos los componentes, providers, utilidades y guías
+  - Tablas de navegación rápida
+  - Arquitectura completa del sistema
+  - Enlaces directos a documentación específica de cada módulo
+
+### **Documentación por Componente**
+
+Cada componente incluye su propio `README-IA.md` con:
+- Descripción y características
+- Props y tipos TypeScript
+- Ejemplos de uso
+- Configuración de i18n
+- Casos de uso comunes
+
+**Acceso directo desde GitHub:**  
+[📖 Ver README-INDEX.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/README-INDEX.md)
+
+---
 
 ## 📄 Licencia
 
@@ -149,4 +266,4 @@ MIT License - Ver LICENSE file para más detalles.
 
 ---
 
-**Version: 1.0.6** | **Última actualización: Noviembre 2025**
+**Version: 1.0.7** | **Última actualización: Noviembre 2025**
