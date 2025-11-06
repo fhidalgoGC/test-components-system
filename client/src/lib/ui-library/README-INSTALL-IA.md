@@ -49,14 +49,21 @@ npm install wouter react-hook-form zod
 
 ### **Paso 2: Configurar Alias de Vite (⚠️ OBLIGATORIO)**
 
-Agrega este alias en tu `vite.config.ts`:
+Agrega estos alias en tu `vite.config.ts`:
 
 ```typescript
 // vite.config.ts
+import { defineConfig } from 'vite';
+import path from 'path';
+
 export default defineConfig({
   resolve: {
     alias: {
       // ... tus otros alias
+      "@/lib/ui-library": path.resolve(
+        import.meta.dirname,
+        "node_modules/GC-UI-COMPONENTS/client/src/lib/ui-library",
+      ),
       "GC-UI-COMPONENTS/styles": path.resolve(
         import.meta.dirname,
         "node_modules/GC-UI-COMPONENTS/dist/style.css",
@@ -65,6 +72,8 @@ export default defineConfig({
   },
 });
 ```
+
+> **⚠️ Importante:** El alias `@/lib/ui-library` es obligatorio para que los componentes internos funcionen correctamente. Sin este alias, obtendrás errores de importación.
 
 ### **Paso 3: Importar Estilos**
 
