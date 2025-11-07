@@ -89,13 +89,18 @@ export function AppAuthProvider({
     }
   }, []);
 
-  const logout = useCallback((fromBroadcastChannel: boolean = false) => {
+  const logout = useCallback((fromBroadcastChannel: boolean = false, shouldCallInvalidCallback: boolean = false) => {
     if (isLoggingOut.current) return;
     isLoggingOut.current = true;
 
     clearSessionFromStorage();
     setIsAuthenticated(false);
-    onSessionInvalidRef.current?.();
+    
+    // Solo llamar onSessionInvalid si es una invalidación real (expiración o no existe sesión)
+    // NO llamar si es un logout manual del usuario
+    if (shouldCallInvalidCallback) {
+      onSessionInvalidRef.current?.();
+    }
 
     if (
       !fromBroadcastChannel &&
@@ -129,7 +134,7 @@ export function AppAuthProvider({
         isProcessingEvent.current = false;
       } else if (type === "session_logout") {
         isProcessingEvent.current = true;
-        logout(true);
+        logout(true, false);
         isProcessingEvent.current = false;
       }
     };
@@ -157,12 +162,18 @@ export function AppAuthProvider({
       console.log("useEffect-getSessionFromStorage");
       login(true);
     } else if (existingSession) {
-      logout(true);
+      // Caso 2: Hay sesión pero expiró - SÍ llamar onSessionInvalid
+      logout(true, true);
     } else {
-      // Caso 3: No hay sesión en localStorage, ejecutar logout para llamar onSessionInvalid
-      logout(true);
+      // Caso 3: No hay sesión en localStorage - SÍ llamar onSessionInvalid
+      logout(true, true);
     }
   }, [skipInitialValidation]);
+
+  // Función específica para cuando SessionValidator detecta expiración
+  const handleSessionValidatorInvalid = useCallback(() => {
+    logout(false, true); // SÍ llamar onSessionInvalid porque es expiración real
+  }, [logout]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
@@ -176,7 +187,7 @@ export function AppAuthProvider({
         enabled={isAuthenticated}
         sessionDuration={finalSessionDuration}
         checkInterval={finalValidationInterval}
-        onSessionInvalid={logout}
+        onSessionInvalid={handleSessionValidatorInvalid}
       >
         {children}
       </SessionValidator>
