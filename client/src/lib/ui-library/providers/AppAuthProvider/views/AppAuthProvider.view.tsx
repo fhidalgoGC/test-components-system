@@ -158,6 +158,9 @@ export function AppAuthProvider({
       login(true);
     } else if (existingSession) {
       logout(true);
+    } else {
+      // Caso 3: No hay sesión en localStorage, ejecutar logout para llamar onSessionInvalid
+      logout(true);
     }
   }, [skipInitialValidation]);
 
