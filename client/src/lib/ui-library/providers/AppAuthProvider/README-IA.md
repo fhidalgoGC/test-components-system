@@ -1,6 +1,6 @@
 # AppAuthProvider - Provider de Autenticación y Gestión de Sesiones
 
-**Version: 1.0.8**
+**Version: 1.0.9**
 
 ## 📖 Descripción
 
@@ -11,8 +11,8 @@
 - ✅ Validación automática de sesión basada en tiempo real
 - ✅ Sincronización cross-tab usando BroadcastChannel
 - ✅ Persistencia de sesión en localStorage
-- ✅ Modo `skipInitialValidation` para páginas de login (nuevo en v1.0.8)
-- ✅ Callbacks de ciclo de vida (`onLogging`, `onSessionInvalid`)
+- ✅ Modo `skipInitialValidation` para páginas de login (v1.0.8)
+- ✅ Callbacks de ciclo de vida (`onLogging`, `onLogout`, `onSessionInvalid`) (v1.0.9)
 - ✅ Integración con ConfigProvider para configuración jerárquica
 
 ## 🏗️ Estructura Modular
@@ -51,8 +51,9 @@ AppAuthProvider
 │   └── Persistencia en localStorage
 │
 ├── 🎯 Callbacks de ciclo de vida
-│   ├── onLogging (al iniciar sesión)
-│   └── onSessionInvalid (al expirar sesión)
+│   ├── onLogging (al iniciar sesión manualmente)
+│   ├── onLogout (SIEMPRE que hay logout) ⚡ NUEVO
+│   └── onSessionInvalid (solo cuando sesión es inválida)
 │
 └── ⚙️ Integración con ConfigProvider
     ├── Configuración jerárquica (props → ConfigProvider → defaults)
@@ -68,14 +69,129 @@ interface AppAuthProviderProps {
   sessionDuration?: number;        // Duración de la sesión en ms (default: 8 horas)
   validationInterval?: number;     // Intervalo de validación en ms (default: 10 segundos)
   skipInitialValidation?: boolean; // Si es true, no valida la sesión al iniciar (útil para páginas de login)
-  onLogging?: () => void;          // Callback al iniciar sesión
-  onSessionInvalid?: () => void;   // Callback al expirar sesión
+  onLogging?: () => void;          // Callback al iniciar sesión manualmente
+  onLogout?: () => void;           // Callback SIEMPRE que hay logout (manual o automático)
+  onSessionInvalid?: () => void;   // Callback solo cuando sesión es inválida/expirada
 }
 
 interface AppAuthContextValue {
   isAuthenticated: boolean;
   login: () => void;
   logout: () => void;
+}
+```
+
+## 🎯 Callbacks del Ciclo de Vida
+
+El AppAuthProvider ofrece **3 callbacks** para gestionar eventos del ciclo de autenticación:
+
+### **1️⃣ onLogging - Login Manual**
+
+**Se ejecuta:** Solo cuando el usuario hace `login()` manualmente (después de autenticarse con tu backend)
+
+```typescript
+const handleLogin = () => {
+  console.log("✅ Usuario inició sesión");
+  // Redirigir al dashboard
+  navigate('/dashboard');
+  // Enviar evento de analytics
+  analytics.track('user_login');
+};
+```
+
+**NO se ejecuta:**
+- ❌ Al restaurar sesión desde localStorage
+- ❌ Al sincronizar login desde otra pestaña
+
+### **2️⃣ onLogout - Cualquier Logout** ⚡ NUEVO
+
+**Se ejecuta:** **SIEMPRE** que hay un logout (manual o automático)
+
+```typescript
+const handleLogout = () => {
+  console.log("🔓 Logout detectado");
+  // Limpiar datos locales
+  localStorage.removeItem('user_data');
+  localStorage.removeItem('auth_token');
+  // Cerrar conexiones WebSocket
+  websocket.close();
+};
+```
+
+**Se ejecuta en:**
+- ✅ Logout manual del usuario (botón "Cerrar Sesión")
+- ✅ Sesión expiró (SessionValidator)
+- ✅ No hay sesión al cargar la app
+- ✅ Sesión expirada al cargar la app
+- ✅ Logout sincronizado desde otra pestaña
+
+### **3️⃣ onSessionInvalid - Solo Sesiones Inválidas**
+
+**Se ejecuta:** Solo cuando la sesión es inválida o expiró (NO en logout manual)
+
+```typescript
+const handleSessionExpired = () => {
+  console.log("❌ Sesión inválida o expiró");
+  // Redirigir al login
+  window.location.href = '/login';
+  // Mostrar notificación
+  toast.error('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+};
+```
+
+**Se ejecuta en:**
+- ✅ No hay sesión al cargar la app
+- ✅ Sesión expirada al cargar la app
+- ✅ SessionValidator detecta expiración
+
+**NO se ejecuta en:**
+- ❌ Logout manual del usuario
+
+### **Tabla de Comportamiento Completo**
+
+| Acción | `onLogging` | `onLogout` | `onSessionInvalid` |
+|--------|-------------|------------|-------------------|
+| Usuario hace login manual | ✅ SÍ | ❌ No | ❌ No |
+| Usuario hace logout manual | ❌ No | ✅ SÍ | ❌ No |
+| NO hay sesión al iniciar app | ❌ No | ✅ SÍ | ✅ SÍ |
+| Sesión expiró al iniciar app | ❌ No | ✅ SÍ | ✅ SÍ |
+| SessionValidator detecta expiración | ❌ No | ✅ SÍ | ✅ SÍ |
+| Otra pestaña hace logout | ❌ No | ✅ SÍ | ❌ No |
+| Restaurar sesión válida al recargar | ❌ No | ❌ No | ❌ No |
+
+### **Ejemplo Completo de Uso**
+
+```typescript
+import { AppAuthProvider } from 'GC-UI-COMPONENTS';
+
+function App() {
+  const handleLogin = () => {
+    console.log("✅ Usuario inició sesión");
+    navigate('/dashboard');
+  };
+
+  const handleLogout = () => {
+    console.log("🔓 Cerrando sesión");
+    // Limpiar datos locales
+    localStorage.clear();
+  };
+
+  const handleSessionExpired = () => {
+    console.log("❌ Sesión inválida");
+    // Redirigir al login
+    window.location.href = '/login';
+  };
+
+  return (
+    <AppAuthProvider
+      sessionDuration={8 * 60 * 60 * 1000}
+      onLogging={handleLogin}              // Login manual
+      onLogout={handleLogout}              // Cualquier logout
+      onSessionInvalid={handleSessionExpired}  // Solo sesiones inválidas
+    >
+      <MyApp />
+    </AppAuthProvider>
+  );
 }
 ```
 
@@ -934,8 +1050,9 @@ function App() {
 | `sessionDuration` | `number` | `8 * 60 * 60 * 1000` | Duración de sesión en ms (8 horas) |
 | `validationInterval` | `number` | `10000` | Intervalo de validación en ms (10 seg) |
 | `skipInitialValidation` | `boolean` | `false` | Si es true, no valida la sesión al montar (útil para login) |
-| `onLogging` | `() => void` | `undefined` | Callback al iniciar sesión |
-| `onSessionInvalid` | `() => void` | `undefined` | Callback al expirar sesión |
+| `onLogging` | `() => void` | `undefined` | Callback al iniciar sesión manualmente |
+| `onLogout` | `() => void` | `undefined` | Callback SIEMPRE que hay logout (manual o automático) |
+| `onSessionInvalid` | `() => void` | `undefined` | Callback solo cuando sesión es inválida/expirada |
 
 ### **useAppAuth Hook**
 
@@ -1003,9 +1120,16 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 
 ---
 
-**Version: 1.0.8** | **Última actualización: Noviembre 2025**
+**Version: 1.0.9** | **Última actualización: Noviembre 2025**
 
 ## 📝 Changelog
+
+### v1.0.9 (Noviembre 2025)
+- ✨ **NUEVO:** Agregado prop `onLogout` que se ejecuta SIEMPRE que hay logout (manual o automático)
+- 🔧 Modificado `onSessionInvalid` para ejecutarse SOLO cuando la sesión es inválida (no en logout manual)
+- 📚 Documentación completa sobre los 3 callbacks del ciclo de vida
+- 📊 Tabla de comportamiento de callbacks para cada escenario
+- 🐛 Corregido comportamiento cuando NO hay sesión al cargar app (ahora ejecuta callbacks apropiados)
 
 ### v1.0.8 (Noviembre 2025)
 - ✨ Agregado prop `skipInitialValidation` para páginas de login
