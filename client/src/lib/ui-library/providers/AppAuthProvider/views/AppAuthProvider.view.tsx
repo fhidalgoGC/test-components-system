@@ -32,6 +32,7 @@ export function AppAuthProvider({
   children,
   sessionDuration,
   validationInterval,
+  skipInitialValidation = false,
   onLogging,
   onSessionInvalid,
 }: AppAuthProviderProps) {
@@ -144,6 +145,10 @@ export function AppAuthProvider({
   }, []);
 
   useEffect(() => {
+    if (skipInitialValidation) {
+      return;
+    }
+
     const existingSession = getSessionFromStorage();
     if (
       existingSession &&
@@ -154,7 +159,7 @@ export function AppAuthProvider({
     } else if (existingSession) {
       logout(true);
     }
-  }, []);
+  }, [skipInitialValidation]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
