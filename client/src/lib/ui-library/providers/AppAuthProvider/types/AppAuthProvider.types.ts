@@ -12,5 +12,6 @@ export interface AppAuthProviderProps {
   validationInterval?: number;
   skipInitialValidation?: boolean;
   onLogging?: () => void;
+  onLogout?: () => void;
   onSessionInvalid?: () => void;
 }

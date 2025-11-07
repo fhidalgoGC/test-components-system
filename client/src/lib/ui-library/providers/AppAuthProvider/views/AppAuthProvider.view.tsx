@@ -34,6 +34,7 @@ export function AppAuthProvider({
   validationInterval,
   skipInitialValidation = false,
   onLogging,
+  onLogout,
   onSessionInvalid,
 }: AppAuthProviderProps) {
   const optionalConfig = useOptionalConfig();
@@ -53,11 +54,16 @@ export function AppAuthProvider({
   const isProcessingEvent = useRef(false);
   const broadcastChannel = useRef<BroadcastChannel | null>(null);
   const onLoggingRef = useRef(onLogging);
+  const onLogoutRef = useRef(onLogout);
   const onSessionInvalidRef = useRef(onSessionInvalid);
 
   useEffect(() => {
     onLoggingRef.current = onLogging;
   }, [onLogging]);
+
+  useEffect(() => {
+    onLogoutRef.current = onLogout;
+  }, [onLogout]);
 
   useEffect(() => {
     onSessionInvalidRef.current = onSessionInvalid;
@@ -95,6 +101,9 @@ export function AppAuthProvider({
 
     clearSessionFromStorage();
     setIsAuthenticated(false);
+    
+    // SIEMPRE llamar onLogout cuando hay un logout (manual o automático)
+    onLogoutRef.current?.();
     
     // Solo llamar onSessionInvalid si es una invalidación real (expiración o no existe sesión)
     // NO llamar si es un logout manual del usuario
