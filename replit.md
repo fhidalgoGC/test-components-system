@@ -2,12 +2,14 @@
 
 This project is a frontend-only React component library built with React, TypeScript, and Vite. Its primary purpose is to provide a comprehensive UI component library, featuring custom components built on shadcn/ui, a complete theming system, internationalization support, and a responsive design. This is a standalone frontend library with no backend dependencies, designed for integration into other frontend applications. The project includes automated component and wrapper generators that support incremental development for creating responsive components with i18n support.
 
-**Recent Updates (October 2025):**
+**Recent Updates (November 2025):**
+- **AppAuthProvider skipInitialValidation (v1.0.8)**: Added `skipInitialValidation` prop to AppAuthProvider. When set to `true`, the provider skips automatic session validation on mount, allowing developers to call `login()` manually after backend authentication. Useful for login pages where users haven't authenticated yet.
+- **README-INSTALL-IA.md Update (v1.0.7)**: Reorganized installation guide to clarify that `@/lib/ui-library` alias is for internal library functionality only. Developers always import from `"GC-UI-COMPONENTS"` directly. Added comprehensive examples and troubleshooting section.
 - **UniversalCard Selection Integration (v1.0.7)**: Added `selectable` and `id` props to UniversalCard, enabling selection state management when used within WrapperItemsSelected. Cards display visual feedback (ring-2 ring-primary border) when selected. Safe to use outside wrapper (no errors when selectable=true without wrapper).
+- **UniversalCard Import Fix**: Fixed critical import errors by replacing `@/` aliases with relative paths in internal library components
 - Relocated command templates from `client/src/lib/ui-library/command-templates` to `client/src/command-templates`
 - Enhanced WrapperItemsSelected documentation with communication flow diagrams
 - Added interactive demo with 5 examples showing component communication patterns
-- Updated README-INDEX.md to version 1.0.6
 
 # User Preferences
 
