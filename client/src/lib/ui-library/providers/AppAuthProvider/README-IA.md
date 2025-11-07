@@ -1,10 +1,19 @@
 # AppAuthProvider - Provider de Autenticación y Gestión de Sesiones
 
-**Version: 1.0.1**
+**Version: 1.0.8**
 
 ## 📖 Descripción
 
 `AppAuthProvider` es el proveedor de autenticación y gestión de sesiones para aplicaciones que usan GC-UI-COMPONENTS. Controla el estado de autenticación global, la expiración automática de sesiones basada en tiempo real, y sincroniza el estado de la sesión entre múltiples pestañas usando BroadcastChannel API.
+
+**Características principales:**
+- ✅ Gestión de estado de autenticación (`isAuthenticated`, `login()`, `logout()`)
+- ✅ Validación automática de sesión basada en tiempo real
+- ✅ Sincronización cross-tab usando BroadcastChannel
+- ✅ Persistencia de sesión en localStorage
+- ✅ Modo `skipInitialValidation` para páginas de login (nuevo en v1.0.8)
+- ✅ Callbacks de ciclo de vida (`onLogging`, `onSessionInvalid`)
+- ✅ Integración con ConfigProvider para configuración jerárquica
 
 ## 🏗️ Estructura Modular
 
@@ -33,12 +42,13 @@ AppAuthProvider
 │   ├── Expiración basada en tiempo REAL (no inactividad)
 │   ├── sessionStartTime (marca de inicio de sesión)
 │   ├── sessionDuration configurable
-│   └── SessionValidator automático
+│   ├── SessionValidator automático
+│   └── skipInitialValidation para páginas de login ⚡ NUEVO
 │
 ├── 🔄 Sincronización cross-tab
 │   ├── BroadcastChannel API
 │   ├── Sincronización automática de login/logout
-│   └── Persistencia en sessionStorage
+│   └── Persistencia en localStorage
 │
 ├── 🎯 Callbacks de ciclo de vida
 │   ├── onLogging (al iniciar sesión)
@@ -67,6 +77,97 @@ interface AppAuthContextValue {
   login: () => void;
   logout: () => void;
 }
+```
+
+## ⚡ skipInitialValidation - Cuándo y Cómo Usar
+
+### **¿Qué hace `skipInitialValidation`?**
+
+Por defecto, cuando montas el `AppAuthProvider`, automáticamente busca en `localStorage` si existe una sesión válida. Si la encuentra, activa `isAuthenticated = true`. 
+
+**El problema:** En páginas de login, el usuario AÚN NO ha iniciado sesión, por lo que no existe sesión en localStorage. Esto genera un comportamiento no deseado.
+
+### **Cuándo usar `skipInitialValidation={true}`**
+
+✅ **USA en:**
+- Páginas de login/registro donde el usuario NO está autenticado aún
+- Rutas públicas donde quieres usar `login()` después de validar con tu backend
+- Componentes donde llamas `login()` manualmente después de OAuth/SSO
+
+❌ **NO USES en:**
+- Páginas protegidas que requieren sesión válida
+- Dashboard o rutas privadas
+- Componentes que solo muestran contenido para usuarios autenticados
+
+### **Ejemplo: Página de Login vs Página Protegida**
+
+```typescript
+import { AppAuthProvider, useAppAuth } from 'GC-UI-COMPONENTS';
+import { Switch, Route } from 'wouter';
+
+// ✅ Página de login - skipInitialValidation=true
+function LoginPage() {
+  const { login } = useAppAuth();
+  
+  const handleSuccessfulAuth = async () => {
+    const response = await fetch('/api/auth/login', { /* ... */ });
+    if (response.ok) {
+      login(); // Activar sesión manualmente
+      window.location.href = '/dashboard';
+    }
+  };
+  
+  return <LoginCard onSuccess={handleSuccessfulAuth} />;
+}
+
+// ✅ Página protegida - sin skipInitialValidation (valida automáticamente)
+function DashboardPage() {
+  const { isAuthenticated } = useAppAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+  
+  return <Dashboard />;
+}
+
+// Configuración en App.tsx
+function App() {
+  return (
+    <Switch>
+      {/* Login: skipInitialValidation=true */}
+      <Route path="/login">
+        <AppAuthProvider skipInitialValidation={true}>
+          <LoginPage />
+        </AppAuthProvider>
+      </Route>
+      
+      {/* Dashboard: validación automática */}
+      <Route path="/dashboard">
+        <AppAuthProvider>
+          <DashboardPage />
+        </AppAuthProvider>
+      </Route>
+    </Switch>
+  );
+}
+```
+
+### **Comportamiento Interno**
+
+```typescript
+// Con skipInitialValidation={false} (default)
+useEffect(() => {
+  const session = getSessionFromStorage();
+  if (session && !isSessionExpired(session, duration)) {
+    login(true); // ← Auto-login si hay sesión válida
+  }
+}, []);
+
+// Con skipInitialValidation={true}
+useEffect(() => {
+  return; // ← No hace nada, espera que llames login() manualmente
+}, []);
 ```
 
 ## 🚀 Uso Básico
@@ -528,20 +629,81 @@ function ExtendSessionButton() {
 }
 ```
 
-## 🗄️ Persistencia de Sesión
+## 🔍 Cómo Funciona la Validación de Sesión
 
-### **SessionStorage Automático**
+### **¿Qué Valida el AppAuthProvider?**
 
-El AppAuthProvider guarda automáticamente la sesión en sessionStorage:
+El AppAuthProvider **NO** valida:
+- ❌ Tokens JWT contra un backend
+- ❌ Credenciales de usuario
+- ❌ Sesiones en base de datos
+- ❌ Cookies de autenticación
+
+El AppAuthProvider **SÍ** valida:
+- ✅ Si existe datos de sesión en `localStorage['app_session_data']`
+- ✅ Si el tiempo transcurrido desde `sessionStartTime` es menor a `sessionDuration`
+
+### **Flujo de Validación**
+
+```
+1. Usuario llama login()
+   ↓
+2. Se guarda en localStorage:
+   {
+     sessionId: "session-123",
+     sessionStartTime: Date.now(), ← Marca de tiempo
+     lastActivityTime: Date.now()
+   }
+   ↓
+3. Cada X segundos (validationInterval), SessionValidator verifica:
+   ↓
+4. ¿Existe localStorage['app_session_data']?
+   └─ NO → logout()
+   └─ SÍ → Continúa
+   ↓
+5. ¿(Date.now() - sessionStartTime) > sessionDuration?
+   └─ SÍ → logout() (expiró)
+   └─ NO → Sesión válida
+```
+
+### **Importante: Es Validación Local**
+
+El AppAuthProvider solo mantiene un **estado de sesión temporal en el cliente**. Para autenticación real:
 
 ```typescript
-// Estructura guardada en sessionStorage
-{
-  sessionId: 'session-1234567890-abc123',
-  sessionStartTime: 1633024800000,
-  lastActivityTime: 1633024800000
+// 1. Tu backend valida credenciales
+const response = await fetch('/api/login', {
+  method: 'POST',
+  body: JSON.stringify({ email, password })
+});
+
+if (response.ok) {
+  const { token } = await response.json();
+  
+  // 2. Guardas el token en localStorage
+  localStorage.setItem('auth_token', token);
+  
+  // 3. Activas la sesión en AppAuthProvider
+  login(); // ← Solo activa el estado local
 }
 ```
+
+## 🗄️ Persistencia de Sesión
+
+### **localStorage Automático**
+
+El AppAuthProvider guarda automáticamente la sesión en localStorage:
+
+```typescript
+// Estructura guardada en localStorage['app_session_data']
+{
+  sessionId: 'session-1234567890-abc123',
+  sessionStartTime: 1633024800000,  // Timestamp de login
+  lastActivityTime: 1633024800000    // Timestamp de última actividad
+}
+```
+
+**⚠️ Nota:** Este es un dato separado de tu token de autenticación. El AppAuthProvider NO accede a tu token.
 
 ### **Restauración al Recargar Página**
 
