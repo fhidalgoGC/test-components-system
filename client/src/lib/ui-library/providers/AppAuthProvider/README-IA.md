@@ -170,6 +170,56 @@ useEffect(() => {
 }, []);
 ```
 
+### **⚠️ IMPORTANTE: skipInitialValidation NO desactiva la validación periódica**
+
+Muchos desarrolladores confunden estos dos conceptos:
+
+| Característica | ¿Qué valida? | ¿Cuándo ocurre? | ¿Se afecta con skipInitialValidation? |
+|----------------|--------------|-----------------|---------------------------------------|
+| **Validación inicial** | Si existe sesión guardada | Al montar el componente (1 sola vez) | ✅ SÍ (se desactiva con `true`) |
+| **SessionValidator** | Si la sesión expiró por tiempo | Cada X segundos mientras `isAuthenticated = true` | ❌ NO (siempre activo cuando hay sesión) |
+
+**Ejemplo del flujo completo:**
+
+```typescript
+// PÁGINA DE LOGIN con skipInitialValidation={true}
+function App() {
+  return (
+    <AppAuthProvider skipInitialValidation={true}>
+      <LoginPage />
+    </AppAuthProvider>
+  );
+}
+
+// 1. Usuario carga la página
+//    ✅ skipInitialValidation=true → NO busca sesión en localStorage
+//    → isAuthenticated = false
+//    → SessionValidator NO está activo
+
+// 2. Usuario ingresa credenciales y llama login()
+const { login } = useAppAuth();
+login();
+//    → isAuthenticated = true
+//    → SessionValidator SE ACTIVA AUTOMÁTICAMENTE ✅
+//    → Guarda sessionStartTime en localStorage
+
+// 3. SessionValidator verifica cada 10 segundos
+//    Cada 10 seg → ¿(Date.now() - sessionStartTime) > sessionDuration?
+//    Si NO → Sesión válida, continúa
+//    Si SÍ → logout() automáticamente
+
+// 4. Después de 8 horas (sessionDuration)
+//    → SessionValidator detecta expiración
+//    → Llama logout() automáticamente
+//    → isAuthenticated = false
+//    → SessionValidator se DESACTIVA
+```
+
+**Resumen:**
+- `skipInitialValidation={true}` → Solo salta la validación **al montar** el componente
+- SessionValidator → Siempre se activa **después de login()** y valida periódicamente
+- La validación periódica **NUNCA** se desactiva mientras haya sesión activa
+
 ## 🚀 Uso Básico
 
 ### **Instalación Mínima**
@@ -724,7 +774,7 @@ function App() {
 }
 ```
 
-## 🚨 Errores Comunes
+## 🚨 Errores Comunes y Troubleshooting
 
 ### **Error: "useAppAuth must be used within AppAuthProvider"**
 
@@ -778,6 +828,102 @@ function App() {
 <AppAuthProvider sessionDuration={8 * 60 * 60 * 1000}> {/* 8 horas */}
 ```
 
+### **Problema: Página de login muestra isAuthenticated=true**
+
+Si tu página de login muestra que el usuario está autenticado al cargar, significa que hay una sesión guardada y el AppAuthProvider la está restaurando automáticamente.
+
+```jsx
+// ❌ Problema: Login page restaura sesión automáticamente
+function App() {
+  return (
+    <AppAuthProvider>  {/* Sin skipInitialValidation */}
+      <LoginPage />    {/* isAuthenticated puede ser true! */}
+    </AppAuthProvider>
+  );
+}
+
+// ✅ Solución: Usar skipInitialValidation en páginas de login
+function App() {
+  return (
+    <AppAuthProvider skipInitialValidation={true}>
+      <LoginPage />  {/* isAuthenticated siempre false al iniciar */}
+    </AppAuthProvider>
+  );
+}
+```
+
+**¿Por qué pasa esto?**
+- Al montar el provider, revisa `localStorage['app_session_data']`
+- Si encuentra una sesión válida, activa `isAuthenticated = true` automáticamente
+- Esto es el comportamiento deseado en páginas protegidas, pero no en login
+
+**Solución:** Usa `skipInitialValidation={true}` para que NO valide automáticamente.
+
+### **Problema: skipInitialValidation no funciona con rutas protegidas**
+
+Si usas `skipInitialValidation={true}` en una página protegida, los usuarios no podrán acceder aunque tengan sesión válida.
+
+```jsx
+// ❌ Incorrecto: skipInitialValidation en página protegida
+<Route path="/dashboard">
+  <AppAuthProvider skipInitialValidation={true}>
+    <Dashboard />  {/* Usuario siempre será redirigido a login */}
+  </AppAuthProvider>
+</Route>
+
+// ✅ Correcto: Sin skipInitialValidation en páginas protegidas
+<Route path="/dashboard">
+  <AppAuthProvider>
+    <Dashboard />  {/* Restaura sesión automáticamente */}
+  </AppAuthProvider>
+</Route>
+```
+
+**Regla simple:**
+- `skipInitialValidation={true}` → Solo para login/registro
+- Sin `skipInitialValidation` → Todas las demás páginas
+
+### **Problema: Login manual no funciona**
+
+Si llamas `login()` pero `isAuthenticated` sigue siendo `false`, verifica:
+
+```jsx
+// ❌ Problema común: Llamar login fuera del provider
+function LoginPage() {
+  const handleAuth = async () => {
+    const response = await fetch('/api/login', {...});
+    if (response.ok) {
+      login(); // ← Error: login no está definido
+    }
+  };
+  
+  return <LoginCard onSuccess={handleAuth} />;
+}
+
+// ✅ Solución: Usar useAppAuth dentro del provider
+function LoginPage() {
+  const { login } = useAppAuth(); // ← Obtener login del hook
+  
+  const handleAuth = async () => {
+    const response = await fetch('/api/login', {...});
+    if (response.ok) {
+      login(); // ← Ahora sí funciona
+    }
+  };
+  
+  return <LoginCard onSuccess={handleAuth} />;
+}
+
+// En App.tsx
+function App() {
+  return (
+    <AppAuthProvider skipInitialValidation={true}>
+      <LoginPage />  {/* Ahora LoginPage puede usar useAppAuth */}
+    </AppAuthProvider>
+  );
+}
+```
+
 ## 🔗 API Reference
 
 ### **AppAuthProvider Props**
@@ -787,6 +933,7 @@ function App() {
 | `children` | `ReactNode` | - | Contenido de la aplicación |
 | `sessionDuration` | `number` | `8 * 60 * 60 * 1000` | Duración de sesión en ms (8 horas) |
 | `validationInterval` | `number` | `10000` | Intervalo de validación en ms (10 seg) |
+| `skipInitialValidation` | `boolean` | `false` | Si es true, no valida la sesión al montar (útil para login) |
 | `onLogging` | `() => void` | `undefined` | Callback al iniciar sesión |
 | `onSessionInvalid` | `() => void` | `undefined` | Callback al expirar sesión |
 
@@ -819,13 +966,15 @@ interface AppAuthContextValue {
 
 ## 🎯 Mejores Prácticas
 
-1. **Usar ConfigProvider para configuración centralizada**: Permite cambiar configuración sin modificar props
-2. **Implementar callbacks para UX mejorada**: Notificar al usuario sobre cambios de sesión
-3. **Limpiar datos sensibles en logout**: Usar el callback onSessionInvalid para limpiar localStorage
-4. **Validar duración de sesión**: Asegúrate de pasar milisegundos correctamente
-5. **Combinar con autenticación real**: AppAuthProvider solo maneja el estado, no la autenticación
-6. **Usar useCallback para callbacks**: Evita re-renders innecesarios
-7. **Probar sincronización cross-tab**: Abre múltiples pestañas para verificar
+1. **Usar skipInitialValidation correctamente**: Solo en páginas de login/registro, nunca en rutas protegidas
+2. **Usar ConfigProvider para configuración centralizada**: Permite cambiar configuración sin modificar props
+3. **Implementar callbacks para UX mejorada**: Notificar al usuario sobre cambios de sesión
+4. **Limpiar datos sensibles en logout**: Usar el callback onSessionInvalid para limpiar localStorage
+5. **Validar duración de sesión**: Asegúrate de pasar milisegundos correctamente
+6. **Combinar con autenticación real**: AppAuthProvider solo maneja el estado, no la autenticación
+7. **Usar useCallback para callbacks**: Evita re-renders innecesarios
+8. **Probar sincronización cross-tab**: Abre múltiples pestañas para verificar
+9. **Entender la validación periódica**: SessionValidator siempre se activa después de login(), independientemente de skipInitialValidation
 
 ## 📊 Ejemplos de Duración de Sesión
 
@@ -854,4 +1003,19 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 
 ---
 
-**Version: 1.0.0** | **Última actualización: Octubre 2025**
+**Version: 1.0.8** | **Última actualización: Noviembre 2025**
+
+## 📝 Changelog
+
+### v1.0.8 (Noviembre 2025)
+- ✨ Agregado prop `skipInitialValidation` para páginas de login
+- 📚 Documentación extendida sobre validación inicial vs periódica
+- 🐛 Aclarado que SessionValidator siempre se activa después de login()
+- 📖 Agregados ejemplos de troubleshooting para `skipInitialValidation`
+
+### v1.0.0 (Octubre 2025)
+- 🎉 Versión inicial del AppAuthProvider
+- ✅ Gestión de estado de autenticación
+- ✅ Validación automática basada en tiempo real
+- ✅ Sincronización cross-tab con BroadcastChannel
+- ✅ Integración con ConfigProvider
