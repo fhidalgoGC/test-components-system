@@ -1,6 +1,6 @@
 # AppAuthProvider - Provider de Autenticación y Gestión de Sesiones
 
-**Version: 1.0.0**
+**Version: 1.0.1**
 
 ## 📖 Descripción
 
@@ -57,6 +57,7 @@ interface AppAuthProviderProps {
   children: React.ReactNode;
   sessionDuration?: number;        // Duración de la sesión en ms (default: 8 horas)
   validationInterval?: number;     // Intervalo de validación en ms (default: 10 segundos)
+  skipInitialValidation?: boolean; // Si es true, no valida la sesión al iniciar (útil para páginas de login)
   onLogging?: () => void;          // Callback al iniciar sesión
   onSessionInvalid?: () => void;   // Callback al expirar sesión
 }
@@ -184,6 +185,59 @@ function App() {
   );
 }
 ```
+
+### **Caso 3.5: Página de Login (Sin Validación Inicial) ⚡ NUEVO**
+
+> **⚡ USE CASE:** Útil cuando tienes una página de login donde el usuario AÚN NO está autenticado y quieres usar `login()` después de autenticar con tu backend.
+
+```jsx
+import { AppAuthProvider, useAppAuth } from 'GC-UI-COMPONENTS';
+import { Switch, Route } from 'wouter';
+
+function LoginPage() {
+  const { login } = useAppAuth();
+  
+  const handleSuccessfulAuth = async () => {
+    // Tu lógica de autenticación con el backend
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    });
+    
+    if (response.ok) {
+      // Llamar login() para activar la sesión en el provider
+      login();
+    }
+  };
+  
+  return <LoginCard onSuccess={handleSuccessfulAuth} />;
+}
+
+function App() {
+  return (
+    <Switch>
+      {/* Página de login con skipInitialValidation=true */}
+      <Route path="/login">
+        <AppAuthProvider skipInitialValidation={true}>
+          <LoginPage />
+        </AppAuthProvider>
+      </Route>
+      
+      {/* Otras páginas con validación normal */}
+      <Route path="/dashboard">
+        <AppAuthProvider>
+          <Dashboard />
+        </AppAuthProvider>
+      </Route>
+    </Switch>
+  );
+}
+```
+
+**¿Qué hace `skipInitialValidation`?**
+- ✅ **true**: No valida sesión al montar el componente (útil para páginas de login)
+- ✅ **false/undefined**: Valida sesión automáticamente (comportamiento por defecto)
+- ✅ Permite llamar `login()` manualmente después de autenticarte con tu backend
 
 ### **Caso 4: Con ConfigProvider (Configuración Jerárquica) - RECOMENDADO para Apps**
 
