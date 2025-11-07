@@ -10,6 +10,7 @@ export interface AppAuthProviderProps {
   children: ReactNode;
   sessionDuration?: number;
   validationInterval?: number;
+  skipInitialValidation?: boolean;
   onLogging?: () => void;
   onSessionInvalid?: () => void;
 }
