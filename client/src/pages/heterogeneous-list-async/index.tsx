@@ -1,1 +1,1 @@
-export { AsyncLoadingDemo } from './views/AsyncLoadingDemo.view';
+export { AsyncLoadingDemo as default } from './views/AsyncLoadingDemo.view';

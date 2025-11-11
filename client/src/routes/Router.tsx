@@ -8,7 +8,7 @@ import DateDemo from "@/pages/date-demo";
 import { AuthTestPage } from "@/pages/auth-test";
 import RegistryMode from "@/pages/heterogeneous-list-registry";
 import ElementsMode from "@/pages/heterogeneous-list-elements";
-import { AsyncLoadingDemo } from "@/pages/heterogeneous-list-async";
+import AsyncLoadingDemo from "@/pages/heterogeneous-list-async";
 import BottomNavDemo from "@/pages/bottom-nav-demo";
 import BottomNavConfigDemo from "@/pages/bottom-nav-config-demo";
 import ResponsiveDemo from "@/pages/responsive-demo";
