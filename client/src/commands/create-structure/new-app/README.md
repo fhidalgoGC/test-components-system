@@ -48,8 +48,15 @@ npx gc-ui-setup new-app --force
 
 ## Archivos Creados
 
-- `pages/home.tsx` - Página principal
-- `pages/not-found.tsx` - Página 404
+| Archivo | Descripción |
+|---------|-------------|
+| `pages/home.tsx` | Página principal |
+| `pages/not-found.tsx` | Página 404 |
+| `lib/utils.ts` | Utilidad `cn()` para clases CSS |
+| `hooks/use-toast.ts` | Hook para notificaciones toast |
+| `components/ui/toast.tsx` | Componente Toast |
+| `components/ui/toaster.tsx` | Componente Toaster |
+| `components/ui/tooltip.tsx` | Componente Tooltip |
 
 ## Estructura de Salida
 
@@ -57,12 +64,18 @@ npx gc-ui-setup new-app --force
 src/
 ├── assets/
 ├── components/
+│   └── ui/
+│       ├── toast.tsx
+│       ├── toaster.tsx
+│       └── tooltip.tsx
 ├── contexts/
 ├── features/
 ├── hooks/
+│   └── use-toast.ts
 ├── interceptors/
 ├── layouts/
 ├── lib/
+│   └── utils.ts
 ├── pages/
 │   ├── home.tsx
 │   └── not-found.tsx
