@@ -53,6 +53,7 @@ npx gc-ui-setup new-app --force
 | `pages/home.tsx` | Página principal |
 | `pages/not-found.tsx` | Página 404 |
 | `lib/utils.ts` | Utilidad `cn()` para clases CSS |
+| `lib/queryClient.ts` | Cliente TanStack Query con fetch config |
 | `hooks/use-toast.ts` | Hook para notificaciones toast |
 | `components/ui/toast.tsx` | Componente Toast |
 | `components/ui/toaster.tsx` | Componente Toaster |
@@ -75,6 +76,7 @@ src/
 ├── interceptors/
 ├── layouts/
 ├── lib/
+│   ├── queryClient.ts
 │   └── utils.ts
 ├── pages/
 │   ├── home.tsx
