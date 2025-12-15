@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const { logger } = require('./logger.cjs');
+import fs from 'fs';
+import path from 'path';
+import { logger } from './logger.js';
 
-async function createFolders({ basePath, folders, force = false }) {
+export async function createFolders({ basePath, folders, force = false }) {
   const results = {
     created: [],
     skipped: [],
@@ -49,7 +49,7 @@ async function createFolders({ basePath, folders, force = false }) {
   return results;
 }
 
-function generateAliasConfig(folders, basePath) {
+export function generateAliasConfig(folders, basePath) {
   const aliases = {};
   
   for (const folder of folders) {
@@ -61,5 +61,3 @@ function generateAliasConfig(folders, basePath) {
   
   return aliases;
 }
-
-module.exports = { createFolders, generateAliasConfig };

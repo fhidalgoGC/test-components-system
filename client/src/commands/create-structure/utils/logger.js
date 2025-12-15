@@ -72,4 +72,4 @@ const logger = {
   }
 };
 
-module.exports = { logger, colors };
+export { logger, colors };

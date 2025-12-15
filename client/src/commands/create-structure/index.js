@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
-const path = require('path');
-const fs = require('fs');
-const { logger } = require('./utils/logger.cjs');
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { logger } from './utils/logger.js';
 
-function loadCommands() {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function loadCommands() {
   const commands = {};
   const commandsDir = __dirname;
   
@@ -13,11 +17,12 @@ function loadCommands() {
   for (const entry of entries) {
     if (entry.isDirectory() && entry.name !== 'utils') {
       const commandPath = path.join(commandsDir, entry.name);
-      const indexPath = path.join(commandPath, 'index.cjs');
+      const indexPath = path.join(commandPath, 'index.js');
       const configPath = path.join(commandPath, 'config.json');
       
       if (fs.existsSync(indexPath) && fs.existsSync(configPath)) {
-        commands[entry.name] = require(path.join(commandPath, 'index.cjs'));
+        const module = await import(indexPath);
+        commands[entry.name] = module;
       }
     }
   }
@@ -53,7 +58,7 @@ function parseArgs(args) {
 async function main() {
   const args = process.argv.slice(2);
   const options = parseArgs(args);
-  const commands = loadCommands();
+  const commands = await loadCommands();
 
   if (options.help || !options.command) {
     logger.help(commands);
