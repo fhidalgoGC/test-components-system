@@ -11,7 +11,20 @@
     { "path": "interceptors", "alias": "@/interceptors" },
     { "path": "layouts", "alias": "@/layouts" },
     { "path": "lib", "alias": "@/lib" },
-    { "path": "pages", "alias": "@/pages" },
+    { 
+      "path": "pages", 
+      "alias": "@/pages",
+      "files": [
+        {
+          "name": "home.tsx",
+          "content": "export default function Home() {\n  return <p data-testid=\"text-greeting\">Hola Mundo</p>;\n}\n"
+        },
+        {
+          "name": "not-found.tsx",
+          "content": "export default function NotFound() {\n  return (\n    <div className=\"flex flex-col items-center justify-center min-h-screen\">\n      <h1 className=\"text-4xl font-bold\">404</h1>\n      <p data-testid=\"text-not-found\">Página no encontrada</p>\n    </div>\n  );\n}\n"
+        }
+      ]
+    },
     { "path": "routes", "alias": "@/routes" },
     { "path": "services", "alias": "@/services" },
     { "path": "types", "alias": "@/types" },

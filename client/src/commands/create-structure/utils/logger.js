@@ -32,10 +32,15 @@ const logger = {
     console.log(`  ${colors.red}✖${colors.reset} ${folderPath} ${colors.red}(error: ${message})${colors.reset}`);
   },
 
+  file(fileName) {
+    console.log(`    ${colors.blue}📄${colors.reset} ${fileName} ${colors.blue}(archivo creado)${colors.reset}`);
+  },
+
   summary(results) {
     console.log('\n' + '─'.repeat(50));
     
     const total = results.created.length + results.skipped.length + results.overwritten.length;
+    const filesCount = results.files ? results.files.length : 0;
     
     if (results.errors.length === 0) {
       console.log(`${colors.green}✅ Estructura creada exitosamente${colors.reset}`);
@@ -47,6 +52,10 @@ const logger = {
     console.log(`   ${colors.green}Creadas:${colors.reset}      ${results.created.length}`);
     console.log(`   ${colors.yellow}Saltadas:${colors.reset}     ${results.skipped.length}`);
     console.log(`   ${colors.cyan}Sobrescritas:${colors.reset} ${results.overwritten.length}`);
+    
+    if (filesCount > 0) {
+      console.log(`   ${colors.blue}Archivos:${colors.reset}     ${filesCount}`);
+    }
     
     if (results.errors.length > 0) {
       console.log(`   ${colors.red}Errores:${colors.reset}      ${results.errors.length}`);

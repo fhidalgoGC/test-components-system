@@ -7,7 +7,8 @@ export async function createFolders({ basePath, folders, force = false }) {
     created: [],
     skipped: [],
     overwritten: [],
-    errors: []
+    errors: [],
+    files: []
   };
 
   for (const folder of folders) {
@@ -16,6 +17,7 @@ export async function createFolders({ basePath, folders, force = false }) {
       : folder.path;
     
     const alias = typeof folder === 'object' ? folder.alias : null;
+    const files = typeof folder === 'object' ? folder.files : null;
     const fullPath = path.join(process.cwd(), basePath, folderPath);
 
     try {
@@ -29,14 +31,23 @@ export async function createFolders({ basePath, folders, force = false }) {
         fs.mkdirSync(fullPath, { recursive: true });
         logger.overwrite(folderPath, alias);
         results.overwritten.push({ path: folderPath, alias });
+        
+        if (files && Array.isArray(files)) {
+          await createFiles(fullPath, files, results);
+        }
       } else {
         fs.mkdirSync(fullPath, { recursive: true });
         logger.create(folderPath, alias);
         results.created.push({ path: folderPath, alias });
+        
+        if (files && Array.isArray(files)) {
+          await createFiles(fullPath, files, results);
+        }
       }
 
       const gitkeepPath = path.join(fullPath, '.gitkeep');
-      if (!fs.existsSync(gitkeepPath)) {
+      const hasFiles = files && Array.isArray(files) && files.length > 0;
+      if (!fs.existsSync(gitkeepPath) && !hasFiles) {
         fs.writeFileSync(gitkeepPath, '');
       }
 
@@ -47,6 +58,20 @@ export async function createFolders({ basePath, folders, force = false }) {
   }
 
   return results;
+}
+
+async function createFiles(folderPath, files, results) {
+  for (const file of files) {
+    try {
+      const filePath = path.join(folderPath, file.name);
+      fs.writeFileSync(filePath, file.content);
+      logger.file(file.name);
+      results.files.push({ name: file.name, path: filePath });
+    } catch (error) {
+      logger.error(file.name, error.message);
+      results.errors.push({ path: file.name, error: error.message });
+    }
+  }
 }
 
 export function generateAliasConfig(folders, basePath) {
