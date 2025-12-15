@@ -1,35 +1,32 @@
-# Create Structure CLI
+# gc-ui-setup CLI
 
-Generador de estructuras de carpetas para proyectos que implementan la librería **GC-UI-COMPONENTS**.
+Herramienta de línea de comandos para crear estructuras de carpetas en proyectos que usan GC-UI-COMPONENTS.
 
 ## Instalación
 
-Este CLI viene incluido con la librería. Una vez instalada la librería en tu proyecto:
+El CLI viene incluido con la librería:
 
 ```bash
 npm install github:fhidalgoGC/test-components-system#version.1.0.2-mobile
 ```
 
+La configuración en `package.json` de la librería:
+
+```json
+{
+  "bin": {
+    "gc-ui-setup": "./client/src/commands/create-structure/index.js"
+  }
+}
+```
+
 ## Uso
 
-### Con npx (Recomendado)
-
 ```bash
-# Ver comandos disponibles
-npx gc-ui-setup --help
-
-# Crear estructura
-npx gc-ui-setup new-app
-
-# Con opciones
-npx gc-ui-setup new-app --path=src
-npx gc-ui-setup new-app --force
-npx gc-ui-setup new-app --path=src --force
+npx gc-ui-setup <comando> [flags]
 ```
 
 ### Alternativa: Script en package.json
-
-Si prefieres un comando más corto, agrega en tu `package.json`:
 
 ```json
 {
@@ -39,80 +36,43 @@ Si prefieres un comando más corto, agrega en tu `package.json`:
 }
 ```
 
-Luego ejecuta:
-
 ```bash
 npm run setup new-app
-npm run setup new-app --path=src --force
+npm run setup features --name=login
 ```
 
 ## Comandos Disponibles
 
-### `new-app`
+| Comando | Descripción | Documentación |
+|---------|-------------|---------------|
+| `new-app` | Crea estructura base para nueva aplicación | [Ver README](./new-app/README.md) |
+| `features` | Crea estructura para un feature específico | [Ver README](./features/README.md) |
 
-Crea la estructura base de carpetas para una nueva aplicación.
+## Flags Comunes
 
-```bash
-npx gc-ui-setup new-app
-```
-
-**Carpetas que crea:**
-
-| Carpeta | Alias |
-|---------|-------|
-| assets | @/assets |
-| components | @/components |
-| contexts | @/contexts |
-| features | @/features |
-| hooks | @/hooks |
-| interceptors | @/interceptors |
-| layouts | @/layouts |
-| lib | @/lib |
-| pages | @/pages |
-| routes | @/routes |
-| services | @/services |
-| types | @/types |
-| utils | @/utils |
-
-## Opciones (Flags)
+Estos flags están disponibles en **todos** los comandos:
 
 | Flag | Alias | Descripción |
 |------|-------|-------------|
-| `--path=<ruta>` | `-path=<ruta>` | Define la ruta base donde crear las carpetas. Por defecto: `client/src` |
-| `--force` | `-f` | Sobrescribe las carpetas si ya existen. Sin esta flag, las carpetas existentes se saltan |
-| `--help` | `-h` | Muestra la ayuda con los comandos disponibles |
+| `--path=<ruta>` | `-path=<ruta>` | Ruta personalizada donde crear la estructura |
+| `--force` | `-f` | Sobrescribe carpetas existentes |
+| `--help` | `-h` | Muestra ayuda y lista de comandos |
 
-## Ejemplos
-
-### Crear estructura en ruta por defecto
+## Ejemplos Rápidos
 
 ```bash
+# Ver ayuda
+npx gc-ui-setup --help
+
+# Crear estructura de aplicación
 npx gc-ui-setup new-app
-# Crea carpetas en: client/src/assets, client/src/components, ...
-```
-
-### Crear estructura en ruta personalizada
-
-```bash
 npx gc-ui-setup new-app --path=src
-# Crea carpetas en: src/assets, src/components, ...
-
-npx gc-ui-setup new-app --path=frontend/app
-# Crea carpetas en: frontend/app/assets, frontend/app/components, ...
-```
-
-### Sobrescribir carpetas existentes
-
-```bash
 npx gc-ui-setup new-app --force
-# Si las carpetas existen, las elimina y crea de nuevo
-```
 
-### Combinar opciones
-
-```bash
-npx gc-ui-setup new-app --force --path=src/app
-# Crea/sobrescribe carpetas en: src/app/assets, src/app/components, ...
+# Crear feature
+npx gc-ui-setup features --name=login
+npx gc-ui-setup features --name=auth --path=src/features
+npx gc-ui-setup features --name=login --force
 ```
 
 ## Output
@@ -128,6 +88,7 @@ El CLI muestra el progreso con indicadores visuales:
   ✔ components → @/components (creada)
   ⚠ hooks → @/hooks (ya existe, saltando)
   ↻ utils → @/utils (sobrescrita)
+    📄 home.tsx (archivo creado)
 
 ──────────────────────────────────────────────────
 ✅ Estructura creada exitosamente
@@ -136,6 +97,7 @@ El CLI muestra el progreso con indicadores visuales:
    Creadas:      10
    Saltadas:     2
    Sobrescritas: 1
+   Archivos:     1
    Total:        13
 ```
 
@@ -143,45 +105,14 @@ El CLI muestra el progreso con indicadores visuales:
 - ✔ (verde) - Carpeta creada exitosamente
 - ⚠ (amarillo) - Carpeta ya existe, se saltó
 - ↻ (cyan) - Carpeta sobrescrita (con --force)
-- ✖ (rojo) - Error al crear la carpeta
+- 📄 - Archivo de plantilla creado
+- ✖ (rojo) - Error al crear
 
-## Agregar Nuevos Comandos
-
-Para agregar un nuevo comando (ej: `features`):
-
-1. Crea una carpeta con el nombre del comando:
-   ```
-   create-structure/
-     features/
-       config.json
-       index.js
-   ```
-
-2. Define la configuración en `config.json`:
-   ```json
-   {
-     "name": "features",
-     "description": "Crea estructura de features/módulos",
-     "defaultPath": "src/features",
-     "folders": [
-       { "path": "auth/components", "alias": "@/features/auth/components" },
-       { "path": "auth/hooks", "alias": "@/features/auth/hooks" }
-     ]
-   }
-   ```
-
-3. Copia el `index.js` de `new-app/` y ajusta si es necesario.
-
-4. El nuevo comando estará disponible automáticamente:
-   ```bash
-   npx gc-ui-setup features
-   ```
-
-## Configuración de Aliases en tu Proyecto
+## Configuración de Aliases
 
 Después de crear la estructura, configura los aliases en tu proyecto:
 
-### Para Vite (vite.config.ts)
+### Vite (vite.config.ts)
 
 ```typescript
 import { defineConfig } from 'vite';
@@ -196,7 +127,7 @@ export default defineConfig({
 });
 ```
 
-### Para TypeScript (tsconfig.json)
+### TypeScript (tsconfig.json)
 
 ```json
 {
@@ -209,17 +140,74 @@ export default defineConfig({
 }
 ```
 
-## Estructura de Archivos del CLI
+## Estructura del CLI
 
 ```
 create-structure/
-├── index.js              # Entry point principal
-├── README.md             # Esta documentación
-├── new-app/
-│   ├── config.json       # Configuración de carpetas
-│   └── index.js          # Ejecutor del comando
-└── utils/
-    ├── create-folders.js # Lógica para crear carpetas
-    ├── logger.js         # Logs con colores
-    └── index.js          # Exports
+├── index.js                # Entry point principal
+├── README.md               # Esta documentación
+├── utils/                  # Utilidades compartidas
+│   ├── copy-templates.js   # Copiar archivos de plantilla
+│   ├── create-folders.js   # Crear carpetas con aliases
+│   ├── logger.js           # Logs con colores
+│   └── index.js            # Exports
+├── new-app/                # Comando new-app
+│   ├── config.json         # Configuración de carpetas
+│   ├── index.js            # Lógica del comando
+│   ├── README.md           # Documentación del comando
+│   └── templates/          # Archivos plantilla
+└── features/               # Comando features
+    ├── config.json
+    ├── index.js
+    ├── README.md
+    └── templates/
+```
+
+## Crear Nuevo Comando
+
+1. Crear carpeta en `create-structure/<nombre-comando>/`
+2. Agregar `config.json` con definición de carpetas
+3. Agregar `index.js` con función `execute(options)`
+4. Agregar `templates/` si el comando necesita copiar archivos
+5. Agregar `README.md` documentando el comando
+
+El CLI detecta automáticamente nuevos comandos.
+
+### Ejemplo config.json
+
+```json
+{
+  "name": "mi-comando",
+  "description": "Descripción del comando",
+  "defaultPath": "src",
+  "folders": [
+    { "path": "carpeta1", "alias": "@/carpeta1" },
+    { "path": "carpeta2", "alias": "@/carpeta2" }
+  ]
+}
+```
+
+### Ejemplo index.js
+
+```javascript
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createFolders, copyTemplateFiles, logger } from '../utils/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const config = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'config.json'), 'utf-8')
+);
+
+export async function execute(options = {}) {
+  const { force = false, targetPath = null } = options;
+  const basePath = targetPath || config.defaultPath;
+  
+  // Tu lógica aquí...
+}
+
+export { config };
 ```
