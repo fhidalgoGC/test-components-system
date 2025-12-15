@@ -13,44 +13,31 @@ const config = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'config.json'), 'utf-8')
 );
 
-const PAGE_FILES = [
-  {
-    name: 'home.tsx',
-    content: `export default function Home() {
-  return <p data-testid="text-greeting">Hola Mundo</p>;
-}
-`
-  },
-  {
-    name: 'not-found.tsx',
-    content: `export default function NotFound() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-4xl font-bold">404</h1>
-      <p data-testid="text-not-found">Página no encontrada</p>
-    </div>
-  );
-}
-`
-  }
-];
-
-function createPageFiles(pagesFullPath) {
+function copyTemplateFiles(templateFolder, targetFolder) {
   const filesCreated = [];
+  const templatePath = path.join(__dirname, 'templates', templateFolder);
   
-  for (const file of PAGE_FILES) {
+  if (!fs.existsSync(templatePath)) {
+    return filesCreated;
+  }
+
+  const files = fs.readdirSync(templatePath);
+  
+  for (const file of files) {
     try {
-      const filePath = path.join(pagesFullPath, file.name);
-      fs.writeFileSync(filePath, file.content);
-      logger.file(file.name);
-      filesCreated.push({ name: file.name, path: filePath });
+      const sourcePath = path.join(templatePath, file);
+      const destPath = path.join(targetFolder, file);
+      
+      fs.copyFileSync(sourcePath, destPath);
+      logger.file(file);
+      filesCreated.push({ name: file, path: destPath });
     } catch (error) {
-      logger.error(file.name, error.message);
+      logger.error(file, error.message);
     }
   }
-  
-  const gitkeepPath = path.join(pagesFullPath, '.gitkeep');
-  if (fs.existsSync(gitkeepPath)) {
+
+  const gitkeepPath = path.join(targetFolder, '.gitkeep');
+  if (fs.existsSync(gitkeepPath) && filesCreated.length > 0) {
     fs.unlinkSync(gitkeepPath);
   }
   
@@ -79,7 +66,7 @@ export async function execute(options = {}) {
   );
   
   if (pagesFolder) {
-    const filesCreated = createPageFiles(pagesFolder.fullPath);
+    const filesCreated = copyTemplateFiles('pages', pagesFolder.fullPath);
     results.files.push(...filesCreated);
   }
 
