@@ -50,6 +50,7 @@ npx gc-ui-setup new-app --force
 
 | Archivo | Descripción |
 |---------|-------------|
+| `App.tsx` | Componente principal de la aplicación |
 | `pages/home.tsx` | Página principal |
 | `pages/not-found.tsx` | Página 404 |
 | `lib/utils.ts` | Utilidad `cn()` para clases CSS |
@@ -63,6 +64,7 @@ npx gc-ui-setup new-app --force
 
 ```
 src/
+├── App.tsx
 ├── assets/
 ├── components/
 │   └── ui/
