@@ -16,7 +16,8 @@ export async function createFolders({ basePath, folders, force = false }) {
       : folder.path;
     
     const alias = typeof folder === 'object' ? folder.alias : null;
-    const fullPath = path.join(process.cwd(), basePath, folderPath);
+    const resolvedBasePath = path.isAbsolute(basePath) ? basePath : path.join(process.cwd(), basePath);
+    const fullPath = path.join(resolvedBasePath, folderPath);
 
     try {
       const exists = fs.existsSync(fullPath);
