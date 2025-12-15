@@ -1,0 +1,83 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const fs = require('fs');
+const { logger } = require('./utils/logger.cjs');
+
+function loadCommands() {
+  const commands = {};
+  const commandsDir = __dirname;
+  
+  const entries = fs.readdirSync(commandsDir, { withFileTypes: true });
+  
+  for (const entry of entries) {
+    if (entry.isDirectory() && entry.name !== 'utils') {
+      const commandPath = path.join(commandsDir, entry.name);
+      const indexPath = path.join(commandPath, 'index.cjs');
+      const configPath = path.join(commandPath, 'config.json');
+      
+      if (fs.existsSync(indexPath) && fs.existsSync(configPath)) {
+        commands[entry.name] = require(path.join(commandPath, 'index.cjs'));
+      }
+    }
+  }
+  
+  return commands;
+}
+
+function parseArgs(args) {
+  const options = {
+    command: null,
+    force: false,
+    path: null,
+    help: false
+  };
+
+  for (const arg of args) {
+    if (arg === '--force' || arg === '-f') {
+      options.force = true;
+    } else if (arg.startsWith('--path=')) {
+      options.path = arg.replace('--path=', '');
+    } else if (arg.startsWith('-path=')) {
+      options.path = arg.replace('-path=', '');
+    } else if (arg === '--help' || arg === '-h') {
+      options.help = true;
+    } else if (!arg.startsWith('-')) {
+      options.command = arg;
+    }
+  }
+
+  return options;
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const options = parseArgs(args);
+  const commands = loadCommands();
+
+  if (options.help || !options.command) {
+    logger.help(commands);
+    return;
+  }
+
+  const command = commands[options.command];
+
+  if (!command) {
+    console.log(`\n❌ Comando no encontrado: ${options.command}`);
+    console.log(`\nComandos disponibles: ${Object.keys(commands).join(', ')}`);
+    console.log('Usa --help para más información\n');
+    process.exit(1);
+  }
+
+  try {
+    await command.execute({
+      force: options.force,
+      targetPath: options.path
+    });
+  } catch (error) {
+    console.error(`\n❌ Error ejecutando ${options.command}:`, error.message);
+    process.exit(1);
+  }
+}
+
+main();

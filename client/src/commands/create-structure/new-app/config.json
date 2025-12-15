@@ -1,0 +1,20 @@
+{
+  "name": "new-app",
+  "description": "Crea estructura base para nueva aplicación",
+  "defaultPath": "client/src",
+  "folders": [
+    { "path": "assets", "alias": "@/assets" },
+    { "path": "components", "alias": "@/components" },
+    { "path": "contexts", "alias": "@/contexts" },
+    { "path": "features", "alias": "@/features" },
+    { "path": "hooks", "alias": "@/hooks" },
+    { "path": "interceptors", "alias": "@/interceptors" },
+    { "path": "layouts", "alias": "@/layouts" },
+    { "path": "lib", "alias": "@/lib" },
+    { "path": "pages", "alias": "@/pages" },
+    { "path": "routes", "alias": "@/routes" },
+    { "path": "services", "alias": "@/services" },
+    { "path": "types", "alias": "@/types" },
+    { "path": "utils", "alias": "@/utils" }
+  ]
+}
