@@ -35,6 +35,7 @@ function parseArgs(args) {
     command: null,
     force: false,
     path: null,
+    name: null,
     help: false
   };
 
@@ -45,6 +46,10 @@ function parseArgs(args) {
       options.path = arg.replace('--path=', '');
     } else if (arg.startsWith('-path=')) {
       options.path = arg.replace('-path=', '');
+    } else if (arg.startsWith('--name=')) {
+      options.name = arg.replace('--name=', '');
+    } else if (arg.startsWith('-name=')) {
+      options.name = arg.replace('-name=', '');
     } else if (arg === '--help' || arg === '-h') {
       options.help = true;
     } else if (!arg.startsWith('-')) {
@@ -77,7 +82,8 @@ async function main() {
   try {
     await command.execute({
       force: options.force,
-      targetPath: options.path
+      targetPath: options.path,
+      name: options.name
     });
   } catch (error) {
     console.error(`\n❌ Error ejecutando ${options.command}:`, error.message);
