@@ -14,7 +14,7 @@ const config = JSON.parse(
 
 const TEMPLATES_PATH = path.join(__dirname, 'templates');
 
-function copyAllTemplates(templatesDir, targetDir, results) {
+function copyAllTemplates(templatesDir, targetDir, results, force = false) {
   if (!fs.existsSync(templatesDir)) return;
   
   const items = fs.readdirSync(templatesDir);
@@ -26,12 +26,17 @@ function copyAllTemplates(templatesDir, targetDir, results) {
     
     if (stat.isDirectory()) {
       fs.mkdirSync(destPath, { recursive: true });
-      copyAllTemplates(sourcePath, destPath, results);
+      copyAllTemplates(sourcePath, destPath, results, force);
     } else {
       try {
-        fs.copyFileSync(sourcePath, destPath);
-        logger.file(item);
-        results.files.push({ name: item, path: destPath });
+        if (fs.existsSync(destPath) && !force) {
+          logger.fileSkip(item);
+          results.filesSkipped = (results.filesSkipped || 0) + 1;
+        } else {
+          fs.copyFileSync(sourcePath, destPath);
+          logger.file(item);
+          results.files.push({ name: item, path: destPath });
+        }
       } catch (error) {
         logger.error(item, error.message);
       }
@@ -56,7 +61,7 @@ export async function execute(options = {}) {
 
   results.files = [];
 
-  copyAllTemplates(TEMPLATES_PATH, basePath, results);
+  copyAllTemplates(TEMPLATES_PATH, basePath, results, force);
 
   logger.summary(results);
   

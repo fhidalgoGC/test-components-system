@@ -36,6 +36,10 @@ const logger = {
     console.log(`    ${colors.blue}📄${colors.reset} ${fileName} ${colors.blue}(archivo creado)${colors.reset}`);
   },
 
+  fileSkip(fileName) {
+    console.log(`    ${colors.yellow}📄${colors.reset} ${fileName} ${colors.yellow}(ya existe, saltando)${colors.reset}`);
+  },
+
   summary(results) {
     console.log('\n' + '─'.repeat(50));
     
