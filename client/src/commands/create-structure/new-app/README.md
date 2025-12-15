@@ -2,6 +2,16 @@
 
 Crea la estructura base de carpetas para una nueva aplicación.
 
+## 📥 Acceso Directo
+
+**Ver desde GitHub:**  
+[📄 new-app/README.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/commands/create-structure/new-app/README.md)
+
+**Documentación principal del CLI:**  
+[📄 README.md (CLI)](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/commands/create-structure/README.md)
+
+---
+
 ## Uso
 
 ```bash

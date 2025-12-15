@@ -2,6 +2,16 @@
 
 Crea la estructura de carpetas para un feature específico dentro de `features/`.
 
+## 📥 Acceso Directo
+
+**Ver desde GitHub:**  
+[📄 features/README.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/commands/create-structure/features/README.md)
+
+**Documentación principal del CLI:**  
+[📄 README.md (CLI)](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/commands/create-structure/README.md)
+
+---
+
 ## Uso
 
 ```bash

@@ -2,6 +2,29 @@
 
 Herramienta de línea de comandos para crear estructuras de carpetas en proyectos que usan GC-UI-COMPONENTS.
 
+## 📥 Acceso Directo a Esta Guía
+
+**Ver/Descargar desde GitHub:**  
+[📄 README.md (CLI)](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/commands/create-structure/README.md)
+
+---
+
+## 📚 Documentación de Comandos
+
+| Comando | Documentación GitHub |
+|---------|---------------------|
+| `new-app` | [📄 new-app/README.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/commands/create-structure/new-app/README.md) |
+| `features` | [📄 features/README.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/commands/create-structure/features/README.md) |
+
+---
+
+## 📦 Repositorio
+
+**GitHub Repository:** `https://github.com/fhidalgoGC/test-components-system/`  
+**Rama Principal:** `version.1.0.2-mobile`
+
+---
+
 ## Instalación
 
 El CLI viene incluido con la librería:
