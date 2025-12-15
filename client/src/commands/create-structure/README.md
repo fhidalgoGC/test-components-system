@@ -12,34 +12,38 @@ npm install github:fhidalgoGC/test-components-system#version.1.0.2-mobile
 
 ## Uso
 
-### Desde tu proyecto
+### Con npx (Recomendado)
 
 ```bash
 # Ver comandos disponibles
-node node_modules/gc-ui-components/client/src/commands/create-structure/index.js --help
+npx gc-ui-setup --help
 
-# Ejecutar comando
-node node_modules/gc-ui-components/client/src/commands/create-structure/index.js <comando> [opciones]
+# Crear estructura
+npx gc-ui-setup new-app
+
+# Con opciones
+npx gc-ui-setup new-app --path=src
+npx gc-ui-setup new-app --force
+npx gc-ui-setup new-app --path=src --force
 ```
 
-### Configurar script en package.json (Recomendado)
+### Alternativa: Script en package.json
 
-Agrega este script en el `package.json` de tu proyecto:
+Si prefieres un comando más corto, agrega en tu `package.json`:
 
 ```json
 {
   "scripts": {
-    "gc-setup": "node node_modules/gc-ui-components/client/src/commands/create-structure/index.js"
+    "setup": "gc-ui-setup"
   }
 }
 ```
 
-Luego puedes ejecutar:
+Luego ejecuta:
 
 ```bash
-npm run gc-setup new-app
-npm run gc-setup new-app --path=src
-npm run gc-setup new-app --force
+npm run setup new-app
+npm run setup new-app --path=src --force
 ```
 
 ## Comandos Disponibles
@@ -49,7 +53,7 @@ npm run gc-setup new-app --force
 Crea la estructura base de carpetas para una nueva aplicación.
 
 ```bash
-npm run gc-setup new-app
+npx gc-ui-setup new-app
 ```
 
 **Carpetas que crea:**
@@ -83,31 +87,31 @@ npm run gc-setup new-app
 ### Crear estructura en ruta por defecto
 
 ```bash
-npm run gc-setup new-app
+npx gc-ui-setup new-app
 # Crea carpetas en: client/src/assets, client/src/components, ...
 ```
 
 ### Crear estructura en ruta personalizada
 
 ```bash
-npm run gc-setup new-app --path=src
+npx gc-ui-setup new-app --path=src
 # Crea carpetas en: src/assets, src/components, ...
 
-npm run gc-setup new-app --path=frontend/app
+npx gc-ui-setup new-app --path=frontend/app
 # Crea carpetas en: frontend/app/assets, frontend/app/components, ...
 ```
 
 ### Sobrescribir carpetas existentes
 
 ```bash
-npm run gc-setup new-app --force
+npx gc-ui-setup new-app --force
 # Si las carpetas existen, las elimina y crea de nuevo
 ```
 
 ### Combinar opciones
 
 ```bash
-npm run gc-setup new-app --force --path=src/app
+npx gc-ui-setup new-app --force --path=src/app
 # Crea/sobrescribe carpetas en: src/app/assets, src/app/components, ...
 ```
 
@@ -170,7 +174,7 @@ Para agregar un nuevo comando (ej: `features`):
 
 4. El nuevo comando estará disponible automáticamente:
    ```bash
-   npm run gc-setup features
+   npx gc-ui-setup features
    ```
 
 ## Configuración de Aliases en tu Proyecto

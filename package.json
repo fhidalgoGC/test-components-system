@@ -4,6 +4,9 @@
   "type": "module",
   "main": "client/src/lib/ui-library/index.ts",
   "license": "MIT",
+  "bin": {
+    "gc-ui-setup": "./client/src/commands/create-structure/index.js"
+  },
   "scripts": {
     "dev": "node start-frontend.mjs",
     "build": "vite build",
