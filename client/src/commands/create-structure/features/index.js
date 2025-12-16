@@ -55,8 +55,6 @@ function removeFeatureRoutes(basePath, featureName) {
   }
 
   const camelName = toCamelCase(featureName);
-  const importLine = `import { ${camelName}Routes } from '@/features/${featureName}';\n`;
-  const routeSpread = `...${camelName}Routes,\n`;
 
   let content = fs.readFileSync(featureRoutesPath, 'utf-8');
 
@@ -64,9 +62,13 @@ function removeFeatureRoutes(basePath, featureName) {
     return false;
   }
 
-  content = content.replace(importLine, '');
-  content = content.replace(`  ${routeSpread}`, '');
-  content = content.replace(`${routeSpread}`, '');
+  const importRegex = new RegExp(`import\\s*\\{\\s*${camelName}Routes\\s*\\}\\s*from\\s*['"]@/features/${featureName}['"];?\\n?`, 'g');
+  content = content.replace(importRegex, '');
+
+  const spreadRegex = new RegExp(`\\s*\\.\\.\\.${camelName}Routes,?\\n?`, 'g');
+  content = content.replace(spreadRegex, '\n');
+
+  content = content.replace(/,(\s*\n\s*\])/g, '$1');
 
   fs.writeFileSync(featureRoutesPath, content);
   console.log(`  ${colors.green}✔ Rutas eliminadas de feature-routes.ts${colors.reset}`);
