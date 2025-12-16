@@ -14,6 +14,7 @@ export default function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Switch>
+        <Route path="/" component={Home} />
         <Route path="/home" component={Home} />
         <Route component={NotFound} />
       </Switch>

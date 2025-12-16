@@ -4,13 +4,13 @@
   "defaultPath": "src/features",
   "folders": [
     { "path": "components" },
+    { "path": "constants" },
     { "path": "contexts" },
     { "path": "hooks" },
     { "path": "interceptors" },
     { "path": "layouts" },
     { "path": "libs" },
     { "path": "pages" },
-    { "path": "routes" },
     { "path": "services" },
     { "path": "types" },
     { "path": "utils" }

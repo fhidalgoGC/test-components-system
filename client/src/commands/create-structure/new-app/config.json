@@ -3,6 +3,7 @@
   "description": "Crea estructura base para nueva aplicación",
   "defaultPath": "client/src",
   "folders": [
+    { "path": "constants", "alias": "@/constants" },
     { "path": "assets", "alias": "@/assets" },
     { "path": "components", "alias": "@/components" },
     { "path": "contexts", "alias": "@/contexts" },
