@@ -2,6 +2,7 @@ import { Switch, Route } from "wouter";
 import { lazy, Suspense } from "react";
 const Home = lazy(() => import("@/pages/home"));
 const NotFound = lazy(() => import("@/pages/not-found"));
+import { featureRoutes } from "./feature-routes";
 
 // Loading component for Suspense fallback
 const PageLoader = () => (
@@ -16,6 +17,13 @@ export default function AppRoutes() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/home" component={Home} />
+        {featureRoutes.map((route: any) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            component={route.component}
+          />
+        ))}
         <Route component={NotFound} />
       </Switch>
     </Suspense>

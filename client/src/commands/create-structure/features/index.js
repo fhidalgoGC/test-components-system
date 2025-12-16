@@ -47,6 +47,56 @@ function replaceFilename(filename, featureName) {
     .replace(/FeaturePage/g, `${pascalName}Page`);
 }
 
+function updateFeatureRoutes(basePath, featureName) {
+  const featureRoutesPath = path.join(basePath, '..', 'routes', 'feature-routes.ts');
+  
+  if (!fs.existsSync(featureRoutesPath)) {
+    console.log(`  ${colors.yellow}⚠ feature-routes.ts no encontrado en routes/${colors.reset}`);
+    return false;
+  }
+
+  const camelName = toCamelCase(featureName);
+  const importLine = `import { ${camelName}Routes } from '@/features/${featureName}';`;
+  const routeSpread = `...${camelName}Routes,`;
+
+  let content = fs.readFileSync(featureRoutesPath, 'utf-8');
+
+  if (content.includes(importLine)) {
+    console.log(`  ${colors.yellow}⚠ Rutas de ${featureName} ya existen en feature-routes.ts${colors.reset}`);
+    return false;
+  }
+
+  if (content.includes('// {{FEATURE_IMPORTS}}')) {
+    content = content.replace(
+      '// {{FEATURE_IMPORTS}}',
+      `${importLine}\n// {{FEATURE_IMPORTS}}`
+    );
+  } else {
+    const importMatch = content.match(/^(import .+;\n)+/m);
+    if (importMatch) {
+      content = content.replace(importMatch[0], `${importMatch[0]}${importLine}\n`);
+    } else {
+      content = `${importLine}\n${content}`;
+    }
+  }
+
+  if (content.includes('// {{FEATURE_ROUTES}}')) {
+    content = content.replace(
+      '// {{FEATURE_ROUTES}}',
+      `${routeSpread}\n  // {{FEATURE_ROUTES}}`
+    );
+  } else {
+    content = content.replace(
+      /export const featureRoutes = \[/,
+      `export const featureRoutes = [\n  ${routeSpread}`
+    );
+  }
+
+  fs.writeFileSync(featureRoutesPath, content);
+  console.log(`  ${colors.green}✔ feature-routes.ts actualizado${colors.reset}`);
+  return true;
+}
+
 function copyAllTemplates(templatesDir, targetDir, results, force = false, featureName = '') {
   if (!fs.existsSync(templatesDir)) return;
   
@@ -155,6 +205,8 @@ export async function execute(options = {}) {
   if (featureFolder && fs.existsSync(TEMPLATES_PATH)) {
     copyAllTemplates(TEMPLATES_PATH, featureFolder.fullPath, results, force, name);
   }
+
+  updateFeatureRoutes(basePath, name);
 
   const subfolders = results.created.filter(f => f.isSubfolder).length;
   const mainCreated = results.created.filter(f => !f.isSubfolder).length;
