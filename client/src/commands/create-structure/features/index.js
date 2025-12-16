@@ -14,31 +14,68 @@ const config = JSON.parse(
 
 const TEMPLATES_PATH = path.join(__dirname, 'templates');
 
-function copyAllTemplates(templatesDir, targetDir, results, force = false) {
+function toPascalCase(str) {
+  return str
+    .split(/[-_\s]+/)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('');
+}
+
+function toCamelCase(str) {
+  const pascal = toPascalCase(str);
+  return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+}
+
+function replacePlaceholders(content, featureName) {
+  const pascalName = toPascalCase(featureName);
+  const camelName = toCamelCase(featureName);
+  
+  return content
+    .replace(/\{\{FEATURE_NAME_PASCAL\}\}/g, pascalName)
+    .replace(/\{\{FEATURE_NAME_CAMEL\}\}/g, camelName)
+    .replace(/\{\{FEATURE_NAME\}\}/g, featureName);
+}
+
+function replaceFilename(filename, featureName) {
+  const pascalName = toPascalCase(featureName);
+  const camelName = toCamelCase(featureName);
+  
+  return filename
+    .replace(/\{\{FEATURE_NAME_PASCAL\}\}/g, pascalName)
+    .replace(/\{\{FEATURE_NAME_CAMEL\}\}/g, camelName)
+    .replace(/\{\{FEATURE_NAME\}\}/g, featureName)
+    .replace(/FeaturePage/g, `${pascalName}Page`);
+}
+
+function copyAllTemplates(templatesDir, targetDir, results, force = false, featureName = '') {
   if (!fs.existsSync(templatesDir)) return;
   
   const items = fs.readdirSync(templatesDir);
   
   for (const item of items) {
     const sourcePath = path.join(templatesDir, item);
-    const destPath = path.join(targetDir, item);
     const stat = fs.statSync(sourcePath);
+    
+    const destFileName = replaceFilename(item, featureName);
+    const destPath = path.join(targetDir, destFileName);
     
     if (stat.isDirectory()) {
       fs.mkdirSync(destPath, { recursive: true });
-      copyAllTemplates(sourcePath, destPath, results, force);
+      copyAllTemplates(sourcePath, destPath, results, force, featureName);
     } else {
       try {
         if (fs.existsSync(destPath) && !force) {
-          logger.fileSkip(item);
+          logger.fileSkip(destFileName);
           results.filesSkipped = (results.filesSkipped || 0) + 1;
         } else {
-          fs.copyFileSync(sourcePath, destPath);
-          logger.file(item);
-          results.files.push({ name: item, path: destPath });
+          let content = fs.readFileSync(sourcePath, 'utf-8');
+          content = replacePlaceholders(content, featureName);
+          fs.writeFileSync(destPath, content);
+          logger.file(destFileName);
+          results.files.push({ name: destFileName, path: destPath });
         }
       } catch (error) {
-        logger.error(item, error.message);
+        logger.error(destFileName, error.message);
       }
     }
   }
@@ -116,7 +153,7 @@ export async function execute(options = {}) {
   );
   
   if (featureFolder && fs.existsSync(TEMPLATES_PATH)) {
-    copyAllTemplates(TEMPLATES_PATH, featureFolder.fullPath, results, force);
+    copyAllTemplates(TEMPLATES_PATH, featureFolder.fullPath, results, force, name);
   }
 
   const subfolders = results.created.filter(f => f.isSubfolder).length;

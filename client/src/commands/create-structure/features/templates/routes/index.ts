@@ -1,10 +1,10 @@
-import { FeaturePage } from '../pages';
+import { {{FEATURE_NAME_PASCAL}}Page } from '../pages';
 
-export const featureRoutes = [
+export const {{FEATURE_NAME_CAMEL}}Routes = [
   {
-    path: '/feature',
-    component: FeaturePage,
+    path: '/{{FEATURE_NAME}}',
+    component: {{FEATURE_NAME_PASCAL}}Page,
   },
 ];
 
-export { featureRoutes as default };
+export { {{FEATURE_NAME_CAMEL}}Routes as default };
