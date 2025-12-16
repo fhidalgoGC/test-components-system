@@ -6,6 +6,7 @@ export * from './interceptors';
 export * from './layouts';
 export * from './libs';
 export * from './pages';
+export * from './routes';
 export * from './services';
 export * from './types';
 export * from './utils';

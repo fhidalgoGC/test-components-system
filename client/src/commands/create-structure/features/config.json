@@ -13,6 +13,7 @@
     { "path": "pages" },
     { "path": "services" },
     { "path": "types" },
-    { "path": "utils" }
+    { "path": "utils" },
+    { "path": "routes" }
   ]
 }
