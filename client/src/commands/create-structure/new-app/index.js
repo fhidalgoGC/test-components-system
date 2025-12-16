@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createFolders, logger, updateComponentsJson } from '../utils/index.js';
+import { createFolders, logger, updateComponentsJson, updateViteConfig } from '../utils/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,6 +52,8 @@ export async function execute(options = {}) {
   logger.info(`\n📁 Ejecutando: ${config.name}`);
   logger.info(`📝 ${config.description}`);
   logger.info(`📍 Ruta base: ${basePath}\n`);
+
+  updateViteConfig('.');
 
   const results = await createFolders({
     basePath,
