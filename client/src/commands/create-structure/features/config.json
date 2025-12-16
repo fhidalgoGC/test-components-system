@@ -1,7 +1,7 @@
 {
   "name": "features",
   "description": "Crea estructura de carpetas para un feature específico",
-  "defaultPath": "src/features",
+  "defaultPath": "client/src/features",
   "folders": [
     { "path": "components" },
     { "path": "constants" },
