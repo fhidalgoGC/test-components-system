@@ -36,12 +36,15 @@ function parseArgs(args) {
     force: false,
     path: null,
     name: null,
-    help: false
+    help: false,
+    delete: false
   };
 
   for (const arg of args) {
     if (arg === '--force' || arg === '-f') {
       options.force = true;
+    } else if (arg === '--delete' || arg === '-d') {
+      options.delete = true;
     } else if (arg.startsWith('--path=')) {
       options.path = arg.replace('--path=', '');
     } else if (arg.startsWith('-path=')) {
@@ -83,7 +86,8 @@ async function main() {
     await command.execute({
       force: options.force,
       targetPath: options.path,
-      name: options.name
+      name: options.name,
+      delete: options.delete
     });
   } catch (error) {
     console.error(`\n❌ Error ejecutando ${options.command}:`, error.message);

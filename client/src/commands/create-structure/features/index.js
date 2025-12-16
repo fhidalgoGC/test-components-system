@@ -47,6 +47,32 @@ function replaceFilename(filename, featureName) {
     .replace(/FeaturePage/g, `${pascalName}Page`);
 }
 
+function removeFeatureRoutes(basePath, featureName) {
+  const featureRoutesPath = path.join(basePath, '..', 'routes', 'feature-routes.ts');
+  
+  if (!fs.existsSync(featureRoutesPath)) {
+    return false;
+  }
+
+  const camelName = toCamelCase(featureName);
+  const importLine = `import { ${camelName}Routes } from '@/features/${featureName}';\n`;
+  const routeSpread = `...${camelName}Routes,\n`;
+
+  let content = fs.readFileSync(featureRoutesPath, 'utf-8');
+
+  if (!content.includes(`${camelName}Routes`)) {
+    return false;
+  }
+
+  content = content.replace(importLine, '');
+  content = content.replace(`  ${routeSpread}`, '');
+  content = content.replace(`${routeSpread}`, '');
+
+  fs.writeFileSync(featureRoutesPath, content);
+  console.log(`  ${colors.green}✔ Rutas eliminadas de feature-routes.ts${colors.reset}`);
+  return true;
+}
+
 function updateFeatureRoutes(basePath, featureName) {
   const featureRoutesPath = path.join(basePath, '..', 'routes', 'feature-routes.ts');
   
@@ -174,8 +200,24 @@ async function createFeatureFolders({ basePath, featureName, folders, force }) {
   return results;
 }
 
+async function deleteFeature(basePath, featureName) {
+  const featurePath = path.join(basePath, featureName);
+
+  if (!fs.existsSync(featurePath)) {
+    console.log(`  ${colors.red}✖ Feature "${featureName}" no existe${colors.reset}`);
+    return { error: true };
+  }
+
+  fs.rmSync(featurePath, { recursive: true, force: true });
+  console.log(`  ${colors.green}✔ Carpeta ${featureName} eliminada${colors.reset}`);
+
+  removeFeatureRoutes(basePath, featureName);
+
+  return { deleted: true };
+}
+
 export async function execute(options = {}) {
-  const { force = false, targetPath = null, name = null } = options;
+  const { force = false, targetPath = null, name = null, delete: deleteFlag = false } = options;
   
   if (!name) {
     logger.error('features', 'El flag --name es requerido. Ejemplo: features --name=login');
@@ -183,6 +225,15 @@ export async function execute(options = {}) {
   }
 
   const basePath = targetPath || config.defaultPath;
+
+  if (deleteFlag) {
+    logger.info(`\n🗑️  Eliminando feature: ${name}\n`);
+    const result = await deleteFeature(basePath, name);
+    if (!result.error) {
+      console.log(`\n${colors.green}✅ Feature "${name}" eliminado exitosamente${colors.reset}`);
+    }
+    return result;
+  }
   
   logger.info(`\n📁 Ejecutando: ${config.name}`);
   logger.info(`📝 ${config.description}`);
