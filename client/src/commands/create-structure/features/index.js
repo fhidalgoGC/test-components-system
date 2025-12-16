@@ -14,6 +14,36 @@ const config = JSON.parse(
 
 const TEMPLATES_PATH = path.join(__dirname, 'templates');
 
+function copyAllTemplates(templatesDir, targetDir, results, force = false) {
+  if (!fs.existsSync(templatesDir)) return;
+  
+  const items = fs.readdirSync(templatesDir);
+  
+  for (const item of items) {
+    const sourcePath = path.join(templatesDir, item);
+    const destPath = path.join(targetDir, item);
+    const stat = fs.statSync(sourcePath);
+    
+    if (stat.isDirectory()) {
+      fs.mkdirSync(destPath, { recursive: true });
+      copyAllTemplates(sourcePath, destPath, results, force);
+    } else {
+      try {
+        if (fs.existsSync(destPath) && !force) {
+          logger.fileSkip(item);
+          results.filesSkipped = (results.filesSkipped || 0) + 1;
+        } else {
+          fs.copyFileSync(sourcePath, destPath);
+          logger.file(item);
+          results.files.push({ name: item, path: destPath });
+        }
+      } catch (error) {
+        logger.error(item, error.message);
+      }
+    }
+  }
+}
+
 async function createFeatureFolders({ basePath, featureName, folders, force }) {
   const results = {
     created: [],
@@ -86,14 +116,7 @@ export async function execute(options = {}) {
   );
   
   if (featureFolder && fs.existsSync(TEMPLATES_PATH)) {
-    const templateFolders = fs.readdirSync(TEMPLATES_PATH);
-    for (const templateFolder of templateFolders) {
-      const targetFolder = path.join(featureFolder.fullPath, templateFolder);
-      if (fs.existsSync(targetFolder)) {
-        const filesCreated = copyTemplateFiles(TEMPLATES_PATH, templateFolder, targetFolder);
-        results.files.push(...filesCreated);
-      }
-    }
+    copyAllTemplates(TEMPLATES_PATH, featureFolder.fullPath, results, force);
   }
 
   const subfolders = results.created.filter(f => f.isSubfolder).length;
