@@ -11,7 +11,7 @@
     { "path": "hooks", "alias": "@/hooks" },
     { "path": "interceptors", "alias": "@/interceptors" },
     { "path": "layouts", "alias": "@/layouts" },
-    { "path": "lib", "alias": "@/lib" },
+    { "path": "libs", "alias": "@/libs" },
     { "path": "pages", "alias": "@/pages" },
     { "path": "routes", "alias": "@/routes" },
     { "path": "services", "alias": "@/services" },
