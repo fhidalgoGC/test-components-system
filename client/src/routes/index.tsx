@@ -1,6 +1,6 @@
 import { Switch, Route } from "wouter";
 import { lazy, Suspense } from "react";
-const Home = lazy(() => import("@/pages/home"));
+import { LibraryDashboardView } from "@/pages/library-dashboard";
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -13,8 +13,8 @@ export function Router() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/home" component={Home} />
+        <Route path="/" component={LibraryDashboardView} />
+        <Route path="/home" component={LibraryDashboardView} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
