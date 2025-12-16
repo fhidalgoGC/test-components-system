@@ -89,7 +89,7 @@ function updateFeatureRoutes(basePath, featureName) {
 
   let content = fs.readFileSync(featureRoutesPath, 'utf-8');
 
-  if (content.includes(importLine)) {
+  if (content.includes(`${camelName}Routes`)) {
     console.log(`  ${colors.yellow}⚠ Rutas de ${featureName} ya existen en feature-routes.ts${colors.reset}`);
     return false;
   }
@@ -108,15 +108,25 @@ function updateFeatureRoutes(basePath, featureName) {
     }
   }
 
-  if (content.includes('// {{FEATURE_ROUTES}}')) {
+  if (content.includes('featureRoutes = []')) {
+    content = content.replace(
+      'featureRoutes = []',
+      `featureRoutes = [\n  ${routeSpread}\n]`
+    );
+  } else if (content.includes('featureRoutes = [];')) {
+    content = content.replace(
+      'featureRoutes = [];',
+      `featureRoutes = [\n  ${routeSpread}\n];`
+    );
+  } else if (content.includes('// {{FEATURE_ROUTES}}')) {
     content = content.replace(
       '// {{FEATURE_ROUTES}}',
       `${routeSpread}\n  // {{FEATURE_ROUTES}}`
     );
   } else {
     content = content.replace(
-      /export const featureRoutes = \[/,
-      `export const featureRoutes = [\n  ${routeSpread}`
+      /(\s*)\];(\s*)$/m,
+      `\n  ${routeSpread}\n];$2`
     );
   }
 
