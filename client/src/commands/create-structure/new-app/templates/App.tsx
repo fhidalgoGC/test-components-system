@@ -5,14 +5,33 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import AppRoutes from "@/routes";
 
+import {
+  AppLanguageProvider,
+  LibI18nProvider,
+  useAppLanguage,
+} from "GC-UI-COMPONENTS";
+
+const appLanguage = useAppLanguage();
+
+const globalTranslationPaths = [
+  { lang: "es", path: "/i18n/es.json" },
+  { lang: "en", path: "/i18n/en.json" },
+];
+
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <AppRoutes />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <LibI18nProvider
+      parentLanguageProvider={appLanguage}
+      globalTranslationPaths={globalTranslationPaths}
+      translationPriority="external-first"
+    >
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <AppRoutes />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </LibI18nProvider>
   );
 }
 
