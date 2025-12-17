@@ -13,3 +13,6 @@ export type { Lang, LibI18nContextValue, GlobalTranslationPath, LibI18nProviderP
 
 // Utils (para uso interno y externo)
 export * from './utils';
+
+// Hooks
+export * from './hooks';
