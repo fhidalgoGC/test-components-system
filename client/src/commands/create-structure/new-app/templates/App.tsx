@@ -11,14 +11,13 @@ import {
   useAppLanguage,
 } from "GC-UI-COMPONENTS";
 
-const appLanguage = useAppLanguage();
-
 const globalTranslationPaths = [
   { lang: "es", path: "/i18n/es.json" },
   { lang: "en", path: "/i18n/en.json" },
 ];
 
 function App() {
+  const appLanguage = useAppLanguage();
   return (
     <LibI18nProvider
       parentLanguageProvider={appLanguage}
