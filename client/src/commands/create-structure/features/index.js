@@ -44,7 +44,8 @@ function replaceFilename(filename, featureName) {
     .replace(/\{\{FEATURE_NAME_PASCAL\}\}/g, pascalName)
     .replace(/\{\{FEATURE_NAME_CAMEL\}\}/g, camelName)
     .replace(/\{\{FEATURE_NAME\}\}/g, featureName)
-    .replace(/FeaturePage/g, `${pascalName}Page`);
+    .replace(/FeaturePage/g, `${pascalName}Page`)
+    .replace(/FeatureProvider/g, `${pascalName}Provider`);
 }
 
 function removeFeatureRoutes(basePath, featureName) {
