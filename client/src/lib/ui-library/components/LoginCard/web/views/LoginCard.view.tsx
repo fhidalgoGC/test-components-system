@@ -4,9 +4,9 @@ import type { LoginCardProps } from "../types";
 import { useLoginCardContext } from "../providers";
 import type { MultiLanguageLabel } from "../../../../types/language.types";
 import { WithCredentialsLayout, ProvidersOnlyLayout } from "../layouts";
-import { Button } from "../../../../../components/ui/button";
-import { Input } from "../../../../../components/ui/input";
-import { Checkbox } from "../../../../../components/ui/checkbox";
+import { Button } from "../../../ui/button";
+import { Input } from "../../../ui/input";
+import { Checkbox } from "../../../ui/checkbox";
 import { Lock, Plus } from "lucide-react";
 import styles from "../css/LoginCard.module.css";
 
