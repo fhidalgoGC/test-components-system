@@ -1,4 +1,4 @@
-import { MultiLanguageLabel } from '@/lib/ui-library/types/language.types';
+import { MultiLanguageLabel } from '../../../../types/language.types';
 
 export type LoginProvider = {
   provider: string;

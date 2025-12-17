@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import type { LoginCardProps } from "../types";
 import { useLoginCardContext } from "../providers";
-import type { MultiLanguageLabel } from "@/lib/ui-library/types/language.types";
+import type { MultiLanguageLabel } from "../../../../types/language.types";
 import { WithCredentialsLayout, ProvidersOnlyLayout } from "../layouts";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "../../../../../components/ui/button";
+import { Input } from "../../../../../components/ui/input";
+import { Checkbox } from "../../../../../components/ui/checkbox";
 import { Lock, Plus } from "lucide-react";
 import styles from "../css/LoginCard.module.css";
 
