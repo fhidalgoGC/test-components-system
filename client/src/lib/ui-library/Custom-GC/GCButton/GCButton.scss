@@ -1,0 +1,321 @@
+// Button component styles using GetColorFromTheme function
+@import '../../../../public/assets/styles/colors/colors.scss';
+
+.gc-button {
+  // Base styles
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  letter-spacing: 0;
+  text-align: center;
+  font-style: normal;
+  opacity: 1;
+  min-width: auto;
+
+  &:focus-visible {
+    outline: 2px solid;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // Size variants
+  &--small {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
+    gap: 8px;
+    border-radius: 2px;
+
+    &.only-icon {
+      width: 32px;
+      padding: 0;
+    }
+  }
+
+  &--medium {
+    height: 40px;
+    padding: 12px 16px 11px 16px;
+    font-size: 14px;
+    gap: 4px;
+    border-radius: 4px;
+
+    &.only-icon {
+      width: 40px;
+      padding: 0;
+    }
+
+    // Medium with left icon
+    &.has-left-icon {
+      padding: 12px 16px 11px 12px;
+      gap: 4px;
+    }
+
+    // Medium with right icon
+    &.has-right-icon {
+      padding: 12px 12px 11px 16px;
+      gap: 4px;
+    }
+  }
+
+  &--large {
+    height: 48px;
+    padding: 12px 24px;
+    font-size: 16px;
+    gap: 12px;
+    border-radius: 6px;
+
+    &.only-icon {
+      width: 48px;
+      padding: 0;
+    }
+  }
+
+  // Type variants using GetColorFromTheme function
+  &--primary {
+    background-color: GetColorFromTheme("brand", "default");
+    color: white;
+
+    svg {
+      color: white;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: GetColorFromTheme("brand", "lighten-1");
+    }
+
+    &:focus-visible {
+      background-color: GetColorFromTheme("brand", "lighten-1");
+      border: 1px solid GetColorFromTheme("brand", "darken-2");
+      outline: none;
+    }
+
+    &:active:not(:disabled) {
+      background-color: GetColorFromTheme("brand", "darken-2");
+    }
+
+    &:disabled {
+      background-color: GetColorFromTheme("neutral", "lighten-2") !important;
+      color: GetColorFromTheme("neutral", "default") !important;
+    }
+  }
+
+  &--secondary {
+    border: 1px solid GetColorFromTheme("neutral", "darken-4");
+    background-color: white;
+    color: GetColorFromTheme("neutral", "darken-4");
+
+    svg {
+      color: GetColorFromTheme("neutral", "darken-4");
+    }
+
+    &:hover:not(:disabled) {
+      background-color: GetColorFromTheme("neutral", "darken-3");
+      border: 1px solid GetColorFromTheme("neutral", "darken-3");
+      color: white;
+
+      svg {
+        color: white;
+      }
+    }
+
+    &:active:not(:disabled) {
+      background-color: GetColorFromTheme("neutral", "darken-4");
+      border: 1px solid GetColorFromTheme("neutral", "darken-2");
+    }
+
+    &:focus-visible {
+      background-color: GetColorFromTheme("neutral", "lighten-3");
+      border: 1px solid GetColorFromTheme("neutral", "lighten-1");
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: GetColorFromTheme("neutral", "lighten-2") !important;
+      color: GetColorFromTheme("neutral", "darken-1") !important;
+      border: 1px solid GetColorFromTheme("neutral", "default") !important;
+
+      svg {
+        color: GetColorFromTheme("neutral", "darken-1") !important;
+      }
+    }
+  }
+
+  &--tertiary {
+    background-color: GetColorFromTheme("brand", "lighten-4");
+    color: GetColorFromTheme("brand", "darken-3");
+    border: 1px solid GetColorFromTheme("brand", "lighten-4");
+
+    svg {
+      color: GetColorFromTheme("brand", "darken-3");
+    }
+
+    &:hover:not(:disabled) {
+      background-color: GetColorFromTheme("brand", "lighten-2");
+      border: 1px solid GetColorFromTheme("brand", "lighten-4");
+      color: GetColorFromTheme("brand", "darken-3");
+
+      svg {
+        color: GetColorFromTheme("brand", "darken-3");
+      }
+    }
+
+    &:active:not(:disabled) {
+      background-color: GetColorFromTheme("brand", "darken-2");
+      color: white;
+
+      svg {
+        color: white;
+      }
+    }
+
+    &:focus-visible {
+      background-color: GetColorFromTheme("brand", "lighten-4");
+      border: 1px solid GetColorFromTheme("brand", "lighten-1");
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: GetColorFromTheme("neutral", "lighten-2") !important;
+      border: 1px solid GetColorFromTheme("neutral", "lighten-2") !important;
+      color: GetColorFromTheme("neutral", "default") !important;
+
+      svg {
+        color: GetColorFromTheme("neutral", "default") !important;
+      }
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: GetColorFromTheme("brand", "darken-1");
+
+    svg {
+      color: GetColorFromTheme("brand", "darken-1");
+    }
+
+    &:hover:not(:disabled) {
+      color: GetColorFromTheme("brand", "accent-4");
+      background-color: GetColorFromTheme("brand", "lighten-5");
+
+      svg {
+        color: GetColorFromTheme("brand", "accent-4");
+      }
+    }
+
+    &:active:not(:disabled) {
+      color: GetColorFromTheme("neutral", "darken-4");
+
+      svg {
+        color: GetColorFromTheme("neutral", "darken-4");
+      }
+    }
+
+    &:focus-visible {
+      color: GetColorFromTheme("brand", "darken-3");
+      outline: none;
+
+      svg {
+        color: GetColorFromTheme("brand", "darken-3");
+      }
+    }
+
+    &:disabled {
+      background-color: inherit !important;
+      color: GetColorFromTheme("neutral", "lighten-1") !important;
+
+      svg {
+        color: GetColorFromTheme("neutral", "lighten-1") !important;
+      }
+    }
+  }
+
+  &--link {
+    background-color: transparent;
+    color: GetColorFromTheme("brand", "default");
+    text-decoration: underline;
+
+    svg {
+      color: GetColorFromTheme("brand", "default");
+    }
+
+    &:hover:not(:disabled) {
+      color: GetColorFromTheme("brand", "lighten-1");
+      background-color: inherit;
+
+      svg {
+        color: GetColorFromTheme("brand", "lighten-1");
+      }
+    }
+
+    &:active:not(:disabled) {
+      color: GetColorFromTheme("brand", "darken-2");
+      background-color: transparent;
+
+      svg {
+        color: GetColorFromTheme("brand", "darken-2");
+      }
+    }
+
+    &:focus-visible {
+      color: GetColorFromTheme("brand", "accent-4");
+      background-color: inherit;
+      outline: none;
+
+      svg {
+        color: GetColorFromTheme("brand", "accent-4");
+      }
+    }
+
+    &:disabled {
+      background-color: inherit !important;
+      color: GetColorFromTheme("neutral", "lighten-1") !important;
+
+      svg {
+        color: GetColorFromTheme("neutral", "lighten-1") !important;
+      }
+    }
+  }
+
+  &--danger {
+    background-color: GetColorFromTheme("error", "default");
+    color: white;
+
+    svg {
+      color: white;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: GetColorFromTheme("error", "lighten-1");
+    }
+
+    &:active:not(:disabled) {
+      background-color: GetColorFromTheme("error", "darken-2");
+    }
+
+    &:focus-visible {
+      background-color: GetColorFromTheme("error", "lighten-2");
+      border: 1px solid GetColorFromTheme("error", "darken-2");
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: GetColorFromTheme("neutral", "lighten-2") !important;
+      color: GetColorFromTheme("neutral", "default") !important;
+
+      svg {
+        color: GetColorFromTheme("neutral", "default") !important;
+      }
+    }
+  }
+}

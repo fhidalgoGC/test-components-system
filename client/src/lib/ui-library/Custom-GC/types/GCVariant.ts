@@ -1,0 +1,1 @@
+export type GCVariant = 'primary' | 'secondary' | 'tertiary' | 'ghost' | 'link' | 'danger';

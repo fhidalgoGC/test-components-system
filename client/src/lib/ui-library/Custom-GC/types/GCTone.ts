@@ -1,0 +1,15 @@
+export type GCTone = 
+  | 'default'
+  | 'lighten-1'
+  | 'lighten-2'
+  | 'lighten-3'
+  | 'lighten-4'
+  | 'lighten-5'
+  | 'darken-1'
+  | 'darken-2'
+  | 'darken-3'
+  | 'darken-4'
+  | 'accent-1'
+  | 'accent-2'
+  | 'accent-3'
+  | 'accent-4';

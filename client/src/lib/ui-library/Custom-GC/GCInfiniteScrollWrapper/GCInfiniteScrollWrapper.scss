@@ -1,0 +1,36 @@
+@import '../../../../public/assets/styles/index.scss';
+
+// GC Infinite Scroll Wrapper Styles
+.gc-infinite-scroll-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.gc-infinite-scroll-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gc-infinite-scroll-sentinel {
+  height: 1px;
+  width: 100%;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gc-infinite-scroll-show-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  margin-top: 8px;
+  width: 100%;
+  
+  // Center the button and any loading states
+  & > * {
+    text-align: center;
+  }
+}

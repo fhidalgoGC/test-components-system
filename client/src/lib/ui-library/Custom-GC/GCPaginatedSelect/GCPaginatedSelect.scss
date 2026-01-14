@@ -1,0 +1,48 @@
+@import '../../../../public/assets/styles/index.scss';
+
+.gc-paginated-select {
+  &__search {
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid GetColorFromTheme('neutral-4');
+    
+    input {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid GetColorFromTheme('neutral-4');
+      border-radius: 4px;
+      font-size: 14px;
+      outline: none;
+      
+      &:focus {
+        border-color: GetColorFromTheme('primary');
+      }
+    }
+  }
+
+  &__content {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+    color: GetColorFromTheme('neutral-6');
+    font-size: 14px;
+  }
+
+  &__no-results {
+    padding: 12px;
+    text-align: center;
+    color: GetColorFromTheme('neutral-6');
+    font-size: 14px;
+  }
+
+  &__error {
+    margin-top: 4px;
+    font-size: 12px;
+    color: GetColorFromTheme('error');
+  }
+}

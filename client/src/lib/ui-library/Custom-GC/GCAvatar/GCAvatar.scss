@@ -1,0 +1,171 @@
+@use '../../../../public/assets/styles/fonts/inter-font';
+@import '../../../../public/assets/styles/colors/colors.scss';
+
+.gc-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+
+  // Dynamic font-size based on size
+  &--size-16,
+  &--size-24,
+  &--size-32 {
+    font-size: 14px;
+  }
+
+  &--size-40,
+  &--size-48,
+  &--size-56,
+  &--size-64 {
+    font-size: 16px;
+  }
+
+  // Color backgrounds using GetColorFromTheme
+  &--black {
+    background-color: GetColorFromTheme("black");
+    color: GetColorFromTheme("white");
+  }
+
+  &--white {
+    background-color: GetColorFromTheme("white");
+    color: GetColorFromTheme("black");
+  }
+
+  &--brand {
+    background-color: GetColorFromTheme("brand");
+    color: GetColorFromTheme("white");
+  }
+
+  &--error {
+    background-color: GetColorFromTheme("error");
+    color: GetColorFromTheme("white");
+  }
+
+  &--green {
+    background-color: GetColorFromTheme("green");
+    color: GetColorFromTheme("white");
+  }
+
+  &--information {
+    background-color: GetColorFromTheme("information");
+    color: GetColorFromTheme("white");
+  }
+
+  &--neutral {
+    background-color: GetColorFromTheme("neutral");
+    color: GetColorFromTheme("white");
+  }
+
+  &--orange {
+    background-color: GetColorFromTheme("orange");
+    color: GetColorFromTheme("white");
+  }
+
+  &--purple {
+    background-color: GetColorFromTheme("purple");
+    color: GetColorFromTheme("white");
+  }
+
+  &--success {
+    background-color: GetColorFromTheme("success");
+    color: GetColorFromTheme("white");
+  }
+
+  &--teal {
+    background-color: GetColorFromTheme("teal");
+    color: GetColorFromTheme("white");
+  }
+
+  &--warning {
+    background-color: GetColorFromTheme("warning");
+    color: GetColorFromTheme("white");
+  }
+
+  // Content container
+  &__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  // Type-specific styles
+  &--icon {
+    .gc-avatar__content {
+      svg, .icon {
+        display: block;
+      }
+    }
+
+    // Icon sizes based on container size
+    &.gc-avatar--size-16 {
+      .gc-avatar__content svg,
+      .gc-avatar__content .icon {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    &.gc-avatar--size-24 {
+      .gc-avatar__content svg,
+      .gc-avatar__content .icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    &.gc-avatar--size-32,
+    &.gc-avatar--size-40 {
+      .gc-avatar__content svg,
+      .gc-avatar__content .icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &.gc-avatar--size-48 {
+      .gc-avatar__content svg,
+      .gc-avatar__content .icon {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &.gc-avatar--size-56,
+    &.gc-avatar--size-64 {
+      .gc-avatar__content svg,
+      .gc-avatar__content .icon {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+
+  &--initials {
+    .gc-avatar__content {
+      text-align: center;
+      line-height: 1;
+      user-select: none;
+    }
+  }
+
+  &--picture {
+    .gc-avatar__content {
+      width: 100%;
+      height: 100%;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+      }
+    }
+  }
+}

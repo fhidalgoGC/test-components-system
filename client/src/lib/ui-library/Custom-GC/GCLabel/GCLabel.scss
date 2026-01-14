@@ -1,0 +1,359 @@
+@use '../../../../public/assets/styles/fonts/inter-font';
+@import '../../../../public/assets/styles/colors/colors.scss';
+
+.gc-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  white-space: nowrap;
+  box-sizing: border-box;
+  
+  // Size variants
+  &--small {
+    @extend .gcc-ui-small-large-medium;
+    height: 24px;
+    max-height: 24px;
+    padding: 5px 8px 4px 8px;
+    border-radius: 4px;
+  }
+  
+  &--medium {
+    @extend .gcc-ui-label-large-medium;
+    height: 32px;
+    max-height: 32px;
+    padding: 7px 12px 8px 12px;
+    border-radius: 8px;
+  }
+  
+  &--large {
+    @extend .gcc-ui-body-large-medium;
+    height: 36px;
+    max-height: 36px;
+    padding: 8px 12px 8px 12px;
+    border-radius: 8px;
+  }
+
+  // Brand color combinations
+  &--brand {
+    // Default tone
+    &-default {
+      background-color: GetColorFromTheme("brand", "default");
+      color: GetColorFromTheme("white");
+    }
+    
+    // Light tones with dark text
+    &-lighten-5, &-lighten-4, &-lighten-3 {
+      color: GetColorFromTheme("brand", "darken-4");
+    }
+    &-lighten-5 {
+      background-color: GetColorFromTheme("brand", "lighten-5");
+    }
+    &-lighten-4 {
+      background-color: GetColorFromTheme("brand", "lighten-4");
+    }
+    &-lighten-3 {
+      background-color: GetColorFromTheme("brand", "lighten-3");
+    }
+    
+    // Medium tones with white text
+    &-lighten-2, &-lighten-1, &-darken-1, &-darken-2, &-darken-3, &-darken-4, &-accent-3, &-accent-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-lighten-2 { background-color: GetColorFromTheme("brand", "lighten-2"); }
+    &-lighten-1 { background-color: GetColorFromTheme("brand", "lighten-1"); }
+    &-darken-1 { background-color: GetColorFromTheme("brand", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("brand", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("brand", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("brand", "darken-4"); }
+    &-accent-3 { background-color: GetColorFromTheme("brand", "accent-3"); }
+    &-accent-4 { background-color: GetColorFromTheme("brand", "accent-4"); }
+    
+    // Accent tones with dark text
+    &-accent-1, &-accent-2 {
+      color: GetColorFromTheme("brand", "darken-4");
+    }
+    &-accent-1 { background-color: GetColorFromTheme("brand", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("brand", "accent-2"); }
+  }
+
+  // Neutral color combinations
+  &--neutral {
+    &-default {
+      background-color: GetColorFromTheme("neutral", "default");
+      color: GetColorFromTheme("white");
+    }
+    
+    &-lighten-5, &-lighten-4, &-lighten-3, &-lighten-2 {
+      color: GetColorFromTheme("neutral", "darken-4");
+    }
+    &-lighten-5 { background-color: GetColorFromTheme("neutral", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("neutral", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("neutral", "lighten-3"); }
+    &-lighten-2 { background-color: GetColorFromTheme("neutral", "lighten-2"); }
+    
+    &-lighten-1, &-darken-1, &-darken-2, &-darken-3, &-darken-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-lighten-1 { background-color: GetColorFromTheme("neutral", "lighten-1"); }
+    &-darken-1 { background-color: GetColorFromTheme("neutral", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("neutral", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("neutral", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("neutral", "darken-4"); }
+  }
+
+  // Success color combinations
+  &--success {
+    &-default {
+      background-color: GetColorFromTheme("success", "default");
+      color: GetColorFromTheme("white");
+    }
+    
+    &-lighten-5, &-lighten-4, &-lighten-3, &-lighten-2 {
+      color: GetColorFromTheme("success", "darken-4");
+    }
+    &-lighten-5 { background-color: GetColorFromTheme("success", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("success", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("success", "lighten-3"); }
+    &-lighten-2 { background-color: GetColorFromTheme("success", "lighten-2"); }
+    
+    &-lighten-1, &-darken-1, &-darken-2, &-darken-3, &-darken-4, &-accent-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-lighten-1 { background-color: GetColorFromTheme("success", "lighten-1"); }
+    &-darken-1 { background-color: GetColorFromTheme("success", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("success", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("success", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("success", "darken-4"); }
+    &-accent-4 { background-color: GetColorFromTheme("success", "accent-4"); }
+    
+    &-accent-1, &-accent-2, &-accent-3 {
+      color: GetColorFromTheme("success", "darken-4");
+    }
+    &-accent-1 { background-color: GetColorFromTheme("success", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("success", "accent-2"); }
+    &-accent-3 { background-color: GetColorFromTheme("success", "accent-3"); }
+  }
+
+  // Warning color combinations
+  &--warning {
+    &-default, &-lighten-5, &-lighten-4, &-lighten-3, &-lighten-2, &-lighten-1, &-accent-1, &-accent-2, &-accent-3, &-accent-4 {
+      color: GetColorFromTheme("warning", "darken-4");
+    }
+    &-default { background-color: GetColorFromTheme("warning", "default"); }
+    &-lighten-5 { background-color: GetColorFromTheme("warning", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("warning", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("warning", "lighten-3"); }
+    &-lighten-2 { background-color: GetColorFromTheme("warning", "lighten-2"); }
+    &-lighten-1 { background-color: GetColorFromTheme("warning", "lighten-1"); }
+    &-accent-1 { background-color: GetColorFromTheme("warning", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("warning", "accent-2"); }
+    &-accent-3 { background-color: GetColorFromTheme("warning", "accent-3"); }
+    &-accent-4 { background-color: GetColorFromTheme("warning", "accent-4"); }
+    
+    &-darken-1, &-darken-2, &-darken-3, &-darken-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-darken-1 { background-color: GetColorFromTheme("warning", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("warning", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("warning", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("warning", "darken-4"); }
+  }
+
+  // Error color combinations
+  &--error {
+    &-default {
+      background-color: GetColorFromTheme("error", "default");
+      color: GetColorFromTheme("white");
+    }
+    
+    &-lighten-5, &-lighten-4, &-lighten-3, &-lighten-2 {
+      color: GetColorFromTheme("error", "darken-4");
+    }
+    &-lighten-5 { background-color: GetColorFromTheme("error", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("error", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("error", "lighten-3"); }
+    &-lighten-2 { background-color: GetColorFromTheme("error", "lighten-2"); }
+    
+    &-lighten-1, &-darken-1, &-darken-2, &-darken-3, &-darken-4, &-accent-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-lighten-1 { background-color: GetColorFromTheme("error", "lighten-1"); }
+    &-darken-1 { background-color: GetColorFromTheme("error", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("error", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("error", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("error", "darken-4"); }
+    &-accent-4 { background-color: GetColorFromTheme("error", "accent-4"); }
+    
+    &-accent-1, &-accent-2, &-accent-3 {
+      color: GetColorFromTheme("error", "darken-4");
+    }
+    &-accent-1 { background-color: GetColorFromTheme("error", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("error", "accent-2"); }
+    &-accent-3 { background-color: GetColorFromTheme("error", "accent-3"); }
+  }
+
+  // Information color combinations
+  &--information {
+    &-default {
+      background-color: GetColorFromTheme("information", "default");
+      color: GetColorFromTheme("white");
+    }
+    
+    &-lighten-5, &-lighten-4, &-lighten-3 {
+      color: GetColorFromTheme("information", "darken-4");
+    }
+    &-lighten-5 { background-color: GetColorFromTheme("information", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("information", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("information", "lighten-3"); }
+    
+    &-lighten-2, &-lighten-1, &-darken-1, &-darken-2, &-darken-3, &-darken-4, &-accent-3, &-accent-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-lighten-2 { background-color: GetColorFromTheme("information", "lighten-2"); }
+    &-lighten-1 { background-color: GetColorFromTheme("information", "lighten-1"); }
+    &-darken-1 { background-color: GetColorFromTheme("information", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("information", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("information", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("information", "darken-4"); }
+    &-accent-3 { background-color: GetColorFromTheme("information", "accent-3"); }
+    &-accent-4 { background-color: GetColorFromTheme("information", "accent-4"); }
+    
+    &-accent-1, &-accent-2 {
+      color: GetColorFromTheme("information", "darken-4");
+    }
+    &-accent-1 { background-color: GetColorFromTheme("information", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("information", "accent-2"); }
+  }
+
+  // Purple color combinations
+  &--purple {
+    &-default {
+      background-color: GetColorFromTheme("purple", "default");
+      color: GetColorFromTheme("white");
+    }
+    
+    &-lighten-5, &-lighten-4, &-lighten-3 {
+      color: GetColorFromTheme("purple", "darken-4");
+    }
+    &-lighten-5 { background-color: GetColorFromTheme("purple", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("purple", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("purple", "lighten-3"); }
+    
+    &-lighten-2, &-lighten-1, &-darken-1, &-darken-2, &-darken-3, &-darken-4, &-accent-3, &-accent-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-lighten-2 { background-color: GetColorFromTheme("purple", "lighten-2"); }
+    &-lighten-1 { background-color: GetColorFromTheme("purple", "lighten-1"); }
+    &-darken-1 { background-color: GetColorFromTheme("purple", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("purple", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("purple", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("purple", "darken-4"); }
+    &-accent-3 { background-color: GetColorFromTheme("purple", "accent-3"); }
+    &-accent-4 { background-color: GetColorFromTheme("purple", "accent-4"); }
+    
+    &-accent-1, &-accent-2 {
+      color: GetColorFromTheme("purple", "darken-4");
+    }
+    &-accent-1 { background-color: GetColorFromTheme("purple", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("purple", "accent-2"); }
+  }
+
+  // Orange color combinations
+  &--orange {
+    &-default {
+      background-color: GetColorFromTheme("orange", "default");
+      color: GetColorFromTheme("white");
+    }
+    
+    &-lighten-5, &-lighten-4, &-lighten-3, &-lighten-2 {
+      color: GetColorFromTheme("orange", "darken-4");
+    }
+    &-lighten-5 { background-color: GetColorFromTheme("orange", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("orange", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("orange", "lighten-3"); }
+    &-lighten-2 { background-color: GetColorFromTheme("orange", "lighten-2"); }
+    
+    &-lighten-1, &-darken-1, &-darken-2, &-darken-3, &-darken-4, &-accent-3, &-accent-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-lighten-1 { background-color: GetColorFromTheme("orange", "lighten-1"); }
+    &-darken-1 { background-color: GetColorFromTheme("orange", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("orange", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("orange", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("orange", "darken-4"); }
+    &-accent-3 { background-color: GetColorFromTheme("orange", "accent-3"); }
+    &-accent-4 { background-color: GetColorFromTheme("orange", "accent-4"); }
+    
+    &-accent-1, &-accent-2 {
+      color: GetColorFromTheme("orange", "darken-4");
+    }
+    &-accent-1 { background-color: GetColorFromTheme("orange", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("orange", "accent-2"); }
+  }
+
+  // Teal color combinations
+  &--teal {
+    &-default, &-lighten-5, &-lighten-4, &-lighten-3, &-lighten-2, &-lighten-1, &-accent-1, &-accent-2, &-accent-3, &-accent-4 {
+      color: GetColorFromTheme("teal", "darken-4");
+    }
+    &-default { background-color: GetColorFromTheme("teal", "default"); }
+    &-lighten-5 { background-color: GetColorFromTheme("teal", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("teal", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("teal", "lighten-3"); }
+    &-lighten-2 { background-color: GetColorFromTheme("teal", "lighten-2"); }
+    &-lighten-1 { background-color: GetColorFromTheme("teal", "lighten-1"); }
+    &-accent-1 { background-color: GetColorFromTheme("teal", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("teal", "accent-2"); }
+    &-accent-3 { background-color: GetColorFromTheme("teal", "accent-3"); }
+    &-accent-4 { background-color: GetColorFromTheme("teal", "accent-4"); }
+    
+    &-darken-1, &-darken-2, &-darken-3, &-darken-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-darken-1 { background-color: GetColorFromTheme("teal", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("teal", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("teal", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("teal", "darken-4"); }
+  }
+
+  // Green color combinations
+  &--green {
+    &-default, &-lighten-5, &-lighten-4, &-lighten-3, &-lighten-2, &-lighten-1, &-accent-1, &-accent-2, &-accent-3, &-accent-4 {
+      color: GetColorFromTheme("green", "darken-4");
+    }
+    &-default { background-color: GetColorFromTheme("green", "default"); }
+    &-lighten-5 { background-color: GetColorFromTheme("green", "lighten-5"); }
+    &-lighten-4 { background-color: GetColorFromTheme("green", "lighten-4"); }
+    &-lighten-3 { background-color: GetColorFromTheme("green", "lighten-3"); }
+    &-lighten-2 { background-color: GetColorFromTheme("green", "lighten-2"); }
+    &-lighten-1 { background-color: GetColorFromTheme("green", "lighten-1"); }
+    &-accent-1 { background-color: GetColorFromTheme("green", "accent-1"); }
+    &-accent-2 { background-color: GetColorFromTheme("green", "accent-2"); }
+    &-accent-3 { background-color: GetColorFromTheme("green", "accent-3"); }
+    &-accent-4 { background-color: GetColorFromTheme("green", "accent-4"); }
+    
+    &-darken-1, &-darken-2, &-darken-3, &-darken-4 {
+      color: GetColorFromTheme("white");
+    }
+    &-darken-1 { background-color: GetColorFromTheme("green", "darken-1"); }
+    &-darken-2 { background-color: GetColorFromTheme("green", "darken-2"); }
+    &-darken-3 { background-color: GetColorFromTheme("green", "darken-3"); }
+    &-darken-4 { background-color: GetColorFromTheme("green", "darken-4"); }
+  }
+
+  // Black and White color combinations
+  &--black {
+    &-default {
+      background-color: GetColorFromTheme("black");
+      color: GetColorFromTheme("white");
+    }
+  }
+
+  &--white {
+    &-default {
+      background-color: GetColorFromTheme("white");
+      color: GetColorFromTheme("black");
+    }
+  }
+}

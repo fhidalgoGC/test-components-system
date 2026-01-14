@@ -1,0 +1,384 @@
+@import "../colors/colors";
+
+$gcc-font-family-global: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$gcc-font-style-normal: normal;
+$gcc-font-weight-600: 600;
+$gcc-font-weight-bold: bold;
+$gcc-font-weight-medium: 500;
+$gcc-font-weight-normal: normal;
+$gcc-font-size-12: 0.788rem;
+$gcc-font-size-14: 0.875rem;
+$gcc-font-size-16: 1rem;
+$gcc-font-size-20: 1.25rem;
+$gcc-font-size-23: 1.438rem;
+$gcc-font-size-26: 1.625rem;
+$gcc-font-size-29: 1.8125rem;
+$gcc-font-size-32: 2rem;
+$gcc-font-size-36: 2.25rem;
+$gcc-font-size-41: 2.562rem;
+$gcc-font-size-46: 2.875rem;
+$gcc-font-size-52: 3.25rem;
+$gcc-font-size-58: 3.625rem;
+$gcc-character-spacing-0: 0px;
+$gcc-line-spacing-16: 16px;
+$gcc-line-spacing-20: 20px;
+$gcc-line-spacing-24: 24px;
+$gcc-line-spacing-32: 32px;
+$gcc-line-spacing-40: 40px;
+$gcc-line-spacing-48: 48px;
+$gcc-line-spacing-56: 56px;
+$gcc-line-spacing-64: 64px;
+$gcc-line-spacing-72: 72px;
+$gcc-decoration-underline: underline;
+
+.gcc-ui-small-large-bold-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-12;
+  line-height: $gcc-line-spacing-16;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-small-large-semibold-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-600;
+  font-size: $gcc-font-size-12;
+  line-height: $gcc-line-spacing-16;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-small-large-medium-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-medium;
+  font-size: $gcc-font-size-12;
+  line-height: $gcc-line-spacing-16;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-small-large-regular-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-normal;
+  font-size: $gcc-font-size-12;
+  line-height: $gcc-line-spacing-16;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-small-large-bold {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-12;
+  line-height: $gcc-line-spacing-16;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-small-large-semibold {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-600;
+  font-size: $gcc-font-size-12;
+  line-height: $gcc-line-spacing-16;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-small-large-medium {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-medium;
+  font-size: $gcc-font-size-12;
+  line-height: $gcc-line-spacing-16;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-small-large-regular {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-normal;
+  font-size: $gcc-font-size-12;
+  line-height: $gcc-line-spacing-16;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-label-large-bold-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-14;
+  line-height: $gcc-line-spacing-20;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-label-large-semibold-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-600;
+  font-size: $gcc-font-size-14;
+  line-height: $gcc-line-spacing-20;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-label-large-medium-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-medium;
+  font-size: $gcc-font-size-14;
+  line-height: $gcc-line-spacing-20;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-label-large-regular-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-normal;
+  font-size: $gcc-font-size-14;
+  line-height: $gcc-line-spacing-20;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-label-large-bold {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-14;
+  line-height: $gcc-line-spacing-20;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-label-large-semibold {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-600;
+  font-size: $gcc-font-size-14;
+  line-height: $gcc-line-spacing-20;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-label-large-medium {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-medium;
+  font-size: $gcc-font-size-14;
+  line-height: $gcc-line-spacing-20;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-label-large-regular {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-normal;
+  font-size: $gcc-font-size-14;
+  line-height: $gcc-line-spacing-20;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-body-large-bold-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-16;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-body-large-semibold-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-600;
+  font-size: $gcc-font-size-16;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-body-large-medium-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-medium;
+  font-size: $gcc-font-size-16;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-body-large-regular-underline {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-normal;
+  font-size: $gcc-font-size-16;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+  text-decoration: $gcc-decoration-underline;
+}
+
+.gcc-ui-body-large-bold {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-16;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-body-large-semibold {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-600;
+  font-size: $gcc-font-size-16;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-body-large-medium {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-medium;
+  font-size: $gcc-font-size-16;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-body-large-regular {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-normal;
+  font-size: $gcc-font-size-16;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-3;
+}
+
+.gcc-ui-h6-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-20;
+  line-height: $gcc-line-spacing-24;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-h5-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-23;
+  line-height: $gcc-line-spacing-32;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-h4-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-26;
+  line-height: $gcc-line-spacing-32;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-h3-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-29;
+  line-height: $gcc-line-spacing-40;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-h2-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-32;
+  line-height: $gcc-line-spacing-40;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-h1-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-36;
+  line-height: $gcc-line-spacing-48;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-display-4-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-41;
+  line-height: $gcc-line-spacing-56;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-display-3-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-46;
+  line-height: $gcc-line-spacing-56;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-display-2-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-52;
+  line-height: $gcc-line-spacing-64;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}
+
+.gcc-ui-display-1-large {
+  font-family: $gcc-font-family-global;
+  font-style: $gcc-font-style-normal;
+  font-weight: $gcc-font-weight-bold;
+  font-size: $gcc-font-size-58;
+  line-height: $gcc-line-spacing-72;
+  letter-spacing: $gcc-character-spacing-0;
+  color: $gcc-neutral-darken-4;
+}

@@ -1,0 +1,126 @@
+@import '../../../../public/assets/styles/colors/colors.scss';
+
+// Size and stroke width mappings
+$gc-spinner-sizes: (
+  tiny: (size: 16px, stroke: 4px),
+  small: (size: 20px, stroke: 4px),
+  medium: (size: 40px, stroke: 6px),
+  large: (size: 64px, stroke: 8px),
+  extra-large: (size: 96px, stroke: 12px)
+);
+
+// Color list
+$gc-spinner-colors: (
+  black, white, brand, error, green, information, 
+  neutral, orange, purple, success, teal, warning
+);
+
+// Tone list
+$gc-spinner-tones: (
+  default, lighten-1, lighten-2, lighten-3, lighten-4, lighten-5,
+  darken-1, darken-2, darken-3, darken-4, 
+  accent-1, accent-2, accent-3, accent-4
+);
+
+.gc-progress-spinner {
+  display: inline-block;
+  position: relative;
+  
+  &__svg {
+    transform: rotate(-90deg);
+    transition: all 0.3s ease;
+  }
+  
+  &__track {
+    fill: none;
+    opacity: 0.1;
+  }
+  
+  &__progress {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.3s ease, stroke-dashoffset 0.3s ease;
+  }
+  
+  // Indeterminate animation
+  &--indeterminate {
+    .gc-progress-spinner__svg {
+      animation: gc-spinner-rotate 1.4s linear infinite;
+    }
+    
+    .gc-progress-spinner__progress {
+      animation: gc-spinner-dash 1.4s ease-in-out infinite;
+    }
+  }
+  
+  // Generate size classes
+  @each $size-name, $size-props in $gc-spinner-sizes {
+    &--#{$size-name} {
+      width: map-get($size-props, size);
+      height: map-get($size-props, size);
+      
+      .gc-progress-spinner__track,
+      .gc-progress-spinner__progress {
+        stroke-width: map-get($size-props, stroke);
+      }
+    }
+  }
+  
+  // Generate color classes for black and white (no tone)
+  &--black {
+    .gc-progress-spinner__track {
+      stroke: GetColorFromTheme("black");
+    }
+    .gc-progress-spinner__progress {
+      stroke: GetColorFromTheme("black");
+    }
+  }
+  
+  &--white {
+    .gc-progress-spinner__track {
+      stroke: GetColorFromTheme("white");
+    }
+    .gc-progress-spinner__progress {
+      stroke: GetColorFromTheme("white");
+    }
+  }
+  
+  // Generate color classes for all other colors with tones
+  @each $color in ("brand", "error", "green", "information", "neutral", "orange", "purple", "success", "teal", "warning") {
+    @each $tone in $gc-spinner-tones {
+      &--#{$color}-#{$tone} {
+        .gc-progress-spinner__track {
+          stroke: GetColorFromTheme("#{$color}", "#{$tone}");
+        }
+        .gc-progress-spinner__progress {
+          stroke: GetColorFromTheme("#{$color}", "#{$tone}");
+        }
+      }
+    }
+  }
+}
+
+// Keyframe animations
+@keyframes gc-spinner-rotate {
+  0% {
+    transform: rotate(-90deg);
+  }
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes gc-spinner-dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}

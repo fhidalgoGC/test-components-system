@@ -1,0 +1,1 @@
+export type GCSize = 'small' | 'medium' | 'large';

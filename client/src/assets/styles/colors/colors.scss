@@ -1,0 +1,298 @@
+$gcc-black: #000000;
+$gcc-white: #ffffff;
+$gcc-brand-accent-1: #ddf8cb;
+$gcc-brand-accent-2: #b6f29b;
+$gcc-brand-accent-3: #7eda64;
+$gcc-brand-accent-4: #4cb53a;
+$gcc-brand-darken-1: #106a0a;
+$gcc-brand-darken-2: #0c4f08;
+$gcc-brand-darken-3: #083505;
+$gcc-brand-darken-4: #041a03;
+$gcc-brand-default: #14840d;
+$gcc-brand-lighten-1: #439d3d;
+$gcc-brand-lighten-2: #72b56e;
+$gcc-brand-lighten-3: #8ac286;
+$gcc-brand-lighten-4: #b9dab6;
+$gcc-brand-lighten-5: #e8f3e7;
+$gcc-error-accent-1: #fcded1;
+$gcc-error-accent-2: #f9b7a5;
+$gcc-error-accent-3: #ef8575;
+$gcc-error-accent-4: #e05651;
+$gcc-error-darken-1: #a31920;
+$gcc-error-darken-2: #7a1318;
+$gcc-error-darken-3: #520c10;
+$gcc-error-darken-4: #290608;
+$gcc-error-default: #cc1f28;
+$gcc-error-lighten-1: #d64c53;
+$gcc-error-lighten-2: #e0797e;
+$gcc-error-lighten-3: #e68f94;
+$gcc-error-lighten-4: #f0bcbf;
+$gcc-error-lighten-5: #fae9ea;
+$gcc-green-darken-1: #1ea186;
+$gcc-green-darken-2: #177965;
+$gcc-green-darken-3: #0f5043;
+$gcc-green-darken-4: #082822;
+$gcc-green-default: #26c9a8;
+$gcc-green-lighten-1: #51d4b9;
+$gcc-green-lighten-2: #7ddfcb;
+$gcc-green-lighten-3: #93e4d4;
+$gcc-green-lighten-4: #beefe5;
+$gcc-green-lighten-5: #e9faf6;
+$gcc-green-accent-1: #d3fce4;
+$gcc-green-accent-2: #a8f9d2;
+$gcc-green-accent-3: #7aeec1;
+$gcc-green-accent-4: #57deb6;
+$gcc-information-accent-1: #d3e2ff;
+$gcc-information-accent-2: #a7c6ff;
+$gcc-information-accent-3: #7ca9ff;
+$gcc-information-accent-4: #508dff;
+$gcc-information-darken-1: #0029e8;
+$gcc-information-darken-2: #001fae;
+$gcc-information-darken-3: #001574;
+$gcc-information-darken-4: #000a3a;
+$gcc-information-default: #234aff;
+$gcc-information-lighten-1: #4f6eff;
+$gcc-information-lighten-2: #7b92ff;
+$gcc-information-lighten-3: #91a5ff;
+$gcc-information-lighten-4: #bdc9ff;
+$gcc-information-lighten-5: #e9edff;
+$gcc-neutral-darken-1: #767681;
+$gcc-neutral-darken-2: #4d4d59;
+$gcc-neutral-darken-3: #3e3d4a;
+$gcc-neutral-darken-4: #1a1a2d;
+$gcc-neutral-default: #8d8d96;
+$gcc-neutral-lighten-1: #afafb6;
+$gcc-neutral-lighten-2: #c6c6cb;
+$gcc-neutral-lighten-3: #dddde0;
+$gcc-neutral-lighten-4: #e8e8ea;
+$gcc-neutral-lighten-5: #f4f4f5;
+$gcc-orange-accent-1: #feeacc;
+$gcc-orange-accent-2: #fdcf9a;
+$gcc-orange-accent-3: #fbac67;
+$gcc-orange-accent-4: #f78b41;
+$gcc-orange-darken-1: #c24504;
+$gcc-orange-darken-2: #913403;
+$gcc-orange-darken-3: #612202;
+$gcc-orange-darken-4: #301101;
+$gcc-orange-default: #f25605;
+$gcc-orange-lighten-1: #f57837;
+$gcc-orange-lighten-2: #f79a69;
+$gcc-orange-lighten-3: #f9ab82;
+$gcc-orange-lighten-4: #fbccb4;
+$gcc-orange-lighten-5: #feeee6;
+$gcc-purple-accent-1: #e0d2fb;
+$gcc-purple-accent-2: #c1a7f8;
+$gcc-purple-accent-3: #9a78eb;
+$gcc-purple-accent-4: #7754d8;
+$gcc-purple-darken-1: #3a1d99;
+$gcc-purple-darken-2: #2c1673;
+$gcc-purple-darken-3: #1d0e4c;
+$gcc-purple-darken-4: #0f0726;
+$gcc-purple-default: #4924bf;
+$gcc-purple-lighten-1: #6d50cc;
+$gcc-purple-lighten-2: #927cd9;
+$gcc-purple-lighten-3: #a492df;
+$gcc-purple-lighten-4: #c8bdec;
+$gcc-purple-lighten-5: #ede9f9;
+$gcc-success-accent-1: #e1fad1;
+$gcc-success-accent-2: #bef6a6;
+$gcc-success-accent-3: #8ee374;
+$gcc-success-accent-4: #60c94e;
+$gcc-success-darken-1: #1f8419;
+$gcc-success-darken-2: #176313;
+$gcc-success-darken-3: #10420c;
+$gcc-success-darken-4: #082106;
+$gcc-success-default: #27a51f;
+$gcc-success-lighten-1: #52b74c;
+$gcc-success-lighten-2: #7dc979;
+$gcc-success-lighten-3: #93d28f;
+$gcc-success-lighten-4: #bee4bc;
+$gcc-success-lighten-5: #e9f6e9;
+$gcc-teal-accent-1: #cefcf4;
+$gcc-teal-accent-2: #9efaf0;
+$gcc-teal-accent-3: #6df2ee;
+$gcc-teal-accent-4: #48dee6;
+$gcc-teal-darken-1: #0e97ab;
+$gcc-teal-darken-2: #0b7180;
+$gcc-teal-darken-3: #074c56;
+$gcc-teal-darken-4: #04262b;
+$gcc-teal-default: #12bdd6;
+$gcc-teal-lighten-1: #41cade;
+$gcc-teal-lighten-2: #71d7e6;
+$gcc-teal-lighten-3: #89deeb;
+$gcc-teal-lighten-4: #b8ebf3;
+$gcc-teal-lighten-5: #e7f8fb;
+$gcc-warning-accent-1: #fdf2cd;
+$gcc-warning-accent-2: #fbe29c;
+$gcc-warning-accent-3: #f5cb6a;
+$gcc-warning-accent-4: #ecb344;
+$gcc-warning-darken-1: #b3730a;
+$gcc-warning-darken-2: #865607;
+$gcc-warning-darken-3: #5a3a05;
+$gcc-warning-darken-4: #2d1d02;
+$gcc-warning-default: #e0900c;
+$gcc-warning-lighten-1: #e6a63d;
+$gcc-warning-lighten-2: #ecbc6d;
+$gcc-warning-lighten-3: #f0c886;
+$gcc-warning-lighten-4: #f6deb6;
+$gcc-warning-lighten-5: #fcf4e7;
+
+// Color map for function lookup
+$gcc-colors-map: (
+  "gcc-black": $gcc-black,
+  "gcc-white": $gcc-white,
+  "gcc-brand-accent-1": $gcc-brand-accent-1,
+  "gcc-brand-accent-2": $gcc-brand-accent-2,
+  "gcc-brand-accent-3": $gcc-brand-accent-3,
+  "gcc-brand-accent-4": $gcc-brand-accent-4,
+  "gcc-brand-darken-1": $gcc-brand-darken-1,
+  "gcc-brand-darken-2": $gcc-brand-darken-2,
+  "gcc-brand-darken-3": $gcc-brand-darken-3,
+  "gcc-brand-darken-4": $gcc-brand-darken-4,
+  "gcc-brand-default": $gcc-brand-default,
+  "gcc-brand-lighten-1": $gcc-brand-lighten-1,
+  "gcc-brand-lighten-2": $gcc-brand-lighten-2,
+  "gcc-brand-lighten-3": $gcc-brand-lighten-3,
+  "gcc-brand-lighten-4": $gcc-brand-lighten-4,
+  "gcc-brand-lighten-5": $gcc-brand-lighten-5,
+  "gcc-error-accent-1": $gcc-error-accent-1,
+  "gcc-error-accent-2": $gcc-error-accent-2,
+  "gcc-error-accent-3": $gcc-error-accent-3,
+  "gcc-error-accent-4": $gcc-error-accent-4,
+  "gcc-error-darken-1": $gcc-error-darken-1,
+  "gcc-error-darken-2": $gcc-error-darken-2,
+  "gcc-error-darken-3": $gcc-error-darken-3,
+  "gcc-error-darken-4": $gcc-error-darken-4,
+  "gcc-error-default": $gcc-error-default,
+  "gcc-error-lighten-1": $gcc-error-lighten-1,
+  "gcc-error-lighten-2": $gcc-error-lighten-2,
+  "gcc-error-lighten-3": $gcc-error-lighten-3,
+  "gcc-error-lighten-4": $gcc-error-lighten-4,
+  "gcc-error-lighten-5": $gcc-error-lighten-5,
+  "gcc-green-darken-1": $gcc-green-darken-1,
+  "gcc-green-darken-2": $gcc-green-darken-2,
+  "gcc-green-darken-3": $gcc-green-darken-3,
+  "gcc-green-darken-4": $gcc-green-darken-4,
+  "gcc-green-default": $gcc-green-default,
+  "gcc-green-lighten-1": $gcc-green-lighten-1,
+  "gcc-green-lighten-2": $gcc-green-lighten-2,
+  "gcc-green-lighten-3": $gcc-green-lighten-3,
+  "gcc-green-lighten-4": $gcc-green-lighten-4,
+  "gcc-green-lighten-5": $gcc-green-lighten-5,
+  "gcc-green-accent-1": $gcc-green-accent-1,
+  "gcc-green-accent-2": $gcc-green-accent-2,
+  "gcc-green-accent-3": $gcc-green-accent-3,
+  "gcc-green-accent-4": $gcc-green-accent-4,
+  "gcc-information-accent-1": $gcc-information-accent-1,
+  "gcc-information-accent-2": $gcc-information-accent-2,
+  "gcc-information-accent-3": $gcc-information-accent-3,
+  "gcc-information-accent-4": $gcc-information-accent-4,
+  "gcc-information-darken-1": $gcc-information-darken-1,
+  "gcc-information-darken-2": $gcc-information-darken-2,
+  "gcc-information-darken-3": $gcc-information-darken-3,
+  "gcc-information-darken-4": $gcc-information-darken-4,
+  "gcc-information-default": $gcc-information-default,
+  "gcc-information-lighten-1": $gcc-information-lighten-1,
+  "gcc-information-lighten-2": $gcc-information-lighten-2,
+  "gcc-information-lighten-3": $gcc-information-lighten-3,
+  "gcc-information-lighten-4": $gcc-information-lighten-4,
+  "gcc-information-lighten-5": $gcc-information-lighten-5,
+  "gcc-neutral-darken-1": $gcc-neutral-darken-1,
+  "gcc-neutral-darken-2": $gcc-neutral-darken-2,
+  "gcc-neutral-darken-3": $gcc-neutral-darken-3,
+  "gcc-neutral-darken-4": $gcc-neutral-darken-4,
+  "gcc-neutral-default": $gcc-neutral-default,
+  "gcc-neutral-lighten-1": $gcc-neutral-lighten-1,
+  "gcc-neutral-lighten-2": $gcc-neutral-lighten-2,
+  "gcc-neutral-lighten-3": $gcc-neutral-lighten-3,
+  "gcc-neutral-lighten-4": $gcc-neutral-lighten-4,
+  "gcc-neutral-lighten-5": $gcc-neutral-lighten-5,
+  "gcc-orange-accent-1": $gcc-orange-accent-1,
+  "gcc-orange-accent-2": $gcc-orange-accent-2,
+  "gcc-orange-accent-3": $gcc-orange-accent-3,
+  "gcc-orange-accent-4": $gcc-orange-accent-4,
+  "gcc-orange-darken-1": $gcc-orange-darken-1,
+  "gcc-orange-darken-2": $gcc-orange-darken-2,
+  "gcc-orange-darken-3": $gcc-orange-darken-3,
+  "gcc-orange-darken-4": $gcc-orange-darken-4,
+  "gcc-orange-default": $gcc-orange-default,
+  "gcc-orange-lighten-1": $gcc-orange-lighten-1,
+  "gcc-orange-lighten-2": $gcc-orange-lighten-2,
+  "gcc-orange-lighten-3": $gcc-orange-lighten-3,
+  "gcc-orange-lighten-4": $gcc-orange-lighten-4,
+  "gcc-orange-lighten-5": $gcc-orange-lighten-5,
+  "gcc-purple-accent-1": $gcc-purple-accent-1,
+  "gcc-purple-accent-2": $gcc-purple-accent-2,
+  "gcc-purple-accent-3": $gcc-purple-accent-3,
+  "gcc-purple-accent-4": $gcc-purple-accent-4,
+  "gcc-purple-darken-1": $gcc-purple-darken-1,
+  "gcc-purple-darken-2": $gcc-purple-darken-2,
+  "gcc-purple-darken-3": $gcc-purple-darken-3,
+  "gcc-purple-darken-4": $gcc-purple-darken-4,
+  "gcc-purple-default": $gcc-purple-default,
+  "gcc-purple-lighten-1": $gcc-purple-lighten-1,
+  "gcc-purple-lighten-2": $gcc-purple-lighten-2,
+  "gcc-purple-lighten-3": $gcc-purple-lighten-3,
+  "gcc-purple-lighten-4": $gcc-purple-lighten-4,
+  "gcc-purple-lighten-5": $gcc-purple-lighten-5,
+  "gcc-success-accent-1": $gcc-success-accent-1,
+  "gcc-success-accent-2": $gcc-success-accent-2,
+  "gcc-success-accent-3": $gcc-success-accent-3,
+  "gcc-success-accent-4": $gcc-success-accent-4,
+  "gcc-success-darken-1": $gcc-success-darken-1,
+  "gcc-success-darken-2": $gcc-success-darken-2,
+  "gcc-success-darken-3": $gcc-success-darken-3,
+  "gcc-success-darken-4": $gcc-success-darken-4,
+  "gcc-success-default": $gcc-success-default,
+  "gcc-success-lighten-1": $gcc-success-lighten-1,
+  "gcc-success-lighten-2": $gcc-success-lighten-2,
+  "gcc-success-lighten-3": $gcc-success-lighten-3,
+  "gcc-success-lighten-4": $gcc-success-lighten-4,
+  "gcc-success-lighten-5": $gcc-success-lighten-5,
+  "gcc-teal-accent-1": $gcc-teal-accent-1,
+  "gcc-teal-accent-2": $gcc-teal-accent-2,
+  "gcc-teal-accent-3": $gcc-teal-accent-3,
+  "gcc-teal-accent-4": $gcc-teal-accent-4,
+  "gcc-teal-darken-1": $gcc-teal-darken-1,
+  "gcc-teal-darken-2": $gcc-teal-darken-2,
+  "gcc-teal-darken-3": $gcc-teal-darken-3,
+  "gcc-teal-darken-4": $gcc-teal-darken-4,
+  "gcc-teal-default": $gcc-teal-default,
+  "gcc-teal-lighten-1": $gcc-teal-lighten-1,
+  "gcc-teal-lighten-2": $gcc-teal-lighten-2,
+  "gcc-teal-lighten-3": $gcc-teal-lighten-3,
+  "gcc-teal-lighten-4": $gcc-teal-lighten-4,
+  "gcc-teal-lighten-5": $gcc-teal-lighten-5,
+  "gcc-warning-accent-1": $gcc-warning-accent-1,
+  "gcc-warning-accent-2": $gcc-warning-accent-2,
+  "gcc-warning-accent-3": $gcc-warning-accent-3,
+  "gcc-warning-accent-4": $gcc-warning-accent-4,
+  "gcc-warning-darken-1": $gcc-warning-darken-1,
+  "gcc-warning-darken-2": $gcc-warning-darken-2,
+  "gcc-warning-darken-3": $gcc-warning-darken-3,
+  "gcc-warning-darken-4": $gcc-warning-darken-4,
+  "gcc-warning-default": $gcc-warning-default,
+  "gcc-warning-lighten-1": $gcc-warning-lighten-1,
+  "gcc-warning-lighten-2": $gcc-warning-lighten-2,
+  "gcc-warning-lighten-3": $gcc-warning-lighten-3,
+  "gcc-warning-lighten-4": $gcc-warning-lighten-4,
+  "gcc-warning-lighten-5": $gcc-warning-lighten-5
+);
+
+// Function to get color from theme
+@function GetColorFromTheme($color, $tone: null) {
+  // If color is black or white and no tone is provided, don't use tone
+  @if ($color == "black" or $color == "white") and $tone == null {
+    $key: "gcc-#{$color}";
+    @return map-get($gcc-colors-map, $key);
+  }
+  
+  // If color is different from black/white and no tone is provided, use "default"
+  @if $tone == null {
+    $tone: "default";
+  }
+  
+  $key: "gcc-#{$color}-#{$tone}";
+  @return map-get($gcc-colors-map, $key);
+}
+

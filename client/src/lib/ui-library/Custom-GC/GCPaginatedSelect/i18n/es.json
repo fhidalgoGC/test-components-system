@@ -1,0 +1,8 @@
+{
+  "loading": "Cargando...",
+  "errorLoadingOptions": "Error cargando opciones",
+  "selectOption": "Seleccionar una opción...",
+  "search": "Buscar...",
+  "requiredField": "Este campo es obligatorio",
+  "noOptionsAvailable": "No hay opciones disponibles"
+}

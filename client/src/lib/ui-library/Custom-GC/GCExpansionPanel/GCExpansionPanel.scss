@@ -1,0 +1,160 @@
+@import '../../../../public/assets/styles/index.scss';
+
+.gc-expansion-panel {
+  overflow: hidden;
+  background-color: white;
+
+  &--expanded {
+    .gc-expansion-panel__header {
+      border-bottom: 1px solid GetColorFromTheme("neutral", "lighten-2");
+    }
+  }
+
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.gc-expansion-panel__header {
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  transition: background-color 0.2s ease-in-out;
+  min-height: 64px;
+
+  &:hover:not(.gc-expansion-panel__header--disabled) {
+    background-color: GetColorFromTheme("neutral", "lighten-4");
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+.gc-expansion-panel__header-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0; // Allows text to truncate
+}
+
+.gc-expansion-panel__text-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.gc-expansion-panel__custom-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.gc-expansion-panel__title {
+  @extend .gcc-ui-body-large-medium;
+  color: GetColorFromTheme("neutral", "darken-2");
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.gc-expansion-panel__description {
+  @extend .gcc-ui-label-large-regular;
+  color: GetColorFromTheme("neutral", "default");
+  margin: 0;
+  line-height: 1.4;
+}
+
+.gc-expansion-panel__toggle {
+  margin-left: 16px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.gc-expansion-panel__toggle-icon {
+  color: GetColorFromTheme("neutral", "darken-1");
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), color 0.2s ease-in-out;
+
+  &--expanded {
+    transform: rotate(0deg);
+  }
+
+  .gc-expansion-panel__header:hover & {
+    color: GetColorFromTheme("brand", "default");
+  }
+}
+
+.gc-expansion-panel__content {
+  overflow: hidden;
+  background-color: white;
+  
+  &--expanded {
+    // Additional styles when expanded if needed
+  }
+}
+
+.gc-expansion-panel__content-wrapper {
+  padding: 20px;
+  border-top: none;
+}
+
+// Action row styles (optional feature)
+.gc-expansion-panel__action-row {
+  padding: 12px 20px;
+  border-top: 1px solid GetColorFromTheme("neutral", "lighten-3");
+  background-color: GetColorFromTheme("neutral", "lighten-5");
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+// Accordion styles
+.gc-expansion-panel-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+// Dark mode support
+.dark {
+  .gc-expansion-panel {
+    background-color: GetColorFromTheme("neutral", "darken-4");
+    border-color: GetColorFromTheme("neutral", "darken-2");
+    
+    .gc-expansion-panel__header {
+      &:hover:not(.gc-expansion-panel__header--disabled) {
+        background-color: GetColorFromTheme("neutral", "darken-3");
+      }
+    }
+    
+    .gc-expansion-panel__content {
+      background-color: GetColorFromTheme("neutral", "darken-4");
+    }
+    
+    .gc-expansion-panel__title {
+      color: GetColorFromTheme("white", "default");
+    }
+    
+    .gc-expansion-panel__description {
+      color: GetColorFromTheme("neutral", "lighten-2");
+    }
+    
+    .gc-expansion-panel__action-row {
+      background-color: GetColorFromTheme("neutral", "darken-3");
+      border-color: GetColorFromTheme("neutral", "darken-2");
+    }
+  }
+}

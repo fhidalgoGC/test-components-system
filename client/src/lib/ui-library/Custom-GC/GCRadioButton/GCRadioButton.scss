@@ -1,0 +1,147 @@
+@import '../../../../public/assets/styles/index.scss';
+
+.gc-radio-button {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &--horizontal {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  &--vertical {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.gc-radio-button__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover:not(&--disabled) {
+    .gc-radio-button__circle {
+      border-color: currentColor;
+    }
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.gc-radio-button__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  width: 0;
+  height: 0;
+}
+
+.gc-radio-button__circle {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: 2px solid GetColorFromTheme("neutral", "darken-1");
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.2s ease-in-out;
+  background-color: transparent;
+
+  .gc-radio-button__circle-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: currentColor;
+    transition: transform 0.2s ease-in-out;
+  }
+}
+
+.gc-radio-button__label {
+  cursor: pointer;
+  user-select: none;
+  color: GetColorFromTheme("neutral", "darken-2");
+  transition: color 0.2s ease-in-out;
+
+  &--disabled {
+    cursor: not-allowed;
+    color: GetColorFromTheme("neutral", "default");
+  }
+}
+
+// Selected state
+.gc-radio-button__option--selected {
+  .gc-radio-button__circle {
+    border-color: currentColor;
+    
+    .gc-radio-button__circle-inner {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+// Focus state
+.gc-radio-button__input:focus + .gc-radio-button__circle {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+// Color variants - mapping component colors to theme colors
+.gc-radio-button--primary .gc-radio-button__option {
+  color: GetColorFromTheme("brand", "default");
+}
+
+.gc-radio-button--accent .gc-radio-button__option {
+  color: GetColorFromTheme("teal", "default");
+}
+
+.gc-radio-button--warn .gc-radio-button__option {
+  color: GetColorFromTheme("error", "default");
+}
+
+.gc-radio-button--warning .gc-radio-button__option {
+  color: GetColorFromTheme("warning", "default");
+}
+
+.gc-radio-button--information .gc-radio-button__option {
+  color: GetColorFromTheme("information", "default");
+}
+
+.gc-radio-button--success .gc-radio-button__option {
+  color: GetColorFromTheme("success", "default");
+}
+
+.gc-radio-button--neutral .gc-radio-button__option {
+  color: GetColorFromTheme("neutral", "darken-1");
+}
+
+// Dark mode support
+.dark {
+  .gc-radio-button__circle {
+    border-color: GetColorFromTheme("neutral", "lighten-2");
+  }
+
+  .gc-radio-button__label {
+    color: GetColorFromTheme("white", "default");
+    
+    &--disabled {
+      color: GetColorFromTheme("neutral", "lighten-2");
+    }
+  }
+}

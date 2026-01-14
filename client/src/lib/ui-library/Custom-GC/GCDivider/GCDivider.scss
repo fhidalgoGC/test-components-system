@@ -1,0 +1,69 @@
+@import '../../../../public/assets/styles/index.scss';
+
+// GC Divider Styles
+.gc-divider {
+  border: none;
+  margin: 0;
+  padding: 0;
+  background-color: #e5e7eb; // Gray-200 equivalent - visible gray color
+  
+  // Base horizontal divider (default)
+  &--horizontal {
+    width: 100%;
+    height: 1px;
+    display: block;
+    
+    // Inset horizontal divider
+    &.gc-divider--inset {
+      margin-left: 80px;
+      width: calc(100% - 80px);
+    }
+  }
+  
+  // Vertical divider
+  &--vertical {
+    width: 1px;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    
+    // Inset vertical divider
+    &.gc-divider--inset {
+      margin-top: 8px;
+      margin-bottom: 8px;
+      height: calc(100% - 16px);
+    }
+  }
+  
+  // Color variants for different themes (using Tailwind's dark mode)
+  .dark & {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+  
+  // Interactive states
+  &:focus {
+    outline: none;
+  }
+  
+  // Ensure proper display in flex containers
+  &--horizontal {
+    flex-shrink: 0;
+  }
+  
+  &--vertical {
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+}
+
+// Container helpers for vertical dividers
+.gc-divider-container {
+  display: flex;
+  align-items: stretch;
+  min-height: 1px;
+  
+  &--vertical {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
