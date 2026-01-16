@@ -35,24 +35,38 @@ const getHeightStyle = (heightMode: string | undefined, height: HeightToken | nu
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-const getPaddingXClass = (token: SpacingToken | undefined) => {
-  if (!token) return '';
-  return styles[`paddingX${capitalize(token)}`] || '';
+const getPaddingXClass = (value: SpacingToken | number | undefined): string => {
+  if (!value || typeof value === 'number') return '';
+  return styles[`paddingX${capitalize(value)}`] || '';
 };
 
-const getPaddingYClass = (token: SpacingToken | undefined) => {
-  if (!token) return '';
-  return styles[`paddingY${capitalize(token)}`] || '';
+const getPaddingYClass = (value: SpacingToken | number | undefined): string => {
+  if (!value || typeof value === 'number') return '';
+  return styles[`paddingY${capitalize(value)}`] || '';
 };
 
-const getMarginXClass = (token: SpacingToken | undefined) => {
-  if (!token) return '';
-  return styles[`marginX${capitalize(token)}`] || '';
+const getMarginXClass = (value: SpacingToken | number | undefined): string => {
+  if (!value || typeof value === 'number') return '';
+  return styles[`marginX${capitalize(value)}`] || '';
 };
 
-const getMarginYClass = (token: SpacingToken | undefined) => {
-  if (!token) return '';
-  return styles[`marginY${capitalize(token)}`] || '';
+const getMarginYClass = (value: SpacingToken | number | undefined): string => {
+  if (!value || typeof value === 'number') return '';
+  return styles[`marginY${capitalize(value)}`] || '';
+};
+
+const getSpacingStyle = (
+  paddingX: SpacingToken | number | undefined,
+  paddingY: SpacingToken | number | undefined,
+  marginX: SpacingToken | number | undefined,
+  marginY: SpacingToken | number | undefined
+): React.CSSProperties => {
+  const style: React.CSSProperties = {};
+  if (typeof paddingX === 'number') style.paddingLeft = style.paddingRight = `${paddingX}px`;
+  if (typeof paddingY === 'number') style.paddingTop = style.paddingBottom = `${paddingY}px`;
+  if (typeof marginX === 'number') style.marginLeft = style.marginRight = `${marginX}px`;
+  if (typeof marginY === 'number') style.marginTop = style.marginBottom = `${marginY}px`;
+  return style;
 };
 
 const getComponentGapClass = (gap: GapToken | number | undefined): string => {
@@ -134,6 +148,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
   const inlineStyles: React.CSSProperties = {
     ...getWidthStyle(widthMode, width),
     ...getHeightStyle(heightMode, height),
+    ...getSpacingStyle(paddingX, paddingY, marginX, marginY),
   };
 
   return (

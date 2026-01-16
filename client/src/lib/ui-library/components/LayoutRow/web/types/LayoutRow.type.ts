@@ -22,10 +22,10 @@ export interface LayoutRowProps {
   width?: SizeToken | number;
   heightMode?: HeightMode;
   height?: HeightToken | number;
-  paddingX?: SpacingToken;
-  paddingY?: SpacingToken;
-  marginX?: SpacingToken;
-  marginY?: SpacingToken;
+  paddingX?: SpacingToken | number;
+  paddingY?: SpacingToken | number;
+  marginX?: SpacingToken | number;
+  marginY?: SpacingToken | number;
   componentVerticalAlign?: VerticalAlign;
   componentGap?: GapToken | number;
   slotGap?: SlotGapToken;

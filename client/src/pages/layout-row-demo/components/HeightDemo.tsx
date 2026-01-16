@@ -1,7 +1,7 @@
 import { LayoutRow } from "@/lib/ui-library/components/LayoutRow";
 import styles from "../css/LayoutRowDemo.module.scss";
 
-const heightOptions = ["xs", "sm", "md", "lg", "xl"] as const;
+const heightOptions = ["xs", "sm", "md", "lg", "xl", 200] as const;
 
 export function HeightDemo() {
   return (
@@ -22,9 +22,11 @@ export function HeightDemo() {
               widthMode="full"
               heightMode="fixed"
               height={h}
-              paddingX="none"
-              componentVerticalAlign="center"
-              componentGap={50}
+              paddingX="xs"
+              marginY="none"
+              paddingY={10}
+              componentVerticalAlign="top"
+              componentGap='xs'
               className={styles.whiteCardBg}
               components={[
                 {
