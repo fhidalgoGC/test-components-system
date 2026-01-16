@@ -26,25 +26,50 @@ export function HeightDemo() {
               marginY="xs"
               marginX="lg"
               paddingY={10}
-              componentVerticalAlign="stretch"
+              componentVerticalAlign="center"
               componentGap="xs"
               className={styles.whiteCardBg}
               components={[
                 {
-                  component: <span className="text-sm font-medium" style={{ display: 'inline-block', height: '100px', background: '#ddd' }}>Left</span>,
-                  align: "left",
-                  slot: 0,
-                },
-                {
                   component: (
-                    <div style={{ width: '60px', height: '100%', background: '#22c55e', borderRadius: '4px' }} />
+                    <span
+                      className="text-sm font-medium"
+                      style={{
+                        display: "inline-block",
+                        height: "100%",
+                        background: "#ddd",
+                      }}
+                    >
+                      Left
+                    </span>
                   ),
                   align: "left",
                   slot: 0,
                 },
                 {
                   component: (
-                    <div style={{ width: '80px', height: '120px', background: '#3b82f6', borderRadius: '4px' }} />
+                    <div
+                      style={{
+                        width: "10px",
+                        height: "100%",
+                        background: "#22c55e",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  ),
+                  align: "left",
+                  slot: 0,
+                },
+                {
+                  component: (
+                    <div
+                      style={{
+                        width: "80px",
+                        height: "120px",
+                        background: "#3b82f6",
+                        borderRadius: "4px",
+                      }}
+                    />
                   ),
                   align: "center",
                   slot: 1,
