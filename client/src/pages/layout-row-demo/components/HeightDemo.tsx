@@ -10,7 +10,8 @@ export function HeightDemo() {
         8. Diferentes tamaños de altura (HeightToken)
       </h2>
       <p className={styles.section__description}>
-        Comparación de tokens de altura: xs=40px, sm=56px, md=72px, lg=96px, xl=120px.
+        Comparación de tokens de altura: xs=40px, sm=56px, md=72px, lg=96px,
+        xl=120px.
       </p>
       <div className={styles.verticalStack} data-testid="demo-height">
         {heightOptions.map((h) => (
@@ -21,9 +22,9 @@ export function HeightDemo() {
               widthMode="full"
               heightMode="fixed"
               height={h}
-              paddingX="md"
+              paddingX="sm"
               componentVerticalAlign="center"
-              componentGap="md"
+              componentGap="lg"
               className={styles.whiteCardBg}
               components={[
                 {
@@ -32,9 +33,18 @@ export function HeightDemo() {
                   slot: 0,
                 },
                 {
-                  component: <span className="text-sm font-medium">Center - Height: {h}</span>,
+                  component: (
+                    <span className="text-sm font-medium">
+                      Center - Height: {h}
+                    </span>
+                  ),
                   align: "center",
                   slot: 1,
+                },
+                {
+                  component: <span className="text-sm font-medium">Right</span>,
+                  align: "right",
+                  slot: 2,
                 },
                 {
                   component: <span className="text-sm font-medium">Right</span>,
