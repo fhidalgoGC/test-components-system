@@ -43,12 +43,9 @@ export function HeightDemo() {
                   slot: 1,
                 },
                 {
-                  component: <span className="text-sm font-medium">Right</span>,
-                  align: "right",
-                  slot: 2,
-                },
-                {
-                  component: <span className="text-sm font-medium">Right</span>,
+                  component: (
+                    <div style={{ width: '60px', height: '100%', background: '#fbbf24', borderRadius: '4px' }} />
+                  ),
                   align: "right",
                   slot: 2,
                 },
