@@ -6,6 +6,7 @@ import {
   BreadcrumbsDemo,
   VerticalAlignDemo,
   SpacingDemo,
+  HeightDemo,
 } from "./components";
 import styles from "./css/LayoutRowDemo.module.scss";
 
@@ -30,6 +31,7 @@ export function LayoutRowDemo() {
         <BreadcrumbsDemo />
         <VerticalAlignDemo />
         <SpacingDemo />
+        <HeightDemo />
       </div>
     </div>
   );

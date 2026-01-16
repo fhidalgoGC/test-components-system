@@ -5,3 +5,4 @@ export { CardActionsDemo } from './CardActionsDemo';
 export { BreadcrumbsDemo } from './BreadcrumbsDemo';
 export { VerticalAlignDemo } from './VerticalAlignDemo';
 export { SpacingDemo } from './SpacingDemo';
+export { HeightDemo } from './HeightDemo';
