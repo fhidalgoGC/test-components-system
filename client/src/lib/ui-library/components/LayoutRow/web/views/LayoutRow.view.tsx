@@ -26,10 +26,10 @@ const spacingTokenToPixels: Record<string, number> = {
   xl: 32,
 };
 
-const getMarginXValue = (marginX: SpacingToken | number | undefined): number => {
-  if (marginX === undefined) return 0;
-  if (typeof marginX === 'number') return marginX;
-  return spacingTokenToPixels[marginX] || 0;
+const getMarginValue = (margin: SpacingToken | number | undefined): number => {
+  if (margin === undefined) return 0;
+  if (typeof margin === 'number') return margin;
+  return spacingTokenToPixels[margin] || 0;
 };
 
 const getWidthStyle = (
@@ -42,7 +42,7 @@ const getWidthStyle = (
     return { width: `${value}px` };
   }
   if (widthMode === 'full' && marginX !== undefined) {
-    const marginValue = getMarginXValue(marginX);
+    const marginValue = getMarginValue(marginX);
     if (marginValue > 0) {
       return { width: `calc(100% - ${marginValue * 2}px)` };
     }
@@ -50,10 +50,20 @@ const getWidthStyle = (
   return {};
 };
 
-const getHeightStyle = (heightMode: string | undefined, height: HeightToken | number | undefined): React.CSSProperties => {
+const getHeightStyle = (
+  heightMode: string | undefined,
+  height: HeightToken | number | undefined,
+  marginY?: SpacingToken | number
+): React.CSSProperties => {
   if (heightMode === 'fixed' && height !== undefined) {
     const value = typeof height === 'number' ? height : heightTokenToPixels[height];
     return { height: `${value}px` };
+  }
+  if (heightMode === 'full' && marginY !== undefined) {
+    const marginValue = getMarginValue(marginY);
+    if (marginValue > 0) {
+      return { height: `calc(100% - ${marginValue * 2}px)` };
+    }
   }
   return {};
 };
@@ -160,7 +170,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
   const containerClasses = [
     styles.layoutrow,
     widthMode === 'full' ? styles.widthFull : widthMode === 'auto' ? styles.widthAuto : '',
-    heightMode === 'auto' ? styles.heightAuto : '',
+    heightMode === 'full' ? styles.heightFull : heightMode === 'auto' ? styles.heightAuto : '',
     getPaddingXClass(paddingX),
     getPaddingYClass(paddingY),
     getMarginXClass(marginX),
@@ -172,7 +182,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
 
   const inlineStyles: React.CSSProperties = {
     ...getWidthStyle(widthMode, width, marginX),
-    ...getHeightStyle(heightMode, height),
+    ...getHeightStyle(heightMode, height, marginY),
     ...getSpacingStyle(paddingX, paddingY, marginX, marginY),
   };
 
