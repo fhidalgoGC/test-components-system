@@ -26,12 +26,19 @@ export function HeightDemo() {
               marginY="xs"
               marginX="lg"
               paddingY={10}
-              componentVerticalAlign="center"
+              componentVerticalAlign="stretch"
               componentGap="xs"
               className={styles.whiteCardBg}
               components={[
                 {
                   component: <span className="text-sm font-medium" style={{ display: 'inline-block', height: '100px', background: '#ddd' }}>Left</span>,
+                  align: "left",
+                  slot: 0,
+                },
+                {
+                  component: (
+                    <div style={{ width: '60px', height: '100%', background: '#22c55e', borderRadius: '4px' }} />
+                  ),
                   align: "left",
                   slot: 0,
                 },
@@ -43,9 +50,12 @@ export function HeightDemo() {
                   slot: 1,
                 },
                 {
-                  component: (
-                    <div style={{ width: '60px', height: '100%', background: '#fbbf24', borderRadius: '4px' }} />
-                  ),
+                  component: <span className="text-sm font-medium">Right</span>,
+                  align: "right",
+                  slot: 2,
+                },
+                {
+                  component: <span className="text-sm font-medium">Right</span>,
                   align: "right",
                   slot: 2,
                 },
