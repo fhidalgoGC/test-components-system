@@ -1,3 +1,91 @@
 .layoutrow {
-  /* Add your styles here */
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
 }
+
+.widthFull {
+  width: 100%;
+}
+
+.widthAuto {
+  width: auto;
+}
+
+.heightAuto {
+  height: auto;
+}
+
+.slot {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.alignLeft {
+  justify-content: flex-start;
+}
+
+.alignCenter {
+  justify-content: center;
+}
+
+.alignRight {
+  justify-content: flex-end;
+}
+
+.verticalTop {
+  align-items: flex-start;
+}
+
+.verticalCenter {
+  align-items: center;
+}
+
+.verticalBottom {
+  align-items: flex-end;
+}
+
+.verticalStretch {
+  align-items: stretch;
+}
+
+.paddingXNone { padding-left: 0; padding-right: 0; }
+.paddingXXs { padding-left: 4px; padding-right: 4px; }
+.paddingXSm { padding-left: 8px; padding-right: 8px; }
+.paddingXMd { padding-left: 16px; padding-right: 16px; }
+.paddingXLg { padding-left: 24px; padding-right: 24px; }
+.paddingXXl { padding-left: 32px; padding-right: 32px; }
+
+.paddingYNone { padding-top: 0; padding-bottom: 0; }
+.paddingYXs { padding-top: 4px; padding-bottom: 4px; }
+.paddingYSm { padding-top: 8px; padding-bottom: 8px; }
+.paddingYMd { padding-top: 16px; padding-bottom: 16px; }
+.paddingYLg { padding-top: 24px; padding-bottom: 24px; }
+.paddingYXl { padding-top: 32px; padding-bottom: 32px; }
+
+.marginXNone { margin-left: 0; margin-right: 0; }
+.marginXXs { margin-left: 4px; margin-right: 4px; }
+.marginXSm { margin-left: 8px; margin-right: 8px; }
+.marginXMd { margin-left: 16px; margin-right: 16px; }
+.marginXLg { margin-left: 24px; margin-right: 24px; }
+.marginXXl { margin-left: 32px; margin-right: 32px; }
+
+.marginYNone { margin-top: 0; margin-bottom: 0; }
+.marginYXs { margin-top: 4px; margin-bottom: 4px; }
+.marginYSm { margin-top: 8px; margin-bottom: 8px; }
+.marginYMd { margin-top: 16px; margin-bottom: 16px; }
+.marginYLg { margin-top: 24px; margin-bottom: 24px; }
+.marginYXl { margin-top: 32px; margin-bottom: 32px; }
+
+.componentGapXs { gap: 4px; }
+.componentGapSm { gap: 8px; }
+.componentGapMd { gap: 12px; }
+.componentGapLg { gap: 16px; }
+.componentGapXl { gap: 24px; }
+
+.slotGapNone { gap: 0; }
+.slotGapXs { gap: 4px; }
+.slotGapSm { gap: 8px; }
+.slotGapMd { gap: 16px; }
+.slotGapLg { gap: 24px; }
