@@ -1,4 +1,4 @@
-import type { LayoutRowProps, LayoutRowComponent, SizeToken, SpacingToken, SlotGapToken } from '../types';
+import type { LayoutRowProps, LayoutRowComponent, SizeToken, HeightToken, SpacingToken, SlotGapToken } from '../types';
 import styles from '../css/LayoutRow.module.scss';
 
 const sizeTokenToPixels: Record<SizeToken, number> = {
@@ -9,6 +9,14 @@ const sizeTokenToPixels: Record<SizeToken, number> = {
   xl: 800,
 };
 
+const heightTokenToPixels: Record<HeightToken, number> = {
+  xs: 40,
+  sm: 56,
+  md: 72,
+  lg: 96,
+  xl: 120,
+};
+
 const getWidthStyle = (widthMode: string | undefined, width: SizeToken | number | undefined): React.CSSProperties => {
   if (widthMode === 'fixed' && width !== undefined) {
     const value = typeof width === 'number' ? width : sizeTokenToPixels[width];
@@ -17,9 +25,9 @@ const getWidthStyle = (widthMode: string | undefined, width: SizeToken | number 
   return {};
 };
 
-const getHeightStyle = (heightMode: string | undefined, height: SizeToken | number | undefined): React.CSSProperties => {
+const getHeightStyle = (heightMode: string | undefined, height: HeightToken | number | undefined): React.CSSProperties => {
   if (heightMode === 'fixed' && height !== undefined) {
-    const value = typeof height === 'number' ? height : sizeTokenToPixels[height];
+    const value = typeof height === 'number' ? height : heightTokenToPixels[height];
     return { height: `${value}px` };
   }
   return {};

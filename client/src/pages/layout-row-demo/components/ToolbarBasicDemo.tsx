@@ -16,7 +16,7 @@ export function ToolbarBasicDemo() {
           slots={3}
           widthMode="full"
           heightMode="fixed"
-          height={56}
+          height="sm"
           paddingX="md"
           paddingY="sm"
           componentVerticalAlign="center"

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export type SizeToken = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type HeightToken = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type SpacingToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type SlotGapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg';
 export type WidthMode = 'full' | 'auto' | 'fixed';
@@ -19,7 +20,7 @@ export interface LayoutRowProps {
   widthMode?: WidthMode;
   width?: SizeToken | number;
   heightMode?: HeightMode;
-  height?: SizeToken | number;
+  height?: HeightToken | number;
   paddingX?: SpacingToken;
   paddingY?: SpacingToken;
   marginX?: SpacingToken;
