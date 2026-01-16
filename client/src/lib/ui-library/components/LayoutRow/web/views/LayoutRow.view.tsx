@@ -1,5 +1,5 @@
 import type { LayoutRowProps, LayoutRowComponent, SizeToken, SpacingToken, SlotGapToken } from '../types';
-import styles from '../css/LayoutRow.module.css';
+import styles from '../css/LayoutRow.module.scss';
 
 const sizeTokenToPixels: Record<SizeToken, number> = {
   xs: 100,
