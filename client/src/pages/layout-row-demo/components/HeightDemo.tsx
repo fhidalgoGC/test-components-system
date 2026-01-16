@@ -37,9 +37,7 @@ export function HeightDemo() {
                 },
                 {
                   component: (
-                    <span className="text-sm font-medium">
-                      Center - Height: {h}
-                    </span>
+                    <div style={{ width: '80px', height: '120px', background: '#3b82f6', borderRadius: '4px' }} />
                   ),
                   align: "center",
                   slot: 1,
