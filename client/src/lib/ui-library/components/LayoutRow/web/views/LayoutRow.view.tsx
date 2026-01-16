@@ -1,4 +1,4 @@
-import type { LayoutRowProps, LayoutRowComponent, SizeToken, HeightToken, SpacingToken, SlotGapToken } from '../types';
+import type { LayoutRowProps, LayoutRowComponent, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken } from '../types';
 import styles from '../css/LayoutRow.module.scss';
 
 const sizeTokenToPixels: Record<SizeToken, number> = {
@@ -55,7 +55,7 @@ const getMarginYClass = (token: SpacingToken | undefined) => {
   return styles[`marginY${capitalize(token)}`] || '';
 };
 
-const getComponentGapClass = (token: SizeToken | undefined) => {
+const getComponentGapClass = (token: GapToken | undefined) => {
   if (!token) return styles.componentGapMd;
   return styles[`componentGap${capitalize(token)}`] || styles.componentGapMd;
 };

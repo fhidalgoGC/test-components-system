@@ -3,7 +3,8 @@ import { ReactNode } from 'react';
 export type SizeToken = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type HeightToken = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type SpacingToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-export type SlotGapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg';
+export type GapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type SlotGapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'auto' | 'fixed';
 export type VerticalAlign = 'top' | 'center' | 'bottom' | 'stretch';
@@ -26,7 +27,7 @@ export interface LayoutRowProps {
   marginX?: SpacingToken;
   marginY?: SpacingToken;
   componentVerticalAlign?: VerticalAlign;
-  componentGap?: SizeToken;
+  componentGap?: GapToken;
   slotGap?: SlotGapToken;
   components: LayoutRowComponent[];
   className?: string;
