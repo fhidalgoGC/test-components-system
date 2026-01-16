@@ -27,7 +27,7 @@ export interface LayoutRowProps {
   marginX?: SpacingToken;
   marginY?: SpacingToken;
   componentVerticalAlign?: VerticalAlign;
-  componentGap?: GapToken;
+  componentGap?: GapToken | number;
   slotGap?: SlotGapToken;
   components: LayoutRowComponent[];
   className?: string;

@@ -55,9 +55,17 @@ const getMarginYClass = (token: SpacingToken | undefined) => {
   return styles[`marginY${capitalize(token)}`] || '';
 };
 
-const getComponentGapClass = (token: GapToken | undefined) => {
-  if (!token) return styles.componentGapMd;
-  return styles[`componentGap${capitalize(token)}`] || styles.componentGapMd;
+const getComponentGapClass = (gap: GapToken | number | undefined): string => {
+  if (gap === undefined) return styles.componentGapMd;
+  if (typeof gap === 'number') return '';
+  return styles[`componentGap${capitalize(gap)}`] || styles.componentGapMd;
+};
+
+const getComponentGapStyle = (gap: GapToken | number | undefined): React.CSSProperties => {
+  if (typeof gap === 'number') {
+    return { gap: `${gap}px` };
+  }
+  return {};
 };
 
 const getSlotGapClass = (token: SlotGapToken | undefined) => {
@@ -157,6 +165,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
                 <div
                   key={align}
                   className={`${styles.slot} ${getAlignClass(align)} ${getComponentGapClass(componentGap)}`}
+                  style={getComponentGapStyle(componentGap)}
                   data-testid={`layoutrow-slot-${slotIndex}-${align}`}
                 >
                   {alignComponents.map((comp, idx) => (
