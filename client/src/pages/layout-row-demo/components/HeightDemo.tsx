@@ -22,11 +22,12 @@ export function HeightDemo() {
               widthMode="full"
               heightMode="fixed"
               height={h}
-              paddingX="xs"
-              marginY="none"
+              paddingX="lg"
+              marginY="xs"
+              marginX="lg"
               paddingY={10}
               componentVerticalAlign="top"
-              componentGap='xs'
+              componentGap="xs"
               className={styles.whiteCardBg}
               components={[
                 {

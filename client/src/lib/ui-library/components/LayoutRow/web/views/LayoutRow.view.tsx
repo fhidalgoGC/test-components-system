@@ -17,10 +17,35 @@ const heightTokenToPixels: Record<HeightToken, number> = {
   xl: 120,
 };
 
-const getWidthStyle = (widthMode: string | undefined, width: SizeToken | number | undefined): React.CSSProperties => {
+const spacingTokenToPixels: Record<string, number> = {
+  none: 0,
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+};
+
+const getMarginXValue = (marginX: SpacingToken | number | undefined): number => {
+  if (marginX === undefined) return 0;
+  if (typeof marginX === 'number') return marginX;
+  return spacingTokenToPixels[marginX] || 0;
+};
+
+const getWidthStyle = (
+  widthMode: string | undefined,
+  width: SizeToken | number | undefined,
+  marginX?: SpacingToken | number
+): React.CSSProperties => {
   if (widthMode === 'fixed' && width !== undefined) {
     const value = typeof width === 'number' ? width : sizeTokenToPixels[width];
     return { width: `${value}px` };
+  }
+  if (widthMode === 'full' && marginX !== undefined) {
+    const marginValue = getMarginXValue(marginX);
+    if (marginValue > 0) {
+      return { width: `calc(100% - ${marginValue * 2}px)` };
+    }
   }
   return {};
 };
@@ -146,7 +171,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
   ].filter(Boolean).join(' ');
 
   const inlineStyles: React.CSSProperties = {
-    ...getWidthStyle(widthMode, width),
+    ...getWidthStyle(widthMode, width, marginX),
     ...getHeightStyle(heightMode, height),
     ...getSpacingStyle(paddingX, paddingY, marginX, marginY),
   };
