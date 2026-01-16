@@ -20,7 +20,7 @@ export function VerticalAlignDemo() {
               slots={3}
               widthMode="full"
               heightMode="fixed"
-              height="xs"
+              height={80}
               paddingX="sm"
               componentVerticalAlign={align}
               componentGap="sm"
