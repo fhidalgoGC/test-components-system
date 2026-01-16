@@ -52,18 +52,11 @@ const getWidthStyle = (
 
 const getHeightStyle = (
   heightMode: string | undefined,
-  height: HeightToken | number | undefined,
-  marginY?: SpacingToken | number
+  height: HeightToken | number | undefined
 ): React.CSSProperties => {
   if (heightMode === 'fixed' && height !== undefined) {
     const value = typeof height === 'number' ? height : heightTokenToPixels[height];
     return { height: `${value}px` };
-  }
-  if (heightMode === 'full' && marginY !== undefined) {
-    const marginValue = getMarginValue(marginY);
-    if (marginValue > 0) {
-      return { height: `calc(100% - ${marginValue * 2}px)` };
-    }
   }
   return {};
 };
@@ -170,7 +163,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
   const containerClasses = [
     styles.layoutrow,
     widthMode === 'full' ? styles.widthFull : widthMode === 'auto' ? styles.widthAuto : '',
-    heightMode === 'full' ? styles.heightFull : heightMode === 'auto' ? styles.heightAuto : '',
+    heightMode === 'auto' ? styles.heightAuto : '',
     getPaddingXClass(paddingX),
     getPaddingYClass(paddingY),
     getMarginXClass(marginX),
@@ -182,7 +175,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
 
   const inlineStyles: React.CSSProperties = {
     ...getWidthStyle(widthMode, width, marginX),
-    ...getHeightStyle(heightMode, height, marginY),
+    ...getHeightStyle(heightMode, height),
     ...getSpacingStyle(paddingX, paddingY, marginX, marginY),
   };
 
