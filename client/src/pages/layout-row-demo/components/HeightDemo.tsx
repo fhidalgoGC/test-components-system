@@ -31,7 +31,7 @@ export function HeightDemo() {
               className={styles.whiteCardBg}
               components={[
                 {
-                  component: <span className="text-sm font-medium">Left</span>,
+                  component: <span className="text-sm font-medium" style={{ display: 'inline-block', height: '100px', background: '#ddd' }}>Left</span>,
                   align: "left",
                   slot: 0,
                 },
