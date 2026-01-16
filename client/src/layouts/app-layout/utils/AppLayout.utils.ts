@@ -18,6 +18,7 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'universal-card', label: 'UniversalCard', path: '/components/universal-card', icon: 'Layout' },
         { id: 'login-card', label: 'LoginCard', path: '/components/login-card', icon: 'Layout' },
         { id: 'wrapper-items-selected', label: 'WrapperItemsSelected', path: '/components/wrapper-items-selected', icon: 'MousePointer' },
+        { id: 'layout-row', label: 'LayoutRow', path: '/components/layout-row', icon: 'Rows' },
         { id: 'bottom-nav', label: 'BottomNavigationBar', path: '/components/bottom-nav', icon: 'Navigation' },
         { id: 'bottom-nav-config', label: 'BottomNav + Config', path: '/components/bottom-nav-config', icon: 'Settings' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
