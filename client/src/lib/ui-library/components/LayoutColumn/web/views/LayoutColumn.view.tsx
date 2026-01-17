@@ -188,9 +188,15 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
     ...getSpacingStyle(paddingX, paddingY, marginX, marginY),
   };
 
+  const slotsToRender = Array.from({ length: slots }, (_, i) => i)
+    .filter((slotIndex) => {
+      const slotComponents = groupedBySlot[slotIndex];
+      return slotComponents && slotComponents.length > 0;
+    });
+
   return (
     <div className={containerClasses} style={inlineStyles} data-testid="layoutcolumn">
-      {Array.from({ length: slots }, (_, slotIndex) => {
+      {slotsToRender.map((slotIndex) => {
         const slotComponents = groupedBySlot[slotIndex] || [];
         
         const groupedByAlign: Record<string, LayoutColumnComponent[]> = {
@@ -220,7 +226,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
                   data-testid={`layoutcolumn-slot-${slotIndex}-${align}`}
                 >
                   {alignComponents.map((comp, idx) => (
-                    <div key={idx} data-testid={`layoutcolumn-component-${slotIndex}-${align}-${idx}`}>
+                    <div key={comp.id || idx} data-testid={`layoutcolumn-component-${slotIndex}-${align}-${idx}`}>
                       {comp.component}
                     </div>
                   ))}
