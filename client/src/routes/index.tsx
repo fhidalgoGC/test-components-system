@@ -17,6 +17,7 @@ const HeterogeneousListAsync = lazy(() => import("@/pages/heterogeneous-list-asy
 const DateDemo = lazy(() => import("@/pages/date-demo"));
 const AuthTest = lazy(() => import("@/pages/auth-test"));
 const LayoutRowDemo = lazy(() => import("@/pages/layout-row-demo"));
+const LayoutColumnDemo = lazy(() => import("@/pages/layout-column-demo/LayoutColumnDemo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -46,6 +47,7 @@ export function Router() {
           <Route path="/date-demo" component={DateDemo} />
           <Route path="/auth-test" component={AuthTest} />
           <Route path="/components/layout-row" component={LayoutRowDemo} />
+          <Route path="/components/layout-column" component={LayoutColumnDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
