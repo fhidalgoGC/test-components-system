@@ -26,7 +26,7 @@ export function HeightDemo() {
               marginY="xs"
               marginX="lg"
               paddingY={10}
-              componentVerticalAlign="center"
+              componentVerticalAlign="top"
               componentGap="xs"
               className={styles.whiteCardBg}
               components={[

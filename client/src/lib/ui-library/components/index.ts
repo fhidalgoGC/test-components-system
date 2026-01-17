@@ -19,3 +19,4 @@ export * from './LoginCard';
 export * from './Carousel';
 export * from './WrapperItemsSelected';
 export * from './LayoutRow';
+export * from './LayoutColumn';
