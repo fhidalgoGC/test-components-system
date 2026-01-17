@@ -1,0 +1,183 @@
+@import '../../../assets/styles/index.scss';
+
+.container {
+  padding: 1.5rem;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 2rem;
+
+  &__title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  &__description {
+    color: $gcc-neutral-default;
+  }
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  &__description {
+    font-size: 0.875rem;
+    color: $gcc-neutral-default;
+  }
+}
+
+.demoBox {
+  border: 1px solid $gcc-neutral-lighten-3;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: $gcc-neutral-lighten-5;
+}
+
+.demoBoxCentered {
+  display: flex;
+  justify-content: center;
+}
+
+.gridTwoCol {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.gridThreeCol {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.verticalStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.horizontalStack {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.alignLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  background-color: $gcc-neutral-lighten-5;
+}
+
+.whiteBg {
+  background-color: $gcc-white;
+}
+
+.grayBg {
+  background-color: $gcc-neutral-lighten-5;
+}
+
+.darkBg {
+  background-color: $gcc-neutral-darken-3;
+}
+
+.controlsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.controlLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.statusText {
+  font-size: 0.875rem;
+  color: $gcc-neutral-default;
+}
+
+.demoItem {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  text-align: center;
+  min-width: 60px;
+
+  &--primary {
+    background-color: $gcc-brand-default;
+    color: $gcc-white;
+  }
+
+  &--secondary {
+    background-color: $gcc-neutral-darken-2;
+    color: $gcc-white;
+  }
+
+  &--success {
+    background-color: $gcc-green-default;
+    color: $gcc-white;
+  }
+
+  &--info {
+    background-color: $gcc-information-default;
+    color: $gcc-white;
+  }
+
+  &--warning {
+    background-color: $gcc-warning-default;
+    color: $gcc-neutral-darken-3;
+  }
+
+  &--purple {
+    background-color: $gcc-purple-default;
+    color: $gcc-white;
+  }
+
+  &--teal {
+    background-color: #14b8a6;
+    color: $gcc-white;
+  }
+
+  &--slate {
+    background-color: #64748b;
+    color: $gcc-white;
+  }
+}
+
+.sidebarDemo {
+  display: flex;
+  height: 300px;
+  gap: 1rem;
+}
+
+.sidebarContent {
+  flex: 1;
+  background-color: $gcc-white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.fixedContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
