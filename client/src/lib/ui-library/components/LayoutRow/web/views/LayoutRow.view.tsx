@@ -151,14 +151,16 @@ export const LayoutRowView = (props: LayoutRowProps) => {
   } = props;
 
   const groupedBySlot: Record<number, LayoutRowComponent[]> = {};
-  components.forEach((comp) => {
-    if (comp.slot >= 0 && comp.slot < slots) {
-      if (!groupedBySlot[comp.slot]) {
-        groupedBySlot[comp.slot] = [];
+  components
+    .filter((comp) => !comp.hide)
+    .forEach((comp) => {
+      if (comp.slot >= 0 && comp.slot < slots) {
+        if (!groupedBySlot[comp.slot]) {
+          groupedBySlot[comp.slot] = [];
+        }
+        groupedBySlot[comp.slot].push(comp);
       }
-      groupedBySlot[comp.slot].push(comp);
-    }
-  });
+    });
 
   const containerClasses = [
     styles.layoutrow,

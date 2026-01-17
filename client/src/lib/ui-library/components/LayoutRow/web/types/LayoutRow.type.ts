@@ -14,6 +14,7 @@ export interface LayoutRowComponent {
   component: ReactNode;
   align: HorizontalAlign;
   slot: number;
+  hide?: boolean;
 }
 
 export interface LayoutRowProps {
