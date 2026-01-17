@@ -10,20 +10,19 @@ export function FixedDimensionsDemo() {
       </p>
       <div className={`${styles.demoBox} ${styles.fixedContainer}`} data-testid="demo-fixed">
         <LayoutColumn
-          slots={1}
+          slots={3}
           widthMode="fixed"
-          width={200}
-          heightMode="fixed"
-          height={250}
+          width={250}
+          heightMode="auto"
           paddingX={16}
           paddingY={12}
+          slotGap="sm"
           componentGap={8}
-          componentHorizontalAlign="center"
           className={styles.whiteBg}
           components={[
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}>200px x 250px</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Centered</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Bottom</div>, align: "bottom", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}>250px width</div>, align: "center", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Fixed Layout</div>, align: "center", slot: 1 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Auto Height</div>, align: "center", slot: 2 },
           ]}
         />
       </div>

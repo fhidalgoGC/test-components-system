@@ -7,13 +7,13 @@ export type GapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type SlotGapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'full' | 'auto' | 'fixed';
-export type VerticalAlign = 'top' | 'bottom';
-export type HorizontalAlign = 'left' | 'center' | 'right' | 'stretch';
+export type HorizontalAlign = 'left' | 'center' | 'right';
+export type VerticalAlign = 'top' | 'center' | 'bottom' | 'stretch';
 
 export interface LayoutColumnComponent {
   id?: string;
   component: ReactNode;
-  align: VerticalAlign;
+  align: HorizontalAlign;
   slot: number;
   hide?: boolean;
 }
@@ -49,7 +49,7 @@ export interface LayoutColumnProps {
   paddingY?: SpacingToken | number;
   marginX?: SpacingToken | number;
   marginY?: SpacingToken | number;
-  componentHorizontalAlign?: HorizontalAlign;
+  componentVerticalAlign?: VerticalAlign;
   componentGap?: GapToken | number;
   slotGap?: SlotGapToken;
   components: LayoutColumnComponent[];

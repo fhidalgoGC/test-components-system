@@ -8,22 +8,22 @@ export function MarginsDemo() {
       <p className={styles.section__description}>
         marginX/marginY con widthMode="full" usa calc(100% - margin*2).
       </p>
-      <div className={styles.demoBox} style={{ height: 250, backgroundColor: '#e5e7eb' }} data-testid="demo-margins">
+      <div className={styles.demoBox} style={{ minHeight: 200, backgroundColor: '#e5e7eb' }} data-testid="demo-margins">
         <LayoutColumn
-          slots={1}
+          slots={3}
           widthMode="full"
-          heightMode="full"
+          heightMode="auto"
           marginX="lg"
           marginY="md"
           paddingX="md"
           paddingY="sm"
+          slotGap="sm"
           componentGap="sm"
-          componentHorizontalAlign="stretch"
           className={styles.whiteBg}
           components={[
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>With Margins</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>calc(100% - margin*2)</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>Stretched</div>, align: "bottom", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>With Margins</div>, align: "center", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>calc(100% - margin*2)</div>, align: "center", slot: 1 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>Full Width Row</div>, align: "center", slot: 2 },
           ]}
         />
       </div>

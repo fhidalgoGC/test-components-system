@@ -1,29 +1,31 @@
 import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 import styles from "../css/LayoutColumnDemo.module.scss";
 
-const alignments = ["left", "center", "right", "stretch"] as const;
-const colors = ["demoItem--primary", "demoItem--info", "demoItem--success", "demoItem--purple"];
+const alignments = ["left", "center", "right"] as const;
+const colors = ["demoItem--primary", "demoItem--info", "demoItem--success"];
 
 export function HorizontalAlignDemo() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>4. Alineación Horizontal</h2>
+      <h2 className={styles.section__title}>4. Alineación Horizontal dentro de Filas</h2>
       <p className={styles.section__description}>
-        componentHorizontalAlign: left, center, right, stretch.
+        Cada componente puede alinearse left, center o right dentro de su fila.
       </p>
-      <div className={styles.gridTwoCol} data-testid="demo-horizontal-align">
+      <div className={styles.gridThreeCol} data-testid="demo-horizontal-align">
         {alignments.map((align, idx) => (
-          <div key={align} className={styles.demoBox} style={{ height: 180 }}>
+          <div key={align} className={styles.demoBox} style={{ minHeight: 150 }}>
             <div className={styles.alignLabel}>align: "{align}"</div>
             <LayoutColumn
-              slots={1}
+              slots={2}
               widthMode="full"
-              heightMode="full"
+              heightMode="auto"
+              paddingX="sm"
+              paddingY="sm"
+              slotGap="sm"
               componentGap="xs"
-              componentHorizontalAlign={align}
               components={[
-                { component: <div className={`${styles.demoItem} ${styles[colors[idx]]}`}>{align}</div>, align: "top", slot: 0 },
-                { component: <div className={`${styles.demoItem} ${styles[colors[idx]]}`}>Item 2</div>, align: "top", slot: 0 },
+                { component: <div className={`${styles.demoItem} ${styles[colors[idx]]}`}>{align}</div>, align, slot: 0 },
+                { component: <div className={`${styles.demoItem} ${styles[colors[idx]]}`}>Row 2</div>, align, slot: 1 },
               ]}
             />
           </div>

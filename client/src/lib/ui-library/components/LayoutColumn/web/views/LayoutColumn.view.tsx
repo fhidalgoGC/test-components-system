@@ -122,20 +122,20 @@ const getSlotGapClass = (token: SlotGapToken | undefined) => {
   return styles[`slotGap${capitalize(token)}`] || '';
 };
 
-const getHorizontalAlignClass = (align: string | undefined) => {
+const getVerticalAlignClass = (align: string | undefined) => {
   switch (align) {
-    case 'left': return styles.horizontalLeft;
-    case 'right': return styles.horizontalRight;
-    case 'stretch': return styles.horizontalStretch;
-    default: return styles.horizontalCenter;
+    case 'top': return styles.verticalTop;
+    case 'bottom': return styles.verticalBottom;
+    case 'stretch': return styles.verticalStretch;
+    default: return styles.verticalCenter;
   }
 };
 
 const getAlignClass = (align: string) => {
   switch (align) {
-    case 'top': return styles.alignTop;
-    case 'bottom': return styles.alignBottom;
-    default: return styles.alignTop;
+    case 'left': return styles.alignLeft;
+    case 'right': return styles.alignRight;
+    default: return styles.alignCenter;
   }
 };
 
@@ -150,8 +150,8 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
     paddingY,
     marginX,
     marginY,
-    componentHorizontalAlign,
-    componentGap,
+    componentVerticalAlign = 'center',
+    componentGap = 'md',
     slotGap,
     components,
     className,
@@ -178,7 +178,6 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
     getMarginXClass(marginX),
     getMarginYClass(marginY),
     getSlotGapClass(slotGap),
-    getHorizontalAlignClass(componentHorizontalAlign),
     className,
   ].filter(Boolean).join(' ');
 
@@ -200,8 +199,9 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
         const slotComponents = groupedBySlot[slotIndex] || [];
         
         const groupedByAlign: Record<string, LayoutColumnComponent[]> = {
-          top: [],
-          bottom: [],
+          left: [],
+          center: [],
+          right: [],
         };
 
         slotComponents.forEach((comp) => {
@@ -211,17 +211,17 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
         return (
           <div
             key={slotIndex}
-            className={`${styles.slot} ${getHorizontalAlignClass(componentHorizontalAlign)}`}
+            className={`${styles.slot} ${getVerticalAlignClass(componentVerticalAlign)}`}
             data-testid={`layoutcolumn-slot-${slotIndex}`}
           >
-            {(['top', 'bottom'] as const).map((align) => {
+            {(['left', 'center', 'right'] as const).map((align) => {
               const alignComponents = groupedByAlign[align];
               if (alignComponents.length === 0) return null;
               
               return (
                 <div
                   key={align}
-                  className={`${styles.slot} ${getAlignClass(align)} ${getComponentGapClass(componentGap)}`}
+                  className={`${styles.alignGroup} ${getAlignClass(align)} ${getComponentGapClass(componentGap)}`}
                   style={getComponentGapStyle(componentGap)}
                   data-testid={`layoutcolumn-slot-${slotIndex}-${align}`}
                 >
