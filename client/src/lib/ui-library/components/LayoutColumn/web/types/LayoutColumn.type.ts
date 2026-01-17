@@ -1,5 +1,36 @@
+import { ReactNode } from 'react';
+
+export type SizeToken = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type HeightToken = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type SpacingToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type GapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type SlotGapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type WidthMode = 'full' | 'auto' | 'fixed';
+export type HeightMode = 'full' | 'auto' | 'fixed';
+export type VerticalAlign = 'top' | 'bottom';
+export type HorizontalAlign = 'left' | 'center' | 'right' | 'stretch';
+
+export interface LayoutColumnComponent {
+  component: ReactNode;
+  align: VerticalAlign;
+  slot: number;
+  hide?: boolean;
+}
+
 export interface LayoutColumnProps {
-  children?: React.ReactNode;
+  slots: number;
+  widthMode?: WidthMode;
+  width?: SizeToken | number;
+  heightMode?: HeightMode;
+  height?: HeightToken | number;
+  paddingX?: SpacingToken | number;
+  paddingY?: SpacingToken | number;
+  marginX?: SpacingToken | number;
+  marginY?: SpacingToken | number;
+  componentHorizontalAlign?: HorizontalAlign;
+  componentGap?: GapToken | number;
+  slotGap?: SlotGapToken;
+  components: LayoutColumnComponent[];
   className?: string;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';

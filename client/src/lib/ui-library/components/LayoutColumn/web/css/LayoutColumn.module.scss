@@ -1,0 +1,115 @@
+@import '../../../../../../assets/styles/index.scss';
+
+$size-xs: 100px;
+$size-sm: 200px;
+$size-md: 400px;
+$size-lg: 600px;
+$size-xl: 800px;
+
+$height-xs: 100px;
+$height-sm: 200px;
+$height-md: 300px;
+$height-lg: 400px;
+$height-xl: 500px;
+
+$spacing-none: 0;
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+.layoutcolumn {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.widthFull {
+  width: 100%;
+}
+
+.widthAuto {
+  width: auto;
+}
+
+.heightFull {
+  height: 100%;
+}
+
+.heightAuto {
+  height: auto;
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.alignTop {
+  justify-content: flex-start;
+}
+
+.alignBottom {
+  justify-content: flex-end;
+}
+
+.horizontalLeft {
+  align-items: flex-start;
+}
+
+.horizontalCenter {
+  align-items: center;
+}
+
+.horizontalRight {
+  align-items: flex-end;
+}
+
+.horizontalStretch {
+  align-items: stretch;
+}
+
+.paddingXNone { padding-left: $spacing-none; padding-right: $spacing-none; }
+.paddingXXs { padding-left: $spacing-xs; padding-right: $spacing-xs; }
+.paddingXSm { padding-left: $spacing-sm; padding-right: $spacing-sm; }
+.paddingXMd { padding-left: $spacing-md; padding-right: $spacing-md; }
+.paddingXLg { padding-left: $spacing-lg; padding-right: $spacing-lg; }
+.paddingXXl { padding-left: $spacing-xl; padding-right: $spacing-xl; }
+
+.paddingYNone { padding-top: $spacing-none; padding-bottom: $spacing-none; }
+.paddingYXs { padding-top: $spacing-xs; padding-bottom: $spacing-xs; }
+.paddingYSm { padding-top: $spacing-sm; padding-bottom: $spacing-sm; }
+.paddingYMd { padding-top: $spacing-md; padding-bottom: $spacing-md; }
+.paddingYLg { padding-top: $spacing-lg; padding-bottom: $spacing-lg; }
+.paddingYXl { padding-top: $spacing-xl; padding-bottom: $spacing-xl; }
+
+.marginXNone { margin-left: $spacing-none; margin-right: $spacing-none; }
+.marginXXs { margin-left: $spacing-xs; margin-right: $spacing-xs; }
+.marginXSm { margin-left: $spacing-sm; margin-right: $spacing-sm; }
+.marginXMd { margin-left: $spacing-md; margin-right: $spacing-md; }
+.marginXLg { margin-left: $spacing-lg; margin-right: $spacing-lg; }
+.marginXXl { margin-left: $spacing-xl; margin-right: $spacing-xl; }
+
+.marginYNone { margin-top: $spacing-none; margin-bottom: $spacing-none; }
+.marginYXs { margin-top: $spacing-xs; margin-bottom: $spacing-xs; }
+.marginYSm { margin-top: $spacing-sm; margin-bottom: $spacing-sm; }
+.marginYMd { margin-top: $spacing-md; margin-bottom: $spacing-md; }
+.marginYLg { margin-top: $spacing-lg; margin-bottom: $spacing-lg; }
+.marginYXl { margin-top: $spacing-xl; margin-bottom: $spacing-xl; }
+
+.componentGapNone { gap: $spacing-none; }
+.componentGapXs { gap: $spacing-xs; }
+.componentGapSm { gap: $spacing-sm; }
+.componentGapMd { gap: 12px; }
+.componentGapLg { gap: $spacing-md; }
+.componentGapXl { gap: $spacing-lg; }
+
+.slotGapNone { gap: $spacing-none; }
+.slotGapXs { gap: $spacing-xs; }
+.slotGapSm { gap: $spacing-sm; }
+.slotGapMd { gap: $spacing-md; }
+.slotGapLg { gap: $spacing-lg; }
+.slotGapXl { gap: $spacing-xl; }
