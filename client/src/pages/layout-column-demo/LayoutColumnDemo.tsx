@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LayoutColumn } from '../../lib/ui-library/components/LayoutColumn';
+import { LayoutColumn, useLayoutColumn } from '../../lib/ui-library/components/LayoutColumn';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -10,6 +10,74 @@ const DemoBox = ({ children, color = 'bg-primary' }: { children: React.ReactNode
     {children}
   </div>
 );
+
+const initialComponents = [
+  { id: 'header', component: <DemoBox color="bg-violet-600">Header (Slot 0)</DemoBox>, align: 'top' as const, slot: 0 },
+  { id: 'nav', component: <DemoBox color="bg-violet-500">Navigation (Slot 1)</DemoBox>, align: 'top' as const, slot: 1 },
+  { id: 'main', component: <DemoBox color="bg-violet-400">Main Content (Slot 2)</DemoBox>, align: 'top' as const, slot: 2 },
+  { id: 'sidebar', component: <DemoBox color="bg-violet-300">Sidebar (Slot 2)</DemoBox>, align: 'top' as const, slot: 2 },
+  { id: 'footer', component: <DemoBox color="bg-violet-700">Footer (Slot 3)</DemoBox>, align: 'bottom' as const, slot: 3 },
+];
+
+function HookExample() {
+  const {
+    visibleComponents,
+    visibleSlots,
+    toggleSlot,
+    toggleComponent,
+    isSlotVisible,
+    isComponentVisible,
+    resetVisibility,
+  } = useLayoutColumn({ components: initialComponents, slots: 4 });
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap gap-2 mb-4">
+        <span className="text-sm font-medium">Slots:</span>
+        {[0, 1, 2, 3].map((slot) => (
+          <Button
+            key={slot}
+            size="sm"
+            variant={isSlotVisible(slot) ? "default" : "outline"}
+            onClick={() => toggleSlot(slot)}
+            data-testid={`button-toggle-slot-${slot}`}
+          >
+            Slot {slot}
+          </Button>
+        ))}
+        <Button size="sm" variant="secondary" onClick={resetVisibility} data-testid="button-reset">
+          Reset
+        </Button>
+      </div>
+      <div className="flex flex-wrap gap-2 mb-4">
+        <span className="text-sm font-medium">Components:</span>
+        {initialComponents.map((comp) => (
+          <Button
+            key={comp.id}
+            size="sm"
+            variant={isComponentVisible(comp.id) ? "default" : "outline"}
+            onClick={() => toggleComponent(comp.id)}
+            data-testid={`button-toggle-${comp.id}`}
+          >
+            {comp.id}
+          </Button>
+        ))}
+      </div>
+      <p className="text-sm text-muted-foreground">Visible slots: {visibleSlots}</p>
+      <div className="border rounded-lg p-4 bg-gray-50 h-[300px]">
+        <LayoutColumn
+          slots={4}
+          widthMode="full"
+          heightMode="full"
+          slotGap="md"
+          componentGap="sm"
+          componentHorizontalAlign="stretch"
+          components={visibleComponents}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function LayoutColumnDemo() {
   const [showItem2, setShowItem2] = useState(true);
@@ -246,6 +314,15 @@ export default function LayoutColumnDemo() {
                 <p className="text-muted-foreground">Main Content Area</p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle data-testid="text-example-8-title">useLayoutColumn Hook (Dynamic Visibility)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <HookExample />
           </CardContent>
         </Card>
       </div>
