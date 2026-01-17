@@ -31,12 +31,97 @@ import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 
 ```tsx
 interface LayoutColumnComponent {
+  id?: string;              // ID único para el hook useLayoutColumn
   component: ReactNode;
   align: 'top' | 'bottom';  // Alineación vertical dentro del slot
   slot: number;
   hide?: boolean;           // Mostrar/ocultar dinámicamente
 }
 ```
+
+## Hook useLayoutColumn
+
+Hook para gestionar la visibilidad dinámica de componentes y slots.
+
+### Importación
+
+```tsx
+import { LayoutColumn, useLayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
+```
+
+### Uso Básico
+
+```tsx
+const initialComponents = [
+  { id: 'header', component: <Header />, align: 'top', slot: 0 },
+  { id: 'nav', component: <Nav />, align: 'top', slot: 1 },
+  { id: 'main', component: <Main />, align: 'top', slot: 2 },
+  { id: 'footer', component: <Footer />, align: 'bottom', slot: 3 },
+];
+
+function MyComponent() {
+  const {
+    visibleComponents,
+    visibleSlots,
+    toggleSlot,
+    toggleComponent,
+    hideSlot,
+    showSlot,
+    hideComponent,
+    showComponent,
+    isSlotVisible,
+    isSlotEmpty,
+    isComponentVisible,
+    resetVisibility,
+  } = useLayoutColumn({ components: initialComponents, slots: 4 });
+
+  return (
+    <>
+      <button onClick={() => toggleSlot(1)}>Toggle Nav</button>
+      <button onClick={() => hideComponent('header')}>Hide Header</button>
+      <p>Visible slots: {visibleSlots}</p>
+      
+      <LayoutColumn
+        slots={4}
+        components={visibleComponents}
+        ...
+      />
+    </>
+  );
+}
+```
+
+### Parámetros
+
+| Parámetro | Tipo | Descripción |
+|-----------|------|-------------|
+| `components` | `LayoutColumnComponent[]` | Array inicial de componentes (con `id` opcional) |
+| `slots` | `number` | Número total de slots |
+
+### Retorno
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `visibleComponents` | `LayoutColumnComponent[]` | Componentes visibles (para pasar al LayoutColumn) |
+| `allComponents` | `LayoutColumnComponent[]` | Todos los componentes con estado `hide` actualizado |
+| `visibleSlots` | `number` | Número de slots con componentes visibles |
+| `hideComponent(id)` | `(id: string) => void` | Ocultar un componente por ID |
+| `showComponent(id)` | `(id: string) => void` | Mostrar un componente por ID |
+| `toggleComponent(id)` | `(id: string) => void` | Alternar visibilidad de un componente |
+| `hideSlot(index)` | `(index: number) => void` | Ocultar todos los componentes de un slot |
+| `showSlot(index)` | `(index: number) => void` | Mostrar todos los componentes de un slot |
+| `toggleSlot(index)` | `(index: number) => void` | Alternar visibilidad de un slot |
+| `isComponentVisible(id)` | `(id: string) => boolean` | Verificar si un componente es visible |
+| `isSlotVisible(index)` | `(index: number) => boolean` | Verificar si un slot tiene componentes visibles |
+| `isSlotEmpty(index)` | `(index: number) => boolean` | Verificar si un slot está vacío |
+| `resetVisibility()` | `() => void` | Restaurar visibilidad inicial |
+
+### Comportamiento de Slots Vacíos
+
+Cuando todos los componentes de un slot están ocultos:
+- El slot **no se renderiza** en el DOM
+- No ocupa espacio (sin margin, padding, gap)
+- `isSlotEmpty(index)` retorna `true`
 
 ## Tokens
 
