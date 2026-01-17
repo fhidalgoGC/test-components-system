@@ -1,2 +1,2 @@
-export * from './useLayoutColumn.hook';
+export { useLayoutColumn } from './useLayoutColumn';
 export * from './useI18nMerge.hook';

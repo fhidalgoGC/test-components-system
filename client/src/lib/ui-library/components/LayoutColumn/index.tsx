@@ -1,7 +1,7 @@
 import { useIsMobile } from '../../hooks';
 import { LayoutColumn as LayoutColumnWeb } from './web';
 import { NotImplemented } from '../NotImplemented';
-import type { LayoutColumnProps } from './web/types';
+import type { LayoutColumnProps, LayoutColumnComponent, UseLayoutColumnOptions, UseLayoutColumnReturn } from './web/types';
 
 // Mobile version placeholder (uncomment when implemented)
 // import { LayoutColumn as LayoutColumnMobile } from './mobile';
@@ -20,4 +20,5 @@ export const LayoutColumn = (props: LayoutColumnProps) => {
   return <LayoutColumnWeb {...props} />;
 };
 
-export type { LayoutColumnProps };
+export type { LayoutColumnProps, LayoutColumnComponent, UseLayoutColumnOptions, UseLayoutColumnReturn };
+export { useLayoutColumn } from './web/hooks';

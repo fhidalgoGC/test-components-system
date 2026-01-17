@@ -11,10 +11,32 @@ export type VerticalAlign = 'top' | 'bottom';
 export type HorizontalAlign = 'left' | 'center' | 'right' | 'stretch';
 
 export interface LayoutColumnComponent {
+  id?: string;
   component: ReactNode;
   align: VerticalAlign;
   slot: number;
   hide?: boolean;
+}
+
+export interface UseLayoutColumnOptions {
+  components: LayoutColumnComponent[];
+  slots: number;
+}
+
+export interface UseLayoutColumnReturn {
+  visibleComponents: LayoutColumnComponent[];
+  allComponents: LayoutColumnComponent[];
+  visibleSlots: number;
+  hideComponent: (id: string) => void;
+  showComponent: (id: string) => void;
+  toggleComponent: (id: string) => void;
+  hideSlot: (slotIndex: number) => void;
+  showSlot: (slotIndex: number) => void;
+  toggleSlot: (slotIndex: number) => void;
+  isComponentVisible: (id: string) => boolean;
+  isSlotVisible: (slotIndex: number) => boolean;
+  isSlotEmpty: (slotIndex: number) => boolean;
+  resetVisibility: () => void;
 }
 
 export interface LayoutColumnProps {
