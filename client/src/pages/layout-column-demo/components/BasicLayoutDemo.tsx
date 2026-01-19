@@ -6,7 +6,7 @@ export function BasicLayoutDemo() {
     <section className={styles.section}>
       <h2 className={styles.section__title}>1. Slots Dividen Espacio Vertical</h2>
       <p className={styles.section__description}>
-        3 slots = espacio dividido en 3 partes iguales. Cada componente se alinea top o bottom.
+        3 slots = espacio dividido en 3 partes iguales. Alineación: top, center, bottom.
       </p>
       <div className={styles.demoBox} style={{ height: 300 }} data-testid="demo-basic">
         <LayoutColumn
@@ -18,7 +18,7 @@ export function BasicLayoutDemo() {
           slotGap="sm"
           components={[
             { component: <div className={`${styles.demoItem} ${styles['demoItem--primary']}`}>Slot 0 - Top</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Slot 1 - Top</div>, align: "top", slot: 1 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Slot 1 - Center</div>, align: "center", slot: 1 },
             { component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Slot 2 - Bottom</div>, align: "bottom", slot: 2 },
           ]}
         />

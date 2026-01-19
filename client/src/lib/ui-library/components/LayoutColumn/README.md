@@ -37,13 +37,13 @@ import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 
 ```tsx
 interface LayoutColumnComponent {
-  id?: string;                    // ID único para el hook
+  id?: string;                        // ID único para el hook
   component: ReactNode;
-  align: 'top' | 'bottom';        // Alineación vertical dentro del slot
-  slot: number;                   // Índice del slot (0, 1, 2...)
-  hide?: boolean;                 // Mostrar/ocultar dinámicamente
-  sizeMode?: 'auto' | 'full';     // 'auto' = tamaño natural, 'full' = llenar espacio
-  height?: HeightToken | number;  // Altura fija del componente
+  align: 'top' | 'center' | 'bottom'; // Alineación vertical dentro del slot
+  slot: number;                       // Índice del slot (0, 1, 2...)
+  hide?: boolean;                     // Mostrar/ocultar dinámicamente
+  sizeMode?: 'auto' | 'full';         // 'auto' = tamaño natural, 'full' = llenar espacio
+  height?: HeightToken | number;      // Altura fija del componente
 }
 ```
 
@@ -65,7 +65,7 @@ interface LayoutColumnComponent {
 
 Resultado: 3 slots de igual altura. Header arriba del slot 0, Content arriba del slot 1, Footer abajo del slot 2.
 
-## Top y Bottom en Mismo Slot
+## Top, Center y Bottom en Mismo Slot
 
 ```tsx
 <LayoutColumn
@@ -73,13 +73,13 @@ Resultado: 3 slots de igual altura. Header arriba del slot 0, Content arriba del
   heightMode="full"
   components={[
     { component: <Title />, align: "top", slot: 0 },
-    { component: <Subtitle />, align: "top", slot: 0 },
+    { component: <Content />, align: "center", slot: 0 },
     { component: <Button />, align: "bottom", slot: 0 },
   ]}
 />
 ```
 
-Resultado: Title y Subtitle arriba, Button abajo, con espacio entre ellos.
+Resultado: Title arriba, Content centrado, Button abajo, con espacio distribuido entre ellos.
 
 ## Tamaño de Componentes
 

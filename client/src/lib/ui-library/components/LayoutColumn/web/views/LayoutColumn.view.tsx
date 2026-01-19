@@ -189,7 +189,12 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
         const slotComponents = groupedBySlot[slotIndex] || [];
         
         const topComponents = slotComponents.filter(c => c.align === 'top');
+        const centerComponents = slotComponents.filter(c => c.align === 'center');
         const bottomComponents = slotComponents.filter(c => c.align === 'bottom');
+
+        const hasTop = topComponents.length > 0;
+        const hasCenter = centerComponents.length > 0;
+        const hasBottom = bottomComponents.length > 0;
 
         return (
           <div
@@ -197,7 +202,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
             className={styles.slot}
             data-testid={`layoutcolumn-slot-${slotIndex}`}
           >
-            {topComponents.length > 0 && (
+            {hasTop && (
               <div
                 className={`${styles.slotContent} ${styles.alignTop} ${getComponentGapClass(componentGap)}`}
                 style={getComponentGapStyle(componentGap)}
@@ -220,11 +225,42 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
               </div>
             )}
             
-            {topComponents.length > 0 && bottomComponents.length > 0 && (
+            {hasTop && (hasCenter || hasBottom) && (
+              <div style={{ flex: 1 }} />
+            )}
+
+            {hasCenter && (
+              <div
+                className={`${styles.slotContent} ${styles.alignCenter} ${getComponentGapClass(componentGap)}`}
+                style={getComponentGapStyle(componentGap)}
+                data-testid={`layoutcolumn-slot-${slotIndex}-center`}
+              >
+                {centerComponents.map((comp, idx) => {
+                  const sizeMode = comp.sizeMode || 'auto';
+                  const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
+                  return (
+                    <div 
+                      key={comp.id || idx} 
+                      className={`${styles.componentWrapper} ${wrapperClass}`}
+                      style={getComponentHeightStyle(comp)}
+                      data-testid={`layoutcolumn-component-${slotIndex}-center-${idx}`}
+                    >
+                      {comp.component}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {hasCenter && hasBottom && (
+              <div style={{ flex: 1 }} />
+            )}
+
+            {!hasTop && !hasCenter && hasBottom && (
               <div style={{ flex: 1 }} />
             )}
             
-            {bottomComponents.length > 0 && (
+            {hasBottom && (
               <div
                 className={`${styles.slotContent} ${styles.alignBottom} ${getComponentGapClass(componentGap)}`}
                 style={getComponentGapStyle(componentGap)}

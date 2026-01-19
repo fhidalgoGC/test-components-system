@@ -7,7 +7,7 @@ export type GapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type SlotGapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'full' | 'auto' | 'fixed';
-export type VerticalAlign = 'top' | 'bottom';
+export type VerticalAlign = 'top' | 'center' | 'bottom';
 export type ComponentSizeMode = 'auto' | 'full';
 
 export interface LayoutColumnComponent {
