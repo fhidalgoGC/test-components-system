@@ -18,9 +18,9 @@ export function BasicLayoutDemo() {
           slots={2}
           widthMode="full"
           heightMode="full"
-          paddingY="none"
+          paddingY="xs"
           paddingX="none"
-          componentGap="none"
+          componentGap="lg"
           slotDivider="xl-primary"
           components={[
             {
@@ -32,19 +32,7 @@ export function BasicLayoutDemo() {
                   <span className={styles.slotBadge}>T</span> Slot0-Top-1
                 </div>
               ),
-              align: "top",
-              slot: 0,
-            },
-            {
-              component: (
-                <div
-                  className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
-                  style={{ height: 50 }}
-                >
-                  <span className={styles.slotBadge}>T</span> Slot0-Top-2
-                </div>
-              ),
-              align: "top",
+              align: "center",
               slot: 0,
             },
             {
@@ -74,31 +62,19 @@ export function BasicLayoutDemo() {
             {
               component: (
                 <div
-                  className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}
-                  style={{ height: 50 }}
-                >
-                  <span className={styles.slotBadge}>B</span> Slot0-Bottom
-                </div>
-              ),
-              align: "bottom",
-              slot: 0,
-            },
-            {
-              component: (
-                <div
                   className={`${styles.demoItem} ${styles["demoItem--warning"]}`}
-                  style={{ height: 50 }}
+                  style={{ height: 30 }}
                 >
                   <span className={styles.slotBadge}>T</span> Slot1-Top
                 </div>
               ),
-              align: "top",
+              align: "bottom",
               slot: 1,
             },
             {
               component: (
                 <div
-                  className={`${styles.demoItem} ${styles["demoItem--error"]}`}
+                  className={`${styles.demoItem} ${styles["demoItem--warning"]}`}
                   style={{ height: 50 }}
                 >
                   <span className={styles.slotBadge}>B</span> Slot1-Bottom
