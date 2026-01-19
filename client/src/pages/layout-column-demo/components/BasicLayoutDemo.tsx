@@ -23,8 +23,8 @@ export function BasicLayoutDemo() {
           paddingX="none"
           slotGap="xs"
           componentGap="lg"
-          slotDivider="xl-primary"
-          slotAlignDivider="sm-gray-dashed"
+          //slotDivider="xl-primary"
+          //slotAlignDivider="sm-gray-dashed"
           components={[
             {
               component: (

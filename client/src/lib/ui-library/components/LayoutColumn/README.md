@@ -1,13 +1,41 @@
 # LayoutColumn Component
 
-Componente de layout vertical que divide el espacio en slots iguales. Cada slot ocupa una porción igual del espacio vertical disponible.
+Componente de layout vertical que organiza contenido en una estructura jerárquica de 3 niveles: Slots, Grupos de Alineación y Componentes.
 
-## Concepto
+## Arquitectura de 3 Niveles
 
-- **N slots = espacio dividido en N partes iguales**
-- **3 slots** = cada slot ocupa 1/3 del espacio vertical
-- **Dentro de cada slot**: componentes se alinean **top** o **bottom**
-- **Tamaño de componentes**: auto, full (llenar slot), o altura fija
+```
+LayoutColumn (contenedor principal)
+├── Slot 0 (1/N del espacio vertical)
+│   ├── Grupo Top (1/M del slot) ─────── [Componente A, Componente B]
+│   ├── ─ ─ ─ slotAlignDivider ─ ─ ─
+│   ├── Grupo Center (1/M del slot) ──── [Componente C]
+│   ├── ─ ─ ─ slotAlignDivider ─ ─ ─
+│   └── Grupo Bottom (1/M del slot) ──── [Componente D]
+│
+├── ═══════ slotDivider ═══════
+│
+└── Slot 1 (1/N del espacio vertical)
+    ├── Grupo Top (1/M del slot) ─────── [Componente E]
+    └── Grupo Bottom (1/M del slot) ──── [Componente F]
+```
+
+### Nivel 1: SLOTS
+- El espacio vertical total se divide en N partes iguales (N = número de slots)
+- 2 slots = cada slot ocupa 50% del espacio
+- 3 slots = cada slot ocupa 33.3% del espacio
+- **Comportamiento dinámico**: Los slots se adaptan al tamaño del contenedor padre
+
+### Nivel 2: GRUPOS DE ALINEACIÓN
+- Dentro de cada slot, el espacio se divide según las alineaciones presentes
+- Si un slot tiene top + center + bottom = 3 grupos (cada uno 1/3 del slot)
+- Si un slot tiene top + bottom = 2 grupos (cada uno 1/2 del slot)
+- **Tamaño proporcional FIJO**: Los grupos NO crecen ni se encogen por el contenido interno
+
+### Nivel 3: COMPONENTES
+- Los componentes se renderizan dentro de su grupo de alineación
+- Si hay más componentes de los que caben, se cortan visualmente (overflow: hidden)
+- Los grupos mantienen su tamaño proporcional independientemente del contenido
 
 ## Importación
 
@@ -30,7 +58,8 @@ import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 | `marginY` | `SpacingToken \| number` | - | Margen vertical |
 | `componentGap` | `GapToken \| number` | `'md'` | Espacio entre componentes del mismo grupo |
 | `slotGap` | `SlotGapToken` | - | Espacio entre slots |
-| `slotDivider` | `SlotDividerToken` | - | Línea divisora entre slots (ej: `xs-white`, `sm-gray`) |
+| `slotDivider` | `SlotDividerToken` | - | Línea divisora entre SLOTS |
+| `slotAlignDivider` | `SlotAlignDividerToken` | - | Línea divisora entre GRUPOS DE ALINEACIÓN |
 | `components` | `LayoutColumnComponent[]` | requerido | Array de componentes |
 | `className` | `string` | - | Clase CSS adicional |
 
@@ -48,39 +77,87 @@ interface LayoutColumnComponent {
 }
 ```
 
+## Comportamiento Dinámico vs Fijo
+
+### Modo Dinámico (recomendado)
+```tsx
+<LayoutColumn
+  widthMode="full"    // 100% del ancho del contenedor padre
+  heightMode="full"   // 100% del alto del contenedor padre
+  slots={2}
+  ...
+/>
+```
+- Si el contenedor padre mide 600px → cada slot ocupa 300px
+- Si el contenedor padre mide 1000px → cada slot ocupa 500px
+- **Todo se reajusta proporcionalmente** al tamaño del contenedor
+
+### Modo Fijo
+```tsx
+<LayoutColumn
+  widthMode="fixed"
+  width="md"          // 400px fijo
+  heightMode="fixed"
+  height={500}        // 500px fijo
+  slots={2}
+  ...
+/>
+```
+- Usa tokens (xs/sm/md/lg/xl) o valores numéricos en píxeles
+
+## Divisores
+
+### slotDivider (entre SLOTS)
+Línea sólida que separa los slots principales.
+
+**Formato:** `{size}-{color}`
+
+```tsx
+<LayoutColumn
+  slotDivider="md-primary"  // Línea sólida azul de 4px entre slots
+  ...
+/>
+```
+
+### slotAlignDivider (entre GRUPOS DE ALINEACIÓN)
+Línea que separa los grupos de alineación (top/center/bottom) dentro de un slot.
+
+**Formato:** `{size}-{color}-{style}`
+
+```tsx
+<LayoutColumn
+  slotAlignDivider="sm-gray-dashed"  // Línea punteada gris de 2px entre grupos
+  ...
+/>
+```
+
+**Si no defines estos props, no aparecen los divisores correspondientes.**
+
 ## Ejemplo Básico
 
 ```tsx
 <LayoutColumn
-  slots={3}
+  slots={2}
   widthMode="full"
   heightMode="full"
-  slotGap="sm"
+  slotDivider="md-primary"
+  slotAlignDivider="sm-gray-dashed"
   components={[
+    // Slot 0
     { component: <Header />, align: "top", slot: 0 },
-    { component: <Content />, align: "top", slot: 1 },
-    { component: <Footer />, align: "bottom", slot: 2 },
-  ]}
-/>
-```
-
-Resultado: 3 slots de igual altura. Header arriba del slot 0, Content arriba del slot 1, Footer abajo del slot 2.
-
-## Top, Center y Bottom en Mismo Slot
-
-```tsx
-<LayoutColumn
-  slots={1}
-  heightMode="full"
-  components={[
-    { component: <Title />, align: "top", slot: 0 },
     { component: <Content />, align: "center", slot: 0 },
-    { component: <Button />, align: "bottom", slot: 0 },
+    { component: <Footer />, align: "bottom", slot: 0 },
+    // Slot 1
+    { component: <Nav />, align: "top", slot: 1 },
+    { component: <Actions />, align: "bottom", slot: 1 },
   ]}
 />
 ```
 
-Resultado: Title arriba, Content centrado, Button abajo, con espacio distribuido entre ellos.
+**Resultado:**
+- Slot 0 (50%): Header arriba, Content centrado, Footer abajo (con líneas punteadas entre ellos)
+- Línea sólida azul entre Slot 0 y Slot 1
+- Slot 1 (50%): Nav arriba, Actions abajo (con línea punteada entre ellos)
 
 ## Tamaño de Componentes
 
@@ -88,14 +165,14 @@ Resultado: Title arriba, Content centrado, Button abajo, con espacio distribuido
 El componente usa su tamaño natural.
 
 ### sizeMode: "full"
-El componente se expande para llenar el espacio disponible del slot.
+El componente se expande para llenar el espacio disponible del grupo.
 
 ```tsx
 { 
   component: <ExpandableContent style={{ height: '100%' }} />, 
   align: "top", 
   slot: 0,
-  sizeMode: "full"  // Ocupa todo el espacio del slot
+  sizeMode: "full"
 }
 ```
 
@@ -103,19 +180,8 @@ El componente se expande para llenar el espacio disponible del slot.
 Especifica una altura fija con token o número.
 
 ```tsx
-{ 
-  component: <FixedHeader />, 
-  align: "top", 
-  slot: 0,
-  height: 80  // 80px de altura
-}
-
-{ 
-  component: <FixedFooter />, 
-  align: "bottom", 
-  slot: 0,
-  height: "sm"  // 200px (token)
-}
+{ component: <FixedHeader />, align: "top", slot: 0, height: 80 }     // 80px
+{ component: <FixedFooter />, align: "bottom", slot: 0, height: "sm" } // 200px
 ```
 
 ## Hook useLayoutColumn
@@ -133,8 +199,8 @@ import { LayoutColumn, useLayoutColumn } from "@/lib/ui-library/components/Layou
 ```tsx
 const initialComponents = [
   { id: 'header', component: <Header />, align: 'top', slot: 0 },
-  { id: 'content', component: <Content />, align: 'top', slot: 1 },
-  { id: 'footer', component: <Footer />, align: 'bottom', slot: 2 },
+  { id: 'content', component: <Content />, align: 'center', slot: 0 },
+  { id: 'footer', component: <Footer />, align: 'bottom', slot: 1 },
 ];
 
 function MyComponent() {
@@ -146,15 +212,15 @@ function MyComponent() {
     isSlotVisible,
     isComponentVisible,
     resetVisibility,
-  } = useLayoutColumn({ components: initialComponents, slots: 3 });
+  } = useLayoutColumn({ components: initialComponents, slots: 2 });
 
   return (
     <>
-      <button onClick={() => toggleSlot(1)}>Toggle Content</button>
-      <p>Visible slots: {visibleSlots}</p>
+      <button onClick={() => toggleSlot(0)}>Toggle Slot 0</button>
+      <button onClick={() => toggleComponent('header')}>Toggle Header</button>
       
       <LayoutColumn
-        slots={3}
+        slots={2}
         heightMode="full"
         components={visibleComponents}
       />
@@ -181,9 +247,9 @@ function MyComponent() {
 | `isSlotEmpty(index)` | `(index: number) => boolean` | Slot vacío? |
 | `resetVisibility()` | `() => void` | Restaurar estado inicial |
 
-## Tokens
+## Tokens de Referencia
 
-### SizeToken (width)
+### SizeToken (width en modo fixed)
 | Token | Valor |
 |-------|-------|
 | `xs` | 100px |
@@ -192,7 +258,7 @@ function MyComponent() {
 | `lg` | 600px |
 | `xl` | 800px |
 
-### HeightToken (height)
+### HeightToken (height en modo fixed)
 | Token | Valor |
 |-------|-------|
 | `xs` | 100px |
@@ -232,9 +298,8 @@ function MyComponent() {
 | `xl` | 32px |
 
 ### SlotDividerToken (slotDivider)
-Formato: `{size}-{color}`
+**Formato:** `{size}-{color}`
 
-**Tamaños disponibles:**
 | Size | Altura |
 |------|--------|
 | `xs` | 1px |
@@ -243,7 +308,6 @@ Formato: `{size}-{color}`
 | `lg` | 6px |
 | `xl` | 8px |
 
-**Colores disponibles:**
 | Color | Valor |
 |-------|-------|
 | `white` | #ffffff |
@@ -252,13 +316,36 @@ Formato: `{size}-{color}`
 | `dark` | #374151 |
 | `primary` | #4353ff |
 
-**Ejemplos:**
-- `xs-white` → 1px blanco
-- `sm-gray` → 2px gris
-- `md-light` → 4px gris claro
-- `lg-primary` → 6px azul primario
+**Ejemplos:** `xs-white`, `sm-gray`, `md-light`, `lg-primary`, `xl-dark`
+
+### SlotAlignDividerToken (slotAlignDivider)
+**Formato:** `{size}-{color}-{style}`
+
+| Style | Descripción |
+|-------|-------------|
+| `solid` | Línea sólida |
+| `dashed` | Línea punteada (guiones) |
+| `dotted` | Línea de puntos |
+
+**Ejemplos:** `sm-gray-dashed`, `md-light-dotted`, `xs-primary-solid`
 
 ## Ejemplos de Uso
+
+### Layout de Página Completa
+
+```tsx
+<LayoutColumn
+  slots={3}
+  widthMode="full"
+  heightMode="full"
+  slotDivider="sm-light"
+  components={[
+    { component: <Header />, align: "top", slot: 0, height: 64 },
+    { component: <MainContent />, align: "top", slot: 1, sizeMode: "full" },
+    { component: <Footer />, align: "bottom", slot: 2, height: 80 },
+  ]}
+/>
+```
 
 ### Sidebar con Navegación
 
@@ -273,13 +360,12 @@ Formato: `{size}-{color}`
     { component: <Logo />, align: "top", slot: 0 },
     { component: <NavHome />, align: "top", slot: 1 },
     { component: <NavSettings />, align: "top", slot: 1 },
-    { component: <NavProfile />, align: "top", slot: 1 },
     { component: <LogoutButton />, align: "bottom", slot: 1 },
   ]}
 />
 ```
 
-### Card con Header y Footer Fijos
+### Card con Secciones
 
 ```tsx
 <LayoutColumn
@@ -290,35 +376,11 @@ Formato: `{size}-{color}`
   height={500}
   paddingX="lg"
   paddingY="md"
+  slotAlignDivider="xs-light-solid"
   components={[
     { component: <CardTitle />, align: "top", slot: 0, height: 60 },
-    { component: <CardContent style={{ height: '100%' }} />, align: "top", slot: 0, sizeMode: "full" },
+    { component: <CardContent />, align: "center", slot: 0, sizeMode: "full" },
     { component: <CardActions />, align: "bottom", slot: 0, height: 50 },
   ]}
 />
 ```
-
-### Layout de Página Completa
-
-```tsx
-<LayoutColumn
-  slots={3}
-  widthMode="full"
-  heightMode="full"
-  slotGap="none"
-  components={[
-    { component: <Header />, align: "top", slot: 0, height: 64 },
-    { component: <MainContent style={{ height: '100%' }} />, align: "top", slot: 1, sizeMode: "full" },
-    { component: <Footer />, align: "bottom", slot: 2, height: 80 },
-  ]}
-/>
-```
-
-## Comparación con LayoutRow
-
-| Aspecto | LayoutRow | LayoutColumn |
-|---------|-----------|--------------|
-| Orientación | Horizontal (columnas lado a lado) | Vertical (slots apilados) |
-| Slots dividen | Espacio horizontal | Espacio vertical |
-| Alineación componentes | `left`, `center`, `right` | `top`, `bottom` |
-| Uso típico | Columnas de contenido | Secciones verticales |
