@@ -19,17 +19,20 @@ const menuItems = [
   { id: 'completed', label: 'Completados', path: '/completed', icon: <CheckCircle className="h-5 w-5" /> },
 ];
 
-export function ManyItemsDemo() {
+export default function NavSidebarScrollPage() {
   return (
-    <div className="border rounded-lg overflow-hidden h-[400px] relative">
-      <p className="absolute top-2 right-2 z-50 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-        Body hace scroll
-      </p>
+    <div className="h-screen w-full flex">
       <NavigationSidebar
         items={menuItems}
         currentPath="/home"
         onNavigate={(path) => console.log('Navigate to:', path)}
       />
+      <div className="flex-1 p-8 bg-gray-50 dark:bg-gray-900">
+        <h1 className="text-2xl font-bold mb-4">Scroll en Body</h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          NavigationSidebar con muchos items. Solo el Body hace scroll, Header y Footer permanecen fijos.
+        </p>
+      </div>
     </div>
   );
 }

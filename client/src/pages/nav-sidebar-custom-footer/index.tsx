@@ -6,9 +6,9 @@ const menuItems = [
   { id: 'settings', label: 'Configuración', path: '/settings', icon: <Settings className="h-5 w-5" /> },
 ];
 
-export function CustomFooterDemo() {
+export default function NavSidebarCustomFooterPage() {
   return (
-    <div className="border rounded-lg overflow-hidden h-[500px] relative">
+    <div className="h-screen w-full flex">
       <NavigationSidebar
         items={menuItems}
         currentPath="/home"
@@ -31,6 +31,12 @@ export function CustomFooterDemo() {
         }
         onNavigate={(path) => console.log('Navigate to:', path)}
       />
+      <div className="flex-1 p-8 bg-gray-50 dark:bg-gray-900">
+        <h1 className="text-2xl font-bold mb-4">Footer Personalizado</h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          NavigationSidebar con footerContent personalizado: perfil de usuario y botón de logout.
+        </p>
+      </div>
     </div>
   );
 }

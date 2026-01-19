@@ -18,7 +18,12 @@ const DateDemo = lazy(() => import("@/pages/date-demo"));
 const AuthTest = lazy(() => import("@/pages/auth-test"));
 const LayoutRowDemo = lazy(() => import("@/pages/layout-row-demo"));
 const LayoutColumnDemo = lazy(() => import("@/pages/layout-column-demo/LayoutColumnDemo"));
-const NavigationSidebarDemo = lazy(() => import("@/pages/navigation-sidebar-demo"));
+const NavSidebarBasic = lazy(() => import("@/pages/nav-sidebar-basic"));
+const NavSidebarCustomHeader = lazy(() => import("@/pages/nav-sidebar-custom-header"));
+const NavSidebarCustomFooter = lazy(() => import("@/pages/nav-sidebar-custom-footer"));
+const NavSidebarNested = lazy(() => import("@/pages/nav-sidebar-nested"));
+const NavSidebarScroll = lazy(() => import("@/pages/nav-sidebar-scroll"));
+const NavSidebarFullCustom = lazy(() => import("@/pages/nav-sidebar-full-custom"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -49,7 +54,12 @@ export function Router() {
           <Route path="/auth-test" component={AuthTest} />
           <Route path="/components/layout-row" component={LayoutRowDemo} />
           <Route path="/components/layout-column" component={LayoutColumnDemo} />
-          <Route path="/components/navigation-sidebar" component={NavigationSidebarDemo} />
+          <Route path="/components/nav-sidebar/basic" component={NavSidebarBasic} />
+          <Route path="/components/nav-sidebar/custom-header" component={NavSidebarCustomHeader} />
+          <Route path="/components/nav-sidebar/custom-footer" component={NavSidebarCustomFooter} />
+          <Route path="/components/nav-sidebar/nested" component={NavSidebarNested} />
+          <Route path="/components/nav-sidebar/scroll" component={NavSidebarScroll} />
+          <Route path="/components/nav-sidebar/full-custom" component={NavSidebarFullCustom} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

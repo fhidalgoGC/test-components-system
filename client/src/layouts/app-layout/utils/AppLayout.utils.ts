@@ -20,10 +20,22 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'wrapper-items-selected', label: 'WrapperItemsSelected', path: '/components/wrapper-items-selected', icon: 'MousePointer' },
         { id: 'layout-row', label: 'LayoutRow', path: '/components/layout-row', icon: 'Rows' },
         { id: 'layout-column', label: 'LayoutColumn', path: '/components/layout-column', icon: 'Columns' },
-        { id: 'navigation-sidebar', label: 'NavigationSidebar', path: '/components/navigation-sidebar', icon: 'PanelLeft' },
         { id: 'bottom-nav', label: 'BottomNavigationBar', path: '/components/bottom-nav', icon: 'Navigation' },
         { id: 'bottom-nav-config', label: 'BottomNav + Config', path: '/components/bottom-nav-config', icon: 'Settings' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
+      ]
+    },
+    { 
+      id: 'navigation-sidebar', 
+      label: 'NavigationSidebar', 
+      icon: 'PanelLeft',
+      children: [
+        { id: 'nav-basic', label: 'Básico', path: '/components/nav-sidebar/basic', icon: 'Layout' },
+        { id: 'nav-custom-header', label: 'Header Custom', path: '/components/nav-sidebar/custom-header', icon: 'Heading' },
+        { id: 'nav-custom-footer', label: 'Footer Custom', path: '/components/nav-sidebar/custom-footer', icon: 'User' },
+        { id: 'nav-nested', label: 'Items Anidados', path: '/components/nav-sidebar/nested', icon: 'Network' },
+        { id: 'nav-scroll', label: 'Scroll', path: '/components/nav-sidebar/scroll', icon: 'ScrollText' },
+        { id: 'nav-full-custom', label: 'Full Custom', path: '/components/nav-sidebar/full-custom', icon: 'Palette' }
       ]
     },
     { 
