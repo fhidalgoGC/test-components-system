@@ -1,0 +1,63 @@
+import type { ReactNode } from 'react';
+
+export interface NavigationSubItem {
+  id: string;
+  label: string;
+  path: string;
+  icon?: ReactNode;
+  isActive?: boolean;
+  component?: ReactNode;
+}
+
+export interface NavigationItem {
+  id: string;
+  label: string;
+  path?: string;
+  icon?: ReactNode;
+  isActive?: boolean;
+  children?: NavigationSubItem[];
+  component?: ReactNode;
+}
+
+export interface NavigationSidebarProps {
+  items: NavigationItem[];
+  brandTitle?: string;
+  brandSubtitle?: string;
+  brandIcon?: ReactNode;
+  version?: string;
+  currentPath?: string;
+  defaultCollapsed?: boolean;
+  showThemeToggle?: boolean;
+  showLanguageSelector?: boolean;
+  availableLanguages?: string[];
+  currentLanguage?: string;
+  currentTheme?: 'light' | 'dark';
+  onNavigate?: (path: string) => void;
+  onThemeChange?: (theme: 'light' | 'dark') => void;
+  onLanguageChange?: (language: string) => void;
+  onCollapseChange?: (collapsed: boolean) => void;
+  langOverride?: string;
+  i18nOrder?: 'global-first' | 'local-first';
+  className?: string;
+  footerContent?: ReactNode;
+}
+
+export interface NavigationSidebarContext {
+  t: (key: string, params?: Record<string, string | number>) => string;
+  lang: string;
+}
+
+export interface UseNavigationSidebarReturn {
+  processedItems: NavigationItem[];
+  expandedItems: Set<string>;
+  isCollapsed: boolean;
+  isMobileMenuOpen: boolean;
+  currentTheme: 'light' | 'dark';
+  currentLanguage: string;
+  toggleItemExpansion: (id: string) => void;
+  handleNavigation: (path: string) => void;
+  handleThemeToggle: () => void;
+  handleLanguageChange: (language: string) => void;
+  handleToggleCollapse: () => void;
+  handleToggleMobileMenu: () => void;
+}

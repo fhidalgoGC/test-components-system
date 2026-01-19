@@ -1,0 +1,22 @@
+{
+  "navigationsidebar": {
+    "themeToggle": {
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "switch": "Switch theme"
+    },
+    "language": {
+      "select": "Select language",
+      "current": "Current language"
+    },
+    "menu": {
+      "expand": "Expand menu",
+      "collapse": "Collapse menu",
+      "openMobile": "Open menu",
+      "closeMobile": "Close menu"
+    },
+    "navigation": {
+      "main": "Main navigation"
+    }
+  }
+}
