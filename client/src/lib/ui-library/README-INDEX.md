@@ -325,6 +325,33 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Configurar navegación por teclado y accesibilidad
 - Testing con data-testid de slides, botones e indicadores
 
+### **LayoutColumn**
+
+#### **`./components/LayoutColumn/README.md`**
+**Cuándo usar:** Para implementar layouts verticales con división proporcional del espacio en slots y grupos de alineación.
+
+**Contiene:**
+- 🏗️ Arquitectura de 3 niveles (Slots → Grupos de Alineación → Componentes)
+- 📖 Props completos del LayoutColumn (slots, widthMode, heightMode, dividers, etc.)
+- 🎯 Ejemplos de uso (layouts de página, sidebars, cards con secciones)
+- 🔧 API detallada con tipos TypeScript (LayoutColumnComponent, tokens)
+- ⚖️ Comportamiento dinámico vs fijo (full/auto/fixed modes)
+- 📏 Sistema de divisores (slotDivider entre slots, slotAlignDivider entre grupos)
+- 🎨 Tokens de spacing, gaps y dimensiones
+- 🔄 Hook useLayoutColumn para visibilidad dinámica
+- 🎯 Alineación vertical (top, center, bottom) dentro de cada slot
+
+**Buscar aquí para:**
+- Implementar layouts de página con header, content, footer
+- Dividir espacio vertical proporcionalmente en slots
+- Usar grupos de alineación (top/center/bottom) dentro de slots
+- Configurar divisores personalizados entre slots y grupos
+- Crear sidebars con navegación arriba y logout abajo
+- Implementar cards con secciones fijas y contenido flexible
+- Usar modo dinámico (full) vs modo fijo (fixed con tokens)
+- Controlar visibilidad de componentes/slots con useLayoutColumn
+- Personalizar gaps, paddings, margins con tokens
+
 ### **WrapperItemsSelected**
 
 #### **`./components/WrapperItemsSelected/README-IA.md`**
@@ -500,6 +527,15 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 ├── Modos multi-select y single-select
 └── Demo interactivo en /components/wrapper-items-selected
 
+./components/LayoutColumn/README.md
+├── 🏗️ Arquitectura de 3 niveles (Slots → Alineaciones → Componentes)
+├── Props y API del LayoutColumn
+├── Ejemplos (layouts de página, sidebars, cards)
+├── Comportamiento dinámico vs fijo (full/auto/fixed)
+├── Divisores (slotDivider, slotAlignDivider)
+├── Hook useLayoutColumn para visibilidad dinámica
+└── Tokens de spacing, gaps y dimensiones
+
 ./components/[ComponentName]/README-IA.md
 ├── Props y API del componente
 ├── Ejemplos de implementación
@@ -535,6 +571,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | LoginCard | `components/LoginCard/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/LoginCard/README-IA.md) |
 | Carousel | `components/Carousel/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/Carousel/README-IA.md) |
 | WrapperItemsSelected | `components/WrapperItemsSelected/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/WrapperItemsSelected/README-IA.md) |
+| LayoutColumn | `components/LayoutColumn/README.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/LayoutColumn/README.md) |
 | [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` | - |
 
 ### **🔌 Providers del Sistema:**
