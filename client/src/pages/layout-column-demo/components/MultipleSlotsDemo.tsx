@@ -28,10 +28,8 @@ export function MultipleSlotsDemo() {
           components={[
             {
               component: (
-                <div
-                  className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
-                >
-                  Slot 0 - Top
+                <div className={`${styles.demoItem} ${styles["demoItem--primary"]}`}>
+                  <span className={styles.slotBadge}>0</span> Top
                 </div>
               ),
               align: "top",
@@ -39,10 +37,8 @@ export function MultipleSlotsDemo() {
             },
             {
               component: (
-                <div
-                  className={`${styles.demoItem} ${styles["demoItem--info"]}`}
-                >
-                  Slot 0 - Center
+                <div className={`${styles.demoItem} ${styles["demoItem--info"]}`}>
+                  <span className={styles.slotBadge}>0</span> Center
                 </div>
               ),
               align: "top",
@@ -50,10 +46,8 @@ export function MultipleSlotsDemo() {
             },
             {
               component: (
-                <div
-                  className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}
-                >
-                  Slot 0 - Bottom
+                <div className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}>
+                  <span className={styles.slotBadge}>0</span> Bottom
                 </div>
               ),
               align: "center",
@@ -61,10 +55,8 @@ export function MultipleSlotsDemo() {
             },
             {
               component: (
-                <div
-                  className={`${styles.demoItem} ${styles["demoItem--success"]}`}
-                >
-                  Slot 1 - Top
+                <div className={`${styles.demoItem} ${styles["demoItem--success"]}`}>
+                  <span className={styles.slotBadge}>1</span> Top
                 </div>
               ),
               align: "top",
@@ -72,10 +64,8 @@ export function MultipleSlotsDemo() {
             },
             {
               component: (
-                <div
-                  className={`${styles.demoItem} ${styles["demoItem--teal"]}`}
-                >
-                  Slot 1 - Bottom
+                <div className={`${styles.demoItem} ${styles["demoItem--teal"]}`}>
+                  <span className={styles.slotBadge}>1</span> Bottom
                 </div>
               ),
               align: "bottom",

@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import styles from "../css/LayoutColumnDemo.module.scss";
 
 const initialComponents = [
-  { id: 'header', component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}>Header (Slot 0)</div>, align: 'top' as const, slot: 0 },
-  { id: 'nav', component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Navigation (Slot 1)</div>, align: 'top' as const, slot: 1 },
-  { id: 'content', component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}>Content (Slot 2)</div>, align: 'top' as const, slot: 2 },
-  { id: 'sidebar', component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>Sidebar (Slot 2)</div>, align: 'top' as const, slot: 2 },
-  { id: 'footer', component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Footer (Slot 3)</div>, align: 'bottom' as const, slot: 3 },
+  { id: 'header', component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}><span className={styles.slotBadge}>0</span> Header</div>, align: 'top' as const, slot: 0 },
+  { id: 'nav', component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}><span className={styles.slotBadge}>1</span> Navigation</div>, align: 'top' as const, slot: 1 },
+  { id: 'content', component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}><span className={styles.slotBadge}>2</span> Content</div>, align: 'top' as const, slot: 2 },
+  { id: 'sidebar', component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}><span className={styles.slotBadge}>2</span> Sidebar</div>, align: 'top' as const, slot: 2 },
+  { id: 'footer', component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}><span className={styles.slotBadge}>3</span> Footer</div>, align: 'bottom' as const, slot: 3 },
 ];
 
 export function HookDemo() {

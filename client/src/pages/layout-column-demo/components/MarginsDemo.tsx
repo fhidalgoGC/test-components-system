@@ -22,9 +22,9 @@ export function MarginsDemo() {
           componentGap="sm"
           className={styles.whiteBg}
           components={[
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>Slot 0 - Top</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>Slot 1 - Top</div>, align: "top", slot: 1 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>Slot 2 - Bottom</div>, align: "bottom", slot: 2 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}><span className={styles.slotBadge}>0</span> Top</div>, align: "top", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}><span className={styles.slotBadge}>1</span> Top</div>, align: "top", slot: 1 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}><span className={styles.slotBadge}>2</span> Bottom</div>, align: "bottom", slot: 2 },
           ]}
         />
       </div>

@@ -95,6 +95,20 @@
   background-color: $gcc-neutral-lighten-5;
 }
 
+.slotBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
 .whiteBg {
   background-color: $gcc-white;
 }

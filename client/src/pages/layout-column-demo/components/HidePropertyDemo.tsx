@@ -35,10 +35,10 @@ export function HidePropertyDemo() {
           slotDivider="xs-gray"
           componentGap="sm"
           components={[
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}>Slot 0 - Always</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--warning']}`}>Slot 1 - Toggle</div>, align: "top", slot: 1, hide: !showSlot1 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Slot 2 - Top</div>, align: "top", slot: 2 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--slate']}`}>Slot 2 - Bottom Toggle</div>, align: "bottom", slot: 2, hide: !showBottom },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}><span className={styles.slotBadge}>0</span> Always</div>, align: "top", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--warning']}`}><span className={styles.slotBadge}>1</span> Toggle</div>, align: "top", slot: 1, hide: !showSlot1 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}><span className={styles.slotBadge}>2</span> Top</div>, align: "top", slot: 2 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--slate']}`}><span className={styles.slotBadge}>2</span> Bottom Toggle</div>, align: "bottom", slot: 2, hide: !showBottom },
           ]}
         />
       </div>

@@ -22,11 +22,11 @@ export function SidebarDemo() {
           componentGap="xs"
           className={styles.darkBg}
           components={[
-            { component: <div style={{ color: 'white', fontWeight: 700, fontSize: '1.125rem', padding: '0.5rem' }}>Logo</div>, align: "top", slot: 0 },
-            { component: <Button variant="ghost" className="justify-start text-white w-full">Home</Button>, align: "top", slot: 1 },
-            { component: <Button variant="ghost" className="justify-start text-white w-full">Settings</Button>, align: "top", slot: 1 },
-            { component: <Button variant="ghost" className="justify-start text-white w-full">Profile</Button>, align: "top", slot: 1 },
-            { component: <Button variant="outline" className="text-white border-white w-full">Logout</Button>, align: "bottom", slot: 1 },
+            { component: <div style={{ color: 'white', fontWeight: 700, fontSize: '1.125rem', padding: '0.5rem' }}><span className={styles.slotBadge}>0</span> Logo</div>, align: "top", slot: 0 },
+            { component: <Button variant="ghost" className="justify-start text-white w-full"><span className={styles.slotBadge}>1</span> Home</Button>, align: "top", slot: 1 },
+            { component: <Button variant="ghost" className="justify-start text-white w-full"><span className={styles.slotBadge}>1</span> Settings</Button>, align: "top", slot: 1 },
+            { component: <Button variant="ghost" className="justify-start text-white w-full"><span className={styles.slotBadge}>1</span> Profile</Button>, align: "top", slot: 1 },
+            { component: <Button variant="outline" className="text-white border-white w-full"><span className={styles.slotBadge}>1</span> Logout</Button>, align: "bottom", slot: 1 },
           ]}
         />
         <div className={styles.sidebarContent}>

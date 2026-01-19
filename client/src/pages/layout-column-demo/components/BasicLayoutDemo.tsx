@@ -18,9 +18,9 @@ export function BasicLayoutDemo() {
           paddingX="md"
           slotDivider="sm-light"
           components={[
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--primary']}`}>Slot 0 - Top</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Slot 1 - Center</div>, align: "center", slot: 1 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Slot 2 - Bottom</div>, align: "bottom", slot: 2 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--primary']}`}><span className={styles.slotBadge}>0</span> Top</div>, align: "top", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}><span className={styles.slotBadge}>1</span> Center</div>, align: "center", slot: 1 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}><span className={styles.slotBadge}>2</span> Bottom</div>, align: "bottom", slot: 2 },
           ]}
         />
       </div>

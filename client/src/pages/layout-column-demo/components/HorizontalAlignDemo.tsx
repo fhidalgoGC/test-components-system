@@ -19,18 +19,18 @@ export function HorizontalAlignDemo() {
           paddingY="md"
           components={[
             { 
-              component: <div className={`${styles.demoItem} ${styles['demoItem--primary']}`} style={{ height: '100%' }}>sizeMode: full</div>, 
+              component: <div className={`${styles.demoItem} ${styles['demoItem--primary']}`} style={{ height: '100%' }}><span className={styles.slotBadge}>0</span> sizeMode: full</div>, 
               align: "top", 
               slot: 0,
               sizeMode: "full"
             },
             { 
-              component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>sizeMode: auto (default)</div>, 
+              component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}><span className={styles.slotBadge}>1</span> sizeMode: auto (default)</div>, 
               align: "top", 
               slot: 1 
             },
             { 
-              component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Bottom</div>, 
+              component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}><span className={styles.slotBadge}>1</span> Bottom</div>, 
               align: "bottom", 
               slot: 1 
             },

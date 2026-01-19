@@ -18,9 +18,9 @@ export function FixedDimensionsDemo() {
           paddingY="md"
           componentGap="sm"
           components={[
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}>height: 50px</div>, align: "top", slot: 0, height: 50 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>height: "sm" (200px)</div>, align: "top", slot: 0, height: "sm" },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>height: auto (default)</div>, align: "bottom", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}><span className={styles.slotBadge}>0</span> height: 50px</div>, align: "top", slot: 0, height: 50 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}><span className={styles.slotBadge}>0</span> height: "sm" (200px)</div>, align: "top", slot: 0, height: "sm" },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}><span className={styles.slotBadge}>0</span> height: auto (default)</div>, align: "bottom", slot: 0 },
           ]}
         />
       </div>
