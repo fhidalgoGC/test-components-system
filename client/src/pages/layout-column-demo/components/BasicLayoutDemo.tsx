@@ -11,7 +11,7 @@ export function BasicLayoutDemo() {
       </p>
       <div
         className={styles.demoBox}
-        style={{ height: 400, border: '2px solid red' }}
+        style={{ height: 600, border: '2px solid red' }}
         data-testid="demo-basic"
       >
         <LayoutColumn
