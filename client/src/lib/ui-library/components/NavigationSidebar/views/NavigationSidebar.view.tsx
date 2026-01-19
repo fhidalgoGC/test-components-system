@@ -79,10 +79,15 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
               {headerContent}
             </div>
           ) : (
-            <div className="flex items-center justify-center w-full">
-              <div className={`${styles.brandIcon} bg-primary`}>
+            <div className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
+              <div className={`${styles.brandIcon} bg-primary flex-shrink-0`}>
                 <Package className="h-4 w-4 text-primary-foreground" />
               </div>
+              {!isCollapsed && (
+                <span className={`font-semibold truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  Navigation
+                </span>
+              )}
             </div>
           )}
         </div>
