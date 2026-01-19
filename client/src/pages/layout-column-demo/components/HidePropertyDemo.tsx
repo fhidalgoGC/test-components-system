@@ -5,39 +5,39 @@ import { Label } from "@/components/ui/label";
 import styles from "../css/LayoutColumnDemo.module.scss";
 
 export function HidePropertyDemo() {
-  const [showRow2, setShowRow2] = useState(true);
-  const [showRow3, setShowRow3] = useState(true);
+  const [showSlot1, setShowSlot1] = useState(true);
+  const [showBottom, setShowBottom] = useState(true);
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>5. Propiedad hide (Ocultar Filas)</h2>
+      <h2 className={styles.section__title}>5. Propiedad hide</h2>
       <p className={styles.section__description}>
-        Ocultar filas dinámicamente. Filas vacías no se renderizan.
+        Ocultar componentes dinámicamente. Slots vacíos no se renderizan.
       </p>
       <div className={styles.controlsRow}>
         <div className={styles.horizontalStack}>
-          <Switch id="show-row-2" checked={showRow2} onCheckedChange={setShowRow2} data-testid="switch-row-2" />
-          <Label htmlFor="show-row-2">Fila 2</Label>
+          <Switch id="show-slot-1" checked={showSlot1} onCheckedChange={setShowSlot1} data-testid="switch-slot-1" />
+          <Label htmlFor="show-slot-1">Slot 1</Label>
         </div>
         <div className={styles.horizontalStack}>
-          <Switch id="show-row-3" checked={showRow3} onCheckedChange={setShowRow3} data-testid="switch-row-3" />
-          <Label htmlFor="show-row-3">Fila 3</Label>
+          <Switch id="show-bottom" checked={showBottom} onCheckedChange={setShowBottom} data-testid="switch-bottom" />
+          <Label htmlFor="show-bottom">Bottom Items</Label>
         </div>
       </div>
-      <div className={styles.demoBox} style={{ minHeight: 200 }} data-testid="demo-hide">
+      <div className={styles.demoBox} style={{ height: 300 }} data-testid="demo-hide">
         <LayoutColumn
-          slots={4}
+          slots={3}
           widthMode="full"
-          heightMode="auto"
+          heightMode="full"
           paddingX="md"
           paddingY="md"
           slotGap="sm"
           componentGap="sm"
           components={[
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}>Fila 1 (Siempre)</div>, align: "center", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--warning']}`}>Fila 2 (Toggle)</div>, align: "center", slot: 1, hide: !showRow2 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Fila 3 (Toggle)</div>, align: "center", slot: 2, hide: !showRow3 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--slate']}`}>Fila 4 (Siempre)</div>, align: "center", slot: 3 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}>Slot 0 - Always</div>, align: "top", slot: 0 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--warning']}`}>Slot 1 - Toggle</div>, align: "top", slot: 1, hide: !showSlot1 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Slot 2 - Top</div>, align: "top", slot: 2 },
+            { component: <div className={`${styles.demoItem} ${styles['demoItem--slate']}`}>Slot 2 - Bottom Toggle</div>, align: "bottom", slot: 2, hide: !showBottom },
           ]}
         />
       </div>

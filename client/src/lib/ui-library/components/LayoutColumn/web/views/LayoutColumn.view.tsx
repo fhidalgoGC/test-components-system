@@ -122,21 +122,12 @@ const getSlotGapClass = (token: SlotGapToken | undefined) => {
   return styles[`slotGap${capitalize(token)}`] || '';
 };
 
-const getVerticalAlignClass = (align: string | undefined) => {
-  switch (align) {
-    case 'top': return styles.verticalTop;
-    case 'bottom': return styles.verticalBottom;
-    case 'stretch': return styles.verticalStretch;
-    default: return styles.verticalCenter;
+const getComponentHeightStyle = (comp: LayoutColumnComponent): React.CSSProperties => {
+  if (comp.height !== undefined) {
+    const value = typeof comp.height === 'number' ? comp.height : heightTokenToPixels[comp.height];
+    return { height: `${value}px` };
   }
-};
-
-const getAlignClass = (align: string) => {
-  switch (align) {
-    case 'left': return styles.alignLeft;
-    case 'right': return styles.alignRight;
-    default: return styles.alignCenter;
-  }
+  return {};
 };
 
 export const LayoutColumnView = (props: LayoutColumnProps) => {
@@ -150,7 +141,6 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
     paddingY,
     marginX,
     marginY,
-    componentVerticalAlign = 'center',
     componentGap = 'md',
     slotGap,
     components,
@@ -198,41 +188,64 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
       {slotsToRender.map((slotIndex) => {
         const slotComponents = groupedBySlot[slotIndex] || [];
         
-        const groupedByAlign: Record<string, LayoutColumnComponent[]> = {
-          left: [],
-          center: [],
-          right: [],
-        };
-
-        slotComponents.forEach((comp) => {
-          groupedByAlign[comp.align].push(comp);
-        });
+        const topComponents = slotComponents.filter(c => c.align === 'top');
+        const bottomComponents = slotComponents.filter(c => c.align === 'bottom');
 
         return (
           <div
             key={slotIndex}
-            className={`${styles.slot} ${getVerticalAlignClass(componentVerticalAlign)}`}
+            className={styles.slot}
             data-testid={`layoutcolumn-slot-${slotIndex}`}
           >
-            {(['left', 'center', 'right'] as const).map((align) => {
-              const alignComponents = groupedByAlign[align];
-              if (alignComponents.length === 0) return null;
-              
-              return (
-                <div
-                  key={align}
-                  className={`${styles.alignGroup} ${getAlignClass(align)} ${getComponentGapClass(componentGap)}`}
-                  style={getComponentGapStyle(componentGap)}
-                  data-testid={`layoutcolumn-slot-${slotIndex}-${align}`}
-                >
-                  {alignComponents.map((comp, idx) => (
-                    <div key={comp.id || idx} data-testid={`layoutcolumn-component-${slotIndex}-${align}-${idx}`}>
+            {topComponents.length > 0 && (
+              <div
+                className={`${styles.slotContent} ${styles.alignTop} ${getComponentGapClass(componentGap)}`}
+                style={getComponentGapStyle(componentGap)}
+                data-testid={`layoutcolumn-slot-${slotIndex}-top`}
+              >
+                {topComponents.map((comp, idx) => {
+                  const sizeMode = comp.sizeMode || 'auto';
+                  const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
+                  return (
+                    <div 
+                      key={comp.id || idx} 
+                      className={`${styles.componentWrapper} ${wrapperClass}`}
+                      style={getComponentHeightStyle(comp)}
+                      data-testid={`layoutcolumn-component-${slotIndex}-top-${idx}`}
+                    >
                       {comp.component}
                     </div>
-                  ))}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            )}
+            
+            {topComponents.length > 0 && bottomComponents.length > 0 && (
+              <div style={{ flex: 1 }} />
+            )}
+            
+            {bottomComponents.length > 0 && (
+              <div
+                className={`${styles.slotContent} ${styles.alignBottom} ${getComponentGapClass(componentGap)}`}
+                style={getComponentGapStyle(componentGap)}
+                data-testid={`layoutcolumn-slot-${slotIndex}-bottom`}
+              >
+                {bottomComponents.map((comp, idx) => {
+                  const sizeMode = comp.sizeMode || 'auto';
+                  const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
+                  return (
+                    <div 
+                      key={comp.id || idx} 
+                      className={`${styles.componentWrapper} ${wrapperClass}`}
+                      style={getComponentHeightStyle(comp)}
+                      data-testid={`layoutcolumn-component-${slotIndex}-bottom-${idx}`}
+                    >
+                      {comp.component}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
       })}

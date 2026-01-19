@@ -43,44 +43,38 @@ $spacing-xl: 32px;
 
 .slot {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
   width: 100%;
 }
 
-.alignGroup {
+.slotContent {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  width: 100%;
 }
 
-.alignLeft {
+.alignTop {
   justify-content: flex-start;
-  flex: 1;
 }
 
-.alignCenter {
-  justify-content: center;
-  flex: 1;
-}
-
-.alignRight {
+.alignBottom {
   justify-content: flex-end;
+}
+
+.componentWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.componentFull {
   flex: 1;
+  min-height: 0;
 }
 
-.verticalTop {
-  align-items: flex-start;
-}
-
-.verticalCenter {
-  align-items: center;
-}
-
-.verticalBottom {
-  align-items: flex-end;
-}
-
-.verticalStretch {
-  align-items: stretch;
+.componentAuto {
+  flex: 0 0 auto;
 }
 
 .paddingXNone { padding-left: $spacing-none; padding-right: $spacing-none; }

@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import styles from "../css/LayoutColumnDemo.module.scss";
 
 const initialComponents = [
-  { id: 'header', component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}>Header (Fila 0)</div>, align: 'center' as const, slot: 0 },
-  { id: 'nav', component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Navigation (Fila 1)</div>, align: 'center' as const, slot: 1 },
-  { id: 'main', component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}>Main (Fila 2)</div>, align: 'left' as const, slot: 2 },
-  { id: 'sidebar', component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>Sidebar (Fila 2)</div>, align: 'right' as const, slot: 2 },
-  { id: 'footer', component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Footer (Fila 3)</div>, align: 'center' as const, slot: 3 },
+  { id: 'header', component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}>Header (Slot 0)</div>, align: 'top' as const, slot: 0 },
+  { id: 'nav', component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Navigation (Slot 1)</div>, align: 'top' as const, slot: 1 },
+  { id: 'content', component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}>Content (Slot 2)</div>, align: 'top' as const, slot: 2 },
+  { id: 'sidebar', component: <div className={`${styles.demoItem} ${styles['demoItem--teal']}`}>Sidebar (Slot 2)</div>, align: 'top' as const, slot: 2 },
+  { id: 'footer', component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Footer (Slot 3)</div>, align: 'bottom' as const, slot: 3 },
 ];
 
 export function HookDemo() {
@@ -25,10 +25,10 @@ export function HookDemo() {
     <section className={styles.section}>
       <h2 className={styles.section__title}>8. Hook useLayoutColumn</h2>
       <p className={styles.section__description}>
-        Gestión programática de visibilidad de componentes y filas.
+        Gestión programática de visibilidad de componentes y slots.
       </p>
       <div className={styles.controlsRow}>
-        <span className={styles.controlLabel}>Filas:</span>
+        <span className={styles.controlLabel}>Slots:</span>
         {[0, 1, 2, 3].map((slot) => (
           <Button
             key={slot}
@@ -37,7 +37,7 @@ export function HookDemo() {
             onClick={() => toggleSlot(slot)}
             data-testid={`button-slot-${slot}`}
           >
-            Fila {slot}
+            Slot {slot}
           </Button>
         ))}
         <Button size="sm" variant="secondary" onClick={resetVisibility} data-testid="button-reset">
@@ -58,12 +58,12 @@ export function HookDemo() {
           </Button>
         ))}
       </div>
-      <p className={styles.statusText}>Filas visibles: {visibleSlots}</p>
-      <div className={styles.demoBox} style={{ minHeight: 250 }} data-testid="demo-hook">
+      <p className={styles.statusText}>Slots visibles: {visibleSlots}</p>
+      <div className={styles.demoBox} style={{ height: 350 }} data-testid="demo-hook">
         <LayoutColumn
           slots={4}
           widthMode="full"
-          heightMode="auto"
+          heightMode="full"
           slotGap="md"
           paddingX="md"
           paddingY="md"

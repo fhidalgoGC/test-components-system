@@ -1,35 +1,40 @@
 import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 import styles from "../css/LayoutColumnDemo.module.scss";
 
-const alignments = ["left", "center", "right"] as const;
-const colors = ["demoItem--primary", "demoItem--info", "demoItem--success"];
-
 export function HorizontalAlignDemo() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>4. Alineación Horizontal dentro de Filas</h2>
+      <h2 className={styles.section__title}>4. sizeMode: full (Componente Ocupa Todo)</h2>
       <p className={styles.section__description}>
-        Cada componente puede alinearse left, center o right dentro de su fila.
+        Con sizeMode="full", el componente se expande para llenar el espacio disponible del slot.
       </p>
-      <div className={styles.gridThreeCol} data-testid="demo-horizontal-align">
-        {alignments.map((align, idx) => (
-          <div key={align} className={styles.demoBox} style={{ minHeight: 150 }}>
-            <div className={styles.alignLabel}>align: "{align}"</div>
-            <LayoutColumn
-              slots={2}
-              widthMode="full"
-              heightMode="auto"
-              paddingX="sm"
-              paddingY="sm"
-              slotGap="sm"
-              componentGap="xs"
-              components={[
-                { component: <div className={`${styles.demoItem} ${styles[colors[idx]]}`}>{align}</div>, align, slot: 0 },
-                { component: <div className={`${styles.demoItem} ${styles[colors[idx]]}`}>Row 2</div>, align, slot: 1 },
-              ]}
-            />
-          </div>
-        ))}
+      <div className={styles.demoBox} style={{ height: 300 }} data-testid="demo-size-mode">
+        <LayoutColumn
+          slots={2}
+          widthMode="full"
+          heightMode="full"
+          slotGap="md"
+          paddingX="md"
+          paddingY="md"
+          components={[
+            { 
+              component: <div className={`${styles.demoItem} ${styles['demoItem--primary']}`} style={{ height: '100%' }}>sizeMode: full</div>, 
+              align: "top", 
+              slot: 0,
+              sizeMode: "full"
+            },
+            { 
+              component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>sizeMode: auto (default)</div>, 
+              align: "top", 
+              slot: 1 
+            },
+            { 
+              component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}>Bottom</div>, 
+              align: "bottom", 
+              slot: 1 
+            },
+          ]}
+        />
       </div>
     </section>
   );

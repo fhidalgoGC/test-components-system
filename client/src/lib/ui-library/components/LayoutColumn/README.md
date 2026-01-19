@@ -1,12 +1,13 @@
 # LayoutColumn Component
 
-Componente de layout vertical que organiza múltiples filas (slots) apiladas verticalmente. Cada fila es un contenedor horizontal donde los componentes se alinean left/center/right.
+Componente de layout vertical que divide el espacio en slots iguales. Cada slot ocupa una porción igual del espacio vertical disponible.
 
 ## Concepto
 
-- **LayoutColumn**: Organiza los slots verticalmente (apilados)
-- **Cada slot**: Es una fila horizontal donde los componentes se distribuyen
-- **3 slots = 3 filas** apiladas una encima de otra
+- **N slots = espacio dividido en N partes iguales**
+- **3 slots** = cada slot ocupa 1/3 del espacio vertical
+- **Dentro de cada slot**: componentes se alinean **top** o **bottom**
+- **Tamaño de componentes**: auto, full (llenar slot), o altura fija
 
 ## Importación
 
@@ -14,11 +15,11 @@ Componente de layout vertical que organiza múltiples filas (slots) apiladas ver
 import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 ```
 
-## Props
+## Props del Contenedor
 
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
-| `slots` | `number` | requerido | Número de filas (slots) |
+| `slots` | `number` | requerido | Número de slots (dividen espacio equitativamente) |
 | `widthMode` | `'full' \| 'auto' \| 'fixed'` | `'full'` | Modo de ancho |
 | `width` | `SizeToken \| number` | - | Ancho cuando `widthMode="fixed"` |
 | `heightMode` | `'full' \| 'auto' \| 'fixed'` | `'auto'` | Modo de altura |
@@ -27,21 +28,22 @@ import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 | `paddingY` | `SpacingToken \| number` | - | Padding vertical |
 | `marginX` | `SpacingToken \| number` | - | Margen horizontal |
 | `marginY` | `SpacingToken \| number` | - | Margen vertical |
-| `componentVerticalAlign` | `'top' \| 'center' \| 'bottom' \| 'stretch'` | `'center'` | Alineación vertical de componentes dentro de cada fila |
-| `componentGap` | `GapToken \| number` | `'md'` | Espacio entre componentes del mismo slot |
-| `slotGap` | `SlotGapToken` | - | Espacio entre filas |
-| `components` | `LayoutColumnComponent[]` | requerido | Array de componentes a renderizar |
+| `componentGap` | `GapToken \| number` | `'md'` | Espacio entre componentes del mismo grupo |
+| `slotGap` | `SlotGapToken` | - | Espacio entre slots |
+| `components` | `LayoutColumnComponent[]` | requerido | Array de componentes |
 | `className` | `string` | - | Clase CSS adicional |
 
 ## Interface de Componentes
 
 ```tsx
 interface LayoutColumnComponent {
-  id?: string;                      // ID único para el hook useLayoutColumn
+  id?: string;                    // ID único para el hook
   component: ReactNode;
-  align: 'left' | 'center' | 'right';  // Alineación horizontal dentro de la fila
-  slot: number;                     // Índice de la fila (0, 1, 2...)
-  hide?: boolean;                   // Mostrar/ocultar dinámicamente
+  align: 'top' | 'bottom';        // Alineación vertical dentro del slot
+  slot: number;                   // Índice del slot (0, 1, 2...)
+  hide?: boolean;                 // Mostrar/ocultar dinámicamente
+  sizeMode?: 'auto' | 'full';     // 'auto' = tamaño natural, 'full' = llenar espacio
+  height?: HeightToken | number;  // Altura fija del componente
 }
 ```
 
@@ -49,45 +51,75 @@ interface LayoutColumnComponent {
 
 ```tsx
 <LayoutColumn
-  slots={4}
+  slots={3}
   widthMode="full"
-  heightMode="auto"
+  heightMode="full"
   slotGap="sm"
-  paddingX="md"
-  paddingY="md"
   components={[
-    { component: <Header />, align: "center", slot: 0 },
-    { component: <Content1 />, align: "center", slot: 1 },
-    { component: <Content2 />, align: "center", slot: 2 },
-    { component: <Footer />, align: "center", slot: 3 },
+    { component: <Header />, align: "top", slot: 0 },
+    { component: <Content />, align: "top", slot: 1 },
+    { component: <Footer />, align: "bottom", slot: 2 },
   ]}
 />
 ```
 
-Resultado: 4 filas apiladas verticalmente, cada una centrada horizontalmente.
+Resultado: 3 slots de igual altura. Header arriba del slot 0, Content arriba del slot 1, Footer abajo del slot 2.
 
-## Múltiples Componentes por Fila
+## Top y Bottom en Mismo Slot
 
 ```tsx
 <LayoutColumn
-  slots={2}
-  slotGap="md"
+  slots={1}
+  heightMode="full"
   components={[
-    { component: <Logo />, align: "left", slot: 0 },
-    { component: <Title />, align: "center", slot: 0 },
-    { component: <Menu />, align: "right", slot: 0 },
-    { component: <MainContent />, align: "center", slot: 1 },
+    { component: <Title />, align: "top", slot: 0 },
+    { component: <Subtitle />, align: "top", slot: 0 },
+    { component: <Button />, align: "bottom", slot: 0 },
   ]}
 />
 ```
 
-Resultado: 
-- Fila 0: Logo a la izquierda, Title en el centro, Menu a la derecha
-- Fila 1: MainContent centrado
+Resultado: Title y Subtitle arriba, Button abajo, con espacio entre ellos.
+
+## Tamaño de Componentes
+
+### sizeMode: "auto" (default)
+El componente usa su tamaño natural.
+
+### sizeMode: "full"
+El componente se expande para llenar el espacio disponible del slot.
+
+```tsx
+{ 
+  component: <ExpandableContent style={{ height: '100%' }} />, 
+  align: "top", 
+  slot: 0,
+  sizeMode: "full"  // Ocupa todo el espacio del slot
+}
+```
+
+### height: Altura fija
+Especifica una altura fija con token o número.
+
+```tsx
+{ 
+  component: <FixedHeader />, 
+  align: "top", 
+  slot: 0,
+  height: 80  // 80px de altura
+}
+
+{ 
+  component: <FixedFooter />, 
+  align: "bottom", 
+  slot: 0,
+  height: "sm"  // 200px (token)
+}
+```
 
 ## Hook useLayoutColumn
 
-Hook para gestionar la visibilidad dinámica de componentes y filas.
+Hook para gestionar la visibilidad dinámica de componentes y slots.
 
 ### Importación
 
@@ -99,11 +131,9 @@ import { LayoutColumn, useLayoutColumn } from "@/lib/ui-library/components/Layou
 
 ```tsx
 const initialComponents = [
-  { id: 'header', component: <Header />, align: 'center', slot: 0 },
-  { id: 'nav', component: <Nav />, align: 'center', slot: 1 },
-  { id: 'main', component: <Main />, align: 'left', slot: 2 },
-  { id: 'sidebar', component: <Sidebar />, align: 'right', slot: 2 },
-  { id: 'footer', component: <Footer />, align: 'center', slot: 3 },
+  { id: 'header', component: <Header />, align: 'top', slot: 0 },
+  { id: 'content', component: <Content />, align: 'top', slot: 1 },
+  { id: 'footer', component: <Footer />, align: 'bottom', slot: 2 },
 ];
 
 function MyComponent() {
@@ -112,63 +142,43 @@ function MyComponent() {
     visibleSlots,
     toggleSlot,
     toggleComponent,
-    hideSlot,
-    showSlot,
-    hideComponent,
-    showComponent,
     isSlotVisible,
-    isSlotEmpty,
     isComponentVisible,
     resetVisibility,
-  } = useLayoutColumn({ components: initialComponents, slots: 4 });
+  } = useLayoutColumn({ components: initialComponents, slots: 3 });
 
   return (
     <>
-      <button onClick={() => toggleSlot(1)}>Toggle Nav Row</button>
-      <button onClick={() => hideComponent('header')}>Hide Header</button>
-      <p>Visible rows: {visibleSlots}</p>
+      <button onClick={() => toggleSlot(1)}>Toggle Content</button>
+      <p>Visible slots: {visibleSlots}</p>
       
       <LayoutColumn
-        slots={4}
+        slots={3}
+        heightMode="full"
         components={visibleComponents}
-        slotGap="md"
       />
     </>
   );
 }
 ```
 
-### Parámetros
-
-| Parámetro | Tipo | Descripción |
-|-----------|------|-------------|
-| `components` | `LayoutColumnComponent[]` | Array inicial de componentes (con `id` opcional) |
-| `slots` | `number` | Número total de filas |
-
-### Retorno
+### Retorno del Hook
 
 | Propiedad | Tipo | Descripción |
 |-----------|------|-------------|
-| `visibleComponents` | `LayoutColumnComponent[]` | Componentes visibles (para pasar al LayoutColumn) |
-| `allComponents` | `LayoutColumnComponent[]` | Todos los componentes con estado `hide` actualizado |
-| `visibleSlots` | `number` | Número de filas con componentes visibles |
-| `hideComponent(id)` | `(id: string) => void` | Ocultar un componente por ID |
-| `showComponent(id)` | `(id: string) => void` | Mostrar un componente por ID |
-| `toggleComponent(id)` | `(id: string) => void` | Alternar visibilidad de un componente |
-| `hideSlot(index)` | `(index: number) => void` | Ocultar todos los componentes de una fila |
-| `showSlot(index)` | `(index: number) => void` | Mostrar todos los componentes de una fila |
-| `toggleSlot(index)` | `(index: number) => void` | Alternar visibilidad de una fila |
-| `isComponentVisible(id)` | `(id: string) => boolean` | Verificar si un componente es visible |
-| `isSlotVisible(index)` | `(index: number) => boolean` | Verificar si una fila tiene componentes visibles |
-| `isSlotEmpty(index)` | `(index: number) => boolean` | Verificar si una fila está vacía |
-| `resetVisibility()` | `() => void` | Restaurar visibilidad inicial |
-
-### Comportamiento de Filas Vacías
-
-Cuando todos los componentes de una fila están ocultos:
-- La fila **no se renderiza** en el DOM
-- No ocupa espacio (sin margin, padding, gap)
-- `isSlotEmpty(index)` retorna `true`
+| `visibleComponents` | `LayoutColumnComponent[]` | Componentes visibles |
+| `allComponents` | `LayoutColumnComponent[]` | Todos los componentes |
+| `visibleSlots` | `number` | Número de slots con contenido |
+| `hideComponent(id)` | `(id: string) => void` | Ocultar componente |
+| `showComponent(id)` | `(id: string) => void` | Mostrar componente |
+| `toggleComponent(id)` | `(id: string) => void` | Alternar visibilidad |
+| `hideSlot(index)` | `(index: number) => void` | Ocultar slot |
+| `showSlot(index)` | `(index: number) => void` | Mostrar slot |
+| `toggleSlot(index)` | `(index: number) => void` | Alternar visibilidad de slot |
+| `isComponentVisible(id)` | `(id: string) => boolean` | Es visible? |
+| `isSlotVisible(index)` | `(index: number) => boolean` | Slot tiene contenido? |
+| `isSlotEmpty(index)` | `(index: number) => boolean` | Slot vacío? |
+| `resetVisibility()` | `() => void` | Restaurar estado inicial |
 
 ## Tokens
 
@@ -220,149 +230,58 @@ Cuando todos los componentes de una fila están ocultos:
 | `lg` | 24px |
 | `xl` | 32px |
 
-## Valores Numéricos
+## Ejemplos de Uso
 
-Todas las props de espaciado y dimensiones aceptan valores numéricos además de tokens:
-
-```tsx
-// Con tokens
-<LayoutColumn
-  height="lg"
-  paddingX="md"
-  marginY="sm"
-  componentGap="xs"
-  slotGap="md"
-  ...
-/>
-
-// Con números (en píxeles)
-<LayoutColumn
-  height={350}
-  paddingX={20}
-  marginY={10}
-  componentGap={50}
-  slotGap={16}
-  ...
-/>
-```
-
-## Propiedad hide
-
-Cada componente puede ocultarse dinámicamente usando la prop `hide`:
+### Sidebar con Navegación
 
 ```tsx
 <LayoutColumn
-  slots={4}
-  components={[
-    { component: <Header />, align: "center", slot: 0, hide: false },
-    { component: <Content />, align: "center", slot: 1, hide: isLoading },
-    { component: <Sidebar />, align: "center", slot: 2, hide: !showSidebar },
-    { component: <Footer />, align: "center", slot: 3 },
-  ]}
-/>
-```
-
-## Modos de Ancho
-
-### `widthMode="full"` (default)
-- El componente ocupa el 100% del contenedor padre
-- Si hay `marginX`, el ancho se calcula automáticamente: `calc(100% - marginX*2)`
-
-### `widthMode="auto"`
-- El ancho se ajusta al contenido
-
-### `widthMode="fixed"`
-- Requiere prop `width` con token o número
-- Ejemplo: `width="lg"` (600px) o `width={500}` (500px)
-
-## Modos de Altura
-
-### `heightMode="auto"` (default)
-- La altura se ajusta al contenido total de todas las filas
-
-### `heightMode="full"`
-- Ocupa el 100% del contenedor padre
-- Si hay `marginY`, la altura se calcula automáticamente: `calc(100% - marginY*2)`
-
-### `heightMode="fixed"`
-- Requiere prop `height` con token o número
-- Ejemplo: `height="lg"` (400px) o `height={350}` (350px)
-
-## Alineación Horizontal (dentro de la fila)
-
-Cada componente especifica su alineación horizontal dentro de la fila con `align`:
-
-| Valor | Comportamiento |
-|-------|----------------|
-| `left` | Componente alineado a la izquierda de la fila |
-| `center` | Componente centrado horizontalmente en la fila |
-| `right` | Componente alineado a la derecha de la fila |
-
-## Alineación Vertical (componentVerticalAlign)
-
-La prop `componentVerticalAlign` controla cómo se alinean los componentes verticalmente dentro de cada fila:
-
-| Valor | Comportamiento |
-|-------|----------------|
-| `top` | Componentes alineados arriba de la fila |
-| `center` | Componentes centrados verticalmente (default) |
-| `bottom` | Componentes alineados abajo de la fila |
-| `stretch` | Componentes estiran para llenar la altura de la fila |
-
-## Ejemplos
-
-### Sidebar Vertical
-
-```tsx
-<LayoutColumn
-  slots={5}
+  slots={2}
   widthMode="fixed"
   width={200}
-  heightMode="auto"
-  slotGap="xs"
-  paddingX="sm"
-  paddingY="md"
+  heightMode="full"
+  slotGap="lg"
   components={[
-    { component: <Logo />, align: "left", slot: 0 },
-    { component: <NavItem>Home</NavItem>, align: "left", slot: 1 },
-    { component: <NavItem>Settings</NavItem>, align: "left", slot: 2 },
-    { component: <NavItem>Profile</NavItem>, align: "left", slot: 3 },
-    { component: <LogoutButton />, align: "left", slot: 4 },
+    { component: <Logo />, align: "top", slot: 0 },
+    { component: <NavHome />, align: "top", slot: 1 },
+    { component: <NavSettings />, align: "top", slot: 1 },
+    { component: <NavProfile />, align: "top", slot: 1 },
+    { component: <LogoutButton />, align: "bottom", slot: 1 },
   ]}
 />
 ```
 
-### Header con Distribución
+### Card con Header y Footer Fijos
 
 ```tsx
 <LayoutColumn
   slots={1}
-  widthMode="full"
+  widthMode="fixed"
+  width={400}
+  heightMode="fixed"
+  height={500}
   paddingX="lg"
   paddingY="md"
   components={[
-    { component: <Logo />, align: "left", slot: 0 },
-    { component: <Title />, align: "center", slot: 0 },
-    { component: <UserMenu />, align: "right", slot: 0 },
+    { component: <CardTitle />, align: "top", slot: 0, height: 60 },
+    { component: <CardContent style={{ height: '100%' }} />, align: "top", slot: 0, sizeMode: "full" },
+    { component: <CardActions />, align: "bottom", slot: 0, height: 50 },
   ]}
 />
 ```
 
-### Formulario con Filas
+### Layout de Página Completa
 
 ```tsx
 <LayoutColumn
-  slots={4}
-  widthMode="fixed"
-  width={400}
-  slotGap="md"
-  paddingX="lg"
-  paddingY="lg"
+  slots={3}
+  widthMode="full"
+  heightMode="full"
+  slotGap="none"
   components={[
-    { component: <FormTitle />, align: "center", slot: 0 },
-    { component: <EmailInput />, align: "center", slot: 1 },
-    { component: <PasswordInput />, align: "center", slot: 2 },
-    { component: <SubmitButton />, align: "center", slot: 3 },
+    { component: <Header />, align: "top", slot: 0, height: 64 },
+    { component: <MainContent style={{ height: '100%' }} />, align: "top", slot: 1, sizeMode: "full" },
+    { component: <Footer />, align: "bottom", slot: 2, height: 80 },
   ]}
 />
 ```
@@ -371,8 +290,7 @@ La prop `componentVerticalAlign` controla cómo se alinean los componentes verti
 
 | Aspecto | LayoutRow | LayoutColumn |
 |---------|-----------|--------------|
-| Orientación slots | Columnas horizontales | Filas verticales |
-| Alineación componentes | `left`, `center`, `right` | `left`, `center`, `right` |
-| Alineación contenedor | `componentVerticalAlign` | `componentVerticalAlign` |
-| Slots | Dividen horizontalmente (columnas) | Apilan verticalmente (filas) |
-| Prop hide | Disponible | Disponible |
+| Orientación | Horizontal (columnas lado a lado) | Vertical (slots apilados) |
+| Slots dividen | Espacio horizontal | Espacio vertical |
+| Alineación componentes | `left`, `center`, `right` | `top`, `bottom` |
+| Uso típico | Columnas de contenido | Secciones verticales |

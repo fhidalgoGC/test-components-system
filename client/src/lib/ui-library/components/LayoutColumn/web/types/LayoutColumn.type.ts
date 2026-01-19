@@ -7,15 +7,17 @@ export type GapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type SlotGapToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'full' | 'auto' | 'fixed';
-export type HorizontalAlign = 'left' | 'center' | 'right';
-export type VerticalAlign = 'top' | 'center' | 'bottom' | 'stretch';
+export type VerticalAlign = 'top' | 'bottom';
+export type ComponentSizeMode = 'auto' | 'full';
 
 export interface LayoutColumnComponent {
   id?: string;
   component: ReactNode;
-  align: HorizontalAlign;
+  align: VerticalAlign;
   slot: number;
   hide?: boolean;
+  sizeMode?: ComponentSizeMode;
+  height?: HeightToken | number;
 }
 
 export interface UseLayoutColumnOptions {
@@ -49,7 +51,6 @@ export interface LayoutColumnProps {
   paddingY?: SpacingToken | number;
   marginX?: SpacingToken | number;
   marginY?: SpacingToken | number;
-  componentVerticalAlign?: VerticalAlign;
   componentGap?: GapToken | number;
   slotGap?: SlotGapToken;
   components: LayoutColumnComponent[];
