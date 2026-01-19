@@ -65,7 +65,7 @@ export function HookDemo() {
           slots={4}
           widthMode="full"
           heightMode="full"
-          slotGap="md"
+          slotDivider="sm-light"
           paddingX="md"
           paddingY="md"
           componentGap="sm"

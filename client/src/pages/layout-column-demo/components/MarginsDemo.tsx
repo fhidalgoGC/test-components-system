@@ -18,7 +18,7 @@ export function MarginsDemo() {
           marginY="md"
           paddingX="md"
           paddingY="sm"
-          slotGap="sm"
+          slotDivider="sm-dark"
           componentGap="sm"
           className={styles.whiteBg}
           components={[
