@@ -10,7 +10,8 @@ export function HidePropertyDemo() {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>5. Propiedad hide</h2>
+      <div className={styles.componentName}>5-HidePropertyDemo.tsx</div>
+      <h2 className={styles.section__title}>Propiedad hide</h2>
       <p className={styles.section__description}>
         Ocultar componentes dinámicamente. Slots vacíos no se renderizan.
       </p>

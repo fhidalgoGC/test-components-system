@@ -4,7 +4,8 @@ import styles from "../css/LayoutColumnDemo.module.scss";
 export function BasicLayoutDemo() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>1. Slots Dividen Espacio Vertical</h2>
+      <div className={styles.componentName}>1-BasicLayoutDemo.tsx</div>
+      <h2 className={styles.section__title}>Slots Dividen Espacio Vertical</h2>
       <p className={styles.section__description}>
         3 slots = espacio dividido en 3 partes iguales. Alineación: top, center, bottom.
       </p>

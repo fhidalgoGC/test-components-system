@@ -42,6 +42,16 @@
   }
 }
 
+.componentName {
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: $gcc-brand-default;
+  background-color: rgba($gcc-brand-default, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  width: fit-content;
+}
+
 .demoBox {
   border: 1px solid $gcc-neutral-lighten-3;
   border-radius: 0.5rem;

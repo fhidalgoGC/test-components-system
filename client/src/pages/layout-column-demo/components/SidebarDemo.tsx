@@ -5,7 +5,8 @@ import styles from "../css/LayoutColumnDemo.module.scss";
 export function SidebarDemo() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>7. Ejemplo Sidebar</h2>
+      <div className={styles.componentName}>7-SidebarDemo.tsx</div>
+      <h2 className={styles.section__title}>Ejemplo Sidebar</h2>
       <p className={styles.section__description}>
         Sidebar con 2 slots: navegación arriba, logout abajo.
       </p>

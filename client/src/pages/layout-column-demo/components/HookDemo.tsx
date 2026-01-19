@@ -23,7 +23,8 @@ export function HookDemo() {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>8. Hook useLayoutColumn</h2>
+      <div className={styles.componentName}>8-HookDemo.tsx</div>
+      <h2 className={styles.section__title}>Hook useLayoutColumn</h2>
       <p className={styles.section__description}>
         Gestión programática de visibilidad de componentes y slots.
       </p>

@@ -4,7 +4,8 @@ import styles from "../css/LayoutColumnDemo.module.scss";
 export function MultipleSlotsDemo() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>2. Top, Center y Bottom en Mismo Slot</h2>
+      <div className={styles.componentName}>2-MultipleSlotsDemo.tsx</div>
+      <h2 className={styles.section__title}>Top, Center y Bottom en Mismo Slot</h2>
       <p className={styles.section__description}>
         Dentro de cada slot: componentes arriba (top), centro (center) y abajo (bottom).
       </p>

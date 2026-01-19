@@ -4,7 +4,8 @@ import styles from "../css/LayoutColumnDemo.module.scss";
 export function HorizontalAlignDemo() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>4. sizeMode: full (Componente Ocupa Todo)</h2>
+      <div className={styles.componentName}>4-HorizontalAlignDemo.tsx</div>
+      <h2 className={styles.section__title}>sizeMode: full (Componente Ocupa Todo)</h2>
       <p className={styles.section__description}>
         Con sizeMode="full", el componente se expande para llenar el espacio disponible del slot.
       </p>

@@ -4,7 +4,8 @@ import styles from "../css/LayoutColumnDemo.module.scss";
 export function MarginsDemo() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>6. Full Mode con Márgenes</h2>
+      <div className={styles.componentName}>6-MarginsDemo.tsx</div>
+      <h2 className={styles.section__title}>Full Mode con Márgenes</h2>
       <p className={styles.section__description}>
         marginX/marginY con widthMode/heightMode="full" usa calc(100% - margin*2).
       </p>

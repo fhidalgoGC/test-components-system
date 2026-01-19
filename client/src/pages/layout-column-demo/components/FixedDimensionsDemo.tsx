@@ -4,7 +4,8 @@ import styles from "../css/LayoutColumnDemo.module.scss";
 export function FixedDimensionsDemo() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.section__title}>3. Componentes con Altura Fija</h2>
+      <div className={styles.componentName}>3-FixedDimensionsDemo.tsx</div>
+      <h2 className={styles.section__title}>Componentes con Altura Fija</h2>
       <p className={styles.section__description}>
         Cada componente puede tener altura fija con tokens o números.
       </p>
