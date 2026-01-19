@@ -17,7 +17,10 @@ export function LayoutColumnDemo() {
         <h1 className={styles.header__title} data-testid="text-title">
           LayoutColumn Component
         </h1>
-        <p className={styles.header__description} data-testid="text-description">
+        <p
+          className={styles.header__description}
+          data-testid="text-description"
+        >
           Componente de layout vertical altamente configurable para organizar
           múltiples componentes en slots.
         </p>
@@ -25,13 +28,13 @@ export function LayoutColumnDemo() {
 
       <div className={styles.sections}>
         <BasicLayoutDemo />
-        <MultipleSlotsDemo />
+        {/* <MultipleSlotsDemo />
         <FixedDimensionsDemo />
         <HorizontalAlignDemo />
         <HidePropertyDemo />
         <MarginsDemo />
         <SidebarDemo />
-        <HookDemo />
+        <HookDemo /> */}
       </div>
     </div>
   );
