@@ -1,4 +1,4 @@
-import type { LayoutColumnProps, LayoutColumnComponent, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken, SlotDividerToken, DividerSize, DividerColor } from '../types';
+import type { LayoutColumnProps, LayoutColumnComponent, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken, SlotDividerToken, SlotAlignDividerToken, DividerSize, DividerColor, DividerStyle } from '../types';
 import styles from '../css/LayoutColumn.module.scss';
 
 const dividerSizeToPixels: Record<DividerSize, number> = {
@@ -20,6 +20,11 @@ const dividerColorToValue: Record<DividerColor, string> = {
 const parseDividerToken = (token: SlotDividerToken): { size: DividerSize; color: DividerColor } => {
   const [size, color] = token.split('-') as [DividerSize, DividerColor];
   return { size, color };
+};
+
+const parseAlignDividerToken = (token: SlotAlignDividerToken): { size: DividerSize; color: DividerColor; style: DividerStyle } => {
+  const [size, color, style] = token.split('-') as [DividerSize, DividerColor, DividerStyle];
+  return { size, color, style };
 };
 
 const sizeTokenToPixels: Record<SizeToken, number> = {
@@ -165,9 +170,20 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
     componentGap = 'md',
     slotGap,
     slotDivider,
+    slotAlignDivider,
     components,
     className,
   } = props;
+
+  const alignDividerStyle = slotAlignDivider ? (() => {
+    const { size, color, style } = parseAlignDividerToken(slotAlignDivider);
+    return {
+      height: 0,
+      borderTopWidth: `${dividerSizeToPixels[size]}px`,
+      borderTopStyle: style,
+      borderTopColor: dividerColorToValue[color],
+    };
+  })() : null;
 
   const groupedBySlot: Record<number, LayoutColumnComponent[]> = {};
   components
@@ -257,8 +273,8 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
               </div>
             )}
 
-            {hasTop && (hasCenter || hasBottom) && (
-              <div className={styles.alignDivider} />
+            {slotAlignDivider && hasTop && (hasCenter || hasBottom) && (
+              <div className={styles.alignDivider} style={alignDividerStyle || undefined} />
             )}
 
             {hasCenter && (
@@ -284,8 +300,8 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
               </div>
             )}
 
-            {(hasCenter || hasTop) && hasBottom && (
-              <div className={styles.alignDivider} />
+            {slotAlignDivider && (hasCenter || hasTop) && hasBottom && (
+              <div className={styles.alignDivider} style={alignDividerStyle || undefined} />
             )}
 
             {hasBottom && (

@@ -12,7 +12,9 @@ export type ComponentSizeMode = 'auto' | 'full';
 
 export type DividerSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type DividerColor = 'white' | 'gray' | 'light' | 'dark' | 'primary';
+export type DividerStyle = 'solid' | 'dashed' | 'dotted';
 export type SlotDividerToken = `${DividerSize}-${DividerColor}`;
+export type SlotAlignDividerToken = `${DividerSize}-${DividerColor}-${DividerStyle}`;
 
 export interface LayoutColumnComponent {
   id?: string;
@@ -58,6 +60,7 @@ export interface LayoutColumnProps {
   componentGap?: GapToken | number;
   slotGap?: SlotGapToken;
   slotDivider?: SlotDividerToken;
+  slotAlignDivider?: SlotAlignDividerToken;
   components: LayoutColumnComponent[];
   className?: string;
   langOverride?: string;
