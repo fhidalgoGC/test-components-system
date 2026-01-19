@@ -24,11 +24,13 @@ export function MultipleSlotsDemo() {
           slotDivider="sm-dark"
           paddingX="md"
           paddingY="md"
-          componentGap="xs"
+          componentGap="none"
           components={[
             {
               component: (
-                <div className={`${styles.demoItem} ${styles["demoItem--primary"]}`}>
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
+                >
                   <span className={styles.slotBadge}>0</span> Top
                 </div>
               ),
@@ -37,8 +39,10 @@ export function MultipleSlotsDemo() {
             },
             {
               component: (
-                <div className={`${styles.demoItem} ${styles["demoItem--info"]}`}>
-                  <span className={styles.slotBadge}>0</span> Center
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--info"]}`}
+                >
+                  <span className={styles.slotBadge}>0</span> Top2
                 </div>
               ),
               align: "top",
@@ -46,7 +50,9 @@ export function MultipleSlotsDemo() {
             },
             {
               component: (
-                <div className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}>
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}
+                >
                   <span className={styles.slotBadge}>0</span> Bottom
                 </div>
               ),
@@ -55,7 +61,9 @@ export function MultipleSlotsDemo() {
             },
             {
               component: (
-                <div className={`${styles.demoItem} ${styles["demoItem--success"]}`}>
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--success"]}`}
+                >
                   <span className={styles.slotBadge}>1</span> Top
                 </div>
               ),
@@ -64,7 +72,9 @@ export function MultipleSlotsDemo() {
             },
             {
               component: (
-                <div className={`${styles.demoItem} ${styles["demoItem--teal"]}`}>
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--teal"]}`}
+                >
                   <span className={styles.slotBadge}>1</span> Bottom
                 </div>
               ),

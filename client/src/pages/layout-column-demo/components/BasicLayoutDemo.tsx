@@ -12,15 +12,15 @@ export function BasicLayoutDemo() {
       </p>
       <div
         className={styles.demoBox}
-        style={{ height: 300 }}
+        style={{ height: 500 }}
         data-testid="demo-basic"
       >
         <LayoutColumn
           slots={3}
           widthMode="full"
           heightMode="full"
-          paddingY="sm"
-          paddingX="md"
+          paddingY="lg"
+          paddingX="none"
           slotDivider="lg-dark"
           components={[
             {
@@ -28,10 +28,32 @@ export function BasicLayoutDemo() {
                 <div
                   className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
                 >
-                  <span className={styles.slotBadge}>0</span> Top
+                  <span className={styles.slotBadge}>0</span> Top-A
                 </div>
               ),
               align: "top",
+              slot: 0,
+            },
+            {
+              component: (
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--warning"]}`}
+                >
+                  <span className={styles.slotBadge}>0</span> Center-B
+                </div>
+              ),
+              align: "center",
+              slot: 0,
+            },
+            {
+              component: (
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}
+                >
+                  <span className={styles.slotBadge}>0</span> Bottom-C
+                </div>
+              ),
+              align: "bottom",
               slot: 0,
             },
             {
@@ -53,7 +75,7 @@ export function BasicLayoutDemo() {
                   <span className={styles.slotBadge}>2</span> Bottom
                 </div>
               ),
-              align: "bottom",
+              align: "center",
               slot: 2,
             },
           ]}
