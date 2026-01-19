@@ -1,48 +1,53 @@
 # NavigationSidebar Component
 
-Componente de navegación lateral configurable con soporte para i18n, temas y estructura de menú jerárquica.
+Componente de navegación lateral con estructura de **Header**, **Body** y **Footer** configurable.
+
+## Arquitectura
+
+```
+┌─────────────────────────────┐
+│         HEADER              │  ← headerContent (ReactNode)
+│   (componente custom)       │
+├─────────────────────────────┤
+│                             │
+│         BODY                │  ← items (NavigationItem[])
+│   (items de navegación)     │
+│                             │
+├─────────────────────────────┤
+│         FOOTER              │  ← footerContent (ReactNode) o default
+│   (tema/idioma o custom)    │
+└─────────────────────────────┘
+```
 
 ## Importación
 
 ```tsx
 import { NavigationSidebar } from "@/lib/ui-library/components/NavigationSidebar";
-import type { NavigationItem, NavigationSubItem } from "@/lib/ui-library/components/NavigationSidebar";
+import type { NavigationItem } from "@/lib/ui-library/components/NavigationSidebar";
 ```
-
-## Características
-
-- Items de navegación configurables por props
-- Soporte para sub-menús con componentes personalizados
-- Toggle de tema claro/oscuro
-- Selector de idioma integrado
-- Modo colapsado/expandido
-- Responsive (menú móvil incluido)
-- Soporte completo para i18n
 
 ## Props
 
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
-| `items` | `NavigationItem[]` | **requerido** | Array de items de navegación |
-| `brandTitle` | `string` | `'UI Library'` | Título de la marca |
-| `brandSubtitle` | `string` | - | Subtítulo opcional |
-| `brandIcon` | `ReactNode` | `<Package />` | Icono de la marca |
-| `version` | `string` | `'v1.0.0'` | Versión mostrada |
+| `items` | `NavigationItem[]` | **requerido** | Items de navegación (Body) |
+| `headerContent` | `ReactNode` | - | Componente para el Header |
+| `footerContent` | `ReactNode` | - | Componente personalizado para el Footer |
 | `currentPath` | `string` | - | Ruta actual para marcar items activos |
 | `defaultCollapsed` | `boolean` | `false` | Estado inicial colapsado |
-| `showThemeToggle` | `boolean` | `true` | Mostrar botón de cambio de tema |
-| `showLanguageSelector` | `boolean` | `true` | Mostrar selector de idioma |
+| `showThemeToggle` | `boolean` | `true` | Mostrar botón de tema (solo si no hay footerContent) |
+| `showLanguageSelector` | `boolean` | `true` | Mostrar selector de idioma (solo si no hay footerContent) |
 | `availableLanguages` | `string[]` | `['en', 'es']` | Idiomas disponibles |
 | `currentLanguage` | `string` | - | Idioma actual (modo controlado) |
 | `currentTheme` | `'light' \| 'dark'` | - | Tema actual (modo controlado) |
 | `onNavigate` | `(path: string) => void` | - | Callback al navegar |
-| `onThemeChange` | `(theme: 'light' \| 'dark') => void` | - | Callback al cambiar tema |
-| `onLanguageChange` | `(language: string) => void` | - | Callback al cambiar idioma |
-| `onCollapseChange` | `(collapsed: boolean) => void` | - | Callback al colapsar/expandir |
+| `onThemeChange` | `(theme) => void` | - | Callback al cambiar tema |
+| `onLanguageChange` | `(language) => void` | - | Callback al cambiar idioma |
+| `onCollapseChange` | `(collapsed) => void` | - | Callback al colapsar/expandir |
+| `collapsedWidth` | `number` | `80` | Ancho en modo colapsado (px) |
+| `expandedWidth` | `number` | `280` | Ancho en modo expandido (px) |
 | `langOverride` | `string` | - | Override del idioma para traducciones |
-| `i18nOrder` | `'global-first' \| 'local-first'` | `'local-first'` | Prioridad de traducciones |
 | `className` | `string` | - | Clases CSS adicionales |
-| `footerContent` | `ReactNode` | - | Contenido personalizado del footer |
 
 ## Interfaces
 
@@ -50,13 +55,13 @@ import type { NavigationItem, NavigationSubItem } from "@/lib/ui-library/compone
 
 ```tsx
 interface NavigationItem {
-  id: string;                       // ID único del item
-  label: string;                    // Texto a mostrar
-  path?: string;                    // Ruta de navegación
-  icon?: ReactNode;                 // Icono del item
-  isActive?: boolean;               // Estado activo (calculado automáticamente)
-  children?: NavigationSubItem[];   // Sub-items
-  component?: ReactNode;            // Componente personalizado
+  id: string;
+  label: string;
+  path?: string;
+  icon?: ReactNode;
+  isActive?: boolean;
+  children?: NavigationSubItem[];
+  component?: ReactNode;
 }
 ```
 
@@ -64,12 +69,12 @@ interface NavigationItem {
 
 ```tsx
 interface NavigationSubItem {
-  id: string;                       // ID único del sub-item
-  label: string;                    // Texto a mostrar
-  path: string;                     // Ruta de navegación
-  icon?: ReactNode;                 // Icono opcional
-  isActive?: boolean;               // Estado activo
-  component?: ReactNode;            // Componente personalizado
+  id: string;
+  label: string;
+  path: string;
+  icon?: ReactNode;
+  isActive?: boolean;
+  component?: ReactNode;
 }
 ```
 
@@ -77,91 +82,105 @@ interface NavigationSubItem {
 
 ```tsx
 import { NavigationSidebar } from "@/lib/ui-library/components/NavigationSidebar";
-import { Home, Settings, Users } from "lucide-react";
+import { Home, Settings, Package } from "lucide-react";
 
 const menuItems = [
-  {
-    id: "home",
-    label: "Inicio",
-    path: "/",
-    icon: <Home className="h-5 w-5" />,
-  },
-  {
-    id: "users",
-    label: "Usuarios",
-    icon: <Users className="h-5 w-5" />,
-    children: [
-      { id: "users-list", label: "Lista", path: "/users" },
-      { id: "users-add", label: "Agregar", path: "/users/add" },
-    ],
-  },
-  {
-    id: "settings",
-    label: "Configuración",
-    path: "/settings",
-    icon: <Settings className="h-5 w-5" />,
-  },
+  { id: "home", label: "Inicio", path: "/", icon: <Home className="h-5 w-5" /> },
+  { id: "settings", label: "Config", path: "/settings", icon: <Settings className="h-5 w-5" /> },
 ];
 
 function App() {
-  const handleNavigate = (path: string) => {
-    window.location.href = path;
-  };
-
   return (
     <NavigationSidebar
+      headerContent={
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <Package className="h-4 w-4 text-white" />
+          </div>
+          <div>
+            <h1 className="font-semibold">Mi App</h1>
+            <p className="text-xs text-gray-500">v1.0.0</p>
+          </div>
+        </div>
+      }
       items={menuItems}
-      brandTitle="Mi App"
-      version="v2.0.0"
-      currentPath={window.location.pathname}
-      onNavigate={handleNavigate}
+      onNavigate={(path) => window.location.href = path}
     />
   );
 }
 ```
 
-## Ejemplo con Componentes Personalizados en Sub-items
+## Header Personalizado
+
+El header recibe un `ReactNode` para renderizar cualquier contenido:
 
 ```tsx
-const menuItems = [
-  {
-    id: "components",
-    label: "Componentes",
-    icon: <Package className="h-5 w-5" />,
-    children: [
-      {
-        id: "button",
-        label: "Button",
-        path: "/components/button",
-        component: (
-          <div className="flex items-center gap-2">
-            <span className="truncate">Button</span>
-            <span className="text-xs bg-green-100 text-green-800 px-1 rounded">New</span>
-          </div>
-        ),
-      },
-      {
-        id: "card",
-        label: "Card",
-        path: "/components/card",
-      },
-    ],
-  },
-];
+<NavigationSidebar
+  headerContent={
+    <div className="flex items-center justify-between w-full">
+      <div className="flex items-center gap-3">
+        <img src="/logo.png" className="w-8 h-8" />
+        <span className="font-bold">Brand</span>
+      </div>
+      <span className="text-xs bg-blue-100 px-2 py-1 rounded">v2.0</span>
+    </div>
+  }
+  items={menuItems}
+/>
 ```
 
-## Ejemplo con Footer Personalizado
+## Footer Personalizado
+
+Por defecto, el footer muestra los controles de tema e idioma. Puedes personalizarlo:
 
 ```tsx
+// Footer predeterminado (tema + idioma)
+<NavigationSidebar
+  items={menuItems}
+  showThemeToggle={true}
+  showLanguageSelector={true}
+/>
+
+// Footer personalizado
 <NavigationSidebar
   items={menuItems}
   footerContent={
     <div className="flex items-center gap-2">
       <img src="/avatar.png" className="w-8 h-8 rounded-full" />
-      <span>John Doe</span>
+      <div>
+        <p className="text-sm font-medium">John Doe</p>
+        <p className="text-xs text-gray-500">Admin</p>
+      </div>
     </div>
   }
 />
+```
+
+## Items con Sub-menús
+
+```tsx
+const menuItems = [
+  {
+    id: "components",
+    label: "Components",
+    icon: <Package className="h-5 w-5" />,
+    children: [
+      { id: "button", label: "Button", path: "/components/button" },
+      { id: "card", label: "Card", path: "/components/card" },
+      { 
+        id: "carousel", 
+        label: "Carousel", 
+        path: "/components/carousel",
+        component: (
+          <div className="flex items-center gap-2">
+            <span>Carousel</span>
+            <span className="text-xs bg-green-100 text-green-800 px-1 rounded">New</span>
+          </div>
+        )
+      },
+    ],
+  },
+];
 ```
 
 ## Modo Controlado vs No Controlado
@@ -171,13 +190,10 @@ const menuItems = [
 ```tsx
 <NavigationSidebar
   items={menuItems}
-  onNavigate={(path) => navigate(path)}
-  onThemeChange={(theme) => console.log('Theme:', theme)}
-  onLanguageChange={(lang) => console.log('Language:', lang)}
+  onThemeChange={(theme) => console.log(theme)}
+  onLanguageChange={(lang) => console.log(lang)}
 />
 ```
-
-El componente maneja internamente el tema e idioma usando `localStorage`.
 
 ### Controlado (manejo externo)
 
@@ -194,65 +210,28 @@ const [language, setLanguage] = useState('es');
 />
 ```
 
-El estado es manejado externamente por la aplicación padre.
+## Responsive
 
-## Traducciones
-
-El componente incluye traducciones para:
-- `navigationsidebar.themeToggle.light` / `dark` / `switch`
-- `navigationsidebar.language.select` / `current`
-- `navigationsidebar.menu.expand` / `collapse` / `openMobile` / `closeMobile`
-- `navigationsidebar.navigation.main`
-
-### Agregar traducciones personalizadas
-
-```tsx
-// Usando langOverride
-<NavigationSidebar
-  items={menuItems}
-  langOverride="en"
-/>
-
-// Usando i18nOrder para priorizar traducciones globales
-<NavigationSidebar
-  items={menuItems}
-  i18nOrder="global-first"
-/>
-```
+- **Desktop (≥1024px)**: Sidebar fijo, botón de colapsar visible
+- **Mobile (<1024px)**: Sidebar oculto, botón hamburguesa fijo
 
 ## Estructura de Archivos
 
 ```
 NavigationSidebar/
-├── index.tsx                    # Export principal
-├── README.md                    # Documentación
+├── index.tsx
+├── README.md
 ├── css/
-│   ├── NavigationSidebar.module.css
-│   └── index.ts
+│   └── NavigationSidebar.module.css
 ├── hooks/
 │   ├── useNavigationSidebar.hook.ts
-│   ├── useI18nMerge.hook.ts
-│   └── index.ts
+│   └── useI18nMerge.hook.ts
 ├── i18n/
 │   ├── en.json
 │   ├── es.json
 │   └── index.ts
 ├── types/
-│   ├── NavigationSidebar.type.ts
-│   └── index.ts
+│   └── NavigationSidebar.type.ts
 └── views/
-    ├── NavigationSidebar.view.tsx
-    └── index.ts
+    └── NavigationSidebar.view.tsx
 ```
-
-## Responsive
-
-- **Desktop (≥1024px)**: Sidebar fijo en el lado izquierdo, botón de colapsar visible
-- **Mobile (<1024px)**: Sidebar oculto por defecto, botón hamburguesa fijo en esquina superior izquierda
-
-## Accesibilidad
-
-- Usa `aria-label` en botones
-- Navegación semántica con `<nav>`
-- Focus visible en elementos interactivos
-- `data-testid` en todos los elementos interactivos

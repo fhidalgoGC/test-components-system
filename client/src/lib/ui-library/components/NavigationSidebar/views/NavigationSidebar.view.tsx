@@ -24,17 +24,17 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
 
   const {
     className = '',
-    brandTitle = 'UI Library',
-    brandSubtitle,
-    version = 'v1.0.0',
-    brandIcon,
+    headerContent,
     showThemeToggle = true,
     showLanguageSelector = true,
     availableLanguages = ['en', 'es'],
     footerContent,
+    collapsedWidth = 80,
+    expandedWidth = 280,
   } = props;
 
   const isDark = currentTheme === 'dark';
+  const sidebarWidth = isCollapsed ? collapsedWidth : expandedWidth;
 
   return (
     <>
@@ -63,48 +63,31 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
         className={`
           ${styles.sidebar}
           ${isDark ? styles.dark : ''}
-          ${isCollapsed ? styles.collapsed : styles.expanded}
           ${isMobileMenuOpen ? styles.mobileVisible : styles.mobileHidden}
           lg:translate-x-0
           fixed lg:relative
           z-40
           ${className}
         `}
+        style={{ width: `${sidebarWidth}px` }}
         data-testid="navigation-sidebar"
       >
+        {/* HEADER */}
         <div className={`${styles.header} ${isDark ? styles.dark : ''}`} data-testid="sidebar-header">
-          <div className="flex items-center justify-between w-full">
-            <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center w-full' : ''}`}>
-              <div className={`${styles.brandIcon} bg-primary`}>
-                {brandIcon || <Package className="h-4 w-4 text-primary-foreground" />}
-              </div>
-              {!isCollapsed && (
-                <div className="flex-1 min-w-0">
-                  <h1
-                    className={`${styles.brandTitle} ${isDark ? styles.dark : ''}`}
-                    data-testid="text-brand-title"
-                  >
-                    {brandTitle}
-                  </h1>
-                  {brandSubtitle && (
-                    <p className={`${styles.brandSubtitle} ${isDark ? styles.dark : ''}`}>
-                      {brandSubtitle}
-                    </p>
-                  )}
-                </div>
-              )}
+          {headerContent ? (
+            <div className="w-full">
+              {headerContent}
             </div>
-            {!isCollapsed && (
-              <span
-                className={`${styles.versionBadge} ${isDark ? styles.dark : ''}`}
-                data-testid="text-brand-version"
-              >
-                {version}
-              </span>
-            )}
-          </div>
+          ) : (
+            <div className="flex items-center justify-center w-full">
+              <div className={`${styles.brandIcon} bg-primary`}>
+                <Package className="h-4 w-4 text-primary-foreground" />
+              </div>
+            </div>
+          )}
         </div>
 
+        {/* Toggle Collapse Button */}
         <button
           onClick={handleToggleCollapse}
           className={`hidden lg:flex ${styles.toggleButton} ${isDark ? styles.dark : ''}`}
@@ -118,7 +101,8 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
           )}
         </button>
 
-        <nav className={styles.nav} aria-label={t('navigationsidebar.navigation.main')}>
+        {/* BODY - Navigation Items */}
+        <nav className={styles.nav} aria-label={t('navigationsidebar.navigation.main')} data-testid="sidebar-body">
           <div className="space-y-2">
             {processedItems.map((item) => {
               const isExpanded = expandedItems.has(item.id);
@@ -205,7 +189,8 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
           </div>
         </nav>
 
-        <div className={`${styles.footer} ${isDark ? styles.dark : ''}`}>
+        {/* FOOTER */}
+        <div className={`${styles.footer} ${isDark ? styles.dark : ''}`} data-testid="sidebar-footer">
           {footerContent ? (
             footerContent
           ) : (

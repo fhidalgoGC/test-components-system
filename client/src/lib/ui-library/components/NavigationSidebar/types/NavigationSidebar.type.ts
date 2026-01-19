@@ -21,10 +21,7 @@ export interface NavigationItem {
 
 export interface NavigationSidebarProps {
   items: NavigationItem[];
-  brandTitle?: string;
-  brandSubtitle?: string;
-  brandIcon?: ReactNode;
-  version?: string;
+  headerContent?: ReactNode;
   currentPath?: string;
   defaultCollapsed?: boolean;
   showThemeToggle?: boolean;
@@ -40,6 +37,8 @@ export interface NavigationSidebarProps {
   i18nOrder?: 'global-first' | 'local-first';
   className?: string;
   footerContent?: ReactNode;
+  collapsedWidth?: number;
+  expandedWidth?: number;
 }
 
 export interface NavigationSidebarContext {
