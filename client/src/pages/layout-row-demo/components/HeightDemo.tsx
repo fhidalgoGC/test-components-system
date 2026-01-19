@@ -6,6 +6,7 @@ const heightOptions = ["xs", "sm", "md", "lg", "xl", 200] as const;
 export function HeightDemo() {
   return (
     <section className={styles.section}>
+      <div className={styles.componentName}>HeightDemo.tsx</div>
       <h2 className={styles.section__title}>
         8. Diferentes tamaños de altura (HeightToken)
       </h2>

@@ -6,6 +6,7 @@ import styles from "../css/LayoutRowDemo.module.scss";
 export function BreadcrumbsDemo() {
   return (
     <section className={styles.section}>
+      <div className={styles.componentName}>BreadcrumbsDemo.tsx</div>
       <h2 className={styles.section__title}>5. Navegación con breadcrumbs</h2>
       <p className={styles.section__description}>
         Breadcrumbs a la izquierda, acciones contextuales a la derecha.

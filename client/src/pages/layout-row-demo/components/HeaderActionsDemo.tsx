@@ -6,6 +6,7 @@ import styles from "../css/LayoutRowDemo.module.scss";
 export function HeaderActionsDemo() {
   return (
     <section className={styles.section}>
+      <div className={styles.componentName}>HeaderActionsDemo.tsx</div>
       <h2 className={styles.section__title}>2. Header con múltiples acciones</h2>
       <p className={styles.section__description}>
         2 slots con múltiples componentes por slot, usando diferentes alineaciones.

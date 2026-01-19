@@ -6,6 +6,7 @@ const gapOptions = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 export function SpacingDemo() {
   return (
     <section className={styles.section}>
+      <div className={styles.componentName}>SpacingDemo.tsx</div>
       <h2 className={styles.section__title}>7. Diferentes tamaños de spacing</h2>
       <p className={styles.section__description}>
         Comparación de componentGap y slotGap.

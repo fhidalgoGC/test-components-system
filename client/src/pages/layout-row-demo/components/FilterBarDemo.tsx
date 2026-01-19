@@ -7,6 +7,7 @@ import styles from "../css/LayoutRowDemo.module.scss";
 export function FilterBarDemo() {
   return (
     <section className={styles.section}>
+      <div className={styles.componentName}>FilterBarDemo.tsx</div>
       <h2 className={styles.section__title}>3. Barra de filtros</h2>
       <p className={styles.section__description}>
         Layout con filtros a la izquierda y acciones a la derecha.

@@ -6,6 +6,7 @@ import styles from "../css/LayoutRowDemo.module.scss";
 export function ToolbarBasicDemo() {
   return (
     <section className={styles.section}>
+      <div className={styles.componentName}>ToolbarBasicDemo.tsx</div>
       <h2 className={styles.section__title}>1. Toolbar Básico (3 slots)</h2>
       <p className={styles.section__description}>
         Layout con 3 slots: navegación izquierda, título central, acciones

@@ -5,6 +5,7 @@ import styles from "../css/LayoutRowDemo.module.scss";
 export function CardActionsDemo() {
   return (
     <section className={styles.section}>
+      <div className={styles.componentName}>CardActionsDemo.tsx</div>
       <h2 className={styles.section__title}>4. Card Actions (ancho fijo)</h2>
       <p className={styles.section__description}>
         Layout con ancho fijo para acciones de tarjeta.

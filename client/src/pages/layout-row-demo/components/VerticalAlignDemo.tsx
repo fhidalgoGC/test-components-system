@@ -6,6 +6,7 @@ const alignOptions = ["top", "center", "bottom", "stretch"] as const;
 export function VerticalAlignDemo() {
   return (
     <section className={styles.section}>
+      <div className={styles.componentName}>VerticalAlignDemo.tsx</div>
       <h2 className={styles.section__title}>
         6. Diferentes alineaciones verticales
       </h2>
