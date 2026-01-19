@@ -325,6 +325,31 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 - Configurar navegación por teclado y accesibilidad
 - Testing con data-testid de slides, botones e indicadores
 
+### **LayoutRow**
+
+#### **`./components/LayoutRow/README.md`**
+**Cuándo usar:** Para implementar layouts horizontales con división proporcional del espacio en slots y grupos de alineación.
+
+**Contiene:**
+- 🏗️ Arquitectura de 3 niveles (Slots → Grupos de Alineación → Componentes)
+- 📖 Props completos del LayoutRow (slots, widthMode, heightMode, etc.)
+- 🎯 Ejemplos de uso (toolbars, headers, footers, card actions)
+- 🔧 API detallada con tipos TypeScript (LayoutRowComponent, tokens)
+- ⚖️ Comportamiento dinámico vs fijo (full/auto/fixed modes)
+- 🎨 Alineación horizontal (left, center, right) dentro de cada slot
+- 📏 Alineación vertical de componentes (top, center, bottom, stretch)
+- 🎨 Tokens de spacing, gaps y dimensiones
+
+**Buscar aquí para:**
+- Implementar toolbars con botones izquierda/centro/derecha
+- Crear headers de aplicación con logo y acciones
+- Dividir espacio horizontal proporcionalmente en slots
+- Usar grupos de alineación (left/center/right) dentro de slots
+- Configurar gaps entre slots y componentes
+- Crear footers de cards con acciones distribuidas
+- Usar modo dinámico (full) vs modo fijo (fixed con tokens)
+- Hacer que componentes llenen el alto con stretch
+
 ### **LayoutColumn**
 
 #### **`./components/LayoutColumn/README.md`**
@@ -536,6 +561,15 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 ├── Hook useLayoutColumn para visibilidad dinámica
 └── Tokens de spacing, gaps y dimensiones
 
+./components/LayoutRow/README.md
+├── 🏗️ Arquitectura de 3 niveles (Slots → Alineaciones → Componentes)
+├── Props y API del LayoutRow
+├── Ejemplos (toolbars, headers, footers)
+├── Comportamiento dinámico vs fijo (full/auto/fixed)
+├── Alineación horizontal (left, center, right)
+├── Alineación vertical de componentes (stretch)
+└── Tokens de spacing, gaps y dimensiones
+
 ./components/[ComponentName]/README-IA.md
 ├── Props y API del componente
 ├── Ejemplos de implementación
@@ -572,6 +606,7 @@ Este índice te ayuda a encontrar rápidamente la documentación específica que
 | Carousel | `components/Carousel/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/Carousel/README-IA.md) |
 | WrapperItemsSelected | `components/WrapperItemsSelected/README-IA.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/WrapperItemsSelected/README-IA.md) |
 | LayoutColumn | `components/LayoutColumn/README.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/LayoutColumn/README.md) |
+| LayoutRow | `components/LayoutRow/README.md` | - | [📄 Ver en GitHub](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/components/LayoutRow/README.md) |
 | [Futuros componentes] | `components/[ComponentName]/README-IA.md` | `components/[ComponentName]/README-IA--STYLES.md` | - |
 
 ### **🔌 Providers del Sistema:**
