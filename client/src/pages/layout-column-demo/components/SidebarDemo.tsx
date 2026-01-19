@@ -18,7 +18,7 @@ export function SidebarDemo() {
           heightMode="full"
           paddingY="md"
           paddingX="sm"
-          slotDivider="xs-white"
+          slotDivider="sm-dark"
           componentGap="xs"
           className={styles.darkBg}
           components={[

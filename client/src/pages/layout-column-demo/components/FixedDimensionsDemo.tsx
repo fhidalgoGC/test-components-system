@@ -16,6 +16,7 @@ export function FixedDimensionsDemo() {
           heightMode="full"
           paddingX="md"
           paddingY="md"
+          slotDivider="sm-dark"
           componentGap="sm"
           components={[
             { component: <div className={`${styles.demoItem} ${styles['demoItem--purple']}`}><span className={styles.slotBadge}>0</span> height: 50px</div>, align: "top", slot: 0, height: 50 },

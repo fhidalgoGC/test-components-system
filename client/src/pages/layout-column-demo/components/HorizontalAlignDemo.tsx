@@ -14,7 +14,7 @@ export function HorizontalAlignDemo() {
           slots={2}
           widthMode="full"
           heightMode="full"
-          slotDivider="md-primary"
+          slotDivider="sm-dark"
           paddingX="md"
           paddingY="md"
           components={[

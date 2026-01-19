@@ -32,7 +32,7 @@ export function HidePropertyDemo() {
           heightMode="full"
           paddingX="md"
           paddingY="md"
-          slotDivider="xs-gray"
+          slotDivider="sm-dark"
           componentGap="sm"
           components={[
             { component: <div className={`${styles.demoItem} ${styles['demoItem--success']}`}><span className={styles.slotBadge}>0</span> Always</div>, align: "top", slot: 0 },

@@ -21,7 +21,7 @@ export function MultipleSlotsDemo() {
           slots={2}
           widthMode="full"
           heightMode="full"
-          slotDivider="sm-gray"
+          slotDivider="sm-dark"
           paddingX="md"
           paddingY="md"
           componentGap="xs"
