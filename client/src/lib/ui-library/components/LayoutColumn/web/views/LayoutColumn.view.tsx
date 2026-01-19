@@ -256,14 +256,6 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
                 })}
               </div>
             )}
-            
-            {hasTop && (hasCenter || hasBottom) && (
-              <div style={{ flex: 1 }} />
-            )}
-
-            {!hasTop && hasCenter && (
-              <div style={{ flex: 1 }} />
-            )}
 
             {hasCenter && (
               <div
@@ -288,20 +280,13 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
               </div>
             )}
 
-            {hasCenter && (hasBottom || !hasTop) && (
-              <div style={{ flex: 1 }} />
-            )}
-
-            {!hasTop && !hasCenter && hasBottom && (
-              <div style={{ flex: 1 }} />
-            )}
-            
             {hasBottom && (
               <div
                 className={`${styles.slotContent} ${styles.alignBottom} ${getComponentGapClass(componentGap)}`}
                 style={getComponentGapStyle(componentGap)}
                 data-testid={`layoutcolumn-slot-${slotIndex}-bottom`}
               >
+                {console.log('Rendering bottom components:', bottomComponents.length, bottomComponents)}
                 {bottomComponents.map((comp, idx) => {
                   const sizeMode = comp.sizeMode || 'auto';
                   const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;

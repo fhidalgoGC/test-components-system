@@ -14,7 +14,7 @@ export function MultipleSlotsDemo() {
       </p>
       <div
         className={styles.demoBox}
-        style={{ height: 1000 }}
+        style={{ height: 500 }}
         data-testid="demo-multiple-slots"
       >
         <LayoutColumn

@@ -55,6 +55,7 @@ $spacing-xl: 32px;
   flex: 1;
   min-height: 0;
   width: 100%;
+  overflow: hidden;
 }
 
 .slotDivider {
@@ -66,23 +67,29 @@ $spacing-xl: 32px;
   display: flex;
   flex-direction: column;
   width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .alignTop {
   justify-content: flex-start;
+  background-color: rgba(255, 0, 0, 0.3);
 }
 
 .alignCenter {
   justify-content: center;
+  background-color: rgba(255, 255, 0, 0.3);
 }
 
 .alignBottom {
   justify-content: flex-end;
+  background-color: rgba(128, 0, 128, 0.3);
 }
 
 .componentWrapper {
   display: flex;
   flex-direction: column;
+  border: 2px solid black;
 }
 
 .componentFull {

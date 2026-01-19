@@ -5,30 +5,30 @@ export function BasicLayoutDemo() {
   return (
     <section className={styles.section}>
       <div className={styles.componentName}>1-BasicLayoutDemo.tsx</div>
-      <h2 className={styles.section__title}>Slots Dividen Espacio Vertical</h2>
+      <h2 className={styles.section__title}>Centrado Absoluto - 1 Slot</h2>
       <p className={styles.section__description}>
-        3 slots = espacio dividido en 3 partes iguales. Alineación: top, center,
-        bottom.
+        Slot de 400px. Top (2), Center (2), Bottom (1). Center siempre en el 50% del slot.
       </p>
       <div
         className={styles.demoBox}
-        style={{ height: 500 }}
+        style={{ height: 400, border: '2px solid red' }}
         data-testid="demo-basic"
       >
         <LayoutColumn
-          slots={3}
+          slots={1}
           widthMode="full"
           heightMode="full"
-          paddingY="lg"
+          paddingY="none"
           paddingX="none"
-          slotDivider="lg-dark"
+          componentGap="none"
           components={[
             {
               component: (
                 <div
                   className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
+                  style={{ height: 50 }}
                 >
-                  <span className={styles.slotBadge}>0</span> Top-1
+                  <span className={styles.slotBadge}>T</span> Top-1 (0-50px)
                 </div>
               ),
               align: "top",
@@ -38,19 +38,9 @@ export function BasicLayoutDemo() {
               component: (
                 <div
                   className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
+                  style={{ height: 50 }}
                 >
-                  <span className={styles.slotBadge}>0</span> Top-2
-                </div>
-              ),
-              align: "top",
-              slot: 0,
-            },
-            {
-              component: (
-                <div
-                  className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
-                >
-                  <span className={styles.slotBadge}>0</span> Top-3
+                  <span className={styles.slotBadge}>T</span> Top-2 (50-100px)
                 </div>
               ),
               align: "top",
@@ -60,23 +50,37 @@ export function BasicLayoutDemo() {
               component: (
                 <div
                   className={`${styles.demoItem} ${styles["demoItem--info"]}`}
+                  style={{ height: 50 }}
                 >
-                  <span className={styles.slotBadge}>1</span> Center
+                  <span className={styles.slotBadge}>C</span> Center-1 (175-225px)
                 </div>
               ),
               align: "center",
-              slot: 1,
+              slot: 0,
+            },
+            {
+              component: (
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--info"]}`}
+                  style={{ height: 50 }}
+                >
+                  <span className={styles.slotBadge}>C</span> Center-2 (175-225px)
+                </div>
+              ),
+              align: "center",
+              slot: 0,
             },
             {
               component: (
                 <div
                   className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}
+                  style={{ height: 50 }}
                 >
-                  <span className={styles.slotBadge}>2</span> Bottom
+                  <span className={styles.slotBadge}>B</span> Bottom (350-400px)
                 </div>
               ),
-              align: "center",
-              slot: 2,
+              align: "bottom",
+              slot: 0,
             },
           ]}
         />
