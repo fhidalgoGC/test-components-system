@@ -63,10 +63,6 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
         className={`
           ${styles.sidebar}
           ${isDark ? styles.dark : ''}
-          ${isMobileMenuOpen ? styles.mobileVisible : styles.mobileHidden}
-          lg:translate-x-0
-          fixed lg:relative
-          z-40
           ${className}
         `}
         style={{ width: `${sidebarWidth}px` }}

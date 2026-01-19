@@ -18,6 +18,7 @@ const DateDemo = lazy(() => import("@/pages/date-demo"));
 const AuthTest = lazy(() => import("@/pages/auth-test"));
 const LayoutRowDemo = lazy(() => import("@/pages/layout-row-demo"));
 const LayoutColumnDemo = lazy(() => import("@/pages/layout-column-demo/LayoutColumnDemo"));
+const NavigationSidebarDemo = lazy(() => import("@/pages/navigation-sidebar-demo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -48,6 +49,7 @@ export function Router() {
           <Route path="/auth-test" component={AuthTest} />
           <Route path="/components/layout-row" component={LayoutRowDemo} />
           <Route path="/components/layout-column" component={LayoutColumnDemo} />
+          <Route path="/components/navigation-sidebar" component={NavigationSidebarDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

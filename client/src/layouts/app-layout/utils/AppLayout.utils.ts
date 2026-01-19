@@ -20,6 +20,7 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'wrapper-items-selected', label: 'WrapperItemsSelected', path: '/components/wrapper-items-selected', icon: 'MousePointer' },
         { id: 'layout-row', label: 'LayoutRow', path: '/components/layout-row', icon: 'Rows' },
         { id: 'layout-column', label: 'LayoutColumn', path: '/components/layout-column', icon: 'Columns' },
+        { id: 'navigation-sidebar', label: 'NavigationSidebar', path: '/components/navigation-sidebar', icon: 'PanelLeft' },
         { id: 'bottom-nav', label: 'BottomNavigationBar', path: '/components/bottom-nav', icon: 'Navigation' },
         { id: 'bottom-nav-config', label: 'BottomNav + Config', path: '/components/bottom-nav-config', icon: 'Settings' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
