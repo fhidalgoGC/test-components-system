@@ -261,6 +261,10 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
               <div style={{ flex: 1 }} />
             )}
 
+            {!hasTop && hasCenter && (
+              <div style={{ flex: 1 }} />
+            )}
+
             {hasCenter && (
               <div
                 className={`${styles.slotContent} ${styles.alignCenter} ${getComponentGapClass(componentGap)}`}
@@ -284,7 +288,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
               </div>
             )}
 
-            {hasCenter && hasBottom && (
+            {hasCenter && (hasBottom || !hasTop) && (
               <div style={{ flex: 1 }} />
             )}
 

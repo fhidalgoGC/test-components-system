@@ -7,20 +7,55 @@ export function BasicLayoutDemo() {
       <div className={styles.componentName}>1-BasicLayoutDemo.tsx</div>
       <h2 className={styles.section__title}>Slots Dividen Espacio Vertical</h2>
       <p className={styles.section__description}>
-        3 slots = espacio dividido en 3 partes iguales. Alineación: top, center, bottom.
+        3 slots = espacio dividido en 3 partes iguales. Alineación: top, center,
+        bottom.
       </p>
-      <div className={styles.demoBox} style={{ height: 300 }} data-testid="demo-basic">
+      <div
+        className={styles.demoBox}
+        style={{ height: 300 }}
+        data-testid="demo-basic"
+      >
         <LayoutColumn
           slots={3}
           widthMode="full"
           heightMode="full"
           paddingY="sm"
           paddingX="md"
-          slotDivider="sm-dark"
+          slotDivider="lg-dark"
           components={[
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--primary']}`}><span className={styles.slotBadge}>0</span> Top</div>, align: "top", slot: 0 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}><span className={styles.slotBadge}>1</span> Center</div>, align: "center", slot: 1 },
-            { component: <div className={`${styles.demoItem} ${styles['demoItem--secondary']}`}><span className={styles.slotBadge}>2</span> Bottom</div>, align: "bottom", slot: 2 },
+            {
+              component: (
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
+                >
+                  <span className={styles.slotBadge}>0</span> Top
+                </div>
+              ),
+              align: "top",
+              slot: 0,
+            },
+            {
+              component: (
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--info"]}`}
+                >
+                  <span className={styles.slotBadge}>1</span> Center
+                </div>
+              ),
+              align: "center",
+              slot: 1,
+            },
+            {
+              component: (
+                <div
+                  className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}
+                >
+                  <span className={styles.slotBadge}>2</span> Bottom
+                </div>
+              ),
+              align: "bottom",
+              slot: 2,
+            },
           ]}
         />
       </div>
