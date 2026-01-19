@@ -10,6 +10,10 @@ export type HeightMode = 'full' | 'auto' | 'fixed';
 export type VerticalAlign = 'top' | 'center' | 'bottom';
 export type ComponentSizeMode = 'auto' | 'full';
 
+export type DividerSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type DividerColor = 'white' | 'gray' | 'light' | 'dark' | 'primary';
+export type SlotDividerToken = `${DividerSize}-${DividerColor}`;
+
 export interface LayoutColumnComponent {
   id?: string;
   component: ReactNode;
@@ -53,6 +57,7 @@ export interface LayoutColumnProps {
   marginY?: SpacingToken | number;
   componentGap?: GapToken | number;
   slotGap?: SlotGapToken;
+  slotDivider?: SlotDividerToken;
   components: LayoutColumnComponent[];
   className?: string;
   langOverride?: string;

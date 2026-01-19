@@ -41,12 +41,25 @@ $spacing-xl: 32px;
   height: auto;
 }
 
+.slotWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
 .slot {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 0;
   width: 100%;
+}
+
+.slotDivider {
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .slotContent {

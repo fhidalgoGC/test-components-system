@@ -16,7 +16,7 @@ export function BasicLayoutDemo() {
           heightMode="full"
           paddingY="sm"
           paddingX="md"
-          slotGap="sm"
+          slotDivider="sm-light"
           components={[
             { component: <div className={`${styles.demoItem} ${styles['demoItem--primary']}`}>Slot 0 - Top</div>, align: "top", slot: 0 },
             { component: <div className={`${styles.demoItem} ${styles['demoItem--info']}`}>Slot 1 - Center</div>, align: "center", slot: 1 },

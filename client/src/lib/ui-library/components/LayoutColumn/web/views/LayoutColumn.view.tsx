@@ -1,5 +1,26 @@
-import type { LayoutColumnProps, LayoutColumnComponent, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken } from '../types';
+import type { LayoutColumnProps, LayoutColumnComponent, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken, SlotDividerToken, DividerSize, DividerColor } from '../types';
 import styles from '../css/LayoutColumn.module.scss';
+
+const dividerSizeToPixels: Record<DividerSize, number> = {
+  xs: 1,
+  sm: 2,
+  md: 4,
+  lg: 6,
+  xl: 8,
+};
+
+const dividerColorToValue: Record<DividerColor, string> = {
+  white: '#ffffff',
+  gray: '#9ca3af',
+  light: '#e5e7eb',
+  dark: '#374151',
+  primary: '#4353ff',
+};
+
+const parseDividerToken = (token: SlotDividerToken): { size: DividerSize; color: DividerColor } => {
+  const [size, color] = token.split('-') as [DividerSize, DividerColor];
+  return { size, color };
+};
 
 const sizeTokenToPixels: Record<SizeToken, number> = {
   xs: 100,
@@ -143,6 +164,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
     marginY,
     componentGap = 'md',
     slotGap,
+    slotDivider,
     components,
     className,
   } = props;
@@ -183,9 +205,17 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
       return slotComponents && slotComponents.length > 0;
     });
 
+  const dividerStyle = slotDivider ? (() => {
+    const { size, color } = parseDividerToken(slotDivider);
+    return {
+      height: `${dividerSizeToPixels[size]}px`,
+      backgroundColor: dividerColorToValue[color],
+    };
+  })() : null;
+
   return (
     <div className={containerClasses} style={inlineStyles} data-testid="layoutcolumn">
-      {slotsToRender.map((slotIndex) => {
+      {slotsToRender.map((slotIndex, arrayIndex) => {
         const slotComponents = groupedBySlot[slotIndex] || [];
         
         const topComponents = slotComponents.filter(c => c.align === 'top');
@@ -196,12 +226,14 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
         const hasCenter = centerComponents.length > 0;
         const hasBottom = bottomComponents.length > 0;
 
+        const showDivider = slotDivider && arrayIndex < slotsToRender.length - 1;
+
         return (
-          <div
-            key={slotIndex}
-            className={styles.slot}
-            data-testid={`layoutcolumn-slot-${slotIndex}`}
-          >
+          <div key={slotIndex} className={styles.slotWrapper}>
+            <div
+              className={styles.slot}
+              data-testid={`layoutcolumn-slot-${slotIndex}`}
+            >
             {hasTop && (
               <div
                 className={`${styles.slotContent} ${styles.alignTop} ${getComponentGapClass(componentGap)}`}
@@ -281,6 +313,14 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
                   );
                 })}
               </div>
+            )}
+            </div>
+            {showDivider && dividerStyle && (
+              <div 
+                className={styles.slotDivider} 
+                style={dividerStyle}
+                data-testid={`layoutcolumn-divider-${slotIndex}`}
+              />
             )}
           </div>
         );

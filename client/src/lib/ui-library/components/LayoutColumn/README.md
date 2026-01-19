@@ -30,6 +30,7 @@ import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 | `marginY` | `SpacingToken \| number` | - | Margen vertical |
 | `componentGap` | `GapToken \| number` | `'md'` | Espacio entre componentes del mismo grupo |
 | `slotGap` | `SlotGapToken` | - | Espacio entre slots |
+| `slotDivider` | `SlotDividerToken` | - | Línea divisora entre slots (ej: `xs-white`, `sm-gray`) |
 | `components` | `LayoutColumnComponent[]` | requerido | Array de componentes |
 | `className` | `string` | - | Clase CSS adicional |
 
@@ -229,6 +230,33 @@ function MyComponent() {
 | `md` | 16px |
 | `lg` | 24px |
 | `xl` | 32px |
+
+### SlotDividerToken (slotDivider)
+Formato: `{size}-{color}`
+
+**Tamaños disponibles:**
+| Size | Altura |
+|------|--------|
+| `xs` | 1px |
+| `sm` | 2px |
+| `md` | 4px |
+| `lg` | 6px |
+| `xl` | 8px |
+
+**Colores disponibles:**
+| Color | Valor |
+|-------|-------|
+| `white` | #ffffff |
+| `gray` | #9ca3af |
+| `light` | #e5e7eb |
+| `dark` | #374151 |
+| `primary` | #4353ff |
+
+**Ejemplos:**
+- `xs-white` → 1px blanco
+- `sm-gray` → 2px gris
+- `md-light` → 4px gris claro
+- `lg-primary` → 6px azul primario
 
 ## Ejemplos de Uso
 
