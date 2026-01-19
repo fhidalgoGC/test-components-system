@@ -32,7 +32,7 @@ const PageLoader = () => (
   </div>
 );
 
-export function Router() {
+function AppRoutes() {
   return (
     <AppLayoutView>
       <Suspense fallback={<PageLoader />}>
@@ -54,15 +54,33 @@ export function Router() {
           <Route path="/auth-test" component={AuthTest} />
           <Route path="/components/layout-row" component={LayoutRowDemo} />
           <Route path="/components/layout-column" component={LayoutColumnDemo} />
-          <Route path="/components/nav-sidebar/basic" component={NavSidebarBasic} />
-          <Route path="/components/nav-sidebar/custom-header" component={NavSidebarCustomHeader} />
-          <Route path="/components/nav-sidebar/custom-footer" component={NavSidebarCustomFooter} />
-          <Route path="/components/nav-sidebar/nested" component={NavSidebarNested} />
-          <Route path="/components/nav-sidebar/scroll" component={NavSidebarScroll} />
-          <Route path="/components/nav-sidebar/full-custom" component={NavSidebarFullCustom} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
     </AppLayoutView>
+  );
+}
+
+function FullScreenRoutes() {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <Switch>
+        <Route path="/components/nav-sidebar/basic" component={NavSidebarBasic} />
+        <Route path="/components/nav-sidebar/custom-header" component={NavSidebarCustomHeader} />
+        <Route path="/components/nav-sidebar/custom-footer" component={NavSidebarCustomFooter} />
+        <Route path="/components/nav-sidebar/nested" component={NavSidebarNested} />
+        <Route path="/components/nav-sidebar/scroll" component={NavSidebarScroll} />
+        <Route path="/components/nav-sidebar/full-custom" component={NavSidebarFullCustom} />
+      </Switch>
+    </Suspense>
+  );
+}
+
+export function Router() {
+  return (
+    <Switch>
+      <Route path="/components/nav-sidebar/:rest*" component={FullScreenRoutes} />
+      <Route path="/:rest*" component={AppRoutes} />
+    </Switch>
   );
 }
