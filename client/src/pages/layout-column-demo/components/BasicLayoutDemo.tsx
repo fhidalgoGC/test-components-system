@@ -28,7 +28,7 @@ export function BasicLayoutDemo() {
                 <div
                   className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
                 >
-                  <span className={styles.slotBadge}>0</span> Top-A
+                  <span className={styles.slotBadge}>0</span> Top-1
                 </div>
               ),
               align: "top",
@@ -37,23 +37,23 @@ export function BasicLayoutDemo() {
             {
               component: (
                 <div
-                  className={`${styles.demoItem} ${styles["demoItem--warning"]}`}
+                  className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
                 >
-                  <span className={styles.slotBadge}>0</span> Center-B
+                  <span className={styles.slotBadge}>0</span> Top-2
                 </div>
               ),
-              align: "center",
+              align: "top",
               slot: 0,
             },
             {
               component: (
                 <div
-                  className={`${styles.demoItem} ${styles["demoItem--secondary"]}`}
+                  className={`${styles.demoItem} ${styles["demoItem--primary"]}`}
                 >
-                  <span className={styles.slotBadge}>0</span> Bottom-C
+                  <span className={styles.slotBadge}>0</span> Top-3
                 </div>
               ),
-              align: "bottom",
+              align: "top",
               slot: 0,
             },
             {
