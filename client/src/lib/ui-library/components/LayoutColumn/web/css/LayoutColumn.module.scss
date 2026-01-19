@@ -55,7 +55,7 @@ $spacing-xl: 32px;
   flex: 1;
   min-height: 0;
   width: 100%;
-  background-color: #f5f5f5;
+  overflow: hidden;
 }
 
 .slotDivider {
@@ -67,8 +67,9 @@ $spacing-xl: 32px;
   display: flex;
   flex-direction: column;
   width: 100%;
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .alignTop {
