@@ -2,7 +2,6 @@ import {
   BasicLayoutDemo,
   MultipleSlotsDemo,
   FixedDimensionsDemo,
-  HorizontalAlignDemo,
   HidePropertyDemo,
   MarginsDemo,
   SidebarDemo,
@@ -28,13 +27,12 @@ export function LayoutColumnDemo() {
 
       <div className={styles.sections}>
         <BasicLayoutDemo />
-        {/* <MultipleSlotsDemo />
+        <MultipleSlotsDemo />
         <FixedDimensionsDemo />
-        <HorizontalAlignDemo />
         <HidePropertyDemo />
         <MarginsDemo />
         <SidebarDemo />
-        <HookDemo /> */}
+        <HookDemo />
       </div>
     </div>
   );
