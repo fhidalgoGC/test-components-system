@@ -1,5 +1,5 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
-import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers/AppLanguageLibUiProvider';
+import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
 import { Home, Settings, Users, FileText } from 'lucide-react';
 import { useState } from 'react';
 import styles from './css/NavSidebarBasic.module.scss';
@@ -45,6 +45,7 @@ function NavSidebarContent() {
   };
 
   const handleLanguageChange = (language: string) => {
+    console.log('=== NavSidebarContent handleLanguageChange ===', language);
     setLanguage(language as 'en' | 'es');
   };
 
@@ -76,8 +77,15 @@ function NavSidebarContent() {
 }
 
 export default function NavSidebarBasicPage() {
+  const [language, setLanguage] = useState<'en' | 'es'>('es');
+  
+  const handleLanguageChange = (lang: 'en' | 'es') => {
+    console.log('=== LibI18nProvider onLanguageChange ===', lang);
+    setLanguage(lang);
+  };
+  
   return (
-    <LibI18nProvider language="es">
+    <LibI18nProvider language={language} onLanguageChange={handleLanguageChange}>
       <NavSidebarContent />
     </LibI18nProvider>
   );
