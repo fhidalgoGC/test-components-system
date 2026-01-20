@@ -82,8 +82,8 @@ export function SidebarView(props: SidebarProps) {
   const t = getSidebarTranslations(currentLanguage);
   
   const libI18n = useOptionalLibI18n();
-  const effectiveLang = libI18n?.lang || currentLanguage;
-  const libResolveLabel = libI18n?.resolveLabel;
+  const effectiveLang = currentLanguage;
+  const libResolveLabel = undefined;
 
   const { 
     className = '', 

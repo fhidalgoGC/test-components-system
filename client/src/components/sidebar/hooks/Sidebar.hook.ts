@@ -108,7 +108,7 @@ export const useSidebar = (props: SidebarProps) => {
   return {
     processedMenuItems,
     expandedItems: state.expandedItems,
-    currentLanguage: state.currentLanguage,
+    currentLanguage: appLanguage?.lang || state.currentLanguage,
     currentTheme: state.currentTheme,
     isCollapsed,
     isMobileMenuOpen,
