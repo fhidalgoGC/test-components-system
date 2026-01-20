@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { MultiLanguageLabel } from '../../../types/language.types';
 
 export interface NavigationSubItem {
   id: string;
@@ -7,6 +8,7 @@ export interface NavigationSubItem {
   icon?: ReactNode;
   isActive?: boolean;
   component?: ReactNode;
+  i18n?: MultiLanguageLabel;
 }
 
 export interface NavigationItem {
@@ -17,6 +19,7 @@ export interface NavigationItem {
   isActive?: boolean;
   children?: NavigationSubItem[];
   component?: ReactNode;
+  i18n?: MultiLanguageLabel;
 }
 
 export interface NavigationSidebarProps {
