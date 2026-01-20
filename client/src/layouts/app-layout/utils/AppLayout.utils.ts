@@ -41,6 +41,16 @@ export function getDefaultMenuItems(): MenuItem[] {
       ]
     },
     { 
+      id: 'sidebar-layout', 
+      label: 'SidebarLayout', 
+      icon: 'LayoutDashboard',
+      children: [
+        { id: 'layout-basic', label: 'Basic', i18n: { en: 'Basic', es: 'Básico', default: 'Basic' }, path: '/layouts/sidebar-layout', icon: 'Layout', openInNewTab: true },
+        { id: 'layout-scroll', label: 'With Scroll', i18n: { en: 'With Scroll', es: 'Con Scroll', default: 'With Scroll' }, path: '/layouts/sidebar-layout/scroll', icon: 'ScrollText', openInNewTab: true },
+        { id: 'layout-controlled', label: 'Controlled', i18n: { en: 'Controlled', es: 'Controlado', default: 'Controlled' }, path: '/layouts/sidebar-layout/controlled', icon: 'Settings', openInNewTab: true }
+      ]
+    },
+    { 
       id: 'heterogeneous-list', 
       label: 'HeterogeneousList', 
       icon: 'Layout',
