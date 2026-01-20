@@ -1,10 +1,30 @@
 import { ChevronDown, ChevronRight, Sun, Moon, ChevronLeft, Menu, X } from 'lucide-react';
+import { useContext } from 'react';
 import { useSidebar } from '../hooks';
 import { getSidebarTranslations } from '../i18n';
-import type { SidebarProps, SubMenuItem } from '../types/Sidebar.types';
+import type { SidebarProps, SubMenuItem, MenuItem, MultiLanguageLabel } from '../types/Sidebar.types';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { environment } from '@/enviorments/enviroment';
+import { LibI18nContext } from '@/lib/ui-library/providers/AppLanguageLibUiProvider/index.hook';
+
+function useOptionalLibI18n() {
+  return useContext(LibI18nContext);
+}
+
+function resolveItemLabel(
+  item: MenuItem | SubMenuItem,
+  lang: string,
+  libResolveLabel?: (label: { [key: string]: string; default: string }) => string
+): string {
+  if (item.i18n) {
+    if (libResolveLabel) {
+      return libResolveLabel(item.i18n as { [key: string]: string; default: string });
+    }
+    return item.i18n[lang] || item.i18n.default || item.label;
+  }
+  return item.label;
+}
 
 const iconMap: Record<string, any> = {
   'Home': ({ className }: { className?: string }) => (
@@ -60,6 +80,10 @@ export function SidebarView(props: SidebarProps) {
   } = useSidebar(props);
 
   const t = getSidebarTranslations(currentLanguage);
+  
+  const libI18n = useOptionalLibI18n();
+  const effectiveLang = libI18n?.lang || currentLanguage;
+  const libResolveLabel = libI18n?.resolveLabel;
 
   const { 
     className = '', 
@@ -190,13 +214,13 @@ export function SidebarView(props: SidebarProps) {
                       }
                       ${isCollapsed ? 'justify-center' : ''}
                     `}
-                    title={isCollapsed ? item.label : undefined}
+                    title={isCollapsed ? resolveItemLabel(item, effectiveLang, libResolveLabel) : undefined}
                     data-testid={`nav-${item.id}`}
                   >
                     <IconComponent className={`h-5 w-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
                     {!isCollapsed && (
                       <>
-                        <span className="flex-1 text-left truncate">{item.label}</span>
+                        <span className="flex-1 text-left truncate">{resolveItemLabel(item, effectiveLang, libResolveLabel)}</span>
                         {hasChildren && (
                           <div className="ml-2 flex-shrink-0">
                             {isExpanded ? (
@@ -238,7 +262,7 @@ export function SidebarView(props: SidebarProps) {
                             data-testid={`nav-${subItem.id}`}
                           >
                             {SubIconComponent && <SubIconComponent className="h-4 w-4 mr-3 flex-shrink-0" />}
-                            <span className="truncate">{subItem.label}</span>
+                            <span className="truncate">{resolveItemLabel(subItem, effectiveLang, libResolveLabel)}</span>
                           </button>
                         );
                       })}

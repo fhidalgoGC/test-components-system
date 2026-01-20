@@ -4,13 +4,15 @@ export function getDefaultMenuItems(): MenuItem[] {
   return [
     { 
       id: 'overview', 
-      label: 'Overview', 
+      label: 'Overview',
+      i18n: { en: 'Overview', es: 'Inicio', default: 'Overview' },
       icon: 'Home',
       path: '/' 
     },
     { 
       id: 'components', 
-      label: 'Components', 
+      label: 'Components',
+      i18n: { en: 'Components', es: 'Componentes', default: 'Components' },
       icon: 'Package',
       children: [
         { id: 'tagselector', label: 'TagSelector', path: '/components/tag-selector', icon: 'Tags' },
@@ -30,10 +32,10 @@ export function getDefaultMenuItems(): MenuItem[] {
       label: 'NavigationSidebar', 
       icon: 'PanelLeft',
       children: [
-        { id: 'nav-basic', label: 'Básico', path: '/components/nav-sidebar/basic', icon: 'Layout', openInNewTab: true },
+        { id: 'nav-basic', label: 'Basic', i18n: { en: 'Basic', es: 'Básico', default: 'Basic' }, path: '/components/nav-sidebar/basic', icon: 'Layout', openInNewTab: true },
         { id: 'nav-custom-header', label: 'Header Custom', path: '/components/nav-sidebar/custom-header', icon: 'Heading', openInNewTab: true },
         { id: 'nav-custom-footer', label: 'Footer Custom', path: '/components/nav-sidebar/custom-footer', icon: 'User', openInNewTab: true },
-        { id: 'nav-nested', label: 'Items Anidados', path: '/components/nav-sidebar/nested', icon: 'Network', openInNewTab: true },
+        { id: 'nav-nested', label: 'Nested Items', i18n: { en: 'Nested Items', es: 'Items Anidados', default: 'Nested Items' }, path: '/components/nav-sidebar/nested', icon: 'Network', openInNewTab: true },
         { id: 'nav-scroll', label: 'Scroll', path: '/components/nav-sidebar/scroll', icon: 'ScrollText', openInNewTab: true },
         { id: 'nav-full-custom', label: 'Full Custom', path: '/components/nav-sidebar/full-custom', icon: 'Palette', openInNewTab: true }
       ]
@@ -50,11 +52,12 @@ export function getDefaultMenuItems(): MenuItem[] {
     },
     { 
       id: 'utils', 
-      label: 'Utilities', 
+      label: 'Utilities',
+      i18n: { en: 'Utilities', es: 'Utilidades', default: 'Utilities' },
       icon: 'Layout',
       children: [
-        { id: 'date-demo', label: 'Date Demo', path: '/date-demo', icon: 'Calendar' },
-        { id: 'auth-test', label: 'Auth Test', path: '/auth-test', icon: 'Shield' }
+        { id: 'date-demo', label: 'Date Demo', i18n: { en: 'Date Demo', es: 'Demo de Fechas', default: 'Date Demo' }, path: '/date-demo', icon: 'Calendar' },
+        { id: 'auth-test', label: 'Auth Test', i18n: { en: 'Auth Test', es: 'Prueba de Auth', default: 'Auth Test' }, path: '/auth-test', icon: 'Shield' }
       ]
     }
   ];

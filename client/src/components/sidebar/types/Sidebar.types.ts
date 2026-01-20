@@ -1,3 +1,8 @@
+export interface MultiLanguageLabel {
+  [languageCode: string]: string;
+  default: string;
+}
+
 export interface MenuItem {
   id: string;
   label: string;
@@ -5,6 +10,7 @@ export interface MenuItem {
   path?: string;
   children?: SubMenuItem[];
   isActive?: boolean;
+  i18n?: MultiLanguageLabel;
 }
 
 export interface SubMenuItem {
@@ -15,6 +21,7 @@ export interface SubMenuItem {
   isActive?: boolean;
   description?: string;
   openInNewTab?: boolean;
+  i18n?: MultiLanguageLabel;
 }
 
 export interface SidebarProps {
