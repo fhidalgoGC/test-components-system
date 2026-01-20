@@ -12,7 +12,6 @@ export interface SidebarLayoutProps {
   sidebarExpandedWidth?: number;
   sidebarCollapsedWidth?: number;
   toolbarHeight?: number;
-  
   className?: string;
 }
 
@@ -20,5 +19,5 @@ export interface SidebarLayoutContextValue {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
   toggleCollapse: () => void;
-  sidebarWidth: number;
+  sidebarWidth: number | 'auto';
 }

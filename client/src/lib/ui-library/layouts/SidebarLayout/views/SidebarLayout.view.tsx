@@ -10,9 +10,9 @@ export function SidebarLayoutView({
   collapsed: controlledCollapsed,
   defaultCollapsed = false,
   onCollapseChange,
-  sidebarExpandedWidth = 260,
-  sidebarCollapsedWidth = 70,
-  toolbarHeight = 60,
+  sidebarExpandedWidth,
+  sidebarCollapsedWidth,
+  toolbarHeight,
   className,
 }: SidebarLayoutProps) {
   const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
@@ -31,7 +31,9 @@ export function SidebarLayoutView({
     setCollapsed(!collapsed);
   }, [collapsed, setCollapsed]);
   
-  const sidebarWidth = collapsed ? sidebarCollapsedWidth : sidebarExpandedWidth;
+  const currentExpandedWidth: number | 'auto' = sidebarExpandedWidth ?? 'auto';
+  const currentCollapsedWidth: number | 'auto' = sidebarCollapsedWidth ?? 'auto';
+  const sidebarWidth: number | 'auto' = collapsed ? currentCollapsedWidth : currentExpandedWidth;
   
   const contextValue = useMemo(() => ({
     collapsed,
@@ -53,7 +55,7 @@ export function SidebarLayoutView({
         <div className={styles.rightSection}>
           <div 
             className={styles.toolbar}
-            style={{ height: toolbarHeight }}
+            style={{ height: toolbarHeight ?? 'auto' }}
           >
             {toolbarContent}
           </div>
