@@ -22,7 +22,7 @@ const getExpandedItemsFromPath = (items: NavigationItem[], currentPath: string):
 export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigationSidebarReturn {
   const {
     items,
-    currentPath = '',
+    currentPath: propPath,
     defaultCollapsed = false,
     currentLanguage: propLanguage,
     currentTheme: propTheme,
@@ -32,8 +32,9 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
     onCollapseChange,
   } = props;
 
+  const [internalPath, setInternalPath] = useState<string>(propPath || '');
   const [expandedItems, setExpandedItems] = useState<Set<string>>(() => 
-    getExpandedItemsFromPath(items, currentPath)
+    getExpandedItemsFromPath(items, propPath || '')
   );
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -53,8 +54,15 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
     return 'es';
   });
 
+  const currentPath = propPath !== undefined ? propPath : internalPath;
   const currentTheme = propTheme ?? internalTheme;
   const currentLanguage = propLanguage ?? internalLanguage;
+
+  useEffect(() => {
+    if (propPath !== undefined) {
+      setInternalPath(propPath);
+    }
+  }, [propPath]);
 
   useEffect(() => {
     if (propTheme) return;
@@ -95,10 +103,15 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
   }, []);
 
   const handleNavigation = useCallback((path: string) => {
+    if (propPath === undefined) {
+      setInternalPath(path);
+      const newExpanded = getExpandedItemsFromPath(items, path);
+      setExpandedItems(prev => new Set([...prev, ...newExpanded]));
+    }
     if (onNavigate) {
       onNavigate(path);
     }
-  }, [onNavigate]);
+  }, [propPath, items, onNavigate]);
 
   const handleThemeToggle = useCallback(() => {
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -149,6 +162,7 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
     isMobileMenuOpen,
     currentTheme,
     currentLanguage,
+    currentPath,
     toggleItemExpansion,
     handleNavigation,
     handleThemeToggle,

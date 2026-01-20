@@ -53,10 +53,22 @@ export interface UseNavigationSidebarReturn {
   isMobileMenuOpen: boolean;
   currentTheme: 'light' | 'dark';
   currentLanguage: string;
+  currentPath: string;
   toggleItemExpansion: (id: string) => void;
   handleNavigation: (path: string) => void;
   handleThemeToggle: () => void;
   handleLanguageChange: (language: string) => void;
   handleToggleCollapse: () => void;
   handleToggleMobileMenu: () => void;
+}
+
+export interface NavigationSidebarController {
+  currentPath: string;
+  setCurrentPath: (path: string) => void;
+  isCollapsed: boolean;
+  setIsCollapsed: (collapsed: boolean) => void;
+  currentTheme: 'light' | 'dark';
+  setCurrentTheme: (theme: 'light' | 'dark') => void;
+  currentLanguage: string;
+  setCurrentLanguage: (language: string) => void;
 }

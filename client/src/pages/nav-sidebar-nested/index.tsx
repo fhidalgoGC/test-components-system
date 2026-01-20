@@ -1,5 +1,6 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
 import { Home, Package, Settings, Layout, MousePointer, Tag, Calendar } from 'lucide-react';
+import { useState } from 'react';
 
 const menuItems = [
   { id: 'home', label: 'Inicio', path: '/home', icon: <Home className="h-5 w-5" /> },
@@ -36,18 +37,32 @@ const menuItems = [
 ];
 
 export default function NavSidebarNestedPage() {
+  const [selectedPath, setSelectedPath] = useState('/home');
+
+  const handleNavigate = (path: string) => {
+    setSelectedPath(path);
+    console.log('Navigate to:', path);
+  };
+
   return (
     <div className="h-screen w-full flex">
       <NavigationSidebar
         items={menuItems}
-        currentPath="/components/carousel"
-        onNavigate={(path) => console.log('Navigate to:', path)}
+        currentPath={selectedPath}
+        onNavigate={handleNavigate}
       />
       <div className="flex-1 p-8 bg-gray-50 dark:bg-gray-900">
         <h1 className="text-2xl font-bold mb-4">Items Anidados</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
           NavigationSidebar con children (submenús), badges personalizados y componentes custom en items.
         </p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
+          <h3 className="font-semibold mb-2">Estado actual:</h3>
+          <p className="text-blue-600 dark:text-blue-400 font-mono">{selectedPath}</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Haz clic en cualquier item del menú para ver cómo cambia el estado.
+          </p>
+        </div>
       </div>
     </div>
   );
