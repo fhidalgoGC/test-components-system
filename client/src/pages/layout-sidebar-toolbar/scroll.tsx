@@ -1,5 +1,5 @@
 import { SidebarLayout, useSidebarLayout } from '@/lib/ui-library/layouts';
-import styles from '../sidebar-layout-demo/css/SidebarLayoutDemo.module.scss';
+import styles from './css/SidebarLayoutDemo.module.scss';
 
 function SidebarContent() {
   const { collapsed } = useSidebarLayout();

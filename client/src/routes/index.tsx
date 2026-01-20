@@ -24,9 +24,9 @@ const NavSidebarCustomFooter = lazy(() => import("@/pages/nav-sidebar-custom-foo
 const NavSidebarNested = lazy(() => import("@/pages/nav-sidebar-nested"));
 const NavSidebarScroll = lazy(() => import("@/pages/nav-sidebar-scroll"));
 const NavSidebarFullCustom = lazy(() => import("@/pages/nav-sidebar-full-custom"));
-const SidebarLayoutDemo = lazy(() => import("@/pages/sidebar-layout-demo"));
-const SidebarLayoutScroll = lazy(() => import("@/pages/sidebar-layout-scroll"));
-const SidebarLayoutControlled = lazy(() => import("@/pages/sidebar-layout-controlled"));
+const SidebarLayoutBasic = lazy(() => import("@/pages/layout-sidebar-toolbar/basic"));
+const SidebarLayoutScroll = lazy(() => import("@/pages/layout-sidebar-toolbar/scroll"));
+const SidebarLayoutControlled = lazy(() => import("@/pages/layout-sidebar-toolbar/controlled"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -45,7 +45,7 @@ export function Router() {
     return (
       <Suspense fallback={<PageLoader />}>
         <Switch>
-          <Route path="/layouts/sidebar-layout" component={SidebarLayoutDemo} />
+          <Route path="/layouts/sidebar-layout" component={SidebarLayoutBasic} />
           <Route path="/layouts/sidebar-layout/scroll" component={SidebarLayoutScroll} />
           <Route path="/layouts/sidebar-layout/controlled" component={SidebarLayoutControlled} />
         </Switch>
