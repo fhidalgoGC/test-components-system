@@ -106,7 +106,7 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
     if (propPath === undefined) {
       setInternalPath(path);
       const newExpanded = getExpandedItemsFromPath(items, path);
-      setExpandedItems(prev => new Set([...prev, ...newExpanded]));
+      setExpandedItems(prev => new Set([...Array.from(prev), ...Array.from(newExpanded)]));
     }
     if (onNavigate) {
       onNavigate(path);
