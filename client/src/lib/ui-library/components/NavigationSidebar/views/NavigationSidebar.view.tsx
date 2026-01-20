@@ -1,8 +1,16 @@
 import { ChevronDown, ChevronRight, Sun, Moon, ChevronLeft, Menu, X, Package } from 'lucide-react';
-import type { NavigationSidebarProps, NavigationSubItem } from '../types';
+import type { NavigationSidebarProps, NavigationSubItem, NavigationItem } from '../types';
+import type { MultiLanguageLabel } from '../../../types/language.types';
 import { useNavigationSidebar } from '../hooks';
 import { useI18nMerge } from '../hooks/useI18nMerge.hook';
 import styles from '../css/NavigationSidebar.module.css';
+
+function resolveItemLabel(item: NavigationItem | NavigationSubItem, lang: string): string {
+  if (item.i18n) {
+    return item.i18n[lang] || item.i18n.default || item.label;
+  }
+  return item.label;
+}
 
 export function NavigationSidebarView(props: NavigationSidebarProps) {
   const {
@@ -138,7 +146,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
                       ${isDark ? styles.dark : ''}
                       ${isCollapsed ? 'justify-center' : ''}
                     `}
-                    title={isCollapsed ? item.label : undefined}
+                    title={isCollapsed ? resolveItemLabel(item, currentLanguage) : undefined}
                     data-testid={`nav-${item.id}`}
                   >
                     <span className={`${styles.iconContainer} ${isCollapsed ? '' : 'mr-3'}`}>
@@ -147,7 +155,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
                     {!isCollapsed && (
                       <>
                         <span className={`flex-1 text-left truncate ${styles.menuItemText} ${isDark ? styles.dark : ''}`}>
-                          {item.label}
+                          {resolveItemLabel(item, currentLanguage)}
                         </span>
                         {hasChildren && (
                           <span className="ml-2 flex-shrink-0">
@@ -188,7 +196,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
                           {subItem.component ? (
                             subItem.component
                           ) : (
-                            <span className="truncate">{subItem.label}</span>
+                            <span className="truncate">{resolveItemLabel(subItem, currentLanguage)}</span>
                           )}
                         </button>
                       ))}
