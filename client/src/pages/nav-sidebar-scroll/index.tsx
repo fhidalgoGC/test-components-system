@@ -31,10 +31,6 @@ function NavSidebarContent() {
     console.log('Navigate to:', path);
   };
 
-  const handleLanguageChange = (language: string) => {
-    setLanguage(language as 'en' | 'es');
-  };
-
   return (
     <div className={styles.pageContainer}>
       <NavigationSidebar
@@ -42,7 +38,7 @@ function NavSidebarContent() {
         currentPath={selectedPath}
         onNavigate={handleNavigate}
         currentLanguage={lang}
-        onLanguageChange={handleLanguageChange}
+        onLanguageChange={(l) => setLanguage(l as 'en' | 'es')}
       />
       <div className={styles.contentArea}>
         <h1 className={styles.pageTitle}>Scroll en Body</h1>
@@ -62,10 +58,8 @@ function NavSidebarContent() {
 }
 
 export default function NavSidebarScrollPage() {
-  const [language, setLanguage] = useState<'en' | 'es'>('es');
-  
   return (
-    <LibI18nProvider language={language} onLanguageChange={setLanguage}>
+    <LibI18nProvider>
       <NavSidebarContent />
     </LibI18nProvider>
   );
