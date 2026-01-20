@@ -4,10 +4,34 @@ import { useState } from 'react';
 import styles from './css/NavSidebarBasic.module.scss';
 
 const menuItems = [
-  { id: 'home', label: 'Inicio', path: '/home', icon: <Home className="h-5 w-5" /> },
-  { id: 'users', label: 'Usuarios', path: '/users', icon: <Users className="h-5 w-5" /> },
-  { id: 'docs', label: 'Documentos', path: '/docs', icon: <FileText className="h-5 w-5" /> },
-  { id: 'settings', label: 'Configuración', path: '/settings', icon: <Settings className="h-5 w-5" /> },
+  { 
+    id: 'home', 
+    label: 'Home',
+    i18n: { en: 'Home', es: 'Inicio', default: 'Home' },
+    path: '/home', 
+    icon: <Home className="h-5 w-5" /> 
+  },
+  { 
+    id: 'users', 
+    label: 'Users',
+    i18n: { en: 'Users', es: 'Usuarios', default: 'Users' },
+    path: '/users', 
+    icon: <Users className="h-5 w-5" /> 
+  },
+  { 
+    id: 'docs', 
+    label: 'Documents',
+    i18n: { en: 'Documents', es: 'Documentos', default: 'Documents' },
+    path: '/docs', 
+    icon: <FileText className="h-5 w-5" /> 
+  },
+  { 
+    id: 'settings', 
+    label: 'Settings',
+    i18n: { en: 'Settings', es: 'Configuración', default: 'Settings' },
+    path: '/settings', 
+    icon: <Settings className="h-5 w-5" /> 
+  },
 ];
 
 export default function NavSidebarBasicPage() {
@@ -26,16 +50,16 @@ export default function NavSidebarBasicPage() {
         onNavigate={handleNavigate}
       />
       <div className={styles.contentArea}>
-        <h1 className={styles.pageTitle}>Ejemplo Básico</h1>
+        <h1 className={styles.pageTitle}>Ejemplo Básico con i18n</h1>
         <p className={styles.pageDescription}>
-          NavigationSidebar con Header y Footer predeterminados.
-          El Footer incluye controles de tema e idioma.
+          NavigationSidebar con items traducibles. Cambia el idioma en el footer
+          para ver cómo los items se traducen automáticamente.
         </p>
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Estado actual:</h3>
           <p className={styles.currentPath}>{selectedPath}</p>
           <p className={styles.helpText}>
-            Haz clic en cualquier item del menú para ver cómo se selecciona.
+            Cada item tiene una prop i18n con traducciones en inglés y español.
           </p>
         </div>
       </div>
