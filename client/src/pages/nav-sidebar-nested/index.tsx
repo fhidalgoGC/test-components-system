@@ -1,6 +1,7 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
 import { Home, Package, Settings, Layout, MousePointer, Tag, Calendar } from 'lucide-react';
 import { useState } from 'react';
+import styles from './css/NavSidebarNested.module.scss';
 
 const menuItems = [
   { id: 'home', label: 'Inicio', path: '/home', icon: <Home className="h-5 w-5" /> },
@@ -60,38 +61,34 @@ export default function NavSidebarNestedPage() {
   };
 
   return (
-    <div className="h-screen w-full flex">
+    <div className={styles.pageContainer}>
       <NavigationSidebar
         items={menuItems}
         currentPath={selectedPath}
         onNavigate={handleNavigate}
       />
-      <div className="flex-1 p-8 bg-gray-50 dark:bg-gray-900 overflow-auto">
-        <h1 className="text-2xl font-bold mb-4">Control Externo del Menú</h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+      <div className={styles.contentArea}>
+        <h1 className={styles.pageTitle}>Control Externo del Menú</h1>
+        <p className={styles.pageDescription}>
           Este ejemplo demuestra cómo cambiar el item seleccionado desde fuera del menú usando botones externos.
         </p>
         
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow mb-6">
-          <h3 className="font-semibold mb-2">Estado actual:</h3>
-          <p className="text-blue-600 dark:text-blue-400 font-mono text-lg">{selectedPath}</p>
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Estado actual:</h3>
+          <p className={styles.currentPath}>{selectedPath}</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow mb-6">
-          <h3 className="font-semibold mb-4">Navegación Externa (Botones)</h3>
-          <p className="text-sm text-gray-500 mb-4">
+        <div className={styles.cardLarge}>
+          <h3 className={styles.cardTitleLarge}>Navegación Externa (Botones)</h3>
+          <p className={styles.helpText}>
             Haz clic en cualquier botón para cambiar el item seleccionado en el menú:
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className={styles.buttonsContainer}>
             {quickNavOptions.map((option) => (
               <button
                 key={option.path}
                 onClick={() => handleExternalNavigation(option.path)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedPath === option.path
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                }`}
+                className={selectedPath === option.path ? styles.navButtonActive : styles.navButtonDefault}
               >
                 {option.label}
               </button>
@@ -99,31 +96,35 @@ export default function NavSidebarNestedPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow mb-6">
-          <h3 className="font-semibold mb-4">Navegación con Select</h3>
-          <select
-            value={selectedPath}
-            onChange={(e) => handleExternalNavigation(e.target.value)}
-            className="w-full max-w-xs px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600"
-          >
-            {quickNavOptions.map((option) => (
-              <option key={option.path} value={option.path}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+        <div className={styles.cardLarge}>
+          <h3 className={styles.cardTitleLarge}>Navegación con Select</h3>
+          <div className={styles.selectContainer}>
+            <select
+              value={selectedPath}
+              onChange={(e) => handleExternalNavigation(e.target.value)}
+              className={styles.selectInput}
+            >
+              {quickNavOptions.map((option) => (
+                <option key={option.path} value={option.path}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
-          <h3 className="font-semibold mb-3 text-blue-800 dark:text-blue-300">Cómo funciona</h3>
-          <div className="text-sm text-blue-700 dark:text-blue-400 space-y-2">
-            <p><strong>1.</strong> El estado <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">selectedPath</code> se maneja en el componente padre.</p>
-            <p><strong>2.</strong> Se pasa a NavigationSidebar como <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">currentPath</code> prop.</p>
-            <p><strong>3.</strong> Los botones externos llaman <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">setSelectedPath()</code> directamente.</p>
-            <p><strong>4.</strong> El menú reacciona automáticamente al cambio de estado.</p>
+        <div className={styles.infoCard}>
+          <h3 className={styles.infoTitle}>Cómo funciona</h3>
+          <div className={styles.infoContent}>
+            <div className={styles.infoList}>
+              <p><strong>1.</strong> El estado <code className={styles.codeInline}>selectedPath</code> se maneja en el componente padre.</p>
+              <p><strong>2.</strong> Se pasa a NavigationSidebar como <code className={styles.codeInline}>currentPath</code> prop.</p>
+              <p><strong>3.</strong> Los botones externos llaman <code className={styles.codeInline}>setSelectedPath()</code> directamente.</p>
+              <p><strong>4.</strong> El menú reacciona automáticamente al cambio de estado.</p>
+            </div>
           </div>
-          <div className="mt-4 p-4 bg-gray-900 rounded-lg overflow-x-auto">
-            <pre className="text-green-400 text-xs">
+          <div className={styles.codeBlock}>
+            <pre className={styles.codeContent}>
 {`const [selectedPath, setSelectedPath] = useState('/home');
 
 // Botón externo cambia el estado
