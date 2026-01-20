@@ -274,22 +274,26 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
                   )}
 
                   {showLanguageSelector && (
-                    <select
-                      value={currentLanguage}
-                      onChange={(e) => handleLanguageChange(e.target.value)}
-                      className={`h-9 px-3 rounded-md border text-sm ${
-                        isDark
-                          ? 'bg-gray-800 text-gray-100 border-gray-600'
-                          : 'bg-white text-gray-900 border-gray-200'
-                      }`}
-                      data-testid="select-language"
-                    >
+                    <div className="flex h-9 rounded-md border overflow-hidden">
                       {availableLanguages.map((lang) => (
-                        <option key={lang} value={lang} data-testid={`language-${lang}`}>
+                        <button
+                          key={lang}
+                          onClick={() => handleLanguageChange(lang)}
+                          className={`flex-1 px-3 text-sm font-medium transition-colors ${
+                            currentLanguage === lang
+                              ? isDark
+                                ? 'bg-primary text-white'
+                                : 'bg-primary text-white'
+                              : isDark
+                                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                : 'bg-white text-gray-600 hover:bg-gray-100'
+                          } ${isDark ? 'border-gray-600' : 'border-gray-200'}`}
+                          data-testid={`button-language-${lang}`}
+                        >
                           {lang.toUpperCase()}
-                        </option>
+                        </button>
                       ))}
-                    </select>
+                    </div>
                   )}
                 </div>
               )}
