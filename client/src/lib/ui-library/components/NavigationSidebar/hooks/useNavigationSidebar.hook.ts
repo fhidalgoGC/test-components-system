@@ -1,5 +1,10 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useContext } from 'react';
 import type { NavigationSidebarProps, NavigationItem, UseNavigationSidebarReturn } from '../types';
+import { LibI18nContext } from '../../../providers/AppLanguageLibUiProvider/index.hook';
+
+function useOptionalLibI18n() {
+  return useContext(LibI18nContext);
+}
 
 const isPathActive = (path: string, currentPath: string): boolean => {
   if (!currentPath || !path) return false;
@@ -32,6 +37,8 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
     onCollapseChange,
   } = props;
 
+  const libI18n = useOptionalLibI18n();
+
   const [internalPath, setInternalPath] = useState<string>(propPath || '');
   const [expandedItems, setExpandedItems] = useState<Set<string>>(() => 
     getExpandedItemsFromPath(items, propPath || '')
@@ -56,7 +63,7 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
 
   const currentPath = propPath !== undefined ? propPath : internalPath;
   const currentTheme = propTheme ?? internalTheme;
-  const currentLanguage = propLanguage ?? internalLanguage;
+  const currentLanguage = libI18n?.lang ?? propLanguage ?? internalLanguage;
 
   useEffect(() => {
     if (propPath !== undefined) {
@@ -133,6 +140,10 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
   }, [currentTheme, propTheme, onThemeChange]);
 
   const handleLanguageChange = useCallback((language: string) => {
+    if (libI18n?.setLanguage) {
+      libI18n.setLanguage(language as 'en' | 'es');
+    }
+    
     if (!propLanguage) {
       setInternalLanguage(language);
       localStorage.setItem('language', language);
@@ -141,7 +152,7 @@ export function useNavigationSidebar(props: NavigationSidebarProps): UseNavigati
     if (onLanguageChange) {
       onLanguageChange(language);
     }
-  }, [propLanguage, onLanguageChange]);
+  }, [libI18n, propLanguage, onLanguageChange]);
 
   const handleToggleCollapse = useCallback(() => {
     const newCollapsed = !isCollapsed;

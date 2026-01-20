@@ -23,7 +23,7 @@ const menuItems = [
 
 function NavSidebarContent() {
   const [selectedPath, setSelectedPath] = useState('/home');
-  const { lang, setLanguage } = useLibI18n();
+  const { lang } = useLibI18n();
 
   const handleNavigate = (path: string) => {
     setSelectedPath(path);
@@ -36,8 +36,6 @@ function NavSidebarContent() {
         items={menuItems}
         currentPath={selectedPath}
         onNavigate={handleNavigate}
-        currentLanguage={lang}
-        onLanguageChange={(l) => setLanguage(l as 'en' | 'es')}
         footerContent={
           <div className={styles.footerContainer}>
             <div className={styles.userCard}>

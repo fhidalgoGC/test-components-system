@@ -24,7 +24,7 @@ const menuItems = [
 
 function NavSidebarContent() {
   const [selectedPath, setSelectedPath] = useState('/home');
-  const { lang, setLanguage } = useLibI18n();
+  const { lang } = useLibI18n();
 
   const handleNavigate = (path: string) => {
     setSelectedPath(path);
@@ -37,8 +37,6 @@ function NavSidebarContent() {
         items={menuItems}
         currentPath={selectedPath}
         onNavigate={handleNavigate}
-        currentLanguage={lang}
-        onLanguageChange={(l) => setLanguage(l as 'en' | 'es')}
       />
       <div className={styles.contentArea}>
         <h1 className={styles.pageTitle}>Scroll en Body</h1>
