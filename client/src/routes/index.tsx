@@ -27,6 +27,7 @@ const NavSidebarFullCustom = lazy(() => import("@/pages/nav-sidebar-full-custom"
 const SidebarLayoutBasic = lazy(() => import("@/pages/layout-sidebar-toolbar/basic"));
 const SidebarLayoutScroll = lazy(() => import("@/pages/layout-sidebar-toolbar/scroll"));
 const SidebarLayoutControlled = lazy(() => import("@/pages/layout-sidebar-toolbar/controlled"));
+const SidebarLayoutWithNavigation = lazy(() => import("@/pages/layout-sidebar-toolbar/with-navigation"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -48,6 +49,7 @@ export function Router() {
           <Route path="/layouts/sidebar-layout" component={SidebarLayoutBasic} />
           <Route path="/layouts/sidebar-layout/scroll" component={SidebarLayoutScroll} />
           <Route path="/layouts/sidebar-layout/controlled" component={SidebarLayoutControlled} />
+          <Route path="/layouts/sidebar-layout/with-navigation" component={SidebarLayoutWithNavigation} />
         </Switch>
       </Suspense>
     );
