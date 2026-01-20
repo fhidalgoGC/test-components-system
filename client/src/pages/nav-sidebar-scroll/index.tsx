@@ -1,5 +1,5 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
-import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
+import { AppLanguageProvider, useAppLanguage, LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
 import { Home, FileText, Folder, Star, Heart, Bell, Mail, Calendar, Clock, User, Settings, HelpCircle, Info, AlertCircle, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import styles from './css/NavSidebarScroll.module.scss';
@@ -55,10 +55,20 @@ function NavSidebarContent() {
   );
 }
 
-export default function NavSidebarScrollPage() {
+function NavSidebarWithLibI18n() {
+  const appLanguage = useAppLanguage();
+  
   return (
-    <LibI18nProvider>
+    <LibI18nProvider parentLanguageProvider={appLanguage}>
       <NavSidebarContent />
     </LibI18nProvider>
+  );
+}
+
+export default function NavSidebarScrollPage() {
+  return (
+    <AppLanguageProvider initial="en">
+      <NavSidebarWithLibI18n />
+    </AppLanguageProvider>
   );
 }

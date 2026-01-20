@@ -1,5 +1,5 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
-import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
+import { AppLanguageProvider, useAppLanguage, LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
 import { Home, Settings, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import styles from './css/NavSidebarCustomFooter.module.scss';
@@ -71,10 +71,20 @@ function NavSidebarContent() {
   );
 }
 
-export default function NavSidebarCustomFooterPage() {
+function NavSidebarWithLibI18n() {
+  const appLanguage = useAppLanguage();
+  
   return (
-    <LibI18nProvider>
+    <LibI18nProvider parentLanguageProvider={appLanguage}>
       <NavSidebarContent />
     </LibI18nProvider>
+  );
+}
+
+export default function NavSidebarCustomFooterPage() {
+  return (
+    <AppLanguageProvider initial="en">
+      <NavSidebarWithLibI18n />
+    </AppLanguageProvider>
   );
 }

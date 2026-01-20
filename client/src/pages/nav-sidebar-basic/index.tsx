@@ -1,5 +1,5 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
-import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
+import { AppLanguageProvider, useAppLanguage, LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
 import { Home, Settings, Users, FileText } from 'lucide-react';
 import { useState } from 'react';
 import styles from './css/NavSidebarBasic.module.scss';
@@ -54,7 +54,7 @@ function NavSidebarContent() {
       <div className={styles.contentArea}>
         <h1 className={styles.pageTitle}>Ejemplo Básico con i18n</h1>
         <p className={styles.pageDescription}>
-          NavigationSidebar con items traducibles usando LibI18nProvider.
+          NavigationSidebar con items traducibles usando AppLanguageProvider + LibI18nProvider.
           Cambia el idioma en el footer para ver cómo los items se traducen automáticamente.
         </p>
         <div className={styles.card}>
@@ -69,10 +69,20 @@ function NavSidebarContent() {
   );
 }
 
-export default function NavSidebarBasicPage() {
+function NavSidebarWithLibI18n() {
+  const appLanguage = useAppLanguage();
+  
   return (
-    <LibI18nProvider>
+    <LibI18nProvider parentLanguageProvider={appLanguage}>
       <NavSidebarContent />
     </LibI18nProvider>
+  );
+}
+
+export default function NavSidebarBasicPage() {
+  return (
+    <AppLanguageProvider initial="en">
+      <NavSidebarWithLibI18n />
+    </AppLanguageProvider>
   );
 }
