@@ -24,6 +24,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
 
   const {
     className = '',
+    headerIcon,
     headerContent,
     showThemeToggle = true,
     showLanguageSelector = true,
@@ -70,9 +71,18 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
       >
         {/* HEADER */}
         <div className={`${styles.header} ${isDark ? styles.dark : ''}`} data-testid="sidebar-header">
-          {headerContent ? (
-            <div className="w-full">
-              {headerContent}
+          {headerIcon || headerContent ? (
+            <div className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
+              {headerIcon && (
+                <div className="flex-shrink-0">
+                  {headerIcon}
+                </div>
+              )}
+              {!isCollapsed && headerContent && (
+                <div className="flex-1 min-w-0">
+                  {headerContent}
+                </div>
+              )}
             </div>
           ) : (
             <div className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'}`}>

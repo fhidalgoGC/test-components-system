@@ -21,6 +21,7 @@ export interface NavigationItem {
 
 export interface NavigationSidebarProps {
   items: NavigationItem[];
+  headerIcon?: ReactNode;
   headerContent?: ReactNode;
   currentPath?: string;
   defaultCollapsed?: boolean;

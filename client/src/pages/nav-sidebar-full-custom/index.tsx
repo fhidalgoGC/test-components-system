@@ -20,15 +20,15 @@ export default function NavSidebarFullCustomPage() {
   return (
     <div className={styles.pageContainer}>
       <NavigationSidebar
+        headerIcon={
+          <div className={styles.headerIcon}>
+            <Zap className="h-5 w-5 text-white" />
+          </div>
+        }
         headerContent={
-          <div className={styles.headerContainer}>
-            <div className={styles.headerIcon}>
-              <Zap className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h1 className={styles.headerTitle}>SuperApp</h1>
-              <p className={styles.headerSubtitle}>Enterprise Edition</p>
-            </div>
+          <div>
+            <h1 className={styles.headerTitle}>SuperApp</h1>
+            <p className={styles.headerSubtitle}>Enterprise Edition</p>
           </div>
         }
         items={menuItems}
@@ -56,13 +56,19 @@ export default function NavSidebarFullCustomPage() {
       <div className={styles.contentArea}>
         <h1 className={styles.pageTitle}>Full Custom</h1>
         <p className={styles.pageDescription}>
-          NavigationSidebar con Header y Footer completamente personalizados, gradientes y estilos premium.
+          NavigationSidebar con Header y Footer completamente personalizados. El icono del header se ve siempre.
         </p>
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Estado actual:</h3>
           <p className={styles.currentPath}>{selectedPath}</p>
           <p className={styles.helpText}>
             Haz clic en cualquier item del menú para ver cómo se selecciona.
+          </p>
+        </div>
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Colapsar el menú:</h3>
+          <p className={styles.helpText}>
+            Usa el botón de colapsar para ver cómo solo el icono permanece visible en el header.
           </p>
         </div>
       </div>
