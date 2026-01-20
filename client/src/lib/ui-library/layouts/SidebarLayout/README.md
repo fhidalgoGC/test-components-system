@@ -47,10 +47,36 @@ import { SidebarLayout, useSidebarLayout } from "@/lib/ui-library/layouts";
 | `collapsed` | `boolean` | - | Estado controlado de colapso |
 | `defaultCollapsed` | `boolean` | `false` | Estado inicial de colapso |
 | `onCollapseChange` | `(collapsed: boolean) => void` | - | Callback al cambiar estado |
-| `sidebarExpandedWidth` | `number` | `260` | Ancho del sidebar expandido (px) |
-| `sidebarCollapsedWidth` | `number` | `70` | Ancho del sidebar colapsado (px) |
-| `toolbarHeight` | `number` | `60` | Altura del toolbar (px) |
+| `sidebarExpandedWidth` | `number` | `stretch` | Ancho del sidebar expandido. Si no se pasa, se ajusta al contenido |
+| `sidebarCollapsedWidth` | `number` | `stretch` | Ancho del sidebar colapsado. Si no se pasa, se ajusta al contenido |
+| `toolbarHeight` | `number` | `stretch` | Altura del toolbar. Si no se pasa, se ajusta al contenido |
 | `className` | `string` | - | Clases CSS adicionales |
+
+### Comportamiento de tamaños
+
+- **Sin prop (default)**: El área se ajusta automáticamente al tamaño del componente que se pasa (stretch/auto)
+- **Con número**: El área usa ese tamaño fijo en píxeles
+
+```tsx
+// Stretch: se ajusta al contenido
+<SidebarLayout
+  sidebarContent={<MySidebar />}
+  toolbarContent={<MyToolbar />}
+>
+  ...
+</SidebarLayout>
+
+// Fijo: tamaños específicos en px
+<SidebarLayout
+  sidebarExpandedWidth={300}
+  sidebarCollapsedWidth={80}
+  toolbarHeight={60}
+  sidebarContent={<MySidebar />}
+  toolbarContent={<MyToolbar />}
+>
+  ...
+</SidebarLayout>
+```
 
 ## Interfaces
 
