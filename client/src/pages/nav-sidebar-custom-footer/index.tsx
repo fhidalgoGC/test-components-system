@@ -1,19 +1,37 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
+import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
 import { Home, Settings, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import styles from './css/NavSidebarCustomFooter.module.scss';
 
 const menuItems = [
-  { id: 'home', label: 'Inicio', path: '/home', icon: <Home className="h-5 w-5" /> },
-  { id: 'settings', label: 'Configuración', path: '/settings', icon: <Settings className="h-5 w-5" /> },
+  { 
+    id: 'home', 
+    label: 'Home', 
+    i18n: { en: 'Home', es: 'Inicio', default: 'Home' },
+    path: '/home', 
+    icon: <Home className="h-5 w-5" /> 
+  },
+  { 
+    id: 'settings', 
+    label: 'Settings', 
+    i18n: { en: 'Settings', es: 'Configuración', default: 'Settings' },
+    path: '/settings', 
+    icon: <Settings className="h-5 w-5" /> 
+  },
 ];
 
-export default function NavSidebarCustomFooterPage() {
+function NavSidebarContent() {
   const [selectedPath, setSelectedPath] = useState('/home');
+  const { lang, setLanguage } = useLibI18n();
 
   const handleNavigate = (path: string) => {
     setSelectedPath(path);
     console.log('Navigate to:', path);
+  };
+
+  const handleLanguageChange = (language: string) => {
+    setLanguage(language as 'en' | 'es');
   };
 
   return (
@@ -22,6 +40,8 @@ export default function NavSidebarCustomFooterPage() {
         items={menuItems}
         currentPath={selectedPath}
         onNavigate={handleNavigate}
+        currentLanguage={lang}
+        onLanguageChange={handleLanguageChange}
         footerContent={
           <div className={styles.footerContainer}>
             <div className={styles.userCard}>
@@ -49,10 +69,20 @@ export default function NavSidebarCustomFooterPage() {
           <h3 className={styles.cardTitle}>Estado actual:</h3>
           <p className={styles.currentPath}>{selectedPath}</p>
           <p className={styles.helpText}>
-            Haz clic en cualquier item del menú para ver cómo se selecciona.
+            Idioma actual: <strong>{lang.toUpperCase()}</strong>
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function NavSidebarCustomFooterPage() {
+  const [language, setLanguage] = useState<'en' | 'es'>('es');
+  
+  return (
+    <LibI18nProvider language={language} onLanguageChange={setLanguage}>
+      <NavSidebarContent />
+    </LibI18nProvider>
   );
 }

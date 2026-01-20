@@ -1,20 +1,41 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
+import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers';
 import { Home, Package, Settings, Layout, MousePointer, Tag, Calendar } from 'lucide-react';
 import { useState } from 'react';
 import styles from './css/NavSidebarNested.module.scss';
 
 const menuItems = [
-  { id: 'home', label: 'Inicio', path: '/home', icon: <Home className="h-5 w-5" /> },
+  { 
+    id: 'home', 
+    label: 'Home', 
+    i18n: { en: 'Home', es: 'Inicio', default: 'Home' },
+    path: '/home', 
+    icon: <Home className="h-5 w-5" /> 
+  },
   {
     id: 'components',
-    label: 'Componentes',
+    label: 'Components',
+    i18n: { en: 'Components', es: 'Componentes', default: 'Components' },
     icon: <Package className="h-5 w-5" />,
     children: [
-      { id: 'button', label: 'Button', path: '/components/button', icon: <MousePointer className="h-4 w-4" /> },
-      { id: 'card', label: 'Card', path: '/components/card', icon: <Layout className="h-4 w-4" /> },
+      { 
+        id: 'button', 
+        label: 'Button', 
+        i18n: { en: 'Button', es: 'Botón', default: 'Button' },
+        path: '/components/button', 
+        icon: <MousePointer className="h-4 w-4" /> 
+      },
+      { 
+        id: 'card', 
+        label: 'Card', 
+        i18n: { en: 'Card', es: 'Tarjeta', default: 'Card' },
+        path: '/components/card', 
+        icon: <Layout className="h-4 w-4" /> 
+      },
       { 
         id: 'carousel', 
         label: 'Carousel', 
+        i18n: { en: 'Carousel', es: 'Carrusel', default: 'Carousel' },
         path: '/components/carousel',
         component: (
           <div className="flex items-center gap-2">
@@ -23,16 +44,34 @@ const menuItems = [
           </div>
         )
       },
-      { id: 'tag', label: 'TagSelector', path: '/components/tag', icon: <Tag className="h-4 w-4" /> },
+      { 
+        id: 'tag', 
+        label: 'TagSelector', 
+        i18n: { en: 'Tag Selector', es: 'Selector de Etiquetas', default: 'Tag Selector' },
+        path: '/components/tag', 
+        icon: <Tag className="h-4 w-4" /> 
+      },
     ],
   },
   {
     id: 'utilities',
-    label: 'Utilidades',
+    label: 'Utilities',
+    i18n: { en: 'Utilities', es: 'Utilidades', default: 'Utilities' },
     icon: <Settings className="h-5 w-5" />,
     children: [
-      { id: 'calendar', label: 'Calendario', path: '/utilities/calendar', icon: <Calendar className="h-4 w-4" /> },
-      { id: 'settings', label: 'Configuración', path: '/utilities/settings' },
+      { 
+        id: 'calendar', 
+        label: 'Calendar', 
+        i18n: { en: 'Calendar', es: 'Calendario', default: 'Calendar' },
+        path: '/utilities/calendar', 
+        icon: <Calendar className="h-4 w-4" /> 
+      },
+      { 
+        id: 'settings', 
+        label: 'Settings', 
+        i18n: { en: 'Settings', es: 'Configuración', default: 'Settings' },
+        path: '/utilities/settings' 
+      },
     ],
   },
 ];
@@ -47,8 +86,9 @@ const quickNavOptions = [
   { path: '/utilities/settings', label: 'Configuración' },
 ];
 
-export default function NavSidebarNestedPage() {
+function NavSidebarContent() {
   const [selectedPath, setSelectedPath] = useState('/home');
+  const { lang, setLanguage } = useLibI18n();
 
   const handleNavigate = (path: string) => {
     setSelectedPath(path);
@@ -60,12 +100,18 @@ export default function NavSidebarNestedPage() {
     console.log('External navigation to:', path);
   };
 
+  const handleLanguageChange = (language: string) => {
+    setLanguage(language as 'en' | 'es');
+  };
+
   return (
     <div className={styles.pageContainer}>
       <NavigationSidebar
         items={menuItems}
         currentPath={selectedPath}
         onNavigate={handleNavigate}
+        currentLanguage={lang}
+        onLanguageChange={handleLanguageChange}
       />
       <div className={styles.contentArea}>
         <h1 className={styles.pageTitle}>Control Externo del Menú</h1>
@@ -76,6 +122,9 @@ export default function NavSidebarNestedPage() {
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Estado actual:</h3>
           <p className={styles.currentPath}>{selectedPath}</p>
+          <p className={styles.helpText}>
+            Idioma actual: <strong>{lang.toUpperCase()}</strong>
+          </p>
         </div>
 
         <div className={styles.cardLarge}>
@@ -143,5 +192,15 @@ export default function NavSidebarNestedPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function NavSidebarNestedPage() {
+  const [language, setLanguage] = useState<'en' | 'es'>('es');
+  
+  return (
+    <LibI18nProvider language={language} onLanguageChange={setLanguage}>
+      <NavSidebarContent />
+    </LibI18nProvider>
   );
 }

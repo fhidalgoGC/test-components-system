@@ -45,7 +45,6 @@ function NavSidebarContent() {
   };
 
   const handleLanguageChange = (language: string) => {
-    console.log('=== NavSidebarContent handleLanguageChange ===', language);
     setLanguage(language as 'en' | 'es');
   };
 
@@ -79,13 +78,8 @@ function NavSidebarContent() {
 export default function NavSidebarBasicPage() {
   const [language, setLanguage] = useState<'en' | 'es'>('es');
   
-  const handleLanguageChange = (lang: 'en' | 'es') => {
-    console.log('=== LibI18nProvider onLanguageChange ===', lang);
-    setLanguage(lang);
-  };
-  
   return (
-    <LibI18nProvider language={language} onLanguageChange={handleLanguageChange}>
+    <LibI18nProvider language={language} onLanguageChange={setLanguage}>
       <NavSidebarContent />
     </LibI18nProvider>
   );
