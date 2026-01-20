@@ -1,0 +1,64 @@
+.pageContainer {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+}
+
+.contentArea {
+  flex: 1;
+  padding: 2rem;
+  background-color: #f9fafb;
+  overflow: auto;
+
+  :global(.dark) & {
+    background-color: #111827;
+  }
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.pageDescription {
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+
+  :global(.dark) & {
+    color: #9ca3af;
+  }
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+
+  :global(.dark) & {
+    background-color: #1f2937;
+  }
+}
+
+.cardTitle {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.currentPath {
+  color: #2563eb;
+  font-family: monospace;
+  font-size: 1.125rem;
+
+  :global(.dark) & {
+    color: #60a5fa;
+  }
+}
+
+.helpText {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}

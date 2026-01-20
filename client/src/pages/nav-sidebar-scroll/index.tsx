@@ -1,5 +1,7 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
 import { Home, FileText, Folder, Star, Heart, Bell, Mail, Calendar, Clock, User, Settings, HelpCircle, Info, AlertCircle, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import styles from './css/NavSidebarScroll.module.scss';
 
 const menuItems = [
   { id: 'home', label: 'Inicio', path: '/home', icon: <Home className="h-5 w-5" /> },
@@ -20,18 +22,32 @@ const menuItems = [
 ];
 
 export default function NavSidebarScrollPage() {
+  const [selectedPath, setSelectedPath] = useState('/home');
+
+  const handleNavigate = (path: string) => {
+    setSelectedPath(path);
+    console.log('Navigate to:', path);
+  };
+
   return (
-    <div className="h-screen w-full flex">
+    <div className={styles.pageContainer}>
       <NavigationSidebar
         items={menuItems}
-        currentPath="/home"
-        onNavigate={(path) => console.log('Navigate to:', path)}
+        currentPath={selectedPath}
+        onNavigate={handleNavigate}
       />
-      <div className="flex-1 p-8 bg-gray-50 dark:bg-gray-900">
-        <h1 className="text-2xl font-bold mb-4">Scroll en Body</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+      <div className={styles.contentArea}>
+        <h1 className={styles.pageTitle}>Scroll en Body</h1>
+        <p className={styles.pageDescription}>
           NavigationSidebar con muchos items. Solo el Body hace scroll, Header y Footer permanecen fijos.
         </p>
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Estado actual:</h3>
+          <p className={styles.currentPath}>{selectedPath}</p>
+          <p className={styles.helpText}>
+            Haz clic en cualquier item del menú para ver cómo se selecciona.
+          </p>
+        </div>
       </div>
     </div>
   );
