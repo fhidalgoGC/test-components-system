@@ -80,8 +80,13 @@ export const useSidebar = (props: SidebarProps) => {
   }, []);
 
   const handleLanguageChange = useCallback((language: string) => {
+    console.log('=== LANGUAGE CHANGE ===');
+    console.log('New language:', language);
+    console.log('appLanguage exists:', !!appLanguage);
     if (appLanguage) {
+      console.log('Current appLanguage.lang:', appLanguage.lang);
       appLanguage.setLang(language as 'es' | 'en');
+      console.log('Called appLanguage.setLang with:', language);
     }
     setState(prev => ({ ...prev, currentLanguage: language }));
   }, [appLanguage]);

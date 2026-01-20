@@ -84,6 +84,11 @@ export function SidebarView(props: SidebarProps) {
   const libI18n = useOptionalLibI18n();
   const effectiveLang = currentLanguage;
   const libResolveLabel = undefined;
+  
+  console.log('=== SIDEBAR RENDER ===');
+  console.log('currentLanguage from hook:', currentLanguage);
+  console.log('effectiveLang:', effectiveLang);
+  console.log('libI18n?.lang:', libI18n?.lang);
 
   const { 
     className = '', 
@@ -310,7 +315,7 @@ export function SidebarView(props: SidebarProps) {
                 )}
               </Button>
 
-              <Select value={currentLanguage} onValueChange={handleLanguageChange}>
+              <Select value={currentLanguage} onValueChange={(val) => { console.log('SELECT onValueChange called with:', val); handleLanguageChange(val); }}>
                 <SelectTrigger className="h-9" data-testid="select-language">
                   <SelectValue />
                 </SelectTrigger>
