@@ -30,12 +30,12 @@ export function getDefaultMenuItems(): MenuItem[] {
       label: 'NavigationSidebar', 
       icon: 'PanelLeft',
       children: [
-        { id: 'nav-basic', label: 'Básico', path: '/components/nav-sidebar/basic', icon: 'Layout' },
-        { id: 'nav-custom-header', label: 'Header Custom', path: '/components/nav-sidebar/custom-header', icon: 'Heading' },
-        { id: 'nav-custom-footer', label: 'Footer Custom', path: '/components/nav-sidebar/custom-footer', icon: 'User' },
-        { id: 'nav-nested', label: 'Items Anidados', path: '/components/nav-sidebar/nested', icon: 'Network' },
-        { id: 'nav-scroll', label: 'Scroll', path: '/components/nav-sidebar/scroll', icon: 'ScrollText' },
-        { id: 'nav-full-custom', label: 'Full Custom', path: '/components/nav-sidebar/full-custom', icon: 'Palette' }
+        { id: 'nav-basic', label: 'Básico', path: '/components/nav-sidebar/basic', icon: 'Layout', openInNewTab: true },
+        { id: 'nav-custom-header', label: 'Header Custom', path: '/components/nav-sidebar/custom-header', icon: 'Heading', openInNewTab: true },
+        { id: 'nav-custom-footer', label: 'Footer Custom', path: '/components/nav-sidebar/custom-footer', icon: 'User', openInNewTab: true },
+        { id: 'nav-nested', label: 'Items Anidados', path: '/components/nav-sidebar/nested', icon: 'Network', openInNewTab: true },
+        { id: 'nav-scroll', label: 'Scroll', path: '/components/nav-sidebar/scroll', icon: 'ScrollText', openInNewTab: true },
+        { id: 'nav-full-custom', label: 'Full Custom', path: '/components/nav-sidebar/full-custom', icon: 'Palette', openInNewTab: true }
       ]
     },
     { 

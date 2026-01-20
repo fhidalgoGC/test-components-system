@@ -219,7 +219,11 @@ export function SidebarView(props: SidebarProps) {
                           <button
                             key={subItem.id}
                             onClick={() => {
-                              handleNavigation(subItem.path);
+                              if (subItem.openInNewTab) {
+                                window.open(subItem.path, '_blank');
+                              } else {
+                                handleNavigation(subItem.path);
+                              }
                               if (isMobileMenuOpen) {
                                 handleToggleMobileMenu();
                               }

@@ -14,6 +14,7 @@ export interface SubMenuItem {
   icon?: string;
   isActive?: boolean;
   description?: string;
+  openInNewTab?: boolean;
 }
 
 export interface SidebarProps {
