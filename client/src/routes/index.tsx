@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { lazy, Suspense } from "react";
 import { AppLayoutView } from "@/layouts/app-layout";
 import { LibraryDashboardView } from "@/pages/library-dashboard";
@@ -32,7 +32,26 @@ const PageLoader = () => (
   </div>
 );
 
-function AppRoutes() {
+export function Router() {
+  const [location] = useLocation();
+  
+  const isNavSidebarPage = location.startsWith('/components/nav-sidebar/');
+  
+  if (isNavSidebarPage) {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <Switch>
+          <Route path="/components/nav-sidebar/basic" component={NavSidebarBasic} />
+          <Route path="/components/nav-sidebar/custom-header" component={NavSidebarCustomHeader} />
+          <Route path="/components/nav-sidebar/custom-footer" component={NavSidebarCustomFooter} />
+          <Route path="/components/nav-sidebar/nested" component={NavSidebarNested} />
+          <Route path="/components/nav-sidebar/scroll" component={NavSidebarScroll} />
+          <Route path="/components/nav-sidebar/full-custom" component={NavSidebarFullCustom} />
+        </Switch>
+      </Suspense>
+    );
+  }
+  
   return (
     <AppLayoutView>
       <Suspense fallback={<PageLoader />}>
@@ -58,29 +77,5 @@ function AppRoutes() {
         </Switch>
       </Suspense>
     </AppLayoutView>
-  );
-}
-
-function FullScreenRoutes() {
-  return (
-    <Suspense fallback={<PageLoader />}>
-      <Switch>
-        <Route path="/components/nav-sidebar/basic" component={NavSidebarBasic} />
-        <Route path="/components/nav-sidebar/custom-header" component={NavSidebarCustomHeader} />
-        <Route path="/components/nav-sidebar/custom-footer" component={NavSidebarCustomFooter} />
-        <Route path="/components/nav-sidebar/nested" component={NavSidebarNested} />
-        <Route path="/components/nav-sidebar/scroll" component={NavSidebarScroll} />
-        <Route path="/components/nav-sidebar/full-custom" component={NavSidebarFullCustom} />
-      </Switch>
-    </Suspense>
-  );
-}
-
-export function Router() {
-  return (
-    <Switch>
-      <Route path="/components/nav-sidebar/:rest*" component={FullScreenRoutes} />
-      <Route path="/:rest*" component={AppRoutes} />
-    </Switch>
   );
 }
