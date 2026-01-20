@@ -1,2 +1,1 @@
-export { SidebarLayout, useSidebarLayout, useOptionalSidebarLayout } from '../components/SidebarLayout';
-export type { SidebarLayoutProps, SidebarLayoutContextValue } from '../components/SidebarLayout';
+export * from './SidebarLayout';

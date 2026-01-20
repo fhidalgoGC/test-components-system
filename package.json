@@ -13,6 +13,7 @@
     "start": "vite preview --host 0.0.0.0 --port 5000",
     "check": "tsc",
     "new-component": "node scripts/generate-component.mjs",
+    "new-layout": "node scripts/generate-layout.mjs",
     "create-wrapper": "node scripts/create-wrapper.mjs"
   },
   "dependencies": {

@@ -21,4 +21,3 @@ export * from './WrapperItemsSelected';
 export * from './LayoutRow';
 export * from './LayoutColumn';
 export * from './NavigationSidebar';
-export * from './SidebarLayout';

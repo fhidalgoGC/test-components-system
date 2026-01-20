@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SidebarLayout, useSidebarLayout } from '@/lib/ui-library/components/SidebarLayout';
+import { SidebarLayout, useSidebarLayout } from '@/lib/ui-library/layouts/SidebarLayout';
 import styles from './css/SidebarLayoutDemo.module.scss';
 
 function SidebarContent() {
