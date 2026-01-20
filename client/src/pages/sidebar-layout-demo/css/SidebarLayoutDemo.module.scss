@@ -20,6 +20,7 @@
   color: white;
   font-weight: bold;
   font-size: 18px;
+  box-sizing: border-box;
 }
 
 .mainArea {
@@ -80,7 +81,7 @@
 
 .demoSelector {
   position: fixed;
-  top: 10px;
+  top: 70px;
   right: 10px;
   z-index: 1000;
   background: white;
