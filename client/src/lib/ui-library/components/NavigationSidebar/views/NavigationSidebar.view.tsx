@@ -1,12 +1,25 @@
 import { ChevronDown, ChevronRight, Sun, Moon, ChevronLeft, Menu, X, Package } from 'lucide-react';
+import { useContext } from 'react';
 import type { NavigationSidebarProps, NavigationSubItem, NavigationItem } from '../types';
-import type { MultiLanguageLabel } from '../../../types/language.types';
 import { useNavigationSidebar } from '../hooks';
 import { useI18nMerge } from '../hooks/useI18nMerge.hook';
+import { LibI18nContext } from '../../../providers/AppLanguageLibUiProvider/index.hook';
 import styles from '../css/NavigationSidebar.module.css';
 
-function resolveItemLabel(item: NavigationItem | NavigationSubItem, lang: string): string {
+function useOptionalLibI18n() {
+  const ctx = useContext(LibI18nContext);
+  return ctx;
+}
+
+function resolveItemLabel(
+  item: NavigationItem | NavigationSubItem, 
+  lang: string,
+  libI18nResolveLabel?: (label: { [key: string]: string; default: string }) => string
+): string {
   if (item.i18n) {
+    if (libI18nResolveLabel) {
+      return libI18nResolveLabel(item.i18n as { [key: string]: string; default: string });
+    }
     return item.i18n[lang] || item.i18n.default || item.label;
   }
   return item.label;
@@ -29,6 +42,10 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
   } = useNavigationSidebar(props);
 
   const { t } = useI18nMerge(props.langOverride, { order: props.i18nOrder });
+  
+  const libI18n = useOptionalLibI18n();
+  const effectiveLang = libI18n?.lang || currentLanguage;
+  const libResolveLabel = libI18n?.resolveLabel;
 
   const {
     className = '',
@@ -146,7 +163,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
                       ${isDark ? styles.dark : ''}
                       ${isCollapsed ? 'justify-center' : ''}
                     `}
-                    title={isCollapsed ? resolveItemLabel(item, currentLanguage) : undefined}
+                    title={isCollapsed ? resolveItemLabel(item, effectiveLang, libResolveLabel) : undefined}
                     data-testid={`nav-${item.id}`}
                   >
                     <span className={`${styles.iconContainer} ${isCollapsed ? '' : 'mr-3'}`}>
@@ -155,7 +172,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
                     {!isCollapsed && (
                       <>
                         <span className={`flex-1 text-left truncate ${styles.menuItemText} ${isDark ? styles.dark : ''}`}>
-                          {resolveItemLabel(item, currentLanguage)}
+                          {resolveItemLabel(item, effectiveLang, libResolveLabel)}
                         </span>
                         {hasChildren && (
                           <span className="ml-2 flex-shrink-0">
@@ -196,7 +213,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
                           {subItem.component ? (
                             subItem.component
                           ) : (
-                            <span className="truncate">{resolveItemLabel(subItem, currentLanguage)}</span>
+                            <span className="truncate">{resolveItemLabel(subItem, effectiveLang, libResolveLabel)}</span>
                           )}
                         </button>
                       ))}

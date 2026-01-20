@@ -1,4 +1,5 @@
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
+import { LibI18nProvider, useLibI18n } from '@/lib/ui-library/providers/AppLanguageLibUiProvider';
 import { Home, Settings, Users, FileText } from 'lucide-react';
 import { useState } from 'react';
 import styles from './css/NavSidebarBasic.module.scss';
@@ -34,12 +35,17 @@ const menuItems = [
   },
 ];
 
-export default function NavSidebarBasicPage() {
+function NavSidebarContent() {
   const [selectedPath, setSelectedPath] = useState('/home');
+  const { lang, setLanguage } = useLibI18n();
 
   const handleNavigate = (path: string) => {
     setSelectedPath(path);
     console.log('Navigate to:', path);
+  };
+
+  const handleLanguageChange = (language: string) => {
+    setLanguage(language as 'en' | 'es');
   };
 
   return (
@@ -48,21 +54,31 @@ export default function NavSidebarBasicPage() {
         items={menuItems}
         currentPath={selectedPath}
         onNavigate={handleNavigate}
+        currentLanguage={lang}
+        onLanguageChange={handleLanguageChange}
       />
       <div className={styles.contentArea}>
         <h1 className={styles.pageTitle}>Ejemplo Básico con i18n</h1>
         <p className={styles.pageDescription}>
-          NavigationSidebar con items traducibles. Cambia el idioma en el footer
-          para ver cómo los items se traducen automáticamente.
+          NavigationSidebar con items traducibles usando LibI18nProvider.
+          Cambia el idioma en el footer para ver cómo los items se traducen automáticamente.
         </p>
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Estado actual:</h3>
           <p className={styles.currentPath}>{selectedPath}</p>
           <p className={styles.helpText}>
-            Cada item tiene una prop i18n con traducciones en inglés y español.
+            Idioma actual: <strong>{lang.toUpperCase()}</strong>
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function NavSidebarBasicPage() {
+  return (
+    <LibI18nProvider language="es">
+      <NavSidebarContent />
+    </LibI18nProvider>
   );
 }
