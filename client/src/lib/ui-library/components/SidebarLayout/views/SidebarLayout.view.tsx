@@ -1,22 +1,9 @@
-import { createContext, useContext, useState, useCallback, useMemo } from 'react';
-import { SidebarLayoutProps, SidebarLayoutContextValue } from './SidebarLayout.types';
-import styles from './SidebarLayout.module.scss';
+import { useState, useCallback, useMemo } from 'react';
+import type { SidebarLayoutProps } from '../types/SidebarLayout.types';
+import { SidebarLayoutContext } from '../hooks/useSidebarLayout.hook';
+import styles from '../css/SidebarLayout.module.scss';
 
-const SidebarLayoutContext = createContext<SidebarLayoutContextValue | null>(null);
-
-export function useSidebarLayout() {
-  const context = useContext(SidebarLayoutContext);
-  if (!context) {
-    throw new Error('useSidebarLayout must be used within SidebarLayout');
-  }
-  return context;
-}
-
-export function useOptionalSidebarLayout() {
-  return useContext(SidebarLayoutContext);
-}
-
-export function SidebarLayout({
+export function SidebarLayoutView({
   sidebarContent,
   toolbarContent,
   children,
@@ -46,7 +33,7 @@ export function SidebarLayout({
   
   const sidebarWidth = collapsed ? sidebarCollapsedWidth : sidebarExpandedWidth;
   
-  const contextValue = useMemo<SidebarLayoutContextValue>(() => ({
+  const contextValue = useMemo(() => ({
     collapsed,
     setCollapsed,
     toggleCollapse,
@@ -79,5 +66,3 @@ export function SidebarLayout({
     </SidebarLayoutContext.Provider>
   );
 }
-
-export type { SidebarLayoutProps, SidebarLayoutContextValue } from './SidebarLayout.types';
