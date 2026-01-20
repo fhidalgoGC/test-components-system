@@ -315,22 +315,23 @@ export function SidebarView(props: SidebarProps) {
                 )}
               </Button>
 
-              <Select value={currentLanguage} onValueChange={(val) => { console.log('SELECT onValueChange called with:', val); handleLanguageChange(val); }}>
-                <SelectTrigger className="h-9" data-testid="select-language">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {environment.AVAILABLE_LANGUAGES.map((lang: string) => (
-                    <SelectItem 
-                      key={lang} 
-                      value={lang} 
-                      data-testid={`language-${lang}`}
-                    >
-                      {lang.toUpperCase()}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex gap-1">
+                {environment.AVAILABLE_LANGUAGES.map((lang: string) => (
+                  <Button
+                    key={lang}
+                    variant={currentLanguage === lang ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => {
+                      console.log('Button clicked for language:', lang);
+                      handleLanguageChange(lang);
+                    }}
+                    data-testid={`language-${lang}`}
+                    className="h-9 px-2"
+                  >
+                    {lang.toUpperCase()}
+                  </Button>
+                ))}
+              </div>
             </div>
           )}
         </div>
