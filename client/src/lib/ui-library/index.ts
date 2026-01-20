@@ -4,6 +4,9 @@ export * from './components';
 // Providers
 export * from './providers';
 
+// Layouts
+export * from './layouts';
+
 // Types and Theme
 export * from './types';
 export * from './theme';
