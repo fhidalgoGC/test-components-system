@@ -88,6 +88,7 @@ function ToolbarContent() {
       paddingY="sm"
       componentVerticalAlign="center"
       slotGap="md"
+      className="bg-white border-b border-gray-200"
       components={[
         {
           component: (
