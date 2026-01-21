@@ -102,9 +102,9 @@ function ToolbarContent() {
         },
         {
           component: (
-            <div className="relative">
+            <div className="relative flex items-center justify-center h-8">
               <Bell className="h-5 w-5 text-gray-600 cursor-pointer hover:text-gray-900" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full"></span>
             </div>
           ),
           align: 'right',
@@ -112,7 +112,9 @@ function ToolbarContent() {
         },
         {
           component: (
-            <Settings className="h-5 w-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            <div className="flex items-center justify-center h-8">
+              <Settings className="h-5 w-5 text-gray-600 cursor-pointer hover:text-gray-900" />
+            </div>
           ),
           align: 'right',
           slot: 1
@@ -120,7 +122,7 @@ function ToolbarContent() {
         {
           component: (
             <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden border-2 border-red-500">
-              <span className="text-lg">🇲🇽</span>
+              <span className="text-lg leading-none">🇲🇽</span>
             </div>
           ),
           align: 'right',
