@@ -1,3 +1,26 @@
-.googlemap {
-  /* Add your styles here */
+.container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fef2f2;
+  color: #dc2626;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 16px;
 }
