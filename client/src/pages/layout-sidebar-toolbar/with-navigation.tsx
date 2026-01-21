@@ -56,17 +56,15 @@ function SidebarContent() {
         collapsedWidth={typeof sidebarWidth === 'number' ? sidebarWidth : 80}
         expandedWidth={typeof sidebarWidth === 'number' ? sidebarWidth : 280}
         onCollapseChange={toggleCollapse}
+        headerIcon={
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <Package className="h-4 w-4 text-white" />
+          </div>
+        }
         headerContent={
-          <div className="flex items-center gap-3 p-4">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Package className="h-4 w-4 text-white" />
-            </div>
-            {!collapsed && (
-              <div className="flex flex-col">
-                <span className="font-semibold text-sm">Admin Portal</span>
-                <span className="text-xs text-gray-500">v1.0.0</span>
-              </div>
-            )}
+          <div className="flex flex-col">
+            <span className="font-semibold text-sm">Admin Portal</span>
+            <span className="text-xs text-gray-500">v1.0.0</span>
           </div>
         }
         showThemeToggle={true}
