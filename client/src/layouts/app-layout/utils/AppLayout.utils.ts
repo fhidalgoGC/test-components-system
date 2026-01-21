@@ -24,6 +24,7 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'layout-column', label: 'LayoutColumn', path: '/components/layout-column', icon: 'Columns' },
         { id: 'bottom-nav', label: 'BottomNavigationBar', path: '/components/bottom-nav', icon: 'Navigation' },
         { id: 'bottom-nav-config', label: 'BottomNav + Config', path: '/components/bottom-nav-config', icon: 'Settings' },
+        { id: 'google-map', label: 'GoogleMap', i18n: { en: 'GoogleMap', es: 'Mapa Google', default: 'GoogleMap' }, path: '/components/google-map', icon: 'Map' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
       ]
     },

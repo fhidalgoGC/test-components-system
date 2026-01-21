@@ -28,6 +28,7 @@ const SidebarLayoutBasic = lazy(() => import("@/pages/layout-sidebar-toolbar/bas
 const SidebarLayoutScroll = lazy(() => import("@/pages/layout-sidebar-toolbar/scroll"));
 const SidebarLayoutControlled = lazy(() => import("@/pages/layout-sidebar-toolbar/controlled"));
 const SidebarLayoutWithNavigation = lazy(() => import("@/pages/layout-sidebar-toolbar/with-navigation"));
+const GoogleMapDemo = lazy(() => import("@/pages/google-map-demo/GoogleMapDemo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -91,6 +92,7 @@ export function Router() {
           <Route path="/auth-test" component={AuthTest} />
           <Route path="/components/layout-row" component={LayoutRowDemo} />
           <Route path="/components/layout-column" component={LayoutColumnDemo} />
+          <Route path="/components/google-map" component={GoogleMapDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

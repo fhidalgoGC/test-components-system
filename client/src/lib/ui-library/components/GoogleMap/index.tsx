@@ -20,4 +20,4 @@ export const GoogleMap = (props: GoogleMapProps) => {
   return <GoogleMapWeb {...props} />;
 };
 
-export type { GoogleMapProps };
+export type { GoogleMapProps, MapMarker, MapCenter, MapSizeValue } from './web/types';
