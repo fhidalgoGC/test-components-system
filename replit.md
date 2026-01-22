@@ -28,6 +28,7 @@ To use NativeWind classes in native components:
 3. Ensure `nativewind-env.d.ts` is in the project root for TypeScript support
 
 **Recent Updates (January 2026):**
+- **Native Home Screen**: App.native.tsx now includes a full navigation menu listing available native components with demo screens
 - **Dual Platform Support**: Added Expo and NativeWind configuration for React Native support
 - **UniversalCard Native**: Created `UniversalCard.native.tsx` with React Native StyleSheet implementation (NativeWind-ready)
 - **Platform-specific exports**: Reorganized component exports with `.native.tsx` files for native imports
