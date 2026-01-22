@@ -1,36 +1,36 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, padding, borders, shadows } from '../../token.shared';
+import { colors, semanticColors, spacing, padding, borders, cardShadow } from '../../token.shared';
 
 export const styles = StyleSheet.create({
   header: {
-    padding: padding.card,
-    borderBottomWidth: borders.width,
-    borderBottomColor: colors.border,
-    backgroundColor: colors.backgroundMuted,
+    padding: padding['card'],
+    borderBottomWidth: borders['width'],
+    borderBottomColor: semanticColors['border'],
+    backgroundColor: colors['gray-50'],
   },
   content: {
     flex: 1,
-    padding: padding.card,
+    padding: padding['card'],
   },
   footer: {
-    padding: padding.card,
-    borderTopWidth: borders.width,
-    borderTopColor: colors.border,
-    backgroundColor: colors.backgroundMuted,
+    padding: padding['card'],
+    borderTopWidth: borders['width'],
+    borderTopColor: semanticColors['border'],
+    backgroundColor: colors['gray-50'],
   },
 });
 
 export const defaultCardStyles = {
-  backgroundColor: colors.background,
-  borderRadius: borders.radius,
-  borderWidth: borders.width,
-  borderColor: colors.border,
-  selectedBorderColor: colors.borderSelected,
-  selectedBorderWidth: borders.selectedWidth,
-  shadowColor: shadows.color,
-  shadowOffsetWidth: shadows.offsetX,
-  shadowOffsetHeight: shadows.offsetY,
-  shadowOpacity: shadows.opacity,
-  shadowRadius: shadows.radius,
-  elevation: shadows.elevation,
+  backgroundColor: semanticColors['background'],
+  borderRadius: borders['radius'],
+  borderWidth: borders['width'],
+  borderColor: semanticColors['border'],
+  selectedBorderColor: semanticColors['border-selected'],
+  selectedBorderWidth: borders['width-selected'],
+  shadowColor: cardShadow.color,
+  shadowOffsetWidth: cardShadow.offsetX,
+  shadowOffsetHeight: cardShadow.offsetY,
+  shadowOpacity: cardShadow.opacity,
+  shadowRadius: cardShadow.radius,
+  elevation: cardShadow.elevation,
 };

@@ -1,7 +1,85 @@
 export const colors = {
-  background: '#ffffff',
-  backgroundMuted: 'rgba(243, 244, 246, 0.2)',
-  border: '#e5e7eb',
-  borderSelected: '#2563eb',
-  shadow: '#000000',
+  // Base
+  'white': '#ffffff',
+  'black': '#000000',
+  'transparent': 'transparent',
+
+  // Gray scale (Tailwind default)
+  'gray-50': '#f9fafb',
+  'gray-100': '#f3f4f6',
+  'gray-200': '#e5e7eb',
+  'gray-300': '#d1d5db',
+  'gray-400': '#9ca3af',
+  'gray-500': '#6b7280',
+  'gray-600': '#4b5563',
+  'gray-700': '#374151',
+  'gray-800': '#1f2937',
+  'gray-900': '#111827',
+  'gray-950': '#030712',
+
+  // Primary (Blue - Tailwind default)
+  'primary-50': '#eff6ff',
+  'primary-100': '#dbeafe',
+  'primary-200': '#bfdbfe',
+  'primary-300': '#93c5fd',
+  'primary-400': '#60a5fa',
+  'primary-500': '#3b82f6',
+  'primary-600': '#2563eb',
+  'primary-700': '#1d4ed8',
+  'primary-800': '#1e40af',
+  'primary-900': '#1e3a8a',
+  'primary-950': '#172554',
+
+  // Red
+  'red-50': '#fef2f2',
+  'red-100': '#fee2e2',
+  'red-200': '#fecaca',
+  'red-300': '#fca5a5',
+  'red-400': '#f87171',
+  'red-500': '#ef4444',
+  'red-600': '#dc2626',
+  'red-700': '#b91c1c',
+  'red-800': '#991b1b',
+  'red-900': '#7f1d1d',
+  'red-950': '#450a0a',
+
+  // Green
+  'green-50': '#f0fdf4',
+  'green-100': '#dcfce7',
+  'green-200': '#bbf7d0',
+  'green-300': '#86efac',
+  'green-400': '#4ade80',
+  'green-500': '#22c55e',
+  'green-600': '#16a34a',
+  'green-700': '#15803d',
+  'green-800': '#166534',
+  'green-900': '#14532d',
+  'green-950': '#052e16',
+
+  // Yellow
+  'yellow-50': '#fefce8',
+  'yellow-100': '#fef9c3',
+  'yellow-200': '#fef08a',
+  'yellow-300': '#fde047',
+  'yellow-400': '#facc15',
+  'yellow-500': '#eab308',
+  'yellow-600': '#ca8a04',
+  'yellow-700': '#a16207',
+  'yellow-800': '#854d0e',
+  'yellow-900': '#713f12',
+  'yellow-950': '#422006',
+};
+
+// Semantic aliases (shortcuts)
+export const semanticColors = {
+  'background': colors['white'],
+  'background-muted': colors['gray-50'],
+  'foreground': colors['gray-900'],
+  'foreground-muted': colors['gray-500'],
+  'border': colors['gray-200'],
+  'border-focus': colors['primary-500'],
+  'border-selected': colors['primary-600'],
+  'error': colors['red-500'],
+  'success': colors['green-500'],
+  'warning': colors['yellow-500'],
 };
