@@ -1,35 +1,36 @@
 import { StyleSheet } from 'react-native';
+import { colors, spacing, padding, borders, shadows } from '../../token.shared';
 
 export const styles = StyleSheet.create({
   header: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
-    backgroundColor: 'rgba(243, 244, 246, 0.2)',
+    padding: padding.card,
+    borderBottomWidth: borders.width,
+    borderBottomColor: colors.border,
+    backgroundColor: colors.backgroundMuted,
   },
   content: {
     flex: 1,
-    padding: 20,
+    padding: padding.card,
   },
   footer: {
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
-    backgroundColor: 'rgba(243, 244, 246, 0.2)',
+    padding: padding.card,
+    borderTopWidth: borders.width,
+    borderTopColor: colors.border,
+    backgroundColor: colors.backgroundMuted,
   },
 });
 
 export const defaultCardStyles = {
-  backgroundColor: '#ffffff',
-  borderRadius: 12,
-  borderWidth: 1,
-  borderColor: '#e5e7eb',
-  selectedBorderColor: '#2563eb',
-  selectedBorderWidth: 3,
-  shadowColor: '#000',
-  shadowOffsetWidth: 0,
-  shadowOffsetHeight: 1,
-  shadowOpacity: 0.1,
-  shadowRadius: 3,
-  elevation: 2,
+  backgroundColor: colors.background,
+  borderRadius: borders.radius,
+  borderWidth: borders.width,
+  borderColor: colors.border,
+  selectedBorderColor: colors.borderSelected,
+  selectedBorderWidth: borders.selectedWidth,
+  shadowColor: shadows.color,
+  shadowOffsetWidth: shadows.offsetX,
+  shadowOffsetHeight: shadows.offsetY,
+  shadowOpacity: shadows.opacity,
+  shadowRadius: shadows.radius,
+  elevation: shadows.elevation,
 };
