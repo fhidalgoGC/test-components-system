@@ -1,1 +1,1 @@
-export * from './UniversalCard.view';
+export { UniversalCardView } from './UniversalCard.web';

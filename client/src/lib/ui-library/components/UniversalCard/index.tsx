@@ -1,2 +1,2 @@
 export { UniversalCardView as UniversalCard } from './views';
-export type { UniversalCardProps } from './types';
+export type { UniversalCardProps, UniversalCardNativeProps, SizeValue, CardStyles } from './types';

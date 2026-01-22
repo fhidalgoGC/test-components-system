@@ -1,8 +1,38 @@
 # Overview
 
-This project is a frontend-only React component library built with React, TypeScript, and Vite. Its primary purpose is to provide a comprehensive UI component library, featuring custom components built on shadcn/ui, a complete theming system, internationalization support, and a responsive design. This is a standalone frontend library with no backend dependencies, designed for integration into other frontend applications. The project includes automated component and wrapper generators that support incremental development for creating responsive components with i18n support.
+This project is a dual-platform React component library built with React, TypeScript, supporting both **Web (Vite)** and **Native (Expo + NativeWind)**. Its primary purpose is to provide a comprehensive UI component library, featuring custom components built on shadcn/ui for web and NativeWind for native, a complete theming system, internationalization support, and a responsive design. This is a standalone frontend library with no backend dependencies, designed for integration into other frontend applications.
 
-**Recent Updates (November 2025):**
+## Platform Architecture
+
+The project supports two compilation targets:
+- **Web**: Uses Vite, React DOM, Tailwind CSS, and Radix UI components
+- **Native**: Uses Expo, React Native, and NativeWind for styling
+
+### File Resolution by Platform
+Components that need platform-specific implementations use the `.web.tsx` / `.native.tsx` file naming convention:
+- `ComponentName.web.tsx` - Web implementation (DOM, CSS)
+- `ComponentName.native.tsx` - Native implementation (React Native, NativeWind)
+- `index.tsx` - Exports web version
+- `index.native.tsx` - Exports native version
+
+### Running the Project
+- **Web Development**: `npm run dev` (Vite on port 5000)
+- **Native Development**: `npx expo start` (Expo with Metro bundler)
+
+### Native Styling Approach
+Native components use React Native `StyleSheet` by default for maximum stability and performance. NativeWind is configured and available (via `metro.config.js` and `global.css`) for developers who prefer Tailwind-style classes in native components.
+
+To use NativeWind classes in native components:
+1. Import `global.css` at the top of your entry file
+2. Use `className` prop on React Native components
+3. Ensure `nativewind-env.d.ts` is in the project root for TypeScript support
+
+**Recent Updates (January 2026):**
+- **Dual Platform Support**: Added Expo and NativeWind configuration for React Native support
+- **UniversalCard Native**: Created `UniversalCard.native.tsx` with React Native StyleSheet implementation (NativeWind-ready)
+- **Platform-specific exports**: Reorganized component exports with `.native.tsx` files for native imports
+
+**Previous Updates (November 2025):**
 - **AppAuthProvider onLogout callback (v1.0.9)**: Added `onLogout` prop to AppAuthProvider that executes ALWAYS when there's a logout (manual or automatic). Modified `onSessionInvalid` to execute ONLY when session is invalid/expired (not on manual logout). Now provides 3 lifecycle callbacks: `onLogging` (manual login), `onLogout` (any logout), `onSessionInvalid` (invalid sessions only). Fixed behavior when NO session exists at app load to properly trigger callbacks.
 - **AppAuthProvider skipInitialValidation (v1.0.8)**: Added `skipInitialValidation` prop to AppAuthProvider. When set to `true`, the provider skips automatic session validation on mount, allowing developers to call `login()` manually after backend authentication. Useful for login pages where users haven't authenticated yet.
 - **README-INSTALL-IA.md Update (v1.0.7)**: Reorganized installation guide to clarify that `@/lib/ui-library` alias is for internal library functionality only. Developers always import from `"GC-UI-COMPONENTS"` directly. Added comprehensive examples and troubleshooting section.
@@ -49,10 +79,17 @@ Preferred communication style: Simple, everyday language.
 # External Dependencies
 
 ### Core Framework Dependencies
-- `vite`
-- `react`
-- `react-dom`
-- `typescript`
+- `vite` - Web bundler
+- `react` - UI framework
+- `react-dom` - Web renderer
+- `typescript` - Type system
+
+### Native/Mobile Dependencies (Expo)
+- `expo` - React Native framework
+- `react-native` - Native UI primitives
+- `react-native-web` - React Native for web (shared components)
+- `nativewind` - Tailwind CSS for React Native
+- `expo-status-bar` - Status bar control
 
 ### UI and Component Libraries
 - `@radix-ui/*`
