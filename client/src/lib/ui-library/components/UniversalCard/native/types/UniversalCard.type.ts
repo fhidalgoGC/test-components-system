@@ -9,25 +9,7 @@ export interface CardStyles {
   borderColor?: string;
   borderWidth?: string;
   borderRadius?: string;
-  boxShadow?: string;
   padding?: string;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export interface UniversalCardProps {
-  component: ComponentType<any>;
-  componentProps?: ChildComponentProps;
-  id?: string;
-  selectable?: boolean;
-  minWidth?: SizeValue;
-  minHeight?: SizeValue;
-  width?: SizeValue;
-  height?: SizeValue;
-  cardStyles?: CardStyles;
-  dataTestId?: string;
-  headerContent?: ReactNode;
-  footerContent?: ReactNode;
 }
 
 export interface UniversalCardNativeProps {
@@ -39,7 +21,7 @@ export interface UniversalCardNativeProps {
   minHeight?: SizeValue;
   width?: SizeValue;
   height?: SizeValue;
-  cardStyles?: Omit<CardStyles, 'className' | 'style' | 'boxShadow'>;
+  cardStyles?: CardStyles;
   dataTestId?: string;
   headerContent?: ReactNode;
   footerContent?: ReactNode;

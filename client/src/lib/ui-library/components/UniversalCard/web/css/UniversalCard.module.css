@@ -1,30 +1,20 @@
 .universalcard {
-  /* Base card styles - More defined and visible */
   border-radius: 12px;
-  
-  /* White background for better contrast */
   background-color: white;
   color: hsl(var(--card-foreground));
-  /* NO overflow hidden - let the inner border be visible */
-  
-  /* Base shadow for better card definition */
   box-shadow: 
     0 1px 3px 0 rgba(0, 0, 0, 0.1),
     0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  
-  /* Smooth transitions */
   transition: 
     box-shadow 0.3s ease-in-out;
 }
 
-/* More noticeable hover effect - elevation only */
 .universalcard:hover {
   box-shadow: 
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
 
-/* Inner div that contains all content and handles the selection border */
 .innerBorder {
   display: flex;
   flex-direction: column;
@@ -33,15 +23,12 @@
   border: 1.5px solid hsl(var(--border));
   border-radius: 12px;
   overflow: hidden;
-  /* NO transition - instant border change */
 }
 
-/* Selected state - blue border on inner div */
 .innerBorderSelected {
-  border: 3px solid #2563eb !important; /* Blue 600 - hard coded for visibility */
+  border: 3px solid #2563eb !important;
 }
 
-/* Dark mode adjustments */
 .dark .universalcard {
   background-color: hsl(var(--card));
   border-color: hsl(var(--border));
@@ -74,7 +61,6 @@
   background-color: hsl(var(--muted) / 0.2);
 }
 
-/* Variants for different card types */
 .universalcard.compact .header,
 .universalcard.compact .content,
 .universalcard.compact .footer {

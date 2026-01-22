@@ -1,2 +1,2 @@
-export { UniversalCardNativeView as UniversalCardNative } from './views/index.native';
-export type { UniversalCardNativeProps, SizeValue, CardStyles } from './types';
+export { UniversalCardNative } from './native';
+export type { UniversalCardNativeProps, SizeValue, CardStyles } from './native/types';

@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Pressable 
 } from 'react-native';
-import { UniversalCardNative } from './client/src/lib/ui-library/components/UniversalCard/index.native';
+import { UniversalCardNative } from './client/src/lib/ui-library/components/UniversalCard/native';
 
 type Screen = 'home' | 'universal-card';
 

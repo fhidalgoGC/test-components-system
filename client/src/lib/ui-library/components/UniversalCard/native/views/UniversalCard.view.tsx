@@ -1,11 +1,13 @@
-import { View, Text, Pressable, ViewStyle, StyleSheet } from 'react-native';
+import { View, Pressable, ViewStyle, StyleSheet } from 'react-native';
 import type { UniversalCardNativeProps, SizeValue } from '../types';
-import { useMemo, ComponentType } from 'react';
+import { useMemo } from 'react';
 
-const convertSizeValue = (value: SizeValue | undefined): number | undefined => {
+const convertSizeValue = (value: SizeValue | undefined): number | string | undefined => {
   if (value === undefined) return undefined;
   if (typeof value === 'number') return value;
+  if (value === '100%') return '100%';
   if (value.endsWith('px')) return parseInt(value, 10);
+  if (value.endsWith('%')) return value;
   return undefined;
 };
 
@@ -46,10 +48,10 @@ export const UniversalCardNativeView = (props: UniversalCardNativeProps) => {
     const minWidthVal = convertSizeValue(minWidth);
     const minHeightVal = convertSizeValue(minHeight);
 
-    if (widthVal !== undefined) style.width = widthVal;
-    if (heightVal !== undefined) style.height = heightVal;
-    if (minWidthVal !== undefined) style.minWidth = minWidthVal;
-    if (minHeightVal !== undefined) style.minHeight = minHeightVal;
+    if (widthVal !== undefined) style.width = widthVal as any;
+    if (heightVal !== undefined) style.height = heightVal as any;
+    if (minWidthVal !== undefined) style.minWidth = minWidthVal as any;
+    if (minHeightVal !== undefined) style.minHeight = minHeightVal as any;
 
     return style;
   }, [width, height, minWidth, minHeight, cardStyles, isSelected]);

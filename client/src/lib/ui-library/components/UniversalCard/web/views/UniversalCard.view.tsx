@@ -1,28 +1,17 @@
 import type { UniversalCardProps, SizeValue } from '../types';
 import { useMemo } from 'react';
-import { cn } from '../../../utils';
-import styles from '../css/UniversalCard.module.css';
-import { useSelectionSafe } from '../../WrapperItemsSelected/index';
+import { cn } from '../../../../utils';
+import { styles } from '../css';
+import { useSelectionSafe } from '../../../WrapperItemsSelected/index';
 
-/**
- * Converts a size value to CSS format
- * Supports: numbers (px), strings with units, Tailwind classes (w-full, h-full)
- */
 const convertSizeValue = (value: SizeValue | undefined): string | undefined => {
   if (value === undefined) return undefined;
-  
-  // If it's a number, convert to px
   if (typeof value === 'number') {
     return `${value}px`;
   }
-  
-  // If it's a Tailwind class or already has units, return as is
   return value;
 };
 
-/**
- * Checks if a value is a Tailwind class (like w-full, h-full)
- */
 const isTailwindClass = (value: string): boolean => {
   return value.startsWith('w-') || value.startsWith('h-') || 
          value.startsWith('min-w-') || value.startsWith('min-h-') ||
@@ -45,28 +34,22 @@ export const UniversalCardView = (props: UniversalCardProps) => {
     footerContent,
   } = props;
 
-  // Try to use selection context (safe - won't throw if not wrapped)
   const selectionContext = useSelectionSafe();
   const isSelectable = selectable && selectionContext !== null && id !== undefined;
   
-  // Subscribe to selectedIds to trigger re-render when selection changes
-  // Access selectedIds directly to ensure React detects the dependency
   const selectedIds = selectionContext?.selectedIds || [];
   const isSelected = isSelectable && id !== undefined && selectedIds.includes(id);
 
-  // Process size values
   const widthValue = convertSizeValue(width);
   const heightValue = convertSizeValue(height);
   const minWidthValue = convertSizeValue(minWidth);
   const minHeightValue = convertSizeValue(minHeight);
 
-  // Build inline styles
   const inlineStyles = useMemo(() => {
     const baseStyles: React.CSSProperties = {
       ...cardStyles.style,
     };
 
-    // Add width/height if they're not Tailwind classes
     if (widthValue && !isTailwindClass(widthValue)) {
       baseStyles.width = widthValue;
     }
@@ -80,7 +63,6 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       baseStyles.minHeight = minHeightValue;
     }
 
-    // Add custom styles from cardStyles
     if (cardStyles.backgroundColor) {
       baseStyles.backgroundColor = cardStyles.backgroundColor;
     }
@@ -103,11 +85,9 @@ export const UniversalCardView = (props: UniversalCardProps) => {
     return baseStyles;
   }, [widthValue, heightValue, minWidthValue, minHeightValue, cardStyles]);
 
-  // Build class names
   const classNames = useMemo(() => {
     const classes: string[] = [styles.universalcard];
 
-    // Add Tailwind classes for sizes if they are Tailwind
     if (widthValue && isTailwindClass(widthValue)) {
       classes.push(widthValue);
     }
@@ -121,12 +101,10 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       classes.push(minHeightValue);
     }
 
-    // Add custom className from cardStyles
     if (cardStyles.className) {
       classes.push(cardStyles.className);
     }
 
-    // Add selectable class
     if (isSelectable) {
       classes.push('cursor-pointer');
     }
@@ -134,7 +112,6 @@ export const UniversalCardView = (props: UniversalCardProps) => {
     return cn(...classes);
   }, [widthValue, heightValue, minWidthValue, minHeightValue, cardStyles.className, isSelectable, isSelected, id]);
 
-  // Handle click for selectable cards
   const handleClick = () => {
     if (isSelectable && id && selectionContext) {
       selectionContext.toggleSelection(id);
@@ -150,10 +127,7 @@ export const UniversalCardView = (props: UniversalCardProps) => {
       data-testid={dataTestId}
       onClick={handleClick}
     >
-      {/* Inner div that handles the selection border */}
-      <div 
-        className={innerBorderClass}
-      >
+      <div className={innerBorderClass}>
         {headerContent && (
           <div className={styles.header} data-testid={`${dataTestId}-header`}>
             {headerContent}
