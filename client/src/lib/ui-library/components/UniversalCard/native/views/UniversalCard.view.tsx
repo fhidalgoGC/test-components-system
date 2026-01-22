@@ -1,5 +1,6 @@
-import { View, Pressable, ViewStyle, StyleSheet } from 'react-native';
+import { View, Pressable, ViewStyle } from 'react-native';
 import type { UniversalCardNativeProps, SizeValue } from '../types';
+import { styles, defaultCardStyles } from '../styles';
 import { useMemo } from 'react';
 
 const convertSizeValue = (value: SizeValue | undefined): number | string | undefined => {
@@ -31,15 +32,15 @@ export const UniversalCardNativeView = (props: UniversalCardNativeProps) => {
 
   const containerStyle = useMemo(() => {
     const style: ViewStyle = {
-      backgroundColor: cardStyles.backgroundColor || '#ffffff',
-      borderRadius: cardStyles.borderRadius ? parseInt(String(cardStyles.borderRadius), 10) : 12,
-      borderWidth: isSelected ? 3 : (cardStyles.borderWidth ? parseInt(String(cardStyles.borderWidth), 10) : 1),
-      borderColor: isSelected ? '#2563eb' : (cardStyles.borderColor || '#e5e7eb'),
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.1,
-      shadowRadius: 3,
-      elevation: 2,
+      backgroundColor: cardStyles.backgroundColor || defaultCardStyles.backgroundColor,
+      borderRadius: cardStyles.borderRadius ? parseInt(String(cardStyles.borderRadius), 10) : defaultCardStyles.borderRadius,
+      borderWidth: isSelected ? defaultCardStyles.selectedBorderWidth : (cardStyles.borderWidth ? parseInt(String(cardStyles.borderWidth), 10) : defaultCardStyles.borderWidth),
+      borderColor: isSelected ? defaultCardStyles.selectedBorderColor : (cardStyles.borderColor || defaultCardStyles.borderColor),
+      shadowColor: defaultCardStyles.shadowColor,
+      shadowOffset: { width: defaultCardStyles.shadowOffsetWidth, height: defaultCardStyles.shadowOffsetHeight },
+      shadowOpacity: defaultCardStyles.shadowOpacity,
+      shadowRadius: defaultCardStyles.shadowRadius,
+      elevation: defaultCardStyles.elevation,
       overflow: 'hidden',
     };
 
@@ -89,22 +90,3 @@ export const UniversalCardNativeView = (props: UniversalCardNativeProps) => {
     </CardWrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
-    backgroundColor: 'rgba(243, 244, 246, 0.2)',
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  footer: {
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
-    backgroundColor: 'rgba(243, 244, 246, 0.2)',
-  },
-});
