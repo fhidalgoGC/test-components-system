@@ -246,11 +246,11 @@ function createComponent(variant) {
   // Create CSS files
   createFile(
     path.join(variantPath, 'css', `${componentName}.module.css`),
-    processTemplate(readTemplate('css/ComponentName.module.css.template'), replacements)
+    processTemplate(readTemplate('web-mobile/css/ComponentName.module.css.template'), replacements)
   );
   createFile(
     path.join(variantPath, 'css', `${componentName}.module.ts`),
-    processTemplate(readTemplate('css/ComponentName.module.ts.template'), replacements)
+    processTemplate(readTemplate('web-mobile/css/ComponentName.module.ts.template'), replacements)
   );
   createFile(
     path.join(variantPath, 'css', 'index.ts'),
@@ -260,7 +260,7 @@ function createComponent(variant) {
   // Create types
   createFile(
     path.join(variantPath, 'types', `${componentName}.type.ts`),
-    processTemplate(readTemplate('types/ComponentName.type.ts.template'), replacements)
+    processTemplate(readTemplate('web-mobile/types/ComponentName.type.ts.template'), replacements)
   );
   createFile(
     path.join(variantPath, 'types', 'index.ts'),
@@ -270,11 +270,11 @@ function createComponent(variant) {
   // Create hooks
   createFile(
     path.join(variantPath, 'hooks', `use${componentName}.hook.ts`),
-    processTemplate(readTemplate('hooks/useComponentName.hook.ts.template'), replacements)
+    processTemplate(readTemplate('web-mobile/hooks/useComponentName.hook.ts.template'), replacements)
   );
   createFile(
     path.join(variantPath, 'hooks', 'useI18nMerge.hook.ts'),
-    readTemplate('hooks/useI18nMerge.hook.ts.template')
+    readTemplate('web-mobile/hooks/useI18nMerge.hook.ts.template')
   );
   createFile(
     path.join(variantPath, 'hooks', 'index.ts'),
@@ -284,7 +284,7 @@ function createComponent(variant) {
   // Create view
   createFile(
     path.join(variantPath, 'views', `${componentName}.view.tsx`),
-    processTemplate(readTemplate('views/ComponentName.view.tsx.template'), replacements)
+    processTemplate(readTemplate('web-mobile/views/ComponentName.view.tsx.template'), replacements)
   );
   createFile(
     path.join(variantPath, 'views', 'index.ts'),
@@ -309,18 +309,18 @@ function createComponent(variant) {
     };
     createFile(
       path.join(variantPath, 'environment', 'enviroment.ts'),
-      processTemplate(readTemplate('environment/enviroment.ts.template'), envReplacements)
+      processTemplate(readTemplate('web-mobile/environment/enviroment.ts.template'), envReplacements)
     );
     createFile(
       path.join(variantPath, 'environment', 'index.ts'),
-      processTemplate(readTemplate('environment/index.ts.template'), envReplacements)
+      processTemplate(readTemplate('web-mobile/environment/index.ts.template'), envReplacements)
     );
 
     // Utils
     createDir(path.join(variantPath, 'utils'));
     createFile(
       path.join(variantPath, 'utils', `${componentNameLower}.util.ts`),
-      processTemplate(readTemplate('utils/componentname.util.ts.template'), replacements)
+      processTemplate(readTemplate('web-mobile/utils/componentname.util.ts.template'), replacements)
     );
     createFile(
       path.join(variantPath, 'utils', 'index.ts'),
@@ -331,7 +331,7 @@ function createComponent(variant) {
     createDir(path.join(variantPath, 'providers'));
     createFile(
       path.join(variantPath, 'providers', `${componentName}.provider.tsx`),
-      processTemplate(readTemplate('providers/ComponentName.provider.tsx.template'), envReplacements)
+      processTemplate(readTemplate('web-mobile/providers/ComponentName.provider.tsx.template'), envReplacements)
     );
     createFile(
       path.join(variantPath, 'providers', 'index.ts'),
@@ -341,10 +341,10 @@ function createComponent(variant) {
     // i18n
     createDir(path.join(variantPath, 'i18n'));
     languages.forEach(lang => {
-      let templatePath = `i18n/${lang}.json.template`;
+      let templatePath = `web-mobile/i18n/${lang}.json.template`;
       const specificTemplatePath = path.join(templatesPath, templatePath);
       if (!fs.existsSync(specificTemplatePath)) {
-        templatePath = 'i18n/lang.json.template';
+        templatePath = 'web-mobile/i18n/lang.json.template';
       }
       createFile(
         path.join(variantPath, 'i18n', `${lang}.json`),
@@ -362,7 +362,7 @@ function createComponent(variant) {
     };
     createFile(
       path.join(variantPath, 'i18n', 'index.ts'),
-      processTemplate(readTemplate('i18n/index.ts.template'), i18nIndexReplacements)
+      processTemplate(readTemplate('web-mobile/i18n/index.ts.template'), i18nIndexReplacements)
     );
   }
 }

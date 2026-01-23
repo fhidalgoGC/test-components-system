@@ -1,0 +1,2 @@
+export { {{ComponentName}}View as {{ComponentName}} } from './views';
+export type { {{ComponentName}}Props } from './types';
