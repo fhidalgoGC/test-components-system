@@ -1,0 +1,111 @@
+# {{ComponentName}} - Native Version (iOS/Android)
+
+## Overview
+Native implementation using React Native and Expo. Uses `StyleSheet` for styling and React Native primitives (`View`, `Pressable`, `Text`) for UI.
+
+## Folder Structure
+
+```
+native/
+├── styles/
+│   ├── index.ts
+│   └── {{ComponentName}}.module.ts    # StyleSheet.create() styles
+├── types/
+│   ├── index.ts
+│   └── {{ComponentName}}.type.ts      # React Native types
+├── views/
+│   ├── index.ts
+│   └── {{ComponentName}}.view.tsx     # React Native component
+└── index.tsx                           # Main export
+```
+
+## Using Shared Tokens
+
+Import tokens from `token.shared/` - same values as web:
+
+```typescript
+import { colors, spacing, borders, cardShadow, semanticColors } from '../../token.shared';
+
+const styles = StyleSheet.create({
+  container: {
+    padding: spacing['4'],                    // 16px (same as p-4)
+    backgroundColor: colors['gray-100'],      // same as bg-gray-100
+    borderRadius: borders['radius'],          // 12px
+    borderWidth: borders['width'],            // 1px
+    borderColor: semanticColors['border'],    // #e5e7eb
+  },
+});
+```
+
+## Token Reference (Tailwind-style)
+
+### Colors
+```typescript
+colors['gray-50']       // #f9fafb (bg-gray-50)
+colors['gray-100']      // #f3f4f6 (bg-gray-100)
+colors['primary-500']   // #3b82f6 (bg-primary-500)
+```
+
+### Spacing
+```typescript
+spacing['1']    // 4   (p-1)
+spacing['2']    // 8   (p-2)
+spacing['4']    // 16  (p-4)
+spacing['6']    // 24  (p-6)
+```
+
+### Shadows (Native)
+```typescript
+import { cardShadow } from '../../token.shared';
+
+const styles = StyleSheet.create({
+  card: {
+    shadowColor: cardShadow.color,
+    shadowOffset: { 
+      width: cardShadow.offsetX, 
+      height: cardShadow.offsetY 
+    },
+    shadowOpacity: cardShadow.opacity,
+    shadowRadius: cardShadow.radius,
+    elevation: cardShadow.elevation,  // Android
+  },
+});
+```
+
+## Component Usage
+
+```tsx
+import { {{ComponentName}} } from './native';
+
+<{{ComponentName}}>
+  Content
+</{{ComponentName}}>
+```
+
+## Platform Resolution
+
+Metro bundler automatically resolves `.native.tsx` files:
+
+```
+{{ComponentName}}/
+├── index.tsx          # Web/Mobile (Vite resolves this)
+└── index.native.tsx   # Native (Metro resolves this)
+```
+
+## Running Native
+
+```bash
+npx expo start        # Start Expo development server
+npx expo start --ios  # iOS Simulator
+npx expo start --android  # Android Emulator
+```
+
+## Key Differences from Web
+
+| Aspect | Web | Native |
+|--------|-----|--------|
+| Styling | CSS/Tailwind | StyleSheet |
+| Layout | Flexbox (CSS) | Flexbox (RN) |
+| Events | onClick | onPress |
+| Elements | div, span | View, Text |
+| Shadows | box-shadow | shadowColor + elevation |

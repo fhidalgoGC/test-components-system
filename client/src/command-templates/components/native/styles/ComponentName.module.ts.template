@@ -1,0 +1,48 @@
+import { StyleSheet } from 'react-native';
+import { colors, semanticColors, spacing, padding, borders, cardShadow } from '../../token.shared';
+
+export const styles = StyleSheet.create({
+  container: {
+    backgroundColor: semanticColors['background'],
+    borderRadius: borders['radius'],
+    borderWidth: borders['width'],
+    borderColor: semanticColors['border'],
+    shadowColor: cardShadow.color,
+    shadowOffset: { width: cardShadow.offsetX, height: cardShadow.offsetY },
+    shadowOpacity: cardShadow.opacity,
+    shadowRadius: cardShadow.radius,
+    elevation: cardShadow.elevation,
+    overflow: 'hidden',
+  },
+  header: {
+    padding: padding['card'],
+    borderBottomWidth: borders['width'],
+    borderBottomColor: semanticColors['border'],
+    backgroundColor: colors['gray-50'],
+  },
+  content: {
+    flex: 1,
+    padding: padding['card'],
+  },
+  footer: {
+    padding: padding['card'],
+    borderTopWidth: borders['width'],
+    borderTopColor: semanticColors['border'],
+    backgroundColor: colors['gray-50'],
+  },
+});
+
+export const defaultCardStyles = {
+  backgroundColor: semanticColors['background'],
+  borderRadius: borders['radius'],
+  borderWidth: borders['width'],
+  borderColor: semanticColors['border'],
+  selectedBorderColor: semanticColors['border-selected'],
+  selectedBorderWidth: borders['width-selected'],
+  shadowColor: cardShadow.color,
+  shadowOffsetWidth: cardShadow.offsetX,
+  shadowOffsetHeight: cardShadow.offsetY,
+  shadowOpacity: cardShadow.opacity,
+  shadowRadius: cardShadow.radius,
+  elevation: cardShadow.elevation,
+};

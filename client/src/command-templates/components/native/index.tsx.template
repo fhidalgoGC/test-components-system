@@ -1,0 +1,2 @@
+export { {{ComponentName}}NativeView as {{ComponentName}} } from './views';
+export type { {{ComponentName}}NativeProps } from './types';

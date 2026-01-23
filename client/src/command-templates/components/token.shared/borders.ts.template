@@ -1,0 +1,28 @@
+export const borderRadius = {
+  'none': 0,
+  'sm': 2,
+  'DEFAULT': 4,
+  'md': 6,
+  'lg': 8,
+  'xl': 12,
+  '2xl': 16,
+  '3xl': 24,
+  'full': 9999,
+};
+
+export const borderWidth = {
+  'DEFAULT': 1,
+  '0': 0,
+  '2': 2,
+  '4': 4,
+  '8': 8,
+};
+
+// Semantic aliases
+export const borders = {
+  'radius': borderRadius['xl'],
+  'radius-sm': borderRadius['lg'],
+  'radius-lg': borderRadius['2xl'],
+  'width': borderWidth['DEFAULT'],
+  'width-selected': borderWidth['2'] + 1,
+};

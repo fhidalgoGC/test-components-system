@@ -26,24 +26,29 @@ if (!componentName) {
   console.log('\nOptions:');
   console.log('  --mobile                Create/add mobile version only');
   console.log('  --web                   Create/add web version only');
+  console.log('  --native                Create/add native version (iOS/Android)');
   console.log('  (no flag)               Create in root (no responsive wrapper)');
   console.log('  -all-folders            Create i18n, utils, and provider folders');
-  console.log('  -readme                 Generate README-IA.md in component');
+  console.log('  -readme                 Generate README files (main + per platform)');
+  console.log('  -tokens                 Create token.shared folder with design tokens');
   console.log('  --languages <langs>     i18n languages (comma-separated, e.g., en,es,fr)');
   console.log('\nExamples:');
   console.log('  npm run new-component -- Modal                    # Root structure');
   console.log('  npm run new-component -- Modal --mobile           # Mobile only');
-  console.log('  npm run new-component -- Modal --web              # Web only (if mobile exists)');
-  console.log('  npm run new-component -- Modal --mobile --web     # Both with wrapper');
-  console.log('  npm run new-component -- Dialog -all-folders --languages en,es,fr');
+  console.log('  npm run new-component -- Modal --web              # Web only');
+  console.log('  npm run new-component -- Modal --native           # Native only');
+  console.log('  npm run new-component -- Modal --mobile --web --native  # All platforms');
+  console.log('  npm run new-component -- Modal --web --native -tokens -readme');
   process.exit(1);
 }
 
 const flags = {
   allFolders: args.includes('-all-folders'),
   readme: args.includes('-readme'),
+  tokens: args.includes('-tokens'),
   mobile: args.includes('--mobile'),
   web: args.includes('--web'),
+  native: args.includes('--native'),
 };
 
 // Parse languages (default: en,es)
@@ -55,41 +60,42 @@ const componentsPath = path.join(process.cwd(), 'client/src/lib/ui-library/compo
 const componentPath = path.join(componentsPath, componentName);
 const templatesPath = path.join(process.cwd(), 'client/src/command-templates/components');
 
-// Detect mode: root, mobile, web, or both
-const isRootMode = !flags.mobile && !flags.web;
+// Detect mode: root or variants
+const isRootMode = !flags.mobile && !flags.web && !flags.native;
 const componentExists = fs.existsSync(componentPath);
 
 // Check existing variants
 let existingMobile = false;
 let existingWeb = false;
+let existingNative = false;
 let existingRoot = false;
 
 if (componentExists) {
   existingMobile = fs.existsSync(path.join(componentPath, 'mobile'));
   existingWeb = fs.existsSync(path.join(componentPath, 'web'));
-  // Check if it's a root structure (has views/ directly in root)
+  existingNative = fs.existsSync(path.join(componentPath, 'native'));
   existingRoot = fs.existsSync(path.join(componentPath, 'views'));
 }
 
 // Validation: prevent mixing root with variants
-if (componentExists && existingRoot && (flags.mobile || flags.web)) {
+if (componentExists && existingRoot && (flags.mobile || flags.web || flags.native)) {
   console.error(`❌ Error: Component "${componentName}" exists with root structure.`);
-  console.error('   Cannot add mobile/web variants to a root-structure component.');
+  console.error('   Cannot add mobile/web/native variants to a root-structure component.');
   console.error('   Delete the component first or create a new one.');
   process.exit(1);
 }
 
-if (componentExists && (existingMobile || existingWeb) && isRootMode) {
+if (componentExists && (existingMobile || existingWeb || existingNative) && isRootMode) {
   console.error(`❌ Error: Component "${componentName}" exists with variant structure.`);
   console.error('   Cannot create root structure for a component with variants.');
-  console.error('   Use --mobile or --web flags instead.');
+  console.error('   Use --mobile, --web, or --native flags instead.');
   process.exit(1);
 }
 
-// Validation: if creating new component, root mode cannot have both flags
+// Log what we're doing
 if (!componentExists && isRootMode) {
   console.log(`\n🚀 Creating component: ${componentName} (root structure)\n`);
-} else if (!componentExists && (flags.mobile || flags.web)) {
+} else if (!componentExists && (flags.mobile || flags.web || flags.native)) {
   console.log(`\n🚀 Creating component: ${componentName}\n`);
 } else if (componentExists) {
   console.log(`\n🔄 Updating component: ${componentName}\n`);
@@ -135,7 +141,6 @@ function generateLanguageSelectionLogic(languages) {
   const defaultLang = languages[0];
   const langLower = '(lang || \'' + defaultLang + '\').toLowerCase()';
   
-  // Build ternary chain: lang.startsWith('es') ? 'es' : lang.startsWith('fr') ? 'fr' : 'en'
   const conditions = languages.slice(1).reverse().reduce((acc, lang) => {
     return `${langLower}.startsWith('${lang}') ? '${lang}' : ${acc}`;
   }, `'${defaultLang}'`);
@@ -143,7 +148,82 @@ function generateLanguageSelectionLogic(languages) {
   return `  const pick = ${conditions};\n  return localDictionaries[pick];`;
 }
 
-// Create component structure
+// Create token.shared folder
+function createTokenShared() {
+  const tokenPath = path.join(componentPath, 'token.shared');
+  
+  if (fs.existsSync(tokenPath)) {
+    console.log('⏭️  token.shared already exists, skipping...');
+    return;
+  }
+  
+  console.log('🎨 Creating token.shared/ with design tokens...');
+  createDir(tokenPath);
+  
+  const replacements = { ComponentName: componentName };
+  
+  createFile(path.join(tokenPath, 'colors.ts'), readTemplate('token.shared/colors.ts.template'));
+  createFile(path.join(tokenPath, 'spacing.ts'), readTemplate('token.shared/spacing.ts.template'));
+  createFile(path.join(tokenPath, 'borders.ts'), readTemplate('token.shared/borders.ts.template'));
+  createFile(path.join(tokenPath, 'shadows.ts'), readTemplate('token.shared/shadows.ts.template'));
+  createFile(path.join(tokenPath, 'index.ts'), readTemplate('token.shared/index.ts.template'));
+}
+
+// Create native component structure
+function createNativeComponent() {
+  const nativePath = path.join(componentPath, 'native');
+  const componentNameLower = componentName.toLowerCase();
+  
+  console.log(`📱 Creating ${componentName}/native/ structure...`);
+  
+  const replacements = {
+    ComponentName: componentName,
+    componentname: componentNameLower,
+  };
+  
+  // Create directories
+  createDir(path.join(nativePath, 'styles'));
+  createDir(path.join(nativePath, 'types'));
+  createDir(path.join(nativePath, 'views'));
+  
+  // Create styles
+  createFile(
+    path.join(nativePath, 'styles', `${componentName}.module.ts`),
+    processTemplate(readTemplate('native/styles/ComponentName.module.ts.template'), replacements)
+  );
+  createFile(
+    path.join(nativePath, 'styles', 'index.ts'),
+    processTemplate(readTemplate('native/styles/index.ts.template'), replacements)
+  );
+  
+  // Create types
+  createFile(
+    path.join(nativePath, 'types', `${componentName}.type.ts`),
+    processTemplate(readTemplate('native/types/ComponentName.type.ts.template'), replacements)
+  );
+  createFile(
+    path.join(nativePath, 'types', 'index.ts'),
+    processTemplate(readTemplate('native/types/index.ts.template'), replacements)
+  );
+  
+  // Create views
+  createFile(
+    path.join(nativePath, 'views', `${componentName}.view.tsx`),
+    processTemplate(readTemplate('native/views/ComponentName.view.tsx.template'), replacements)
+  );
+  createFile(
+    path.join(nativePath, 'views', 'index.ts'),
+    processTemplate(readTemplate('native/views/index.ts.template'), replacements)
+  );
+  
+  // Create native index
+  createFile(
+    path.join(nativePath, 'index.tsx'),
+    processTemplate(readTemplate('native/index.tsx.template'), replacements)
+  );
+}
+
+// Create web/mobile component structure (existing logic)
 function createComponent(variant) {
   const variantPath = variant ? path.join(componentPath, variant) : componentPath;
   const componentNameLower = componentName.toLowerCase();
@@ -151,7 +231,6 @@ function createComponent(variant) {
   const displayPath = variant ? `${componentName}/${variant}/` : `${componentName}/`;
   console.log(`📁 Creating ${displayPath} structure...`);
 
-  // Prepare replacements
   const replacements = {
     ComponentName: componentName,
     componentname: componentNameLower,
@@ -193,13 +272,10 @@ function createComponent(variant) {
     path.join(variantPath, 'hooks', `use${componentName}.hook.ts`),
     processTemplate(readTemplate('hooks/useComponentName.hook.ts.template'), replacements)
   );
-  
-  // Create useI18nMerge hook (always, for i18n support)
   createFile(
     path.join(variantPath, 'hooks', 'useI18nMerge.hook.ts'),
     readTemplate('hooks/useI18nMerge.hook.ts.template')
   );
-  
   createFile(
     path.join(variantPath, 'hooks', 'index.ts'),
     `export * from './use${componentName}.hook';\nexport * from './useI18nMerge.hook';`
@@ -264,34 +340,26 @@ function createComponent(variant) {
 
     // i18n
     createDir(path.join(variantPath, 'i18n'));
-    
-    // Create JSON files for each language
     languages.forEach(lang => {
-      // Try to use language-specific template first, fallback to generic
       let templatePath = `i18n/${lang}.json.template`;
       const specificTemplatePath = path.join(templatesPath, templatePath);
-      
       if (!fs.existsSync(specificTemplatePath)) {
         templatePath = 'i18n/lang.json.template';
       }
-      
       createFile(
         path.join(variantPath, 'i18n', `${lang}.json`),
         processTemplate(readTemplate(templatePath), replacements)
       );
     });
     
-    // Create i18n index with dynamic imports
     const languagesImports = languages.map(lang => `import ${lang} from './${lang}.json';`).join('\n');
     const languagesKeys = languages.join(', ');
     const languageSelectionLogic = generateLanguageSelectionLogic(languages);
-    
     const i18nIndexReplacements = {
       LANGUAGES_IMPORTS: languagesImports,
       LANGUAGES_KEYS: languagesKeys,
       LANGUAGE_SELECTION_LOGIC: languageSelectionLogic,
     };
-    
     createFile(
       path.join(variantPath, 'i18n', 'index.ts'),
       processTemplate(readTemplate('i18n/index.ts.template'), i18nIndexReplacements)
@@ -299,31 +367,25 @@ function createComponent(variant) {
   }
 }
 
-// Create or update wrapper
+// Create or update wrapper index.tsx
 function createOrUpdateWrapper() {
   const wrapperPath = path.join(componentPath, 'index.tsx');
-  const replacements = {
-    ComponentName: componentName,
-    componentname: componentName.toLowerCase(),
-  };
-
-  // Determine what variants exist now
+  
   const hasMobile = fs.existsSync(path.join(componentPath, 'mobile'));
   const hasWeb = fs.existsSync(path.join(componentPath, 'web'));
+  const hasNative = fs.existsSync(path.join(componentPath, 'native'));
   const hasRoot = fs.existsSync(path.join(componentPath, 'views'));
 
   if (hasRoot) {
-    // Root structure: simple export from root
     createFile(
       wrapperPath,
       `export { ${componentName}View as ${componentName} } from './views';\nexport type { ${componentName}Props } from './types';`
     );
   } else if (hasMobile && hasWeb) {
-    // Both variants: create responsive wrapper with both active
     const wrapperContent = `import { useIsMobile } from '../../hooks';
 import { ${componentName} as ${componentName}Mobile } from './mobile';
 import { ${componentName} as ${componentName}Web } from './web';
-import type { ${componentName}Props } from './mobile/types';
+import type { ${componentName}Props } from './web/types';
 
 export const ${componentName} = (props: ${componentName}Props) => {
   const isMobile = useIsMobile();
@@ -336,18 +398,13 @@ export const ${componentName} = (props: ${componentName}Props) => {
 };
 
 export type { ${componentName}Props };`;
-    
     createFile(wrapperPath, wrapperContent);
     console.log('📱💻 Created responsive wrapper (mobile + web)');
   } else if (hasMobile) {
-    // Only mobile: export from mobile with placeholder for web
     const wrapperContent = `import { useIsMobile } from '../../hooks';
 import { ${componentName} as ${componentName}Mobile } from './mobile';
 import { NotImplemented } from '../NotImplemented';
 import type { ${componentName}Props } from './mobile/types';
-
-// Web version placeholder (uncomment when implemented)
-// import { ${componentName} as ${componentName}Web } from './web';
 
 export const ${componentName} = (props: ${componentName}Props) => {
   const isMobile = useIsMobile();
@@ -356,34 +413,21 @@ export const ${componentName} = (props: ${componentName}Props) => {
     return <${componentName}Mobile {...props} />;
   }
 
-  // Return web version when implemented
-  // return <${componentName}Web {...props} />;
-  
-  // Fallback: web version not implemented
   return <NotImplemented platform="Web" componentName="${componentName}" />;
 };
 
 export type { ${componentName}Props };`;
-    
     createFile(wrapperPath, wrapperContent);
   } else if (hasWeb) {
-    // Only web: export from web with placeholder for mobile
     const wrapperContent = `import { useIsMobile } from '../../hooks';
 import { ${componentName} as ${componentName}Web } from './web';
 import { NotImplemented } from '../NotImplemented';
 import type { ${componentName}Props } from './web/types';
 
-// Mobile version placeholder (uncomment when implemented)
-// import { ${componentName} as ${componentName}Mobile } from './mobile';
-
 export const ${componentName} = (props: ${componentName}Props) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    // Return mobile version when implemented
-    // return <${componentName}Mobile {...props} />;
-    
-    // Fallback: mobile version not implemented
     return <NotImplemented platform="Mobile" componentName="${componentName}" />;
   }
 
@@ -391,60 +435,74 @@ export const ${componentName} = (props: ${componentName}Props) => {
 };
 
 export type { ${componentName}Props };`;
-    
     createFile(wrapperPath, wrapperContent);
+  }
+
+  // Create index.native.tsx if native exists
+  if (hasNative) {
+    const nativeWrapperPath = path.join(componentPath, 'index.native.tsx');
+    createFile(
+      nativeWrapperPath,
+      `export { ${componentName} } from './native';\nexport type { ${componentName}NativeProps } from './native/types';`
+    );
+    console.log('📱 Created index.native.tsx for Metro bundler');
   }
 }
 
-// README template
-const readmeTemplate = (name) => `# ${name} Component
-
-## Overview
-${name} component description.
-
-## Usage
-
-\`\`\`tsx
-import { ${name} } from '@/lib/ui-library/components/${name}';
-
-function Example() {
-  return (
-    <${name}>
-      Content
-    </${name}>
+// Create README files
+function createReadmes() {
+  const replacements = { ComponentName: componentName };
+  
+  const hasMobile = fs.existsSync(path.join(componentPath, 'mobile'));
+  const hasWeb = fs.existsSync(path.join(componentPath, 'web'));
+  const hasNative = fs.existsSync(path.join(componentPath, 'native'));
+  
+  // Main README
+  console.log('📝 Creating README.md...');
+  createFile(
+    path.join(componentPath, 'README.md'),
+    processTemplate(readTemplate('readme/README.md.template'), replacements)
   );
+  
+  // Platform-specific READMEs
+  if (hasWeb) {
+    console.log('📝 Creating README-WEB-IA.md...');
+    createFile(
+      path.join(componentPath, 'README-WEB-IA.md'),
+      processTemplate(readTemplate('readme/README-WEB-IA.md.template'), replacements)
+    );
+  }
+  
+  if (hasMobile) {
+    console.log('📝 Creating README-MOBILE-IA.md...');
+    createFile(
+      path.join(componentPath, 'README-MOBILE-IA.md'),
+      processTemplate(readTemplate('readme/README-MOBILE-IA.md.template'), replacements)
+    );
+  }
+  
+  if (hasNative) {
+    console.log('📝 Creating README-MOBILE-NATIVE.md...');
+    createFile(
+      path.join(componentPath, 'README-MOBILE-NATIVE.md'),
+      processTemplate(readTemplate('readme/README-MOBILE-NATIVE.md.template'), replacements)
+    );
+  }
 }
-\`\`\`
-
-## Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| children | React.ReactNode | - | Component content |
-| className | string | - | Additional CSS classes |
-| langOverride | string | - | Override language (e.g., 'en', 'es') |
-| i18nOrder | 'global-first' \\| 'local-first' | 'local-first' | Translation priority order |
-
-## Features
-
-- Reactive to language changes
-- Supports i18n with local and global translations
-- Customizable with CSS classes
-
-## Development Notes
-
-Add development notes here...`;
 
 // Main execution
 createDir(componentPath);
 
 // Determine what to create
 if (isRootMode) {
-  // Root mode: create structure in root
   createComponent(null);
   createOrUpdateWrapper();
 } else {
-  // Variant mode
+  // Create token.shared if -tokens flag or if creating native
+  if (flags.tokens || flags.native) {
+    createTokenShared();
+  }
+  
   if (flags.mobile && !existingMobile) {
     createComponent('mobile');
   } else if (flags.mobile && existingMobile) {
@@ -457,17 +515,18 @@ if (isRootMode) {
     console.log('⏭️  Web variant already exists, skipping...');
   }
 
-  // Update wrapper
+  if (flags.native && !existingNative) {
+    createNativeComponent();
+  } else if (flags.native && existingNative) {
+    console.log('⏭️  Native variant already exists, skipping...');
+  }
+
   createOrUpdateWrapper();
 }
 
-// Create README if requested
-if (flags.readme && !fs.existsSync(path.join(componentPath, 'README-IA.md'))) {
-  console.log('📝 Creating README-IA.md...');
-  createFile(
-    path.join(componentPath, 'README-IA.md'),
-    readmeTemplate(componentName)
-  );
+// Create READMEs if requested
+if (flags.readme) {
+  createReadmes();
 }
 
 // Update components index
@@ -482,27 +541,39 @@ if (!componentsIndex.includes(exportLine)) {
   console.log('📦 Added to components index');
 }
 
+// Summary
 console.log(`\n✅ Component "${componentName}" ${componentExists ? 'updated' : 'created'} successfully!\n`);
 console.log('📦 Structure:');
 console.log(`   ${componentName}/`);
 
-if (fs.existsSync(path.join(componentPath, 'mobile'))) {
-  console.log('   ├── mobile/');
+if (fs.existsSync(path.join(componentPath, 'token.shared'))) {
+  console.log('   ├── token.shared/');
 }
 if (fs.existsSync(path.join(componentPath, 'web'))) {
   console.log('   ├── web/');
+}
+if (fs.existsSync(path.join(componentPath, 'mobile'))) {
+  console.log('   ├── mobile/');
+}
+if (fs.existsSync(path.join(componentPath, 'native'))) {
+  console.log('   ├── native/');
 }
 if (fs.existsSync(path.join(componentPath, 'views'))) {
   console.log('   ├── views/ (root)');
 }
 if (flags.readme) {
-  console.log('   ├── README-IA.md');
+  console.log('   ├── README.md');
+  if (fs.existsSync(path.join(componentPath, 'web'))) console.log('   ├── README-WEB-IA.md');
+  if (fs.existsSync(path.join(componentPath, 'mobile'))) console.log('   ├── README-MOBILE-IA.md');
+  if (fs.existsSync(path.join(componentPath, 'native'))) console.log('   ├── README-MOBILE-NATIVE.md');
 }
-console.log('   └── index.tsx');
+console.log('   ├── index.tsx');
+if (fs.existsSync(path.join(componentPath, 'native'))) {
+  console.log('   └── index.native.tsx');
+}
 
 if (flags.allFolders) {
   console.log(`\n🌐 i18n enabled with languages: ${languages.join(', ')}`);
-  console.log('   Component is now reactive to language changes!');
 }
 
 console.log(`\n💡 Import it with:`);

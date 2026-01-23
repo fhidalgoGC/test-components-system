@@ -1,0 +1,27 @@
+import type { ReactNode, ComponentType } from 'react';
+
+export type SizeValue = number | string;
+
+export interface {{ComponentName}}NativeProps {
+  component: ComponentType<any>;
+  componentProps?: Record<string, any>;
+  id?: string;
+  selectable?: boolean;
+  minWidth?: SizeValue;
+  minHeight?: SizeValue;
+  width?: SizeValue;
+  height?: SizeValue;
+  cardStyles?: CardStyles;
+  dataTestId?: string;
+  headerContent?: ReactNode;
+  footerContent?: ReactNode;
+  onSelect?: (id: string) => void;
+  isSelected?: boolean;
+}
+
+export interface CardStyles {
+  backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  borderRadius?: number;
+}
