@@ -15,9 +15,9 @@ A flexible, reusable card component that can wrap and render any React component
 
 | Platform | File | Description |
 |----------|------|-------------|
-| Web | [README-WEB-IA.md](./README-WEB-IA.md) | Vite + Tailwind CSS + Radix UI |
-| Mobile Responsive | [README-MOBILE-IA.md](./README-MOBILE-IA.md) | Web responsive for small screens |
-| Native (iOS/Android) | [README-MOBILE-NATIVE.md](./README-MOBILE-NATIVE.md) | Expo + React Native + StyleSheet |
+| Web | [README-WEB-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/main/client/src/lib/ui-library/components/UniversalCard/README-WEB-IA.md) | Vite + Tailwind CSS + Radix UI |
+| Mobile Responsive | [README-MOBILE-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/main/client/src/lib/ui-library/components/UniversalCard/README-MOBILE-IA.md) | Web responsive for small screens |
+| Native (iOS/Android) | [README-MOBILE-NATIVE.md](https://github.com/fhidalgoGC/test-components-system/blob/main/client/src/lib/ui-library/components/UniversalCard/README-MOBILE-NATIVE.md) | Expo + React Native + StyleSheet |
 
 ## Folder Structure
 
