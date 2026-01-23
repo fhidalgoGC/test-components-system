@@ -219,7 +219,7 @@ function createNativeComponent() {
   // Create native index
   createFile(
     path.join(nativePath, 'index.tsx'),
-    processTemplate(readTemplate('native/index.tsx.template'), replacements)
+    processTemplate(readTemplate('native/index.native.tsx.template'), replacements)
   );
 }
 
