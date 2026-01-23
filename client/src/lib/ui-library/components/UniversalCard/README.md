@@ -30,18 +30,3 @@ UniversalCard/
 ├── index.tsx           # Web/Mobile dispatch (useIsMobile)
 └── index.native.tsx    # Native export (Metro bundler)
 ```
-
-## Quick Start
-
-```tsx
-import { UniversalCard } from 'GC-UI-COMPONENTS';
-
-<UniversalCard
-  component={MyContent}
-  componentProps={{ title: 'Hello' }}
-  width={300}
-  height={200}
-/>
-```
-
-See platform-specific READMEs for detailed usage and examples.
