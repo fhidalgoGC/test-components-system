@@ -45,9 +45,9 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
 
   const getAlignClass = (align?: string) => {
     switch (align) {
-      case 'center': return styles.alignCenter;
-      case 'right': return styles.alignRight;
-      default: return styles.alignLeft;
+      case 'center': return styles.thAlignCenter;
+      case 'right': return styles.thAlignRight;
+      default: return styles.thAlignLeft;
     }
   };
 
