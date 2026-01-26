@@ -64,10 +64,26 @@ export const BaseTableView = (props: BaseTableProps) => {
     col => col.visible !== false && (columnsDefault?.visible !== false || col.visible === true)
   ).length;
 
-  const shouldShowContent = state === 'idle' || state === 'success';
+  const hasData = data.length > 0;
+  const isLoadingWithData = state === 'loading' && hasData;
+  const shouldShowData = state === 'idle' || state === 'success' || isLoadingWithData;
+  const shouldShowStateMessage = !shouldShowData && (state === 'loading' || state === 'error' || state === 'empty');
+
+  const loadingMessage = behaviors?.states?.loading?.message || 
+                         behaviors?.states?.loading?.defaultText || 
+                         'Loading...';
 
   return (
-    <div className={wrapperClasses} style={wrapperStyle} data-testid={dataTestId}>
+    <div className={`${wrapperClasses} ${styles.tableContainer}`} style={wrapperStyle} data-testid={dataTestId}>
+      {isLoadingWithData && (
+        <div className={styles.loadingOverlay} data-testid="table-loading-overlay">
+          <div className={styles.loadingOverlayContent}>
+            <div className={styles.loadingOverlaySpinner} />
+            <span className={styles.loadingOverlayText}>{loadingMessage}</span>
+          </div>
+        </div>
+      )}
+      
       <table className={tableClasses}>
         <TableHeader
           columns={columns}
@@ -76,7 +92,7 @@ export const BaseTableView = (props: BaseTableProps) => {
           callbacks={callbacks}
         />
 
-        {shouldShowContent ? (
+        {shouldShowData ? (
           <TableBody
             data={data}
             columns={columns}
@@ -86,14 +102,14 @@ export const BaseTableView = (props: BaseTableProps) => {
             behaviors={behaviors}
             callbacks={callbacks}
           />
-        ) : (
+        ) : shouldShowStateMessage ? (
           <TableStates
             state={state}
             statesConfig={behaviors?.states}
             error={error}
             columnsCount={visibleColumnsCount}
           />
-        )}
+        ) : null}
       </table>
     </div>
   );
