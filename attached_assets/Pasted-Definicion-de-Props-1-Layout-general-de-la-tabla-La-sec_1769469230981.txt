@@ -1,0 +1,267 @@
+Definicion de Props
+1. Layout general de la tabla
+La sección layout define cómo la tabla ocupa el espacio disponible, tanto horizontal como verticalmente.
+WidthMode
+ Define la estrategia de cálculo del ancho total de la tabla.
+
+
+full: ocupa todo el espacio disponible del contenedor.
+
+
+auto: se ajusta al contenido de las columnas.
+
+
+fixed: usa un ancho explícito definido por width.
+
+
+width
+ Ancho explícito de la tabla.
+ Solo se interpreta si WidthMode es fixed.
+
+
+HeightMode
+ Define cómo se calcula la altura total de la tabla.
+ Aplica las mismas reglas conceptuales que WidthMode.
+
+
+height
+ Altura explícita de la tabla cuando el modo es fijo.
+
+
+minWidth / minHeight
+ Límites mínimos que la tabla nunca debe sobrepasar, incluso cuando el contenido es pequeño.
+
+
+
+2. Configuración por defecto del Header
+headersDefault define el comportamiento y apariencia del encabezado, aplicado a todas las columnas salvo que una columna lo sobrescriba.
+enabled
+ Indica si el encabezado se renderiza o no.
+
+
+dividers
+ Define si se muestran separadores visuales entre celdas del header.
+
+
+Configuración de la celda del header (cell)
+textWrap
+ Define cómo se comporta el contenido textual:
+
+
+nowrap: el texto nunca baja de línea.
+
+
+wrap: el texto baja de línea normalmente.
+
+
+break-word: puede cortar palabras largas.
+
+
+truncate: corta el texto y muestra indicación de truncado.
+
+
+component: el contenido no es texto sino un elemento renderizado.
+
+
+verticalAlign
+ Alineación vertical del contenido: top, middle, bottom.
+
+
+horizontalAlign
+ Alineación horizontal del contenido: left, center, right.
+
+
+sortKey
+ Identificador lógico que se envía al exterior cuando se solicita un ordenamiento.
+
+
+sortable
+ Indica si la columna permite interacción de ordenamiento.
+
+
+text
+ Representa el contenido textual del header, generalmente asociado a un sistema de traducciones.
+
+
+component
+ Permite renderizar un contenido personalizado en lugar de texto.
+
+
+clickable
+ Indica si el header emite eventos de interacción.
+
+
+
+3. Footer
+footerDefault controla la existencia del footer.
+enabled
+ Permite activar o desactivar completamente el footer.
+
+
+
+4. Configuración por defecto de filas
+rowsDefault define reglas globales para las filas de datos.
+minHeight
+ Altura mínima de cada fila.
+
+
+maxHeight
+ Límite máximo de altura:
+
+
+number: valor fijo.
+
+
+stretch: se adapta al contenido.
+
+
+container: se adapta al espacio disponible.
+
+
+maxVisibleRows
+ Número máximo de filas visibles antes de requerir scroll.
+
+
+scroll
+ Indica si las filas pueden desplazarse verticalmente.
+
+
+hoverable
+ Define si las filas reaccionan visualmente al hover.
+
+
+
+5. Configuración por defecto de columnas
+columnsDefault define el comportamiento común de las columnas.
+maxVisibleColumns
+ Número máximo de columnas visibles sin scroll horizontal.
+
+
+scroll
+ Indica si existe desplazamiento horizontal.
+
+
+minWidth
+ Ancho mínimo de columna.
+
+
+maxWidth
+ Ancho máximo permitido:
+
+
+number
+
+
+stretch
+
+
+container
+
+
+sortable
+ Define si las columnas son ordenables por defecto.
+
+
+visible
+ Controla la visibilidad inicial de las columnas.
+
+
+
+6. Configuración por defecto de celdas
+cellsDefault define cómo se renderiza el contenido de las celdas.
+textWrap, verticalAlign, horizontalAlign
+ Funcionan igual que en el header.
+
+
+renderType
+ Define si la celda renderiza:
+
+
+text: contenido textual simple.
+
+
+component: contenido renderizado.
+
+
+render
+ Representa el contenido específico a mostrar.
+
+
+
+7. Behaviors (comportamiento)
+La sección behaviors define interacciones, no layout ni contenido.
+hoverable
+ Indica en qué nivel aplica el hover:
+
+
+header, column, row, cell, none
+
+
+clickable
+ Define qué elementos emiten eventos de click:
+
+
+header, cell, row, none
+
+
+Estados globales
+states.loading
+ Estado visual cuando la tabla está cargando, con texto o componente.
+
+
+states.error
+ Estado visual para errores.
+
+
+
+8. Callbacks (notificación al exterior)
+La tabla no ejecuta acciones, solo notifica eventos:
+onHeaderClick
+ Se dispara cuando un header es activado, enviando la columna y la dirección deseada.
+
+
+onCellClick
+ Notifica interacciones a nivel celda.
+
+
+onRowClick
+ Notifica interacciones a nivel fila.
+
+
+
+9. Configuración específica de columnas
+Cada objeto dentro de columns puede sobrescribir los defaults.
+metadata.columnId
+ Identificador único de la columna.
+
+
+metadata.order
+ Orden visual de renderizado.
+
+
+header.cell.renderType / render
+ Permite personalizar el contenido del header.
+
+
+visible, minWidth, maxWidth
+ Overrides específicos de layout.
+
+
+
+🎯 Principios clave que deben respetarse
+La tabla es agnóstica a los datos.
+
+
+La tabla no ordena, no filtra, no transforma.
+
+
+La tabla solo interpreta configuración.
+
+
+El comportamiento está separado del layout.
+
+
+El contenido está separado de la interacción.
+
+
+Todo es overrideable desde defaults hasta celda.

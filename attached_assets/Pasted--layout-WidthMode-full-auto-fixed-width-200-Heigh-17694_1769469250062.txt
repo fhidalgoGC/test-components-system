@@ -1,0 +1,93 @@
+{
+   "layout": {
+       "WidthMode": "full' | 'auto' | 'fixed",
+       "width": "200",
+       "HeightMode": "full' | 'auto' | 'fixed",
+       "height": "auto",
+       "minWidth": 600,
+       "minHeight": 200
+   },
+   "headersDefault": {
+       "enabled": true,
+       "dividers": true,
+       "cell": {
+           "textWrap": "nowrap | wrap | break-word | truncate | component",
+           "verticalAlign": "middle | top | botton",
+           "horizontalAlign": "left | center | right",
+           "sortKey": "name",
+           "sortable": true,
+          
+           "renderType": "text | component",
+           "render":"<>",
+           "clickable": false
+       }
+   },
+   "footerDefault": {
+       "enabled": false
+   },
+   "rowsDefault": {
+       "minHeight": 50,
+       "maxHeight": "number | stretch | container",
+       "maxVisibleRows": 10,
+       "scroll": true,
+       "hoverable": true
+   },
+   "columnsDefault": {
+       "maxVisibleColumns": 10,
+       "scroll": true,
+       "minWidth": 80,
+       "maxWidth": "number | stretch | container",
+       "sortable": false,
+       "visible": true
+   },
+   "cellsDefault": {
+       "textWrap": "nowrap | wrap | break-word | truncate | component",
+       "verticalAlign": "middle | top | botton",
+       "horizontalAlign": "left | center | right",
+       "cells": {
+           "textWrap": "nowrap | wrap | break-word | truncate | component",
+           "verticalAlign": "middle | top | botton",
+           "horizontalAlign": "left | center | right",
+           "renderType": "text | component",
+           "render":"<>"
+       }
+   },
+   "behaviors": {
+       "hoverable": "header|column|row|cel|none",
+       "clickable": "header|cell|row|none",
+       "states": {
+           "loading": {
+               "defaultText": "",
+               "component": ""
+           },
+           "error": {
+               "defaultText": "",
+               "component": ""
+           }
+       }
+   },
+   "callbacks": {
+       "onHeaderClick": "(columnId, sortDirection) => void",
+       "onCellClick": "(columnId, rowIndex, value, rowData) => void",
+       "onRowClick": "(rowIndex, rowData) => void"
+   },
+   "columns": [
+       {
+           "metadata": {
+               "columnId": "name",
+               "order": 1
+           },
+           "header": {
+               "cell": {
+                   "renderType": "component",
+                   "render":"<>"
+               }
+           },
+          
+           "visible": true,
+           "minWidth": 120,
+           "maxWidth": "stretch"
+       }
+   ]
+}
+
