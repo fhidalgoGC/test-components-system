@@ -4,6 +4,7 @@ import {
   ClickableRowsDemo,
   CustomCellsDemo,
   SortableDemo,
+  ApiSimulationDemo,
 } from "./components";
 import styles from "./css/BaseTableDemo.module.scss";
 
@@ -26,6 +27,7 @@ export function BaseTableDemo() {
         <ClickableRowsDemo />
         <CustomCellsDemo />
         <SortableDemo />
+        <ApiSimulationDemo />
       </div>
     </div>
   );
