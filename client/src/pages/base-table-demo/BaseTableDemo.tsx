@@ -5,6 +5,7 @@ import {
   CustomCellsDemo,
   SortableDemo,
   ApiSimulationDemo,
+  TextWrapDemo,
 } from "./components";
 import styles from "./css/BaseTableDemo.module.scss";
 
@@ -28,6 +29,7 @@ export function BaseTableDemo() {
         <CustomCellsDemo />
         <SortableDemo />
         <ApiSimulationDemo />
+        <TextWrapDemo />
       </div>
     </div>
   );

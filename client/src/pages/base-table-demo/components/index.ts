@@ -4,3 +4,4 @@ export { ClickableRowsDemo } from "./ClickableRowsDemo";
 export { CustomCellsDemo } from "./CustomCellsDemo";
 export { SortableDemo } from "./SortableDemo";
 export { ApiSimulationDemo } from "./ApiSimulationDemo";
+export { TextWrapDemo } from "./TextWrapDemo";
