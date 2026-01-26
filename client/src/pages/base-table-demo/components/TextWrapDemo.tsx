@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BaseTable, useTableState } from "@/lib/ui-library/components/BaseTable";
-import type { ColumnConfig, TextWrap } from "@/lib/ui-library/components/BaseTable";
+import type { ColumnConfig, TextWrap, MaxSize } from "@/lib/ui-library/components/BaseTable";
 import { Button } from "@/components/ui/button";
 import styles from "../css/BaseTableDemo.module.scss";
 
@@ -25,48 +25,108 @@ const longTextData = [
   },
 ];
 
-const columns: ColumnConfig[] = [
-  { metadata: { columnId: "id", order: 0 }, minWidth: 50 },
-  { metadata: { columnId: "title", order: 1 }, minWidth: 150 },
-  { metadata: { columnId: "description", order: 2 }, minWidth: 200 },
-  { metadata: { columnId: "category", order: 3 }, minWidth: 120 },
+const textWrapOptions: { value: TextWrap; label: string }[] = [
+  { value: "nowrap", label: "nowrap" },
+  { value: "wrap", label: "wrap" },
+  { value: "break-word", label: "break-word" },
+  { value: "truncate", label: "truncate" },
 ];
 
-const textWrapOptions: { value: TextWrap; label: string; description: string }[] = [
-  { value: "nowrap", label: "nowrap", description: "Texto en una linea, sin saltos" },
-  { value: "wrap", label: "wrap", description: "Texto con saltos de linea naturales" },
-  { value: "break-word", label: "break-word", description: "Rompe palabras largas" },
-  { value: "truncate", label: "truncate", description: "Corta con ... al final" },
+const minWidthOptions: { value: number | undefined; label: string }[] = [
+  { value: undefined, label: "Sin minimo" },
+  { value: 50, label: "50px" },
+  { value: 100, label: "100px" },
+  { value: 150, label: "150px" },
+  { value: 200, label: "200px" },
+];
+
+const maxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
+  { value: undefined, label: "Sin maximo" },
+  { value: 100, label: "100px" },
+  { value: 150, label: "150px" },
+  { value: 200, label: "200px" },
+  { value: 300, label: "300px" },
+  { value: "stretch", label: "stretch" },
+  { value: "container", label: "container" },
 ];
 
 export function TextWrapDemo() {
   const tableState = useTableState({ initialState: "success" });
   const [currentWrap, setCurrentWrap] = useState<TextWrap>("nowrap");
+  const [currentMinWidth, setCurrentMinWidth] = useState<number | undefined>(100);
+  const [currentMaxWidth, setCurrentMaxWidth] = useState<MaxSize | undefined>(undefined);
+
+  const columns: ColumnConfig[] = [
+    { metadata: { columnId: "id", order: 0 }, minWidth: 50, maxWidth: 80 },
+    { metadata: { columnId: "title", order: 1 }, minWidth: currentMinWidth, maxWidth: currentMaxWidth },
+    { metadata: { columnId: "description", order: 2 }, minWidth: currentMinWidth, maxWidth: currentMaxWidth },
+    { metadata: { columnId: "category", order: 3 }, minWidth: currentMinWidth, maxWidth: currentMaxWidth },
+  ];
 
   return (
     <section className={styles.section}>
       <div className={styles.componentName}>TextWrapDemo.tsx</div>
-      <h2 className={styles.section__title}>7. TextWrap - Comportamiento del Texto</h2>
+      <h2 className={styles.section__title}>7. TextWrap, MinWidth y MaxWidth</h2>
       <p className={styles.section__description}>
-        Prueba las diferentes opciones de textWrap. Observa como cambia el comportamiento 
-        del texto largo en las celdas.
+        Prueba las diferentes combinaciones de textWrap, minWidth y maxWidth. 
+        La columna ID tiene valores fijos (50-80px), las demas columnas usan los valores seleccionados.
       </p>
       
-      <div className={styles.controls}>
-        {textWrapOptions.map((option) => (
-          <Button
-            key={option.value}
-            variant={currentWrap === option.value ? "default" : "outline"}
-            onClick={() => setCurrentWrap(option.value)}
-            data-testid={`btn-textwrap-${option.value}`}
-          >
-            {option.label}
-          </Button>
-        ))}
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>TextWrap:</div>
+        <div className={styles.controls}>
+          {textWrapOptions.map((option) => (
+            <Button
+              key={option.value}
+              variant={currentWrap === option.value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setCurrentWrap(option.value)}
+              data-testid={`btn-textwrap-${option.value}`}
+            >
+              {option.label}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>MinWidth:</div>
+        <div className={styles.controls}>
+          {minWidthOptions.map((option) => (
+            <Button
+              key={String(option.value)}
+              variant={currentMinWidth === option.value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setCurrentMinWidth(option.value)}
+              data-testid={`btn-minwidth-${option.value}`}
+            >
+              {option.label}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>MaxWidth:</div>
+        <div className={styles.controls}>
+          {maxWidthOptions.map((option) => (
+            <Button
+              key={String(option.value)}
+              variant={currentMaxWidth === option.value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setCurrentMaxWidth(option.value)}
+              data-testid={`btn-maxwidth-${option.value}`}
+            >
+              {option.label}
+            </Button>
+          ))}
+        </div>
       </div>
       
       <div className={styles.infoBox}>
-        <strong>Modo actual: {currentWrap}</strong> - {textWrapOptions.find(o => o.value === currentWrap)?.description}
+        <div><strong>TextWrap:</strong> {currentWrap}</div>
+        <div><strong>MinWidth:</strong> {currentMinWidth ?? "sin limite"}</div>
+        <div><strong>MaxWidth:</strong> {String(currentMaxWidth) ?? "sin limite"}</div>
       </div>
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
