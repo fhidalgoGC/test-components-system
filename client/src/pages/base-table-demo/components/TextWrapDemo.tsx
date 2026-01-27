@@ -156,6 +156,7 @@ export function TextWrapDemo() {
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
         <BaseTable
+          key={`${currentWrap}-${currentMinWidth}-${currentMaxWidth}-${scrollEnabled}`}
           data={longTextData}
           state={tableState.state}
           config={{
