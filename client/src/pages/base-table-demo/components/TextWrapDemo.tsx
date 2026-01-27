@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BaseTable, useTableState } from "@/lib/ui-library/components/BaseTable";
+import { BaseTable, useTableState, TextCell } from "@/lib/ui-library/components/BaseTable";
 import type { ColumnConfig, MaxSize } from "@/lib/ui-library/components/BaseTable";
 import { Button } from "@/components/ui/button";
 import styles from "../css/BaseTableDemo.module.scss";
@@ -37,23 +37,19 @@ export function TextWrapDemo() {
   const columns: ColumnConfig[] = [
     { 
       metadata: { columnId: "id", order: 0 },
-      header: { cell: { render: <span>ID</span> } },
-      cell: { render: (value) => <span>{value}</span> }
+      header: { cell: { render: <TextCell text="ID" /> } },
     },
     { 
       metadata: { columnId: "title", order: 1 },
-      header: { cell: { render: <span>Title</span> } },
-      cell: { render: (value) => <span>{value}</span> }
+      header: { cell: { render: <TextCell text="Title" /> } },
     },
     { 
       metadata: { columnId: "description", order: 2 },
-      header: { cell: { render: <span>Description</span> } },
-      cell: { render: (value) => <span>{value}</span> }
+      header: { cell: { render: <TextCell text="Description" /> } },
     },
     { 
       metadata: { columnId: "category", order: 3 },
-      header: { cell: { render: <span>Category</span> } },
-      cell: { render: (value) => <span>{value}</span> }
+      header: { cell: { render: <TextCell text="Category" /> } },
     },
   ];
 
@@ -152,6 +148,7 @@ export function TextWrapDemo() {
             cellsDefault: {
               horizontalAlign: "left",
               verticalAlign: "middle",
+              render: (value) => <TextCell text={value} />,
             },
             rowsDefault: {
               hoverable: true,

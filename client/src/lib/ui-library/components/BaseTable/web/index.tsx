@@ -1,5 +1,7 @@
 export { BaseTableView as BaseTable } from './views';
 export { useTableState } from './hooks';
+export { TextCell } from './components/TextCell';
+export type { TextCellProps } from './components/TextCell';
 export type {
   BaseTableProps,
   BaseTableConfig,
@@ -19,10 +21,8 @@ export type {
   ColumnHeaderCellConfig,
   CellsDefaultConfig,
   CellConfig,
-  TextWrap,
   VerticalAlign,
   HorizontalAlign,
-  RenderType,
   MaxSize,
   BehaviorsConfig,
   HoverableTarget,

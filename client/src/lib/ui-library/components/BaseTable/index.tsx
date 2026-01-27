@@ -13,7 +13,8 @@ export const BaseTable = (props: BaseTableProps) => {
   return <BaseTableWeb {...props} />;
 };
 
-export { useTableState } from './web';
+export { useTableState, TextCell } from './web';
+export type { TextCellProps } from './web';
 export type {
   BaseTableProps,
   BaseTableConfig,
@@ -33,10 +34,8 @@ export type {
   ColumnHeaderCellConfig,
   CellsDefaultConfig,
   CellConfig,
-  TextWrap,
   VerticalAlign,
   HorizontalAlign,
-  RenderType,
   MaxSize,
   BehaviorsConfig,
   HoverableTarget,
