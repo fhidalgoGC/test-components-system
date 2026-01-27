@@ -61,9 +61,12 @@ export const BaseTableView = (props: BaseTableProps) => {
         if (layout?.stickyHeader) {
           // Con sticky header, el scroll lo maneja el layout separado
           classes.push(styles.noVerticalScroll);
-        } else {
-          // Sin sticky header, permitir scroll vertical
+        } else if (layout?.verticalScroll) {
+          // Sin sticky header pero con scroll habilitado
           classes.push(styles.withVerticalScroll);
+        } else {
+          // Sin sticky header y sin scroll: cortar contenido
+          classes.push(styles.noVerticalScroll);
         }
       } else {
         classes.push(styles.noVerticalScroll);
@@ -191,9 +194,9 @@ export const BaseTableView = (props: BaseTableProps) => {
           </table>
         </div>
 
-        {/* Body container - con scroll vertical */}
+        {/* Body container - con scroll vertical o corte */}
         <div 
-          className={styles.bodyContainer} 
+          className={`${styles.bodyContainer} ${layout?.verticalScroll ? styles.bodyWithScroll : styles.bodyNoScroll}`} 
           ref={bodyScrollRef}
           onScroll={handleBodyScroll}
         >

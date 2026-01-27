@@ -558,9 +558,10 @@ export function TextWrapDemo() {
             columns,
             layout: {
               widthMode: "full",
-              heightMode: verticalScrollEnabled ? "fixed" : "auto",
-              height: 200,
+              heightMode: "fixed",
+              height: 400,
               stickyHeader: stickyHeader,
+              verticalScroll: verticalScrollEnabled,
             },
             columnsDefault: {
               minWidth: globalMinWidth,
