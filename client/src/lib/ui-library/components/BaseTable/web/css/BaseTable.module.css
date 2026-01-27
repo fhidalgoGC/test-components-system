@@ -5,6 +5,13 @@
 
 .tableWrapper.withScroll {
   overflow-x: auto;
+}
+
+.tableWrapper.withVerticalScroll {
+  overflow-y: auto;
+}
+
+.tableWrapper.noVerticalScroll {
   overflow-y: hidden;
 }
 

@@ -34,10 +34,18 @@ export const BaseTableView = (props: BaseTableProps) => {
     if (layout?.heightMode === 'full') classes.push(styles.fullHeight);
     if (layout?.heightMode === 'auto') classes.push(styles.autoHeight);
     
+    // Scroll horizontal
     if (columnsDefault?.scroll === false) {
       classes.push(styles.noScroll);
     } else {
       classes.push(styles.withScroll);
+    }
+    
+    // Scroll vertical (solo cuando heightMode es 'fixed' con altura definida)
+    if (layout?.heightMode === 'fixed' && layout?.height) {
+      classes.push(styles.withVerticalScroll);
+    } else {
+      classes.push(styles.noVerticalScroll);
     }
     
     if (className) classes.push(className);
