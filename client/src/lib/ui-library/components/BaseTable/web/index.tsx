@@ -1,7 +1,7 @@
 export { BaseTableView as BaseTable } from './views';
 export { useTableState } from './hooks';
-export { TextCell } from './components/TextCell';
-export type { TextCellProps } from './components/TextCell';
+export { TextCell, HeaderCell } from './components';
+export type { TextCellProps, HeaderCellProps } from './components';
 export type {
   BaseTableProps,
   BaseTableConfig,

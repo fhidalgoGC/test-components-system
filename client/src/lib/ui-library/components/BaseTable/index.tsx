@@ -13,8 +13,8 @@ export const BaseTable = (props: BaseTableProps) => {
   return <BaseTableWeb {...props} />;
 };
 
-export { useTableState, TextCell } from './web';
-export type { TextCellProps } from './web';
+export { useTableState, TextCell, HeaderCell } from './web';
+export type { TextCellProps, HeaderCellProps } from './web';
 export type {
   BaseTableProps,
   BaseTableConfig,
