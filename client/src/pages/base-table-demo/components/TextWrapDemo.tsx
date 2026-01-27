@@ -56,6 +56,7 @@ export function TextWrapDemo() {
   const [currentWrap, setCurrentWrap] = useState<TextWrap>("nowrap");
   const [currentMinWidth, setCurrentMinWidth] = useState<number | undefined>(100);
   const [currentMaxWidth, setCurrentMaxWidth] = useState<MaxSize | undefined>(undefined);
+  const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const columns: ColumnConfig[] = [
     { metadata: { columnId: "id", order: 0 } },
@@ -123,11 +124,34 @@ export function TextWrapDemo() {
           ))}
         </div>
       </div>
+
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>Scroll Horizontal:</div>
+        <div className={styles.controls}>
+          <Button
+            variant={scrollEnabled ? "default" : "outline"}
+            size="sm"
+            onClick={() => setScrollEnabled(true)}
+            data-testid="btn-scroll-true"
+          >
+            true
+          </Button>
+          <Button
+            variant={!scrollEnabled ? "default" : "outline"}
+            size="sm"
+            onClick={() => setScrollEnabled(false)}
+            data-testid="btn-scroll-false"
+          >
+            false
+          </Button>
+        </div>
+      </div>
       
       <div className={styles.infoBox}>
         <div><strong>TextWrap:</strong> {currentWrap}</div>
         <div><strong>MinWidth:</strong> {currentMinWidth ?? "sin limite"}</div>
         <div><strong>MaxWidth:</strong> {String(currentMaxWidth) ?? "sin limite"}</div>
+        <div><strong>Scroll:</strong> {scrollEnabled ? "true (scroll si no cabe)" : "false (corta si no cabe)"}</div>
       </div>
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
@@ -143,6 +167,7 @@ export function TextWrapDemo() {
             columnsDefault: {
               minWidth: currentMinWidth,
               maxWidth: currentMaxWidth,
+              scroll: scrollEnabled,
             },
             headersDefault: {
               cell: {

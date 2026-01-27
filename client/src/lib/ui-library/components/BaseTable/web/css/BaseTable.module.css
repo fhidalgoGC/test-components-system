@@ -1,8 +1,15 @@
 .tableWrapper {
   display: flex;
   flex-direction: column;
+}
+
+.tableWrapper.withScroll {
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+.tableWrapper.noScroll {
+  overflow: hidden;
 }
 
 .tableWrapper.fullWidth {

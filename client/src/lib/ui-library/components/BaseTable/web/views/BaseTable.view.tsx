@@ -34,10 +34,16 @@ export const BaseTableView = (props: BaseTableProps) => {
     if (layout?.heightMode === 'full') classes.push(styles.fullHeight);
     if (layout?.heightMode === 'auto') classes.push(styles.autoHeight);
     
+    if (columnsDefault?.scroll === false) {
+      classes.push(styles.noScroll);
+    } else {
+      classes.push(styles.withScroll);
+    }
+    
     if (className) classes.push(className);
     
     return classes.join(' ');
-  }, [layout, className]);
+  }, [layout, columnsDefault?.scroll, className]);
 
   const wrapperStyle = useMemo(() => {
     const style: React.CSSProperties = {};
