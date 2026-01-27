@@ -10,9 +10,10 @@ interface TableHeaderProps {
   stretchCount?: number;
   fixedWidthTotal?: number;
   autoStretchLastColumnId?: string | null;
+  stickyHeader?: boolean;
 }
 
-export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks, stretchCount = 0, fixedWidthTotal = 0, autoStretchLastColumnId }: TableHeaderProps) => {
+export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks, stretchCount = 0, fixedWidthTotal = 0, autoStretchLastColumnId, stickyHeader }: TableHeaderProps) => {
   const [sortState, setSortState] = useState<{ columnId: string; direction: SortDirection } | null>(null);
 
   const isEnabled = headersDefault?.enabled !== false;
@@ -64,7 +65,7 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
 
 
   return (
-    <thead className={styles.thead}>
+    <thead className={`${styles.thead} ${stickyHeader ? styles.theadSticky : ''}`}>
       <tr className={styles.theadRow}>
         {visibleColumns.map((column, index) => {
           const cellConfig = column.header?.cell ?? headersDefault?.cell;

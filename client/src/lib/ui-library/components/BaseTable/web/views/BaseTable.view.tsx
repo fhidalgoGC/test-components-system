@@ -140,6 +140,7 @@ export const BaseTableView = (props: BaseTableProps) => {
           stretchCount={columnWidthInfo.stretchCount}
           fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
           autoStretchLastColumnId={columnWidthInfo.lastColumnId}
+          stickyHeader={layout?.stickyHeader}
         />
 
         {shouldShowData ? (

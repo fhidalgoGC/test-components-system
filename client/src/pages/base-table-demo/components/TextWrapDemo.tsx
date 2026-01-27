@@ -94,6 +94,7 @@ export function TextWrapDemo() {
   );
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
   const [verticalScrollEnabled, setVerticalScrollEnabled] = useState<boolean>(false);
+  const [stickyHeader, setStickyHeader] = useState<boolean>(true);
   const [textCellWidth, setTextCellWidth] = useState<number | "auto">(80);
   const [lettersPerWord, setLettersPerWord] = useState<number>(5);
   const [wordCount, setWordCount] = useState<number>(1);
@@ -417,6 +418,28 @@ export function TextWrapDemo() {
         </div>
       </div>
 
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>Header Fijo (sticky):</div>
+        <div className={styles.controls}>
+          <Button
+            variant={stickyHeader ? "default" : "outline"}
+            size="sm"
+            onClick={() => setStickyHeader(true)}
+            data-testid="btn-sticky-true"
+          >
+            true
+          </Button>
+          <Button
+            variant={!stickyHeader ? "default" : "outline"}
+            size="sm"
+            onClick={() => setStickyHeader(false)}
+            data-testid="btn-sticky-false"
+          >
+            false
+          </Button>
+        </div>
+      </div>
+
       <div className={styles.infoBox} style={{ marginBottom: 16 }}>
         <div style={{ marginBottom: 8 }}>
           <strong>MaxWidth por Columna:</strong>
@@ -484,6 +507,7 @@ export function TextWrapDemo() {
               widthMode: "full",
               heightMode: verticalScrollEnabled ? "fixed" : "auto",
               height: verticalScrollEnabled ? 400 : undefined,
+              stickyHeader: stickyHeader,
             },
             columnsDefault: {
               minWidth: globalMinWidth,

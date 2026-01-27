@@ -49,6 +49,13 @@
   background-color: var(--table-header-bg, #f9fafb);
 }
 
+.theadSticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--table-header-bg, #f9fafb);
+}
+
 .theadRow {
   border-bottom: 1px solid var(--table-border, #e5e7eb);
 }

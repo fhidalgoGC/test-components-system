@@ -8,4 +8,5 @@ export interface LayoutConfig {
   height?: number | string;
   minWidth?: number;
   minHeight?: number;
+  stickyHeader?: boolean;
 }
