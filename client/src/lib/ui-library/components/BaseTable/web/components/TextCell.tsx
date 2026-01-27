@@ -10,6 +10,7 @@ export interface TextCellProps {
 const defaultStyle: CSSProperties = {
   display: 'inline-block',
   width: 80,
+  whiteSpace: 'nowrap',
 };
 
 export function TextCell({ text, style, className, width }: TextCellProps) {
