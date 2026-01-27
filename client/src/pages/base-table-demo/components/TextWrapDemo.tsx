@@ -48,18 +48,26 @@ const generateColumnSetting = (index: number): ColumnSetting => ({
 
 const generateWord = (length: number): string => {
   const chars = "abcdefghijklmnopqrstuvwxyz";
-  return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  return Array.from(
+    { length },
+    () => chars[Math.floor(Math.random() * chars.length)],
+  ).join("");
 };
 
-const generateCellContent = (lettersPerWord: number, wordCount: number): string => {
-  return Array.from({ length: wordCount }, () => generateWord(lettersPerWord)).join(" ");
+const generateCellContent = (
+  lettersPerWord: number,
+  wordCount: number,
+): string => {
+  return Array.from({ length: wordCount }, () =>
+    generateWord(lettersPerWord),
+  ).join(" ");
 };
 
 const generateRowData = (
   rowIndex: number,
   columnCount: number,
   lettersPerWord: number,
-  wordCount: number
+  wordCount: number,
 ): Record<string, string | number> => {
   const row: Record<string, string | number> = {};
   for (let i = 1; i <= columnCount; i++) {
@@ -72,10 +80,10 @@ const generateTableData = (
   rowCount: number,
   columnCount: number,
   lettersPerWord: number,
-  wordCount: number
+  wordCount: number,
 ) => {
   return Array.from({ length: rowCount }, (_, i) =>
-    generateRowData(i + 1, columnCount, lettersPerWord, wordCount)
+    generateRowData(i + 1, columnCount, lettersPerWord, wordCount),
   );
 };
 
@@ -84,7 +92,7 @@ export function TextWrapDemo() {
   const [columnCount, setColumnCount] = useState<number>(3);
   const [rowCount, setRowCount] = useState<number>(4);
   const [columnSettings, setColumnSettings] = useState<ColumnSetting[]>(() =>
-    Array.from({ length: 3 }, (_, i) => generateColumnSetting(i + 1))
+    Array.from({ length: 3 }, (_, i) => generateColumnSetting(i + 1)),
   );
   const [globalMinWidth, setGlobalMinWidth] = useState<number | undefined>(
     undefined,
@@ -93,7 +101,8 @@ export function TextWrapDemo() {
     undefined,
   );
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
-  const [verticalScrollEnabled, setVerticalScrollEnabled] = useState<boolean>(false);
+  const [verticalScrollEnabled, setVerticalScrollEnabled] =
+    useState<boolean>(false);
   const [stickyHeader, setStickyHeader] = useState<boolean>(true);
   const [textCellWidth, setTextCellWidth] = useState<number | "auto">(80);
   const [lettersPerWord, setLettersPerWord] = useState<number>(5);
@@ -101,8 +110,14 @@ export function TextWrapDemo() {
   const [dataKey, setDataKey] = useState<number>(0);
 
   const tableData = useMemo(
-    () => generateTableData(rowCount, columnSettings.length, lettersPerWord, wordCount),
-    [rowCount, columnSettings.length, lettersPerWord, wordCount, dataKey]
+    () =>
+      generateTableData(
+        rowCount,
+        columnSettings.length,
+        lettersPerWord,
+        wordCount,
+      ),
+    [rowCount, columnSettings.length, lettersPerWord, wordCount, dataKey],
   );
 
   const updateColumnMaxWidth = (
@@ -120,11 +135,11 @@ export function TextWrapDemo() {
     if (newCount < 1) newCount = 1;
     if (newCount > 50) newCount = 50;
     setColumnCount(newCount);
-    
+
     if (newCount > columnSettings.length) {
       const newColumns = Array.from(
         { length: newCount - columnSettings.length },
-        (_, i) => generateColumnSetting(columnSettings.length + i + 1)
+        (_, i) => generateColumnSetting(columnSettings.length + i + 1),
       );
       setColumnSettings((prev) => [...prev, ...newColumns]);
     } else if (newCount < columnSettings.length) {
@@ -145,7 +160,9 @@ export function TextWrapDemo() {
 
   const resetColumns = () => {
     setColumnCount(3);
-    setColumnSettings(Array.from({ length: 3 }, (_, i) => generateColumnSetting(i + 1)));
+    setColumnSettings(
+      Array.from({ length: 3 }, (_, i) => generateColumnSetting(i + 1)),
+    );
   };
 
   const columns: ColumnConfig[] = columnSettings.map((col, index) => ({
@@ -189,7 +206,9 @@ export function TextWrapDemo() {
             min={1}
             max={50}
             value={columnCount}
-            onChange={(e) => setColumnCountAndUpdate(parseInt(e.target.value) || 1)}
+            onChange={(e) =>
+              setColumnCountAndUpdate(parseInt(e.target.value) || 1)
+            }
             style={{ width: 60, textAlign: "center" }}
             data-testid="input-column-count"
           />
@@ -233,7 +252,11 @@ export function TextWrapDemo() {
             min={1}
             max={100}
             value={rowCount}
-            onChange={(e) => setRowCount(Math.min(100, Math.max(1, parseInt(e.target.value) || 1)))}
+            onChange={(e) =>
+              setRowCount(
+                Math.min(100, Math.max(1, parseInt(e.target.value) || 1)),
+              )
+            }
             style={{ width: 60, textAlign: "center" }}
             data-testid="input-row-count"
           />
@@ -255,7 +278,10 @@ export function TextWrapDemo() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => { setLettersPerWord((prev) => Math.max(1, prev - 1)); setDataKey((k) => k + 1); }}
+            onClick={() => {
+              setLettersPerWord((prev) => Math.max(1, prev - 1));
+              setDataKey((k) => k + 1);
+            }}
             disabled={lettersPerWord <= 1}
             data-testid="btn-letters-minus"
           >
@@ -266,14 +292,22 @@ export function TextWrapDemo() {
             min={1}
             max={50}
             value={lettersPerWord}
-            onChange={(e) => { setLettersPerWord(Math.min(50, Math.max(1, parseInt(e.target.value) || 1))); setDataKey((k) => k + 1); }}
+            onChange={(e) => {
+              setLettersPerWord(
+                Math.min(50, Math.max(1, parseInt(e.target.value) || 1)),
+              );
+              setDataKey((k) => k + 1);
+            }}
             style={{ width: 60, textAlign: "center" }}
             data-testid="input-letters-per-word"
           />
           <Button
             variant="default"
             size="sm"
-            onClick={() => { setLettersPerWord((prev) => Math.min(50, prev + 1)); setDataKey((k) => k + 1); }}
+            onClick={() => {
+              setLettersPerWord((prev) => Math.min(50, prev + 1));
+              setDataKey((k) => k + 1);
+            }}
             disabled={lettersPerWord >= 50}
             data-testid="btn-letters-plus"
           >
@@ -288,7 +322,10 @@ export function TextWrapDemo() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => { setWordCount((prev) => Math.max(1, prev - 1)); setDataKey((k) => k + 1); }}
+            onClick={() => {
+              setWordCount((prev) => Math.max(1, prev - 1));
+              setDataKey((k) => k + 1);
+            }}
             disabled={wordCount <= 1}
             data-testid="btn-words-minus"
           >
@@ -299,14 +336,22 @@ export function TextWrapDemo() {
             min={1}
             max={20}
             value={wordCount}
-            onChange={(e) => { setWordCount(Math.min(20, Math.max(1, parseInt(e.target.value) || 1))); setDataKey((k) => k + 1); }}
+            onChange={(e) => {
+              setWordCount(
+                Math.min(20, Math.max(1, parseInt(e.target.value) || 1)),
+              );
+              setDataKey((k) => k + 1);
+            }}
             style={{ width: 60, textAlign: "center" }}
             data-testid="input-word-count"
           />
           <Button
             variant="default"
             size="sm"
-            onClick={() => { setWordCount((prev) => Math.min(20, prev + 1)); setDataKey((k) => k + 1); }}
+            onClick={() => {
+              setWordCount((prev) => Math.min(20, prev + 1));
+              setDataKey((k) => k + 1);
+            }}
             disabled={wordCount >= 20}
             data-testid="btn-words-plus"
           >
@@ -486,10 +531,12 @@ export function TextWrapDemo() {
           MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default:{" "}
           {getMaxWidthDisplay(globalMaxWidth)} | Scroll H:{" "}
           {scrollEnabled ? "si" : "no"} | Scroll V:{" "}
-          {verticalScrollEnabled ? "400px" : "no"} | TextCell: {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
+          {verticalScrollEnabled ? "400px" : "no"} | TextCell:{" "}
+          {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
         </div>
         <div>
-          Contenido: {lettersPerWord} letras/palabra x {wordCount} palabra(s) = ~{lettersPerWord * wordCount + (wordCount - 1)} caracteres
+          Contenido: {lettersPerWord} letras/palabra x {wordCount} palabra(s) =
+          ~{lettersPerWord * wordCount + (wordCount - 1)} caracteres
         </div>
         <div style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
           Nota: Los defaults aplican cuando la columna no tiene valor propio
@@ -498,7 +545,13 @@ export function TextWrapDemo() {
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
         <BaseTable
-          key={JSON.stringify(columnSettings) + globalMinWidth + scrollEnabled + textCellWidth + verticalScrollEnabled}
+          key={
+            JSON.stringify(columnSettings) +
+            globalMinWidth +
+            scrollEnabled +
+            textCellWidth +
+            verticalScrollEnabled
+          }
           data={tableData}
           state={tableState.state}
           config={{
@@ -506,7 +559,7 @@ export function TextWrapDemo() {
             layout: {
               widthMode: "full",
               heightMode: verticalScrollEnabled ? "fixed" : "auto",
-              height: verticalScrollEnabled ? 400 : undefined,
+              height: 200,
               stickyHeader: stickyHeader,
             },
             columnsDefault: {
@@ -522,7 +575,9 @@ export function TextWrapDemo() {
             cellsDefault: {
               horizontalAlign: "left",
               verticalAlign: "middle",
-              render: (value) => <TextCell text={value} width={textCellWidth} />,
+              render: (value) => (
+                <TextCell text={value} width={textCellWidth} />
+              ),
             },
             rowsDefault: {
               hoverable: true,

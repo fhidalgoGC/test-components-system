@@ -55,9 +55,16 @@ export const BaseTableView = (props: BaseTableProps) => {
         classes.push(styles.withScroll);
       }
       
-      // Scroll vertical (solo cuando heightMode es 'fixed' con altura definida y no separado)
+      // Scroll vertical
       if (layout?.heightMode === 'fixed' && layout?.height) {
-        classes.push(styles.withVerticalScroll);
+        // Si hay altura fija, controlar si hay scroll o se corta
+        if (layout?.stickyHeader) {
+          // Con sticky header, el scroll lo maneja el layout separado
+          classes.push(styles.noVerticalScroll);
+        } else {
+          // Sin sticky header, permitir scroll vertical
+          classes.push(styles.withVerticalScroll);
+        }
       } else {
         classes.push(styles.noVerticalScroll);
       }
