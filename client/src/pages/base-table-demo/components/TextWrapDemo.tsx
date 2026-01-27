@@ -58,10 +58,10 @@ export function TextWrapDemo() {
   const [currentMaxWidth, setCurrentMaxWidth] = useState<MaxSize | undefined>(undefined);
 
   const columns: ColumnConfig[] = [
-    { metadata: { columnId: "id", order: 0 }, minWidth: 50, maxWidth: 80 },
-    { metadata: { columnId: "title", order: 1 }, minWidth: currentMinWidth, maxWidth: currentMaxWidth },
-    { metadata: { columnId: "description", order: 2 }, minWidth: currentMinWidth, maxWidth: currentMaxWidth },
-    { metadata: { columnId: "category", order: 3 }, minWidth: currentMinWidth, maxWidth: currentMaxWidth },
+    { metadata: { columnId: "id", order: 0 } },
+    { metadata: { columnId: "title", order: 1 } },
+    { metadata: { columnId: "description", order: 2 } },
+    { metadata: { columnId: "category", order: 3 } },
   ];
 
   return (
@@ -139,6 +139,10 @@ export function TextWrapDemo() {
             layout: {
               widthMode: "full",
               heightMode: "auto",
+            },
+            columnsDefault: {
+              minWidth: currentMinWidth,
+              maxWidth: currentMaxWidth,
             },
             headersDefault: {
               cell: {
