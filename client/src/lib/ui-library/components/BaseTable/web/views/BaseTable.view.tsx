@@ -63,8 +63,9 @@ export const BaseTableView = (props: BaseTableProps) => {
   const tableClasses = useMemo(() => {
     const classes = [styles.table];
     if (layout?.widthMode === 'fixed') classes.push(styles.tableFixed);
+    if (typeof columnsDefault?.maxWidth === 'number') classes.push(styles.tableFixed);
     return classes.join(' ');
-  }, [layout]);
+  }, [layout, columnsDefault?.maxWidth]);
 
   const visibleColumnsCount = columns.filter(
     col => col.visible !== false && (columnsDefault?.visible !== false || col.visible === true)
