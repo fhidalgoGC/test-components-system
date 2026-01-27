@@ -45,6 +45,7 @@ export function TextWrapDemo() {
   const tableState = useTableState({ initialState: "success" });
   const [columnSettings, setColumnSettings] = useState<ColumnSetting[]>(initialColumns);
   const [globalMinWidth, setGlobalMinWidth] = useState<number | undefined>(undefined);
+  const [globalMaxWidth, setGlobalMaxWidth] = useState<MaxSize | undefined>(undefined);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const updateColumnMaxWidth = (columnId: string, newMaxWidth: MaxSize | undefined) => {
@@ -118,7 +119,7 @@ export function TextWrapDemo() {
       </div>
 
       <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>MinWidth Global:</div>
+        <div className={styles.controlLabel}>MinWidth Default:</div>
         <div className={styles.controls}>
           {[undefined, 50, 80, 100].map((value) => (
             <Button
@@ -129,6 +130,23 @@ export function TextWrapDemo() {
               data-testid={`btn-minwidth-${value}`}
             >
               {value === undefined ? "ninguno" : `${value}px`}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>MaxWidth Default:</div>
+        <div className={styles.controls}>
+          {maxWidthOptions.map((option) => (
+            <Button
+              key={String(option.value)}
+              variant={globalMaxWidth === option.value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setGlobalMaxWidth(option.value)}
+              data-testid={`btn-maxwidth-default-${option.value}`}
+            >
+              {option.label}
             </Button>
           ))}
         </div>
@@ -190,7 +208,8 @@ export function TextWrapDemo() {
       <div className={styles.infoBox}>
         <div><strong>Resumen:</strong></div>
         <div>Columnas: {columnSettings.map(c => `${c.label}(${getMaxWidthDisplay(c.maxWidth)})`).join(" | ")}</div>
-        <div>MinWidth Global: {globalMinWidth ?? "ninguno"} | Scroll: {scrollEnabled ? "si" : "no"}</div>
+        <div>MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default: {getMaxWidthDisplay(globalMaxWidth)} | Scroll: {scrollEnabled ? "si" : "no"}</div>
+        <div style={{ fontSize: 12, color: "#666", marginTop: 4 }}>Nota: Los defaults aplican cuando la columna no tiene valor propio</div>
       </div>
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
@@ -206,6 +225,7 @@ export function TextWrapDemo() {
             },
             columnsDefault: {
               minWidth: globalMinWidth,
+              maxWidth: globalMaxWidth,
               scroll: scrollEnabled,
             },
             headersDefault: {
