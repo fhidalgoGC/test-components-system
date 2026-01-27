@@ -21,7 +21,6 @@ const columnMaxWidthOptions: { value: MaxSize | undefined | "inherit"; label: st
 ];
 
 const globalMaxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
-  { value: undefined, label: "auto" },
   { value: 80, label: "80px" },
   { value: 120, label: "120px" },
   { value: 200, label: "200px" },
@@ -55,7 +54,7 @@ export function TextWrapDemo() {
   const tableState = useTableState({ initialState: "success" });
   const [columnSettings, setColumnSettings] = useState<ColumnSetting[]>(initialColumns);
   const [globalMinWidth, setGlobalMinWidth] = useState<number | undefined>(undefined);
-  const [globalMaxWidth, setGlobalMaxWidth] = useState<MaxSize | undefined>(undefined);
+  const [globalMaxWidth, setGlobalMaxWidth] = useState<MaxSize | undefined>("stretch");
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const updateColumnMaxWidth = (columnId: string, newMaxWidth: MaxSize | undefined | "inherit") => {
