@@ -1,7 +1,8 @@
 .tableWrapper {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .tableWrapper.fullWidth {
@@ -21,7 +22,7 @@
 }
 
 .table {
-  width: 100%;
+  min-width: 100%;
   border-collapse: collapse;
   table-layout: auto;
 }
