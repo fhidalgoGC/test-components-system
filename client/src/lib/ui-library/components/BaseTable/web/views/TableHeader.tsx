@@ -87,7 +87,6 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
           if (minWidth) style.minWidth = minWidth;
           if (typeof maxWidth === 'number') {
             style.maxWidth = maxWidth;
-            style.width = maxWidth;
           } else if (maxWidth === 'stretch' && stretchCount > 0) {
             if (fixedWidthTotal > 0) {
               style.width = `calc((100% - ${fixedWidthTotal}px) / ${stretchCount})`;

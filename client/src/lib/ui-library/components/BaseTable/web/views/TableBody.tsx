@@ -120,7 +120,6 @@ export const TableBody = ({
               if (minWidth) cellStyle.minWidth = minWidth;
               if (typeof maxWidth === 'number') {
                 cellStyle.maxWidth = maxWidth;
-                cellStyle.width = maxWidth;
               } else if (maxWidth === 'stretch' && stretchCount > 0) {
                 if (fixedWidthTotal > 0) {
                   cellStyle.width = `calc((100% - ${fixedWidthTotal}px) / ${stretchCount})`;
