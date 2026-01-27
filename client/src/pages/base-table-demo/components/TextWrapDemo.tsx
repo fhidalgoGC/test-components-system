@@ -189,299 +189,96 @@ export function TextWrapDemo() {
         columnas y cambia el maxWidth de cada una.
       </p>
 
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Columnas:</div>
-        <div className={styles.controls}>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setColumnCountAndUpdate(columnSettings.length - 1)}
-            disabled={columnSettings.length <= 1}
-            data-testid="btn-remove-column"
-          >
-            -
-          </Button>
-          <Input
-            type="number"
-            min={1}
-            max={50}
-            value={columnCount}
-            onChange={(e) =>
-              setColumnCountAndUpdate(parseInt(e.target.value) || 1)
-            }
-            style={{ width: 60, textAlign: "center" }}
-            data-testid="input-column-count"
-          />
-          <Button
-            variant="default"
-            size="sm"
-            onClick={addColumn}
-            disabled={columnSettings.length >= 50}
-            data-testid="btn-add-column"
-          >
-            +
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={resetColumns}
-            data-testid="btn-reset-columns"
-          >
-            Reset
-          </Button>
-          <span style={{ fontSize: 12, color: "#666" }}>
-            ({columnSettings.length} columnas, max 50)
-          </span>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '8px 16px', marginBottom: 12 }}>
+        <div className={styles.controlGroup} style={{ marginBottom: 0 }}>
+          <div className={styles.controlLabel}>Columnas:</div>
+          <div className={styles.controls}>
+            <Button variant="outline" size="sm" onClick={() => setColumnCountAndUpdate(columnSettings.length - 1)} disabled={columnSettings.length <= 1} data-testid="btn-remove-column">-</Button>
+            <Input type="number" min={1} max={50} value={columnCount} onChange={(e) => setColumnCountAndUpdate(parseInt(e.target.value) || 1)} style={{ width: 50, textAlign: "center" }} data-testid="input-column-count" />
+            <Button variant="default" size="sm" onClick={addColumn} disabled={columnSettings.length >= 50} data-testid="btn-add-column">+</Button>
+            <Button variant="outline" size="sm" onClick={resetColumns} data-testid="btn-reset-columns">Reset</Button>
+          </div>
+        </div>
+
+        <div className={styles.controlGroup} style={{ marginBottom: 0 }}>
+          <div className={styles.controlLabel}>Filas:</div>
+          <div className={styles.controls}>
+            <Button variant="outline" size="sm" onClick={() => setRowCount((prev) => Math.max(1, prev - 1))} disabled={rowCount <= 1} data-testid="btn-remove-row">-</Button>
+            <Input type="number" min={1} max={100} value={rowCount} onChange={(e) => setRowCount(Math.min(100, Math.max(1, parseInt(e.target.value) || 1)))} style={{ width: 50, textAlign: "center" }} data-testid="input-row-count" />
+            <Button variant="default" size="sm" onClick={() => setRowCount((prev) => Math.min(100, prev + 1))} disabled={rowCount >= 100} data-testid="btn-add-row">+</Button>
+          </div>
+        </div>
+
+        <div className={styles.controlGroup} style={{ marginBottom: 0 }}>
+          <div className={styles.controlLabel}>Letras/Palabra:</div>
+          <div className={styles.controls}>
+            <Button variant="outline" size="sm" onClick={() => { setLettersPerWord((prev) => Math.max(1, prev - 1)); setDataKey((k) => k + 1); }} disabled={lettersPerWord <= 1} data-testid="btn-letters-minus">-</Button>
+            <Input type="number" min={1} max={50} value={lettersPerWord} onChange={(e) => { setLettersPerWord(Math.min(50, Math.max(1, parseInt(e.target.value) || 1))); setDataKey((k) => k + 1); }} style={{ width: 50, textAlign: "center" }} data-testid="input-letters-per-word" />
+            <Button variant="default" size="sm" onClick={() => { setLettersPerWord((prev) => Math.min(50, prev + 1)); setDataKey((k) => k + 1); }} disabled={lettersPerWord >= 50} data-testid="btn-letters-plus">+</Button>
+          </div>
+        </div>
+
+        <div className={styles.controlGroup} style={{ marginBottom: 0 }}>
+          <div className={styles.controlLabel}>Palabras/Celda:</div>
+          <div className={styles.controls}>
+            <Button variant="outline" size="sm" onClick={() => { setWordCount((prev) => Math.max(1, prev - 1)); setDataKey((k) => k + 1); }} disabled={wordCount <= 1} data-testid="btn-words-minus">-</Button>
+            <Input type="number" min={1} max={20} value={wordCount} onChange={(e) => { setWordCount(Math.min(20, Math.max(1, parseInt(e.target.value) || 1))); setDataKey((k) => k + 1); }} style={{ width: 50, textAlign: "center" }} data-testid="input-word-count" />
+            <Button variant="default" size="sm" onClick={() => { setWordCount((prev) => Math.min(20, prev + 1)); setDataKey((k) => k + 1); }} disabled={wordCount >= 20} data-testid="btn-words-plus">+</Button>
+            <Button variant="outline" size="sm" onClick={() => setDataKey((k) => k + 1)} data-testid="btn-regenerate">Regen</Button>
+          </div>
         </div>
       </div>
 
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Filas:</div>
-        <div className={styles.controls}>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setRowCount((prev) => Math.max(1, prev - 1))}
-            disabled={rowCount <= 1}
-            data-testid="btn-remove-row"
-          >
-            -
-          </Button>
-          <Input
-            type="number"
-            min={1}
-            max={100}
-            value={rowCount}
-            onChange={(e) =>
-              setRowCount(
-                Math.min(100, Math.max(1, parseInt(e.target.value) || 1)),
-              )
-            }
-            style={{ width: 60, textAlign: "center" }}
-            data-testid="input-row-count"
-          />
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => setRowCount((prev) => Math.min(100, prev + 1))}
-            disabled={rowCount >= 100}
-            data-testid="btn-add-row"
-          >
-            +
-          </Button>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '8px 16px', marginBottom: 12 }}>
+        <div className={styles.controlGroup} style={{ marginBottom: 0 }}>
+          <div className={styles.controlLabel}>MinWidth:</div>
+          <div className={styles.controls}>
+            {[undefined, 50, 80, 100].map((value) => (
+              <Button key={String(value)} variant={globalMinWidth === value ? "default" : "outline"} size="sm" onClick={() => setGlobalMinWidth(value)} data-testid={`btn-minwidth-${value}`}>
+                {value === undefined ? "none" : `${value}`}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.controlGroup} style={{ marginBottom: 0 }}>
+          <div className={styles.controlLabel}>MaxWidth:</div>
+          <div className={styles.controls}>
+            {globalMaxWidthOptions.map((option) => (
+              <Button key={String(option.value)} variant={globalMaxWidth === option.value ? "default" : "outline"} size="sm" onClick={() => setGlobalMaxWidth(option.value)} data-testid={`btn-maxwidth-default-${option.value}`}>
+                {option.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.controlGroup} style={{ marginBottom: 0 }}>
+          <div className={styles.controlLabel}>TextCell:</div>
+          <div className={styles.controls}>
+            {["auto" as const, 40, 80, 120, 150].map((value) => (
+              <Button key={String(value)} variant={textCellWidth === value ? "default" : "outline"} size="sm" onClick={() => setTextCellWidth(value)} data-testid={`btn-textcell-width-${value}`}>
+                {value === "auto" ? "auto" : `${value}`}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Letras/Palabra:</div>
-        <div className={styles.controls}>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setLettersPerWord((prev) => Math.max(1, prev - 1));
-              setDataKey((k) => k + 1);
-            }}
-            disabled={lettersPerWord <= 1}
-            data-testid="btn-letters-minus"
-          >
-            -
-          </Button>
-          <Input
-            type="number"
-            min={1}
-            max={50}
-            value={lettersPerWord}
-            onChange={(e) => {
-              setLettersPerWord(
-                Math.min(50, Math.max(1, parseInt(e.target.value) || 1)),
-              );
-              setDataKey((k) => k + 1);
-            }}
-            style={{ width: 60, textAlign: "center" }}
-            data-testid="input-letters-per-word"
-          />
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => {
-              setLettersPerWord((prev) => Math.min(50, prev + 1));
-              setDataKey((k) => k + 1);
-            }}
-            disabled={lettersPerWord >= 50}
-            data-testid="btn-letters-plus"
-          >
-            +
-          </Button>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 24px', marginBottom: 12, alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>H-Scroll:</span>
+          <Button variant={horizontalScrollEnabled ? "default" : "outline"} size="sm" onClick={() => setHorizontalScrollEnabled(true)} data-testid="btn-scroll-true">on</Button>
+          <Button variant={!horizontalScrollEnabled ? "default" : "outline"} size="sm" onClick={() => setHorizontalScrollEnabled(false)} data-testid="btn-scroll-false">off</Button>
         </div>
-      </div>
-
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Palabras/Celda:</div>
-        <div className={styles.controls}>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setWordCount((prev) => Math.max(1, prev - 1));
-              setDataKey((k) => k + 1);
-            }}
-            disabled={wordCount <= 1}
-            data-testid="btn-words-minus"
-          >
-            -
-          </Button>
-          <Input
-            type="number"
-            min={1}
-            max={20}
-            value={wordCount}
-            onChange={(e) => {
-              setWordCount(
-                Math.min(20, Math.max(1, parseInt(e.target.value) || 1)),
-              );
-              setDataKey((k) => k + 1);
-            }}
-            style={{ width: 60, textAlign: "center" }}
-            data-testid="input-word-count"
-          />
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => {
-              setWordCount((prev) => Math.min(20, prev + 1));
-              setDataKey((k) => k + 1);
-            }}
-            disabled={wordCount >= 20}
-            data-testid="btn-words-plus"
-          >
-            +
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setDataKey((k) => k + 1)}
-            data-testid="btn-regenerate"
-          >
-            Regenerar
-          </Button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>V-Scroll:</span>
+          <Button variant={verticalScrollEnabled ? "default" : "outline"} size="sm" onClick={() => setVerticalScrollEnabled(true)} data-testid="btn-vscroll-true">on</Button>
+          <Button variant={!verticalScrollEnabled ? "default" : "outline"} size="sm" onClick={() => setVerticalScrollEnabled(false)} data-testid="btn-vscroll-false">off</Button>
         </div>
-      </div>
-
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>MinWidth Default:</div>
-        <div className={styles.controls}>
-          {[undefined, 50, 80, 100].map((value) => (
-            <Button
-              key={String(value)}
-              variant={globalMinWidth === value ? "default" : "outline"}
-              size="sm"
-              onClick={() => setGlobalMinWidth(value)}
-              data-testid={`btn-minwidth-${value}`}
-            >
-              {value === undefined ? "ninguno" : `${value}px`}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>MaxWidth Default:</div>
-        <div className={styles.controls}>
-          {globalMaxWidthOptions.map((option) => (
-            <Button
-              key={String(option.value)}
-              variant={globalMaxWidth === option.value ? "default" : "outline"}
-              size="sm"
-              onClick={() => setGlobalMaxWidth(option.value)}
-              data-testid={`btn-maxwidth-default-${option.value}`}
-            >
-              {option.label}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>TextCell Width:</div>
-        <div className={styles.controls}>
-          {["auto" as const, 40, 60, 80, 100, 120, 150].map((value) => (
-            <Button
-              key={String(value)}
-              variant={textCellWidth === value ? "default" : "outline"}
-              size="sm"
-              onClick={() => setTextCellWidth(value)}
-              data-testid={`btn-textcell-width-${value}`}
-            >
-              {value === "auto" ? "auto" : `${value}px`}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Scroll Horizontal:</div>
-        <div className={styles.controls}>
-          <Button
-            variant={horizontalScrollEnabled ? "default" : "outline"}
-            size="sm"
-            onClick={() => setHorizontalScrollEnabled(true)}
-            data-testid="btn-scroll-true"
-          >
-            true
-          </Button>
-          <Button
-            variant={!horizontalScrollEnabled ? "default" : "outline"}
-            size="sm"
-            onClick={() => setHorizontalScrollEnabled(false)}
-            data-testid="btn-scroll-false"
-          >
-            false
-          </Button>
-        </div>
-      </div>
-
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Scroll Vertical (400px):</div>
-        <div className={styles.controls}>
-          <Button
-            variant={verticalScrollEnabled ? "default" : "outline"}
-            size="sm"
-            onClick={() => setVerticalScrollEnabled(true)}
-            data-testid="btn-vscroll-true"
-          >
-            true
-          </Button>
-          <Button
-            variant={!verticalScrollEnabled ? "default" : "outline"}
-            size="sm"
-            onClick={() => setVerticalScrollEnabled(false)}
-            data-testid="btn-vscroll-false"
-          >
-            false
-          </Button>
-        </div>
-      </div>
-
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Header Fijo (sticky):</div>
-        <div className={styles.controls}>
-          <Button
-            variant={stickyHeader ? "default" : "outline"}
-            size="sm"
-            onClick={() => setStickyHeader(true)}
-            data-testid="btn-sticky-true"
-          >
-            true
-          </Button>
-          <Button
-            variant={!stickyHeader ? "default" : "outline"}
-            size="sm"
-            onClick={() => setStickyHeader(false)}
-            data-testid="btn-sticky-false"
-          >
-            false
-          </Button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Sticky:</span>
+          <Button variant={stickyHeader ? "default" : "outline"} size="sm" onClick={() => setStickyHeader(true)} data-testid="btn-sticky-true">on</Button>
+          <Button variant={!stickyHeader ? "default" : "outline"} size="sm" onClick={() => setStickyHeader(false)} data-testid="btn-sticky-false">off</Button>
         </div>
       </div>
 
