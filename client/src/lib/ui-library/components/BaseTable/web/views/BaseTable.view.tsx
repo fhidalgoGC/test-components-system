@@ -91,14 +91,15 @@ export const BaseTableView = (props: BaseTableProps) => {
     };
   }, [visibleColumns, columnsDefault?.maxWidth]);
 
-  const hasStretchColumns = columnWidthInfo.stretchCount > 0 || columnWidthInfo.autoStretchLastColumn;
+  const hasExplicitStretchColumns = columnWidthInfo.stretchCount > 0 && !columnWidthInfo.autoStretchLastColumn;
 
   const tableClasses = useMemo(() => {
     const classes = [styles.table];
     if (layout?.widthMode === 'fixed') classes.push(styles.tableFixed);
-    if (hasStretchColumns) classes.push(styles.tableFixed);
+    // Solo usar table-layout: fixed cuando hay stretch explícito (no auto)
+    if (hasExplicitStretchColumns) classes.push(styles.tableFixed);
     return classes.join(' ');
-  }, [layout, hasStretchColumns]);
+  }, [layout, hasExplicitStretchColumns]);
 
   const visibleColumnsCount = visibleColumns.length;
 

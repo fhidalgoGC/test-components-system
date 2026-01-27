@@ -124,12 +124,11 @@ export const TableBody = ({
               
               if (isAutoStretchColumn) {
                 // Última columna absorbe espacio restante automáticamente
-                if (fixedWidthTotal > 0) {
-                  cellStyle.width = `calc(100% - ${fixedWidthTotal}px)`;
-                } else {
-                  cellStyle.width = '100%';
-                }
+                cellStyle.width = '100%';
               } else if (typeof maxWidth === 'number') {
+                // Columna se ajusta al contenido hasta el máximo
+                cellStyle.width = '1%';
+                cellStyle.whiteSpace = 'nowrap';
                 cellStyle.maxWidth = maxWidth;
               } else if (maxWidth === 'stretch' && stretchCount > 0) {
                 if (fixedWidthTotal > 0) {
@@ -137,8 +136,10 @@ export const TableBody = ({
                 } else {
                   cellStyle.width = `${100 / stretchCount}%`;
                 }
-              } else if (maxWidth === 'container') {
-                cellStyle.width = 'auto';
+              } else {
+                // container o undefined: ajustar al contenido
+                cellStyle.width = '1%';
+                cellStyle.whiteSpace = 'nowrap';
               }
 
               const renderContent = () => {
