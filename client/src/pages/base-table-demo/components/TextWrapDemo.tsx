@@ -396,7 +396,7 @@ export function TextWrapDemo() {
       </div>
 
       <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Scroll Vertical (600px):</div>
+        <div className={styles.controlLabel}>Scroll Vertical (400px):</div>
         <div className={styles.controls}>
           <Button
             variant={verticalScrollEnabled ? "default" : "outline"}
@@ -463,7 +463,7 @@ export function TextWrapDemo() {
           MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default:{" "}
           {getMaxWidthDisplay(globalMaxWidth)} | Scroll H:{" "}
           {scrollEnabled ? "si" : "no"} | Scroll V:{" "}
-          {verticalScrollEnabled ? "600px" : "no"} | TextCell: {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
+          {verticalScrollEnabled ? "400px" : "no"} | TextCell: {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
         </div>
         <div>
           Contenido: {lettersPerWord} letras/palabra x {wordCount} palabra(s) = ~{lettersPerWord * wordCount + (wordCount - 1)} caracteres
@@ -483,7 +483,7 @@ export function TextWrapDemo() {
             layout: {
               widthMode: "full",
               heightMode: verticalScrollEnabled ? "fixed" : "auto",
-              height: verticalScrollEnabled ? 600 : undefined,
+              height: verticalScrollEnabled ? 400 : undefined,
             },
             columnsDefault: {
               minWidth: globalMinWidth,
