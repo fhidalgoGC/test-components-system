@@ -10,6 +10,8 @@ interface TableBodyProps {
   cellsDefault?: CellsDefaultConfig;
   behaviors?: BehaviorsConfig;
   callbacks?: TableCallbacks;
+  stretchCount?: number;
+  fixedWidthTotal?: number;
 }
 
 const mergeCellConfig = (
@@ -31,6 +33,8 @@ export const TableBody = ({
   cellsDefault,
   behaviors,
   callbacks,
+  stretchCount = 0,
+  fixedWidthTotal = 0,
 }: TableBodyProps) => {
   const visibleColumns = useMemo(() => {
     return columns
@@ -117,10 +121,14 @@ export const TableBody = ({
               if (typeof maxWidth === 'number') {
                 cellStyle.maxWidth = maxWidth;
                 cellStyle.width = maxWidth;
-              } else if (maxWidth === 'stretch') {
-                cellStyle.width = '100%';
+              } else if (maxWidth === 'stretch' && stretchCount > 0) {
+                if (fixedWidthTotal > 0) {
+                  cellStyle.width = `calc((100% - ${fixedWidthTotal}px) / ${stretchCount})`;
+                } else {
+                  cellStyle.width = `${100 / stretchCount}%`;
+                }
               } else if (maxWidth === 'container') {
-                cellStyle.maxWidth = '100%';
+                cellStyle.width = 'auto';
               }
 
               const renderContent = () => {

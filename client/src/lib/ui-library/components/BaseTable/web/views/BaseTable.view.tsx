@@ -60,16 +60,39 @@ export const BaseTableView = (props: BaseTableProps) => {
     return style;
   }, [layout]);
 
+  const visibleColumns = useMemo(() => {
+    return columns.filter(
+      col => col.visible !== false && (columnsDefault?.visible !== false || col.visible === true)
+    );
+  }, [columns, columnsDefault?.visible]);
+
+  const columnWidthInfo = useMemo(() => {
+    let stretchCount = 0;
+    let fixedWidthTotal = 0;
+    
+    visibleColumns.forEach(col => {
+      const maxWidth = col.maxWidth ?? columnsDefault?.maxWidth;
+      if (maxWidth === 'stretch') {
+        stretchCount++;
+      } else if (typeof maxWidth === 'number') {
+        fixedWidthTotal += maxWidth;
+      }
+    });
+    
+    return { stretchCount, fixedWidthTotal };
+  }, [visibleColumns, columnsDefault?.maxWidth]);
+
+  const hasStretchColumns = columnWidthInfo.stretchCount > 0;
+
   const tableClasses = useMemo(() => {
     const classes = [styles.table];
     if (layout?.widthMode === 'fixed') classes.push(styles.tableFixed);
     if (typeof columnsDefault?.maxWidth === 'number') classes.push(styles.tableFixed);
+    if (hasStretchColumns) classes.push(styles.tableFixed);
     return classes.join(' ');
-  }, [layout, columnsDefault?.maxWidth]);
+  }, [layout, columnsDefault?.maxWidth, hasStretchColumns]);
 
-  const visibleColumnsCount = columns.filter(
-    col => col.visible !== false && (columnsDefault?.visible !== false || col.visible === true)
-  ).length;
+  const visibleColumnsCount = visibleColumns.length;
 
   const hasData = data.length > 0;
   const isLoadingWithData = state === 'loading' && hasData;
@@ -97,6 +120,8 @@ export const BaseTableView = (props: BaseTableProps) => {
           headersDefault={headersDefault}
           columnsDefault={columnsDefault}
           callbacks={callbacks}
+          stretchCount={columnWidthInfo.stretchCount}
+          fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
         />
 
         {shouldShowData ? (
@@ -108,6 +133,8 @@ export const BaseTableView = (props: BaseTableProps) => {
             cellsDefault={cellsDefault}
             behaviors={behaviors}
             callbacks={callbacks}
+            stretchCount={columnWidthInfo.stretchCount}
+            fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
           />
         ) : shouldShowStateMessage ? (
           <TableStates

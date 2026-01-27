@@ -7,9 +7,11 @@ interface TableHeaderProps {
   headersDefault?: HeadersDefaultConfig;
   columnsDefault?: ColumnsDefaultConfig;
   callbacks?: TableCallbacks;
+  stretchCount?: number;
+  fixedWidthTotal?: number;
 }
 
-export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks }: TableHeaderProps) => {
+export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks, stretchCount = 0, fixedWidthTotal = 0 }: TableHeaderProps) => {
   const [sortState, setSortState] = useState<{ columnId: string; direction: SortDirection } | null>(null);
 
   const isEnabled = headersDefault?.enabled !== false;
@@ -86,10 +88,14 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
           if (typeof maxWidth === 'number') {
             style.maxWidth = maxWidth;
             style.width = maxWidth;
-          } else if (maxWidth === 'stretch') {
-            style.width = '100%';
+          } else if (maxWidth === 'stretch' && stretchCount > 0) {
+            if (fixedWidthTotal > 0) {
+              style.width = `calc((100% - ${fixedWidthTotal}px) / ${stretchCount})`;
+            } else {
+              style.width = `${100 / stretchCount}%`;
+            }
           } else if (maxWidth === 'container') {
-            style.maxWidth = '100%';
+            style.width = 'auto';
           }
 
           const renderContent = () => {
