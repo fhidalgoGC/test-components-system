@@ -93,6 +93,7 @@ export function TextWrapDemo() {
     undefined,
   );
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const [verticalScrollEnabled, setVerticalScrollEnabled] = useState<boolean>(false);
   const [textCellWidth, setTextCellWidth] = useState<number | "auto">(80);
   const [lettersPerWord, setLettersPerWord] = useState<number>(5);
   const [wordCount, setWordCount] = useState<number>(1);
@@ -373,7 +374,7 @@ export function TextWrapDemo() {
       </div>
 
       <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>Scroll:</div>
+        <div className={styles.controlLabel}>Scroll Horizontal:</div>
         <div className={styles.controls}>
           <Button
             variant={scrollEnabled ? "default" : "outline"}
@@ -388,6 +389,28 @@ export function TextWrapDemo() {
             size="sm"
             onClick={() => setScrollEnabled(false)}
             data-testid="btn-scroll-false"
+          >
+            false
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>Scroll Vertical (600px):</div>
+        <div className={styles.controls}>
+          <Button
+            variant={verticalScrollEnabled ? "default" : "outline"}
+            size="sm"
+            onClick={() => setVerticalScrollEnabled(true)}
+            data-testid="btn-vscroll-true"
+          >
+            true
+          </Button>
+          <Button
+            variant={!verticalScrollEnabled ? "default" : "outline"}
+            size="sm"
+            onClick={() => setVerticalScrollEnabled(false)}
+            data-testid="btn-vscroll-false"
           >
             false
           </Button>
@@ -438,8 +461,9 @@ export function TextWrapDemo() {
         </div>
         <div>
           MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default:{" "}
-          {getMaxWidthDisplay(globalMaxWidth)} | Scroll:{" "}
-          {scrollEnabled ? "si" : "no"} | TextCell: {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
+          {getMaxWidthDisplay(globalMaxWidth)} | Scroll H:{" "}
+          {scrollEnabled ? "si" : "no"} | Scroll V:{" "}
+          {verticalScrollEnabled ? "600px" : "no"} | TextCell: {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
         </div>
         <div>
           Contenido: {lettersPerWord} letras/palabra x {wordCount} palabra(s) = ~{lettersPerWord * wordCount + (wordCount - 1)} caracteres
@@ -451,14 +475,15 @@ export function TextWrapDemo() {
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
         <BaseTable
-          key={JSON.stringify(columnSettings) + globalMinWidth + scrollEnabled + textCellWidth}
+          key={JSON.stringify(columnSettings) + globalMinWidth + scrollEnabled + textCellWidth + verticalScrollEnabled}
           data={tableData}
           state={tableState.state}
           config={{
             columns,
             layout: {
               widthMode: "full",
-              heightMode: "auto",
+              heightMode: verticalScrollEnabled ? "fixed" : "auto",
+              height: verticalScrollEnabled ? 600 : undefined,
             },
             columnsDefault: {
               minWidth: globalMinWidth,
