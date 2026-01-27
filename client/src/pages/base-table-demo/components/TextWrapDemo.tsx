@@ -35,10 +35,26 @@ export function TextWrapDemo() {
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const columns: ColumnConfig[] = [
-    { metadata: { columnId: "id", order: 0 } },
-    { metadata: { columnId: "title", order: 1 } },
-    { metadata: { columnId: "description", order: 2 } },
-    { metadata: { columnId: "category", order: 3 } },
+    { 
+      metadata: { columnId: "id", order: 0 },
+      header: { cell: { render: <span>ID</span> } },
+      cell: { render: (value) => <span>{value}</span> }
+    },
+    { 
+      metadata: { columnId: "title", order: 1 },
+      header: { cell: { render: <span>Title</span> } },
+      cell: { render: (value) => <span>{value}</span> }
+    },
+    { 
+      metadata: { columnId: "description", order: 2 },
+      header: { cell: { render: <span>Description</span> } },
+      cell: { render: (value) => <span>{value}</span> }
+    },
+    { 
+      metadata: { columnId: "category", order: 3 },
+      header: { cell: { render: <span>Category</span> } },
+      cell: { render: (value) => <span>{value}</span> }
+    },
   ];
 
   return (
