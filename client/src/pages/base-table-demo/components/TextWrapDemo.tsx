@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   BaseTable,
   useTableState,
@@ -9,6 +9,7 @@ import type {
   MaxSize,
 } from "@/lib/ui-library/components/BaseTable";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import styles from "../css/BaseTableDemo.module.scss";
 
 interface ColumnSetting {
@@ -39,60 +40,31 @@ const globalMaxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
   { value: "container", label: "container" },
 ];
 
-const initialColumns: ColumnSetting[] = [
-  { id: "id", label: "ID", maxWidth: "inherit" },
-  { id: "title", label: "Title", maxWidth: "inherit" },
-  { id: "description", label: "Description", maxWidth: "inherit" },
-];
+const generateColumnSetting = (index: number): ColumnSetting => ({
+  id: `col${index}`,
+  label: `Col ${index}`,
+  maxWidth: "inherit",
+});
 
-const allAvailableColumns: ColumnSetting[] = [
-  { id: "id", label: "ID", maxWidth: "inherit" },
-  { id: "title", label: "Title", maxWidth: "inherit" },
-  { id: "description", label: "Description", maxWidth: "inherit" },
-  { id: "category", label: "Category", maxWidth: "inherit" },
-  { id: "status", label: "Status", maxWidth: "inherit" },
-  { id: "priority", label: "Priority", maxWidth: "inherit" },
-];
+const generateRowData = (rowIndex: number, columnCount: number): Record<string, string | number> => {
+  const row: Record<string, string | number> = {};
+  for (let i = 1; i <= columnCount; i++) {
+    row[`col${i}`] = `R${rowIndex}C${i}`;
+  }
+  return row;
+};
 
-const tableData = [
-  {
-    id: 1,
-    title: "React",
-    description: "UI Library",
-    category: "Frontend",
-    status: "Active",
-    priority: "High",
-  },
-  {
-    id: 2,
-    title: "Node",
-    description: "Runtime",
-    category: "Backend",
-    status: "Active",
-    priority: "Medium",
-  },
-  {
-    id: 3,
-    title: "CSS",
-    description: "Styles",
-    category: "Design",
-    status: "Deprecated",
-    priority: "Low",
-  },
-  {
-    id: 4,
-    title: "TypeScript",
-    description: "Types",
-    category: "Language",
-    status: "Active",
-    priority: "High",
-  },
-];
+const generateTableData = (rowCount: number, columnCount: number) => {
+  return Array.from({ length: rowCount }, (_, i) => generateRowData(i + 1, columnCount));
+};
 
 export function TextWrapDemo() {
   const tableState = useTableState({ initialState: "success" });
-  const [columnSettings, setColumnSettings] =
-    useState<ColumnSetting[]>(initialColumns);
+  const [columnCount, setColumnCount] = useState<number>(3);
+  const [rowCount, setRowCount] = useState<number>(4);
+  const [columnSettings, setColumnSettings] = useState<ColumnSetting[]>(() =>
+    Array.from({ length: 3 }, (_, i) => generateColumnSetting(i + 1))
+  );
   const [globalMinWidth, setGlobalMinWidth] = useState<number | undefined>(
     undefined,
   );
@@ -100,6 +72,11 @@ export function TextWrapDemo() {
     undefined,
   );
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
+
+  const tableData = useMemo(
+    () => generateTableData(rowCount, columnSettings.length),
+    [rowCount, columnSettings.length]
+  );
 
   const updateColumnMaxWidth = (
     columnId: string,
@@ -112,24 +89,36 @@ export function TextWrapDemo() {
     );
   };
 
-  const addColumn = () => {
-    const existingIds = columnSettings.map((c) => c.id);
-    const nextColumn = allAvailableColumns.find(
-      (c) => !existingIds.includes(c.id),
-    );
-    if (nextColumn) {
-      setColumnSettings((prev) => [...prev, { ...nextColumn }]);
+  const setColumnCountAndUpdate = (newCount: number) => {
+    if (newCount < 1) newCount = 1;
+    if (newCount > 50) newCount = 50;
+    setColumnCount(newCount);
+    
+    if (newCount > columnSettings.length) {
+      const newColumns = Array.from(
+        { length: newCount - columnSettings.length },
+        (_, i) => generateColumnSetting(columnSettings.length + i + 1)
+      );
+      setColumnSettings((prev) => [...prev, ...newColumns]);
+    } else if (newCount < columnSettings.length) {
+      setColumnSettings((prev) => prev.slice(0, newCount));
     }
+  };
+
+  const addColumn = () => {
+    setColumnCountAndUpdate(columnSettings.length + 1);
   };
 
   const removeColumn = (columnId: string) => {
     if (columnSettings.length > 1) {
       setColumnSettings((prev) => prev.filter((c) => c.id !== columnId));
+      setColumnCount((prev) => Math.max(1, prev - 1));
     }
   };
 
   const resetColumns = () => {
-    setColumnSettings([...initialColumns]);
+    setColumnCount(3);
+    setColumnSettings(Array.from({ length: 3 }, (_, i) => generateColumnSetting(i + 1)));
   };
 
   const columns: ColumnConfig[] = columnSettings.map((col, index) => ({
@@ -137,8 +126,6 @@ export function TextWrapDemo() {
     header: { cell: { render: <TextCell text={col.label} /> } },
     maxWidth: col.maxWidth === "inherit" ? undefined : col.maxWidth,
   }));
-
-  const canAddMore = columnSettings.length < allAvailableColumns.length;
 
   const getMaxWidthDisplay = (maxWidth: MaxSize | undefined | "inherit") => {
     if (maxWidth === "inherit") return "heredar";
@@ -161,29 +148,29 @@ export function TextWrapDemo() {
       <div className={styles.controlGroup}>
         <div className={styles.controlLabel}>Columnas:</div>
         <div className={styles.controls}>
-          {columnSettings.map((col) => (
-            <div
-              key={col.id}
-              style={{ display: "flex", alignItems: "center", gap: 4 }}
-            >
-              <span style={{ fontSize: 12 }}>{col.label}</span>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => removeColumn(col.id)}
-                disabled={columnSettings.length <= 1}
-                data-testid={`btn-remove-${col.id}`}
-                style={{ fontSize: 10, padding: "2px 6px", height: 20 }}
-              >
-                X
-              </Button>
-            </div>
-          ))}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setColumnCountAndUpdate(columnSettings.length - 1)}
+            disabled={columnSettings.length <= 1}
+            data-testid="btn-remove-column"
+          >
+            -
+          </Button>
+          <Input
+            type="number"
+            min={1}
+            max={50}
+            value={columnCount}
+            onChange={(e) => setColumnCountAndUpdate(parseInt(e.target.value) || 1)}
+            style={{ width: 60, textAlign: "center" }}
+            data-testid="input-column-count"
+          />
           <Button
             variant="default"
             size="sm"
             onClick={addColumn}
-            disabled={!canAddMore}
+            disabled={columnSettings.length >= 50}
             data-testid="btn-add-column"
           >
             +
@@ -195,6 +182,42 @@ export function TextWrapDemo() {
             data-testid="btn-reset-columns"
           >
             Reset
+          </Button>
+          <span style={{ fontSize: 12, color: "#666" }}>
+            ({columnSettings.length} columnas, max 50)
+          </span>
+        </div>
+      </div>
+
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>Filas:</div>
+        <div className={styles.controls}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setRowCount((prev) => Math.max(1, prev - 1))}
+            disabled={rowCount <= 1}
+            data-testid="btn-remove-row"
+          >
+            -
+          </Button>
+          <Input
+            type="number"
+            min={1}
+            max={100}
+            value={rowCount}
+            onChange={(e) => setRowCount(Math.min(100, Math.max(1, parseInt(e.target.value) || 1)))}
+            style={{ width: 60, textAlign: "center" }}
+            data-testid="input-row-count"
+          />
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => setRowCount((prev) => Math.min(100, prev + 1))}
+            disabled={rowCount >= 100}
+            data-testid="btn-add-row"
+          >
+            +
           </Button>
         </div>
       </div>
