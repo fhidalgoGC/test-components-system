@@ -46,16 +46,37 @@ const generateColumnSetting = (index: number): ColumnSetting => ({
   maxWidth: "inherit",
 });
 
-const generateRowData = (rowIndex: number, columnCount: number): Record<string, string | number> => {
+const generateWord = (length: number): string => {
+  const chars = "abcdefghijklmnopqrstuvwxyz";
+  return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+};
+
+const generateCellContent = (lettersPerWord: number, wordCount: number): string => {
+  return Array.from({ length: wordCount }, () => generateWord(lettersPerWord)).join(" ");
+};
+
+const generateRowData = (
+  rowIndex: number,
+  columnCount: number,
+  lettersPerWord: number,
+  wordCount: number
+): Record<string, string | number> => {
   const row: Record<string, string | number> = {};
   for (let i = 1; i <= columnCount; i++) {
-    row[`col${i}`] = `R${rowIndex}C${i}`;
+    row[`col${i}`] = generateCellContent(lettersPerWord, wordCount);
   }
   return row;
 };
 
-const generateTableData = (rowCount: number, columnCount: number) => {
-  return Array.from({ length: rowCount }, (_, i) => generateRowData(i + 1, columnCount));
+const generateTableData = (
+  rowCount: number,
+  columnCount: number,
+  lettersPerWord: number,
+  wordCount: number
+) => {
+  return Array.from({ length: rowCount }, (_, i) =>
+    generateRowData(i + 1, columnCount, lettersPerWord, wordCount)
+  );
 };
 
 export function TextWrapDemo() {
@@ -73,10 +94,13 @@ export function TextWrapDemo() {
   );
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
   const [textCellWidth, setTextCellWidth] = useState<number | "auto">(80);
+  const [lettersPerWord, setLettersPerWord] = useState<number>(5);
+  const [wordCount, setWordCount] = useState<number>(1);
+  const [dataKey, setDataKey] = useState<number>(0);
 
   const tableData = useMemo(
-    () => generateTableData(rowCount, columnSettings.length),
-    [rowCount, columnSettings.length]
+    () => generateTableData(rowCount, columnSettings.length, lettersPerWord, wordCount),
+    [rowCount, columnSettings.length, lettersPerWord, wordCount, dataKey]
   );
 
   const updateColumnMaxWidth = (
@@ -224,6 +248,80 @@ export function TextWrapDemo() {
       </div>
 
       <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>Letras/Palabra:</div>
+        <div className={styles.controls}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => { setLettersPerWord((prev) => Math.max(1, prev - 1)); setDataKey((k) => k + 1); }}
+            disabled={lettersPerWord <= 1}
+            data-testid="btn-letters-minus"
+          >
+            -
+          </Button>
+          <Input
+            type="number"
+            min={1}
+            max={50}
+            value={lettersPerWord}
+            onChange={(e) => { setLettersPerWord(Math.min(50, Math.max(1, parseInt(e.target.value) || 1))); setDataKey((k) => k + 1); }}
+            style={{ width: 60, textAlign: "center" }}
+            data-testid="input-letters-per-word"
+          />
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => { setLettersPerWord((prev) => Math.min(50, prev + 1)); setDataKey((k) => k + 1); }}
+            disabled={lettersPerWord >= 50}
+            data-testid="btn-letters-plus"
+          >
+            +
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>Palabras/Celda:</div>
+        <div className={styles.controls}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => { setWordCount((prev) => Math.max(1, prev - 1)); setDataKey((k) => k + 1); }}
+            disabled={wordCount <= 1}
+            data-testid="btn-words-minus"
+          >
+            -
+          </Button>
+          <Input
+            type="number"
+            min={1}
+            max={20}
+            value={wordCount}
+            onChange={(e) => { setWordCount(Math.min(20, Math.max(1, parseInt(e.target.value) || 1))); setDataKey((k) => k + 1); }}
+            style={{ width: 60, textAlign: "center" }}
+            data-testid="input-word-count"
+          />
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => { setWordCount((prev) => Math.min(20, prev + 1)); setDataKey((k) => k + 1); }}
+            disabled={wordCount >= 20}
+            data-testid="btn-words-plus"
+          >
+            +
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setDataKey((k) => k + 1)}
+            data-testid="btn-regenerate"
+          >
+            Regenerar
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.controlGroup}>
         <div className={styles.controlLabel}>MinWidth Default:</div>
         <div className={styles.controls}>
           {[undefined, 50, 80, 100].map((value) => (
@@ -342,6 +440,9 @@ export function TextWrapDemo() {
           MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default:{" "}
           {getMaxWidthDisplay(globalMaxWidth)} | Scroll:{" "}
           {scrollEnabled ? "si" : "no"} | TextCell: {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
+        </div>
+        <div>
+          Contenido: {lettersPerWord} letras/palabra x {wordCount} palabra(s) = ~{lettersPerWord * wordCount + (wordCount - 1)} caracteres
         </div>
         <div style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
           Nota: Los defaults aplican cuando la columna no tiene valor propio
