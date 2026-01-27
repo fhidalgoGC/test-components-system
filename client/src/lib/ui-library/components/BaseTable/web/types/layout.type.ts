@@ -9,5 +9,6 @@ export interface LayoutConfig {
   minWidth?: number;
   minHeight?: number;
   stickyHeader?: boolean;
+  horizontalScroll?: boolean;
   verticalScroll?: boolean;
 }

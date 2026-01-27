@@ -49,7 +49,9 @@ export const BaseTableView = (props: BaseTableProps) => {
     
     // Scroll horizontal (solo si no usamos layout separado)
     if (!useSeparatedLayout) {
-      if (columnsDefault?.scroll === false) {
+      // Priorizar layout.horizontalScroll, fallback a columnsDefault.scroll
+      const horizontalScroll = layout?.horizontalScroll ?? columnsDefault?.scroll;
+      if (horizontalScroll === false) {
         classes.push(styles.noScroll);
       } else {
         classes.push(styles.withScroll);

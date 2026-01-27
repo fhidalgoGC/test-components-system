@@ -561,6 +561,7 @@ export function TextWrapDemo() {
               heightMode: "fixed",
               height: 400,
               stickyHeader: stickyHeader,
+              horizontalScroll: horizontalScrollEnabled,
               verticalScroll: verticalScrollEnabled,
             },
             columnsDefault: {
