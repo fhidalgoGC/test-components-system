@@ -1,6 +1,13 @@
 import { useState } from "react";
-import { BaseTable, useTableState, TextCell } from "@/lib/ui-library/components/BaseTable";
-import type { ColumnConfig, MaxSize } from "@/lib/ui-library/components/BaseTable";
+import {
+  BaseTable,
+  useTableState,
+  TextCell,
+} from "@/lib/ui-library/components/BaseTable";
+import type {
+  ColumnConfig,
+  MaxSize,
+} from "@/lib/ui-library/components/BaseTable";
 import { Button } from "@/components/ui/button";
 import styles from "../css/BaseTableDemo.module.scss";
 
@@ -10,7 +17,10 @@ interface ColumnSetting {
   maxWidth: MaxSize | undefined | "inherit";
 }
 
-const columnMaxWidthOptions: { value: MaxSize | undefined | "inherit"; label: string }[] = [
+const columnMaxWidthOptions: {
+  value: MaxSize | undefined | "inherit";
+  label: string;
+}[] = [
   { value: "inherit", label: "heredar" },
   { value: undefined, label: "auto" },
   { value: 80, label: "80px" },
@@ -22,6 +32,7 @@ const columnMaxWidthOptions: { value: MaxSize | undefined | "inherit"; label: st
 
 const globalMaxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
   { value: 80, label: "80px" },
+  { value: 100, label: "100px" },
   { value: 120, label: "120px" },
   { value: 200, label: "200px" },
   { value: "stretch", label: "stretch" },
@@ -44,36 +55,76 @@ const allAvailableColumns: ColumnSetting[] = [
 ];
 
 const tableData = [
-  { id: 1, title: "React", description: "UI Library", category: "Frontend", status: "Active", priority: "High" },
-  { id: 2, title: "Node", description: "Runtime", category: "Backend", status: "Active", priority: "Medium" },
-  { id: 3, title: "CSS", description: "Styles", category: "Design", status: "Deprecated", priority: "Low" },
-  { id: 4, title: "TypeScript", description: "Types", category: "Language", status: "Active", priority: "High" },
+  {
+    id: 1,
+    title: "React",
+    description: "UI Library",
+    category: "Frontend",
+    status: "Active",
+    priority: "High",
+  },
+  {
+    id: 2,
+    title: "Node",
+    description: "Runtime",
+    category: "Backend",
+    status: "Active",
+    priority: "Medium",
+  },
+  {
+    id: 3,
+    title: "CSS",
+    description: "Styles",
+    category: "Design",
+    status: "Deprecated",
+    priority: "Low",
+  },
+  {
+    id: 4,
+    title: "TypeScript",
+    description: "Types",
+    category: "Language",
+    status: "Active",
+    priority: "High",
+  },
 ];
 
 export function TextWrapDemo() {
   const tableState = useTableState({ initialState: "success" });
-  const [columnSettings, setColumnSettings] = useState<ColumnSetting[]>(initialColumns);
-  const [globalMinWidth, setGlobalMinWidth] = useState<number | undefined>(undefined);
-  const [globalMaxWidth, setGlobalMaxWidth] = useState<MaxSize | undefined>("stretch");
+  const [columnSettings, setColumnSettings] =
+    useState<ColumnSetting[]>(initialColumns);
+  const [globalMinWidth, setGlobalMinWidth] = useState<number | undefined>(
+    undefined,
+  );
+  const [globalMaxWidth, setGlobalMaxWidth] = useState<MaxSize | undefined>(
+    undefined,
+  );
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
-  const updateColumnMaxWidth = (columnId: string, newMaxWidth: MaxSize | undefined | "inherit") => {
-    setColumnSettings(prev => 
-      prev.map(col => col.id === columnId ? { ...col, maxWidth: newMaxWidth } : col)
+  const updateColumnMaxWidth = (
+    columnId: string,
+    newMaxWidth: MaxSize | undefined | "inherit",
+  ) => {
+    setColumnSettings((prev) =>
+      prev.map((col) =>
+        col.id === columnId ? { ...col, maxWidth: newMaxWidth } : col,
+      ),
     );
   };
 
   const addColumn = () => {
-    const existingIds = columnSettings.map(c => c.id);
-    const nextColumn = allAvailableColumns.find(c => !existingIds.includes(c.id));
+    const existingIds = columnSettings.map((c) => c.id);
+    const nextColumn = allAvailableColumns.find(
+      (c) => !existingIds.includes(c.id),
+    );
     if (nextColumn) {
-      setColumnSettings(prev => [...prev, { ...nextColumn }]);
+      setColumnSettings((prev) => [...prev, { ...nextColumn }]);
     }
   };
 
   const removeColumn = (columnId: string) => {
     if (columnSettings.length > 1) {
-      setColumnSettings(prev => prev.filter(c => c.id !== columnId));
+      setColumnSettings((prev) => prev.filter((c) => c.id !== columnId));
     }
   };
 
@@ -99,17 +150,22 @@ export function TextWrapDemo() {
   return (
     <section className={styles.section}>
       <div className={styles.componentName}>TextWrapDemo.tsx</div>
-      <h2 className={styles.section__title}>7. Configuracion de Anchos por Columna</h2>
+      <h2 className={styles.section__title}>
+        7. Configuracion de Anchos por Columna
+      </h2>
       <p className={styles.section__description}>
-        Prueba diferentes configuraciones de ancho por columna. 
-        Agrega/quita columnas y cambia el maxWidth de cada una.
+        Prueba diferentes configuraciones de ancho por columna. Agrega/quita
+        columnas y cambia el maxWidth de cada una.
       </p>
 
       <div className={styles.controlGroup}>
         <div className={styles.controlLabel}>Columnas:</div>
         <div className={styles.controls}>
           {columnSettings.map((col) => (
-            <div key={col.id} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <div
+              key={col.id}
+              style={{ display: "flex", alignItems: "center", gap: 4 }}
+            >
               <span style={{ fontSize: 12 }}>{col.label}</span>
               <Button
                 variant="destructive"
@@ -200,9 +256,20 @@ export function TextWrapDemo() {
       </div>
 
       <div className={styles.infoBox} style={{ marginBottom: 16 }}>
-        <div style={{ marginBottom: 8 }}><strong>MaxWidth por Columna:</strong></div>
+        <div style={{ marginBottom: 8 }}>
+          <strong>MaxWidth por Columna:</strong>
+        </div>
         {columnSettings.map((col) => (
-          <div key={col.id} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+          <div
+            key={col.id}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 8,
+              flexWrap: "wrap",
+            }}
+          >
             <span style={{ minWidth: 100, fontWeight: 500 }}>{col.label}:</span>
             {columnMaxWidthOptions.map((option) => (
               <Button
@@ -221,10 +288,23 @@ export function TextWrapDemo() {
       </div>
 
       <div className={styles.infoBox}>
-        <div><strong>Resumen:</strong></div>
-        <div>Columnas: {columnSettings.map(c => `${c.label}(${getMaxWidthDisplay(c.maxWidth)})`).join(" | ")}</div>
-        <div>MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default: {getMaxWidthDisplay(globalMaxWidth)} | Scroll: {scrollEnabled ? "si" : "no"}</div>
-        <div style={{ fontSize: 12, color: "#666", marginTop: 4 }}>Nota: Los defaults aplican cuando la columna no tiene valor propio</div>
+        <div>
+          <strong>Resumen:</strong>
+        </div>
+        <div>
+          Columnas:{" "}
+          {columnSettings
+            .map((c) => `${c.label}(${getMaxWidthDisplay(c.maxWidth)})`)
+            .join(" | ")}
+        </div>
+        <div>
+          MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default:{" "}
+          {getMaxWidthDisplay(globalMaxWidth)} | Scroll:{" "}
+          {scrollEnabled ? "si" : "no"}
+        </div>
+        <div style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
+          Nota: Los defaults aplican cuando la columna no tiene valor propio
+        </div>
       </div>
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
