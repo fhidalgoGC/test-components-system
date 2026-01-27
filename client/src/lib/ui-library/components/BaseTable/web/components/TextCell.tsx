@@ -13,7 +13,6 @@ export interface TextCellProps {
 const defaultStyle: CSSProperties = {
   display: 'inline-block',
   width: 80,
-  whiteSpace: 'nowrap',
 };
 
 const textWrapStyles: Record<TextWrapMode, CSSProperties> = {
@@ -29,10 +28,10 @@ const textWrapStyles: Record<TextWrapMode, CSSProperties> = {
   },
 };
 
-export function TextCell({ text, style, className, width, textWrap }: TextCellProps) {
+export function TextCell({ text, style, className, width, textWrap = 'break-word' }: TextCellProps) {
   const mergedStyle: CSSProperties = {
     ...defaultStyle,
-    ...(textWrap ? textWrapStyles[textWrap] : {}),
+    ...textWrapStyles[textWrap],
     ...style,
     ...(width !== undefined ? { width } : {}),
   };
