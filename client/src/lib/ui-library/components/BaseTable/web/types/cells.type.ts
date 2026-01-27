@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export type TextWrap = 'nowrap' | 'wrap' | 'break-word' | 'truncate' | 'component';
+export type TextWrap = 'nowrap' | 'wrap' | 'break-word' | 'truncate' | 'auto' | 'component';
 export type VerticalAlign = 'top' | 'middle' | 'bottom';
 export type HorizontalAlign = 'left' | 'center' | 'right';
 export type RenderType = 'text' | 'component';

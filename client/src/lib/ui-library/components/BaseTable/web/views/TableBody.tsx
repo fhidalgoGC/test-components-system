@@ -65,6 +65,7 @@ export const TableBody = ({
       case 'wrap': return styles.textWrap;
       case 'break-word': return styles.textBreakWord;
       case 'truncate': return styles.textTruncate;
+      case 'auto': return styles.textAuto;
       default: return styles.textNowrap;
     }
   };
@@ -125,7 +126,13 @@ export const TableBody = ({
 
               const cellStyle: React.CSSProperties = {};
               if (minWidth) cellStyle.minWidth = minWidth;
-              if (typeof maxWidth === 'number') cellStyle.maxWidth = maxWidth;
+              if (typeof maxWidth === 'number') {
+                cellStyle.maxWidth = maxWidth;
+              } else if (maxWidth === 'stretch') {
+                cellStyle.width = '100%';
+              } else if (maxWidth === 'container') {
+                cellStyle.maxWidth = '100%';
+              }
 
               const renderContent = () => {
                 if (mergedCellConfig.renderType === 'component' && mergedCellConfig.render) {

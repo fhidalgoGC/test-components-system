@@ -165,7 +165,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
+}
+
+.textAuto {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .stateContainer {

@@ -30,6 +30,7 @@ const textWrapOptions: { value: TextWrap; label: string }[] = [
   { value: "wrap", label: "wrap" },
   { value: "break-word", label: "break-word" },
   { value: "truncate", label: "truncate" },
+  { value: "auto", label: "auto" },
 ];
 
 const minWidthOptions: { value: number | undefined; label: string }[] = [

@@ -92,7 +92,13 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
 
           const style: React.CSSProperties = {};
           if (minWidth) style.minWidth = minWidth;
-          if (typeof maxWidth === 'number') style.maxWidth = maxWidth;
+          if (typeof maxWidth === 'number') {
+            style.maxWidth = maxWidth;
+          } else if (maxWidth === 'stretch') {
+            style.width = '100%';
+          } else if (maxWidth === 'container') {
+            style.maxWidth = '100%';
+          }
 
           const renderContent = () => {
             if (cellConfig?.renderType === 'component' && cellConfig?.render) {
