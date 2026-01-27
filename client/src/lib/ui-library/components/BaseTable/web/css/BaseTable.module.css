@@ -257,14 +257,26 @@
 
 .headerContainer {
   flex-shrink: 0;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   background-color: var(--table-header-bg, #f9fafb);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.headerContainer::-webkit-scrollbar {
+  display: none;
 }
 
 .bodyContainer {
   flex: 1;
   min-height: 0;
   overflow-x: auto;
+}
+
+/* Cuando hay scroll vertical, compensar el ancho de scrollbar en header */
+.headerWithScrollbarCompensation {
+  padding-right: var(--scrollbar-width, 17px);
 }
 
 .bodyWithScroll {
@@ -275,7 +287,7 @@
   overflow-y: hidden;
 }
 
-/* Tablas dentro de layout separado deben usar table-layout fixed */
+/* Tablas dentro de layout separado - usar auto para que se ajusten al contenido */
 .separatedLayout .table {
-  table-layout: fixed;
+  width: 100%;
 }

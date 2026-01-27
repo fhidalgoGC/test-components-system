@@ -51,6 +51,8 @@ export const TableColgroup = ({
           } else {
             style.width = `${100 / stretchCount}%`;
           }
+        } else if (maxWidth === 'container') {
+          style.width = 'auto';
         } else {
           style.width = 80;
         }

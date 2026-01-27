@@ -174,7 +174,7 @@ export const BaseTableView = (props: BaseTableProps) => {
         )}
         
         {/* Header container - fijo arriba */}
-        <div className={styles.headerContainer} ref={headerScrollRef}>
+        <div className={`${styles.headerContainer} ${layout?.verticalScroll ? styles.headerWithScrollbarCompensation : ''}`} ref={headerScrollRef}>
           <table className={tableClasses}>
             <TableColgroup
               columns={columns}
