@@ -157,31 +157,6 @@
   vertical-align: bottom;
 }
 
-.textNowrap {
-  white-space: nowrap;
-}
-
-.textWrap {
-  white-space: normal;
-}
-
-.textBreakWord {
-  word-break: break-word;
-}
-
-.textTruncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.textAuto {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 .stateContainer {
   display: flex;

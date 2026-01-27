@@ -59,14 +59,6 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
     }
   };
 
-  const getTextWrapClass = (wrap?: string) => {
-    switch (wrap) {
-      case 'wrap': return styles.textWrap;
-      case 'break-word': return styles.textBreakWord;
-      case 'truncate': return styles.textTruncate;
-      default: return styles.textNowrap;
-    }
-  };
 
   return (
     <thead className={styles.thead}>
@@ -84,7 +76,6 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
             showDividers && index < visibleColumns.length - 1 && styles.thDivider,
             getAlignClass(cellConfig?.horizontalAlign),
             getValignClass(cellConfig?.verticalAlign),
-            getTextWrapClass(cellConfig?.textWrap),
           ].filter(Boolean).join(' ');
 
           const minWidth = column.minWidth ?? columnsDefault?.minWidth;
@@ -102,7 +93,7 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
           }
 
           const renderContent = () => {
-            if (cellConfig?.renderType === 'component' && cellConfig?.render) {
+            if (cellConfig?.render) {
               return cellConfig.render;
             }
             return column.metadata.columnId;

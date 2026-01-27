@@ -74,7 +74,6 @@ export function BasicTableDemo() {
             cellsDefault: {
               horizontalAlign: "center",
               verticalAlign: "middle",
-              textWrap: "nowrap",
             },
             rowsDefault: {
               hoverable: true,

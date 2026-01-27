@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { MaxSize, RenderType, TextWrap, VerticalAlign, HorizontalAlign } from './cells.type';
+import type { MaxSize, VerticalAlign, HorizontalAlign } from './cells.type';
 
 export interface ColumnMetadata {
   columnId: string;
@@ -7,20 +7,16 @@ export interface ColumnMetadata {
 }
 
 export interface ColumnCellConfig {
-  textWrap?: TextWrap;
   verticalAlign?: VerticalAlign;
   horizontalAlign?: HorizontalAlign;
-  renderType?: RenderType;
   render?: ReactNode | ((value: any, rowData: any, columnId: string) => ReactNode);
 }
 
 export interface ColumnHeaderCellConfig {
-  textWrap?: TextWrap;
   verticalAlign?: VerticalAlign;
   horizontalAlign?: HorizontalAlign;
   sortKey?: string;
   sortable?: boolean;
-  renderType?: RenderType;
   render?: ReactNode;
   clickable?: boolean;
 }

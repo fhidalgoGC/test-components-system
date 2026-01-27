@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BaseTable, useTableState } from "@/lib/ui-library/components/BaseTable";
-import type { ColumnConfig, TextWrap, MaxSize } from "@/lib/ui-library/components/BaseTable";
+import type { ColumnConfig, MaxSize } from "@/lib/ui-library/components/BaseTable";
 import { Button } from "@/components/ui/button";
 import styles from "../css/BaseTableDemo.module.scss";
 
@@ -25,14 +25,6 @@ const longTextData = [
   },
 ];
 
-const textWrapOptions: { value: TextWrap; label: string }[] = [
-  { value: "nowrap", label: "nowrap" },
-  { value: "wrap", label: "wrap" },
-  { value: "break-word", label: "break-word" },
-  { value: "truncate", label: "truncate" },
-  { value: "auto", label: "auto" },
-];
-
 const minWidthOptions: { value: number | undefined; label: string }[] = [
   { value: undefined, label: "Sin minimo" },
   { value: 50, label: "50px" },
@@ -51,45 +43,53 @@ const maxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
   { value: "container", label: "container" },
 ];
 
+const TextCell = ({ value, style }: { value: string; style?: React.CSSProperties }) => (
+  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', ...style }}>
+    {value}
+  </div>
+);
+
 export function TextWrapDemo() {
   const tableState = useTableState({ initialState: "success" });
-  const [currentWrap, setCurrentWrap] = useState<TextWrap>("nowrap");
   const [currentMinWidth, setCurrentMinWidth] = useState<number | undefined>(100);
   const [currentMaxWidth, setCurrentMaxWidth] = useState<MaxSize | undefined>(undefined);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const columns: ColumnConfig[] = [
-    { metadata: { columnId: "id", order: 0 } },
-    { metadata: { columnId: "title", order: 1 } },
-    { metadata: { columnId: "description", order: 2 } },
-    { metadata: { columnId: "category", order: 3 } },
+    { 
+      metadata: { columnId: "id", order: 0 },
+      cell: {
+        render: (value) => <TextCell value={String(value)} />
+      }
+    },
+    { 
+      metadata: { columnId: "title", order: 1 },
+      cell: {
+        render: (value) => <TextCell value={value} style={{ whiteSpace: 'nowrap' }} />
+      }
+    },
+    { 
+      metadata: { columnId: "description", order: 2 },
+      cell: {
+        render: (value) => <TextCell value={value} style={{ whiteSpace: 'nowrap' }} />
+      }
+    },
+    { 
+      metadata: { columnId: "category", order: 3 },
+      cell: {
+        render: (value) => <TextCell value={value} style={{ whiteSpace: 'nowrap' }} />
+      }
+    },
   ];
 
   return (
     <section className={styles.section}>
       <div className={styles.componentName}>TextWrapDemo.tsx</div>
-      <h2 className={styles.section__title}>7. TextWrap, MinWidth y MaxWidth</h2>
+      <h2 className={styles.section__title}>7. MinWidth y MaxWidth con Componentes</h2>
       <p className={styles.section__description}>
-        Prueba las diferentes combinaciones de textWrap, minWidth y maxWidth. 
-        La columna ID tiene valores fijos (50-80px), las demas columnas usan los valores seleccionados.
+        Prueba las diferentes combinaciones de minWidth y maxWidth. 
+        Las celdas ahora renderizan componentes que controlan su propio estilo de texto.
       </p>
-      
-      <div className={styles.controlGroup}>
-        <div className={styles.controlLabel}>TextWrap:</div>
-        <div className={styles.controls}>
-          {textWrapOptions.map((option) => (
-            <Button
-              key={option.value}
-              variant={currentWrap === option.value ? "default" : "outline"}
-              size="sm"
-              onClick={() => setCurrentWrap(option.value)}
-              data-testid={`btn-textwrap-${option.value}`}
-            >
-              {option.label}
-            </Button>
-          ))}
-        </div>
-      </div>
 
       <div className={styles.controlGroup}>
         <div className={styles.controlLabel}>MinWidth:</div>
@@ -148,7 +148,6 @@ export function TextWrapDemo() {
       </div>
       
       <div className={styles.infoBox}>
-        <div><strong>TextWrap:</strong> {currentWrap}</div>
         <div><strong>MinWidth:</strong> {currentMinWidth ?? "sin limite"}</div>
         <div><strong>MaxWidth:</strong> {String(currentMaxWidth) ?? "sin limite"}</div>
         <div><strong>Scroll:</strong> {scrollEnabled ? "true (scroll si no cabe)" : "false (corta si no cabe)"}</div>
@@ -156,7 +155,7 @@ export function TextWrapDemo() {
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
         <BaseTable
-          key={`${currentWrap}-${currentMinWidth}-${currentMaxWidth}-${scrollEnabled}`}
+          key={`${currentMinWidth}-${currentMaxWidth}-${scrollEnabled}`}
           data={longTextData}
           state={tableState.state}
           config={{
@@ -178,7 +177,6 @@ export function TextWrapDemo() {
             cellsDefault: {
               horizontalAlign: "left",
               verticalAlign: "middle",
-              textWrap: currentWrap,
             },
             rowsDefault: {
               hoverable: true,

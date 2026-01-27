@@ -18,7 +18,6 @@ const columns: ColumnConfig[] = [
     metadata: { columnId: "name", order: 0 }, 
     minWidth: 250,
     cell: {
-      renderType: "component",
       render: (value: string, rowData: any) => (
         <div className={styles.userCell}>
           <div className={styles.avatar}>{getInitials(value)}</div>
@@ -35,7 +34,6 @@ const columns: ColumnConfig[] = [
     metadata: { columnId: "status", order: 2 }, 
     minWidth: 100,
     cell: {
-      renderType: "component",
       render: (value: string) => {
         const statusClass = value === "active" 
           ? styles["statusBadge--active"]

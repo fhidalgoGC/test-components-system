@@ -17,10 +17,8 @@ const mergeCellConfig = (
   columnCell?: ColumnCellConfig
 ): ColumnCellConfig => {
   return {
-    textWrap: columnCell?.textWrap ?? cellsDefault?.textWrap,
     verticalAlign: columnCell?.verticalAlign ?? cellsDefault?.verticalAlign,
     horizontalAlign: columnCell?.horizontalAlign ?? cellsDefault?.horizontalAlign,
-    renderType: columnCell?.renderType ?? cellsDefault?.renderType,
     render: columnCell?.render ?? cellsDefault?.render,
   };
 };
@@ -60,15 +58,6 @@ export const TableBody = ({
     }
   };
 
-  const getTextWrapClass = (wrap?: string) => {
-    switch (wrap) {
-      case 'wrap': return styles.textWrap;
-      case 'break-word': return styles.textBreakWord;
-      case 'truncate': return styles.textTruncate;
-      case 'auto': return styles.textAuto;
-      default: return styles.textNowrap;
-    }
-  };
 
   const handleRowClick = (rowIndex: number, rowData: any) => {
     if (isRowClickable) {
@@ -118,7 +107,6 @@ export const TableBody = ({
                 isCellClickable && styles.clickable,
                 getAlignClass(mergedCellConfig.horizontalAlign),
                 getValignClass(mergedCellConfig.verticalAlign),
-                getTextWrapClass(mergedCellConfig.textWrap),
               ].filter(Boolean).join(' ');
 
               const minWidth = column.minWidth ?? columnsDefault?.minWidth;
@@ -136,7 +124,7 @@ export const TableBody = ({
               }
 
               const renderContent = () => {
-                if (mergedCellConfig.renderType === 'component' && mergedCellConfig.render) {
+                if (mergedCellConfig.render) {
                   if (typeof mergedCellConfig.render === 'function') {
                     return mergedCellConfig.render(value, row, columnId);
                   }
