@@ -4,25 +4,10 @@ import type { ColumnConfig, MaxSize } from "@/lib/ui-library/components/BaseTabl
 import { Button } from "@/components/ui/button";
 import styles from "../css/BaseTableDemo.module.scss";
 
-const longTextData = [
-  { 
-    id: 1, 
-    title: "Este es un titulo muy largo que deberia mostrar como se comporta el texto", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    category: "Categoria con nombre extremadamente largo para probar"
-  },
-  { 
-    id: 2, 
-    title: "Otro titulo con bastante texto para ver el comportamiento", 
-    description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    category: "Tecnologia/Desarrollo/Software/Web"
-  },
-  { 
-    id: 3, 
-    title: "TituloSinEspaciosParaProbarBreakWord", 
-    description: "URLMuyLargaSinEspacios/ejemplo/ruta/archivo/documento/version/final/2024",
-    category: "SinEspaciosAquiTampoco"
-  },
+const shortTextData = [
+  { id: 1, title: "React", description: "UI Library", category: "Frontend" },
+  { id: 2, title: "Node", description: "Runtime", category: "Backend" },
+  { id: 3, title: "CSS", description: "Styles", category: "Design" },
 ];
 
 const minWidthOptions: { value: number | undefined; label: string }[] = [
@@ -43,12 +28,6 @@ const maxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
   { value: "container", label: "container" },
 ];
 
-const TextCell = ({ value, style }: { value: string; style?: React.CSSProperties }) => (
-  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', ...style }}>
-    {value}
-  </div>
-);
-
 export function TextWrapDemo() {
   const tableState = useTableState({ initialState: "success" });
   const [currentMinWidth, setCurrentMinWidth] = useState<number | undefined>(100);
@@ -56,30 +35,10 @@ export function TextWrapDemo() {
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const columns: ColumnConfig[] = [
-    { 
-      metadata: { columnId: "id", order: 0 },
-      cell: {
-        render: (value) => <TextCell value={String(value)} />
-      }
-    },
-    { 
-      metadata: { columnId: "title", order: 1 },
-      cell: {
-        render: (value) => <TextCell value={value} style={{ whiteSpace: 'nowrap' }} />
-      }
-    },
-    { 
-      metadata: { columnId: "description", order: 2 },
-      cell: {
-        render: (value) => <TextCell value={value} style={{ whiteSpace: 'nowrap' }} />
-      }
-    },
-    { 
-      metadata: { columnId: "category", order: 3 },
-      cell: {
-        render: (value) => <TextCell value={value} style={{ whiteSpace: 'nowrap' }} />
-      }
-    },
+    { metadata: { columnId: "id", order: 0 } },
+    { metadata: { columnId: "title", order: 1 } },
+    { metadata: { columnId: "description", order: 2 } },
+    { metadata: { columnId: "category", order: 3 } },
   ];
 
   return (
@@ -156,7 +115,7 @@ export function TextWrapDemo() {
       <div className={styles.demoBox} data-testid="demo-textwrap">
         <BaseTable
           key={`${currentMinWidth}-${currentMaxWidth}-${scrollEnabled}`}
-          data={longTextData}
+          data={shortTextData}
           state={tableState.state}
           config={{
             columns,
