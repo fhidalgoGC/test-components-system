@@ -79,10 +79,19 @@ export const BaseTableView = (props: BaseTableProps) => {
       }
     });
     
-    return { stretchCount, fixedWidthTotal };
+    // Si no hay columnas stretch, la última columna absorberá el espacio restante
+    const autoStretchLastColumn = stretchCount === 0 && visibleColumns.length > 0;
+    const lastColumnId = autoStretchLastColumn ? visibleColumns[visibleColumns.length - 1]?.metadata.columnId : null;
+    
+    return { 
+      stretchCount: autoStretchLastColumn ? 1 : stretchCount, 
+      fixedWidthTotal,
+      autoStretchLastColumn,
+      lastColumnId
+    };
   }, [visibleColumns, columnsDefault?.maxWidth]);
 
-  const hasStretchColumns = columnWidthInfo.stretchCount > 0;
+  const hasStretchColumns = columnWidthInfo.stretchCount > 0 || columnWidthInfo.autoStretchLastColumn;
 
   const tableClasses = useMemo(() => {
     const classes = [styles.table];
@@ -121,6 +130,7 @@ export const BaseTableView = (props: BaseTableProps) => {
           callbacks={callbacks}
           stretchCount={columnWidthInfo.stretchCount}
           fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
+          autoStretchLastColumnId={columnWidthInfo.lastColumnId}
         />
 
         {shouldShowData ? (
@@ -134,6 +144,7 @@ export const BaseTableView = (props: BaseTableProps) => {
             callbacks={callbacks}
             stretchCount={columnWidthInfo.stretchCount}
             fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
+            autoStretchLastColumnId={columnWidthInfo.lastColumnId}
           />
         ) : shouldShowStateMessage ? (
           <TableStates

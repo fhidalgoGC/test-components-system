@@ -12,6 +12,7 @@ interface TableBodyProps {
   callbacks?: TableCallbacks;
   stretchCount?: number;
   fixedWidthTotal?: number;
+  autoStretchLastColumnId?: string | null;
 }
 
 const mergeCellConfig = (
@@ -35,6 +36,7 @@ export const TableBody = ({
   callbacks,
   stretchCount = 0,
   fixedWidthTotal = 0,
+  autoStretchLastColumnId,
 }: TableBodyProps) => {
   const visibleColumns = useMemo(() => {
     return columns
@@ -115,10 +117,19 @@ export const TableBody = ({
 
               const minWidth = column.minWidth ?? columnsDefault?.minWidth;
               const maxWidth = column.maxWidth ?? columnsDefault?.maxWidth;
+              const isAutoStretchColumn = autoStretchLastColumnId === column.metadata.columnId;
 
               const cellStyle: React.CSSProperties = {};
               if (minWidth) cellStyle.minWidth = minWidth;
-              if (typeof maxWidth === 'number') {
+              
+              if (isAutoStretchColumn) {
+                // Última columna absorbe espacio restante automáticamente
+                if (fixedWidthTotal > 0) {
+                  cellStyle.width = `calc(100% - ${fixedWidthTotal}px)`;
+                } else {
+                  cellStyle.width = '100%';
+                }
+              } else if (typeof maxWidth === 'number') {
                 cellStyle.maxWidth = maxWidth;
               } else if (maxWidth === 'stretch' && stretchCount > 0) {
                 if (fixedWidthTotal > 0) {
