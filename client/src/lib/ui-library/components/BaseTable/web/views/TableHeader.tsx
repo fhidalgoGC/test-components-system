@@ -94,6 +94,7 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
           if (minWidth) style.minWidth = minWidth;
           if (typeof maxWidth === 'number') {
             style.maxWidth = maxWidth;
+            style.width = maxWidth;
           } else if (maxWidth === 'stretch') {
             style.width = '100%';
           } else if (maxWidth === 'container') {

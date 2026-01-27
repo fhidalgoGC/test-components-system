@@ -128,6 +128,7 @@ export const TableBody = ({
               if (minWidth) cellStyle.minWidth = minWidth;
               if (typeof maxWidth === 'number') {
                 cellStyle.maxWidth = maxWidth;
+                cellStyle.width = maxWidth;
               } else if (maxWidth === 'stretch') {
                 cellStyle.width = '100%';
               } else if (maxWidth === 'container') {
