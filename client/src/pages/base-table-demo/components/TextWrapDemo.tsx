@@ -7,10 +7,20 @@ import styles from "../css/BaseTableDemo.module.scss";
 interface ColumnSetting {
   id: string;
   label: string;
-  maxWidth: MaxSize | undefined;
+  maxWidth: MaxSize | undefined | "inherit";
 }
 
-const maxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
+const columnMaxWidthOptions: { value: MaxSize | undefined | "inherit"; label: string }[] = [
+  { value: "inherit", label: "heredar" },
+  { value: undefined, label: "auto" },
+  { value: 80, label: "80px" },
+  { value: 120, label: "120px" },
+  { value: 200, label: "200px" },
+  { value: "stretch", label: "stretch" },
+  { value: "container", label: "container" },
+];
+
+const globalMaxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
   { value: undefined, label: "auto" },
   { value: 80, label: "80px" },
   { value: 120, label: "120px" },
@@ -20,18 +30,18 @@ const maxWidthOptions: { value: MaxSize | undefined; label: string }[] = [
 ];
 
 const initialColumns: ColumnSetting[] = [
-  { id: "id", label: "ID", maxWidth: 80 },
-  { id: "title", label: "Title", maxWidth: "stretch" },
-  { id: "description", label: "Description", maxWidth: "stretch" },
+  { id: "id", label: "ID", maxWidth: "inherit" },
+  { id: "title", label: "Title", maxWidth: "inherit" },
+  { id: "description", label: "Description", maxWidth: "inherit" },
 ];
 
 const allAvailableColumns: ColumnSetting[] = [
-  { id: "id", label: "ID", maxWidth: 80 },
-  { id: "title", label: "Title", maxWidth: "stretch" },
-  { id: "description", label: "Description", maxWidth: "stretch" },
-  { id: "category", label: "Category", maxWidth: "stretch" },
-  { id: "status", label: "Status", maxWidth: 100 },
-  { id: "priority", label: "Priority", maxWidth: "container" },
+  { id: "id", label: "ID", maxWidth: "inherit" },
+  { id: "title", label: "Title", maxWidth: "inherit" },
+  { id: "description", label: "Description", maxWidth: "inherit" },
+  { id: "category", label: "Category", maxWidth: "inherit" },
+  { id: "status", label: "Status", maxWidth: "inherit" },
+  { id: "priority", label: "Priority", maxWidth: "inherit" },
 ];
 
 const tableData = [
@@ -48,7 +58,7 @@ export function TextWrapDemo() {
   const [globalMaxWidth, setGlobalMaxWidth] = useState<MaxSize | undefined>(undefined);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
-  const updateColumnMaxWidth = (columnId: string, newMaxWidth: MaxSize | undefined) => {
+  const updateColumnMaxWidth = (columnId: string, newMaxWidth: MaxSize | undefined | "inherit") => {
     setColumnSettings(prev => 
       prev.map(col => col.id === columnId ? { ...col, maxWidth: newMaxWidth } : col)
     );
@@ -75,12 +85,13 @@ export function TextWrapDemo() {
   const columns: ColumnConfig[] = columnSettings.map((col, index) => ({
     metadata: { columnId: col.id, order: index },
     header: { cell: { render: <TextCell text={col.label} /> } },
-    maxWidth: col.maxWidth,
+    maxWidth: col.maxWidth === "inherit" ? undefined : col.maxWidth,
   }));
 
   const canAddMore = columnSettings.length < allAvailableColumns.length;
 
-  const getMaxWidthDisplay = (maxWidth: MaxSize | undefined) => {
+  const getMaxWidthDisplay = (maxWidth: MaxSize | undefined | "inherit") => {
+    if (maxWidth === "inherit") return "heredar";
     if (maxWidth === undefined) return "auto";
     if (typeof maxWidth === "number") return `${maxWidth}px`;
     return maxWidth;
@@ -98,6 +109,21 @@ export function TextWrapDemo() {
       <div className={styles.controlGroup}>
         <div className={styles.controlLabel}>Columnas:</div>
         <div className={styles.controls}>
+          {columnSettings.map((col) => (
+            <div key={col.id} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <span style={{ fontSize: 12 }}>{col.label}</span>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => removeColumn(col.id)}
+                disabled={columnSettings.length <= 1}
+                data-testid={`btn-remove-${col.id}`}
+                style={{ fontSize: 10, padding: "2px 6px", height: 20 }}
+              >
+                X
+              </Button>
+            </div>
+          ))}
           <Button
             variant="default"
             size="sm"
@@ -105,7 +131,7 @@ export function TextWrapDemo() {
             disabled={!canAddMore}
             data-testid="btn-add-column"
           >
-            + Agregar Columna
+            +
           </Button>
           <Button
             variant="outline"
@@ -138,7 +164,7 @@ export function TextWrapDemo() {
       <div className={styles.controlGroup}>
         <div className={styles.controlLabel}>MaxWidth Default:</div>
         <div className={styles.controls}>
-          {maxWidthOptions.map((option) => (
+          {globalMaxWidthOptions.map((option) => (
             <Button
               key={String(option.value)}
               variant={globalMaxWidth === option.value ? "default" : "outline"}
@@ -175,11 +201,11 @@ export function TextWrapDemo() {
       </div>
 
       <div className={styles.infoBox} style={{ marginBottom: 16 }}>
-        <div style={{ marginBottom: 8 }}><strong>Configuracion por Columna:</strong></div>
+        <div style={{ marginBottom: 8 }}><strong>MaxWidth por Columna:</strong></div>
         {columnSettings.map((col) => (
           <div key={col.id} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
             <span style={{ minWidth: 100, fontWeight: 500 }}>{col.label}:</span>
-            {maxWidthOptions.map((option) => (
+            {columnMaxWidthOptions.map((option) => (
               <Button
                 key={`${col.id}-${String(option.value)}`}
                 variant={col.maxWidth === option.value ? "default" : "outline"}
@@ -191,16 +217,6 @@ export function TextWrapDemo() {
                 {option.label}
               </Button>
             ))}
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => removeColumn(col.id)}
-              disabled={columnSettings.length <= 1}
-              data-testid={`btn-remove-${col.id}`}
-              style={{ fontSize: 11, padding: "2px 8px", height: 24, marginLeft: 8 }}
-            >
-              X
-            </Button>
           </div>
         ))}
       </div>
