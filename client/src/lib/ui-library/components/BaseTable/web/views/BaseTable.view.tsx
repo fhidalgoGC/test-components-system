@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useCallback } from 'react';
 import type { BaseTableProps, TableState } from '../types';
 import { TableHeader } from './TableHeader';
 import { TableBody } from './TableBody';
 import { TableStates } from './TableStates';
+import { TableColgroup } from './TableColgroup';
 import styles from '../css/BaseTable.module.css';
 
 export const BaseTableView = (props: BaseTableProps) => {
@@ -26,6 +27,18 @@ export const BaseTableView = (props: BaseTableProps) => {
     columns,
   } = config;
 
+  const headerScrollRef = useRef<HTMLDivElement>(null);
+  const bodyScrollRef = useRef<HTMLDivElement>(null);
+
+  // Sincronizar scroll horizontal entre header y body
+  const handleBodyScroll = useCallback(() => {
+    if (headerScrollRef.current && bodyScrollRef.current) {
+      headerScrollRef.current.scrollLeft = bodyScrollRef.current.scrollLeft;
+    }
+  }, []);
+
+  const useSeparatedLayout = layout?.stickyHeader && layout?.heightMode === 'fixed' && layout?.height;
+
   const wrapperClasses = useMemo(() => {
     const classes = [styles.tableWrapper];
     
@@ -34,24 +47,26 @@ export const BaseTableView = (props: BaseTableProps) => {
     if (layout?.heightMode === 'full') classes.push(styles.fullHeight);
     if (layout?.heightMode === 'auto') classes.push(styles.autoHeight);
     
-    // Scroll horizontal
-    if (columnsDefault?.scroll === false) {
-      classes.push(styles.noScroll);
-    } else {
-      classes.push(styles.withScroll);
-    }
-    
-    // Scroll vertical (solo cuando heightMode es 'fixed' con altura definida)
-    if (layout?.heightMode === 'fixed' && layout?.height) {
-      classes.push(styles.withVerticalScroll);
-    } else {
-      classes.push(styles.noVerticalScroll);
+    // Scroll horizontal (solo si no usamos layout separado)
+    if (!useSeparatedLayout) {
+      if (columnsDefault?.scroll === false) {
+        classes.push(styles.noScroll);
+      } else {
+        classes.push(styles.withScroll);
+      }
+      
+      // Scroll vertical (solo cuando heightMode es 'fixed' con altura definida y no separado)
+      if (layout?.heightMode === 'fixed' && layout?.height) {
+        classes.push(styles.withVerticalScroll);
+      } else {
+        classes.push(styles.noVerticalScroll);
+      }
     }
     
     if (className) classes.push(className);
     
     return classes.join(' ');
-  }, [layout, columnsDefault?.scroll, className]);
+  }, [layout, columnsDefault?.scroll, className, useSeparatedLayout]);
 
   const wrapperStyle = useMemo(() => {
     const style: React.CSSProperties = {};
@@ -59,14 +74,27 @@ export const BaseTableView = (props: BaseTableProps) => {
     if (layout?.widthMode === 'fixed' && layout?.width) {
       style.width = typeof layout.width === 'number' ? `${layout.width}px` : layout.width;
     }
-    if (layout?.heightMode === 'fixed' && layout?.height) {
+    // Solo aplicar altura al wrapper si no usamos layout separado
+    if (!useSeparatedLayout && layout?.heightMode === 'fixed' && layout?.height) {
       style.height = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
     }
     if (layout?.minWidth) style.minWidth = layout.minWidth;
     if (layout?.minHeight) style.minHeight = layout.minHeight;
     
     return style;
-  }, [layout]);
+  }, [layout, useSeparatedLayout]);
+
+  const separatedContainerStyle = useMemo(() => {
+    if (!useSeparatedLayout) return {};
+    const style: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+    };
+    if (layout?.height) {
+      style.height = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
+    }
+    return style;
+  }, [layout, useSeparatedLayout]);
 
   const visibleColumns = useMemo(() => {
     return columns.filter(
@@ -120,6 +148,84 @@ export const BaseTableView = (props: BaseTableProps) => {
                          behaviors?.states?.loading?.defaultText || 
                          'Loading...';
 
+  // Layout separado: header fijo arriba, body con scroll abajo
+  if (useSeparatedLayout) {
+    return (
+      <div className={`${wrapperClasses} ${styles.tableContainer} ${styles.separatedLayout}`} style={separatedContainerStyle} data-testid={dataTestId}>
+        {isLoadingWithData && (
+          <div className={styles.loadingOverlay} data-testid="table-loading-overlay">
+            <div className={styles.loadingOverlayContent}>
+              <div className={styles.loadingOverlaySpinner} />
+              <span className={styles.loadingOverlayText}>{loadingMessage}</span>
+            </div>
+          </div>
+        )}
+        
+        {/* Header container - fijo arriba */}
+        <div className={styles.headerContainer} ref={headerScrollRef}>
+          <table className={tableClasses}>
+            <TableColgroup
+              columns={columns}
+              columnsDefault={columnsDefault}
+              stretchCount={columnWidthInfo.stretchCount}
+              fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
+              autoStretchLastColumnId={columnWidthInfo.lastColumnId}
+            />
+            <TableHeader
+              columns={columns}
+              headersDefault={headersDefault}
+              columnsDefault={columnsDefault}
+              callbacks={callbacks}
+              stretchCount={columnWidthInfo.stretchCount}
+              fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
+              autoStretchLastColumnId={columnWidthInfo.lastColumnId}
+              stickyHeader={false}
+            />
+          </table>
+        </div>
+
+        {/* Body container - con scroll vertical */}
+        <div 
+          className={styles.bodyContainer} 
+          ref={bodyScrollRef}
+          onScroll={handleBodyScroll}
+        >
+          <table className={tableClasses}>
+            <TableColgroup
+              columns={columns}
+              columnsDefault={columnsDefault}
+              stretchCount={columnWidthInfo.stretchCount}
+              fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
+              autoStretchLastColumnId={columnWidthInfo.lastColumnId}
+            />
+            {shouldShowData ? (
+              <TableBody
+                data={data}
+                columns={columns}
+                rowsDefault={rowsDefault}
+                columnsDefault={columnsDefault}
+                cellsDefault={cellsDefault}
+                behaviors={behaviors}
+                callbacks={callbacks}
+                stretchCount={columnWidthInfo.stretchCount}
+                fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
+                autoStretchLastColumnId={columnWidthInfo.lastColumnId}
+              />
+            ) : shouldShowStateMessage ? (
+              <TableStates
+                state={state}
+                statesConfig={behaviors?.states}
+                error={error}
+                columnsCount={visibleColumnsCount}
+              />
+            ) : null}
+          </table>
+        </div>
+      </div>
+    );
+  }
+
+  // Layout normal: una sola tabla
   return (
     <div className={`${wrapperClasses} ${styles.tableContainer}`} style={wrapperStyle} data-testid={dataTestId}>
       {isLoadingWithData && (

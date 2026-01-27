@@ -249,3 +249,26 @@
   color: var(--table-state-text, #6b7280);
   font-size: 14px;
 }
+
+/* Layout separado para sticky header */
+.separatedLayout {
+  overflow: hidden;
+}
+
+.headerContainer {
+  flex-shrink: 0;
+  overflow: hidden;
+  background-color: var(--table-header-bg, #f9fafb);
+}
+
+.bodyContainer {
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/* Tablas dentro de layout separado deben usar table-layout fixed */
+.separatedLayout .table {
+  table-layout: fixed;
+}
