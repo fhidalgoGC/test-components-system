@@ -100,7 +100,7 @@ export function TextWrapDemo() {
   const [globalMaxWidth, setGlobalMaxWidth] = useState<MaxSize | undefined>(
     undefined,
   );
-  const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const [horizontalScrollEnabled, setHorizontalScrollEnabled] = useState<boolean>(true);
   const [verticalScrollEnabled, setVerticalScrollEnabled] =
     useState<boolean>(false);
   const [stickyHeader, setStickyHeader] = useState<boolean>(true);
@@ -423,17 +423,17 @@ export function TextWrapDemo() {
         <div className={styles.controlLabel}>Scroll Horizontal:</div>
         <div className={styles.controls}>
           <Button
-            variant={scrollEnabled ? "default" : "outline"}
+            variant={horizontalScrollEnabled ? "default" : "outline"}
             size="sm"
-            onClick={() => setScrollEnabled(true)}
+            onClick={() => setHorizontalScrollEnabled(true)}
             data-testid="btn-scroll-true"
           >
             true
           </Button>
           <Button
-            variant={!scrollEnabled ? "default" : "outline"}
+            variant={!horizontalScrollEnabled ? "default" : "outline"}
             size="sm"
-            onClick={() => setScrollEnabled(false)}
+            onClick={() => setHorizontalScrollEnabled(false)}
             data-testid="btn-scroll-false"
           >
             false
@@ -530,7 +530,7 @@ export function TextWrapDemo() {
         <div>
           MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default:{" "}
           {getMaxWidthDisplay(globalMaxWidth)} | Scroll H:{" "}
-          {scrollEnabled ? "si" : "no"} | Scroll V:{" "}
+          {horizontalScrollEnabled ? "si" : "no"} | Scroll V:{" "}
           {verticalScrollEnabled ? "400px" : "no"} | TextCell:{" "}
           {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
         </div>
@@ -548,7 +548,7 @@ export function TextWrapDemo() {
           key={
             JSON.stringify(columnSettings) +
             globalMinWidth +
-            scrollEnabled +
+            horizontalScrollEnabled +
             textCellWidth +
             verticalScrollEnabled
           }
@@ -566,7 +566,7 @@ export function TextWrapDemo() {
             columnsDefault: {
               minWidth: globalMinWidth,
               maxWidth: globalMaxWidth,
-              scroll: scrollEnabled,
+              scroll: horizontalScrollEnabled,
             },
             headersDefault: {
               cell: {
