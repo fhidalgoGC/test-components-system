@@ -72,6 +72,7 @@ export function TextWrapDemo() {
     undefined,
   );
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const [textCellWidth, setTextCellWidth] = useState<number | "auto">(80);
 
   const tableData = useMemo(
     () => generateTableData(rowCount, columnSettings.length),
@@ -257,6 +258,23 @@ export function TextWrapDemo() {
       </div>
 
       <div className={styles.controlGroup}>
+        <div className={styles.controlLabel}>TextCell Width:</div>
+        <div className={styles.controls}>
+          {["auto" as const, 40, 60, 80, 100, 120, 150].map((value) => (
+            <Button
+              key={String(value)}
+              variant={textCellWidth === value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setTextCellWidth(value)}
+              data-testid={`btn-textcell-width-${value}`}
+            >
+              {value === "auto" ? "auto" : `${value}px`}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.controlGroup}>
         <div className={styles.controlLabel}>Scroll:</div>
         <div className={styles.controls}>
           <Button
@@ -323,7 +341,7 @@ export function TextWrapDemo() {
         <div>
           MinWidth Default: {globalMinWidth ?? "ninguno"} | MaxWidth Default:{" "}
           {getMaxWidthDisplay(globalMaxWidth)} | Scroll:{" "}
-          {scrollEnabled ? "si" : "no"}
+          {scrollEnabled ? "si" : "no"} | TextCell: {textCellWidth === "auto" ? "auto" : `${textCellWidth}px`}
         </div>
         <div style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
           Nota: Los defaults aplican cuando la columna no tiene valor propio
@@ -332,7 +350,7 @@ export function TextWrapDemo() {
 
       <div className={styles.demoBox} data-testid="demo-textwrap">
         <BaseTable
-          key={JSON.stringify(columnSettings) + globalMinWidth + scrollEnabled}
+          key={JSON.stringify(columnSettings) + globalMinWidth + scrollEnabled + textCellWidth}
           data={tableData}
           state={tableState.state}
           config={{
@@ -354,7 +372,7 @@ export function TextWrapDemo() {
             cellsDefault: {
               horizontalAlign: "left",
               verticalAlign: "middle",
-              render: (value) => <TextCell text={value} />,
+              render: (value) => <TextCell text={value} width={textCellWidth} />,
             },
             rowsDefault: {
               hoverable: true,
