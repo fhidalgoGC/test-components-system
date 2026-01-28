@@ -9,6 +9,7 @@ export type {
   LayoutConfig,
   WidthMode,
   HeightMode,
+  CellHeightMode,
   HeadersDefaultConfig,
   HeaderCellConfig,
   FooterDefaultConfig,

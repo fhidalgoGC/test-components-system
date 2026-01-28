@@ -18,6 +18,8 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
 
   const isEnabled = headersDefault?.enabled !== false;
   const showDividers = headersDefault?.dividers !== false;
+  const headerHeight = headersDefault?.height;
+  const headerHeightMode = headersDefault?.heightMode ?? 'auto';
 
   const visibleColumns = useMemo(() => {
     return columns
@@ -64,9 +66,19 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
   };
 
 
+  const headerRowStyle: React.CSSProperties = {};
+  if (headerHeight !== undefined) {
+    if (headerHeightMode === 'fixed') {
+      headerRowStyle.height = headerHeight;
+      headerRowStyle.overflow = 'hidden';
+    } else {
+      headerRowStyle.minHeight = headerHeight;
+    }
+  }
+
   return (
     <thead className={`${styles.thead} ${stickyHeader ? styles.theadSticky : ''}`}>
-      <tr className={styles.theadRow}>
+      <tr className={styles.theadRow} style={headerRowStyle}>
         {visibleColumns.map((column, index) => {
           const columnCell = column.header?.cell;
           const defaultCell = headersDefault?.cell;

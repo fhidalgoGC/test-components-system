@@ -9,6 +9,7 @@ import type {
   MaxSize,
   HorizontalAlign,
   VerticalAlign,
+  CellHeightMode,
 } from "@/lib/ui-library/components/BaseTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -114,6 +115,10 @@ export function TextWrapDemo() {
   const [headerVAlign, setHeaderVAlign] = useState<VerticalAlign>('middle');
   const [cellHAlign, setCellHAlign] = useState<HorizontalAlign>('left');
   const [cellVAlign, setCellVAlign] = useState<VerticalAlign>('middle');
+  const [headerHeight, setHeaderHeight] = useState<number>(60);
+  const [headerHeightMode, setHeaderHeightMode] = useState<CellHeightMode>('fixed');
+  const [rowHeight, setRowHeight] = useState<number>(50);
+  const [rowHeightMode, setRowHeightMode] = useState<CellHeightMode>('fixed');
 
   const tableData = useMemo(
     () =>
@@ -315,6 +320,33 @@ export function TextWrapDemo() {
         </div>
       </div>
 
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 24px', marginBottom: 12, alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Header Height:</span>
+          {[30, 40, 50, 60, 80].map((h) => (
+            <Button key={h} variant={headerHeight === h ? "default" : "outline"} size="sm" onClick={() => setHeaderHeight(h)} data-testid={`btn-header-height-${h}`}>{h}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Mode:</span>
+          {(['fixed', 'auto'] as CellHeightMode[]).map((mode) => (
+            <Button key={mode} variant={headerHeightMode === mode ? "default" : "outline"} size="sm" onClick={() => setHeaderHeightMode(mode)} data-testid={`btn-header-hmode-${mode}`}>{mode}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Row Height:</span>
+          {[30, 40, 50, 60, 80].map((h) => (
+            <Button key={h} variant={rowHeight === h ? "default" : "outline"} size="sm" onClick={() => setRowHeight(h)} data-testid={`btn-row-height-${h}`}>{h}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Mode:</span>
+          {(['fixed', 'auto'] as CellHeightMode[]).map((mode) => (
+            <Button key={mode} variant={rowHeightMode === mode ? "default" : "outline"} size="sm" onClick={() => setRowHeightMode(mode)} data-testid={`btn-row-hmode-${mode}`}>{mode}</Button>
+          ))}
+        </div>
+      </div>
+
       <div className={styles.infoBox} style={{ marginBottom: 16 }}>
         <div style={{ marginBottom: 8 }}>
           <strong>MaxWidth por Columna:</strong>
@@ -400,6 +432,8 @@ export function TextWrapDemo() {
               scroll: horizontalScrollEnabled,
             },
             headersDefault: {
+              height: headerHeight,
+              heightMode: headerHeightMode,
               cell: {
                 horizontalAlign: headerHAlign,
                 verticalAlign: headerVAlign,
@@ -413,6 +447,8 @@ export function TextWrapDemo() {
               ),
             },
             rowsDefault: {
+              height: rowHeight,
+              heightMode: rowHeightMode,
               hoverable: true,
             },
           }}

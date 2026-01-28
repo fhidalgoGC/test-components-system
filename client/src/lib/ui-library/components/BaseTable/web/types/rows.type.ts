@@ -1,6 +1,8 @@
-import type { MaxSize } from './cells.type';
+import type { MaxSize, CellHeightMode } from './cells.type';
 
 export interface RowsDefaultConfig {
+  height?: number | string;
+  heightMode?: CellHeightMode;
   minHeight?: number;
   maxHeight?: MaxSize;
   maxVisibleRows?: number;

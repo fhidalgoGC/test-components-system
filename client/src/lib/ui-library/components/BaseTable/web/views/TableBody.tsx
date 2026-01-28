@@ -78,6 +78,8 @@ export const TableBody = ({
     }
   };
 
+  const rowHeight = rowsDefault?.height;
+  const rowHeightMode = rowsDefault?.heightMode ?? 'auto';
   const minHeight = rowsDefault?.minHeight;
   const maxHeight = rowsDefault?.maxHeight;
 
@@ -91,7 +93,15 @@ export const TableBody = ({
         ].filter(Boolean).join(' ');
 
         const rowStyle: React.CSSProperties = {};
-        if (minHeight) rowStyle.minHeight = minHeight;
+        if (rowHeight !== undefined) {
+          if (rowHeightMode === 'fixed') {
+            rowStyle.height = rowHeight;
+            rowStyle.overflow = 'hidden';
+          } else {
+            rowStyle.minHeight = rowHeight;
+          }
+        }
+        if (minHeight && !rowHeight) rowStyle.minHeight = minHeight;
         if (typeof maxHeight === 'number') rowStyle.maxHeight = maxHeight;
 
         return (
