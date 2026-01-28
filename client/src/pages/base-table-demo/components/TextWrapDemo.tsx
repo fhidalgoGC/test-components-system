@@ -119,6 +119,8 @@ export function TextWrapDemo() {
   const [headerHeightMode, setHeaderHeightMode] = useState<CellHeightMode>('fixed');
   const [rowHeight, setRowHeight] = useState<number>(50);
   const [rowHeightMode, setRowHeightMode] = useState<CellHeightMode>('fixed');
+  const [headerDividers, setHeaderDividers] = useState<boolean>(true);
+  const [rowDividers, setRowDividers] = useState<boolean>(true);
 
   const tableData = useMemo(
     () =>
@@ -347,6 +349,19 @@ export function TextWrapDemo() {
         </div>
       </div>
 
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 24px', marginBottom: 12, alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Header Dividers:</span>
+          <Button variant={headerDividers ? "default" : "outline"} size="sm" onClick={() => setHeaderDividers(true)} data-testid="btn-header-dividers-on">on</Button>
+          <Button variant={!headerDividers ? "default" : "outline"} size="sm" onClick={() => setHeaderDividers(false)} data-testid="btn-header-dividers-off">off</Button>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Row Dividers:</span>
+          <Button variant={rowDividers ? "default" : "outline"} size="sm" onClick={() => setRowDividers(true)} data-testid="btn-row-dividers-on">on</Button>
+          <Button variant={!rowDividers ? "default" : "outline"} size="sm" onClick={() => setRowDividers(false)} data-testid="btn-row-dividers-off">off</Button>
+        </div>
+      </div>
+
       <div className={styles.infoBox} style={{ marginBottom: 16 }}>
         <div style={{ marginBottom: 8 }}>
           <strong>MaxWidth por Columna:</strong>
@@ -434,6 +449,7 @@ export function TextWrapDemo() {
             headersDefault: {
               height: headerHeight,
               heightMode: headerHeightMode,
+              dividers: headerDividers,
               cell: {
                 horizontalAlign: headerHAlign,
                 verticalAlign: headerVAlign,
@@ -449,6 +465,7 @@ export function TextWrapDemo() {
             rowsDefault: {
               height: rowHeight,
               heightMode: rowHeightMode,
+              dividers: rowDividers,
               hoverable: true,
             },
           }}

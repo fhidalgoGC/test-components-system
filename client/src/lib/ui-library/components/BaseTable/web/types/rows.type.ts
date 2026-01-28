@@ -8,4 +8,5 @@ export interface RowsDefaultConfig {
   maxVisibleRows?: number;
   scroll?: boolean;
   hoverable?: boolean;
+  dividers?: boolean;
 }

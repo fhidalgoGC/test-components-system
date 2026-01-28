@@ -155,6 +155,10 @@
   color: var(--table-cell-text, #1f2937);
 }
 
+.tdDivider {
+  border-right: 1px solid var(--table-border, #e5e7eb);
+}
+
 .td.clickable {
   cursor: pointer;
 }

@@ -82,6 +82,7 @@ export const TableBody = ({
   const rowHeightMode = rowsDefault?.heightMode ?? 'auto';
   const minHeight = rowsDefault?.minHeight;
   const maxHeight = rowsDefault?.maxHeight;
+  const showDividers = rowsDefault?.dividers !== false;
 
   return (
     <tbody className={styles.tbody}>
@@ -112,7 +113,7 @@ export const TableBody = ({
             onClick={() => handleRowClick(rowIndex, row)}
             data-testid={`tr-${rowIndex}`}
           >
-            {visibleColumns.map((column) => {
+            {visibleColumns.map((column, colIndex) => {
               const columnId = column.metadata.columnId;
               const value = row[columnId];
               
@@ -123,6 +124,7 @@ export const TableBody = ({
                 isCellClickable && styles.clickable,
                 getAlignClass(mergedCellConfig.horizontalAlign),
                 getValignClass(mergedCellConfig.verticalAlign),
+                showDividers && colIndex < visibleColumns.length - 1 && styles.tdDivider,
               ].filter(Boolean).join(' ');
 
               const minWidth = column.minWidth ?? columnsDefault?.minWidth;
