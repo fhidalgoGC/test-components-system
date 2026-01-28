@@ -57,9 +57,9 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
 
   const getValignClass = (align?: string) => {
     switch (align) {
-      case 'top': return styles.valignTop;
-      case 'bottom': return styles.valignBottom;
-      default: return styles.valignMiddle;
+      case 'top': return styles.thValignTop;
+      case 'bottom': return styles.thValignBottom;
+      default: return styles.thValignMiddle;
     }
   };
 
