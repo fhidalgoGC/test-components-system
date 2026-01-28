@@ -19,12 +19,9 @@ export interface HeaderCellProps {
 
 const MIN_HEIGHT = 20;
 
-const DEFAULT_PADDING = '12px 16px';
-
 const defaultStyle: CSSProperties = {
   display: 'inline-block',
   minHeight: MIN_HEIGHT,
-  padding: DEFAULT_PADDING,
   boxSizing: 'border-box',
   backgroundColor: '#c3e6cb', // TEMP: verde claro para visualizar
 };

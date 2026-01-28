@@ -1,7 +1,7 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties } from "react";
 
-export type TextWrapMode = 'break-word' | 'truncate';
-export type HeightMode = 'fixed' | 'auto';
+export type TextWrapMode = "break-word" | "truncate";
+export type HeightMode = "fixed" | "auto";
 
 export interface TextCellProps {
   text: string | number;
@@ -18,37 +18,45 @@ export interface TextCellProps {
 
 const MIN_HEIGHT = 20;
 
-const DEFAULT_PADDING = '12px 16px';
-
 const defaultStyle: CSSProperties = {
-  display: 'inline-block',
+  display: "inline-block",
   width: 80,
   minHeight: MIN_HEIGHT,
-  padding: DEFAULT_PADDING,
-  boxSizing: 'border-box',
-  backgroundColor: '#d4edda', // TEMP: verde claro para visualizar
+  boxSizing: "border-box",
+  backgroundColor: "#d4edda", // TEMP: verde claro para visualizar
 };
 
 const textWrapStyles: Record<TextWrapMode, CSSProperties> = {
-  'break-word': {
-    whiteSpace: 'normal',
-    wordWrap: 'break-word',
-    overflowWrap: 'break-word',
+  "break-word": {
+    whiteSpace: "normal",
+    wordWrap: "break-word",
+    overflowWrap: "break-word",
   },
-  'truncate': {
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
+  truncate: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
 };
 
-export function TextCell({ text, style, className, width, height, heightMode = 'auto', textWrap = 'break-word', padding, paddingX, paddingY }: TextCellProps) {
+export function TextCell({
+  text,
+  style,
+  className,
+  width,
+  height,
+  heightMode = "auto",
+  textWrap = "break-word",
+  padding,
+  paddingX,
+  paddingY,
+}: TextCellProps) {
   const heightStyles: CSSProperties = {};
-  
+
   if (height !== undefined) {
-    if (heightMode === 'fixed') {
+    if (heightMode === "fixed") {
       heightStyles.height = height;
-      heightStyles.overflow = 'hidden';
+      heightStyles.overflow = "hidden";
     } else {
       heightStyles.minHeight = height;
     }
