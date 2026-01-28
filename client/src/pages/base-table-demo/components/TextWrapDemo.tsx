@@ -3,6 +3,7 @@ import {
   BaseTable,
   useTableState,
   TextCell,
+  HeaderCell,
 } from "@/lib/ui-library/components/BaseTable";
 import type {
   ColumnConfig,
@@ -108,6 +109,10 @@ export function TextWrapDemo() {
     useState<boolean>(false);
   const [stickyHeader, setStickyHeader] = useState<boolean>(true);
   const [textCellWidth, setTextCellWidth] = useState<number | "auto">(80);
+  const [textCellHeight, setTextCellHeight] = useState<number>(30);
+  const [textCellHeightMode, setTextCellHeightMode] = useState<CellHeightMode>('auto');
+  const [headerCellHeight, setHeaderCellHeight] = useState<number>(40);
+  const [headerCellHeightMode, setHeaderCellHeightMode] = useState<CellHeightMode>('auto');
   const [lettersPerWord, setLettersPerWord] = useState<number>(5);
   const [wordCount, setWordCount] = useState<number>(1);
   const [dataKey, setDataKey] = useState<number>(0);
@@ -266,7 +271,7 @@ export function TextWrapDemo() {
         </div>
 
         <div className={styles.controlGroup} style={{ marginBottom: 0 }}>
-          <div className={styles.controlLabel}>TextCell:</div>
+          <div className={styles.controlLabel}>TextCell Width:</div>
           <div className={styles.controls}>
             {["auto" as const, 40, 80, 120, 150].map((value) => (
               <Button key={String(value)} variant={textCellWidth === value ? "default" : "outline"} size="sm" onClick={() => setTextCellWidth(value)} data-testid={`btn-textcell-width-${value}`}>
@@ -274,6 +279,33 @@ export function TextWrapDemo() {
               </Button>
             ))}
           </div>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 24px', marginBottom: 12, alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>TextCell Height:</span>
+          {[20, 30, 40, 50, 60].map((h) => (
+            <Button key={h} variant={textCellHeight === h ? "default" : "outline"} size="sm" onClick={() => setTextCellHeight(h)} data-testid={`btn-textcell-height-${h}`}>{h}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Mode:</span>
+          {(['auto', 'fixed'] as CellHeightMode[]).map((mode) => (
+            <Button key={mode} variant={textCellHeightMode === mode ? "default" : "outline"} size="sm" onClick={() => setTextCellHeightMode(mode)} data-testid={`btn-textcell-hmode-${mode}`}>{mode}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>HeaderCell Height:</span>
+          {[20, 30, 40, 50, 60].map((h) => (
+            <Button key={h} variant={headerCellHeight === h ? "default" : "outline"} size="sm" onClick={() => setHeaderCellHeight(h)} data-testid={`btn-headercell-height-${h}`}>{h}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Mode:</span>
+          {(['auto', 'fixed'] as CellHeightMode[]).map((mode) => (
+            <Button key={mode} variant={headerCellHeightMode === mode ? "default" : "outline"} size="sm" onClick={() => setHeaderCellHeightMode(mode)} data-testid={`btn-headercell-hmode-${mode}`}>{mode}</Button>
+          ))}
         </div>
       </div>
 
@@ -453,13 +485,25 @@ export function TextWrapDemo() {
               cell: {
                 horizontalAlign: headerHAlign,
                 verticalAlign: headerVAlign,
+                render: (
+                  <HeaderCell 
+                    text="Header" 
+                    height={headerCellHeight} 
+                    heightMode={headerCellHeightMode} 
+                  />
+                ),
               },
             },
             cellsDefault: {
               horizontalAlign: cellHAlign,
               verticalAlign: cellVAlign,
               render: (value) => (
-                <TextCell text={value} width={textCellWidth} />
+                <TextCell 
+                  text={value} 
+                  width={textCellWidth} 
+                  height={textCellHeight}
+                  heightMode={textCellHeightMode}
+                />
               ),
             },
             rowsDefault: {
