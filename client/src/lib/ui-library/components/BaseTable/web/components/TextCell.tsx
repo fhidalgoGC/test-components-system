@@ -11,14 +11,21 @@ export interface TextCellProps {
   height?: number | string;
   heightMode?: HeightMode;
   textWrap?: TextWrapMode;
+  padding?: number | string;
+  paddingX?: number | string;
+  paddingY?: number | string;
 }
 
 const MIN_HEIGHT = 20;
+
+const DEFAULT_PADDING = '12px 16px';
 
 const defaultStyle: CSSProperties = {
   display: 'inline-block',
   width: 80,
   minHeight: MIN_HEIGHT,
+  padding: DEFAULT_PADDING,
+  boxSizing: 'border-box',
   backgroundColor: '#d4edda', // TEMP: verde claro para visualizar
 };
 
@@ -35,7 +42,7 @@ const textWrapStyles: Record<TextWrapMode, CSSProperties> = {
   },
 };
 
-export function TextCell({ text, style, className, width, height, heightMode = 'auto', textWrap = 'break-word' }: TextCellProps) {
+export function TextCell({ text, style, className, width, height, heightMode = 'auto', textWrap = 'break-word', padding, paddingX, paddingY }: TextCellProps) {
   const heightStyles: CSSProperties = {};
   
   if (height !== undefined) {
@@ -47,10 +54,24 @@ export function TextCell({ text, style, className, width, height, heightMode = '
     }
   }
 
+  const paddingStyles: CSSProperties = {};
+  if (padding !== undefined) {
+    paddingStyles.padding = padding;
+  }
+  if (paddingX !== undefined) {
+    paddingStyles.paddingLeft = paddingX;
+    paddingStyles.paddingRight = paddingX;
+  }
+  if (paddingY !== undefined) {
+    paddingStyles.paddingTop = paddingY;
+    paddingStyles.paddingBottom = paddingY;
+  }
+
   const mergedStyle: CSSProperties = {
     ...defaultStyle,
     ...textWrapStyles[textWrap],
     ...heightStyles,
+    ...paddingStyles,
     ...style,
     ...(width !== undefined ? { width } : {}),
   };
