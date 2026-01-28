@@ -7,6 +7,8 @@ import {
 import type {
   ColumnConfig,
   MaxSize,
+  HorizontalAlign,
+  VerticalAlign,
 } from "@/lib/ui-library/components/BaseTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -108,6 +110,10 @@ export function TextWrapDemo() {
   const [lettersPerWord, setLettersPerWord] = useState<number>(5);
   const [wordCount, setWordCount] = useState<number>(1);
   const [dataKey, setDataKey] = useState<number>(0);
+  const [headerHAlign, setHeaderHAlign] = useState<HorizontalAlign>('left');
+  const [headerVAlign, setHeaderVAlign] = useState<VerticalAlign>('middle');
+  const [cellHAlign, setCellHAlign] = useState<HorizontalAlign>('left');
+  const [cellVAlign, setCellVAlign] = useState<VerticalAlign>('middle');
 
   const tableData = useMemo(
     () =>
@@ -282,6 +288,33 @@ export function TextWrapDemo() {
         </div>
       </div>
 
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 24px', marginBottom: 12, alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Header H:</span>
+          {(['left', 'center', 'right'] as HorizontalAlign[]).map((align) => (
+            <Button key={align} variant={headerHAlign === align ? "default" : "outline"} size="sm" onClick={() => setHeaderHAlign(align)} data-testid={`btn-header-halign-${align}`}>{align}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Header V:</span>
+          {(['top', 'middle', 'bottom'] as VerticalAlign[]).map((align) => (
+            <Button key={align} variant={headerVAlign === align ? "default" : "outline"} size="sm" onClick={() => setHeaderVAlign(align)} data-testid={`btn-header-valign-${align}`}>{align}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Cell H:</span>
+          {(['left', 'center', 'right'] as HorizontalAlign[]).map((align) => (
+            <Button key={align} variant={cellHAlign === align ? "default" : "outline"} size="sm" onClick={() => setCellHAlign(align)} data-testid={`btn-cell-halign-${align}`}>{align}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Cell V:</span>
+          {(['top', 'middle', 'bottom'] as VerticalAlign[]).map((align) => (
+            <Button key={align} variant={cellVAlign === align ? "default" : "outline"} size="sm" onClick={() => setCellVAlign(align)} data-testid={`btn-cell-valign-${align}`}>{align}</Button>
+          ))}
+        </div>
+      </div>
+
       <div className={styles.infoBox} style={{ marginBottom: 16 }}>
         <div style={{ marginBottom: 8 }}>
           <strong>MaxWidth por Columna:</strong>
@@ -368,12 +401,13 @@ export function TextWrapDemo() {
             },
             headersDefault: {
               cell: {
-                horizontalAlign: "center",
+                horizontalAlign: headerHAlign,
+                verticalAlign: headerVAlign,
               },
             },
             cellsDefault: {
-              horizontalAlign: "left",
-              verticalAlign: "middle",
+              horizontalAlign: cellHAlign,
+              verticalAlign: cellVAlign,
               render: (value) => (
                 <TextCell text={value} width={textCellWidth} />
               ),
