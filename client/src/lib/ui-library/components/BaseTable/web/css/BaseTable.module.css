@@ -108,16 +108,16 @@
   justify-content: flex-end;
 }
 
-.thValignTop .thContent {
-  align-items: flex-start;
+.thValignTop {
+  vertical-align: top;
 }
 
-.thValignMiddle .thContent {
-  align-items: center;
+.thValignMiddle {
+  vertical-align: middle;
 }
 
-.thValignBottom .thContent {
-  align-items: flex-end;
+.thValignBottom {
+  vertical-align: bottom;
 }
 
 .sortIcon {
