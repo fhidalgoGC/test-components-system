@@ -68,9 +68,12 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
     <thead className={`${styles.thead} ${stickyHeader ? styles.theadSticky : ''}`}>
       <tr className={styles.theadRow}>
         {visibleColumns.map((column, index) => {
-          const cellConfig = column.header?.cell ?? headersDefault?.cell;
-          const isSortable = column.sortable ?? cellConfig?.sortable ?? columnsDefault?.sortable ?? false;
-          const isClickable = cellConfig?.clickable ?? false;
+          const columnCell = column.header?.cell;
+          const defaultCell = headersDefault?.cell;
+          const horizontalAlign = columnCell?.horizontalAlign ?? defaultCell?.horizontalAlign;
+          const verticalAlign = columnCell?.verticalAlign ?? defaultCell?.verticalAlign;
+          const isSortable = column.sortable ?? columnCell?.sortable ?? defaultCell?.sortable ?? columnsDefault?.sortable ?? false;
+          const isClickable = columnCell?.clickable ?? defaultCell?.clickable ?? false;
           const isActive = sortState?.columnId === column.metadata.columnId;
 
           const thClasses = [
@@ -78,8 +81,8 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
             isSortable && styles.sortable,
             isClickable && styles.clickable,
             showDividers && index < visibleColumns.length - 1 && styles.thDivider,
-            getAlignClass(cellConfig?.horizontalAlign),
-            getValignClass(cellConfig?.verticalAlign),
+            getAlignClass(horizontalAlign),
+            getValignClass(verticalAlign),
           ].filter(Boolean).join(' ');
 
           const minWidth = column.minWidth ?? columnsDefault?.minWidth;
@@ -110,8 +113,11 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
           }
 
           const renderContent = () => {
-            if (cellConfig?.render) {
-              return cellConfig.render;
+            if (columnCell?.render) {
+              return columnCell.render;
+            }
+            if (defaultCell?.render) {
+              return defaultCell.render;
             }
             return column.metadata.columnId;
           };
