@@ -18,11 +18,13 @@ export interface HeaderCellProps {
 }
 
 const MIN_HEIGHT = 20;
+const MIN_WIDTH = 20;
 
 const defaultStyle: CSSProperties = {
   display: 'inline-block',
   width: '100%',
   minHeight: MIN_HEIGHT,
+  minWidth: MIN_WIDTH,
   boxSizing: 'border-box',
   textAlign: 'inherit',
   backgroundColor: '#c3e6cb', // TEMP: verde claro para visualizar

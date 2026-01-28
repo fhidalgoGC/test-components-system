@@ -17,11 +17,13 @@ export interface TextCellProps {
 }
 
 const MIN_HEIGHT = 20;
+const MIN_WIDTH = 20;
 
 const defaultStyle: CSSProperties = {
   display: "inline-block",
   width: 80,
   minHeight: MIN_HEIGHT,
+  minWidth: MIN_WIDTH,
   boxSizing: "border-box",
   textAlign: "inherit",
   backgroundColor: "#d4edda", // TEMP: verde claro para visualizar
