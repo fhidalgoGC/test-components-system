@@ -1,18 +1,24 @@
 import type { CSSProperties, ReactNode } from 'react';
 
 export type TextWrapMode = 'break-word' | 'truncate';
+export type HeightMode = 'fixed' | 'auto';
 
 export interface HeaderCellProps {
   text: string | ReactNode;
   style?: CSSProperties;
   className?: string;
   width?: number | string;
+  height?: number | string;
+  heightMode?: HeightMode;
   textWrap?: TextWrapMode;
   bold?: boolean;
 }
 
+const MIN_HEIGHT = 20;
+
 const defaultStyle: CSSProperties = {
   display: 'inline-block',
+  minHeight: MIN_HEIGHT,
 };
 
 const textWrapStyles: Record<TextWrapMode, CSSProperties> = {
@@ -28,10 +34,22 @@ const textWrapStyles: Record<TextWrapMode, CSSProperties> = {
   },
 };
 
-export function HeaderCell({ text, style, className, width, textWrap = 'truncate', bold = true }: HeaderCellProps) {
+export function HeaderCell({ text, style, className, width, height, heightMode = 'auto', textWrap = 'truncate', bold = true }: HeaderCellProps) {
+  const heightStyles: CSSProperties = {};
+  
+  if (height !== undefined) {
+    if (heightMode === 'fixed') {
+      heightStyles.height = height;
+      heightStyles.overflow = 'hidden';
+    } else {
+      heightStyles.minHeight = height;
+    }
+  }
+
   const mergedStyle: CSSProperties = {
     ...defaultStyle,
     ...textWrapStyles[textWrap],
+    ...heightStyles,
     ...(bold ? { fontWeight: 600 } : {}),
     ...style,
     ...(width !== undefined ? { width } : {}),
