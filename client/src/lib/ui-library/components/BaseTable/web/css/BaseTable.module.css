@@ -92,6 +92,8 @@
 .thContent {
   display: flex;
   gap: 8px;
+  height: 100%;
+  width: 100%;
 }
 
 .thAlignLeft .thContent {
