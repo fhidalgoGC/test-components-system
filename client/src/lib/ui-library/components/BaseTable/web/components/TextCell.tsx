@@ -19,6 +19,7 @@ const defaultStyle: CSSProperties = {
   display: 'inline-block',
   width: 80,
   minHeight: MIN_HEIGHT,
+  backgroundColor: '#d4edda', // TEMP: verde claro para visualizar
 };
 
 const textWrapStyles: Record<TextWrapMode, CSSProperties> = {

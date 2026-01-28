@@ -19,6 +19,7 @@ const MIN_HEIGHT = 20;
 const defaultStyle: CSSProperties = {
   display: 'inline-block',
   minHeight: MIN_HEIGHT,
+  backgroundColor: '#c3e6cb', // TEMP: verde claro para visualizar
 };
 
 const textWrapStyles: Record<TextWrapMode, CSSProperties> = {
