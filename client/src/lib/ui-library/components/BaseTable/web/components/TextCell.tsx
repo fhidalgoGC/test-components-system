@@ -23,6 +23,7 @@ const defaultStyle: CSSProperties = {
   width: 80,
   minHeight: MIN_HEIGHT,
   boxSizing: "border-box",
+  textAlign: "inherit",
   backgroundColor: "#d4edda", // TEMP: verde claro para visualizar
 };
 

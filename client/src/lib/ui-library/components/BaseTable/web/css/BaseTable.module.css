@@ -89,9 +89,15 @@
   border-right: 1px solid var(--table-border, #e5e7eb);
 }
 
-.thAlignLeft {}
-.thAlignCenter {}
-.thAlignRight {}
+.thAlignLeft {
+  text-align: left;
+}
+.thAlignCenter {
+  text-align: center;
+}
+.thAlignRight {
+  text-align: right;
+}
 
 .thContent {
   display: flex;
