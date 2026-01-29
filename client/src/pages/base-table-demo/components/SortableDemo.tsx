@@ -21,11 +21,15 @@ const columns: ColumnConfig[] = [
 export function SortableDemo() {
   const tableState = useTableState({ initialState: "success" });
   const [data, setData] = useState(initialData);
-  const [sortInfo, setSortInfo] = useState<{ column: string; direction: SortDirection } | null>(null);
+  const [events, setEvents] = useState<string[]>([]);
   const [iconPosition, setIconPosition] = useState<IconPosition>("right");
 
+  const addEvent = (event: string) => {
+    setEvents(prev => [event, ...prev].slice(0, 5));
+  };
+
   const handleSort = (columnId: string, direction: SortDirection) => {
-    setSortInfo({ column: columnId, direction });
+    addEvent(`Sort: column=${columnId}, direction=${direction}`);
     
     const sorted = [...initialData].sort((a, b) => {
       const aVal = a[columnId as keyof typeof a];
@@ -98,12 +102,12 @@ export function SortableDemo() {
         />
       </div>
 
-      {sortInfo && (
-        <div className={styles.eventLog} data-testid="sort-info">
-          <div className={styles.eventLog__title}>Sort Info:</div>
-          <div className={styles.eventLog__item}>
-            Column: {sortInfo.column}, Direction: {sortInfo.direction}
-          </div>
+      {events.length > 0 && (
+        <div className={styles.eventLog} data-testid="event-log">
+          <div className={styles.eventLog__title}>Event Log:</div>
+          {events.map((event, i) => (
+            <div key={i} className={styles.eventLog__item}>{event}</div>
+          ))}
         </div>
       )}
     </section>
