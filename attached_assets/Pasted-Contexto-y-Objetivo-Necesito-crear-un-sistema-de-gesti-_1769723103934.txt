@@ -1,0 +1,123 @@
+Contexto y Objetivo: Necesito crear un sistema de gestión de datos y tablas avanzado en  siguiendo una arquitectura de "Controlador Universal" y "Componentes Agnósticos". El objetivo es separar totalmente la lógica de datos de la interfaz de usuario. El sistema debe permitir que los componentes de UI (filtros, buscadores) inyecten dinámicamente sus propias funciones de transformación de datos al estado global, sin que el controlador conozca de antemano la estructura de esos filtros.
+Estructura de Archivos y Nomenclatura: Crea una carpeta en client/src/lib/ui-library/providers/controlData. Dentro de esta carpeta, implementa los siguientes archivos siguiendo la nomenclatura estándar de los otros providers del proyecto 
+1. useControlData (Custom Hook / Controlador):
+    * Debe gestionar un estado interno llamado state que contenga page, filters (un objeto JSON) y sort.
+    * Debe exponer una función applyFilter(transformer, rawData). Esta función recibe una función transformer (inyectada desde la UI) y los datos crudos del componente. Debe ejecutar el transformer y fusionar el resultado en state.filters.
+    * Debe implementar un useEffect con un debounce de 400ms que dispare una función loadData cada vez que el state cambie.
+    * loadData debe llamar a una función fetchFn pasando el estado transformado por un mapParams (Adaptador de salida).
+2. ControlDataProvider (Context Provider):
+    * Debe envolver la lógica del hook y proveer el contexto a la aplicación.
+    * Debe ser configurable para recibir por props el fetchFn (servicio de API) y el mapParams (adaptador de salida específico de la pantalla).
+3. Ejemplo de Implementación de Referencia (Adaptadores y Transformers):
+    * Transformer Dinámico (en la UI): Un ejemplo donde un componente de filtro de búsqueda defina const searchTransformer = (val) => ({ searchTerm: val.toUpperCase() }) y lo pase a applyFilter.
+    * Adapter de Salida: Un ejemplo de función mapParams que tome el objeto filters del estado y lo traduzca a query strings o al formato que requiere un endpoint específico (ej. renombrar campos de CamelCase a snake_case).
+Requerimientos Técnicos:
+* Usa TypeScript para definir las interfaces del estado, el transformer y el adaptador.
+* Asegura que el state.filters se actualice de forma inmutable, preservando filtros anteriores cuando se agregan nuevos (fusionando objetos).
+* El sistema debe ser totalmente agnóstico: los componentes de tabla y paginador no deben saber nada del API, solo consumir data, loading y disparar eventos del provider.
+* Incluye comentarios breves explicando el flujo de la inyección dinámica de la función transformer.
+
+Instrucciones adicionales para ti al usarlo en Replit:
+1. Copia y pega el texto anterior en el chat de Replit.
+2. Si Replit te pregunta por la "nomenclatura de los otros providers", asegúrate de decirle si usas archivos .js o .tsx y si exportas como default o named export.
+3. Dato extra: Si quieres que Replit te genere también un ejemplo de la Tabla y el Paginador usando este nuevo provider, puedes añadir al final: "Además, genera un componente de ejemplo FileList.tsx que consuma este provider para demostrar el funcionamiento".
+Te doy ejemplos
+
+// hooks/useDataTable.js
+import { useState, useCallback, useEffect } from 'react';
+
+export const useDataTable = (fetchFn, { mapParams }) => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState({ page: 1, filters: {} });
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    // El adaptador (mapParams) traduce el estado al idioma del API
+    const paramsParaApi = mapParams(state); 
+    const response = await fetchFn(paramsParaApi);
+    setData(response.items);
+    setLoading(false);
+  }, [state, fetchFn, mapParams]);
+
+  useEffect(() => { loadData(); }, [loadData]);
+
+  // Esta función es la que recibe el transformador dinámico
+  const applyFilter = (transformer, rawData) => {
+    const newJsonChunk = transformer(rawData);
+    setState(prev => ({
+      ...prev,
+      page: 1,
+      filters: { ...prev.filters, ...newJsonChunk } // Fusiona el nuevo filtro
+    }));
+  };
+
+  return { data, loading, state, applyFilter };
+};
+
+// context/DataTableContext.js
+import { createContext, useContext } from 'react';
+import { useDataTable } from '../hooks/useDataTable';
+import { getFiles } from '../api/fileService';
+import { filesAdapter } from '../adapters/filesAdapter';
+
+const DataTableContext = createContext();
+
+export const DataTableProvider = ({ children }) => {
+  // Aquí inyectamos el API y el Adaptador de salida
+  const logic = useDataTable(getFiles, { mapParams: filesAdapter });
+
+  return (
+    <DataTableContext.Provider value={logic}>
+      {children}
+    </DataTableContext.Provider>
+  );
+};
+
+export const useDataTableContext = () => useContext(DataTableContext);
+
+// adapters/filesAdapter.js
+export const filesAdapter = (state) => {
+  return {
+    page_num: state.page,
+    // Aplanamos o renombramos los filtros para el API
+    search: state.filters.textSearch || '',
+    date_from: state.filters.dateRange?.start,
+    date_to: state.filters.dateRange?.end
+  };
+};
+
+// components/SearchFilter.jsx
+import { useDataTableContext } from '../context/DataTableContext';
+
+// ESTE ES EL TRANSFORMADOR: Define cómo este filtro afecta al JSON
+const searchTransformer = (value) => ({ textSearch: value.toUpperCase() });
+
+export const SearchFilter = () => {
+  const { applyFilter } = useDataTableContext();
+
+  return (
+    <input 
+      type="text" 
+      onChange={(e) => applyFilter(searchTransformer, e.target.value)} 
+      placeholder="Buscar..."
+    />
+  );
+};
+
+// screens/FilesScreen.jsx
+import { DataTableProvider } from '../context/DataTableContext';
+import { SearchFilter } from '../components/SearchFilter';
+import MyTable from '../components/MyTable';
+
+export const FilesScreen = () => {
+  return (
+    <DataTableProvider>
+      <h1>Mis Archivos</h1>
+      <SearchFilter /> {/* Inyecta su lógica al Provider */}
+      <MyTable />      {/* Consume la data del Provider */}
+    </DataTableProvider>
+  );
+};
+
+Analiza el ejemplo y porfavor créame la estructura

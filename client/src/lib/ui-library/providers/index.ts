@@ -8,3 +8,15 @@ export { useConfig, useConfigValue } from './AppEnviromentProvider/index.hook';
 export { getConfig, getConfigValue, updateGlobalConfig, resetGlobalConfig, config, APP_CONFIG } from './AppEnviromentProvider/index.utils';
 export { AppAuthProvider, useAppAuth } from './AppAuthProvider';
 export type { AppAuthContextValue, AppAuthProviderProps } from './AppAuthProvider';
+export { ControlDataProvider, useControlDataContext, useControlData } from './ControlDataProvider';
+export type {
+  ControlDataState,
+  ControlDataFilters,
+  ControlDataSort,
+  SortDirection,
+  FilterTransformer,
+  MapParamsAdapter,
+  FetchFunction,
+  ControlDataContextValue,
+  ControlDataProviderProps,
+} from './ControlDataProvider';
