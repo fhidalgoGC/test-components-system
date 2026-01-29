@@ -24,9 +24,10 @@ export function SortableDemo() {
   const [lastEvent, setLastEvent] = useState<string | null>(null);
   const [iconPosition, setIconPosition] = useState<IconPosition>("right");
 
-  const handleSort = (columnId: string, direction: SortDirection) => {
-    setLastEvent(`Sort: column=${columnId}, direction=${direction}`);
+  const handleSort = (column: ColumnConfig, direction: SortDirection) => {
+    setLastEvent(`Sort: column=${column.metadata.columnId}, direction=${direction}`);
     
+    const columnId = column.metadata.columnId;
     const sorted = [...initialData].sort((a, b) => {
       const aVal = a[columnId as keyof typeof a];
       const bVal = b[columnId as keyof typeof b];

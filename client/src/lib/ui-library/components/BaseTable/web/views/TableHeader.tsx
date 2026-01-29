@@ -48,7 +48,7 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
     setSortState({ columnId: column.metadata.columnId, direction: newDirection });
     callbacks?.onHeaderClick?.(sortKey, newDirection);
     if (isSortable) {
-      callbacks?.onSort?.(sortKey, newDirection);
+      callbacks?.onSort?.(column, newDirection);
     }
   };
 
