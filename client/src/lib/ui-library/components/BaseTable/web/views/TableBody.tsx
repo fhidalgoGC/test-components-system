@@ -170,11 +170,18 @@ export const TableBody = ({
               };
 
               const content = renderContent();
-              const getFlexAlign = (align?: string) => {
+              const getFlexAlignVertical = (align?: string) => {
                 switch (align) {
                   case 'top': return 'flex-start';
                   case 'bottom': return 'flex-end';
                   default: return 'center';
+                }
+              };
+              const getFlexAlignHorizontal = (align?: string) => {
+                switch (align) {
+                  case 'center': return 'center';
+                  case 'right': return 'flex-end';
+                  default: return 'flex-start';
                 }
               };
               const wrappedContent = rowHeightMode === 'fixed' && rowHeight !== undefined ? (
@@ -183,7 +190,8 @@ export const TableBody = ({
                   maxHeight: rowHeight, 
                   overflow: 'hidden',
                   display: 'flex',
-                  alignItems: getFlexAlign(mergedCellConfig.verticalAlign),
+                  alignItems: getFlexAlignVertical(mergedCellConfig.verticalAlign),
+                  justifyContent: getFlexAlignHorizontal(mergedCellConfig.horizontalAlign),
                 }}>
                   {content}
                 </div>
