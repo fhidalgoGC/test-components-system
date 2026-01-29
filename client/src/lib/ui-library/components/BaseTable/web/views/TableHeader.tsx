@@ -86,6 +86,7 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
           const verticalAlign = columnCell?.verticalAlign ?? defaultCell?.verticalAlign;
           const isSortable = column.sortable ?? columnCell?.sortable ?? defaultCell?.sortable ?? columnsDefault?.sortable ?? false;
           const isClickable = columnCell?.clickable ?? defaultCell?.clickable ?? false;
+          const iconPosition = columnCell?.iconPosition ?? defaultCell?.iconPosition ?? 'right';
           const isActive = sortState?.columnId === column.metadata.columnId;
 
           const thClasses = [
@@ -143,8 +144,15 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
               data-testid={`th-${column.metadata.columnId}`}
             >
               <div className={styles.thContent}>
+                {isSortable && iconPosition === 'left' && (
+                  <span className={`${styles.sortIcon} ${isActive ? styles.active : ''}`}>
+                    {isActive && sortState?.direction === 'asc' && '↑'}
+                    {isActive && sortState?.direction === 'desc' && '↓'}
+                    {(!isActive || sortState?.direction === 'none') && '↕'}
+                  </span>
+                )}
                 {renderContent()}
-                {isSortable && (
+                {isSortable && iconPosition === 'right' && (
                   <span className={`${styles.sortIcon} ${isActive ? styles.active : ''}`}>
                     {isActive && sortState?.direction === 'asc' && '↑'}
                     {isActive && sortState?.direction === 'desc' && '↓'}

@@ -4,6 +4,7 @@ export type VerticalAlign = 'top' | 'middle' | 'bottom';
 export type HorizontalAlign = 'left' | 'center' | 'right';
 export type MaxSize = number | 'stretch' | 'container';
 export type CellHeightMode = 'fixed' | 'auto';
+export type IconPosition = 'left' | 'right';
 
 export interface CellConfig {
   verticalAlign?: VerticalAlign;

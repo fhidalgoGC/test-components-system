@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { VerticalAlign, HorizontalAlign, CellHeightMode } from './cells.type';
+import type { VerticalAlign, HorizontalAlign, CellHeightMode, IconPosition } from './cells.type';
 
 export interface HeaderCellConfig {
   verticalAlign?: VerticalAlign;
@@ -10,6 +10,7 @@ export interface HeaderCellConfig {
   sortable?: boolean;
   render?: ReactNode;
   clickable?: boolean;
+  iconPosition?: IconPosition;
 }
 
 export interface HeadersDefaultConfig {

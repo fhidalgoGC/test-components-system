@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { MaxSize, VerticalAlign, HorizontalAlign } from './cells.type';
+import type { MaxSize, VerticalAlign, HorizontalAlign, IconPosition } from './cells.type';
 
 export interface ColumnMetadata {
   columnId: string;
@@ -19,6 +19,7 @@ export interface ColumnHeaderCellConfig {
   sortable?: boolean;
   render?: ReactNode;
   clickable?: boolean;
+  iconPosition?: IconPosition;
 }
 
 export interface ColumnHeaderConfig {
