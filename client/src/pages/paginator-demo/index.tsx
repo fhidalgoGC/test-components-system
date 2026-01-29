@@ -233,64 +233,125 @@ export default function PaginatorDemo() {
             Set 50 per page
           </button>
         </div>
-        <div style={{ marginBottom: '16px', display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <span style={{ fontSize: '14px', color: '#6b7280' }}>Total Items:</span>
-          <input
-            type="number"
-            value={totalItems}
-            onChange={(e) => {
-              const value = Math.max(1, parseInt(e.target.value) || 1);
-              setTotalItems(value);
-              setCurrentPage(1);
-            }}
-            style={{
-              padding: '8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #d1d5db',
-              width: '100px',
-              fontSize: '14px',
-            }}
-            data-testid="input-total-items"
-          />
-          <button
-            onClick={() => { setTotalItems(100); setCurrentPage(1); }}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: '1px solid #d1d5db',
-              backgroundColor: '#fff',
-              cursor: 'pointer',
-            }}
-            data-testid="btn-set-100-items"
-          >
-            100
-          </button>
-          <button
-            onClick={() => { setTotalItems(500); setCurrentPage(1); }}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: '1px solid #d1d5db',
-              backgroundColor: '#fff',
-              cursor: 'pointer',
-            }}
-            data-testid="btn-set-500-items"
-          >
-            500
-          </button>
-          <button
-            onClick={() => { setTotalItems(1000); setCurrentPage(1); }}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: '1px solid #d1d5db',
-              backgroundColor: '#fff',
-              cursor: 'pointer',
-            }}
-            data-testid="btn-set-1000-items"
-          >
-            1000
-          </button>
+        <div style={{ marginBottom: '16px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <span style={{ fontSize: '14px', color: '#6b7280' }}>Total Items:</span>
+            <input
+              type="number"
+              value={totalItems}
+              onChange={(e) => {
+                const value = Math.max(1, parseInt(e.target.value) || 1);
+                setTotalItems(value);
+                setCurrentPage(1);
+              }}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                width: '100px',
+                fontSize: '14px',
+              }}
+              data-testid="input-total-items"
+            />
+            <button
+              onClick={() => { setTotalItems(100); setCurrentPage(1); }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+              }}
+              data-testid="btn-set-100-items"
+            >
+              100
+            </button>
+            <button
+              onClick={() => { setTotalItems(500); setCurrentPage(1); }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+              }}
+              data-testid="btn-set-500-items"
+            >
+              500
+            </button>
+            <button
+              onClick={() => { setTotalItems(1000); setCurrentPage(1); }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+              }}
+              data-testid="btn-set-1000-items"
+            >
+              1000
+            </button>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <span style={{ fontSize: '14px', color: '#6b7280' }}>Items per page:</span>
+            <input
+              type="number"
+              value={itemsPerPage}
+              onChange={(e) => {
+                const value = Math.max(1, parseInt(e.target.value) || 1);
+                setItemsPerPage(value);
+                setCurrentPage(1);
+              }}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                width: '80px',
+                fontSize: '14px',
+              }}
+              data-testid="input-items-per-page"
+            />
+            <button
+              onClick={() => { setItemsPerPage(10); setCurrentPage(1); }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+              }}
+              data-testid="btn-set-10-per-page"
+            >
+              10
+            </button>
+            <button
+              onClick={() => { setItemsPerPage(25); setCurrentPage(1); }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+              }}
+              data-testid="btn-set-25-per-page"
+            >
+              25
+            </button>
+            <button
+              onClick={() => { setItemsPerPage(50); setCurrentPage(1); }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+              }}
+              data-testid="btn-set-50-per-page-alt"
+            >
+              50
+            </button>
+          </div>
         </div>
         <div style={{ 
           border: '1px solid #e5e7eb', 
