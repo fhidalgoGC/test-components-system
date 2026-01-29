@@ -4,6 +4,28 @@
   background-color: #fff;
 }
 
+.paginatorContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  gap: 16px;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
 .itemsPerPageContainer {
   display: flex;
   align-items: center;
@@ -105,4 +127,19 @@
   padding: 0 4px;
   color: #6b7280;
   font-size: 14px;
+}
+
+.rightComponentItem {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.rightComponentItem:not(:last-child)::after {
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background-color: #d1d5db;
+  margin-left: 16px;
 }

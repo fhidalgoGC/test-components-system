@@ -1,7 +1,5 @@
 import type { PaginatorProps } from '../types';
 import { usePaginatorContext } from '../providers';
-import { LayoutRow } from '../../LayoutRow';
-import type { LayoutRowComponent } from '../../LayoutRow/web/types';
 import styles from '../css/Paginator.module.css';
 
 interface PageButtonProps {
@@ -135,98 +133,69 @@ export const PaginatorView = (props: PaginatorProps) => {
     canGoNext,
   } = usePaginatorContext();
 
-  const startItem = Math.min((currentPage - 1) * itemsPerPage + 1, totalItems);
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
-  
   const pageNumbers = generatePageNumbers(currentPage, totalPages, maxVisiblePages);
-
-  const leftComponents: LayoutRowComponent[] = [];
-
-  if (showItemsPerPage) {
-    leftComponents.push({
-      component: (
-        <ItemsPerPageSelect
-          value={itemsPerPage}
-          options={itemsPerPageOptions}
-          onChange={setItemsPerPage}
-          label={t('showing')}
-        />
-      ),
-      align: 'left',
-      slot: 0,
-    });
-  }
-
-  leftComponents.push({
-    component: (
-      <span className={styles.itemsInfo} data-testid="paginator-items-info">
-        {t('of')} {totalItems} {t('items')}
-      </span>
-    ),
-    align: 'left',
-    slot: 0,
-  });
-
-  if (showPageNumbers) {
-    leftComponents.push({
-      component: (
-        <div className={styles.navigationContainer}>
-          <NavButton onClick={goToFirstPage} disabled={!canGoPrevious} testId="paginator-first">
-            {'|<'}
-          </NavButton>
-          <NavButton onClick={goToPreviousPage} disabled={!canGoPrevious} testId="paginator-prev">
-            {'<'}
-          </NavButton>
-          
-          <div className={styles.pageNumbers}>
-            {pageNumbers.map((page, index) => (
-              typeof page === 'number' ? (
-                <PageButton
-                  key={index}
-                  page={page}
-                  isActive={page === currentPage}
-                  onClick={() => goToPage(page)}
-                />
-              ) : (
-                <span key={index} className={styles.ellipsis}>{page}</span>
-              )
-            ))}
-          </div>
-          
-          <NavButton onClick={goToNextPage} disabled={!canGoNext} testId="paginator-next">
-            {'>'}
-          </NavButton>
-          <NavButton onClick={goToLastPage} disabled={!canGoNext} testId="paginator-last">
-            {'>|'}
-          </NavButton>
-        </div>
-      ),
-      align: 'left',
-      slot: 0,
-    });
-  }
-
-  const rightSlotComponents: LayoutRowComponent[] = rightComponents.map((component, index) => ({
-    component,
-    align: 'right' as const,
-    slot: 1,
-  }));
-
-  const allComponents = [...leftComponents, ...rightSlotComponents];
 
   return (
     <div className={`${styles.paginatorWrapper} ${className || ''}`} data-testid="paginator">
-      <LayoutRow
-        slots={2}
-        widthMode="full"
-        heightMode="auto"
-        paddingX="md"
-        paddingY="sm"
-        componentVerticalAlign="center"
-        componentGap="sm"
-        slotGap="md"
-        components={allComponents}
-      />
+      <div className={styles.paginatorContent}>
+        <div className={styles.leftSection}>
+          {showItemsPerPage && (
+            <ItemsPerPageSelect
+              value={itemsPerPage}
+              options={itemsPerPageOptions}
+              onChange={setItemsPerPage}
+              label={t('showing')}
+            />
+          )}
+          
+          <span className={styles.itemsInfo} data-testid="paginator-items-info">
+            {t('of')} {totalItems} {t('items')}
+          </span>
+          
+          {showPageNumbers && (
+            <div className={styles.navigationContainer}>
+              <NavButton onClick={goToFirstPage} disabled={!canGoPrevious} testId="paginator-first">
+                {'|<'}
+              </NavButton>
+              <NavButton onClick={goToPreviousPage} disabled={!canGoPrevious} testId="paginator-prev">
+                {'<'}
+              </NavButton>
+              
+              <div className={styles.pageNumbers}>
+                {pageNumbers.map((page, index) => (
+                  typeof page === 'number' ? (
+                    <PageButton
+                      key={index}
+                      page={page}
+                      isActive={page === currentPage}
+                      onClick={() => goToPage(page)}
+                    />
+                  ) : (
+                    <span key={index} className={styles.ellipsis}>{page}</span>
+                  )
+                ))}
+              </div>
+              
+              <NavButton onClick={goToNextPage} disabled={!canGoNext} testId="paginator-next">
+                {'>'}
+              </NavButton>
+              <NavButton onClick={goToLastPage} disabled={!canGoNext} testId="paginator-last">
+                {'>|'}
+              </NavButton>
+            </div>
+          )}
+        </div>
+        
+        {rightComponents.length > 0 && (
+          <div className={styles.rightSection}>
+            {rightComponents.map((component, index) => (
+              <div key={index} className={styles.rightComponentItem}>
+                {component}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
