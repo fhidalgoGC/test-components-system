@@ -170,8 +170,21 @@ export const TableBody = ({
               };
 
               const content = renderContent();
+              const getFlexAlign = (align?: string) => {
+                switch (align) {
+                  case 'top': return 'flex-start';
+                  case 'bottom': return 'flex-end';
+                  default: return 'center';
+                }
+              };
               const wrappedContent = rowHeightMode === 'fixed' && rowHeight !== undefined ? (
-                <div style={{ height: '100%', maxHeight: rowHeight, overflow: 'hidden' }}>
+                <div style={{ 
+                  height: '100%', 
+                  maxHeight: rowHeight, 
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: getFlexAlign(mergedCellConfig.verticalAlign),
+                }}>
                   {content}
                 </div>
               ) : content;
