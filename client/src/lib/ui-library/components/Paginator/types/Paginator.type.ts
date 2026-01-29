@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { VisibilityConfig, Device, Orientation } from '../../../types/shared.types';
 
 export interface PaginatorProps {
   totalItems: number;
@@ -14,6 +15,7 @@ export interface PaginatorProps {
   showItemsPerPage?: boolean;
   showPageNumbers?: boolean;
   maxVisiblePages?: number;
+  config?: VisibilityConfig;
 }
 
 export interface PaginatorContext {
@@ -31,6 +33,11 @@ export interface PaginatorContext {
   setItemsPerPage: (items: number) => void;
   canGoPrevious: boolean;
   canGoNext: boolean;
+  visibilityConfig?: VisibilityConfig;
+  isVisible: boolean;
+  device: Device;
+  orientation: Orientation;
+  width: number;
 }
 
 export interface PaginatorMetadata {
