@@ -39,7 +39,7 @@ export default function PaginatorDemo() {
   const setLanguage = appLanguage?.setLang ?? (() => {});
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const totalItems = 435;
+  const [totalItems, setTotalItems] = useState(435);
 
   const [currentPage2, setCurrentPage2] = useState(1);
   const [itemsPerPage2, setItemsPerPage2] = useState(25);
@@ -179,7 +179,7 @@ export default function PaginatorDemo() {
         <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>
           4. External Control Demo
         </h2>
-        <div style={{ marginBottom: '16px', display: 'flex', gap: '8px' }}>
+        <div style={{ marginBottom: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setCurrentPage(1)}
             style={{
@@ -189,6 +189,7 @@ export default function PaginatorDemo() {
               backgroundColor: '#fff',
               cursor: 'pointer',
             }}
+            data-testid="btn-go-page-1"
           >
             Go to Page 1
           </button>
@@ -201,11 +202,12 @@ export default function PaginatorDemo() {
               backgroundColor: '#fff',
               cursor: 'pointer',
             }}
+            data-testid="btn-go-page-22"
           >
             Go to Page 22
           </button>
           <button
-            onClick={() => setCurrentPage(44)}
+            onClick={() => setCurrentPage(Math.ceil(totalItems / itemsPerPage))}
             style={{
               padding: '8px 16px',
               borderRadius: '4px',
@@ -213,6 +215,7 @@ export default function PaginatorDemo() {
               backgroundColor: '#fff',
               cursor: 'pointer',
             }}
+            data-testid="btn-go-last-page"
           >
             Go to Last Page
           </button>
@@ -225,8 +228,68 @@ export default function PaginatorDemo() {
               backgroundColor: '#fff',
               cursor: 'pointer',
             }}
+            data-testid="btn-set-50-per-page"
           >
             Set 50 per page
+          </button>
+        </div>
+        <div style={{ marginBottom: '16px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <span style={{ fontSize: '14px', color: '#6b7280' }}>Total Items:</span>
+          <input
+            type="number"
+            value={totalItems}
+            onChange={(e) => {
+              const value = Math.max(1, parseInt(e.target.value) || 1);
+              setTotalItems(value);
+              setCurrentPage(1);
+            }}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '4px',
+              border: '1px solid #d1d5db',
+              width: '100px',
+              fontSize: '14px',
+            }}
+            data-testid="input-total-items"
+          />
+          <button
+            onClick={() => { setTotalItems(100); setCurrentPage(1); }}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: '1px solid #d1d5db',
+              backgroundColor: '#fff',
+              cursor: 'pointer',
+            }}
+            data-testid="btn-set-100-items"
+          >
+            100
+          </button>
+          <button
+            onClick={() => { setTotalItems(500); setCurrentPage(1); }}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: '1px solid #d1d5db',
+              backgroundColor: '#fff',
+              cursor: 'pointer',
+            }}
+            data-testid="btn-set-500-items"
+          >
+            500
+          </button>
+          <button
+            onClick={() => { setTotalItems(1000); setCurrentPage(1); }}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: '1px solid #d1d5db',
+              backgroundColor: '#fff',
+              cursor: 'pointer',
+            }}
+            data-testid="btn-set-1000-items"
+          >
+            1000
           </button>
         </div>
         <div style={{ 
