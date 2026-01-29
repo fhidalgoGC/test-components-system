@@ -1,48 +1,6 @@
 # Overview
 
-This project is a dual-platform React component library built with React, TypeScript, supporting both **Web (Vite)** and **Native (Expo + NativeWind)**. Its primary purpose is to provide a comprehensive UI component library, featuring custom components built on shadcn/ui for web and NativeWind for native, a complete theming system, internationalization support, and a responsive design. This is a standalone frontend library with no backend dependencies, designed for integration into other frontend applications.
-
-## Platform Architecture
-
-The project supports two compilation targets:
-- **Web**: Uses Vite, React DOM, Tailwind CSS, and Radix UI components
-- **Native**: Uses Expo, React Native, and NativeWind for styling
-
-### File Resolution by Platform
-Components that need platform-specific implementations use the `.web.tsx` / `.native.tsx` file naming convention:
-- `ComponentName.web.tsx` - Web implementation (DOM, CSS)
-- `ComponentName.native.tsx` - Native implementation (React Native, NativeWind)
-- `index.tsx` - Exports web version
-- `index.native.tsx` - Exports native version
-
-### Running the Project
-- **Web Development**: `npm run dev` (Vite on port 5000)
-- **Native Development**: `npx expo start` (Expo with Metro bundler)
-
-### Native Styling Approach
-Native components use React Native `StyleSheet` by default for maximum stability and performance. NativeWind is configured and available (via `metro.config.js` and `global.css`) for developers who prefer Tailwind-style classes in native components.
-
-To use NativeWind classes in native components:
-1. Import `global.css` at the top of your entry file
-2. Use `className` prop on React Native components
-3. Ensure `nativewind-env.d.ts` is in the project root for TypeScript support
-
-**Recent Updates (January 2026):**
-- **BaseTable Component (web-only)**: Declarative, agnostic table component that interprets configuration without making business decisions. Features: external state control via `useTableState` hook (idle, loading, success, error, empty), configuration override chain (cellsDefault → column.cell), customizable headers/cells/rows with callbacks for clicks and sort events. Does NOT transform data or apply internal sorting/filtering logic.
-- **Native Home Screen**: App.native.tsx now includes a full navigation menu listing available native components with demo screens
-- **Dual Platform Support**: Added Expo and NativeWind configuration for React Native support
-- **UniversalCard Native**: Created `UniversalCard.native.tsx` with React Native StyleSheet implementation (NativeWind-ready)
-- **Platform-specific exports**: Reorganized component exports with `.native.tsx` files for native imports
-
-**Previous Updates (November 2025):**
-- **AppAuthProvider onLogout callback (v1.0.9)**: Added `onLogout` prop to AppAuthProvider that executes ALWAYS when there's a logout (manual or automatic). Modified `onSessionInvalid` to execute ONLY when session is invalid/expired (not on manual logout). Now provides 3 lifecycle callbacks: `onLogging` (manual login), `onLogout` (any logout), `onSessionInvalid` (invalid sessions only). Fixed behavior when NO session exists at app load to properly trigger callbacks.
-- **AppAuthProvider skipInitialValidation (v1.0.8)**: Added `skipInitialValidation` prop to AppAuthProvider. When set to `true`, the provider skips automatic session validation on mount, allowing developers to call `login()` manually after backend authentication. Useful for login pages where users haven't authenticated yet.
-- **README-INSTALL-IA.md Update (v1.0.7)**: Reorganized installation guide to clarify that `@/lib/ui-library` alias is for internal library functionality only. Developers always import from `"GC-UI-COMPONENTS"` directly. Added comprehensive examples and troubleshooting section.
-- **UniversalCard Selection Integration (v1.0.7)**: Added `selectable` and `id` props to UniversalCard, enabling selection state management when used within WrapperItemsSelected. Cards display visual feedback (ring-2 ring-primary border) when selected. Safe to use outside wrapper (no errors when selectable=true without wrapper).
-- **UniversalCard Import Fix**: Fixed critical import errors by replacing `@/` aliases with relative paths in internal library components
-- Relocated command templates from `client/src/lib/ui-library/command-templates` to `client/src/command-templates`
-- Enhanced WrapperItemsSelected documentation with communication flow diagrams
-- Added interactive demo with 5 examples showing component communication patterns
+This project is a dual-platform React component library designed to provide a comprehensive UI toolkit for both Web (Vite) and Native (Expo + NativeWind) applications. It offers custom components, a complete theming system, internationalization support, and responsive design, aiming to be a standalone frontend library easily integratable into other frontend projects.
 
 # User Preferences
 
@@ -51,48 +9,52 @@ Preferred communication style: Simple, everyday language.
 # System Architecture
 
 ## Frontend Architecture
-- **Framework**: React 18 with TypeScript and Vite.
-- **Routing**: Wouter for client-side routing.
-- **State Management**: React state with callback-based data management.
-- **Styling**: Tailwind CSS with CSS variables for theming.
-- **UI Components**: shadcn/ui library with Radix UI primitives, and custom components like `TagSelector`, `HeterogeneousList`, `BottomNavigationBar`, `UniversalCard`, `LoginCard`, `Carousel`, `WrapperItemsSelected`, and `BaseTable`.
-- **Theme System**: Custom theme provider with light/dark mode and CSS variable-based theming.
-- **Internationalization (i18n)**: Hierarchical i18n system with global and component-specific translations, supporting English (en) and Spanish (es), with fallback and dynamic language selection.
-- **Modular Architecture**: Codebase follows a classified folder pattern for layouts, pages, and UI components, including `css/`, `types/`, `hooks/`, `utils/`, and `i18n/` subdirectories.
-- **Provider Architecture**: Consistent modular structure for providers (e.g., `AppAuthProvider`, `AppLanguageProvider`), including authentication with real-time expiration and cross-tab synchronization.
-- **Environment Configuration**: External environment configuration support, allowing parent applications to override library defaults. Components use a decentralized, flat-structured `environment/` folder for local configurations, aggregated globally. Configuration access follows a cascade: Props → ConfigProvider environment → Internal library environment.
-- **Responsive Design**: Components automatically switch between mobile and web implementations based on screen size using the `useResponsive` hook. A wrapper component pattern facilitates conditional rendering of platform-specific variants.
-- **Component Generator**: Automated script (`npm run new-component`) creates complete component structures from templates, including i18n, responsive wrappers, and ConfigProvider integration. Supports incremental development for mobile/web variants.
+- **Framework**: React 18 with TypeScript and Vite for web, Expo for native.
+- **Routing**: Wouter for client-side routing on web.
+- **State Management**: Primarily React state with callback-based data management.
+- **Styling**: Tailwind CSS with CSS variables for theming on web, NativeWind and React Native `StyleSheet` for native.
+- **UI Components**: Built on shadcn/ui and Radix UI primitives for web, with custom components like `TagSelector`, `HeterogeneousList`, `BottomNavigationBar`, `UniversalCard`, `LoginCard`, `Carousel`, `WrapperItemsSelected`, and `BaseTable`.
+- **Theme System**: Custom theme provider supporting light/dark modes and CSS variable-based theming.
+- **Internationalization (i18n)**: Hierarchical system with global and component-specific translations for English and Spanish, including fallback and dynamic language selection.
+- **Modular Architecture**: Organized with a classified folder pattern for layouts, pages, UI components, hooks, utilities, and i18n.
+- **Provider Architecture**: Consistent modular structure for providers (e.g., `AppAuthProvider`, `AppLanguageProvider`), handling authentication with real-time expiration and cross-tab synchronization.
+- **Environment Configuration**: External configuration support, allowing parent applications to override library defaults through a cascaded approach (Props → ConfigProvider → Internal library environment).
+- **Responsive Design**: Components adapt to screen size using the `useResponsive` hook, facilitating conditional rendering of platform-specific variants.
+- **Component Generator**: An automated script (`npm run new-component`) streamlines the creation of new component structures, including i18n, responsive wrappers, and ConfigProvider integration.
+
+## Platform Architecture
+The project supports two distinct compilation targets: Web (Vite, React DOM) and Native (Expo, React Native). Platform-specific implementations utilize a `.web.tsx` / `.native.tsx` file naming convention for component resolution.
 
 ## Development Setup
-- **Build Tool**: Vite for fast development and building.
-- **Development Server**: Custom Vite server setup with hot reloading.
-- **Component Demo**: Interactive component playground with live preview and built-in documentation.
+- **Build Tool**: Vite for web development.
+- **Development Server**: Custom Vite server with hot reloading, and Expo with Metro bundler for native.
+- **Component Demo**: Interactive playground with live preview and documentation.
 
 ## Feature Specifications
-- **BottomNavigationBar**: Mobile navigation component supporting controlled/uncontrolled selection, dynamic item disabling (`disabledIds`), and `onError` callback for UX protection. Integrates with i18n and ConfigProvider.
-- **Carousel**: Interactive carousel component that renders React elements with autoplay, drag gestures (mouse/touch), clickable indicators, keyboard navigation, and external index control. Supports both controlled and uncontrolled modes, configurable spacing, uniform item heights, multiple slides per view, loop/no-loop modes, and pause-on-hover. Features GPU-optimized transitions, vertical-scroll cancellation for drag gestures, and automatic timer reset on external index changes. Includes comprehensive demo page with 6 configuration examples.
-- **HeterogeneousList**: Component supporting configurable page size and scroll preservation. Fully migrated to the Provider + Context + Hook architecture with i18n and ConfigProvider integration.
-- **UniversalCard**: Flexible wrapper card component that can render any React component with customizable styling, sizing (numeric, CSS units, Tailwind classes), and optional header/footer content. Supports selection integration with WrapperItemsSelected via `selectable` prop and visual feedback through border styling.
-- **LoginCard**: Authentication card component (web version only, mobile eliminated) with dual configurations: `with-credentials` (providers + email/password) and `providers-only` (external auth only). Uses modular layout system with separate `WithCredentialsLayout` and `ProvidersOnlyLayout` components in dedicated `layouts/` folder. In `with-credentials` mode, credentials section appears first with email input, password input, horizontal layout for "Remember me" checkbox and "Forgot password?" link (aligned left and right using flexbox `space-between`), continue button, "Don't have an account? Sign Up" prompt (with zero gap spacing between text and link using `font-size: 0` technique), conditional "or" divider (only appears when providers exist) with horizontal lines (1.5px solid #e2e8f0), and providers section at the bottom. Provider layout adapts based on count: 1-2 providers display as vertical full-width buttons, 3-4 providers display in a single horizontal row with equal-width square buttons (using `flex: 1` and `aspect-ratio: 1` to distribute evenly across card width), 5+ providers display 3 equal-width squares + "more providers" button in a single row. All buttons in grid layouts use dynamic sizing based on card width with `flex: 1` for equal distribution. Provider objects support: a `data` attribute for custom metadata (e.g., authType, scope, clientId, tenant), an optional `component` attribute for rendering custom React components inside provider buttons (when `component` is provided, it replaces the default icon + label layout), and an optional `redirect` attribute with `external: boolean`, `url: string`, and `newTab: boolean` properties for automatic redirects when clicking providers (if `redirect` is present, clicking triggers navigation instead of calling `onProviderSelect`). All text labels (title, subtitle, provider labels) use `MultiLanguageLabel` interface for reactive i18n support. Translations include: email, password, forgotPassword, rememberMe, continueWithEmail, noAccount, signUp, moreProviders, selectProvider, continueWith, back, or. The `resolveLabel()` helper function resolves labels based on current language. In `providers-only` mode, providers display as large horizontal buttons with left-aligned icon + text. Button styling uses solid blue (#4353FF) background with hover state (#3646E6).
-- **WrapperItemsSelected**: Universal selection wrapper that tracks item selection state by ID and provides callbacks for selection changes. Wraps any child components (cards, lists, grids) and provides a Context API via `useSelection()` hook for children to interact with selection state. Supports controlled/uncontrolled modes, multi-select/single-select, and dual callback system (`onSelectionChange` for full selection array, `onItemAction` for individual select/deselect events). Pure logic wrapper with no visual styling. Features simple communication pattern where each child component only needs to pass its own ID via `toggleSelection(id)`, and the wrapper maintains the complete selection array and notifies all children via Context API. Includes methods: toggleSelection, selectItem, deselectItem, isSelected, clearSelection, selectAll.
-- **GoogleMap**: Google Maps component (web only) with externally controlled markers. Props: `apiKey` (required), `center` ({lat, lng}), `zoom`, `markers` (array of MapMarker), `width`/`height` (number or CSS string), `showZoomControl`, `showStreetViewControl`, `showMapTypeControl`, `showFullscreenControl`. Callbacks: `onMapClick`, `onMarkerClick`, `onMarkerDragEnd`, `onMapLoad`. Markers support `id`, `position`, `title`, `icon`, `draggable`. The parent application manages the markers array and passes it as a prop, allowing external add/remove functionality. Uses `@react-google-maps/api` library internally. Includes i18n support for loading/error messages.
-- **BaseTable**: Declarative, agnostic table component (web only) designed for configuration interpretation without business logic. Features: external state management via `useTableState` hook supporting 5 states (idle, loading, success, error, empty), configuration override chain (cellsDefault → column.cell), customizable layout (width/height modes), header/cell rendering (text/component), row behaviors (hoverable, clickable), column configuration (sortable, visible, min/max width), and comprehensive callbacks (onRowClick, onCellClick, onHeaderClick, onSort). Fully typed with TypeScript interfaces for all configuration options.
+- **Paginator Component (web-only)**: Externally controlled pagination with i18n support, offering flexible layout, page number generation with ellipsis, items-per-page selector, and navigation controls.
+- **BaseTable Component (web-only)**: Declarative, agnostic table component for interpreting configuration without business logic. Features external state control (`useTableState`), customizable headers/cells/rows, column configuration, and comprehensive callbacks.
+- **BottomNavigationBar**: Mobile navigation component with controlled/uncontrolled selection, dynamic item disabling, and `onError` callbacks.
+- **Carousel**: Interactive component rendering React elements with autoplay, drag gestures, indicators, keyboard navigation, and external index control. Supports controlled/uncontrolled modes, configurable spacing, uniform item heights, multiple slides per view, and loop modes.
+- **HeterogeneousList**: Supports configurable page size and scroll preservation, using a Provider + Context + Hook architecture.
+- **UniversalCard**: Flexible wrapper for rendering any React component with customizable styling, sizing, and optional header/footer content. Supports selection integration via `selectable` prop.
+- **LoginCard (web-only)**: Authentication component with dual configurations (`with-credentials` and `providers-only`), modular layouts, and advanced provider display logic. Supports custom provider components and external redirects.
+- **WrapperItemsSelected**: Universal selection wrapper tracking item selection state by ID, providing callbacks for changes. Supports controlled/uncontrolled modes, multi-select/single-select, and a Context API for child component interaction.
+- **GoogleMap (web-only)**: Google Maps component with externally controlled markers, supporting various map controls and callbacks.
 
 # External Dependencies
 
-### Core Framework Dependencies
-- `vite` - Web bundler
-- `react` - UI framework
-- `react-dom` - Web renderer
-- `typescript` - Type system
+### Core Framework
+- `vite`
+- `react`
+- `react-dom`
+- `typescript`
 
-### Native/Mobile Dependencies (Expo)
-- `expo` - React Native framework
-- `react-native` - Native UI primitives
-- `react-native-web` - React Native for web (shared components)
-- `nativewind` - Tailwind CSS for React Native
-- `expo-status-bar` - Status bar control
+### Native/Mobile
+- `expo`
+- `react-native`
+- `react-native-web`
+- `nativewind`
+- `expo-status-bar`
 
 ### UI and Component Libraries
 - `@radix-ui/*`
@@ -103,6 +65,7 @@ Preferred communication style: Simple, everyday language.
 - `cmdk`
 - `framer-motion`
 - `lucide-react`
+- `@react-google-maps/api`
 
 ### Development and Build Tools
 - `@replit/vite-plugin-*`
