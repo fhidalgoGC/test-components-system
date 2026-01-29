@@ -1,5 +1,5 @@
 import { useAppLanguage } from '@/lib/ui-library/providers';
-import { CompleteExample, SimplePaginator, MinimalPaginator, CallbacksDemo } from './components';
+import { CompleteExample, SimplePaginator, MinimalPaginator, CallbacksDemo, EmptyExample } from './components';
 
 export default function PaginatorDemo() {
   const appLanguage = useAppLanguage();
@@ -44,6 +44,7 @@ export default function PaginatorDemo() {
       <SimplePaginator lang={lang} />
       <MinimalPaginator lang={lang} />
       <CallbacksDemo lang={lang} />
+      <EmptyExample lang={lang} />
     </div>
   );
 }
