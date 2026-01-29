@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BaseTable, useTableState } from "@/lib/ui-library/components/BaseTable";
-import type { ColumnConfig, SortDirection } from "@/lib/ui-library/components/BaseTable";
+import type { ColumnConfig, SortDirection, IconPosition } from "@/lib/ui-library/components/BaseTable";
 import styles from "../css/BaseTableDemo.module.scss";
 
 const initialData = [
@@ -22,6 +22,7 @@ export function SortableDemo() {
   const tableState = useTableState({ initialState: "success" });
   const [data, setData] = useState(initialData);
   const [sortInfo, setSortInfo] = useState<{ column: string; direction: SortDirection } | null>(null);
+  const [iconPosition, setIconPosition] = useState<IconPosition>("right");
 
   const handleSort = (columnId: string, direction: SortDirection) => {
     setSortInfo({ column: columnId, direction });
@@ -53,6 +54,21 @@ export function SortableDemo() {
         El padre es responsable de ordenar los datos y pasarlos de nuevo.
       </p>
 
+      <div className={styles.controls}>
+        <div className={styles.controlGroup}>
+          <label className={styles.controlLabel}>Icon Position:</label>
+          <select
+            value={iconPosition}
+            onChange={(e) => setIconPosition(e.target.value as IconPosition)}
+            className={styles.select}
+            data-testid="select-icon-position"
+          >
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+      </div>
+
       <div className={styles.demoBox} data-testid="demo-sortable-table">
         <BaseTable
           data={data}
@@ -66,6 +82,7 @@ export function SortableDemo() {
             headersDefault: {
               cell: {
                 sortable: true,
+                iconPosition,
               },
             },
             cellsDefault: {

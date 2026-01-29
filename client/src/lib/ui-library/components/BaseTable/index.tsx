@@ -38,6 +38,7 @@ export type {
   VerticalAlign,
   HorizontalAlign,
   MaxSize,
+  IconPosition,
   BehaviorsConfig,
   HoverableTarget,
   ClickableTarget,
