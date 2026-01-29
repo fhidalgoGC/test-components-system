@@ -76,7 +76,7 @@
   transition: all 0.15s ease;
 }
 
-.pageButton:hover:not(:disabled) {
+.pageButton:hover:not(:disabled):not(.pageButtonDisabled) {
   color: #3b82f6;
 }
 
@@ -89,15 +89,13 @@
   background-color: #2563eb;
 }
 
-.pageButtonDisabled {
+.pageButtonDisabled,
+.pageButtonDisabled:hover {
   opacity: 0.4;
   cursor: not-allowed;
   background-color: #e5e7eb;
   color: #9ca3af;
-}
-
-.pageButtonDisabled:hover {
-  color: #9ca3af;
+  pointer-events: none;
 }
 
 .navButton {
