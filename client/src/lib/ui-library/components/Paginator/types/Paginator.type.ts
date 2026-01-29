@@ -2,11 +2,11 @@ import type { VisibilityConfig, Device, Orientation } from '../../../types/share
 
 export interface PaginatorProps {
   totalItems: number;
-  itemsPerPage?: number;
+  initialCurrentPage?: number;
+  initialItemsPerPage?: number;
   itemsPerPageOptions?: number[];
   onPageChange?: (page: number) => void;
   onItemsPerPageChange?: (itemsPerPage: number) => void;
-  onTotalItemsChange?: (totalItems: number) => void;
   className?: string;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';
@@ -29,7 +29,6 @@ export interface PaginatorContext {
   goToPreviousPage: () => void;
   goToNextPage: () => void;
   setItemsPerPage: (items: number) => void;
-  setTotalItems: (total: number) => void;
   setCurrentPage: (page: number) => void;
   canGoPrevious: boolean;
   canGoNext: boolean;

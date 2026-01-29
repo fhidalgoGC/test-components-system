@@ -20,23 +20,18 @@ export const PaginatorProvider = ({
   children,
   langOverride,
   i18nOrder = 'local-first',
-  totalItems: initialTotalItems,
-  itemsPerPage: initialItemsPerPage = 10,
+  totalItems,
+  initialCurrentPage = 1,
+  initialItemsPerPage = 10,
   onPageChange,
   onItemsPerPageChange,
-  onTotalItemsChange,
   config,
 }: PaginatorProviderProps) => {
   const { lang, t } = useI18nMerge(langOverride, { order: i18nOrder });
   const { cfg: visibilityConfig, width, device, orientation, isVisible } = useVisibility(config);
   
-  const [totalItems, setTotalItemsInternal] = useState(initialTotalItems);
   const [itemsPerPage, setItemsPerPageInternal] = useState(initialItemsPerPage);
-  const [currentPage, setCurrentPageInternal] = useState(1);
-
-  useEffect(() => {
-    setTotalItemsInternal(initialTotalItems);
-  }, [initialTotalItems]);
+  const [currentPage, setCurrentPageInternal] = useState(initialCurrentPage);
 
   const totalPages = useMemo(() => {
     return Math.max(1, Math.ceil(totalItems / itemsPerPage));
@@ -44,9 +39,11 @@ export const PaginatorProvider = ({
 
   useEffect(() => {
     if (currentPage > totalPages) {
-      setCurrentPageInternal(totalPages);
+      const newPage = totalPages;
+      setCurrentPageInternal(newPage);
+      onPageChange?.(newPage);
     }
-  }, [totalPages, currentPage]);
+  }, [totalPages, currentPage, onPageChange]);
 
   const canGoPrevious = currentPage > 1;
   const canGoNext = currentPage < totalPages;
@@ -92,13 +89,6 @@ export const PaginatorProvider = ({
     }
   }, [itemsPerPage, onItemsPerPageChange, onPageChange]);
 
-  const setTotalItems = useCallback((total: number) => {
-    if (total !== totalItems && total >= 0) {
-      setTotalItemsInternal(total);
-      onTotalItemsChange?.(total);
-    }
-  }, [totalItems, onTotalItemsChange]);
-
   const value: PaginatorContext = useMemo(() => ({
     t,
     lang,
@@ -112,7 +102,6 @@ export const PaginatorProvider = ({
     goToPreviousPage,
     goToNextPage,
     setItemsPerPage,
-    setTotalItems,
     setCurrentPage,
     canGoPrevious,
     canGoNext,
@@ -124,7 +113,7 @@ export const PaginatorProvider = ({
   }), [
     t, lang, totalItems, currentPage, itemsPerPage, totalPages,
     goToPage, goToFirstPage, goToLastPage, goToPreviousPage, goToNextPage,
-    setItemsPerPage, setTotalItems, setCurrentPage, canGoPrevious, canGoNext, 
+    setItemsPerPage, setCurrentPage, canGoPrevious, canGoNext, 
     visibilityConfig, isVisible, device, orientation, width
   ]);
 

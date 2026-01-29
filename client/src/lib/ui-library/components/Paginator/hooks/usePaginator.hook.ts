@@ -12,7 +12,6 @@ export const usePaginator = () => {
     canGoNext: context.canGoNext,
     setCurrentPage: context.setCurrentPage,
     setItemsPerPage: context.setItemsPerPage,
-    setTotalItems: context.setTotalItems,
     goToPage: context.goToPage,
     goToFirstPage: context.goToFirstPage,
     goToLastPage: context.goToLastPage,
