@@ -11,7 +11,7 @@ interface PageButtonProps {
 
 const PageButton = ({ page, isActive, disabled, onClick }: PageButtonProps) => (
   <button
-    className={`${styles.pageButton} ${isActive ? styles.pageButtonActive : ''}`}
+    className={`${styles.pageButton} ${isActive ? styles.pageButtonActive : ''} ${disabled ? styles.pageButtonDisabled : ''}`}
     onClick={onClick}
     disabled={disabled}
     data-testid={`paginator-page-${page}`}
@@ -133,6 +133,7 @@ export const PaginatorView = (props: PaginatorProps) => {
   } = usePaginatorContext();
 
   const pageNumbers = generatePageNumbers(currentPage, totalPages, maxVisiblePages);
+  const isEmpty = totalItems === 0;
 
   return (
     <div className={`${styles.paginatorWrapper} ${className || ''}`} data-testid="paginator">
@@ -153,10 +154,10 @@ export const PaginatorView = (props: PaginatorProps) => {
           
           {showPageNumbers && (
             <div className={styles.navigationContainer}>
-              <NavButton onClick={goToFirstPage} disabled={!canGoPrevious} testId="paginator-first">
+              <NavButton onClick={goToFirstPage} disabled={!canGoPrevious || isEmpty} testId="paginator-first">
                 {'|<'}
               </NavButton>
-              <NavButton onClick={goToPreviousPage} disabled={!canGoPrevious} testId="paginator-prev">
+              <NavButton onClick={goToPreviousPage} disabled={!canGoPrevious || isEmpty} testId="paginator-prev">
                 {'<'}
               </NavButton>
               
@@ -167,6 +168,7 @@ export const PaginatorView = (props: PaginatorProps) => {
                       key={index}
                       page={page}
                       isActive={page === currentPage}
+                      disabled={isEmpty}
                       onClick={() => goToPage(page)}
                     />
                   ) : (
@@ -175,10 +177,10 @@ export const PaginatorView = (props: PaginatorProps) => {
                 ))}
               </div>
               
-              <NavButton onClick={goToNextPage} disabled={!canGoNext} testId="paginator-next">
+              <NavButton onClick={goToNextPage} disabled={!canGoNext || isEmpty} testId="paginator-next">
                 {'>'}
               </NavButton>
-              <NavButton onClick={goToLastPage} disabled={!canGoNext} testId="paginator-last">
+              <NavButton onClick={goToLastPage} disabled={!canGoNext || isEmpty} testId="paginator-last">
                 {'>|'}
               </NavButton>
             </div>

@@ -89,6 +89,17 @@
   background-color: #2563eb;
 }
 
+.pageButtonDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: #e5e7eb;
+  color: #9ca3af;
+}
+
+.pageButtonDisabled:hover {
+  color: #9ca3af;
+}
+
 .navButton {
   min-width: 24px;
   height: 28px;
