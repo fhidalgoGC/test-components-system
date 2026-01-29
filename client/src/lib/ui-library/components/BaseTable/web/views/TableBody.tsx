@@ -133,6 +133,11 @@ export const TableBody = ({
 
               const cellStyle: React.CSSProperties = {};
               if (minWidth) cellStyle.minWidth = minWidth;
+              if (rowHeightMode === 'fixed' && rowHeight !== undefined) {
+                cellStyle.height = rowHeight;
+                cellStyle.maxHeight = rowHeight;
+                cellStyle.overflow = 'hidden';
+              }
               
               if (isAutoStretchColumn) {
                 // Última columna absorbe espacio restante automáticamente
@@ -164,6 +169,13 @@ export const TableBody = ({
                 return value ?? '';
               };
 
+              const content = renderContent();
+              const wrappedContent = rowHeightMode === 'fixed' && rowHeight !== undefined ? (
+                <div style={{ height: '100%', maxHeight: rowHeight, overflow: 'hidden' }}>
+                  {content}
+                </div>
+              ) : content;
+
               return (
                 <td
                   key={columnId}
@@ -172,7 +184,7 @@ export const TableBody = ({
                   onClick={(e) => handleCellClick(columnId, rowIndex, value, row, e)}
                   data-testid={`td-${columnId}-${rowIndex}`}
                 >
-                  {renderContent()}
+                  {wrappedContent}
                 </td>
               );
             })}
