@@ -2,51 +2,30 @@ import { useState } from 'react';
 import { Paginator } from '@/lib/ui-library/components/Paginator';
 import { useAppLanguage } from '@/lib/ui-library/providers';
 
-const StatusIndicator = ({ color, label, count }: { color: string; label: string; count: number }) => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px' }}>
-    <span style={{ 
-      width: '8px', 
-      height: '8px', 
-      borderRadius: '50%', 
-      backgroundColor: color,
-    }} />
-    <span style={{ color: '#6b7280' }}>{label}: {count}</span>
-  </div>
-);
-
-const ViewAllLink = ({ onClick }: { onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '4px',
-      color: '#3b82f6',
-      fontSize: '14px',
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer',
-    }}
-  >
-    View all trips
-    <span>{'>'}</span>
-  </button>
-);
-
 function CompleteExample({ lang }: { lang: string }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(435);
-
-  const handleViewAll = () => {
-    console.log('View all clicked');
-  };
 
   return (
     <div style={{ marginBottom: '32px' }}>
       <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>
-        1. Complete Example (with right components)
+        1. Complete Example
       </h2>
+      <div style={{ marginBottom: '12px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <span style={{ fontSize: '14px', color: '#6b7280' }}>Total Items:</span>
+        <input
+          type="number"
+          value={totalItems}
+          onChange={(e) => setTotalItems(Math.max(1, parseInt(e.target.value) || 1))}
+          style={{
+            padding: '6px 10px',
+            borderRadius: '4px',
+            border: '1px solid #d1d5db',
+            width: '100px',
+            fontSize: '14px',
+          }}
+          data-testid="input-total-items-1"
+        />
+      </div>
       <div style={{ 
         border: '1px solid #e5e7eb', 
         borderRadius: '8px', 
@@ -58,40 +37,23 @@ function CompleteExample({ lang }: { lang: string }) {
         </div>
         <Paginator
           totalItems={totalItems}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
+          itemsPerPage={10}
           itemsPerPageOptions={[10, 25, 50, 100]}
-          onPageChange={setCurrentPage}
-          onItemsPerPageChange={(items) => {
-            setItemsPerPage(items);
-            setCurrentPage(1);
-          }}
+          onPageChange={(page) => console.log('Page changed to:', page)}
+          onItemsPerPageChange={(items) => console.log('Items per page changed to:', items)}
           langOverride={lang}
           i18nOrder="local-first"
-          rightComponents={[
-            <StatusIndicator key="completed" color="#22c55e" label="Completed" count={2} />,
-            <StatusIndicator key="transit" color="#3b82f6" label="In Transit" count={2} />,
-            <StatusIndicator key="delayed" color="#ef4444" label="Delayed" count={2} />,
-            <ViewAllLink key="view-all" onClick={handleViewAll} />,
-          ]}
         />
-      </div>
-      <div style={{ marginTop: '8px', fontSize: '14px', color: '#6b7280' }}>
-        Current state: Page {currentPage}, Items per page: {itemsPerPage}
       </div>
     </div>
   );
 }
 
 function SimplePaginator({ lang }: { lang: string }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(25);
-  const totalItems = 1250;
-
   return (
     <div style={{ marginBottom: '32px' }}>
       <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>
-        2. Simple Paginator (no right components)
+        2. Simple Paginator
       </h2>
       <div style={{ 
         border: '1px solid #e5e7eb', 
@@ -100,32 +62,23 @@ function SimplePaginator({ lang }: { lang: string }) {
         backgroundColor: '#fff',
       }}>
         <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb' }}>
-          <p style={{ color: '#6b7280' }}>Simulated table content for {totalItems} items...</p>
+          <p style={{ color: '#6b7280' }}>Simulated table content for 1250 items...</p>
         </div>
         <Paginator
-          totalItems={totalItems}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
+          totalItems={1250}
+          itemsPerPage={25}
           itemsPerPageOptions={[25, 50, 100, 200]}
-          onPageChange={setCurrentPage}
-          onItemsPerPageChange={(items) => {
-            setItemsPerPage(items);
-            setCurrentPage(1);
-          }}
+          onPageChange={(page) => console.log('Page changed to:', page)}
+          onItemsPerPageChange={(items) => console.log('Items per page changed to:', items)}
           langOverride={lang}
           i18nOrder="local-first"
         />
-      </div>
-      <div style={{ marginTop: '8px', fontSize: '14px', color: '#6b7280' }}>
-        Current state: Page {currentPage}, Items per page: {itemsPerPage}
       </div>
     </div>
   );
 }
 
 function MinimalPaginator({ lang }: { lang: string }) {
-  const [currentPage, setCurrentPage] = useState(1);
-
   return (
     <div style={{ marginBottom: '32px' }}>
       <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>
@@ -139,10 +92,9 @@ function MinimalPaginator({ lang }: { lang: string }) {
       }}>
         <Paginator
           totalItems={100}
-          currentPage={currentPage}
           itemsPerPage={10}
           showItemsPerPage={false}
-          onPageChange={setCurrentPage}
+          onPageChange={(page) => console.log('Page changed to:', page)}
           langOverride={lang}
           i18nOrder="local-first"
         />
@@ -151,97 +103,18 @@ function MinimalPaginator({ lang }: { lang: string }) {
   );
 }
 
-function ExternalControlDemo({ lang }: { lang: string }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [totalItems, setTotalItems] = useState(435);
+function CallbacksDemo({ lang }: { lang: string }) {
+  const [log, setLog] = useState<string[]>([]);
 
-  const buttonStyle = {
-    padding: '8px 16px',
-    borderRadius: '4px',
-    border: '1px solid #d1d5db',
-    backgroundColor: '#fff',
-    cursor: 'pointer',
-  };
-
-  const inputStyle = {
-    padding: '8px 12px',
-    borderRadius: '4px',
-    border: '1px solid #d1d5db',
-    fontSize: '14px',
+  const addLog = (message: string) => {
+    setLog(prev => [...prev.slice(-4), message]);
   };
 
   return (
     <div style={{ marginBottom: '32px' }}>
       <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>
-        4. External Control Demo
+        4. Callbacks Demo
       </h2>
-      <div style={{ marginBottom: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-        <button
-          onClick={() => setCurrentPage(1)}
-          style={buttonStyle}
-          data-testid="btn-go-page-1"
-        >
-          Go to Page 1
-        </button>
-        <button
-          onClick={() => setCurrentPage(22)}
-          style={buttonStyle}
-          data-testid="btn-go-page-22"
-        >
-          Go to Page 22
-        </button>
-        <button
-          onClick={() => setCurrentPage(Math.ceil(totalItems / itemsPerPage))}
-          style={buttonStyle}
-          data-testid="btn-go-last-page"
-        >
-          Go to Last Page
-        </button>
-        <button
-          onClick={() => setItemsPerPage(50)}
-          style={buttonStyle}
-          data-testid="btn-set-50-per-page"
-        >
-          Set 50 per page
-        </button>
-      </div>
-      <div style={{ marginBottom: '16px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <span style={{ fontSize: '14px', color: '#6b7280' }}>Total Items:</span>
-          <input
-            type="number"
-            value={totalItems}
-            onChange={(e) => {
-              const value = Math.max(1, parseInt(e.target.value) || 1);
-              setTotalItems(value);
-              setCurrentPage(1);
-            }}
-            style={{ ...inputStyle, width: '100px' }}
-            data-testid="input-total-items"
-          />
-          <button onClick={() => { setTotalItems(100); setCurrentPage(1); }} style={buttonStyle} data-testid="btn-set-100-items">100</button>
-          <button onClick={() => { setTotalItems(500); setCurrentPage(1); }} style={buttonStyle} data-testid="btn-set-500-items">500</button>
-          <button onClick={() => { setTotalItems(1000); setCurrentPage(1); }} style={buttonStyle} data-testid="btn-set-1000-items">1000</button>
-        </div>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <span style={{ fontSize: '14px', color: '#6b7280' }}>Items per page:</span>
-          <input
-            type="number"
-            value={itemsPerPage}
-            onChange={(e) => {
-              const value = Math.max(1, parseInt(e.target.value) || 1);
-              setItemsPerPage(value);
-              setCurrentPage(1);
-            }}
-            style={{ ...inputStyle, width: '80px' }}
-            data-testid="input-items-per-page"
-          />
-          <button onClick={() => { setItemsPerPage(10); setCurrentPage(1); }} style={buttonStyle} data-testid="btn-set-10-per-page">10</button>
-          <button onClick={() => { setItemsPerPage(25); setCurrentPage(1); }} style={buttonStyle} data-testid="btn-set-25-per-page">25</button>
-          <button onClick={() => { setItemsPerPage(50); setCurrentPage(1); }} style={buttonStyle} data-testid="btn-set-50-per-page-alt">50</button>
-        </div>
-      </div>
       <div style={{ 
         border: '1px solid #e5e7eb', 
         borderRadius: '8px', 
@@ -249,18 +122,33 @@ function ExternalControlDemo({ lang }: { lang: string }) {
         backgroundColor: '#fff',
       }}>
         <Paginator
-          totalItems={totalItems}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-          itemsPerPageOptions={[10, 25, 50, 100]}
-          onPageChange={setCurrentPage}
-          onItemsPerPageChange={(items) => {
-            setItemsPerPage(items);
-            setCurrentPage(1);
-          }}
+          totalItems={500}
+          itemsPerPage={10}
+          itemsPerPageOptions={[10, 25, 50]}
+          onPageChange={(page) => addLog(`Page changed to: ${page}`)}
+          onItemsPerPageChange={(items) => addLog(`Items per page: ${items}`)}
           langOverride={lang}
           i18nOrder="local-first"
         />
+      </div>
+      <div style={{ 
+        marginTop: '12px', 
+        padding: '12px', 
+        backgroundColor: '#f9fafb', 
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        fontSize: '13px',
+      }}>
+        <strong>Callback Log:</strong>
+        {log.length === 0 ? (
+          <p style={{ color: '#9ca3af', marginTop: '8px' }}>Interact with the paginator to see callbacks...</p>
+        ) : (
+          <ul style={{ marginTop: '8px', paddingLeft: '16px' }}>
+            {log.map((entry, i) => (
+              <li key={i} style={{ color: '#374151' }}>{entry}</li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
@@ -308,7 +196,7 @@ export default function PaginatorDemo() {
       <CompleteExample lang={lang} />
       <SimplePaginator lang={lang} />
       <MinimalPaginator lang={lang} />
-      <ExternalControlDemo lang={lang} />
+      <CallbacksDemo lang={lang} />
     </div>
   );
 }

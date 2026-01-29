@@ -12,3 +12,4 @@ export const Paginator = (props: PaginatorProps) => {
 
 export type { PaginatorProps, PaginatorContext, PaginatorMetadata } from './types';
 export { usePaginatorContext } from './providers';
+export { usePaginator } from './hooks';

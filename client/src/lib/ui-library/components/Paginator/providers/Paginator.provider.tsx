@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useCallback } from 'react';
+import { createContext, useContext, useMemo, useCallback, useState, useEffect } from 'react';
 import type { PaginatorContext, PaginatorProps } from '../types';
 import { useI18nMerge, useVisibility } from '../hooks';
 
@@ -20,55 +20,84 @@ export const PaginatorProvider = ({
   children,
   langOverride,
   i18nOrder = 'local-first',
-  totalItems,
-  currentPage,
-  itemsPerPage,
+  totalItems: initialTotalItems,
+  itemsPerPage: initialItemsPerPage = 10,
   onPageChange,
   onItemsPerPageChange,
+  onTotalItemsChange,
   config,
 }: PaginatorProviderProps) => {
   const { lang, t } = useI18nMerge(langOverride, { order: i18nOrder });
   const { cfg: visibilityConfig, width, device, orientation, isVisible } = useVisibility(config);
   
+  const [totalItems, setTotalItemsInternal] = useState(initialTotalItems);
+  const [itemsPerPage, setItemsPerPageInternal] = useState(initialItemsPerPage);
+  const [currentPage, setCurrentPageInternal] = useState(1);
+
+  useEffect(() => {
+    setTotalItemsInternal(initialTotalItems);
+  }, [initialTotalItems]);
+
   const totalPages = useMemo(() => {
     return Math.max(1, Math.ceil(totalItems / itemsPerPage));
   }, [totalItems, itemsPerPage]);
 
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPageInternal(totalPages);
+    }
+  }, [totalPages, currentPage]);
+
   const canGoPrevious = currentPage > 1;
   const canGoNext = currentPage < totalPages;
 
-  const goToPage = useCallback((page: number) => {
+  const setCurrentPage = useCallback((page: number) => {
     const validPage = Math.max(1, Math.min(page, totalPages));
     if (validPage !== currentPage) {
+      setCurrentPageInternal(validPage);
       onPageChange?.(validPage);
     }
   }, [currentPage, totalPages, onPageChange]);
 
+  const goToPage = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, [setCurrentPage]);
+
   const goToFirstPage = useCallback(() => {
-    goToPage(1);
-  }, [goToPage]);
+    setCurrentPage(1);
+  }, [setCurrentPage]);
 
   const goToLastPage = useCallback(() => {
-    goToPage(totalPages);
-  }, [goToPage, totalPages]);
+    setCurrentPage(totalPages);
+  }, [setCurrentPage, totalPages]);
 
   const goToPreviousPage = useCallback(() => {
     if (canGoPrevious) {
-      goToPage(currentPage - 1);
+      setCurrentPage(currentPage - 1);
     }
-  }, [canGoPrevious, currentPage, goToPage]);
+  }, [canGoPrevious, currentPage, setCurrentPage]);
 
   const goToNextPage = useCallback(() => {
     if (canGoNext) {
-      goToPage(currentPage + 1);
+      setCurrentPage(currentPage + 1);
     }
-  }, [canGoNext, currentPage, goToPage]);
+  }, [canGoNext, currentPage, setCurrentPage]);
 
   const setItemsPerPage = useCallback((items: number) => {
-    if (items !== itemsPerPage) {
+    if (items !== itemsPerPage && items > 0) {
+      setItemsPerPageInternal(items);
+      setCurrentPageInternal(1);
       onItemsPerPageChange?.(items);
+      onPageChange?.(1);
     }
-  }, [itemsPerPage, onItemsPerPageChange]);
+  }, [itemsPerPage, onItemsPerPageChange, onPageChange]);
+
+  const setTotalItems = useCallback((total: number) => {
+    if (total !== totalItems && total >= 0) {
+      setTotalItemsInternal(total);
+      onTotalItemsChange?.(total);
+    }
+  }, [totalItems, onTotalItemsChange]);
 
   const value: PaginatorContext = useMemo(() => ({
     t,
@@ -83,6 +112,8 @@ export const PaginatorProvider = ({
     goToPreviousPage,
     goToNextPage,
     setItemsPerPage,
+    setTotalItems,
+    setCurrentPage,
     canGoPrevious,
     canGoNext,
     visibilityConfig,
@@ -93,7 +124,8 @@ export const PaginatorProvider = ({
   }), [
     t, lang, totalItems, currentPage, itemsPerPage, totalPages,
     goToPage, goToFirstPage, goToLastPage, goToPreviousPage, goToNextPage,
-    setItemsPerPage, canGoPrevious, canGoNext, visibilityConfig, isVisible, device, orientation, width
+    setItemsPerPage, setTotalItems, setCurrentPage, canGoPrevious, canGoNext, 
+    visibilityConfig, isVisible, device, orientation, width
   ]);
 
   return (

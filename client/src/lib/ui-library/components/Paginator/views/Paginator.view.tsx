@@ -110,7 +110,6 @@ const generatePageNumbers = (currentPage: number, totalPages: number, maxVisible
 export const PaginatorView = (props: PaginatorProps) => {
   const { 
     className,
-    rightComponents = [],
     itemsPerPageOptions = [10, 25, 50, 100],
     showItemsPerPage = true,
     showPageNumbers = true,
@@ -185,16 +184,6 @@ export const PaginatorView = (props: PaginatorProps) => {
             </div>
           )}
         </div>
-        
-        {rightComponents.length > 0 && (
-          <div className={styles.rightSection}>
-            {rightComponents.map((component, index) => (
-              <div key={index} className={styles.rightComponentItem}>
-                {component}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

@@ -1,14 +1,12 @@
-import type { ReactNode } from 'react';
 import type { VisibilityConfig, Device, Orientation } from '../../../types/shared.types';
 
 export interface PaginatorProps {
   totalItems: number;
-  currentPage: number;
-  itemsPerPage: number;
+  itemsPerPage?: number;
   itemsPerPageOptions?: number[];
   onPageChange?: (page: number) => void;
   onItemsPerPageChange?: (itemsPerPage: number) => void;
-  rightComponents?: ReactNode[];
+  onTotalItemsChange?: (totalItems: number) => void;
   className?: string;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';
@@ -31,6 +29,8 @@ export interface PaginatorContext {
   goToPreviousPage: () => void;
   goToNextPage: () => void;
   setItemsPerPage: (items: number) => void;
+  setTotalItems: (total: number) => void;
+  setCurrentPage: (page: number) => void;
   canGoPrevious: boolean;
   canGoNext: boolean;
   visibilityConfig?: VisibilityConfig;
