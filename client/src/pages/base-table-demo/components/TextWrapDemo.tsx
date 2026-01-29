@@ -113,6 +113,8 @@ export function TextWrapDemo() {
   const [textCellHeightMode, setTextCellHeightMode] = useState<CellHeightMode>('auto');
   const [headerCellHeight, setHeaderCellHeight] = useState<number>(40);
   const [headerCellHeightMode, setHeaderCellHeightMode] = useState<CellHeightMode>('auto');
+  const [textCellTextWrap, setTextCellTextWrap] = useState<'break-word' | 'truncate'>('break-word');
+  const [headerCellTextWrap, setHeaderCellTextWrap] = useState<'break-word' | 'truncate'>('truncate');
   const [lettersPerWord, setLettersPerWord] = useState<number>(5);
   const [wordCount, setWordCount] = useState<number>(1);
   const [dataKey, setDataKey] = useState<number>(0);
@@ -311,6 +313,21 @@ export function TextWrapDemo() {
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 24px', marginBottom: 12, alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>TextCell TextWrap:</span>
+          {(['break-word', 'truncate'] as const).map((wrap) => (
+            <Button key={wrap} variant={textCellTextWrap === wrap ? "default" : "outline"} size="sm" onClick={() => setTextCellTextWrap(wrap)} data-testid={`btn-textcell-wrap-${wrap}`}>{wrap}</Button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>HeaderCell TextWrap:</span>
+          {(['break-word', 'truncate'] as const).map((wrap) => (
+            <Button key={wrap} variant={headerCellTextWrap === wrap ? "default" : "outline"} size="sm" onClick={() => setHeaderCellTextWrap(wrap)} data-testid={`btn-headercell-wrap-${wrap}`}>{wrap}</Button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 24px', marginBottom: 12, alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ fontSize: 13, fontWeight: 500 }}>H-Scroll:</span>
           <Button variant={horizontalScrollEnabled ? "default" : "outline"} size="sm" onClick={() => setHorizontalScrollEnabled(true)} data-testid="btn-scroll-true">on</Button>
           <Button variant={!horizontalScrollEnabled ? "default" : "outline"} size="sm" onClick={() => setHorizontalScrollEnabled(false)} data-testid="btn-scroll-false">off</Button>
@@ -489,7 +506,8 @@ export function TextWrapDemo() {
                   <HeaderCell 
                     text="Header" 
                     height={headerCellHeight} 
-                    heightMode={headerCellHeightMode} 
+                    heightMode={headerCellHeightMode}
+                    textWrap={headerCellTextWrap}
                   />
                 ),
               },
@@ -503,6 +521,7 @@ export function TextWrapDemo() {
                   width={textCellWidth} 
                   height={textCellHeight}
                   heightMode={textCellHeightMode}
+                  textWrap={textCellTextWrap}
                 />
               ),
             },
