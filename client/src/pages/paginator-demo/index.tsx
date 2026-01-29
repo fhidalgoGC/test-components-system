@@ -106,6 +106,8 @@ export default function PaginatorDemo() {
               setItemsPerPage(items);
               setCurrentPage(1);
             }}
+            langOverride={lang}
+            i18nOrder="local-first"
             rightComponents={[
               <StatusIndicator key="completed" color="#22c55e" label="Completed" count={2} />,
               <StatusIndicator key="transit" color="#3b82f6" label="In Transit" count={2} />,
@@ -142,6 +144,8 @@ export default function PaginatorDemo() {
               setItemsPerPage2(items);
               setCurrentPage2(1);
             }}
+            langOverride={lang}
+            i18nOrder="local-first"
           />
         </div>
         <div style={{ marginTop: '8px', fontSize: '14px', color: '#6b7280' }}>
@@ -165,6 +169,8 @@ export default function PaginatorDemo() {
             itemsPerPage={10}
             showItemsPerPage={false}
             onPageChange={(page) => console.log('Page changed:', page)}
+            langOverride={lang}
+            i18nOrder="local-first"
           />
         </div>
       </div>
@@ -239,6 +245,8 @@ export default function PaginatorDemo() {
               setItemsPerPage(items);
               setCurrentPage(1);
             }}
+            langOverride={lang}
+            i18nOrder="local-first"
           />
         </div>
       </div>

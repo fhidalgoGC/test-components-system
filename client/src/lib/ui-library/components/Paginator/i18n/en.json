@@ -1,14 +1,12 @@
 {
-  "paginator": {
-    "showing": "Showing",
-    "of": "of",
-    "items": "items",
-    "page": "Page",
-    "first": "First",
-    "last": "Last",
-    "previous": "Previous",
-    "next": "Next",
-    "itemsPerPage": "Items per page",
-    "goToPage": "Go to page"
-  }
+  "showing": "showing",
+  "of": "of",
+  "items": "items",
+  "page": "Page",
+  "first": "First",
+  "last": "Last",
+  "previous": "Previous",
+  "next": "Next",
+  "itemsPerPage": "Items per page",
+  "goToPage": "Go to page"
 }
