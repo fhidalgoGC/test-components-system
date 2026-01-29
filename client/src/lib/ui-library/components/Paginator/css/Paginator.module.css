@@ -71,41 +71,40 @@
 }
 
 .pageButton {
-  min-width: 32px;
-  height: 32px;
-  padding: 0 8px;
-  border: 1px solid #d1d5db;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border: none;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: transparent;
   font-size: 14px;
+  color: #6b7280;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .pageButton:hover:not(:disabled) {
-  background-color: #f3f4f6;
-  border-color: #9ca3af;
+  color: #3b82f6;
 }
 
 .pageButtonActive {
   background-color: #3b82f6;
-  border-color: #3b82f6;
   color: #fff;
 }
 
 .pageButtonActive:hover {
   background-color: #2563eb;
-  border-color: #2563eb;
 }
 
 .navButton {
-  min-width: 32px;
-  height: 32px;
-  padding: 0 8px;
-  border: 1px solid #d1d5db;
+  min-width: 24px;
+  height: 28px;
+  padding: 0 4px;
+  border: none;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: transparent;
   font-size: 14px;
+  color: #6b7280;
   cursor: pointer;
   transition: all 0.15s ease;
   display: flex;
@@ -114,12 +113,11 @@
 }
 
 .navButton:hover:not(:disabled) {
-  background-color: #f3f4f6;
-  border-color: #9ca3af;
+  color: #3b82f6;
 }
 
 .navButtonDisabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
