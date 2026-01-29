@@ -1,0 +1,14 @@
+{
+  "paginator": {
+    "showing": "Mostrando",
+    "of": "de",
+    "items": "elementos",
+    "page": "Página",
+    "first": "Primera",
+    "last": "Última",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "itemsPerPage": "Elementos por página",
+    "goToPage": "Ir a página"
+  }
+}

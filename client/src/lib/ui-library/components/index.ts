@@ -23,3 +23,4 @@ export * from './LayoutColumn';
 export * from './NavigationSidebar';
 export * from './GoogleMap';
 export * from './BaseTable';
+export * from './Paginator';

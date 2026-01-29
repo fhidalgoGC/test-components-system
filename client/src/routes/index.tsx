@@ -30,6 +30,7 @@ const SidebarLayoutControlled = lazy(() => import("@/pages/layout-sidebar-toolba
 const SidebarLayoutWithNavigation = lazy(() => import("@/pages/layout-sidebar-toolbar/with-navigation"));
 const GoogleMapDemo = lazy(() => import("@/pages/google-map-demo/GoogleMapDemo"));
 const BaseTableDemo = lazy(() => import("@/pages/base-table-demo").then(m => ({ default: m.default || m.BaseTableDemo })));
+const PaginatorDemo = lazy(() => import("@/pages/paginator-demo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -95,6 +96,7 @@ export function Router() {
           <Route path="/components/layout-column" component={LayoutColumnDemo} />
           <Route path="/components/google-map" component={GoogleMapDemo} />
           <Route path="/components/base-table" component={BaseTableDemo} />
+          <Route path="/components/paginator" component={PaginatorDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
