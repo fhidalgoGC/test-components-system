@@ -114,7 +114,6 @@ export default function ControlDataDemo() {
       <ControlDataProvider<ApiParams, ApiResponse>
         fetchFn={mockFetchFiles}
         mapParams={filesAdapter}
-        initialState={{ page: 1 }}
         debounceMs={400}
       >
         <div style={{ display: 'flex', gap: '24px' }}>
