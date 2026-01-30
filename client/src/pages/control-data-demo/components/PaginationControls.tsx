@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useControlDataContext } from '@/lib/ui-library/providers';
 import type { StateTransformer } from '@/lib/ui-library/providers';
 
@@ -16,6 +17,13 @@ export function PaginationControls() {
   const { data, state, applyToState, resetState, reload } = useControlDataContext<ApiResponse>();
 
   const currentPage = (state.page as number) || 1;
+
+  useEffect(() => {
+    if (state.page === undefined) {
+      console.log('📄 [INIT] Initializing page to 1');
+      applyToState('page', pageTransformer, 1);
+    }
+  }, []);
   const total = data?.total || 0;
   const pageSize = 5;
   const totalPages = Math.ceil(total / pageSize);
