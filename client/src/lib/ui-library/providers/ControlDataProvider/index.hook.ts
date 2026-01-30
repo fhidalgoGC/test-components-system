@@ -21,7 +21,6 @@ export function useControlDataContext<TData = unknown>(): ControlDataContextValu
 
 const DEFAULT_STATE: ControlDataState = {
   page: 1,
-  filters: {},
   sort: null,
 };
 
@@ -100,14 +99,6 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     setState((prev) => ({ ...prev, sort, page: 1 }));
   }, []);
 
-  const resetFilters = useCallback(() => {
-    setState((prev) => ({
-      ...prev,
-      page: 1,
-      filters: {},
-    }));
-  }, []);
-
   const resetState = useCallback(() => {
     setState({ ...DEFAULT_STATE });
   }, []);
@@ -124,7 +115,6 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     applyToState,
     setPage,
     setSort,
-    resetFilters,
     resetState,
     reload,
   };

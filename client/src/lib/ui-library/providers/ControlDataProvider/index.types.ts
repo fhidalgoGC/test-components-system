@@ -1,5 +1,3 @@
-export type ControlDataFilters = Record<string, unknown>;
-
 export type SortDirection = 'asc' | 'desc';
 
 export type ControlDataSort = {
@@ -9,7 +7,6 @@ export type ControlDataSort = {
 
 export type ControlDataState = {
   page: number;
-  filters: ControlDataFilters;
   sort: ControlDataSort;
   [key: string]: unknown;
 };
@@ -30,7 +27,6 @@ export type ControlDataContextValue<TData = unknown> = {
   applyToState: <T = unknown, R = unknown>(key: StateKey, transformer: StateTransformer<T, R>, rawData: T) => void;
   setPage: (page: number) => void;
   setSort: (sort: ControlDataSort) => void;
-  resetFilters: () => void;
   resetState: () => void;
   reload: () => void;
 };

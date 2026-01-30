@@ -7,7 +7,7 @@ type ApiResponse = {
 };
 
 export function PaginationControls() {
-  const { data, state, setPage, resetFilters, reload } = useControlDataContext<ApiResponse>();
+  const { data, state, setPage, resetState, reload } = useControlDataContext<ApiResponse>();
 
   const total = data?.total || 0;
   const pageSize = 5;
@@ -28,8 +28,8 @@ export function PaginationControls() {
   };
 
   const handleReset = () => {
-    console.log('🔄 [UI EVENT] Reset filters clicked');
-    resetFilters();
+    console.log('🔄 [UI EVENT] Reset state clicked');
+    resetState();
   };
 
   const handleReload = () => {
