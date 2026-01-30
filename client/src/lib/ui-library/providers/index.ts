@@ -11,8 +11,6 @@ export type { AppAuthContextValue, AppAuthProviderProps } from './AppAuthProvide
 export { ControlDataProvider, useControlDataContext, useControlData } from './ControlDataProvider';
 export type {
   ControlDataState,
-  ControlDataSort,
-  SortDirection,
   StateKey,
   StateTransformer,
   MapParamsAdapter,

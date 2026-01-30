@@ -1,17 +1,8 @@
-export type SortDirection = 'asc' | 'desc';
-
-export type ControlDataSort = {
-  field: string;
-  direction: SortDirection;
-} | null;
-
 export type ControlDataState = {
-  page: number;
-  sort: ControlDataSort;
   [key: string]: unknown;
 };
 
-export type StateKey = keyof ControlDataState | string;
+export type StateKey = string;
 
 export type StateTransformer<T = unknown, R = unknown> = (rawData: T) => R;
 
@@ -25,8 +16,6 @@ export type ControlDataContextValue<TData = unknown> = {
   error: Error | null;
   state: ControlDataState;
   applyToState: <T = unknown, R = unknown>(key: StateKey, transformer: StateTransformer<T, R>, rawData: T) => void;
-  setPage: (page: number) => void;
-  setSort: (sort: ControlDataSort) => void;
   resetState: () => void;
   reload: () => void;
 };

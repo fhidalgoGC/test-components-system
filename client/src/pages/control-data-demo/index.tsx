@@ -28,8 +28,6 @@ type ApiParams = {
   status?: string;
   date_from?: string;
   date_to?: string;
-  sort_field?: string;
-  sort_dir?: string;
 };
 
 const mockFiles: FileItem[] = [
@@ -94,13 +92,11 @@ const filesAdapter: MapParamsAdapter<ApiParams> = (state: ControlDataState): Api
   console.log('🟡 [ADAPTER] mapParams transforming state:', state);
 
   const params: ApiParams = {
-    page_num: state.page,
+    page_num: (state.page as number) || 1,
     search: (state.textSearch as string) || undefined,
     status: (state.status as string) || undefined,
     date_from: (state.dateRange as { start?: string; end?: string })?.start || undefined,
     date_to: (state.dateRange as { start?: string; end?: string })?.end || undefined,
-    sort_field: state.sort?.field || undefined,
-    sort_dir: state.sort?.direction || undefined,
   };
 
   console.log('🟢 [ADAPTER] Transformed to API params:', params);

@@ -1,4 +1,5 @@
 import { useControlDataContext } from '@/lib/ui-library/providers';
+import type { StateTransformer } from '@/lib/ui-library/providers';
 
 type ApiResponse = {
   items: unknown[];
@@ -6,24 +7,30 @@ type ApiResponse = {
   page: number;
 };
 
-export function PaginationControls() {
-  const { data, state, setPage, resetState, reload } = useControlDataContext<ApiResponse>();
+const pageTransformer: StateTransformer<number, number> = (value) => {
+  console.log('🔵 [TRANSFORMER] Page transforming:', value);
+  return value;
+};
 
+export function PaginationControls() {
+  const { data, state, applyToState, resetState, reload } = useControlDataContext<ApiResponse>();
+
+  const currentPage = (state.page as number) || 1;
   const total = data?.total || 0;
   const pageSize = 5;
   const totalPages = Math.ceil(total / pageSize);
 
   const handlePrevious = () => {
-    if (state.page > 1) {
+    if (currentPage > 1) {
       console.log('⬅️ [UI EVENT] Previous page clicked');
-      setPage(state.page - 1);
+      applyToState('page', pageTransformer, currentPage - 1);
     }
   };
 
   const handleNext = () => {
-    if (state.page < totalPages) {
+    if (currentPage < totalPages) {
       console.log('➡️ [UI EVENT] Next page clicked');
-      setPage(state.page + 1);
+      applyToState('page', pageTransformer, currentPage + 1);
     }
   };
 
@@ -57,9 +64,9 @@ export function PaginationControls() {
             background: '#fff',
             cursor: 'pointer',
           }}
-          data-testid="reset-filters-button"
+          data-testid="reset-state-button"
         >
-          🔄 Limpiar filtros
+          🔄 Limpiar todo
         </button>
         <button
           onClick={handleReload}
@@ -78,17 +85,17 @@ export function PaginationControls() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <span style={{ color: '#666', fontSize: '14px' }}>
-          Página {state.page} de {totalPages || 1} ({total} items)
+          Página {currentPage} de {totalPages || 1} ({total} items)
         </span>
         <button
           onClick={handlePrevious}
-          disabled={state.page <= 1}
+          disabled={currentPage <= 1}
           style={{
             padding: '8px 16px',
             border: '1px solid #ddd',
             borderRadius: '4px',
-            background: state.page <= 1 ? '#eee' : '#fff',
-            cursor: state.page <= 1 ? 'not-allowed' : 'pointer',
+            background: currentPage <= 1 ? '#eee' : '#fff',
+            cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
           }}
           data-testid="prev-page-button"
         >
@@ -96,13 +103,13 @@ export function PaginationControls() {
         </button>
         <button
           onClick={handleNext}
-          disabled={state.page >= totalPages}
+          disabled={currentPage >= totalPages}
           style={{
             padding: '8px 16px',
             border: '1px solid #ddd',
             borderRadius: '4px',
-            background: state.page >= totalPages ? '#eee' : '#fff',
-            cursor: state.page >= totalPages ? 'not-allowed' : 'pointer',
+            background: currentPage >= totalPages ? '#eee' : '#fff',
+            cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
           }}
           data-testid="next-page-button"
         >

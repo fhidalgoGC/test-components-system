@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import type {
   ControlDataState,
-  ControlDataSort,
   StateKey,
   StateTransformer,
   MapParamsAdapter,
@@ -19,10 +18,7 @@ export function useControlDataContext<TData = unknown>(): ControlDataContextValu
   return context as ControlDataContextValue<TData>;
 }
 
-const DEFAULT_STATE: ControlDataState = {
-  page: 1,
-  sort: null,
-};
+const DEFAULT_STATE: ControlDataState = {};
 
 export function useControlData<TParams = unknown, TResponse = unknown>(
   fetchFn: FetchFunction<TParams, TResponse>,
@@ -86,17 +82,8 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     const newValue = transformer(rawData);
     setState((prev) => ({
       ...prev,
-      page: 1,
       [key]: newValue,
     }));
-  }, []);
-
-  const setPage = useCallback((page: number) => {
-    setState((prev) => ({ ...prev, page }));
-  }, []);
-
-  const setSort = useCallback((sort: ControlDataSort) => {
-    setState((prev) => ({ ...prev, sort, page: 1 }));
   }, []);
 
   const resetState = useCallback(() => {
@@ -113,8 +100,6 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     error,
     state,
     applyToState,
-    setPage,
-    setSort,
     resetState,
     reload,
   };

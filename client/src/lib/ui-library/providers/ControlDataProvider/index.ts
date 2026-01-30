@@ -2,8 +2,6 @@ export { ControlDataProvider } from './index.provider';
 export { useControlDataContext, useControlData } from './index.hook';
 export type {
   ControlDataState,
-  ControlDataSort,
-  SortDirection,
   StateKey,
   StateTransformer,
   MapParamsAdapter,
