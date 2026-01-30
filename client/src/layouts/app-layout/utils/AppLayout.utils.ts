@@ -65,6 +65,15 @@ export function getDefaultMenuItems(): MenuItem[] {
       ]
     },
     { 
+      id: 'providers', 
+      label: 'Providers',
+      i18n: { en: 'Providers', es: 'Providers', default: 'Providers' },
+      icon: 'Database',
+      children: [
+        { id: 'control-data', label: 'ControlData', i18n: { en: 'ControlData', es: 'ControlData', default: 'ControlData' }, path: '/providers/control-data', icon: 'Filter' }
+      ]
+    },
+    { 
       id: 'utils', 
       label: 'Utilities',
       i18n: { en: 'Utilities', es: 'Utilidades', default: 'Utilities' },
