@@ -1,8 +1,8 @@
 import { useControlDataContext } from '@/lib/ui-library/providers';
 import type { StateTransformer } from '@/lib/ui-library/providers';
 
-const searchTransformer: StateTransformer<string, string> = (value) => {
-  console.log('🔵 [TRANSFORMER] SearchFilter transforming:', value);
+const searchTransformer: StateTransformer<string, string> = (value, _previous) => {
+  console.log('🔵 [TRANSFORMER] SearchFilter transforming:', value, '| Previous:', _previous);
   return value.toUpperCase();
 };
 

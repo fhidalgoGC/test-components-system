@@ -4,7 +4,7 @@ export type ControlDataState = {
 
 export type StateKey = string;
 
-export type StateTransformer<T = unknown, R = unknown> = (rawData: T) => R;
+export type StateTransformer<T = unknown, R = unknown> = (rawData: T, previousValue: R | undefined) => R;
 
 export type MapParamsAdapter<TOutput = unknown> = (state: ControlDataState) => TOutput;
 

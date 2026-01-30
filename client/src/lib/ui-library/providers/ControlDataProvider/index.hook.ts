@@ -79,11 +79,14 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     transformer: StateTransformer<T, R>,
     rawData: T
   ) => {
-    const newValue = transformer(rawData);
-    setState((prev) => ({
-      ...prev,
-      [key]: newValue,
-    }));
+    setState((prev) => {
+      const previousValue = prev[key] as R | undefined;
+      const newValue = transformer(rawData, previousValue);
+      return {
+        ...prev,
+        [key]: newValue,
+      };
+    });
   }, []);
 
   const resetState = useCallback(() => {

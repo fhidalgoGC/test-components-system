@@ -4,8 +4,8 @@ import type { StateTransformer } from '@/lib/ui-library/providers';
 
 type DateRange = { start: string; end: string };
 
-const dateRangeTransformer: StateTransformer<DateRange, DateRange> = (value) => {
-  console.log('🔵 [TRANSFORMER] DateRangeFilter transforming:', value);
+const dateRangeTransformer: StateTransformer<DateRange, DateRange> = (value, _previous) => {
+  console.log('🔵 [TRANSFORMER] DateRangeFilter transforming:', value, '| Previous:', _previous);
   return {
     start: value.start || '',
     end: value.end || '',

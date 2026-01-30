@@ -8,8 +8,8 @@ type ApiResponse = {
   page: number;
 };
 
-const pageTransformer: StateTransformer<number, number> = (value) => {
-  console.log('🔵 [TRANSFORMER] Page transforming:', value);
+const pageTransformer: StateTransformer<number, number> = (value, _previous) => {
+  console.log('🔵 [TRANSFORMER] Page transforming:', value, '| Previous:', _previous);
   return value;
 };
 

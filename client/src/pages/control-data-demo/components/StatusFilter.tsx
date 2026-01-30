@@ -1,8 +1,8 @@
 import { useControlDataContext } from '@/lib/ui-library/providers';
 import type { StateTransformer } from '@/lib/ui-library/providers';
 
-const statusTransformer: StateTransformer<string, string | undefined> = (value) => {
-  console.log('🔵 [TRANSFORMER] StatusFilter transforming:', value);
+const statusTransformer: StateTransformer<string, string | undefined> = (value, _previous) => {
+  console.log('🔵 [TRANSFORMER] StatusFilter transforming:', value, '| Previous:', _previous);
   return value || undefined;
 };
 
