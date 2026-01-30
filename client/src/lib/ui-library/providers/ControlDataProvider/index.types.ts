@@ -11,9 +11,12 @@ export type ControlDataState = {
   page: number;
   filters: ControlDataFilters;
   sort: ControlDataSort;
+  [key: string]: unknown;
 };
 
-export type FilterTransformer<T = unknown> = (rawData: T) => ControlDataFilters;
+export type StateKey = keyof ControlDataState | string;
+
+export type StateTransformer<T = unknown, R = unknown> = (rawData: T) => R;
 
 export type MapParamsAdapter<TOutput = unknown> = (state: ControlDataState) => TOutput;
 
@@ -24,10 +27,11 @@ export type ControlDataContextValue<TData = unknown> = {
   loading: boolean;
   error: Error | null;
   state: ControlDataState;
-  applyFilter: <T = unknown>(transformer: FilterTransformer<T>, rawData: T) => void;
+  applyToState: <T = unknown, R = unknown>(key: StateKey, transformer: StateTransformer<T, R>, rawData: T) => void;
   setPage: (page: number) => void;
   setSort: (sort: ControlDataSort) => void;
   resetFilters: () => void;
+  resetState: () => void;
   reload: () => void;
 };
 

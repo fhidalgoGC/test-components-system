@@ -95,10 +95,10 @@ const filesAdapter: MapParamsAdapter<ApiParams> = (state: ControlDataState): Api
 
   const params: ApiParams = {
     page_num: state.page,
-    search: (state.filters.textSearch as string) || undefined,
-    status: (state.filters.status as string) || undefined,
-    date_from: (state.filters.dateRange as { start?: string; end?: string })?.start || undefined,
-    date_to: (state.filters.dateRange as { start?: string; end?: string })?.end || undefined,
+    search: (state.textSearch as string) || undefined,
+    status: (state.status as string) || undefined,
+    date_from: (state.dateRange as { start?: string; end?: string })?.start || undefined,
+    date_to: (state.dateRange as { start?: string; end?: string })?.end || undefined,
     sort_field: state.sort?.field || undefined,
     sort_dir: state.sort?.direction || undefined,
   };

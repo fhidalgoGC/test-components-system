@@ -1,35 +1,33 @@
 import { useState } from 'react';
 import { useControlDataContext } from '@/lib/ui-library/providers';
-import type { FilterTransformer } from '@/lib/ui-library/providers';
+import type { StateTransformer } from '@/lib/ui-library/providers';
 
 type DateRange = { start: string; end: string };
 
-const dateRangeTransformer: FilterTransformer<DateRange> = (value) => {
+const dateRangeTransformer: StateTransformer<DateRange, DateRange> = (value) => {
   console.log('🔵 [TRANSFORMER] DateRangeFilter transforming:', value);
-  return { 
-    dateRange: {
-      start: value.start || undefined,
-      end: value.end || undefined,
-    }
+  return {
+    start: value.start || '',
+    end: value.end || '',
   };
 };
 
 export function DateRangeFilter() {
-  const { applyFilter } = useControlDataContext();
+  const { applyToState } = useControlDataContext();
   const [dates, setDates] = useState<DateRange>({ start: '', end: '' });
 
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDates = { ...dates, start: e.target.value };
     setDates(newDates);
     console.log('📅 [UI EVENT] DateRange start changed:', newDates);
-    applyFilter(dateRangeTransformer, newDates);
+    applyToState('dateRange', dateRangeTransformer, newDates);
   };
 
   const handleEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDates = { ...dates, end: e.target.value };
     setDates(newDates);
     console.log('📅 [UI EVENT] DateRange end changed:', newDates);
-    applyFilter(dateRangeTransformer, newDates);
+    applyToState('dateRange', dateRangeTransformer, newDates);
   };
 
   return (

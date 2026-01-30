@@ -1,17 +1,17 @@
 import { useControlDataContext } from '@/lib/ui-library/providers';
-import type { FilterTransformer } from '@/lib/ui-library/providers';
+import type { StateTransformer } from '@/lib/ui-library/providers';
 
-const searchTransformer: FilterTransformer<string> = (value) => {
+const searchTransformer: StateTransformer<string, string> = (value) => {
   console.log('🔵 [TRANSFORMER] SearchFilter transforming:', value);
-  return { textSearch: value.toUpperCase() };
+  return value.toUpperCase();
 };
 
 export function SearchFilter() {
-  const { applyFilter } = useControlDataContext();
+  const { applyToState } = useControlDataContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log('⌨️ [UI EVENT] SearchFilter input changed:', e.target.value);
-    applyFilter(searchTransformer, e.target.value);
+    applyToState('textSearch', searchTransformer, e.target.value);
   };
 
   return (

@@ -1,17 +1,17 @@
 import { useControlDataContext } from '@/lib/ui-library/providers';
-import type { FilterTransformer } from '@/lib/ui-library/providers';
+import type { StateTransformer } from '@/lib/ui-library/providers';
 
-const statusTransformer: FilterTransformer<string> = (value) => {
+const statusTransformer: StateTransformer<string, string | undefined> = (value) => {
   console.log('🔵 [TRANSFORMER] StatusFilter transforming:', value);
-  return { status: value || undefined };
+  return value || undefined;
 };
 
 export function StatusFilter() {
-  const { applyFilter } = useControlDataContext();
+  const { applyToState } = useControlDataContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     console.log('🔄 [UI EVENT] StatusFilter changed:', e.target.value);
-    applyFilter(statusTransformer, e.target.value);
+    applyToState('status', statusTransformer, e.target.value);
   };
 
   return (

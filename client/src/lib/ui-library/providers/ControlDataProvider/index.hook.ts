@@ -2,8 +2,8 @@ import { createContext, useContext, useState, useCallback, useEffect, useRef } f
 import type {
   ControlDataState,
   ControlDataSort,
-  ControlDataFilters,
-  FilterTransformer,
+  StateKey,
+  StateTransformer,
   MapParamsAdapter,
   FetchFunction,
   ControlDataContextValue,
@@ -79,12 +79,16 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     };
   }, [state, loadData, debounceMs]);
 
-  const applyFilter = useCallback(<T = unknown>(transformer: FilterTransformer<T>, rawData: T) => {
-    const newFilterChunk = transformer(rawData);
+  const applyToState = useCallback(<T = unknown, R = unknown>(
+    key: StateKey,
+    transformer: StateTransformer<T, R>,
+    rawData: T
+  ) => {
+    const newValue = transformer(rawData);
     setState((prev) => ({
       ...prev,
       page: 1,
-      filters: { ...prev.filters, ...newFilterChunk },
+      [key]: newValue,
     }));
   }, []);
 
@@ -104,6 +108,10 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     }));
   }, []);
 
+  const resetState = useCallback(() => {
+    setState({ ...DEFAULT_STATE });
+  }, []);
+
   const reload = useCallback(() => {
     loadData();
   }, [loadData]);
@@ -113,10 +121,11 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     loading,
     error,
     state,
-    applyFilter,
+    applyToState,
     setPage,
     setSort,
     resetFilters,
+    resetState,
     reload,
   };
 }
