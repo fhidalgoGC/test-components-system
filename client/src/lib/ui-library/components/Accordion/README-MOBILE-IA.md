@@ -1,55 +1,69 @@
 # Accordion - Mobile Responsive Version
 
 ## Overview
-Mobile responsive implementation for web browsers on small screens. Uses the same React DOM runtime as web, but with mobile-optimized layouts and touch interactions.
 
-## Current Status
+Implementación mobile responsive del componente Accordion. Comparte la misma API y lógica que la versión web, optimizada para pantallas pequeñas.
 
-**Not Implemented** - Currently shows `NotImplemented` placeholder.
+## Características
+
+- Misma API que web
+- Estilos optimizados para touch
+- Control interno, por props y por hook
+- Estrategias de render: "once" / "always"
+
+## Importación
+
+```tsx
+import { Accordion, useAccordionController } from '@/lib/ui-library/components/Accordion';
+```
+
+El componente detecta automáticamente si es mobile usando `useIsMobile()`.
 
 ## Folder Structure
 
 ```
 mobile/
-└── index.tsx    # Currently returns NotImplemented
-```
-
-## Planned Structure (when implemented)
-
-```
-mobile/
 ├── css/
 │   ├── index.ts
-│   └── Accordion.module.css    # Mobile-specific CSS
+│   ├── Accordion.module.css    # Estilos mobile
+│   └── Accordion.module.ts     # Helpers de estilo
 ├── hooks/
 │   ├── index.ts
-│   └── useAccordion.hook.ts    # Mobile touch logic
+│   └── useAccordion.hook.ts    # Lógica del componente
 ├── types/
 │   ├── index.ts
-│   └── Accordion.type.ts       # Mobile-specific types
+│   └── Accordion.type.ts       # Re-export de tipos compartidos
 ├── views/
 │   ├── index.ts
-│   └── Accordion.view.tsx      # Mobile React component
-└── index.tsx                            # Main export
+│   └── Accordion.view.tsx      # Componente React
+└── index.tsx                   # Export principal
 ```
 
-## Using Shared Tokens
+## Uso
 
-Same as web version - import from `token.shared/`:
+Misma API que la versión web:
 
-```typescript
-import { colors, spacing, borderRadius } from '../../token.shared';
-
-const mobileStyle = {
-  padding: spacing['4'],           // 16px
-  backgroundColor: colors['white'],
-  borderRadius: borderRadius['lg'],
-};
+```tsx
+<Accordion
+  id="mobile-accordion"
+  defaultOpen={false}
+  header={{
+    renderType: 'component',
+    render: <span>Toca para expandir</span>,
+  }}
+  body={{
+    renderType: 'component',
+    render: <p>Contenido mobile...</p>,
+    behaviors: {
+      renderComponentStrategy: 'once',
+    },
+  }}
+/>
 ```
 
 ## Platform Resolution
 
-The main `index.tsx` uses `useIsMobile()` hook to dispatch:
+El `index.tsx` principal usa `useIsMobile()` para dispatch:
 
 ```typescript
 if (isMobile) {
@@ -58,11 +72,18 @@ if (isMobile) {
 return <AccordionWeb {...props} />;        // >= 768px
 ```
 
-## Implementation Guidelines
+## Tipos Compartidos
 
-When implementing the mobile version:
+Los tipos se comparten desde `shared/`:
 
-1. **Touch-first interactions** - Larger touch targets, swipe gestures
-2. **Full-width layouts** - Components should span screen width on mobile
-3. **Simplified UI** - Hide secondary actions, focus on primary content
-4. **Performance** - Optimize for lower-powered devices
+```typescript
+// mobile/types/Accordion.type.ts
+export type {
+  AccordionProps,
+  AccordionController,
+  AccordionCallbacks,
+  AccordionLayout,
+  AccordionHeader,
+  AccordionBody,
+} from '../../shared';
+```
