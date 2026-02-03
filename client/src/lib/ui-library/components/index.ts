@@ -24,3 +24,4 @@ export * from './NavigationSidebar';
 export * from './GoogleMap';
 export * from './BaseTable';
 export * from './Paginator';
+export * from './Accordion';

@@ -1,0 +1,68 @@
+# Accordion - Mobile Responsive Version
+
+## Overview
+Mobile responsive implementation for web browsers on small screens. Uses the same React DOM runtime as web, but with mobile-optimized layouts and touch interactions.
+
+## Current Status
+
+**Not Implemented** - Currently shows `NotImplemented` placeholder.
+
+## Folder Structure
+
+```
+mobile/
+└── index.tsx    # Currently returns NotImplemented
+```
+
+## Planned Structure (when implemented)
+
+```
+mobile/
+├── css/
+│   ├── index.ts
+│   └── Accordion.module.css    # Mobile-specific CSS
+├── hooks/
+│   ├── index.ts
+│   └── useAccordion.hook.ts    # Mobile touch logic
+├── types/
+│   ├── index.ts
+│   └── Accordion.type.ts       # Mobile-specific types
+├── views/
+│   ├── index.ts
+│   └── Accordion.view.tsx      # Mobile React component
+└── index.tsx                            # Main export
+```
+
+## Using Shared Tokens
+
+Same as web version - import from `token.shared/`:
+
+```typescript
+import { colors, spacing, borderRadius } from '../../token.shared';
+
+const mobileStyle = {
+  padding: spacing['4'],           // 16px
+  backgroundColor: colors['white'],
+  borderRadius: borderRadius['lg'],
+};
+```
+
+## Platform Resolution
+
+The main `index.tsx` uses `useIsMobile()` hook to dispatch:
+
+```typescript
+if (isMobile) {
+  return <AccordionMobile {...props} />;  // < 768px
+}
+return <AccordionWeb {...props} />;        // >= 768px
+```
+
+## Implementation Guidelines
+
+When implementing the mobile version:
+
+1. **Touch-first interactions** - Larger touch targets, swipe gestures
+2. **Full-width layouts** - Components should span screen width on mobile
+3. **Simplified UI** - Hide secondary actions, focus on primary content
+4. **Performance** - Optimize for lower-powered devices
