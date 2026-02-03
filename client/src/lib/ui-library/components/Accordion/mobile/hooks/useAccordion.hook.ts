@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import type { AccordionProps, AccordionHandlers } from '../../shared';
+import type { InternalAccordionProps, AccordionHandlers } from '../../shared';
 
-type UseAccordionOptions = Pick<AccordionProps, 'id' | 'isOpen' | 'defaultOpen' | 'controller' | 'callbacks' | 'body'>;
+type UseAccordionOptions = Pick<InternalAccordionProps, 'id' | 'isOpen' | 'defaultOpen' | 'controller' | 'callbacks' | 'body'>;
 
 export function useAccordion(options: UseAccordionOptions) {
   const { id, isOpen: controlledIsOpen, defaultOpen = false, controller, callbacks, body } = options;

@@ -1,5 +1,5 @@
 import { isValidElement } from 'react';
-import type { AccordionProps } from '../../shared';
+import type { AccordionProps, InternalAccordionController } from '../../shared';
 import { useAccordion } from '../hooks';
 import { accordionStyles } from '../css';
 
@@ -91,7 +91,7 @@ export const AccordionView = (props: AccordionProps) => {
     id: props.id,
     isOpen: props.isOpen,
     defaultOpen: props.defaultOpen,
-    controller: props.controller,
+    controller: props.controller as InternalAccordionController | undefined,
     callbacks: props.callbacks,
     body: props.body,
   });

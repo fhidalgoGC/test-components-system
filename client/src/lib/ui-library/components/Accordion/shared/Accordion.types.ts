@@ -6,8 +6,6 @@ export type AccordionController = {
   toggle: (id: string) => void;
   forceRenderBody: (id: string) => void;
   isOpen: (id: string) => boolean;
-  _register: (id: string, handlers: AccordionHandlers) => void;
-  _unregister: (id: string) => void;
 };
 
 export type AccordionHandlers = {
@@ -16,6 +14,11 @@ export type AccordionHandlers = {
   toggle: () => void;
   forceRenderBody: () => void;
   isOpen: () => boolean;
+};
+
+export type InternalAccordionController = AccordionController & {
+  _register: (id: string, handlers: AccordionHandlers) => void;
+  _unregister: (id: string) => void;
 };
 
 export type AccordionCallbacks = {
@@ -61,4 +64,8 @@ export type AccordionProps = {
   layout?: AccordionLayout;
   header: AccordionHeader;
   body: AccordionBody;
+};
+
+export type InternalAccordionProps = Omit<AccordionProps, 'controller'> & {
+  controller?: InternalAccordionController;
 };

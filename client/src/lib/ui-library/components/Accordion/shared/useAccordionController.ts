@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
-import type { AccordionController, AccordionHandlers } from './Accordion.types';
+import type { InternalAccordionController, AccordionHandlers } from './Accordion.types';
 
-export function useAccordionController(): AccordionController {
+export function useAccordionController(): InternalAccordionController {
   const registryRef = useRef<Map<string, AccordionHandlers>>(new Map());
 
   const _register = useCallback((id: string, handlers: AccordionHandlers) => {
