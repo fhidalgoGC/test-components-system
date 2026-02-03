@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import { Accordion, useAccordionController } from '@/lib/ui-library/components/Accordion';
 
-function SampleHeader({ title, isOpen }: { title: string; isOpen?: boolean }) {
+function SampleHeader({ title }: { title: string }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <span style={{ fontWeight: 600 }}>{title}</span>
-      <span style={{ fontSize: '12px', color: '#666' }}>{isOpen ? '▼' : '▶'}</span>
-    </div>
+    <span style={{ fontWeight: 600 }}>{title}</span>
   );
 }
 
@@ -14,9 +11,23 @@ function SampleBody({ content }: { content: string }) {
   return (
     <div style={{ color: '#374151' }}>
       <p>{content}</p>
-      <p style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280' }}>
-        Rendered at: {new Date().toLocaleTimeString()}
-      </p>
+    </div>
+  );
+}
+
+function RenderTrackingBody({ content }: { content: string }) {
+  const renderId = Math.floor(Math.random() * 10000);
+  return (
+    <div style={{ color: '#374151' }}>
+      <p>{content}</p>
+      <div style={{ marginTop: '12px', padding: '8px', background: '#fef3c7', borderRadius: '4px' }}>
+        <p style={{ fontSize: '14px', fontWeight: 600, color: '#92400e' }}>
+          Render ID: <span style={{ fontFamily: 'monospace' }}>{renderId}</span>
+        </p>
+        <p style={{ fontSize: '12px', color: '#b45309', marginTop: '4px' }}>
+          {new Date().toLocaleTimeString()}
+        </p>
+      </div>
     </div>
   );
 }
@@ -35,6 +46,7 @@ function Example1InternalControl() {
         header={{
           renderType: 'component',
           render: <SampleHeader title="Accordion con control interno" />,
+          arrowPosition: 'right',
         }}
         body={{
           renderType: 'component',
@@ -91,7 +103,8 @@ function Example2PropsControl() {
         isOpen={isOpen}
         header={{
           renderType: 'component',
-          render: <SampleHeader title="Accordion controlado por props" isOpen={isOpen} />,
+          render: <SampleHeader title="Accordion controlado por props" />,
+          arrowPosition: 'left',
         }}
         body={{
           renderType: 'component',
@@ -208,6 +221,7 @@ function Example3HookControl() {
         header={{
           renderType: 'component',
           render: <SampleHeader title="Accordion controlado por hook" />,
+          arrowPosition: 'right',
         }}
         body={{
           renderType: 'component',
@@ -250,10 +264,11 @@ function Example4RenderStrategies() {
             header={{
               renderType: 'component',
               render: <SampleHeader title="Render Once" />,
+              arrowPosition: 'left',
             }}
             body={{
               renderType: 'component',
-              render: <SampleBody content="Este body se monta una vez y se oculta con display:none. El timestamp no cambia." />,
+              render: <RenderTrackingBody content="Este body se monta una vez y se oculta con display:none. El Render ID NO cambia." />,
               behaviors: {
                 renderComponentStrategy: 'once',
               },
@@ -269,10 +284,11 @@ function Example4RenderStrategies() {
             header={{
               renderType: 'component',
               render: <SampleHeader title="Render Always" />,
+              arrowPosition: 'right',
             }}
             body={{
               renderType: 'component',
-              render: <SampleBody content="Este body se desmonta al cerrar. El timestamp cambia cada vez que abres." />,
+              render: <RenderTrackingBody content="Este body se desmonta al cerrar. El Render ID CAMBIA cada vez que abres." />,
               behaviors: {
                 renderComponentStrategy: 'always',
               },

@@ -78,8 +78,26 @@ function getBodyStyles(body: AccordionProps['body']) {
   return style;
 }
 
+function ChevronIcon() {
+  return (
+    <svg 
+      width="16" 
+      height="16" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    >
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+  );
+}
+
 export const AccordionView = (props: AccordionProps) => {
   const { id, layout, header, body } = props;
+  const arrowPosition = header.arrowPosition ?? 'none';
   
   const {
     isOpen,
@@ -99,6 +117,28 @@ export const AccordionView = (props: AccordionProps) => {
   const layoutStyles = getLayoutStyles(layout);
   const headerStyles = getHeaderStyles(header);
   const bodyStyles = getBodyStyles(body);
+
+  const renderHeaderContent = () => {
+    if (arrowPosition === 'none') {
+      return renderContent(header.render);
+    }
+
+    const arrowClasses = `${styles.arrow} ${isOpen ? styles.arrowOpen : ''}`;
+    const contentClasses = `${styles.headerContent} ${
+      arrowPosition === 'left' ? styles.headerContentLeft : styles.headerContentRight
+    }`;
+
+    return (
+      <div className={contentClasses}>
+        <span className={arrowClasses}>
+          <ChevronIcon />
+        </span>
+        <div className={styles.headerContentInner}>
+          {renderContent(header.render)}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div 
@@ -122,7 +162,7 @@ export const AccordionView = (props: AccordionProps) => {
         aria-expanded={isOpen}
         data-testid={`accordion-header-${id}`}
       >
-        {renderContent(header.render)}
+        {renderHeaderContent()}
       </div>
       
       {shouldRenderBody && (

@@ -41,6 +41,7 @@ export type AccordionHeader = {
   heightMode?: 'full' | 'auto' | 'fixed';
   height?: number | 'auto';
   minHeight?: number;
+  arrowPosition?: 'left' | 'right' | 'none';
 };
 
 export type AccordionBody = {

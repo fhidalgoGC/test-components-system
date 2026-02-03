@@ -13,6 +13,36 @@
   border-bottom: 1px solid transparent;
 }
 
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.headerContentLeft {
+  flex-direction: row;
+}
+
+.headerContentRight {
+  flex-direction: row-reverse;
+}
+
+.headerContentInner {
+  flex: 1;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.arrowOpen {
+  transform: rotate(90deg);
+}
+
 .body {
   padding: 16px;
 }
