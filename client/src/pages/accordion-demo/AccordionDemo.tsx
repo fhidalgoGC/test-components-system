@@ -3,6 +3,7 @@ import {
   Example2PropsControl,
   Example3HookControl,
   Example4RenderStrategies,
+  Example5ScrollBehavior,
 } from './components';
 
 export default function AccordionDemo() {
@@ -17,6 +18,7 @@ export default function AccordionDemo() {
       <Example2PropsControl />
       <Example3HookControl />
       <Example4RenderStrategies />
+      <Example5ScrollBehavior />
       
       <div style={{ marginTop: '32px', padding: '16px', background: '#f8fafc', borderRadius: '8px' }}>
         <h4 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: 600 }}>Console Logs</h4>

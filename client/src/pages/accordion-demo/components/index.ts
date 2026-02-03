@@ -5,3 +5,4 @@ export { Example1InternalControl } from './Example1InternalControl';
 export { Example2PropsControl } from './Example2PropsControl';
 export { Example3HookControl } from './Example3HookControl';
 export { Example4RenderStrategies } from './Example4RenderStrategies';
+export { Example5ScrollBehavior } from './Example5ScrollBehavior';
