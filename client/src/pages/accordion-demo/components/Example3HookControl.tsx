@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Accordion, useAccordionController } from '@/lib/ui-library/components/Accordion';
 import { SampleHeader } from './SampleHeader';
-import { SampleBody } from './SampleBody';
+import { RenderTrackingBody } from './RenderTrackingBody';
 
 export function Example3HookControl() {
   const controller = useAccordionController();
@@ -104,7 +104,7 @@ export function Example3HookControl() {
         }}
         body={{
           renderType: 'component',
-          render: <SampleBody content="Este accordion se controla mediante useAccordionController. Puedes abrir, cerrar, toggle y forzar re-render del body." />,
+          render: <RenderTrackingBody content="Presiona 'Force Re-render Body' para ver cómo cambia el Render ID aleatorio." />,
           behaviors: {
             renderComponentStrategy: 'always',
             scroll: true,
