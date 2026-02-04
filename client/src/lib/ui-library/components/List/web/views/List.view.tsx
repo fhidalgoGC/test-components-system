@@ -17,6 +17,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
     callbacks = {},
     behaviors = {},
     loading = {},
+    empty = {},
     item,
     data,
     controller: externalController,
@@ -38,6 +39,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
   const { onScroll, onScrollInfinity } = callbacks;
   const { scroll = 'normal', paginator } = behaviors;
   const { renderType: loadingRenderType = 'self', render: loadingRender, position: loadingPosition = 'bottom' } = loading;
+  const { renderType: emptyRenderType = 'self', render: emptyRender, position: emptyPosition = 'center' } = empty;
 
   const internalController = useListController<T>();
   const controller = (externalController || internalController) as InternalListController<T>;
@@ -189,6 +191,35 @@ export const ListView = <T,>(props: ListProps<T>) => {
     );
   };
 
+  const renderEmptyIndicator = () => {
+    if (state.renderState !== 'renderEmpty') return null;
+
+    const emptyClasses = [
+      styles.emptyContainer,
+      emptyPosition === 'center' && styles.emptyCenter,
+      emptyPosition === 'over' && styles.emptyOver,
+    ].filter(Boolean).join(' ');
+
+    const content = emptyRenderType === 'component' && emptyRender ? (
+      typeof emptyRender === 'function' ? (
+        (() => {
+          const EmptyComponent = emptyRender as React.ComponentType;
+          return <EmptyComponent />;
+        })()
+      ) : emptyRender
+    ) : (
+      <div className={styles.emptyDefault}>
+        <span>No items found</span>
+      </div>
+    );
+
+    return (
+      <div className={emptyClasses} data-testid={`${id}-empty`}>
+        {content}
+      </div>
+    );
+  };
+
   const renderContent = () => {
     const currentData = state.data;
 
@@ -263,6 +294,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
       data-testid={`${id}-container`}
     >
       {loadingPosition === 'over' && renderLoadingIndicator()}
+      {emptyPosition === 'over' && renderEmptyIndicator()}
       
       <div
         ref={listRef}
@@ -273,7 +305,8 @@ export const ListView = <T,>(props: ListProps<T>) => {
         aria-busy={state.renderState === 'renderLoading'}
         data-testid={id}
       >
-        {renderContent()}
+        {state.renderState === 'renderEmpty' && emptyPosition === 'center' && renderEmptyIndicator()}
+        {state.renderState !== 'renderEmpty' && renderContent()}
       </div>
     </div>
   );

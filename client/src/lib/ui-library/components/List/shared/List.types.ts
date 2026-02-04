@@ -4,6 +4,7 @@ export type RenderState =
   | 'renderIdle'
   | 'renderLoading'
   | 'renderComplete'
+  | 'renderEmpty'
   | 'renderError';
 
 export type ScrollBehavior = 'normal' | 'infinityScroll' | 'none';
@@ -40,6 +41,12 @@ export interface ListLoading {
   position?: LoadingPosition;
 }
 
+export interface ListEmpty {
+  renderType?: 'component' | 'self';
+  render?: ReactNode | ComponentType;
+  position?: 'center' | 'over';
+}
+
 export interface ListItemConfig<T> {
   renderType: 'component';
   render: (item: T, index: number) => ReactNode;
@@ -54,6 +61,7 @@ export interface ListProps<T = any> {
   callbacks?: ListCallbacks;
   behaviors?: ListBehaviors;
   loading?: ListLoading;
+  empty?: ListEmpty;
   item: ListItemConfig<T>;
   data?: T[];
   controller?: ListController<T>;
