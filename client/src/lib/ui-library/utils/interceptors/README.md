@@ -149,6 +149,8 @@ api.removeResponseTransformer('/orders');
 
 **Prioridad**: Los transformers dinámicos tienen prioridad sobre los de config.
 
+**Nota**: Los patterns se evalúan sobre el **path** (sin query params). Si registras el mismo pattern nuevamente, se reemplaza el transformer anterior.
+
 ## Dynamic Headers
 
 Headers que se evalúan en cada request - perfectos para estados reactivos (React state, stores, etc.).
@@ -167,6 +169,7 @@ api.addDynamicHeader('X-Tenant-ID', () => tenantId);
 api.addDynamicHeader('Accept-Language', () => language);
 
 // Header condicional (solo para ciertas rutas)
+// Nota: request.url contiene la URL completa incluyendo query params
 api.addDynamicHeader(
   'X-Admin-Token', 
   () => getAdminToken(),

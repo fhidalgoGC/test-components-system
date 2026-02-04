@@ -450,7 +450,20 @@ export function createApiInterceptor(
       transformer: ResponseTransformer,
       methods?: HttpMethod[]
     ) => {
-      dynamicTransformers.push({ pattern, transformer, methods });
+      const existingIndex = dynamicTransformers.findIndex(dt => {
+        if (typeof dt.pattern === 'string' && typeof pattern === 'string') {
+          return dt.pattern === pattern;
+        }
+        if (dt.pattern instanceof RegExp && pattern instanceof RegExp) {
+          return dt.pattern.source === pattern.source;
+        }
+        return false;
+      });
+      if (existingIndex !== -1) {
+        dynamicTransformers[existingIndex] = { pattern, transformer, methods };
+      } else {
+        dynamicTransformers.push({ pattern, transformer, methods });
+      }
     },
 
     removeResponseTransformer: (pattern: string | RegExp) => {
