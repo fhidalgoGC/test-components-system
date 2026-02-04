@@ -7,9 +7,9 @@ export type RenderState =
   | 'renderError';
 
 export type ScrollBehavior = 'normal' | 'infinityScroll' | 'none';
-
 export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'full' | 'auto' | 'fixed';
+export type LoadingPosition = 'top' | 'bottom' | 'over';
 
 export interface ListLayout {
   widthMode?: WidthMode;
@@ -37,10 +37,10 @@ export interface ListBehaviors {
 export interface ListLoading {
   renderType?: 'component' | 'self';
   render?: ReactNode | ComponentType;
-  position?: 'top' | 'bottom' | 'over';
+  position?: LoadingPosition;
 }
 
-export interface ListItem<T> {
+export interface ListItemConfig<T> {
   renderType: 'component';
   render: (item: T, index: number) => ReactNode;
   heightMode?: HeightMode;
@@ -48,18 +48,21 @@ export interface ListItem<T> {
   minHeight?: number;
 }
 
-export interface ListProps<T> {
+export interface ListProps<T = any> {
   id: string;
   layout?: ListLayout;
   callbacks?: ListCallbacks;
   behaviors?: ListBehaviors;
   loading?: ListLoading;
-  item: ListItem<T>;
+  item: ListItemConfig<T>;
   data: T[];
   controller?: ListController<T>;
+  className?: string;
+  langOverride?: string;
+  i18nOrder?: 'global-first' | 'local-first';
 }
 
-export interface ListController<T> {
+export interface ListController<T = any> {
   setData: (data: T[]) => void;
   appendData: (data: T[]) => void;
   setPage: (page: number) => void;
@@ -70,16 +73,16 @@ export interface ListController<T> {
   getPage: () => number;
   getPageSize: () => number;
   getTotalItems: () => number;
-  _getData: () => T[];
-  _subscribe: (callback: () => void) => () => void;
 }
 
-export interface InternalListController<T> extends ListController<T> {
+export interface InternalListController<T = any> extends ListController<T> {
+  _getData: () => T[];
+  _subscribe: (callback: () => void) => () => void;
   _register: (id: string) => void;
   _unregister: (id: string) => void;
 }
 
-export interface ListState<T> {
+export interface ListState<T = any> {
   data: T[];
   page: number;
   pageSize: number;
