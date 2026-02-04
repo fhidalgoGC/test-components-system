@@ -104,6 +104,17 @@ export const InfiniteScrollDemo = () => {
             render: (product) => <ProductCard product={product} />
           }}
         />
+        {isLoadingMore && (
+          <div className="flex items-center justify-center py-3 border-t">
+            <Loader2 className="w-5 h-5 animate-spin text-primary" />
+            <span className="ml-2 text-sm text-muted-foreground">Loading more items...</span>
+          </div>
+        )}
+        {currentPage === totalPages && products.length > 0 && !isLoadingMore && (
+          <div className="flex items-center justify-center py-3 border-t text-sm text-muted-foreground">
+            All {mockProducts.length} items loaded
+          </div>
+        )}
       </CardContent>
     </Card>
   );

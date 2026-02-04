@@ -24,7 +24,7 @@ export const mockProducts: Product[] = Array.from({ length: 100 }, (_, i) => ({
 }));
 
 export const fetchProducts = async (page: number, pageSize: number): Promise<Product[]> => {
-  await new Promise(resolve => setTimeout(resolve, 100));
+  await new Promise(resolve => setTimeout(resolve, 500));
   const start = (page - 1) * pageSize;
   return mockProducts.slice(start, start + pageSize);
 };
