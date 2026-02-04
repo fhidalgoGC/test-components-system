@@ -9,7 +9,7 @@ export const InfiniteScrollDemo = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const pageSize = 3;
+  const pageSize = 8;
 
   const totalPages = Math.ceil(mockProducts.length / pageSize);
   const currentPage = products.length === 0 ? 0 : Math.ceil(products.length / pageSize);

@@ -7,16 +7,21 @@ export interface Product {
   category: string;
 }
 
-export const mockProducts: Product[] = [
-  { id: 1, name: 'Laptop Pro', price: 1299, category: 'Electronics' },
-  { id: 2, name: 'Wireless Mouse', price: 49, category: 'Electronics' },
-  { id: 3, name: 'USB-C Hub', price: 79, category: 'Accessories' },
-  { id: 4, name: 'Mechanical Keyboard', price: 159, category: 'Electronics' },
-  { id: 5, name: 'Monitor 27"', price: 399, category: 'Electronics' },
-  { id: 6, name: 'Webcam HD', price: 89, category: 'Electronics' },
-  { id: 7, name: 'Desk Lamp', price: 45, category: 'Office' },
-  { id: 8, name: 'Notebook Set', price: 25, category: 'Office' },
+const productNames = [
+  'Laptop Pro', 'Wireless Mouse', 'USB-C Hub', 'Mechanical Keyboard', 'Monitor 27"',
+  'Webcam HD', 'Desk Lamp', 'Notebook Set', 'Standing Desk', 'Ergonomic Chair',
+  'Headphones', 'Microphone', 'Smart Watch', 'Tablet', 'Phone Case',
+  'Power Bank', 'USB Cable', 'HDMI Adapter', 'Memory Card', 'External SSD'
 ];
+
+const categories = ['Electronics', 'Accessories', 'Office', 'Audio', 'Mobile'];
+
+export const mockProducts: Product[] = Array.from({ length: 100 }, (_, i) => ({
+  id: i + 1,
+  name: `${productNames[i % productNames.length]} ${Math.floor(i / productNames.length) + 1}`,
+  price: Math.floor(Math.random() * 500) + 20,
+  category: categories[i % categories.length],
+}));
 
 export const fetchProducts = async (page: number, pageSize: number): Promise<Product[]> => {
   await new Promise(resolve => setTimeout(resolve, 100));
