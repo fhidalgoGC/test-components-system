@@ -40,6 +40,16 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
 - **LoginCard (web-only)**: Authentication component with dual configurations (`with-credentials` and `providers-only`), modular layouts, and advanced provider display logic. Supports custom provider components and external redirects.
 - **WrapperItemsSelected**: Universal selection wrapper tracking item selection state by ID, providing callbacks for changes. Supports controlled/uncontrolled modes, multi-select/single-select, and a Context API for child component interaction.
 - **GoogleMap (web-only)**: Google Maps component with externally controlled markers, supporting various map controls and callbacks.
+- **List Component**: Rendering-only component with external state management via `useListController`. Features:
+  - **Controller-based architecture**: All state managed through controller methods (`setData()`, `appendData()`, `setRenderState()`, `getRenderState()`)
+  - **Render States**: `renderIdle`, `renderLoading`, `renderComplete`, `renderEmpty`, `renderError` - each with optional custom components
+  - **Scroll behaviors**: `normal`, `infinityScroll`, `none`
+  - **Pagination support**: Controller exposes `setTotalItems()`, `getTotalItems()`, `getTotalPages()`, `getLoadedItems()`, `getPage()`, `getNextPage()`
+  - **Layout modes**: `widthMode` (full/fixed), `heightMode` (auto/fixed/fit-content), configurable height
+  - **Loading indicator**: Configurable position (`top`, `bottom`, `over`, `center`) and render type (`self`, `component`)
+  - **Empty state**: Configurable position (`center`, `over`) with custom component support
+  - **Data source**: When controller is provided, `data` prop is optional - controller becomes single source of truth
+  - **InfiniteScroll**: Uses IntersectionObserver with configurable threshold, triggers `onLoadMore` callback, uses `controller.appendData()` for new data
 
 # External Dependencies
 
