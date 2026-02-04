@@ -29,13 +29,25 @@ export function useListController<T = any>(): ListController<T> {
 
     controllerRef.current = {
       setData: (data: T[]) => {
+        const isAppend = data.length > store.data.length && 
+          store.data.length > 0 && 
+          store.pageSize > 0;
+        
         store.data = data;
-        store.page = 1;
+        
+        if (isAppend) {
+          store.page = Math.ceil(data.length / store.pageSize);
+        } else if (data.length === 0) {
+          store.page = 1;
+        } else {
+          store.page = Math.max(1, Math.ceil(data.length / store.pageSize));
+        }
+        
         notifySubscribers();
       },
       appendData: (data: T[]) => {
         store.data = [...store.data, ...data];
-        store.page = store.page + 1;
+        store.page = Math.ceil(store.data.length / store.pageSize);
         notifySubscribers();
       },
       setPage: (page: number) => {

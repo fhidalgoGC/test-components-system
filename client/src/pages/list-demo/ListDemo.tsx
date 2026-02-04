@@ -127,17 +127,17 @@ const Example1BasicList = () => {
 
 const Example2InfiniteScroll = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalLoaded, setTotalLoaded] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const pageSize = 3;
+
+  const currentPage = Math.ceil(products.length / pageSize) || 1;
+  const maxPages = Math.ceil(mockProducts.length / pageSize);
 
   useEffect(() => {
     const loadInitial = async () => {
       const data = await fetchProducts(1, pageSize);
       setProducts(data);
-      setTotalLoaded(data.length);
-      setCurrentPage(1);
       setLoading(false);
     };
     loadInitial();
@@ -148,22 +148,20 @@ const Example2InfiniteScroll = () => {
     setProducts([]);
     const data = await fetchProducts(1, pageSize);
     setProducts(data);
-    setTotalLoaded(data.length);
-    setCurrentPage(1);
     setLoading(false);
   };
 
   const handleInfiniteScroll = useCallback(async (page: number) => {
-    if (page > Math.ceil(mockProducts.length / pageSize)) {
+    if (isLoadingMore || page > maxPages) {
       return;
     }
+    setIsLoadingMore(true);
     const data = await fetchProducts(page, pageSize);
     if (data.length > 0) {
       setProducts(prev => [...prev, ...data]);
-      setTotalLoaded(prev => prev + data.length);
-      setCurrentPage(page);
     }
-  }, [pageSize]);
+    setIsLoadingMore(false);
+  }, [isLoadingMore, maxPages, pageSize]);
 
   if (loading) {
     return (
@@ -199,7 +197,7 @@ const Example2InfiniteScroll = () => {
             Reset
           </Button>
           <span className="text-sm text-gray-500">
-            Showing {totalLoaded} of {mockProducts.length} items (Page {currentPage})
+            Showing {products.length} of {mockProducts.length} items (Page {currentPage})
           </span>
         </div>
         <List
