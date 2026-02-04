@@ -72,6 +72,7 @@ export function useListController<T = any>(): ListController<T> {
       getPage: (): number => store.page,
       getPageSize: (): number => store.pageSize,
       getTotalItems: (): number => store.data.length,
+      getNextPage: (): number => store.page + 1,
       _getData: (): T[] => store.data,
       _subscribe: (callback: () => void): (() => void) => {
         store.subscribers.add(callback);

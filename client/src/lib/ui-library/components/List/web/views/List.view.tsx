@@ -7,6 +7,7 @@ interface ListState<T> {
   data: T[];
   renderState: RenderState;
   page: number;
+  nextPage: number;
 }
 
 export const ListView = <T,>(props: ListProps<T>) => {
@@ -49,6 +50,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
     data: controller._getData(),
     renderState: controller.getRenderState(),
     page: controller.getPage(),
+    nextPage: controller.getNextPage(),
   });
 
   useEffect(() => {
@@ -57,6 +59,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
         data: controller._getData(),
         renderState: controller.getRenderState(),
         page: controller.getPage(),
+        nextPage: controller.getNextPage(),
       });
     });
     return unsubscribe;
@@ -91,7 +94,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
       (entries) => {
         const [entry] = entries;
         if (entry.isIntersecting && state.renderState !== 'renderLoading') {
-          onScrollInfinity?.(state.page + 1);
+          onScrollInfinity?.(state.nextPage);
         }
       },
       {
@@ -106,7 +109,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
     return () => {
       observerRef.current?.disconnect();
     };
-  }, [scroll, state.renderState, state.page, onScrollInfinity]);
+  }, [scroll, state.renderState, state.nextPage, onScrollInfinity]);
 
   const handleScroll = useCallback(() => {
     onScroll?.(id);

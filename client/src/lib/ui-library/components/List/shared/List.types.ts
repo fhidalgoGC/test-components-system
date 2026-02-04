@@ -77,6 +77,7 @@ export interface ListController<T = any> {
   getPage: () => number;
   getPageSize: () => number;
   getTotalItems: () => number;
+  getNextPage: () => number;
 }
 
 export interface InternalListController<T = any> extends ListController<T> {
