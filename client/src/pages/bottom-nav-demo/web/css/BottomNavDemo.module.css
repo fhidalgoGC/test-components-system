@@ -1,0 +1,9 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--gray-50, #f9fafb);
+  padding-bottom: 5rem;
+}
+
+:global(.dark) .container {
+  background-color: var(--gray-950, #030712);
+}

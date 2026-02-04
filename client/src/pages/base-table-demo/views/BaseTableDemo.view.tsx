@@ -6,10 +6,10 @@ import {
   SortableDemo,
   ApiSimulationDemo,
   TextWrapDemo,
-} from "./components";
-import styles from "./css/BaseTableDemo.module.scss";
+} from "../components";
+import styles from "../css/BaseTableDemo.module.scss";
 
-export function BaseTableDemo() {
+export const BaseTableDemoView = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -33,6 +33,4 @@ export function BaseTableDemo() {
       </div>
     </div>
   );
-}
-
-export default BaseTableDemo;
+};
