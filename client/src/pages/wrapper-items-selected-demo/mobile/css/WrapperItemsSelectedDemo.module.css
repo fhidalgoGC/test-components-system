@@ -1,0 +1,62 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, var(--gray-50, #f9fafb), var(--gray-100, #f3f4f6));
+  padding: 1rem;
+}
+
+:global(.dark) .container {
+  background: linear-gradient(to bottom right, var(--gray-900, #111827), var(--gray-800, #1f2937));
+}
+
+.content {
+  max-width: 100%;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  margin-bottom: 0.5rem;
+}
+
+:global(.dark) .title {
+  color: white;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: var(--gray-600, #4b5563);
+}
+
+:global(.dark) .description {
+  color: var(--gray-400, #9ca3af);
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+  margin-bottom: 0.5rem;
+}
+
+:global(.dark) .sectionTitle {
+  color: white;
+}
+
+.sectionDescription {
+  font-size: 0.75rem;
+  color: var(--gray-600, #4b5563);
+  margin-bottom: 0.75rem;
+}
+
+:global(.dark) .sectionDescription {
+  color: var(--gray-400, #9ca3af);
+}

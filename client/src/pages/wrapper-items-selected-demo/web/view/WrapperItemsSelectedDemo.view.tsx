@@ -1,93 +1,15 @@
 import { useState } from 'react';
-import { WrapperItemsSelected, useSelection } from '@/lib/ui-library/components/WrapperItemsSelected';
+import { WrapperItemsSelected } from '@/lib/ui-library/components/WrapperItemsSelected';
 import type { ItemActionEvent } from '@/lib/ui-library/components/WrapperItemsSelected';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check } from 'lucide-react';
-import { ControlExample } from './examples/ControlExample';
-import { FlowExample } from './examples/FlowExample';
+import { SelectableCard, SelectableListItem, ControlExample, FlowExample } from '../components';
+import styles from '../css/WrapperItemsSelectedDemo.module.css';
 
-// Selectable Card Component
-interface SelectableCardProps {
-  id: string;
-  title: string;
-  description: string;
-}
-
-const SelectableCard = ({ id, title, description }: SelectableCardProps) => {
-  const { isSelected, toggleSelection } = useSelection();
-  const selected = isSelected(id);
-
-  return (
-    <Card
-      className={`cursor-pointer transition-all ${
-        selected 
-          ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-950' 
-          : 'hover:bg-gray-50 dark:hover:bg-gray-800'
-      }`}
-      onClick={() => toggleSelection(id)}
-      data-testid={`card-${id}`}
-    >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        {selected && (
-          <div className="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center">
-            <Check className="h-4 w-4 text-white" />
-          </div>
-        )}
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
-      </CardContent>
-    </Card>
-  );
-};
-
-// Selectable List Item Component
-interface SelectableListItemProps {
-  id: string;
-  name: string;
-  email: string;
-}
-
-const SelectableListItem = ({ id, name, email }: SelectableListItemProps) => {
-  const { isSelected, toggleSelection } = useSelection();
-  const selected = isSelected(id);
-
-  return (
-    <div
-      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
-        selected 
-          ? 'bg-blue-100 dark:bg-blue-900' 
-          : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-      }`}
-      onClick={() => toggleSelection(id)}
-      data-testid={`list-item-${id}`}
-    >
-      <div
-        className={`h-5 w-5 rounded border-2 flex items-center justify-center ${
-          selected 
-            ? 'bg-blue-500 border-blue-500' 
-            : 'border-gray-300 dark:border-gray-600'
-        }`}
-      >
-        {selected && <Check className="h-3 w-3 text-white" />}
-      </div>
-      <div className="flex-1">
-        <p className="font-medium text-sm">{name}</p>
-        <p className="text-xs text-gray-500 dark:text-gray-400">{email}</p>
-      </div>
-    </div>
-  );
-};
-
-export default function WrapperItemsSelectedDemo() {
-  // Example 1: Uncontrolled mode with cards
+export const WrapperItemsSelectedDemoWebView = () => {
   const [selectionLog, setSelectionLog] = useState<string[]>([]);
   const [actionLog, setActionLog] = useState<string[]>([]);
-
-  // Example 2: Controlled mode with list
   const [controlledSelection, setControlledSelection] = useState<string[]>(['user-2']);
   
   const handleSelectionChange = (selectedIds: string[]) => {
@@ -113,42 +35,28 @@ export default function WrapperItemsSelectedDemo() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            WrapperItemsSelected Demo
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>WrapperItemsSelected Demo</h1>
+          <p className={styles.description}>
             A versatile wrapper component for managing item selection with callbacks
           </p>
         </div>
 
-        {/* Example 0: Flow Explanation */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-              🔄 Flujo de Comunicación (5 Cards)
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Cada card avisa solo de SU ID. El wrapper mantiene el array completo de seleccionados.
-            </p>
-          </div>
-
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>🔄 Flujo de Comunicación (5 Cards)</h2>
+          <p className={styles.sectionDescription}>
+            Cada card avisa solo de SU ID. El wrapper mantiene el array completo de seleccionados.
+          </p>
           <FlowExample />
         </div>
 
-        {/* Example 1: Uncontrolled Mode with Cards */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-              Example 1: Uncontrolled Multi-Select (Cards)
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Click on cards to select/deselect. Component manages its own state.
-            </p>
-          </div>
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Example 1: Uncontrolled Multi-Select (Cards)</h2>
+          <p className={styles.sectionDescription}>
+            Click on cards to select/deselect. Component manages its own state.
+          </p>
 
           <WrapperItemsSelected
             defaultSelectedIds={['product-2']}
@@ -168,8 +76,7 @@ export default function WrapperItemsSelectedDemo() {
             </div>
           </WrapperItemsSelected>
 
-          {/* Logs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-sm">onSelectionChange Callback</CardTitle>
@@ -206,16 +113,11 @@ export default function WrapperItemsSelectedDemo() {
           </div>
         </div>
 
-        {/* Example 2: Controlled Mode with List */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-              Example 2: Controlled Mode (List)
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Parent component controls the selection state. External controls available.
-            </p>
-          </div>
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Example 2: Controlled Mode (List)</h2>
+          <p className={styles.sectionDescription}>
+            Parent component controls the selection state. External controls available.
+          </p>
 
           <div className="flex items-center gap-3 mb-4">
             <Badge variant="secondary" className="text-sm">
@@ -258,7 +160,7 @@ export default function WrapperItemsSelectedDemo() {
             </div>
           </WrapperItemsSelected>
 
-          <Card>
+          <Card className="mt-4">
             <CardHeader>
               <CardTitle className="text-sm">Selected IDs (Controlled State)</CardTitle>
             </CardHeader>
@@ -272,16 +174,11 @@ export default function WrapperItemsSelectedDemo() {
           </Card>
         </div>
 
-        {/* Example 3: Single Select Mode */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-              Example 3: Single Select Mode
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Only one item can be selected at a time (multiSelect=false).
-            </p>
-          </div>
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Example 3: Single Select Mode</h2>
+          <p className={styles.sectionDescription}>
+            Only one item can be selected at a time (multiSelect=false).
+          </p>
 
           <WrapperItemsSelected
             defaultSelectedIds={['product-1']}
@@ -300,21 +197,14 @@ export default function WrapperItemsSelectedDemo() {
           </WrapperItemsSelected>
         </div>
 
-        {/* Example 4: Complete Controls (clearSelection, selectAll, multiSelect toggle) */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-              Example 4: Complete Controls
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Demonstrates clearSelection(), selectAll(), and multiSelect toggle functionality.
-            </p>
-          </div>
-
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Example 4: Complete Controls</h2>
+          <p className={styles.sectionDescription}>
+            Demonstrates clearSelection(), selectAll(), and multiSelect toggle functionality.
+          </p>
           <ControlExample />
         </div>
 
-        {/* API Summary */}
         <Card className="mt-8">
           <CardHeader>
             <CardTitle>API Summary</CardTitle>
@@ -347,4 +237,4 @@ export default function WrapperItemsSelectedDemo() {
       </div>
     </div>
   );
-}
+};

@@ -5,7 +5,7 @@ import { LibraryDashboardView } from "@/pages/library-dashboard";
 
 const TagSelectorDemo = lazy(() => import("@/pages/responsive-demo"));
 const CarouselDemo = lazy(() => import("@/pages/carousel-demo"));
-const UniversalCardDemo = lazy(() => import("@/pages/universal-card-demo/UniversalCardDemo").then(m => ({ default: m.default || m.UniversalCardDemo })));
+const UniversalCardDemo = lazy(() => import("@/pages/universal-card-demo"));
 const LoginCardDemo = lazy(() => import("@/pages/login-card-demo/LoginCardDemo").then(m => ({ default: m.default || m.LoginCardDemo })));
 const WrapperItemsSelectedDemo = lazy(() => import("@/pages/wrapper-items-selected-demo"));
 const BottomNavDemo = lazy(() => import("@/pages/bottom-nav-demo"));

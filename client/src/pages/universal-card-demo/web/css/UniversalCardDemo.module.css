@@ -1,0 +1,38 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--gray-100, #f3f4f6);
+}
+
+:global(.dark) .container {
+  background-color: var(--gray-950, #030712);
+}
+
+.content {
+  container-type: inline-size;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  color: var(--muted-foreground);
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}

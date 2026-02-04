@@ -77,7 +77,7 @@ export const ControlExample = () => {
             checked={multiSelect}
             onChange={(e) => {
               setMultiSelect(e.target.checked);
-              setSelectedIds([]); // Limpiar al cambiar modo
+              setSelectedIds([]);
             }}
             className="w-4 h-4"
             data-testid="checkbox-multi-select"

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { WrapperItemsSelected, useSelection } from '@/lib/ui-library/components/WrapperItemsSelected';
 import { Card, CardContent } from '@/components/ui/card';
 
-// 🎴 Cada Card solo conoce SU propio ID
 const SimpleCard = ({ id, title }: { id: string; title: string }) => {
   const { isSelected, toggleSelection } = useSelection();
   const selected = isSelected(id);
@@ -10,8 +9,7 @@ const SimpleCard = ({ id, title }: { id: string; title: string }) => {
   return (
     <Card
       onClick={() => {
-        // ⚡ El card solo avisa: "Yo soy el ID 'X', cambia mi estado"
-        toggleSelection(id); // Solo pasa SU ID
+        toggleSelection(id);
         console.log(`Card ${id} clicked!`);
       }}
       className={`cursor-pointer transition-all ${
@@ -34,7 +32,6 @@ const SimpleCard = ({ id, title }: { id: string; title: string }) => {
   );
 };
 
-// 📊 Panel que muestra el estado completo
 const StatePanel = () => {
   const { selectedIds } = useSelection();
   
@@ -86,22 +83,18 @@ export const FlowExample = () => {
         multiSelect={true}
         defaultSelectedIds={['card-2']}
         onSelectionChange={(selectedIds) => {
-          // 📣 El wrapper te da el array COMPLETO de todos los seleccionados
           const message = `✅ Selección actualizada: [${selectedIds.join(', ')}]`;
           setLog(prev => [...prev.slice(-4), message]);
           console.log(message);
         }}
         onItemAction={(event) => {
-          // 📣 También te avisa de cada acción individual
           const message = `🔔 Card "${event.id}" fue ${event.action === 'selected' ? '✓ seleccionado' : '✗ deseleccionado'}`;
           setLog(prev => [...prev.slice(-4), message]);
           console.log(message);
         }}
       >
-        {/* Panel de estado - se actualiza automáticamente */}
         <StatePanel />
 
-        {/* 5 Cards - cada uno solo conoce SU ID */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
           {cards.map((card) => (
             <SimpleCard key={card.id} {...card} />
@@ -109,7 +102,6 @@ export const FlowExample = () => {
         </div>
       </WrapperItemsSelected>
 
-      {/* Log de eventos */}
       <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg">
         <h3 className="font-bold mb-2 text-foreground">📝 Log de Eventos:</h3>
         <div className="space-y-1 font-mono text-xs">
@@ -123,7 +115,6 @@ export const FlowExample = () => {
         </div>
       </div>
 
-      {/* Explicación visual */}
       <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg border-2 border-green-200 dark:border-green-800">
         <h3 className="font-bold mb-2 text-foreground">💡 Punto Clave:</h3>
         <p className="text-sm text-foreground">
