@@ -222,8 +222,9 @@ export const ListView = <T,>(props: ListProps<T>) => {
 
   const renderContent = () => {
     const currentData = state.data;
+    const currentRenderState = state.renderState;
 
-    if (propRenderIdle && currentData.length === 0) {
+    if (currentRenderState === 'renderIdle' && propRenderIdle) {
       const IdleComponent = propRenderIdle;
       return (
         <div className={styles.idleState} data-testid={`${id}-idle`}>
@@ -232,16 +233,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
       );
     }
 
-    if (propRenderLoading) {
-      const LoadingComponent = propRenderLoading;
-      return (
-        <div className={styles.loadingState} data-testid={`${id}-loading-state`}>
-          {typeof LoadingComponent === 'function' ? <LoadingComponent /> : LoadingComponent}
-        </div>
-      );
-    }
-
-    if (propRenderError) {
+    if (currentRenderState === 'renderError' && propRenderError) {
       const ErrorComponent = propRenderError;
       return (
         <div className={styles.errorState} data-testid={`${id}-error`}>
@@ -250,7 +242,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
       );
     }
 
-    if (currentData.length === 0) {
+    if (currentData.length === 0 && currentRenderState === 'renderComplete') {
       return (
         <div className={styles.emptyState} data-testid={`${id}-empty`}>
           No items to display
