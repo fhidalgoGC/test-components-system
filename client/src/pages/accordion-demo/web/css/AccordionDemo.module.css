@@ -1,0 +1,26 @@
+.container {
+  padding: 24px;
+  max-width: 900px;
+}
+
+.title {
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.description {
+  margin-bottom: 32px;
+  color: #6b7280;
+}
+
+.consoleLogs {
+  margin-top: 32px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+:global(.dark) .consoleLogs {
+  background: #1f2937;
+}

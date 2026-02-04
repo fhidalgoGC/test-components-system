@@ -4,9 +4,9 @@ import {
   Example3HookControl,
   Example4RenderStrategies,
   Example5ScrollBehavior,
-} from './components';
+} from '../components';
 
-export default function AccordionDemo() {
+export const AccordionDemoWebView = () => {
   return (
     <div style={{ padding: '24px', maxWidth: '900px' }}>
       <h1 style={{ marginBottom: '8px', fontSize: '28px', fontWeight: 700 }}>Accordion Component</h1>
@@ -28,4 +28,4 @@ export default function AccordionDemo() {
       </div>
     </div>
   );
-}
+};

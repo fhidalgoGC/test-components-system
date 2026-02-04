@@ -1,0 +1,10 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--background);
+  padding: 2rem;
+}
+
+.content {
+  max-width: 56rem;
+  margin: 0 auto;
+}

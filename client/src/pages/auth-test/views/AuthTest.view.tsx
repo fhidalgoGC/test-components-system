@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
 
-export function AuthTestPage() {
+export const AuthTestView = () => {
   const { isAuthenticated, login, logout } = useAppAuth();
   const [storageData, setStorageData] = useState<any>(null);
   const [updateTrigger, setUpdateTrigger] = useState(0);
@@ -138,4 +138,4 @@ export function AuthTestPage() {
       </div>
     </div>
   );
-}
+};
