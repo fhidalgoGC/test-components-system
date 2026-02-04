@@ -6,6 +6,7 @@ export function useListController<T = any>(): ListController<T> {
     data: T[];
     page: number;
     pageSize: number;
+    totalItems: number;
     renderState: RenderState;
     subscribers: Set<() => void>;
     registeredIds: Set<string>;
@@ -13,6 +14,7 @@ export function useListController<T = any>(): ListController<T> {
     data: [],
     page: 1,
     pageSize: 10,
+    totalItems: 0,
     renderState: 'renderIdle',
     subscribers: new Set(),
     registeredIds: new Set(),
@@ -58,6 +60,10 @@ export function useListController<T = any>(): ListController<T> {
         store.pageSize = size;
         notifySubscribers();
       },
+      setTotalItems: (total: number) => {
+        store.totalItems = total;
+        notifySubscribers();
+      },
       setRenderState: (state: RenderState) => {
         store.renderState = state;
         notifySubscribers();
@@ -71,8 +77,10 @@ export function useListController<T = any>(): ListController<T> {
       },
       getPage: (): number => store.page,
       getPageSize: (): number => store.pageSize,
-      getTotalItems: (): number => store.data.length,
+      getTotalItems: (): number => store.totalItems,
+      getTotalPages: (): number => store.pageSize > 0 ? Math.ceil(store.totalItems / store.pageSize) : 0,
       getNextPage: (): number => store.page + 1,
+      getLoadedItems: (): number => store.data.length,
       _getData: (): T[] => store.data,
       _subscribe: (callback: () => void): (() => void) => {
         store.subscribers.add(callback);

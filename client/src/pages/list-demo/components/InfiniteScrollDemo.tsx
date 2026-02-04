@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { List } from '@/lib/ui-library/components/List';
 import { useListController } from '@/lib/ui-library/components/List/shared/useListController';
+import type { InternalListController } from '@/lib/ui-library/components/List/shared/List.types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, Loader2 } from 'lucide-react';
@@ -13,9 +14,32 @@ export const InfiniteScrollDemo = () => {
   const pageSize = 8;
 
   const controller = useListController<Product>();
+  
+  const [controllerState, setControllerState] = useState({
+    currentPage: 0,
+    totalPages: 0,
+    totalItems: 0,
+    loadedItems: 0,
+  });
 
-  const totalPages = Math.ceil(mockProducts.length / pageSize);
-  const currentPage = products.length === 0 ? 0 : Math.ceil(products.length / pageSize);
+  useEffect(() => {
+    controller.setPageSize(pageSize);
+    controller.setTotalItems(mockProducts.length);
+  }, [controller]);
+
+  useEffect(() => {
+    const internalController = controller as InternalListController<Product>;
+    const updateState = () => {
+      setControllerState({
+        currentPage: controller.getPage(),
+        totalPages: controller.getTotalPages(),
+        totalItems: controller.getTotalItems(),
+        loadedItems: controller.getLoadedItems(),
+      });
+    };
+    updateState();
+    return internalController._subscribe(updateState);
+  }, [controller]);
 
   useEffect(() => {
     const loadInitial = async () => {
@@ -36,6 +60,7 @@ export const InfiniteScrollDemo = () => {
   };
 
   const handleInfiniteScroll = useCallback(async (page: number) => {
+    const totalPages = controller.getTotalPages();
     if (isLoadingMoreRef.current || page > totalPages) {
       return;
     }
@@ -49,7 +74,7 @@ export const InfiniteScrollDemo = () => {
     
     controller.setRenderState('renderComplete');
     isLoadingMoreRef.current = false;
-  }, [totalPages, pageSize, controller]);
+  }, [pageSize, controller]);
 
   if (loading) {
     return (
@@ -85,7 +110,7 @@ export const InfiniteScrollDemo = () => {
             Reset
           </Button>
           <span className="text-sm text-gray-500">
-            Showing {products.length} of {mockProducts.length} items (Page {currentPage} of {totalPages})
+            Showing {controllerState.loadedItems} of {controllerState.totalItems} items (Page {controllerState.currentPage} of {controllerState.totalPages})
           </span>
         </div>
         <List
@@ -113,9 +138,9 @@ export const InfiniteScrollDemo = () => {
             render: (product) => <ProductCard product={product} />
           }}
         />
-        {currentPage === totalPages && products.length > 0 && (
+        {controllerState.currentPage === controllerState.totalPages && controllerState.loadedItems > 0 && (
           <div className="flex items-center justify-center py-3 border-t text-sm text-muted-foreground">
-            All {mockProducts.length} items loaded
+            All {controllerState.totalItems} items loaded
           </div>
         )}
       </CardContent>

@@ -71,13 +71,16 @@ export interface ListController<T = any> {
   appendData: (data: T[]) => void;
   setPage: (page: number) => void;
   setPageSize: (size: number) => void;
+  setTotalItems: (total: number) => void;
   setRenderState: (state: RenderState) => void;
   getRenderState: () => RenderState;
   reload: () => void;
   getPage: () => number;
   getPageSize: () => number;
   getTotalItems: () => number;
+  getTotalPages: () => number;
   getNextPage: () => number;
+  getLoadedItems: () => number;
 }
 
 export interface InternalListController<T = any> extends ListController<T> {
