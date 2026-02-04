@@ -8,7 +8,6 @@ import { RefreshCw, Loader2 } from 'lucide-react';
 import { Product, mockProducts, fetchProducts, ProductCard } from './shared';
 
 export const InfiniteScrollDemo = () => {
-  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const isLoadingMoreRef = useRef(false);
   const pageSize = 8;
@@ -44,18 +43,17 @@ export const InfiniteScrollDemo = () => {
   useEffect(() => {
     const loadInitial = async () => {
       const data = await fetchProducts(1, pageSize);
-      setProducts(data);
+      controller.setData(data);
       setLoading(false);
     };
     loadInitial();
-  }, []);
+  }, [controller]);
 
   const handleReset = async () => {
     setLoading(true);
-    setProducts([]);
     controller.reload();
     const data = await fetchProducts(1, pageSize);
-    setProducts(data);
+    controller.setData(data);
     setLoading(false);
   };
 
@@ -69,7 +67,7 @@ export const InfiniteScrollDemo = () => {
     
     const data = await fetchProducts(page, pageSize);
     if (data.length > 0) {
-      setProducts(prev => [...prev, ...data]);
+      controller.appendData(data);
     }
     
     controller.setRenderState('renderComplete');
@@ -132,7 +130,6 @@ export const InfiniteScrollDemo = () => {
           callbacks={{
             onScrollInfinity: handleInfiniteScroll
           }}
-          data={products}
           item={{
             renderType: 'component',
             render: (product) => <ProductCard product={product} />

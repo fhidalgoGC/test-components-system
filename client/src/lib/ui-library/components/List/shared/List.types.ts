@@ -55,7 +55,7 @@ export interface ListProps<T = any> {
   behaviors?: ListBehaviors;
   loading?: ListLoading;
   item: ListItemConfig<T>;
-  data: T[];
+  data?: T[];
   controller?: ListController<T>;
   className?: string;
   langOverride?: string;
