@@ -30,6 +30,18 @@ export interface EndpointConfig {
  */
 export type ResponseTransformer<TInput = unknown, TOutput = unknown> = (data: TInput) => TOutput;
 
+/**
+ * Dynamic header getter - called on each request to get the current header value
+ * Return null/undefined to skip the header
+ */
+export type DynamicHeaderGetter = () => string | null | undefined | Promise<string | null | undefined>;
+
+export interface DynamicHeaderConfig {
+  name: string;
+  getValue: DynamicHeaderGetter;
+  condition?: (request: InterceptedRequest) => boolean;
+}
+
 export interface EndpointMatch {
   pattern: string | RegExp;
   methods?: HttpMethod[];
@@ -154,11 +166,17 @@ export interface ApiInterceptorInstance {
   addRequestInterceptor: (interceptor: RequestInterceptor) => void;
   addResponseInterceptor: (interceptor: ResponseInterceptor) => void;
   addErrorInterceptor: (interceptor: ErrorInterceptor) => void;
-  addResponseTransformer: <TInput = unknown, TOutput = unknown>(
+  addResponseTransformer: (
     pattern: string | RegExp,
-    transformer: ResponseTransformer<TInput, TOutput>,
+    transformer: ResponseTransformer,
     methods?: HttpMethod[]
   ) => void;
+  addDynamicHeader: (
+    name: string,
+    getValue: DynamicHeaderGetter,
+    condition?: (request: InterceptedRequest) => boolean
+  ) => void;
+  removeDynamicHeader: (name: string) => void;
   removeInterceptor: (name: string, type: 'request' | 'response' | 'error') => void;
   removeResponseTransformer: (pattern: string | RegExp) => void;
   setAuth: (auth: AuthConfig) => void;

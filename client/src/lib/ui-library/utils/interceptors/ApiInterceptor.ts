@@ -13,6 +13,8 @@ import type {
   QueryParams,
   AuthConfig,
   ResponseTransformer,
+  DynamicHeaderGetter,
+  DynamicHeaderConfig,
 } from './types';
 
 interface DynamicTransformer {
@@ -185,6 +187,9 @@ export function createApiInterceptor(
     ...(config.errorInterceptors || []),
   ].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
+  const dynamicTransformers: DynamicTransformer[] = [];
+  const dynamicHeaders: DynamicHeaderConfig[] = [];
+
   let currentAuth = config.auth;
 
   function log(
@@ -220,7 +225,7 @@ export function createApiInterceptor(
     const method = options.method || 'GET';
     const fullUrl = `${config.baseUrl}${endpoint}${options.params ? buildQueryString(options.params) : ''}`;
     
-    const endpointMatch = matchEndpoint(endpoint, method, config);
+    const endpointMatch = matchEndpoint(endpoint, method, config, dynamicTransformers);
     const visibility = options.visibility ?? endpointMatch.visibility;
     const requiresAuth = options.requiresAuth ?? endpointMatch.requiresAuth;
 
@@ -244,6 +249,14 @@ export function createApiInterceptor(
       requiresAuth,
       metadata: {},
     };
+
+    for (const dynamicHeader of dynamicHeaders) {
+      if (dynamicHeader.condition && !dynamicHeader.condition(request)) continue;
+      const value = await dynamicHeader.getValue();
+      if (value != null) {
+        request.headers[dynamicHeader.name] = value;
+      }
+    }
 
     for (const interceptor of requestInterceptors) {
       if (interceptor.enabled === false) continue;
@@ -367,6 +380,13 @@ export function createApiInterceptor(
         interceptedResponse = await interceptor.handler(interceptedResponse) as InterceptedResponse<T>;
       }
 
+      if (endpointMatch.transform) {
+        interceptedResponse = {
+          ...interceptedResponse,
+          data: endpointMatch.transform(interceptedResponse.data) as T,
+        };
+      }
+
       log('info', `Response: ${method} ${fullUrl}`, { 
         status: response.status, 
         duration: endTime - startTime 
@@ -423,6 +443,49 @@ export function createApiInterceptor(
     addErrorInterceptor: (interceptor: ErrorInterceptor) => {
       errorInterceptors.push(interceptor);
       errorInterceptors.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    },
+
+    addResponseTransformer: (
+      pattern: string | RegExp,
+      transformer: ResponseTransformer,
+      methods?: HttpMethod[]
+    ) => {
+      dynamicTransformers.push({ pattern, transformer, methods });
+    },
+
+    removeResponseTransformer: (pattern: string | RegExp) => {
+      const index = dynamicTransformers.findIndex(dt => {
+        if (typeof dt.pattern === 'string' && typeof pattern === 'string') {
+          return dt.pattern === pattern;
+        }
+        if (dt.pattern instanceof RegExp && pattern instanceof RegExp) {
+          return dt.pattern.source === pattern.source;
+        }
+        return false;
+      });
+      if (index !== -1) {
+        dynamicTransformers.splice(index, 1);
+      }
+    },
+
+    addDynamicHeader: (
+      name: string,
+      getValue: DynamicHeaderGetter,
+      condition?: (request: InterceptedRequest) => boolean
+    ) => {
+      const existingIndex = dynamicHeaders.findIndex(h => h.name === name);
+      if (existingIndex !== -1) {
+        dynamicHeaders[existingIndex] = { name, getValue, condition };
+      } else {
+        dynamicHeaders.push({ name, getValue, condition });
+      }
+    },
+
+    removeDynamicHeader: (name: string) => {
+      const index = dynamicHeaders.findIndex(h => h.name === name);
+      if (index !== -1) {
+        dynamicHeaders.splice(index, 1);
+      }
     },
 
     removeInterceptor: (name: string, type: 'request' | 'response' | 'error') => {

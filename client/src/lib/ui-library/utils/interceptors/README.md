@@ -86,6 +86,13 @@ const api = createApiInterceptor({
       visibility: 'private',
       headers: { 'X-Legacy-Client': 'true' }
     },
+    
+    // Endpoints con transformador de respuesta
+    { 
+      pattern: '/users', 
+      visibility: 'private',
+      transform: (data) => data.map((u: any) => ({ ...u, fullName: `${u.firstName} ${u.lastName}` }))
+    },
   ],
   auth: {
     type: 'bearer',
@@ -96,6 +103,106 @@ const api = createApiInterceptor({
     },
   },
 });
+```
+
+## Response Transformers
+
+Castea automáticamente las respuestas según el endpoint. Se pueden definir en la config inicial o agregarlos dinámicamente.
+
+### En config inicial
+
+```typescript
+const api = createApiInterceptor({
+  baseUrl: 'https://api.example.com',
+  endpoints: [
+    { 
+      pattern: '/users', 
+      visibility: 'private',
+      transform: (data) => data.map((u: any) => ({ 
+        ...u, 
+        fullName: `${u.firstName} ${u.lastName}` 
+      })) as User[]
+    },
+    { 
+      pattern: '/products', 
+      visibility: 'public',
+      transform: (data) => data as Product[]
+    },
+  ],
+});
+
+// Uso - la respuesta ya viene transformada
+const response = await api.get('/users');
+// response.data ya tiene fullName agregado
+```
+
+### Agregar dinámicamente
+
+```typescript
+// Agregar transformer después de crear el interceptor
+api.addResponseTransformer('/orders', (data) => data as Order[]);
+api.addResponseTransformer(/^\/reports\/.*/, (data) => new ReportModel(data));
+
+// Remover transformer
+api.removeResponseTransformer('/orders');
+```
+
+**Prioridad**: Los transformers dinámicos tienen prioridad sobre los de config.
+
+## Dynamic Headers
+
+Headers que se evalúan en cada request - perfectos para estados reactivos (React state, stores, etc.).
+
+```typescript
+const api = createApiInterceptor({
+  baseUrl: 'https://api.example.com',
+});
+
+// En un componente o provider React
+const [tenantId, setTenantId] = useState('tenant-123');
+const [language, setLanguage] = useState('es');
+
+// Registrar headers dinámicos - el getter se ejecuta en cada request
+api.addDynamicHeader('X-Tenant-ID', () => tenantId);
+api.addDynamicHeader('Accept-Language', () => language);
+
+// Header condicional (solo para ciertas rutas)
+api.addDynamicHeader(
+  'X-Admin-Token', 
+  () => getAdminToken(),
+  (request) => request.url.includes('/admin')
+);
+
+// Cuando cambies el estado, los siguientes requests usarán el nuevo valor
+setTenantId('tenant-456');  // Próximos requests tendrán X-Tenant-ID: tenant-456
+
+// Remover header dinámico
+api.removeDynamicHeader('X-Tenant-ID');
+```
+
+### Usar con Context/Provider
+
+```typescript
+// TenantProvider.tsx
+export function TenantProvider({ children }: { children: React.ReactNode }) {
+  const [tenant, setTenant] = useState<Tenant | null>(null);
+  const { api } = useApiInterceptor({ config: apiConfig });
+
+  useEffect(() => {
+    // El header se actualiza automáticamente cuando cambia el tenant
+    api.addDynamicHeader('X-Tenant-ID', () => tenant?.id ?? null);
+    
+    return () => {
+      api.removeDynamicHeader('X-Tenant-ID');
+    };
+  }, [tenant, api]);
+
+  return (
+    <TenantContext.Provider value={{ tenant, setTenant }}>
+      {children}
+    </TenantContext.Provider>
+  );
+}
 ```
 
 ## Query Params Genéricos
