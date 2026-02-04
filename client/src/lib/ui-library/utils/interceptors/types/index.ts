@@ -25,12 +25,18 @@ export interface EndpointConfig {
   cacheTTL?: number;
 }
 
+/**
+ * Response transformer function - transforms the raw response data
+ */
+export type ResponseTransformer<TInput = unknown, TOutput = unknown> = (data: TInput) => TOutput;
+
 export interface EndpointMatch {
   pattern: string | RegExp;
   methods?: HttpMethod[];
   visibility: EndpointVisibility;
   requiresAuth?: boolean;
   headers?: Record<string, string>;
+  transform?: ResponseTransformer;
 }
 
 export interface AuthConfig {
@@ -148,7 +154,13 @@ export interface ApiInterceptorInstance {
   addRequestInterceptor: (interceptor: RequestInterceptor) => void;
   addResponseInterceptor: (interceptor: ResponseInterceptor) => void;
   addErrorInterceptor: (interceptor: ErrorInterceptor) => void;
+  addResponseTransformer: <TInput = unknown, TOutput = unknown>(
+    pattern: string | RegExp,
+    transformer: ResponseTransformer<TInput, TOutput>,
+    methods?: HttpMethod[]
+  ) => void;
   removeInterceptor: (name: string, type: 'request' | 'response' | 'error') => void;
+  removeResponseTransformer: (pattern: string | RegExp) => void;
   setAuth: (auth: AuthConfig) => void;
   clearAuth: () => void;
   getConfig: () => ApiInterceptorConfig;

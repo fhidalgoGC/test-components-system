@@ -12,7 +12,14 @@ import type {
   EndpointVisibility,
   QueryParams,
   AuthConfig,
+  ResponseTransformer,
 } from './types';
+
+interface DynamicTransformer {
+  pattern: string | RegExp;
+  methods?: HttpMethod[];
+  transformer: ResponseTransformer;
+}
 
 const DEFAULT_CONFIG: Partial<ApiInterceptorConfig> = {
   defaultTimeout: 30000,
@@ -68,12 +75,14 @@ interface EndpointMatchResult {
   visibility: EndpointVisibility;
   requiresAuth: boolean;
   headers?: Record<string, string>;
+  transform?: ResponseTransformer;
 }
 
 function matchEndpoint(
   url: string, 
   method: HttpMethod, 
-  config: ApiInterceptorConfig
+  config: ApiInterceptorConfig,
+  dynamicTransformers: DynamicTransformer[] = []
 ): EndpointMatchResult {
   const endpoint = config.endpoints?.find((ep) => {
     const pathMatches = typeof ep.pattern === 'string'
@@ -85,10 +94,21 @@ function matchEndpoint(
     return pathMatches && methodMatches;
   });
 
+  const dynamicTransformer = dynamicTransformers.find((dt) => {
+    const pathMatches = typeof dt.pattern === 'string'
+      ? url.includes(dt.pattern)
+      : dt.pattern.test(url);
+    
+    const methodMatches = !dt.methods || dt.methods.includes(method);
+    
+    return pathMatches && methodMatches;
+  });
+
   return {
     visibility: endpoint?.visibility ?? config.defaultVisibility ?? 'public',
     requiresAuth: endpoint?.requiresAuth ?? (endpoint?.visibility === 'private'),
     headers: endpoint?.headers,
+    transform: dynamicTransformer?.transformer ?? endpoint?.transform,
   };
 }
 
