@@ -33,6 +33,7 @@ const BaseTableDemo = lazy(() => import("@/pages/base-table-demo").then(m => ({ 
 const PaginatorDemo = lazy(() => import("@/pages/paginator-demo"));
 const ControlDataDemo = lazy(() => import("@/pages/control-data-demo"));
 const AccordionDemo = lazy(() => import("@/pages/accordion-demo"));
+const ListDemo = lazy(() => import("@/pages/list-demo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -101,6 +102,7 @@ export function Router() {
           <Route path="/components/paginator" component={PaginatorDemo} />
           <Route path="/providers/control-data" component={ControlDataDemo} />
           <Route path="/components/accordion" component={AccordionDemo} />
+          <Route path="/components/list" component={ListDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

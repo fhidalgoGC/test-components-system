@@ -60,6 +60,10 @@ export interface ListProps<T = any> {
   className?: string;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';
+  renderIdle?: ComponentType | (() => ReactNode);
+  renderLoading?: ComponentType | (() => ReactNode);
+  renderComplete?: ComponentType | (() => ReactNode);
+  renderError?: ComponentType | (() => ReactNode);
 }
 
 export interface ListController<T = any> {

@@ -1,7 +1,13 @@
-import { useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import type { ListProps, InternalListController, RenderState } from '../../shared/List.types';
 import { useListController } from '../../shared/useListController';
 import styles from '../css/List.module.css';
+
+interface ListState<T> {
+  data: T[];
+  renderState: RenderState;
+  page: number;
+}
 
 export const ListView = <T,>(props: ListProps<T>) => {
   const {
@@ -36,19 +42,22 @@ export const ListView = <T,>(props: ListProps<T>) => {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const subscribe = useCallback((callback: () => void) => {
-    return controller._subscribe(callback);
-  }, [controller]);
+  const [state, setState] = useState<ListState<T>>({
+    data: controller._getData(),
+    renderState: controller.getRenderState(),
+    page: controller.getPage(),
+  });
 
-  const getSnapshot = useCallback(() => {
-    return {
-      data: controller._getData(),
-      renderState: controller.getRenderState(),
-      page: controller.getPage(),
-    };
+  useEffect(() => {
+    const unsubscribe = controller._subscribe(() => {
+      setState({
+        data: controller._getData(),
+        renderState: controller.getRenderState(),
+        page: controller.getPage(),
+      });
+    });
+    return unsubscribe;
   }, [controller]);
-
-  const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   useEffect(() => {
     controller._register(id);
@@ -58,13 +67,13 @@ export const ListView = <T,>(props: ListProps<T>) => {
   }, [controller, id]);
 
   useEffect(() => {
-    if (data && data.length > 0 && state.data.length === 0) {
+    if (data && data.length > 0) {
       controller.setData(data);
       if (controller.getRenderState() === 'renderIdle') {
         controller.setRenderState('renderComplete');
       }
     }
-  }, [data, controller, state.data.length]);
+  }, [data, controller]);
 
   useEffect(() => {
     if (paginator?.maxItem) {
