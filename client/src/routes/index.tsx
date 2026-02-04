@@ -11,9 +11,9 @@ const WrapperItemsSelectedDemo = lazy(() => import("@/pages/wrapper-items-select
 const BottomNavDemo = lazy(() => import("@/pages/bottom-nav-demo"));
 const BottomNavConfigDemo = lazy(() => import("@/pages/bottom-nav-config-demo"));
 const ExternalAppDemo = lazy(() => import("@/pages/external-app-demo"));
-const HeterogeneousListRegistry = lazy(() => import("@/pages/heterogeneous-list-registry"));
-const HeterogeneousListElements = lazy(() => import("@/pages/heterogeneous-list-elements"));
-const HeterogeneousListAsync = lazy(() => import("@/pages/heterogeneous-list-async"));
+const HeterogeneousListRegistry = lazy(() => import("@/pages/heterogeneous-list/heterogeneous-list-registry"));
+const HeterogeneousListElements = lazy(() => import("@/pages/heterogeneous-list/heterogeneous-list-elements"));
+const HeterogeneousListAsync = lazy(() => import("@/pages/heterogeneous-list/heterogeneous-list-async"));
 const DateDemo = lazy(() => import("@/pages/date-demo"));
 const AuthTest = lazy(() => import("@/pages/auth-test"));
 const LayoutRowDemo = lazy(() => import("@/pages/layout-row-demo"));
