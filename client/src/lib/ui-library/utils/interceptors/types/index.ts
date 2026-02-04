@@ -44,6 +44,10 @@ export interface QueryParams {
   searchFields?: string[];
 }
 
+/**
+ * Full endpoint configuration (reserved for future use with endpoint registry)
+ * Currently, use EndpointMatch for pattern-based endpoint matching
+ */
 export interface EndpointConfig {
   path: string;
   method?: HttpMethod;

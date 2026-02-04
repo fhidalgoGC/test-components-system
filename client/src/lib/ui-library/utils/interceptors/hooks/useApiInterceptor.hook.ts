@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, useRef } from 'react';
 import { createApiInterceptor } from '../ApiInterceptor';
 import type {
   ApiInterceptorConfig,
@@ -18,6 +18,7 @@ export interface UseApiInterceptorOptions {
 export interface UseApiInterceptorReturn {
   api: ApiInterceptorInstance;
   loading: boolean;
+  pendingRequests: number;
   error: InterceptedError | null;
   clearError: () => void;
   buildFilters: (...filters: FilterRule[]) => FilterRule[];
@@ -35,8 +36,9 @@ export interface UseApiInterceptorReturn {
 export function useApiInterceptor(
   options: UseApiInterceptorOptions
 ): UseApiInterceptorReturn {
-  const [loading, setLoading] = useState(false);
+  const [pendingRequests, setPendingRequests] = useState(0);
   const [error, setError] = useState<InterceptedError | null>(null);
+  const requestCountRef = useRef(0);
 
   const api = useMemo(() => {
     const instance = createApiInterceptor(options.config);
@@ -45,8 +47,8 @@ export function useApiInterceptor(
       method: (...args: any[]) => Promise<InterceptedResponse<T>>
     ) => {
       return async (...args: any[]): Promise<InterceptedResponse<T>> => {
-        setLoading(true);
-        setError(null);
+        requestCountRef.current += 1;
+        setPendingRequests(requestCountRef.current);
         try {
           const result = await method(...args);
           return result;
@@ -54,7 +56,8 @@ export function useApiInterceptor(
           setError(err as InterceptedError);
           throw err;
         } finally {
-          setLoading(false);
+          requestCountRef.current -= 1;
+          setPendingRequests(requestCountRef.current);
         }
       };
     };
@@ -69,6 +72,8 @@ export function useApiInterceptor(
       request: wrapMethod(instance.request) as ApiInterceptorInstance['request'],
     } as ApiInterceptorInstance;
   }, [options.config]);
+
+  const loading = pendingRequests > 0;
 
   const clearError = useCallback(() => {
     setError(null);
@@ -107,6 +112,7 @@ export function useApiInterceptor(
   return {
     api,
     loading,
+    pendingRequests,
     error,
     clearError,
     buildFilters,

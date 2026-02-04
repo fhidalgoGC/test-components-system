@@ -69,11 +69,17 @@ function buildQueryString(params: QueryParams): string {
   return queryParts.length ? `?${queryParts.join('&')}` : '';
 }
 
+interface EndpointMatchResult {
+  visibility: EndpointVisibility;
+  requiresAuth: boolean;
+  headers?: Record<string, string>;
+}
+
 function matchEndpoint(
   url: string, 
   method: HttpMethod, 
   config: ApiInterceptorConfig
-): { visibility: EndpointVisibility; requiresAuth: boolean } {
+): EndpointMatchResult {
   const endpoint = config.endpoints?.find((ep) => {
     const pathMatches = typeof ep.pattern === 'string'
       ? url.includes(ep.pattern)
@@ -87,6 +93,7 @@ function matchEndpoint(
   return {
     visibility: endpoint?.visibility ?? config.defaultVisibility ?? 'public',
     requiresAuth: endpoint?.requiresAuth ?? (endpoint?.visibility === 'private'),
+    headers: endpoint?.headers,
   };
 }
 
@@ -204,6 +211,7 @@ export function createApiInterceptor(
 
     let headers: Record<string, string> = {
       ...config.defaultHeaders,
+      ...endpointMatch.headers,
       ...options.headers,
     };
 
@@ -234,6 +242,7 @@ export function createApiInterceptor(
     const startTime = Date.now();
     let retryCount = 0;
     const maxRetries = config.retry?.enabled ? (config.retry.maxRetries || 3) : 0;
+    const retryOnStatusCodes = config.retry?.retryOn || [408, 429, 500, 502, 503, 504];
 
     const executeWithRetry = async (): Promise<Response> => {
       try {
@@ -251,11 +260,21 @@ export function createApiInterceptor(
         });
 
         clearTimeout(timeoutId);
+
+        if (!response.ok && retryCount < maxRetries && retryOnStatusCodes.includes(response.status)) {
+          retryCount++;
+          log('warn', `Retrying request due to status ${response.status} (${retryCount}/${maxRetries})`, { endpoint });
+          await new Promise(resolve => 
+            setTimeout(resolve, config.retry?.retryDelay || 1000)
+          );
+          return executeWithRetry();
+        }
+
         return response;
       } catch (error) {
         if (retryCount < maxRetries) {
           retryCount++;
-          log('warn', `Retrying request (${retryCount}/${maxRetries})`, { endpoint });
+          log('warn', `Retrying request due to network error (${retryCount}/${maxRetries})`, { endpoint });
           await new Promise(resolve => 
             setTimeout(resolve, config.retry?.retryDelay || 1000)
           );
