@@ -24,7 +24,7 @@ npx gc-ui-setup new-app --force
 
 | Flag | Descripción |
 |------|-------------|
-| `--path=<ruta>` | Ruta donde crear la estructura (default: `src`) |
+| `--path=<ruta>` | Ruta donde crear la estructura (default: `client/src`) |
 | `--force`, `-f` | Sobrescribe carpetas existentes |
 | `--help`, `-h` | Muestra ayuda |
 
@@ -34,12 +34,14 @@ npx gc-ui-setup new-app --force
 |---------|-------|
 | assets | @/assets |
 | components | @/components |
+| constants | @/constants |
 | contexts | @/contexts |
 | features | @/features |
 | hooks | @/hooks |
+| i18n | @/I18n |
 | interceptors | @/interceptors |
 | layouts | @/layouts |
-| lib | @/lib |
+| libs | @/libs |
 | pages | @/pages |
 | routes | @/routes |
 | services | @/services |
@@ -53,12 +55,16 @@ npx gc-ui-setup new-app --force
 | `App.tsx` | Componente principal de la aplicación |
 | `pages/home.tsx` | Página principal |
 | `pages/not-found.tsx` | Página 404 |
-| `lib/utils.ts` | Utilidad `cn()` para clases CSS |
-| `lib/queryClient.ts` | Cliente TanStack Query con fetch config |
+| `libs/utils.ts` | Utilidad `cn()` para clases CSS |
+| `libs/queryClient.ts` | Cliente TanStack Query con fetch config |
 | `hooks/use-toast.ts` | Hook para notificaciones toast |
 | `components/ui/toast.tsx` | Componente Toast |
 | `components/ui/toaster.tsx` | Componente Toaster |
 | `components/ui/tooltip.tsx` | Componente Tooltip |
+| `routes/index.tsx` | Router principal con rutas base |
+| `routes/feature-routes.ts` | Configuración de rutas por feature |
+| `i18n/en.json` | Traducciones en inglés |
+| `i18n/es.json` | Traducciones en español |
 
 ## Estructura de Salida
 
@@ -67,23 +73,30 @@ src/
 ├── App.tsx
 ├── assets/
 ├── components/
+│   ├── shared/
 │   └── ui/
 │       ├── toast.tsx
 │       ├── toaster.tsx
 │       └── tooltip.tsx
+├── constants/
 ├── contexts/
 ├── features/
 ├── hooks/
 │   └── use-toast.ts
+├── i18n/
+│   ├── en.json
+│   └── es.json
 ├── interceptors/
 ├── layouts/
-├── lib/
+├── libs/
 │   ├── queryClient.ts
 │   └── utils.ts
 ├── pages/
 │   ├── home.tsx
 │   └── not-found.tsx
 ├── routes/
+│   ├── feature-routes.ts
+│   └── index.tsx
 ├── services/
 ├── types/
 └── utils/
