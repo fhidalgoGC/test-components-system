@@ -18,7 +18,7 @@ const DateDemo = lazy(() => import("@/pages/date-demo"));
 const AuthTest = lazy(() => import("@/pages/auth-test"));
 const LayoutRowDemo = lazy(() => import("@/pages/layout-row-demo"));
 const LayoutColumnDemo = lazy(() => import("@/pages/layout-column-demo/LayoutColumnDemo"));
-const NavSidebarBasic = lazy(() => import("@/pages/nav-sidebar-basic"));
+const NavSidebarBasic = lazy(() => import("@/pages/nav-sidebar/nav-sidebar-basic"));
 const NavSidebarCustomHeader = lazy(() => import("@/pages/nav-sidebar/nav-sidebar-custom-header"));
 const NavSidebarCustomFooter = lazy(() => import("@/pages/nav-sidebar/nav-sidebar-custom-footer"));
 const NavSidebarNested = lazy(() => import("@/pages/nav-sidebar/nav-sidebar-nested"));
