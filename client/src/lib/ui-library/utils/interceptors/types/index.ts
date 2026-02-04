@@ -2,47 +2,11 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS'
 
 export type EndpointVisibility = 'public' | 'private';
 
-export type FilterOperator = 
-  | 'equals' 
-  | 'not_equals' 
-  | 'contains' 
-  | 'starts_with' 
-  | 'ends_with' 
-  | 'greater_than' 
-  | 'less_than' 
-  | 'in' 
-  | 'not_in'
-  | 'between'
-  | 'is_null'
-  | 'is_not_null';
-
-export type SortDirection = 'asc' | 'desc';
-
-export interface FilterRule {
-  field: string;
-  operator: FilterOperator;
-  value: unknown;
-  caseSensitive?: boolean;
-}
-
-export interface SortRule {
-  field: string;
-  direction: SortDirection;
-}
-
-export interface PaginationConfig {
-  page: number;
-  pageSize: number;
-  pageSizeOptions?: number[];
-}
-
-export interface QueryParams {
-  filters?: FilterRule[];
-  sort?: SortRule[];
-  pagination?: PaginationConfig;
-  search?: string;
-  searchFields?: string[];
-}
+/**
+ * Generic query parameters - the interceptor is agnostic to the structure.
+ * Consumer defines their own param format, interceptor just serializes it.
+ */
+export type QueryParams = Record<string, unknown>;
 
 /**
  * Full endpoint configuration (reserved for future use with endpoint registry)

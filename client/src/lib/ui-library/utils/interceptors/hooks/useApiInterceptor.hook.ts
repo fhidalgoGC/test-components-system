@@ -4,9 +4,6 @@ import type {
   ApiInterceptorConfig,
   ApiInterceptorInstance,
   QueryParams,
-  FilterRule,
-  SortRule,
-  PaginationConfig,
   InterceptedResponse,
   InterceptedError,
 } from '../types';
@@ -21,16 +18,6 @@ export interface UseApiInterceptorReturn {
   pendingRequests: number;
   error: InterceptedError | null;
   clearError: () => void;
-  buildFilters: (...filters: FilterRule[]) => FilterRule[];
-  buildSort: (...sorts: SortRule[]) => SortRule[];
-  buildPagination: (page: number, pageSize: number) => PaginationConfig;
-  buildParams: (options: {
-    filters?: FilterRule[];
-    sort?: SortRule[];
-    pagination?: PaginationConfig;
-    search?: string;
-    searchFields?: string[];
-  }) => QueryParams;
 }
 
 export function useApiInterceptor(
@@ -79,45 +66,11 @@ export function useApiInterceptor(
     setError(null);
   }, []);
 
-  const buildFilters = useCallback((...filters: FilterRule[]): FilterRule[] => {
-    return filters.filter(f => f.value !== undefined && f.value !== null && f.value !== '');
-  }, []);
-
-  const buildSort = useCallback((...sorts: SortRule[]): SortRule[] => {
-    return sorts;
-  }, []);
-
-  const buildPagination = useCallback((page: number, pageSize: number): PaginationConfig => {
-    return { page, pageSize };
-  }, []);
-
-  const buildParams = useCallback((options: {
-    filters?: FilterRule[];
-    sort?: SortRule[];
-    pagination?: PaginationConfig;
-    search?: string;
-    searchFields?: string[];
-  }): QueryParams => {
-    return {
-      filters: options.filters?.filter(f => 
-        f.value !== undefined && f.value !== null && f.value !== ''
-      ),
-      sort: options.sort,
-      pagination: options.pagination,
-      search: options.search,
-      searchFields: options.searchFields,
-    };
-  }, []);
-
   return {
     api,
     loading,
     pendingRequests,
     error,
     clearError,
-    buildFilters,
-    buildSort,
-    buildPagination,
-    buildParams,
   };
 }

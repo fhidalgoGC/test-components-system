@@ -1,6 +1,6 @@
 # ApiInterceptor
 
-Sistema de interceptores de API configurable y declarativo para manejar peticiones HTTP con soporte para filtros dinámicos, autenticación, y endpoints públicos/privados.
+Sistema de interceptores de API **agnóstico** y configurable para manejar peticiones HTTP con soporte para autenticación y endpoints públicos/privados.
 
 ## Estructura de Carpetas
 
@@ -14,6 +14,23 @@ interceptors/
 │   └── useApiInterceptor.hook.ts  # Hook para React
 └── types/
     └── index.ts               # Definiciones de tipos
+```
+
+## Principio de Diseño: Agnóstico
+
+El ApiInterceptor es **completamente agnóstico** - no impone ninguna estructura específica para query params, filtros, o paginación. El consumidor define su propio formato y el interceptor simplemente lo serializa.
+
+```typescript
+// El interceptor acepta cualquier estructura de params
+await api.get('/users', { 
+  status: 'active',           // Simple key-value
+  roles: ['admin', 'user'],   // Arrays
+  pagination: { page: 1 },    // Objetos anidados
+  custom: { nested: { deep: true } }  // Cualquier estructura
+});
+
+// Se serializa automáticamente a query string:
+// ?status=active&roles=admin&roles=user&pagination[page]=1&custom[nested][deep]=true
 ```
 
 ## Uso Básico
@@ -31,8 +48,17 @@ const api = createApiInterceptor({
 // GET request
 const response = await api.get('/users');
 
+// GET con query params (cualquier estructura)
+const users = await api.get('/users', { 
+  active: true, 
+  limit: 10 
+});
+
 // POST request
-const newUser = await api.post('/users', { name: 'John', email: 'john@example.com' });
+const newUser = await api.post('/users', { 
+  name: 'John', 
+  email: 'john@example.com' 
+});
 ```
 
 ## Endpoints Públicos vs Privados
@@ -53,10 +79,17 @@ const api = createApiInterceptor({
     { pattern: '/users', visibility: 'private', requiresAuth: true },
     { pattern: '/orders', visibility: 'private', requiresAuth: true },
     { pattern: /^\/admin\/.*/, visibility: 'private', requiresAuth: true },
+    
+    // Endpoints con headers específicos
+    { 
+      pattern: '/legacy-api', 
+      visibility: 'private',
+      headers: { 'X-Legacy-Client': 'true' }
+    },
   ],
   auth: {
     type: 'bearer',
-    tokenKey: 'access_token',  // Lee de localStorage
+    tokenKey: 'access_token',
     onAuthError: (error) => {
       console.log('Auth error:', error);
       window.location.href = '/login';
@@ -65,59 +98,30 @@ const api = createApiInterceptor({
 });
 ```
 
-## Filtros Dinámicos
+## Query Params Genéricos
 
-Sistema de filtros similar a BaseTable, configurable y extensible:
+El interceptor serializa cualquier estructura de params:
 
 ```typescript
-import type { QueryParams, FilterRule } from '@/lib/ui-library/utils/interceptors';
+// Params simples
+await api.get('/users', { status: 'active', page: 1 });
+// → /users?status=active&page=1
 
-// Definir filtros
-const filters: FilterRule[] = [
-  { field: 'status', operator: 'equals', value: 'active' },
-  { field: 'name', operator: 'contains', value: 'john' },
-  { field: 'price', operator: 'between', value: [10, 100] },
-  { field: 'category', operator: 'in', value: ['electronics', 'books'] },
-];
+// Arrays
+await api.get('/products', { categories: ['electronics', 'books'] });
+// → /products?categories=electronics&categories=books
 
-// Definir ordenamiento
-const sort = [
-  { field: 'createdAt', direction: 'desc' },
-  { field: 'name', direction: 'asc' },
-];
-
-// Definir paginación
-const pagination = {
-  page: 1,
-  pageSize: 20,
-};
-
-// Ejecutar petición con parámetros
-const response = await api.get('/products', {
-  filters,
-  sort,
-  pagination,
-  search: 'laptop',
-  searchFields: ['name', 'description'],
+// Objetos anidados
+await api.get('/search', { 
+  filters: { 
+    price: { min: 10, max: 100 },
+    brand: 'apple'
+  }
 });
+// → /search?filters[price][min]=10&filters[price][max]=100&filters[brand]=apple
+
+// El consumidor define la estructura según lo que espera su backend
 ```
-
-### Operadores de Filtro Disponibles
-
-| Operador | Descripción | Ejemplo |
-|----------|-------------|---------|
-| `equals` | Igualdad exacta | `{ field: 'status', operator: 'equals', value: 'active' }` |
-| `not_equals` | Diferente de | `{ field: 'status', operator: 'not_equals', value: 'deleted' }` |
-| `contains` | Contiene texto | `{ field: 'name', operator: 'contains', value: 'john' }` |
-| `starts_with` | Comienza con | `{ field: 'email', operator: 'starts_with', value: 'admin' }` |
-| `ends_with` | Termina con | `{ field: 'email', operator: 'ends_with', value: '.com' }` |
-| `greater_than` | Mayor que | `{ field: 'price', operator: 'greater_than', value: 100 }` |
-| `less_than` | Menor que | `{ field: 'age', operator: 'less_than', value: 18 }` |
-| `in` | En lista | `{ field: 'category', operator: 'in', value: ['a', 'b'] }` |
-| `not_in` | No en lista | `{ field: 'status', operator: 'not_in', value: ['deleted'] }` |
-| `between` | Entre valores | `{ field: 'price', operator: 'between', value: [10, 100] }` |
-| `is_null` | Es nulo | `{ field: 'deletedAt', operator: 'is_null', value: true }` |
-| `is_not_null` | No es nulo | `{ field: 'email', operator: 'is_not_null', value: true }` |
 
 ## Interceptores Personalizados
 
@@ -189,10 +193,8 @@ const api = createApiInterceptor({
       name: 'handle-401',
       statusCodes: [401],
       handler: async (error) => {
-        // Intentar refresh token
         const newToken = await refreshToken();
         if (newToken) {
-          // Reintentar la petición original
           return error;
         }
         window.location.href = '/login';
@@ -229,16 +231,16 @@ const api = createApiInterceptor({
       return session?.accessToken ?? null;
     },
     
-    // Callback cuando expira el token
-    onTokenExpired: () => {
-      console.log('Token expired');
-    },
-    
-    // Callback en errores de auth (401, 403)
+    // Callback cuando hay errores de auth (401, 403)
     onAuthError: (error) => {
       if (error.status === 401) {
         window.location.href = '/login';
       }
+    },
+    
+    // Callback cuando expira el token
+    onTokenExpired: () => {
+      console.log('Token expired');
     },
   },
 });
@@ -251,8 +253,8 @@ Hook para React con estado de loading y error:
 ```typescript
 import { useApiInterceptor } from '@/lib/ui-library/utils/interceptors';
 
-function ProductList() {
-  const { api, loading, error, clearError, buildFilters, buildParams } = useApiInterceptor({
+function UserList() {
+  const { api, loading, pendingRequests, error, clearError } = useApiInterceptor({
     config: {
       baseUrl: 'https://api.example.com',
       auth: {
@@ -262,31 +264,43 @@ function ProductList() {
     },
   });
 
-  const [products, setProducts] = useState([]);
-  const [statusFilter, setStatusFilter] = useState('active');
+  const [users, setUsers] = useState([]);
 
-  const loadProducts = async () => {
-    const params = buildParams({
-      filters: buildFilters(
-        { field: 'status', operator: 'equals', value: statusFilter }
-      ),
-      pagination: { page: 1, pageSize: 20 },
-      sort: [{ field: 'name', direction: 'asc' }],
+  const loadUsers = async () => {
+    // Pasa cualquier estructura de params que tu backend espere
+    const response = await api.get('/users', { 
+      status: 'active',
+      limit: 20,
+      offset: 0
     });
-
-    const response = await api.get('/products', params);
-    setProducts(response.data);
+    setUsers(response.data);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading... ({pendingRequests} requests)</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      {products.map(p => <div key={p.id}>{p.name}</div>)}
+      {users.map(u => <div key={u.id}>{u.name}</div>)}
     </div>
   );
 }
+```
+
+### Manejo de Concurrencia
+
+El hook maneja correctamente múltiples requests concurrentes:
+
+```typescript
+const { loading, pendingRequests } = useApiInterceptor({ config });
+
+// loading = true si hay AL MENOS UN request pendiente
+// pendingRequests = número exacto de requests en vuelo
+
+// Útil para mostrar estado preciso:
+<div>
+  {pendingRequests > 0 && `${pendingRequests} requests en progreso...`}
+</div>
 ```
 
 ## Retry y Timeout
@@ -313,7 +327,6 @@ const api = createApiInterceptor({
     enabled: true,
     level: 'debug',  // 'debug' | 'info' | 'warn' | 'error'
     onLog: (entry) => {
-      // Enviar a servicio de logging
       sendToLogService(entry);
     },
   },
@@ -345,39 +358,49 @@ api.setAuth({
 api.clearAuth();
 ```
 
+## Override Chain
+
+El sistema sigue una cadena de prioridades:
+
+1. **Request-specific options** (mayor prioridad)
+2. **Endpoint match config**
+3. **Default config** (menor prioridad)
+
+```typescript
+// Config base
+const api = createApiInterceptor({
+  baseUrl: 'https://api.example.com',
+  defaultVisibility: 'public',
+  endpoints: [
+    { 
+      pattern: '/admin', 
+      visibility: 'private',
+      headers: { 'X-Admin': 'true' }
+    },
+  ],
+});
+
+// Override en petición específica
+await api.request('/admin/users', { 
+  method: 'GET',
+  visibility: 'private',
+  requiresAuth: true,
+  headers: { 'X-Custom': 'value' },  // Se mergea con headers del endpoint
+});
+```
+
 ## Tipos Principales
 
 ```typescript
-interface FilterRule {
-  field: string;
-  operator: FilterOperator;
-  value: unknown;
-  caseSensitive?: boolean;
-}
-
-interface SortRule {
-  field: string;
-  direction: 'asc' | 'desc';
-}
-
-interface PaginationConfig {
-  page: number;
-  pageSize: number;
-}
-
-interface QueryParams {
-  filters?: FilterRule[];
-  sort?: SortRule[];
-  pagination?: PaginationConfig;
-  search?: string;
-  searchFields?: string[];
-}
+// Query params genéricos - el consumidor define la estructura
+type QueryParams = Record<string, unknown>;
 
 interface EndpointMatch {
   pattern: string | RegExp;
   methods?: HttpMethod[];
   visibility: 'public' | 'private';
   requiresAuth?: boolean;
+  headers?: Record<string, string>;
 }
 
 interface AuthConfig {
@@ -388,29 +411,15 @@ interface AuthConfig {
   onAuthError?: (error: AuthError) => void;
   onTokenExpired?: () => void;
 }
-```
 
-## Override Chain
-
-Similar a BaseTable, el sistema sigue una cadena de prioridades:
-
-1. **Request-specific options** (mayor prioridad)
-2. **Endpoint match config**
-3. **Default config** (menor prioridad)
-
-```typescript
-// Config base
-const api = createApiInterceptor({
-  baseUrl: 'https://api.example.com',
-  defaultVisibility: 'public',  // Default para todos
-  endpoints: [
-    { pattern: '/admin', visibility: 'private' },  // Override para /admin
-  ],
-});
-
-// Override en petición específica
-await api.get('/admin/users', { 
-  visibility: 'private',  // Override explícito (mayor prioridad)
-  requiresAuth: true,
-});
+interface RequestOptions {
+  method?: HttpMethod;
+  body?: unknown;
+  params?: QueryParams;
+  headers?: Record<string, string>;
+  timeout?: number;
+  visibility?: EndpointVisibility;
+  requiresAuth?: boolean;
+  signal?: AbortSignal;
+}
 ```

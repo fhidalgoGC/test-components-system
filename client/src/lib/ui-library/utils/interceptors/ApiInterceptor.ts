@@ -11,8 +11,6 @@ import type {
   HttpMethod,
   EndpointVisibility,
   QueryParams,
-  FilterRule,
-  SortRule,
   AuthConfig,
 } from './types';
 
@@ -37,34 +35,31 @@ const DEFAULT_CONFIG: Partial<ApiInterceptorConfig> = {
 function buildQueryString(params: QueryParams): string {
   const queryParts: string[] = [];
 
-  if (params.filters?.length) {
-    params.filters.forEach((filter: FilterRule) => {
-      const key = `filter[${filter.field}][${filter.operator}]`;
-      const value = Array.isArray(filter.value) 
-        ? filter.value.join(',') 
-        : String(filter.value);
-      queryParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
-    });
-  }
-
-  if (params.sort?.length) {
-    const sortValue = params.sort
-      .map((s: SortRule) => `${s.direction === 'desc' ? '-' : ''}${s.field}`)
-      .join(',');
-    queryParts.push(`sort=${encodeURIComponent(sortValue)}`);
-  }
-
-  if (params.pagination) {
-    queryParts.push(`page=${params.pagination.page}`);
-    queryParts.push(`pageSize=${params.pagination.pageSize}`);
-  }
-
-  if (params.search) {
-    queryParts.push(`search=${encodeURIComponent(params.search)}`);
-    if (params.searchFields?.length) {
-      queryParts.push(`searchFields=${params.searchFields.join(',')}`);
+  const serialize = (key: string, value: unknown): void => {
+    if (value === undefined || value === null) return;
+    
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        if (typeof item === 'object' && item !== null) {
+          Object.entries(item).forEach(([subKey, subValue]) => {
+            serialize(`${key}[${index}][${subKey}]`, subValue);
+          });
+        } else {
+          queryParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(item))}`);
+        }
+      });
+    } else if (typeof value === 'object') {
+      Object.entries(value).forEach(([subKey, subValue]) => {
+        serialize(`${key}[${subKey}]`, subValue);
+      });
+    } else {
+      queryParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
     }
-  }
+  };
+
+  Object.entries(params).forEach(([key, value]) => {
+    serialize(key, value);
+  });
 
   return queryParts.length ? `?${queryParts.join('&')}` : '';
 }
