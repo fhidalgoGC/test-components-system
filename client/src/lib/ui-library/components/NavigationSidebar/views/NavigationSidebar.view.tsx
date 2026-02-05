@@ -56,6 +56,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
     showLanguageSelector = true,
     availableLanguages = ['en', 'es'],
     footerContent,
+    showFooter = true,
     collapsedWidth = 80,
     expandedWidth = 280,
   } = props;
@@ -231,6 +232,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
         </nav>
 
         {/* FOOTER */}
+        {showFooter && (
         <div className={`${styles.footer} ${isDark ? styles.dark : ''}`} data-testid="sidebar-footer">
           {footerContent ? (
             footerContent
@@ -308,6 +310,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
             </>
           )}
         </div>
+        )}
       </div>
     </>
   );

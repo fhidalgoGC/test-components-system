@@ -31,6 +31,7 @@ const menuItems = [
 function NavSidebarContent() {
   const [selectedPath, setSelectedPath] = useState('/dashboard');
   const [headerHeight, setHeaderHeight] = useState<number>(120);
+  const [showFooter, setShowFooter] = useState<boolean>(true);
   const { lang } = useLibI18n();
 
   const handleNavigate = (path: string) => {
@@ -42,6 +43,7 @@ function NavSidebarContent() {
     <div className={styles.pageContainer}>
       <NavigationSidebar
         headerHeight={headerHeight}
+        showFooter={showFooter}
         headerIcon={
           <div className={styles.headerIcon}>
             <Package className="h-4 w-4 text-white" />
@@ -104,6 +106,18 @@ function NavSidebarContent() {
               200px
             </button>
           </div>
+        </div>
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Mostrar Footer:</h3>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={showFooter}
+              onChange={(e) => setShowFooter(e.target.checked)}
+              style={{ width: '20px', height: '20px' }}
+            />
+            <span>{showFooter ? 'Footer visible' : 'Footer oculto'}</span>
+          </label>
         </div>
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Estado actual:</h3>

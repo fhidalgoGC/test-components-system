@@ -42,6 +42,7 @@ export interface NavigationSidebarProps {
   i18nOrder?: 'global-first' | 'local-first';
   className?: string;
   footerContent?: ReactNode;
+  showFooter?: boolean;
   collapsedWidth?: number;
   expandedWidth?: number;
 }
