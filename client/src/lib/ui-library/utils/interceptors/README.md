@@ -94,15 +94,116 @@ const api = createApiInterceptor({
       transform: (data) => data.map((u: any) => ({ ...u, fullName: `${u.firstName} ${u.lastName}` }))
     },
   ],
-  auth: {
-    type: 'bearer',
-    tokenKey: 'access_token',
-    onAuthError: (error) => {
-      console.log('Auth error:', error);
-      window.location.href = '/login';
-    },
+});
+```
+
+## Autenticación Externa
+
+El interceptor NO accede a storage directamente. La autenticación se configura externamente mediante `setAuth`:
+
+### Tipos de autenticación
+
+```typescript
+// Bearer Token
+api.setAuth({
+  type: 'bearer',
+  getToken: () => myAuthStore.accessToken,  // Tu estado/store externo
+});
+// → Authorization: Bearer <token>
+
+// Basic Auth
+api.setAuth({
+  type: 'basic',
+  getToken: () => btoa(`${username}:${password}`),
+});
+// → Authorization: Basic <base64>
+
+// API Key
+api.setAuth({
+  type: 'api-key',
+  headerName: 'X-API-Key',  // Opcional, default: 'X-API-Key'
+  getToken: () => myApiKey,
+});
+// → X-API-Key: <key>
+
+// Custom Header
+api.setAuth({
+  type: 'custom',
+  headerName: 'X-Custom-Auth',
+  getToken: () => myCustomToken,
+});
+// → X-Custom-Auth: <token>
+```
+
+### Integración con React Context/Provider
+
+```typescript
+// AuthProvider.tsx
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [token, setToken] = useState<string | null>(null);
+  const { api } = useApiInterceptor({ config: apiConfig });
+
+  // Configurar auth cuando cambie el token
+  useEffect(() => {
+    if (token) {
+      api.setAuth({
+        type: 'bearer',
+        getToken: () => token,
+        onAuthError: (error) => {
+          if (error.status === 401) {
+            setToken(null);
+          }
+        },
+      });
+    } else {
+      api.clearAuth();
+    }
+  }, [token, api]);
+
+  const login = async (credentials: Credentials) => {
+    const response = await api.post('/auth/login', credentials);
+    setToken(response.data.accessToken);
+  };
+
+  const logout = () => {
+    setToken(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+```
+
+### Con refresh token
+
+```typescript
+api.setAuth({
+  type: 'bearer',
+  getToken: () => authStore.accessToken,
+  refreshToken: async () => {
+    const response = await fetch('/auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ refreshToken: authStore.refreshToken }),
+    });
+    const data = await response.json();
+    authStore.setAccessToken(data.accessToken);
+    return data.accessToken;
+  },
+  onTokenExpired: () => {
+    authStore.logout();
+    window.location.href = '/login';
   },
 });
+```
+
+### Limpiar autenticación
+
+```typescript
+// Al hacer logout
+api.clearAuth();
 ```
 
 ## Response Transformers

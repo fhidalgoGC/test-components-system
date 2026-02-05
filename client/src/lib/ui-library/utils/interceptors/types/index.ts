@@ -51,11 +51,12 @@ export interface EndpointMatch {
   transform?: ResponseTransformer;
 }
 
+export type AuthType = 'bearer' | 'basic' | 'api-key' | 'custom';
+
 export interface AuthConfig {
-  type: 'bearer' | 'basic' | 'api-key' | 'custom';
-  tokenKey?: string;
+  type: AuthType;
   headerName?: string;
-  getToken?: () => string | null | Promise<string | null>;
+  getToken: () => string | null | Promise<string | null>;
   refreshToken?: () => Promise<string | null>;
   onAuthError?: (error: AuthError) => void;
   onTokenExpired?: () => void;

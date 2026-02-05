@@ -120,15 +120,7 @@ async function applyAuthHeaders(
 ): Promise<Record<string, string>> {
   const newHeaders = { ...headers };
   
-  let token: string | null = null;
-  
-  if (auth.getToken) {
-    token = await auth.getToken();
-  } else if (auth.tokenKey) {
-    token = typeof window !== 'undefined' 
-      ? localStorage.getItem(auth.tokenKey) 
-      : null;
-  }
+  const token = await auth.getToken();
 
   if (!token) return newHeaders;
 
