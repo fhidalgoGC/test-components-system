@@ -39,14 +39,37 @@ $spacing-xl: 32px;
   min-width: 0;
 }
 
-.componentFull {
+.componentWrapper {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.componentWidthFull {
   flex: 1;
   min-width: 0;
   width: 100%;
 }
 
-.componentAuto {
+.componentWidthAuto {
   flex: 0 0 auto;
+}
+
+.componentWidthFixed {
+  flex: 0 0 auto;
+}
+
+.componentHeightFull {
+  height: 100%;
+  align-self: stretch;
+}
+
+.componentHeightAuto {
+  height: auto;
+}
+
+.componentHeightFixed {
+  flex-shrink: 0;
 }
 
 // Horizontal alignment

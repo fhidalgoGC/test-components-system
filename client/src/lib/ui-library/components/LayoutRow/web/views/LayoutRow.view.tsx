@@ -132,6 +132,42 @@ const getAlignClass = (align: string) => {
   }
 };
 
+const getComponentWrapperClasses = (comp: LayoutRowComponent): string => {
+  const classes = [styles.componentWrapper];
+
+  const wm = comp.widthMode || 'auto';
+  if (wm === 'full') classes.push(styles.componentWidthFull);
+  else if (wm === 'fixed') classes.push(styles.componentWidthFixed);
+  else classes.push(styles.componentWidthAuto);
+
+  const hm = comp.heightMode || 'auto';
+  if (hm === 'full') classes.push(styles.componentHeightFull);
+  else if (hm === 'fixed') classes.push(styles.componentHeightFixed);
+  else classes.push(styles.componentHeightAuto);
+
+  return classes.join(' ');
+};
+
+const getComponentWrapperStyle = (comp: LayoutRowComponent): React.CSSProperties => {
+  const style: React.CSSProperties = {};
+
+  if (comp.widthMode === 'fixed' && comp.width !== undefined) {
+    style.width = `${comp.width}px`;
+  }
+  if (comp.minWidth !== undefined) {
+    style.minWidth = `${comp.minWidth}px`;
+  }
+
+  if (comp.heightMode === 'fixed' && comp.height !== undefined) {
+    style.height = `${comp.height}px`;
+  }
+  if (comp.minHeight !== undefined) {
+    style.minHeight = `${comp.minHeight}px`;
+  }
+
+  return style;
+};
+
 export const LayoutRowView = (props: LayoutRowProps) => {
   const {
     slots,
@@ -216,7 +252,8 @@ export const LayoutRowView = (props: LayoutRowProps) => {
                   {alignComponents.map((comp, idx) => (
                     <div
                       key={idx}
-                      className={comp.sizeMode === 'full' ? styles.componentFull : styles.componentAuto}
+                      className={getComponentWrapperClasses(comp)}
+                      style={getComponentWrapperStyle(comp)}
                       data-testid={`layoutrow-component-${slotIndex}-${align}-${idx}`}
                     >
                       {comp.component}
