@@ -1,11 +1,43 @@
-export interface FloatingMenuProps {
-  children?: React.ReactNode;
-  className?: string;
-  langOverride?: string;
-  i18nOrder?: 'global-first' | 'local-first';
+import type { ReactNode } from 'react';
+
+export type WidthMode = 'full' | 'auto' | 'fixed';
+export type HeightMode = 'full' | 'auto' | 'fixed';
+export type ScrollMode = 'auto' | 'none';
+
+export interface FloatingMenuLayout {
+  widthMode?: WidthMode;
+  width?: number | string;
+  minWidth?: number | string;
+  maxWidth?: number | string;
+  heightMode?: HeightMode;
+  height?: number | string;
+  minHeight?: number | string;
+  maxHeight?: number | string;
 }
 
-export interface FloatingMenuContext {
-  t: (key: string, params?: Record<string, string | number>) => string;
-  lang: string;
+export interface FloatingMenuItemConfig {
+  heightMode?: HeightMode;
+  height?: number | string;
+  minHeight?: number | string;
 }
+
+export interface FloatingMenuItem<T = unknown> {
+  id: string;
+  data?: T;
+  render: (item: FloatingMenuItem<T>) => ReactNode;
+  disabled?: boolean;
+}
+
+export interface FloatingMenuProps<T = unknown> {
+  items: FloatingMenuItem<T>[];
+  layout?: FloatingMenuLayout;
+  itemConfig?: FloatingMenuItemConfig;
+  scroll?: ScrollMode;
+  isOpen?: boolean;
+  showBackdrop?: boolean;
+  onItemClick?: (item: FloatingMenuItem<T>, index: number) => void;
+  onClose?: () => void;
+  className?: string;
+  itemClassName?: string;
+}
+

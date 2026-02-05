@@ -3,7 +3,7 @@ import { FloatingMenu as FloatingMenuWeb } from './web';
 import { NotImplemented } from '../NotImplemented';
 import type { FloatingMenuProps } from './web/types';
 
-export const FloatingMenu = (props: FloatingMenuProps) => {
+export const FloatingMenu = <T,>(props: FloatingMenuProps<T>) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
@@ -13,4 +13,12 @@ export const FloatingMenu = (props: FloatingMenuProps) => {
   return <FloatingMenuWeb {...props} />;
 };
 
-export type { FloatingMenuProps };
+export type { 
+  FloatingMenuProps, 
+  FloatingMenuItem, 
+  FloatingMenuLayout, 
+  FloatingMenuItemConfig,
+  WidthMode,
+  HeightMode,
+  ScrollMode
+} from './web/types';
