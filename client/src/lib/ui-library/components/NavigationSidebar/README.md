@@ -216,6 +216,34 @@ const [language, setLanguage] = useState('es');
 - **Desktop (≥1024px)**: Sidebar fijo, botón de colapsar visible
 - **Mobile (<1024px)**: Sidebar oculto, botón hamburguesa fijo
 
+## Altura del Header
+
+Usa el prop `headerHeight` para definir una altura fija del header. El divider aparecerá después de esa altura:
+
+```tsx
+// Con número (píxeles)
+<NavigationSidebar
+  headerHeight={80}
+  headerContent={
+    <div className="flex items-center gap-3">
+      <img src="/logo.png" className="w-10 h-10" />
+      <div>
+        <h1 className="font-bold">Mi App</h1>
+        <p className="text-xs text-gray-500">v1.0.0</p>
+      </div>
+    </div>
+  }
+  items={menuItems}
+/>
+
+// Con string (rem, vh, etc)
+<NavigationSidebar
+  headerHeight="5rem"
+  headerContent={...}
+  items={menuItems}
+/>
+```
+
 ## Personalización de Colores
 
 El componente soporta tres formas de personalizar los colores:
