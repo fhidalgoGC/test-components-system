@@ -88,6 +88,8 @@ export function ApiInterceptorDemo() {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string>('');
   const [dynamicHeaderValue, setDynamicHeaderValue] = useState<string>('');
+  const [userId, setUserId] = useState<string>('1');
+  const [filterStatus, setFilterStatus] = useState<string>('active');
 
   const addLog = useCallback((type: LogEntry['type'], message: string, data?: unknown) => {
     setLogs(prev => [...prev, { 
@@ -226,6 +228,69 @@ export function ApiInterceptorDemo() {
     setLoading(false);
   };
 
+  const handleGetWithQueryParams = async () => {
+    setLoading(true);
+    addLog('info', `Fetching posts with query params: userId=${userId}`);
+    try {
+      const response = await api.get<Post[]>('/posts', { userId: Number(userId) });
+      addLog('response', `Got ${response.data.length} posts for userId=${userId}`, response.data.slice(0, 2));
+    } catch (error) {
+      addLog('error', 'Failed to fetch posts', error);
+    }
+    setLoading(false);
+  };
+
+  const handleGetWithComplexFilters = async () => {
+    setLoading(true);
+    const filters = {
+      status: filterStatus,
+      pagination: { page: 1, limit: 10 },
+      sort: { field: 'name', order: 'asc' }
+    };
+    addLog('info', `Fetching with complex filters...`, filters);
+    try {
+      const response = await api.get<User[]>('/users', filters);
+      addLog('response', `Got ${response.data.length} users with filters applied`, { 
+        filters,
+        sample: response.data.slice(0, 2) 
+      });
+    } catch (error) {
+      addLog('error', 'Failed to fetch', error);
+    }
+    setLoading(false);
+  };
+
+  const handleTransformToModel = async () => {
+    setLoading(true);
+    addLog('info', 'Fetching user and transforming to custom model...');
+    try {
+      const response = await api.get<any>('/users/1', undefined, {
+        transform: (data: any) => ({
+          id: data.id,
+          displayName: `${data.name} (@${data.username})`,
+          contactInfo: {
+            email: data.email,
+            phone: data.phone,
+            website: data.website
+          },
+          location: `${data.address?.city}, ${data.address?.street}`,
+          company: data.company?.name,
+          _transformedAt: new Date().toISOString()
+        })
+      });
+      addLog('response', 'User transformed to custom model', response.data);
+    } catch (error) {
+      addLog('error', 'Failed to fetch user', error);
+    }
+    setLoading(false);
+  };
+
+  const handleAddFilterInterceptor = () => {
+    api.addDynamicHeader('X-User-Filter', () => userId);
+    api.addDynamicHeader('X-Status-Filter', () => filterStatus);
+    addLog('info', `Dynamic filter headers added: X-User-Filter=${userId}, X-Status-Filter=${filterStatus}`);
+  };
+
   const handleAddPathInterceptor = () => {
     api.addRequestInterceptor({
       name: 'posts-only-header',
@@ -318,13 +383,53 @@ export function ApiInterceptorDemo() {
             </div>
           </Section>
 
-          <Section title="Dynamic Transformers">
+          <Section title="Query Params & Filters">
             <div className="space-y-2">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                  placeholder="User ID..."
+                  className="w-20 px-3 py-2 border rounded-lg"
+                  data-testid="input-user-id"
+                />
+                <Button onClick={handleGetWithQueryParams} disabled={loading} testId="btn-get-with-params">
+                  GET /posts?userId={userId}
+                </Button>
+              </div>
+              <div className="flex gap-2">
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="px-3 py-2 border rounded-lg"
+                  data-testid="select-filter-status"
+                >
+                  <option value="active">active</option>
+                  <option value="inactive">inactive</option>
+                  <option value="pending">pending</option>
+                </select>
+                <Button onClick={handleGetWithComplexFilters} disabled={loading} testId="btn-complex-filters">
+                  GET with complex filters
+                </Button>
+              </div>
+              <Button onClick={handleAddFilterInterceptor} testId="btn-add-filter-headers">
+                Add Filter Headers (X-User-Filter, X-Status-Filter)
+              </Button>
+            </div>
+          </Section>
+
+          <Section title="Data Transformations">
+            <div className="space-y-2">
+              <p className="text-sm text-gray-500 mb-2">Transforma la respuesta a un modelo personalizado:</p>
+              <Button onClick={handleTransformToModel} disabled={loading} testId="btn-transform-model">
+                GET /users/1 → Custom Model
+              </Button>
               <Button onClick={handleAddDynamicTransformer} testId="btn-add-transformer">
                 Add Transformer for /comments
               </Button>
               <Button onClick={handleTestDynamicTransformer} disabled={loading} testId="btn-test-transformer">
-                Test GET /comments
+                Test GET /comments (transformed)
               </Button>
             </div>
           </Section>
