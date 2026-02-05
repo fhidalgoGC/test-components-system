@@ -1,5 +1,46 @@
 # Guía para Crear Páginas de Demo
 
+## ApiInterceptor Demo
+
+**Ruta**: `/utils/api-interceptor`
+
+Página interactiva para probar todas las funcionalidades del ApiInterceptor:
+
+### Funcionalidades Demostradas
+
+1. **Requests Básicos**
+   - GET con transform en config
+   - GET con transform inline (override)
+   - POST con body
+   - Manejo de errores (404)
+
+2. **Autenticación**
+   - Configurar Bearer token dinámicamente
+   - Limpiar autenticación
+   - Callbacks de error de auth
+
+3. **Headers Dinámicos**
+   - Agregar headers que se evalúan en cada request
+   - Remover headers dinámicos
+   - Integración con estado reactivo
+
+4. **Transformers Dinámicos**
+   - Agregar transformers en runtime
+   - Probar prioridad de transformers
+
+5. **Interceptors por Path**
+   - Agregar interceptors que solo aplican a ciertos paths
+   - Remover interceptors
+
+### Archivos
+
+- **Demo Page**: `client/src/pages/api-interceptor-demo/`
+- **ApiInterceptor Source**: `client/src/lib/ui-library/utils/interceptors/`
+- **Documentación Completa**: `client/src/lib/ui-library/utils/interceptors/README.md`
+
+---
+
+
 Esta guía documenta cómo crear nuevas páginas de demostración para componentes, providers u otras funcionalidades de la librería.
 
 ## Estructura de Carpetas

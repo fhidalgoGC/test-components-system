@@ -82,7 +82,8 @@ export function getDefaultMenuItems(): MenuItem[] {
       icon: 'Layout',
       children: [
         { id: 'date-demo', label: 'Date Demo', i18n: { en: 'Date Demo', es: 'Demo de Fechas', default: 'Date Demo' }, path: '/date-demo', icon: 'Calendar' },
-        { id: 'auth-test', label: 'Auth Test', i18n: { en: 'Auth Test', es: 'Prueba de Auth', default: 'Auth Test' }, path: '/auth-test', icon: 'Shield' }
+        { id: 'auth-test', label: 'Auth Test', i18n: { en: 'Auth Test', es: 'Prueba de Auth', default: 'Auth Test' }, path: '/auth-test', icon: 'Shield' },
+        { id: 'api-interceptor', label: 'ApiInterceptor', i18n: { en: 'ApiInterceptor', es: 'ApiInterceptor', default: 'ApiInterceptor' }, path: '/utils/api-interceptor', icon: 'Network' }
       ]
     }
   ];

@@ -34,6 +34,7 @@ const PaginatorDemo = lazy(() => import("@/pages/paginator-demo"));
 const ControlDataDemo = lazy(() => import("@/pages/control-data-demo"));
 const AccordionDemo = lazy(() => import("@/pages/accordion-demo"));
 const ListDemo = lazy(() => import("@/pages/list-demo"));
+const ApiInterceptorDemo = lazy(() => import("@/pages/api-interceptor-demo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -103,6 +104,7 @@ export function Router() {
           <Route path="/providers/control-data" component={ControlDataDemo} />
           <Route path="/components/accordion" component={AccordionDemo} />
           <Route path="/components/list" component={ListDemo} />
+          <Route path="/utils/api-interceptor" component={ApiInterceptorDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
