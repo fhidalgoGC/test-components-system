@@ -9,11 +9,13 @@ export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'auto' | 'fixed';
 export type VerticalAlign = 'top' | 'center' | 'bottom' | 'stretch';
 export type HorizontalAlign = 'left' | 'center' | 'right';
+export type SizeMode = 'full' | 'auto';
 
 export interface LayoutRowComponent {
   component: ReactNode;
   align: HorizontalAlign;
   slot: number;
+  sizeMode?: SizeMode;
   hide?: boolean;
 }
 

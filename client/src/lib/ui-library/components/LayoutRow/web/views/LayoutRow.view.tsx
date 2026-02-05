@@ -214,7 +214,11 @@ export const LayoutRowView = (props: LayoutRowProps) => {
                   data-testid={`layoutrow-slot-${slotIndex}-${align}`}
                 >
                   {alignComponents.map((comp, idx) => (
-                    <div key={idx} data-testid={`layoutrow-component-${slotIndex}-${align}-${idx}`}>
+                    <div
+                      key={idx}
+                      className={comp.sizeMode === 'full' ? styles.componentFull : styles.componentAuto}
+                      data-testid={`layoutrow-component-${slotIndex}-${align}-${idx}`}
+                    >
                       {comp.component}
                     </div>
                   ))}

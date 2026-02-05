@@ -39,6 +39,16 @@ $spacing-xl: 32px;
   min-width: 0;
 }
 
+.componentFull {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.componentAuto {
+  flex: 0 0 auto;
+}
+
 // Horizontal alignment
 .alignLeft {
   justify-content: flex-start;
