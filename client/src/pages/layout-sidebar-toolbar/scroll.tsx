@@ -62,6 +62,8 @@ export default function SidebarLayoutScrollPage() {
     <SidebarLayout
       sidebarContent={<SidebarContent />}
       toolbarContent={<ToolbarContent />}
+      mainPaddingX={24}
+      mainPaddingY={16}
     >
       <ScrollMainContent />
     </SidebarLayout>
