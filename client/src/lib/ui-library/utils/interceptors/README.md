@@ -371,11 +371,18 @@ const api = createApiInterceptor({
       }),
     },
     {
-      name: 'only-private',
-      order: 2,
-      condition: (request) => request.visibility === 'private',
+      name: 'admin-header',
+      pathPattern: '/admin',  // Solo aplica a rutas que contengan /admin
+      handler: (request) => ({
+        ...request,
+        headers: { ...request.headers, 'X-Admin-Mode': 'true' },
+      }),
+    },
+    {
+      name: 'api-v2-transform',
+      pathPattern: /^\/api\/v2\//,  // RegExp para rutas que empiecen con /api/v2/
       handler: (request) => {
-        console.log('Private endpoint accessed:', request.url);
+        // Transformar request para API v2
         return request;
       },
     },
@@ -418,7 +425,16 @@ const api = createApiInterceptor({
   baseUrl: 'https://api.example.com',
   errorInterceptors: [
     {
-      name: 'handle-401',
+      name: 'handle-401-admin',
+      pathPattern: '/admin',  // Solo para rutas de admin
+      statusCodes: [401],
+      handler: async (error) => {
+        window.location.href = '/admin/login';
+        return error;
+      },
+    },
+    {
+      name: 'handle-401-general',
       statusCodes: [401],
       handler: async (error) => {
         const newToken = await refreshToken();
@@ -430,10 +446,12 @@ const api = createApiInterceptor({
       },
     },
     {
-      name: 'handle-500',
+      name: 'handle-500-api-v2',
+      pathPattern: /^\/api\/v2\//,
       statusCodes: [500, 502, 503],
       handler: (error) => {
-        console.error('Server error:', error.message);
+        // Manejo especial para API v2
+        console.error('API v2 server error:', error.message);
         return error;
       },
     },
@@ -441,32 +459,23 @@ const api = createApiInterceptor({
 });
 ```
 
-## Configuración de Autenticación
+## Configuración de Autenticación (Deprecated)
+
+> **Nota**: Esta sección se mantiene por compatibilidad. Ver la sección "Autenticación Externa" para la forma recomendada de configurar auth.
 
 ```typescript
 const api = createApiInterceptor({
   baseUrl: 'https://api.example.com',
   auth: {
-    // Tipos: 'bearer' | 'basic' | 'api-key' | 'custom'
     type: 'bearer',
+    getToken: () => myAuthStore.accessToken,  // Función obligatoria
     
-    // Opción 1: Leer de localStorage
-    tokenKey: 'access_token',
-    
-    // Opción 2: Función personalizada
-    getToken: async () => {
-      const session = await getSession();
-      return session?.accessToken ?? null;
-    },
-    
-    // Callback cuando hay errores de auth (401, 403)
     onAuthError: (error) => {
       if (error.status === 401) {
         window.location.href = '/login';
       }
     },
     
-    // Callback cuando expira el token
     onTokenExpired: () => {
       console.log('Token expired');
     },

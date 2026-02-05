@@ -1,0 +1,135 @@
+
+  logging: {
+    enabled: true,
+    level: 'debug',  // 'debug' | 'info' | 'warn' | 'error'
+    onLog: (entry) => {
+      sendToLogService(entry);
+    },
+  },
+});
+Agregar/Remover Interceptores Dinámicamente
+// Agregar interceptor
+api.addRequestInterceptor({
+  name: 'dynamic-header',
+  handler: (req) => ({
+    ...req,
+    headers: { ...req.headers, 'X-Dynamic': 'value' },
+  }),
+});
+// Remover interceptor
+api.removeInterceptor('dynamic-header', 'request');
+// Cambiar autenticación
+api.setAuth({
+  type: 'bearer',
+  getToken: () => newToken,
+});
+// Limpiar autenticación
+api.clearAuth();
+Override Chain
+El sistema sigue una cadena de prioridades:
+
+Request-specific options (mayor prioridad)
+Endpoint match config
+Default config (menor prioridad)
+// Config base
+const api = createApiInterceptor({
+  baseUrl: 'https://api.example.com',
+  defaultVisibility: 'public',
+  endpoints: [
+    { 
+      pattern: '/admin', 
+      visibility: 'private',
+      headers: { 'X-Admin': 'true' }
+    },
+  ],
+});
+// Override en petición específica
+await api.request('/admin/users', { 
+  method: 'GET',
+  visibility: 'private',
+  requiresAuth: true,
+  headers: { 'X-Custom': 'value' },  // Se mergea con headers del endpoint
+});
+Tipos Principales
+// Query params genéricos - el consumidor define la estructura
+type QueryParams = Record<string, unknown>;
+interface EndpointMatch {
+  pattern: string | RegExp;
+  methods?: HttpMethod[];
+  visibility: 'public' | 'private';
+  requiresAuth?: boolean;
+  headers?: Record<string, string>;
+}
+interface AuthConfig {
+  type: 'bearer' | 'basic' | 'api-key' | 'custom';
+  tokenKey?: string;
+  headerName?: string;
+  getToken?: () => string | null | Promise<string | null>;
+  onAuthError?: (error: AuthError) => void;
+  onTokenExpired?: () => void;
+}
+interface RequestOptions {
+  method?: HttpMethod;
+  body?: unknown;
+  params?: QueryParams;
+  headers?: Record<string, string>;
+  timeout?: number;
+  visibility?: EndpointVisibility;
+  requiresAuth?: boolean;
+  signal?: AbortSignal;
+}
+Add ability to apply data transformations directly when calling API endpoints
+el api interceptor debe ser agnostica , entonces todo loq ue es filters sort pagination y eso esta asociado a una tabla, y lo que quiero es que pueda funcionar para cualquiera
+
+ok explicame donde manejas las rutas privada o publicas o como las configuro
+
+ahora si yo quiero agregar un filtro dinamico, es decir si yo estoy llmandi un endpoint y quiero que valides si estamos mandando un header en especifico o que lo agrege como hago eso?
+
+ahora sobre un ndpoint en especifgico o un grupo de endpoint quiero que cuando venga la info yo le pase una interfaz y el castee la data y me la de casteada, esto puede aplicar por endpiint o yo definirla desde el principio sobre alguna rutas
+
+a ver tiene que ser por interceptor, es decir yo creo un interceptor y agreggo sobre las rutas publicas y provada el casteo, pero tambien debe haber un metodo que yo llame y le agrge la ruta y el casteo... claro siempre esto sera por interceptor es decir cada vez que yo llame a createApiInterceptor se crea un intercptor con sus configuraciones
+
+Start building
+el interceptor debe tener tambien la forma de yo agregar headers, teniendo en cuenta que si yo conecto un header con un state pues se va a cambiar al momento que yo comabie el state en el provider o donde sea... quiero flexibiilidad
+
+asi como podemos agregar podemos quitar...
+
+ok actualize el readme
+
+tambien necesito que al autheader, tambien tenga unmetodo para yo poder agregar todo lo de autenticacion y que tipo de auteticacion bearer basic y asi.... porque no quiero que lo tome del storage, el no debe tener acceso a eso, sino que externamente se hace la conexcion para que lo tenga que el interceptor se pueda configurar antes para luego ya usar el intercepto que queremos
+
+esto me gusta auth: {
+type: 'bearer',
+tokenKey: 'access_token',
+onAuthError: (error) => {
+console.log('Auth error:', error);
+window.location.href = '/login';
+},
+}, ahora cualquier parametro de esto createApiInterceptor que se le pasa puede ser reactivo es decir yo puedo conecatrlo contra un hook o algo
+
+los transforms lo quiero poner ya directamente cuando estoy llamando el endpoint ycomo tambien en la configuracion
+
+Listo. Ahora puedes definir transforms en 3 niveles:
+
+// 1. En config inicial
+endpoints: [
+  { pattern: '/users', visibility: 'private', transform: (data) => data as User[] }
+]
+// 2. Dinámicamente
+api.addResponseTransformer('/orders', (data) => data as Order[]);
+// 3. Directamente en el request (máxima prioridad)
+const users = await api.get<User[]>('/users', undefined, {
+  transform: (data) => data.map(u => ({ ...u, isActive: true }))
+});
+const order = await api.post<Order>('/orders', orderData, {
+  transform: (data) => new OrderModel(data)
+});
+Prioridad (de mayor a menor):
+
+Transform en el request
+Transformers dinámicos
+Transformers en config
+
+Scroll to latest
+
+Make, test, iterate…

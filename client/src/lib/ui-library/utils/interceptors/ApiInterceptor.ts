@@ -80,6 +80,13 @@ interface EndpointMatchResult {
   transform?: ResponseTransformer;
 }
 
+function matchesPath(url: string, pattern: string | RegExp): boolean {
+  if (typeof pattern === 'string') {
+    return url.includes(pattern);
+  }
+  return pattern.test(url);
+}
+
 function matchEndpoint(
   url: string, 
   method: HttpMethod, 
@@ -252,6 +259,7 @@ export function createApiInterceptor(
 
     for (const interceptor of requestInterceptors) {
       if (interceptor.enabled === false) continue;
+      if (interceptor.pathPattern && !matchesPath(endpoint, interceptor.pathPattern)) continue;
       if (interceptor.condition && !interceptor.condition(request)) continue;
       
       request = await interceptor.handler(request);
@@ -348,6 +356,7 @@ export function createApiInterceptor(
 
         for (const interceptor of errorInterceptors) {
           if (interceptor.enabled === false) continue;
+          if (interceptor.pathPattern && !matchesPath(endpoint, interceptor.pathPattern)) continue;
           if (interceptor.statusCodes && !interceptor.statusCodes.includes(error.status)) continue;
           
           error = await interceptor.handler(error);
@@ -367,6 +376,7 @@ export function createApiInterceptor(
 
       for (const interceptor of responseInterceptors) {
         if (interceptor.enabled === false) continue;
+        if (interceptor.pathPattern && !matchesPath(endpoint, interceptor.pathPattern)) continue;
         if (interceptor.condition && !interceptor.condition(interceptedResponse)) continue;
         
         interceptedResponse = await interceptor.handler(interceptedResponse) as InterceptedResponse<T>;

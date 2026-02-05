@@ -72,6 +72,7 @@ export interface RequestInterceptor {
   name: string;
   order?: number;
   enabled?: boolean;
+  pathPattern?: string | RegExp;
   condition?: (request: InterceptedRequest) => boolean;
   handler: (request: InterceptedRequest) => InterceptedRequest | Promise<InterceptedRequest>;
 }
@@ -80,6 +81,7 @@ export interface ResponseInterceptor {
   name: string;
   order?: number;
   enabled?: boolean;
+  pathPattern?: string | RegExp;
   condition?: (response: InterceptedResponse) => boolean;
   handler: (response: InterceptedResponse) => InterceptedResponse | Promise<InterceptedResponse>;
 }
@@ -88,6 +90,7 @@ export interface ErrorInterceptor {
   name: string;
   order?: number;
   enabled?: boolean;
+  pathPattern?: string | RegExp;
   statusCodes?: number[];
   handler: (error: InterceptedError) => InterceptedError | Promise<InterceptedError>;
 }
