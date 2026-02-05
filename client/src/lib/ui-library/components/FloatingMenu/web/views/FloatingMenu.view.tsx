@@ -1,4 +1,4 @@
-import type { FloatingMenuProps, FloatingMenuItem, FloatingMenuLayout, FloatingMenuItemConfig, FloatingMenuSectionConfig } from '../types';
+import type { FloatingMenuProps, FloatingMenuItem, FloatingMenuLayout, FloatingMenuItemConfig, FloatingMenuSectionConfig, MenuPosition } from '../types';
 import styles from '../css/FloatingMenu.module.css';
 
 const getLayoutStyles = (layout?: FloatingMenuLayout): React.CSSProperties => {
@@ -34,6 +34,67 @@ const getLayoutStyles = (layout?: FloatingMenuLayout): React.CSSProperties => {
   }
   if (layout.maxHeight) {
     style.maxHeight = typeof layout.maxHeight === 'number' ? `${layout.maxHeight}px` : layout.maxHeight;
+  }
+  
+  return style;
+};
+
+const getPositionStyles = (position: MenuPosition): React.CSSProperties => {
+  const style: React.CSSProperties = {};
+  
+  switch (position) {
+    case 'top':
+      style.bottom = '100%';
+      style.left = '50%';
+      style.transform = 'translateX(-50%)';
+      break;
+    case 'top-start':
+      style.bottom = '100%';
+      style.left = '0';
+      break;
+    case 'top-end':
+      style.bottom = '100%';
+      style.right = '0';
+      break;
+    case 'bottom':
+      style.top = '100%';
+      style.left = '50%';
+      style.transform = 'translateX(-50%)';
+      break;
+    case 'bottom-start':
+      style.top = '100%';
+      style.left = '0';
+      break;
+    case 'bottom-end':
+      style.top = '100%';
+      style.right = '0';
+      break;
+    case 'left':
+      style.right = '100%';
+      style.top = '50%';
+      style.transform = 'translateY(-50%)';
+      break;
+    case 'left-start':
+      style.right = '100%';
+      style.top = '0';
+      break;
+    case 'left-end':
+      style.right = '100%';
+      style.bottom = '0';
+      break;
+    case 'right':
+      style.left = '100%';
+      style.top = '50%';
+      style.transform = 'translateY(-50%)';
+      break;
+    case 'right-start':
+      style.left = '100%';
+      style.top = '0';
+      break;
+    case 'right-end':
+      style.left = '100%';
+      style.bottom = '0';
+      break;
   }
   
   return style;
@@ -85,7 +146,8 @@ const getItemStyles = (itemConfig?: FloatingMenuItemConfig): React.CSSProperties
 export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   const { 
     items, 
-    layout, 
+    layout,
+    position = 'bottom-start',
     header,
     footer,
     itemConfig,
@@ -112,6 +174,7 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   };
 
   const layoutStyles = getLayoutStyles(layout);
+  const positionStyles = getPositionStyles(position);
   const itemStyles = getItemStyles(itemConfig);
   const scrollClass = scroll === 'auto' ? styles.scrollAuto : styles.scrollNone;
   
@@ -132,7 +195,7 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
       )}
       <div 
         className={`${styles.floatingMenu} ${className}`}
-        style={layoutStyles}
+        style={{ ...layoutStyles, ...positionStyles }}
         data-testid="floatingmenu"
       >
         {showHeader && (

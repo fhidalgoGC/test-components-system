@@ -18,7 +18,10 @@ export type {
   FloatingMenuItem, 
   FloatingMenuLayout, 
   FloatingMenuItemConfig,
+  FloatingMenuSectionConfig,
+  MenuPosition,
   WidthMode,
   HeightMode,
-  ScrollMode
+  ScrollMode,
+  RenderType
 } from './web/types';

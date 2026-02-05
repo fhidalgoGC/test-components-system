@@ -5,6 +5,20 @@ export type HeightMode = 'full' | 'auto' | 'fixed';
 export type ScrollMode = 'auto' | 'none';
 export type RenderType = 'component' | 'none';
 
+export type MenuPosition = 
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end';
+
 export interface FloatingMenuLayout {
   widthMode?: WidthMode;
   width?: number | string;
@@ -42,6 +56,7 @@ export interface FloatingMenuItem<T = unknown> {
 export interface FloatingMenuProps<T = unknown> {
   items: FloatingMenuItem<T>[];
   layout?: FloatingMenuLayout;
+  position?: MenuPosition;
   header?: FloatingMenuSectionConfig;
   footer?: FloatingMenuSectionConfig;
   itemConfig?: FloatingMenuItemConfig;
