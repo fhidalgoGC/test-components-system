@@ -39,60 +39,61 @@ const getLayoutStyles = (layout?: FloatingMenuLayout): React.CSSProperties => {
   return style;
 };
 
-const getPositionStyles = (position: MenuPosition): React.CSSProperties => {
+const getPositionStyles = (position: MenuPosition, offset: number): React.CSSProperties => {
   const style: React.CSSProperties = {};
+  const offsetPx = `${offset}px`;
   
   switch (position) {
     case 'top':
-      style.bottom = '100%';
+      style.bottom = `calc(100% + ${offsetPx})`;
       style.left = '50%';
       style.transform = 'translateX(-50%)';
       break;
     case 'top-start':
-      style.bottom = '100%';
+      style.bottom = `calc(100% + ${offsetPx})`;
       style.left = '0';
       break;
     case 'top-end':
-      style.bottom = '100%';
+      style.bottom = `calc(100% + ${offsetPx})`;
       style.right = '0';
       break;
     case 'bottom':
-      style.top = '100%';
+      style.top = `calc(100% + ${offsetPx})`;
       style.left = '50%';
       style.transform = 'translateX(-50%)';
       break;
     case 'bottom-start':
-      style.top = '100%';
+      style.top = `calc(100% + ${offsetPx})`;
       style.left = '0';
       break;
     case 'bottom-end':
-      style.top = '100%';
+      style.top = `calc(100% + ${offsetPx})`;
       style.right = '0';
       break;
     case 'left':
-      style.right = '100%';
+      style.right = `calc(100% + ${offsetPx})`;
       style.top = '50%';
       style.transform = 'translateY(-50%)';
       break;
     case 'left-start':
-      style.right = '100%';
+      style.right = `calc(100% + ${offsetPx})`;
       style.top = '0';
       break;
     case 'left-end':
-      style.right = '100%';
+      style.right = `calc(100% + ${offsetPx})`;
       style.bottom = '0';
       break;
     case 'right':
-      style.left = '100%';
+      style.left = `calc(100% + ${offsetPx})`;
       style.top = '50%';
       style.transform = 'translateY(-50%)';
       break;
     case 'right-start':
-      style.left = '100%';
+      style.left = `calc(100% + ${offsetPx})`;
       style.top = '0';
       break;
     case 'right-end':
-      style.left = '100%';
+      style.left = `calc(100% + ${offsetPx})`;
       style.bottom = '0';
       break;
   }
@@ -148,6 +149,7 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
     items, 
     layout,
     position = 'bottom-start',
+    offset = 8,
     header,
     footer,
     itemConfig,
@@ -174,7 +176,7 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   };
 
   const layoutStyles = getLayoutStyles(layout);
-  const positionStyles = getPositionStyles(position);
+  const positionStyles = getPositionStyles(position, offset);
   const itemStyles = getItemStyles(itemConfig);
   const scrollClass = scroll === 'auto' ? styles.scrollAuto : styles.scrollNone;
   

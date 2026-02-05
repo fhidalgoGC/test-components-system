@@ -57,6 +57,7 @@ export interface FloatingMenuProps<T = unknown> {
   items: FloatingMenuItem<T>[];
   layout?: FloatingMenuLayout;
   position?: MenuPosition;
+  offset?: number;
   header?: FloatingMenuSectionConfig;
   footer?: FloatingMenuSectionConfig;
   itemConfig?: FloatingMenuItemConfig;
