@@ -111,6 +111,46 @@ interface SlotConfig {
 | `auto` | `flex: 0 0 auto` | Crece según el contenido |
 | `full` | `flex: 1 1 0` | Toma el espacio restante |
 
+### División del espacio con múltiples slots `full`
+
+Cuando hay múltiples slots con `heightMode: 'full'`, el espacio restante (después de los slots fijos) se divide proporcionalmente entre ellos:
+
+```tsx
+// Contenedor de 500px de alto
+slotConfig={[
+  { heightMode: 'fixed', height: 100 },  // Slot 0: 100px fijo
+  { heightMode: 'full' },                 // Slot 1: flex: 1
+  { heightMode: 'full' },                 // Slot 2: flex: 1
+]}
+// Resultado:
+// - Slot 0: 100px (fijo)
+// - Espacio restante: 400px
+// - Slot 1: 200px (50% del resto)
+// - Slot 2: 200px (50% del resto)
+```
+
+```tsx
+// Contenedor de 500px de alto
+slotConfig={[
+  { heightMode: 'fixed', height: 60 },   // Slot 0: 60px
+  { heightMode: 'full' },                 // Slot 1: flex: 1
+  { heightMode: 'fixed', height: 60 },   // Slot 2: 60px
+]}
+// Resultado:
+// - Slot 0: 60px (fijo)
+// - Slot 1: 380px (todo el resto)
+// - Slot 2: 60px (fijo)
+```
+
+```tsx
+// 3 slots full = división equitativa
+slotConfig={[
+  { heightMode: 'full' },  // 33.3%
+  { heightMode: 'full' },  // 33.3%
+  { heightMode: 'full' },  // 33.3%
+]}
+```
+
 ### Ejemplo: Header/Content/Footer
 
 ```tsx
