@@ -7,6 +7,7 @@ import {
   VerticalAlignDemo,
   SpacingDemo,
   HeightDemo,
+  ComponentSizingDemo,
 } from "./components";
 import styles from "./css/LayoutRowDemo.module.scss";
 
@@ -32,6 +33,7 @@ export function LayoutRowDemo() {
         <VerticalAlignDemo />
         <SpacingDemo />
         <HeightDemo />
+        <ComponentSizingDemo />
       </div>
     </div>
   );
