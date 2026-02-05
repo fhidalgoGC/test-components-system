@@ -5,14 +5,14 @@
 ## 📥 Acceso Directo a Esta Guía
 
 **Ver/Descargar desde GitHub:**  
-[📄 README-INSTALL-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/README-INSTALL-IA.md)
+[📄 README-INSTALL-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/version1.1.0_NativeWinds/client/src/lib/ui-library/README-INSTALL-IA.md)
 
 ---
 
 ## 📚 Documentación Completa
 
 **Después de instalar, accede al índice completo de la librería:**  
-[📖 README-INDEX.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/README-INDEX.md) - Índice principal con toda la documentación, componentes disponibles, guías y ejemplos.
+[📖 README-INDEX.md](https://github.com/fhidalgoGC/test-components-system/blob/version1.1.0_NativeWinds/client/src/lib/ui-library/README-INDEX.md) - Índice principal con toda la documentación, componentes disponibles, guías y ejemplos.
 
 ---
 
@@ -23,7 +23,7 @@ GC-UI-COMPONENTS es una librería de componentes React frontend-only construida 
 ## 📦 Repositorio
 
 **GitHub Repository:** `https://github.com/fhidalgoGC/test-components-system/`  
-**Rama Principal:** `version.1.0.2-mobile`
+**Rama Principal:** `version1.1.0_NativeWinds`
 
 ---
 
@@ -34,7 +34,7 @@ GC-UI-COMPONENTS es una librería de componentes React frontend-only construida 
 Instala la librería directamente desde GitHub en tu proyecto:
 
 ```bash
-npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile
+npm install git+https://github.com/fhidalgoGC/test-components-system.git#version1.1.0_NativeWinds
 ```
 
 ### **Paso 2: Instalar Dependencias Peer**
@@ -210,7 +210,7 @@ npm run dev
 **Solución:**
 ```bash
 # Reinstalar la librería
-npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile
+npm install git+https://github.com/fhidalgoGC/test-components-system.git#version1.1.0_NativeWinds
 
 # Verificar que se instaló
 npm list GC-UI-COMPONENTS
@@ -256,7 +256,7 @@ Cada componente incluye su propio `README-IA.md` con:
 - Casos de uso comunes
 
 **Acceso directo desde GitHub:**  
-[📖 Ver README-INDEX.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/README-INDEX.md)
+[📖 Ver README-INDEX.md](https://github.com/fhidalgoGC/test-components-system/blob/version1.1.0_NativeWinds/client/src/lib/ui-library/README-INDEX.md)
 
 ---
 
