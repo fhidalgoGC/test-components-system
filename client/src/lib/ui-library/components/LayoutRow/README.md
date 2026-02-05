@@ -47,7 +47,7 @@ import { LayoutRow } from "@/lib/ui-library/components/LayoutRow";
 | `slots` | `number` | requerido | Número de slots (dividen espacio horizontalmente) |
 | `widthMode` | `'full' \| 'auto' \| 'fixed'` | `'full'` | Modo de ancho |
 | `width` | `SizeToken \| number` | - | Ancho cuando `widthMode="fixed"` |
-| `heightMode` | `'auto' \| 'fixed'` | `'auto'` | Modo de altura |
+| `heightMode` | `'full' \| 'auto' \| 'fixed'` | `'auto'` | Modo de altura |
 | `height` | `HeightToken \| number` | - | Altura cuando `heightMode="fixed"` |
 | `paddingX` | `SpacingToken \| number` | - | Padding horizontal |
 | `paddingY` | `SpacingToken \| number` | - | Padding vertical |
@@ -63,26 +63,58 @@ import { LayoutRow } from "@/lib/ui-library/components/LayoutRow";
 
 ```tsx
 interface LayoutRowComponent {
-  id?: string;                        // ID único para identificación
   component: ReactNode;
   align: 'left' | 'center' | 'right'; // Alineación horizontal dentro del slot
-  slot: number;                       // Índice del slot (0, 1, 2...)
-  hide?: boolean;                     // Mostrar/ocultar dinámicamente
+  slot: number;                        // Índice del slot (0, 1, 2...)
+  widthMode?: 'full' | 'auto' | 'fixed';  // Modo de ancho del componente
+  width?: number;                      // Ancho en px cuando widthMode="fixed"
+  minWidth?: number;                   // Ancho mínimo en px
+  heightMode?: 'full' | 'auto' | 'fixed'; // Modo de altura del componente
+  height?: number;                     // Altura en px cuando heightMode="fixed"
+  minHeight?: number;                  // Altura mínima en px
+  hide?: boolean;                      // Mostrar/ocultar dinámicamente
 }
 ```
 
-## Comportamiento Dinámico vs Fijo
+### Props de Sizing por Componente
+
+| Prop | Tipo | Default | Descripción |
+|------|------|---------|-------------|
+| `widthMode` | `'full' \| 'auto' \| 'fixed'` | `'auto'` | `full`: llena el ancho del slot. `auto`: tamaño natural. `fixed`: usa `width` |
+| `width` | `number` | - | Ancho en píxeles cuando `widthMode="fixed"` |
+| `minWidth` | `number` | - | Ancho mínimo garantizado en píxeles |
+| `heightMode` | `'full' \| 'auto' \| 'fixed'` | `'auto'` | `full`: llena la altura del slot. `auto`: tamaño natural. `fixed`: usa `height` |
+| `height` | `number` | - | Altura en píxeles cuando `heightMode="fixed"` |
+| `minHeight` | `number` | - | Altura mínima garantizada en píxeles |
+
+## Comportamiento del Contenedor
+
+### heightMode
+
+| Valor | Comportamiento |
+|-------|----------------|
+| `auto` | La altura se ajusta al contenido (default) |
+| `full` | Ocupa el 100% de la altura del contenedor padre. Usa `overflow: hidden` para no desbordar |
+| `fixed` | Altura fija definida por la prop `height` (token o número en px) |
+
+### widthMode
+
+| Valor | Comportamiento |
+|-------|----------------|
+| `full` | Ocupa el 100% del ancho del contenedor padre (default) |
+| `auto` | El ancho se ajusta al contenido |
+| `fixed` | Ancho fijo definido por la prop `width` (token o número en px) |
 
 ### Modo Dinámico (recomendado)
 ```tsx
 <LayoutRow
   widthMode="full"    // 100% del ancho del contenedor padre
-  heightMode="auto"   // Se ajusta al contenido
+  heightMode="full"   // 100% de la altura del contenedor padre
   slots={3}
   ...
 />
 ```
-- Si el contenedor padre mide 900px → cada slot ocupa 300px
+- Si el contenedor padre mide 900px × 400px → cada slot ocupa 300px × 400px
 - **Todo se reajusta proporcionalmente** al tamaño del contenedor
 
 ### Modo Fijo
@@ -283,6 +315,74 @@ La prop `componentVerticalAlign` controla cómo se alinean los componentes verti
       align: "right",
       slot: 2,
     },
+  ]}
+/>
+```
+
+## Sizing Individual por Componente
+
+Cada componente dentro del LayoutRow puede controlar su propio ancho y alto de forma independiente mediante `widthMode`, `heightMode`, `width`, `height`, `minWidth` y `minHeight`.
+
+### widthMode por Componente
+
+```tsx
+<LayoutRow
+  slots={3}
+  widthMode="full"
+  heightMode="fixed"
+  height={60}
+  componentVerticalAlign="stretch"
+  components={[
+    { component: <A />, align: "left", slot: 0, widthMode: "full" },    // llena todo el slot
+    { component: <B />, align: "center", slot: 1, widthMode: "auto" },  // tamaño natural
+    { component: <C />, align: "right", slot: 2, widthMode: "fixed", width: 150 }, // 150px fijo
+  ]}
+/>
+```
+
+### heightMode por Componente
+
+```tsx
+<LayoutRow
+  slots={3}
+  widthMode="full"
+  heightMode="fixed"
+  height={100}
+  componentVerticalAlign="stretch"
+  components={[
+    { component: <A />, align: "left", slot: 0, heightMode: "full" },   // llena toda la altura
+    { component: <B />, align: "center", slot: 1, heightMode: "auto" }, // tamaño natural
+    { component: <C />, align: "right", slot: 2, heightMode: "fixed", height: 40 }, // 40px fijo
+  ]}
+/>
+```
+
+### minWidth y minHeight
+
+```tsx
+<LayoutRow
+  slots={2}
+  widthMode="full"
+  components={[
+    { component: <Logo />, align: "left", slot: 0, minWidth: 120 },    // nunca menos de 120px
+    { component: <Panel />, align: "right", slot: 1, minHeight: 50 },  // nunca menos de 50px alto
+  ]}
+/>
+```
+
+### Combinando widthMode + heightMode
+
+```tsx
+<LayoutRow
+  slots={3}
+  widthMode="full"
+  heightMode="fixed"
+  height={100}
+  componentVerticalAlign="stretch"
+  components={[
+    { component: <A />, align: "left", slot: 0, widthMode: "full", heightMode: "full" },
+    { component: <B />, align: "center", slot: 1, widthMode: "fixed", width: 200, heightMode: "fixed", height: 60 },
+    { component: <C />, align: "right", slot: 2, widthMode: "auto", heightMode: "auto" },
   ]}
 />
 ```
