@@ -26,6 +26,7 @@ export interface NavigationSidebarProps {
   items: NavigationItem[];
   headerIcon?: ReactNode;
   headerContent?: ReactNode;
+  headerHeight?: number | string;
   currentPath?: string;
   defaultCollapsed?: boolean;
   showThemeToggle?: boolean;

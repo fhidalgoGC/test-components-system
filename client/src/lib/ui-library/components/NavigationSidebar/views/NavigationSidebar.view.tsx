@@ -51,6 +51,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
     className = '',
     headerIcon,
     headerContent,
+    headerHeight,
     showThemeToggle = true,
     showLanguageSelector = true,
     availableLanguages = ['en', 'es'],
@@ -58,6 +59,10 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
     collapsedWidth = 80,
     expandedWidth = 280,
   } = props;
+
+  const headerStyle = headerHeight 
+    ? { height: typeof headerHeight === 'number' ? `${headerHeight}px` : headerHeight, minHeight: typeof headerHeight === 'number' ? `${headerHeight}px` : headerHeight }
+    : undefined;
 
   const isDark = currentTheme === 'dark';
   const sidebarWidth = isCollapsed ? collapsedWidth : expandedWidth;
@@ -95,7 +100,7 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
         data-testid="navigation-sidebar"
       >
         {/* HEADER */}
-        <div className={`${styles.header} ${isDark ? styles.dark : ''}`} data-testid="sidebar-header">
+        <div className={`${styles.header} ${isDark ? styles.dark : ''}`} style={headerStyle} data-testid="sidebar-header">
           {headerIcon || headerContent ? (
             <div className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
               {headerIcon && (

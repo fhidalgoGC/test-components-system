@@ -32,6 +32,7 @@ import type { NavigationItem } from "@/lib/ui-library/components/NavigationSideb
 |------|------|---------|-------------|
 | `items` | `NavigationItem[]` | **requerido** | Items de navegación (Body) |
 | `headerContent` | `ReactNode` | - | Componente para el Header |
+| `headerHeight` | `number \| string` | - | Altura fija del header (ej: `80` o `"5rem"`) |
 | `footerContent` | `ReactNode` | - | Componente personalizado para el Footer |
 | `currentPath` | `string` | - | Ruta actual para marcar items activos |
 | `defaultCollapsed` | `boolean` | `false` | Estado inicial colapsado |
