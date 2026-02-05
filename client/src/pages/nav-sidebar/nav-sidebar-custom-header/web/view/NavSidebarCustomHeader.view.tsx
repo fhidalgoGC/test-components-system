@@ -30,6 +30,7 @@ const menuItems = [
 
 function NavSidebarContent() {
   const [selectedPath, setSelectedPath] = useState('/dashboard');
+  const [headerHeight, setHeaderHeight] = useState<number>(120);
   const { lang } = useLibI18n();
 
   const handleNavigate = (path: string) => {
@@ -40,6 +41,7 @@ function NavSidebarContent() {
   return (
     <div className={styles.pageContainer}>
       <NavigationSidebar
+        headerHeight={headerHeight}
         headerIcon={
           <div className={styles.headerIcon}>
             <Package className="h-4 w-4 text-white" />
@@ -63,6 +65,46 @@ function NavSidebarContent() {
         <p className={styles.pageDescription}>
           NavigationSidebar con headerIcon y headerContent separados. El icono se muestra siempre (colapsado o expandido).
         </p>
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Altura del Header:</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.5rem' }}>
+            <input
+              type="range"
+              min="60"
+              max="200"
+              value={headerHeight}
+              onChange={(e) => setHeaderHeight(Number(e.target.value))}
+              style={{ flex: 1 }}
+            />
+            <span style={{ fontWeight: 'bold', minWidth: '60px' }}>{headerHeight}px</span>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+            <button 
+              onClick={() => setHeaderHeight(60)} 
+              style={{ padding: '0.25rem 0.75rem', borderRadius: '4px', border: '1px solid #ccc', cursor: 'pointer' }}
+            >
+              60px
+            </button>
+            <button 
+              onClick={() => setHeaderHeight(100)} 
+              style={{ padding: '0.25rem 0.75rem', borderRadius: '4px', border: '1px solid #ccc', cursor: 'pointer' }}
+            >
+              100px
+            </button>
+            <button 
+              onClick={() => setHeaderHeight(150)} 
+              style={{ padding: '0.25rem 0.75rem', borderRadius: '4px', border: '1px solid #ccc', cursor: 'pointer' }}
+            >
+              150px
+            </button>
+            <button 
+              onClick={() => setHeaderHeight(200)} 
+              style={{ padding: '0.25rem 0.75rem', borderRadius: '4px', border: '1px solid #ccc', cursor: 'pointer' }}
+            >
+              200px
+            </button>
+          </div>
+        </div>
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Estado actual:</h3>
           <p className={styles.currentPath}>{selectedPath}</p>
