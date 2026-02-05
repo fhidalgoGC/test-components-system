@@ -51,6 +51,8 @@ import { SidebarLayout, useSidebarLayout } from "@/lib/ui-library/layouts";
 | `sidebarCollapsedWidth` | `number` | `stretch` | Ancho del sidebar colapsado. Si no se pasa, se ajusta al contenido |
 | `toolbarHeight` | `number` | `stretch` | Altura del toolbar. Si no se pasa, se ajusta al contenido |
 | `className` | `string` | - | Clases CSS adicionales |
+| `mainPaddingX` | `number` | - | Padding horizontal (izquierda/derecha) del área Main en px |
+| `mainPaddingY` | `number` | - | Padding vertical (arriba/abajo) del área Main en px |
 
 ### Comportamiento de tamaños
 
@@ -76,6 +78,16 @@ import { SidebarLayout, useSidebarLayout } from "@/lib/ui-library/layouts";
 >
   ...
 </SidebarLayout>
+
+// Con padding en el área Main
+<SidebarLayout
+  mainPaddingX={24}
+  mainPaddingY={16}
+  sidebarContent={<MySidebar />}
+  toolbarContent={<MyToolbar />}
+>
+  ...
+</SidebarLayout>
 ```
 
 ## Interfaces
@@ -94,6 +106,8 @@ interface SidebarLayoutProps {
   sidebarCollapsedWidth?: number;
   toolbarHeight?: number;
   className?: string;
+  mainPaddingX?: number;
+  mainPaddingY?: number;
 }
 ```
 

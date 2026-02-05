@@ -13,6 +13,9 @@ export interface SidebarLayoutProps {
   sidebarCollapsedWidth?: number;
   toolbarHeight?: number;
   className?: string;
+  
+  mainPaddingX?: number;
+  mainPaddingY?: number;
 }
 
 export interface SidebarLayoutContextValue {

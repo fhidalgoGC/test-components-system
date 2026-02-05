@@ -14,6 +14,8 @@ export function SidebarLayoutView({
   sidebarCollapsedWidth,
   toolbarHeight,
   className,
+  mainPaddingX,
+  mainPaddingY,
 }: SidebarLayoutProps) {
   const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
   
@@ -61,7 +63,15 @@ export function SidebarLayoutView({
           </div>
           
           <div className={styles.main}>
-            {children}
+            <div 
+              className={styles.mainContent}
+              style={{
+                ...(mainPaddingX !== undefined && { paddingLeft: mainPaddingX, paddingRight: mainPaddingX }),
+                ...(mainPaddingY !== undefined && { paddingTop: mainPaddingY, paddingBottom: mainPaddingY }),
+              }}
+            >
+              {children}
+            </div>
           </div>
         </div>
       </div>
