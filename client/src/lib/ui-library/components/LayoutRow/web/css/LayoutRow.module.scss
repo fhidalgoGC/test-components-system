@@ -44,6 +44,19 @@ $spacing-xl: 32px;
   min-width: 0;
 }
 
+.slotFull {
+  flex: 1;
+  min-width: 0;
+}
+
+.slotAuto {
+  flex: 0 0 auto;
+}
+
+.slotFixed {
+  flex: 0 0 auto;
+}
+
 .componentWrapper {
   display: flex;
   flex-direction: column;

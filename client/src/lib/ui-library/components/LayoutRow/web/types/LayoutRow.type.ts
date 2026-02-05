@@ -25,8 +25,17 @@ export interface LayoutRowComponent {
   hide?: boolean;
 }
 
+export type SlotWidthMode = 'full' | 'auto' | 'fixed';
+
+export interface SlotConfig {
+  widthMode?: SlotWidthMode;
+  width?: number;
+  minWidth?: number;
+}
+
 export interface LayoutRowProps {
   slots: number;
+  slotConfig?: SlotConfig[];
   widthMode?: WidthMode;
   width?: SizeToken | number;
   heightMode?: HeightMode;

@@ -1,7 +1,7 @@
 import { useIsMobile } from '../../hooks';
 import { LayoutRow as LayoutRowWeb } from './web';
 import { NotImplemented } from '../NotImplemented';
-import type { LayoutRowProps } from './web/types';
+import type { LayoutRowProps, SlotConfig } from './web/types';
 
 // Mobile version placeholder (uncomment when implemented)
 // import { LayoutRow as LayoutRowMobile } from './mobile';
@@ -20,4 +20,4 @@ export const LayoutRow = (props: LayoutRowProps) => {
   return <LayoutRowWeb {...props} />;
 };
 
-export type { LayoutRowProps };
+export type { LayoutRowProps, SlotConfig };

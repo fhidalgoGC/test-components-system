@@ -1,4 +1,4 @@
-import type { LayoutRowProps, LayoutRowComponent, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken } from '../types';
+import type { LayoutRowProps, LayoutRowComponent, SlotConfig, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken } from '../types';
 import styles from '../css/LayoutRow.module.scss';
 
 const sizeTokenToPixels: Record<SizeToken, number> = {
@@ -148,6 +148,28 @@ const getComponentWrapperClasses = (comp: LayoutRowComponent): string => {
   return classes.join(' ');
 };
 
+const getSlotClasses = (config: SlotConfig | undefined): string => {
+  if (!config || !config.widthMode) return '';
+  switch (config.widthMode) {
+    case 'full': return styles.slotFull;
+    case 'auto': return styles.slotAuto;
+    case 'fixed': return styles.slotFixed;
+    default: return '';
+  }
+};
+
+const getSlotStyle = (config: SlotConfig | undefined): React.CSSProperties => {
+  if (!config) return {};
+  const style: React.CSSProperties = {};
+  if (config.widthMode === 'fixed' && config.width !== undefined) {
+    style.width = `${config.width}px`;
+  }
+  if (config.minWidth !== undefined) {
+    style.minWidth = `${config.minWidth}px`;
+  }
+  return style;
+};
+
 const getComponentWrapperStyle = (comp: LayoutRowComponent): React.CSSProperties => {
   const style: React.CSSProperties = {};
 
@@ -171,6 +193,7 @@ const getComponentWrapperStyle = (comp: LayoutRowComponent): React.CSSProperties
 export const LayoutRowView = (props: LayoutRowProps) => {
   const {
     slots,
+    slotConfig,
     widthMode = 'full',
     width,
     heightMode = 'auto',
@@ -221,6 +244,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
     <div className={containerClasses} style={inlineStyles} data-testid="layoutrow">
       {Array.from({ length: slots }, (_, slotIndex) => {
         const slotComponents = groupedBySlot[slotIndex] || [];
+        const currentSlotConfig = slotConfig?.[slotIndex];
         
         const groupedByAlign: Record<string, LayoutRowComponent[]> = {
           left: [],
@@ -232,10 +256,17 @@ export const LayoutRowView = (props: LayoutRowProps) => {
           groupedByAlign[comp.align].push(comp);
         });
 
+        const slotClasses = [
+          styles.slot,
+          getSlotClasses(currentSlotConfig),
+          getVerticalAlignClass(componentVerticalAlign),
+        ].filter(Boolean).join(' ');
+
         return (
           <div
             key={slotIndex}
-            className={`${styles.slot} ${getVerticalAlignClass(componentVerticalAlign)}`}
+            className={slotClasses}
+            style={getSlotStyle(currentSlotConfig)}
             data-testid={`layoutrow-slot-${slotIndex}`}
           >
             {(['left', 'center', 'right'] as const).map((align) => {
