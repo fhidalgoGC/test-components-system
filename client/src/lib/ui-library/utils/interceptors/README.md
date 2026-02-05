@@ -248,7 +248,24 @@ api.addResponseTransformer(/^\/reports\/.*/, (data) => new ReportModel(data));
 api.removeResponseTransformer('/orders');
 ```
 
-**Prioridad**: Los transformers dinámicos tienen prioridad sobre los de config.
+### Directamente en el request
+
+```typescript
+// Transform inline al llamar el endpoint
+const users = await api.get<User[]>('/users', undefined, {
+  transform: (data) => data.map((u: any) => ({ ...u, isActive: true }))
+});
+
+// POST con transform
+const order = await api.post<Order>('/orders', orderData, {
+  transform: (data) => new OrderModel(data)
+});
+```
+
+**Prioridad de transformers** (de mayor a menor):
+1. Transform en el request (`options.transform`)
+2. Transformers dinámicos (`addResponseTransformer`)
+3. Transformers en config (`endpoints[].transform`)
 
 **Nota**: Los patterns se evalúan sobre el **path** (sin query params). Si registras el mismo pattern nuevamente, se reemplaza el transformer anterior.
 

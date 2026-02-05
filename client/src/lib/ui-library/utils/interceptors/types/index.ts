@@ -159,11 +159,11 @@ export interface LogEntry {
 
 export interface ApiInterceptorInstance {
   request: <T = unknown>(endpoint: string, options?: RequestOptions) => Promise<InterceptedResponse<T>>;
-  get: <T = unknown>(endpoint: string, params?: QueryParams) => Promise<InterceptedResponse<T>>;
-  post: <T = unknown>(endpoint: string, body?: unknown, params?: QueryParams) => Promise<InterceptedResponse<T>>;
-  put: <T = unknown>(endpoint: string, body?: unknown, params?: QueryParams) => Promise<InterceptedResponse<T>>;
-  patch: <T = unknown>(endpoint: string, body?: unknown, params?: QueryParams) => Promise<InterceptedResponse<T>>;
-  delete: <T = unknown>(endpoint: string, params?: QueryParams) => Promise<InterceptedResponse<T>>;
+  get: <T = unknown>(endpoint: string, params?: QueryParams, options?: RequestWithTransformOptions) => Promise<InterceptedResponse<T>>;
+  post: <T = unknown>(endpoint: string, body?: unknown, options?: RequestWithTransformOptions) => Promise<InterceptedResponse<T>>;
+  put: <T = unknown>(endpoint: string, body?: unknown, options?: RequestWithTransformOptions) => Promise<InterceptedResponse<T>>;
+  patch: <T = unknown>(endpoint: string, body?: unknown, options?: RequestWithTransformOptions) => Promise<InterceptedResponse<T>>;
+  delete: <T = unknown>(endpoint: string, params?: QueryParams, options?: RequestWithTransformOptions) => Promise<InterceptedResponse<T>>;
   addRequestInterceptor: (interceptor: RequestInterceptor) => void;
   addResponseInterceptor: (interceptor: ResponseInterceptor) => void;
   addErrorInterceptor: (interceptor: ErrorInterceptor) => void;
@@ -195,4 +195,10 @@ export interface RequestOptions {
   requiresAuth?: boolean;
   cache?: boolean;
   signal?: AbortSignal;
+  transform?: ResponseTransformer;
+}
+
+export interface RequestWithTransformOptions {
+  params?: QueryParams;
+  transform?: ResponseTransformer;
 }

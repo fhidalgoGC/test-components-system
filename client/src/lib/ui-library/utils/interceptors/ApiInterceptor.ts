@@ -372,10 +372,11 @@ export function createApiInterceptor(
         interceptedResponse = await interceptor.handler(interceptedResponse) as InterceptedResponse<T>;
       }
 
-      if (endpointMatch.transform) {
+      const activeTransform = options.transform ?? endpointMatch.transform;
+      if (activeTransform) {
         interceptedResponse = {
           ...interceptedResponse,
-          data: endpointMatch.transform(interceptedResponse.data) as T,
+          data: activeTransform(interceptedResponse.data) as T,
         };
       }
 
@@ -407,20 +408,20 @@ export function createApiInterceptor(
   return {
     request: executeRequest,
     
-    get: <T>(endpoint: string, params?: QueryParams) => 
-      executeRequest<T>(endpoint, { method: 'GET', params }),
+    get: <T>(endpoint: string, params?: QueryParams, options?: { transform?: ResponseTransformer }) => 
+      executeRequest<T>(endpoint, { method: 'GET', params, transform: options?.transform }),
     
-    post: <T>(endpoint: string, body?: unknown, params?: QueryParams) => 
-      executeRequest<T>(endpoint, { method: 'POST', body, params }),
+    post: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer }) => 
+      executeRequest<T>(endpoint, { method: 'POST', body, params: options?.params, transform: options?.transform }),
     
-    put: <T>(endpoint: string, body?: unknown, params?: QueryParams) => 
-      executeRequest<T>(endpoint, { method: 'PUT', body, params }),
+    put: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer }) => 
+      executeRequest<T>(endpoint, { method: 'PUT', body, params: options?.params, transform: options?.transform }),
     
-    patch: <T>(endpoint: string, body?: unknown, params?: QueryParams) => 
-      executeRequest<T>(endpoint, { method: 'PATCH', body, params }),
+    patch: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer }) => 
+      executeRequest<T>(endpoint, { method: 'PATCH', body, params: options?.params, transform: options?.transform }),
     
-    delete: <T>(endpoint: string, params?: QueryParams) => 
-      executeRequest<T>(endpoint, { method: 'DELETE', params }),
+    delete: <T>(endpoint: string, params?: QueryParams, options?: { transform?: ResponseTransformer }) => 
+      executeRequest<T>(endpoint, { method: 'DELETE', params, transform: options?.transform }),
 
     addRequestInterceptor: (interceptor: RequestInterceptor) => {
       requestInterceptors.push(interceptor);
