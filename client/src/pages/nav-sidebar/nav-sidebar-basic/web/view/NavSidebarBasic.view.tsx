@@ -35,7 +35,7 @@ const menuItems = [
   },
 ];
 
-function NavSidebarContent() {
+function y () {
   const [selectedPath, setSelectedPath] = useState('/home');
   const { lang } = useLibI18n();
 

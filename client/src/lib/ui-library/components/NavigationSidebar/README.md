@@ -215,6 +215,88 @@ const [language, setLanguage] = useState('es');
 - **Desktop (≥1024px)**: Sidebar fijo, botón de colapsar visible
 - **Mobile (<1024px)**: Sidebar oculto, botón hamburguesa fijo
 
+## Personalización de Colores
+
+El componente soporta tres formas de personalizar los colores:
+
+### Opción 1: Via `className` (más simple)
+
+Pasa clases de Tailwind directamente. Soporta variantes `dark:` para modo oscuro:
+
+```tsx
+<NavigationSidebar
+  className="bg-slate-100 dark:bg-slate-900"
+  items={menuItems}
+/>
+
+// Con color específico (hex, rgb, hsl)
+<NavigationSidebar
+  className="bg-[#1a2332] dark:bg-[#0f1419]"
+  items={menuItems}
+/>
+```
+
+### Opción 2: Via CSS Variables (recomendado)
+
+Define las variables CSS en tu archivo global (index.css). Esto permite control completo sobre todos los colores:
+
+```css
+:root {
+  /* Colores del sidebar en modo light */
+  --sidebar-background: 0 0% 98%;           /* fondo */
+  --sidebar-foreground: 240 5.3% 26.1%;     /* texto */
+  --sidebar-primary: 240 5.9% 10%;          /* items activos */
+  --sidebar-accent: 240 4.8% 95.9%;         /* hover */
+  --sidebar-border: 220 13% 91%;            /* bordes */
+}
+
+.dark {
+  /* Colores del sidebar en modo dark */
+  --sidebar-background: 240 5.9% 10%;       /* fondo oscuro */
+  --sidebar-foreground: 240 4.8% 95.9%;     /* texto claro */
+  --sidebar-primary: 224.3 76.3% 48%;       /* azul primario */
+  --sidebar-accent: 240 3.7% 15.9%;         /* hover */
+  --sidebar-border: 240 3.7% 15.9%;         /* bordes */
+}
+```
+
+> **Nota:** Los valores son HSL sin `hsl()`, solo números separados por espacios.
+
+### Opción 3: Clase CSS personalizada
+
+Define una clase en tu proyecto y pásala via `className`:
+
+```css
+/* En tu CSS */
+.mi-sidebar-custom {
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
+.dark .mi-sidebar-custom {
+  background-color: #0f172a;
+}
+```
+
+```tsx
+<NavigationSidebar
+  className="mi-sidebar-custom"
+  items={menuItems}
+/>
+```
+
+### Variables CSS disponibles
+
+| Variable | Descripción |
+|----------|-------------|
+| `--sidebar-background` | Color de fondo del sidebar |
+| `--sidebar-foreground` | Color del texto |
+| `--sidebar-primary` | Color de items activos |
+| `--sidebar-accent` | Color de hover/focus |
+| `--sidebar-border` | Color de bordes |
+| `--sidebar-primary-foreground` | Texto sobre color primario |
+| `--sidebar-accent-foreground` | Texto sobre color accent |
+
 ## Estructura de Archivos
 
 ```
