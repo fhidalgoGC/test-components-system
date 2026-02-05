@@ -93,7 +93,15 @@ interface SlotConfig {
 }
 ```
 
-**Nota**: El array `slotConfig` se indexa por el número de slot. Si tienes `slots={3}`, puedes definir `slotConfig={[config0, config1, config2]}`. Los slots sin configuración usan el comportamiento por defecto (igual división del espacio).
+**Nota**: El array `slotConfig` se indexa por el número de slot. Si tienes `slots={3}`, puedes definir `slotConfig={[config0, config1, config2]}`. 
+
+**Comportamiento por defecto (sin slotConfig)**:
+- Todos los slots usan `flex: 1` → división proporcional (cada slot = 1/N del espacio)
+- 2 slots = 50% cada uno
+- 3 slots = 33.3% cada uno
+
+**Slots sin configuración en slotConfig**:
+- Si defines `slotConfig` pero un slot no tiene configuración, ese slot mantiene `flex: 1` (división proporcional con otros slots sin configuración)
 
 ### Comportamiento de heightMode por Slot
 
