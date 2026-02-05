@@ -16,6 +16,15 @@ export type DividerStyle = 'solid' | 'dashed' | 'dotted';
 export type SlotDividerToken = `${DividerSize}-${DividerColor}`;
 export type SlotAlignDividerToken = `${DividerSize}-${DividerColor}-${DividerStyle}`;
 
+export type SlotHeightMode = 'full' | 'auto' | 'fixed';
+
+export interface SlotConfig {
+  heightMode?: SlotHeightMode;
+  height?: number;
+  minHeight?: number;
+  maxHeight?: number;
+}
+
 export interface LayoutColumnComponent {
   id?: string;
   component: ReactNode;
@@ -49,6 +58,7 @@ export interface UseLayoutColumnReturn {
 
 export interface LayoutColumnProps {
   slots: number;
+  slotConfig?: SlotConfig[];
   widthMode?: WidthMode;
   width?: SizeToken | number;
   heightMode?: HeightMode;

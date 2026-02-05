@@ -47,7 +47,8 @@ import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
-| `slots` | `number` | requerido | Número de slots (dividen espacio equitativamente) |
+| `slots` | `number` | requerido | Número de slots |
+| `slotConfig` | `SlotConfig[]` | - | Configuración individual por slot |
 | `widthMode` | `'full' \| 'auto' \| 'fixed'` | `'full'` | Modo de ancho |
 | `width` | `SizeToken \| number` | - | Ancho cuando `widthMode="fixed"` |
 | `heightMode` | `'full' \| 'auto' \| 'fixed'` | `'auto'` | Modo de altura |
@@ -77,6 +78,64 @@ interface LayoutColumnComponent {
 }
 ```
 
+## SlotConfig - Configuración Individual por Slot
+
+Permite definir alturas diferentes para cada slot en lugar de dividir el espacio equitativamente.
+
+### Interface SlotConfig
+
+```tsx
+interface SlotConfig {
+  heightMode?: 'full' | 'auto' | 'fixed';
+  height?: number;      // Altura en píxeles (solo para fixed)
+  minHeight?: number;   // Altura mínima
+  maxHeight?: number;   // Altura máxima
+}
+```
+
+**Nota**: El array `slotConfig` se indexa por el número de slot. Si tienes `slots={3}`, puedes definir `slotConfig={[config0, config1, config2]}`. Los slots sin configuración usan el comportamiento por defecto (igual división del espacio).
+
+### Comportamiento de heightMode por Slot
+
+| HeightMode | CSS | Descripción |
+|------------|-----|-------------|
+| `fixed` | `flex: 0 0 auto; height: Xpx` | Altura fija en píxeles |
+| `auto` | `flex: 0 0 auto` | Crece según el contenido |
+| `full` | `flex: 1 1 0` | Toma el espacio restante |
+
+### Ejemplo: Header/Content/Footer
+
+```tsx
+<LayoutColumn
+  slots={3}
+  heightMode="full"  // Contenedor ocupa 100% del padre
+  slotConfig={[
+    { heightMode: 'fixed', height: 60 },   // Slot 0: Header 60px
+    { heightMode: 'full' },                 // Slot 1: Content (resto)
+    { heightMode: 'fixed', height: 60 },   // Slot 2: Footer 60px
+  ]}
+  components={[
+    { component: <Header />, align: 'top', slot: 0 },
+    { component: <Content />, align: 'top', slot: 1, sizeMode: 'full' },
+    { component: <Footer />, align: 'top', slot: 2 },
+  ]}
+/>
+```
+
+### Ejemplo: Slots con Altura Mínima/Máxima
+
+```tsx
+<LayoutColumn
+  slots={2}
+  heightMode="full"
+  slotConfig={[
+    { heightMode: 'auto', minHeight: 100, maxHeight: 300 },
+    { heightMode: 'full' },
+  ]}
+  components={components}
+/>
+```
+
 ## Comportamiento Dinámico vs Fijo
 
 ### Modo Dinámico (recomendado)
@@ -91,6 +150,7 @@ interface LayoutColumnComponent {
 - Si el contenedor padre mide 600px → cada slot ocupa 300px
 - Si el contenedor padre mide 1000px → cada slot ocupa 500px
 - **Todo se reajusta proporcionalmente** al tamaño del contenedor
+- **Usa slotConfig para alturas personalizadas por slot**
 
 ### Modo Fijo
 ```tsx
@@ -104,6 +164,48 @@ interface LayoutColumnComponent {
 />
 ```
 - Usa tokens (xs/sm/md/lg/xl) o valores numéricos en píxeles
+
+## Limitaciones Importantes
+
+### heightMode="auto" vs heightMode="full"
+
+| heightMode | Comportamiento | Uso recomendado |
+|------------|----------------|-----------------|
+| `auto` | El contenedor crece según su contenido | Cuando no necesitas dividir el espacio vertical |
+| `full` | El contenedor ocupa 100% del padre | Cuando necesitas que los slots dividan el espacio |
+| `fixed` | Altura fija en píxeles/tokens | Cuando conoces la altura exacta |
+
+**IMPORTANTE**: Si usas `heightMode="auto"` sin `slotConfig`, los slots con `flex: 1` no pueden calcular el espacio porque no hay altura definida. Usa `heightMode="full"` o `heightMode="fixed"` cuando necesites que los slots dividan el espacio verticalmente.
+
+### Ejemplo correcto vs incorrecto
+
+```tsx
+// ❌ INCORRECTO: heightMode="auto" sin altura definida
+<LayoutColumn
+  slots={3}
+  heightMode="auto"  // Sin altura, los slots colapsan
+  components={components}
+/>
+
+// ✅ CORRECTO: heightMode="full" para dividir el espacio
+<LayoutColumn
+  slots={3}
+  heightMode="full"
+  components={components}
+/>
+
+// ✅ CORRECTO: slotConfig para control individual
+<LayoutColumn
+  slots={3}
+  heightMode="full"
+  slotConfig={[
+    { heightMode: 'fixed', height: 60 },
+    { heightMode: 'full' },
+    { heightMode: 'fixed', height: 60 },
+  ]}
+  components={components}
+/>
+```
 
 ## Divisores
 

@@ -1,4 +1,4 @@
-import type { LayoutColumnProps, LayoutColumnComponent, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken, SlotDividerToken, SlotAlignDividerToken, DividerSize, DividerColor, DividerStyle } from '../types';
+import type { LayoutColumnProps, LayoutColumnComponent, SizeToken, HeightToken, SpacingToken, GapToken, SlotGapToken, SlotDividerToken, SlotAlignDividerToken, DividerSize, DividerColor, DividerStyle, SlotConfig } from '../types';
 import styles from '../css/LayoutColumn.module.scss';
 
 const dividerSizeToPixels: Record<DividerSize, number> = {
@@ -156,9 +156,49 @@ const getComponentHeightStyle = (comp: LayoutColumnComponent): React.CSSProperti
   return {};
 };
 
+const getSlotWrapperStyle = (config: SlotConfig | undefined): React.CSSProperties => {
+  if (!config) return {};
+  
+  const style: React.CSSProperties = {};
+  const heightMode = config.heightMode || 'auto';
+  
+  if (heightMode === 'fixed' && config.height !== undefined) {
+    style.flex = '0 0 auto';
+    style.height = `${config.height}px`;
+  } else if (heightMode === 'full') {
+    style.flex = '1 1 0';
+    style.minHeight = 0;
+  } else {
+    style.flex = '0 0 auto';
+  }
+  
+  if (config.minHeight !== undefined) {
+    style.minHeight = `${config.minHeight}px`;
+  }
+  if (config.maxHeight !== undefined) {
+    style.maxHeight = `${config.maxHeight}px`;
+  }
+  
+  return style;
+};
+
+const getSlotWrapperClass = (config: SlotConfig | undefined): string => {
+  if (!config) return styles.slotWrapper;
+  
+  const heightMode = config.heightMode || 'auto';
+  
+  if (heightMode === 'full') {
+    return `${styles.slotWrapper} ${styles.slotWrapperFull}`;
+  } else if (heightMode === 'fixed') {
+    return `${styles.slotWrapper} ${styles.slotWrapperFixed}`;
+  }
+  return `${styles.slotWrapper} ${styles.slotWrapperAuto}`;
+};
+
 export const LayoutColumnView = (props: LayoutColumnProps) => {
   const {
     slots,
+    slotConfig,
     widthMode = 'full',
     width,
     heightMode = 'auto',
@@ -244,8 +284,12 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
 
         const showDivider = slotDivider && arrayIndex < slotsToRender.length - 1;
 
+        const currentSlotConfig = slotConfig?.[slotIndex];
+        const slotWrapperClass = getSlotWrapperClass(currentSlotConfig);
+        const slotWrapperStyle = getSlotWrapperStyle(currentSlotConfig);
+
         return (
-          <div key={slotIndex} className={styles.slotWrapper}>
+          <div key={slotIndex} className={slotWrapperClass} style={slotWrapperStyle}>
             <div
               className={styles.slot}
               data-testid={`layoutcolumn-slot-${slotIndex}`}

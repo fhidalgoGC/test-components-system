@@ -49,6 +49,19 @@ $spacing-xl: 32px;
   width: 100%;
 }
 
+.slotWrapperFull {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.slotWrapperFixed {
+  flex: 0 0 auto;
+}
+
+.slotWrapperAuto {
+  flex: 0 0 auto;
+}
+
 .slot {
   display: flex;
   flex-direction: column;
