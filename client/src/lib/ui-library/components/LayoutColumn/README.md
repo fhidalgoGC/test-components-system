@@ -311,11 +311,51 @@ Línea que separa los grupos de alineación (top/center/bottom) dentro de un slo
 
 ## Tamaño de Componentes
 
+### Diferencia entre `heightMode` (slot) y `sizeMode` (componente)
+
+| Propiedad | Aplica a | Propósito |
+|-----------|----------|-----------|
+| `heightMode` (en slotConfig) | El slot/contenedor | Controla el alto del slot completo |
+| `sizeMode` (en component) | El componente dentro del slot | Controla si el componente llena el slot |
+
+```tsx
+// Ejemplo: Slot de 300px con componente que lo llena
+<LayoutColumn
+  slots={2}
+  heightMode="full"
+  slotConfig={[
+    { heightMode: 'fixed', height: 300 },  // ← El SLOT mide 300px
+    { heightMode: 'full' },
+  ]}
+  components={[
+    { 
+      component: <Content />, 
+      slot: 0, 
+      sizeMode: 'full'  // ← El COMPONENTE llena los 300px del slot
+    },
+  ]}
+/>
+
+// Ejemplo: Slot de 300px con componente de tamaño natural
+<LayoutColumn
+  slotConfig={[
+    { heightMode: 'fixed', height: 300 },  // ← El SLOT mide 300px
+  ]}
+  components={[
+    { 
+      component: <Button>Click</Button>, 
+      slot: 0, 
+      sizeMode: 'auto'  // ← El COMPONENTE usa su tamaño natural (40px)
+    },                   // Queda espacio vacío en el slot
+  ]}
+/>
+```
+
 ### sizeMode: "auto" (default)
-El componente usa su tamaño natural.
+El componente usa su tamaño natural. Si el slot es más grande, queda espacio vacío.
 
 ### sizeMode: "full"
-El componente se expande para llenar el espacio disponible del grupo.
+El componente se expande para llenar todo el espacio disponible del slot.
 
 ```tsx
 { 
@@ -326,8 +366,8 @@ El componente se expande para llenar el espacio disponible del grupo.
 }
 ```
 
-### height: Altura fija
-Especifica una altura fija con token o número.
+### height: Altura fija (en componente)
+Especifica una altura fija para el componente con token o número.
 
 ```tsx
 { component: <FixedHeader />, align: "top", slot: 0, height: 80 }     // 80px
