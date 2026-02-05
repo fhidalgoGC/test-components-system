@@ -201,7 +201,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
   const containerClasses = [
     styles.layoutrow,
     widthMode === 'full' ? styles.widthFull : widthMode === 'auto' ? styles.widthAuto : '',
-    heightMode === 'auto' ? styles.heightAuto : '',
+    heightMode === 'full' ? styles.heightFull : heightMode === 'auto' ? styles.heightAuto : '',
     getPaddingXClass(paddingX),
     getPaddingYClass(paddingY),
     getMarginXClass(marginX),

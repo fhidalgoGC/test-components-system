@@ -29,6 +29,11 @@ $spacing-xl: 32px;
   width: auto;
 }
 
+.heightFull {
+  height: 100%;
+  overflow: hidden;
+}
+
 .heightAuto {
   height: auto;
 }
