@@ -7,21 +7,23 @@ Layout agnóstico con estructura de 3 áreas: **Sidebar (A)**, **Toolbar (B)** y
 ```
 ┌──────────────┬─────────────────────────────┐
 │              │          TOOLBAR (B)        │  ← toolbarContent (ReactNode)
-│              │   (componente custom)       │
+│              │   (flex-shrink: 0)         │     No se encoge, altura fija o auto
 │   SIDEBAR    ├─────────────────────────────┤
-│     (A)      │                             │
-│              │          MAIN (C)           │  ← children (ReactNode)
-│  sidebarContent                            │
-│  (ReactNode) │   (contenido principal)     │
-│              │   (scroll automático)       │
-│              │                             │
+│     (A)      │  ┌─────────────────────┐   │
+│              │  │     MAIN (C)        │   │  ← children (ReactNode)
+│  sidebarContent │  (padding configurable) │
+│  (ReactNode) │  │  (scroll interno)   │   │     mainPaddingX / mainPaddingY
+│              │  │                     │   │
+│              │  └─────────────────────┘   │
 └──────────────┴─────────────────────────────┘
 ```
 
 ## Características
 
 - **Layout agnóstico**: Sin colores, solo estructura
-- **Scroll automático**: El área C (Main) tiene scroll interno cuando el contenido excede
+- **Cálculo automático del espacio**: El área Main ocupa todo el espacio restante después del Toolbar (flex: 1), sin necesidad de calcular alturas manualmente
+- **Scroll interno**: El área Main tiene scroll automático cuando el contenido excede el espacio disponible. El contenido nunca desborda fuera del layout
+- **Padding configurable**: Props `mainPaddingX` y `mainPaddingY` para controlar el espaciado interno del área Main
 - **Sidebar colapsable**: Hook para controlar estado collapsed/expanded
 - **Modo controlado/no-controlado**: Manejo flexible del estado
 
@@ -223,9 +225,62 @@ SidebarLayout/
 └── README.md
 ```
 
+## Comportamiento del Área Main
+
+### Cálculo del espacio disponible
+
+El SidebarLayout calcula automáticamente el espacio disponible para el área Main:
+
+```
+Altura total del viewport (100vh)
+  - Altura del Toolbar (fija o auto)
+  = Espacio disponible para Main
+```
+
+El Toolbar usa `flex-shrink: 0` y el Main usa `flex: 1`, por lo que el Main siempre ocupa exactamente el espacio restante después del Toolbar.
+
+### Scroll interno
+
+El área Main contiene el contenido dentro de sus límites:
+- El contenedor Main tiene `overflow: hidden` para que nada desborde
+- Dentro hay un wrapper con `overflow-y: auto` que proporciona scroll automático
+- Si el contenido es más pequeño que el espacio, no hay scroll
+- Si el contenido excede el espacio, aparece scroll vertical
+
+### Padding del área Main
+
+El padding se configura a nivel del SidebarLayout, no en los children:
+
+```tsx
+// ✓ Correcto: padding configurado en el layout
+<SidebarLayout
+  mainPaddingX={24}
+  mainPaddingY={16}
+  sidebarContent={<MySidebar />}
+  toolbarContent={<MyToolbar />}
+>
+  <MyContent />
+</SidebarLayout>
+
+// ✗ Evitar: padding en el div hijo (no necesario)
+<SidebarLayout ...>
+  <div style={{ padding: 20 }}>
+    <MyContent />
+  </div>
+</SidebarLayout>
+```
+
+| Prop | Aplica a |
+|------|----------|
+| `mainPaddingX` | padding-left + padding-right |
+| `mainPaddingY` | padding-top + padding-bottom |
+
+Si no se pasan, el área Main no tiene padding (contenido pegado a los bordes).
+
 ## Notas de Desarrollo
 
 - El layout es **completamente agnóstico** - no tiene colores, solo estructura
 - Los colores y estilos visuales deben ir en los componentes que se pasan (`sidebarContent`, `toolbarContent`, `children`)
-- El scroll del área C es interno al layout
+- El scroll del área Main es interno al layout
 - La transición del sidebar es animada (0.3s ease)
+- El contenido del Main nunca desborda fuera del layout, el SidebarLayout se encarga de contenerlo
