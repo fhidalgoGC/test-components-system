@@ -13,7 +13,7 @@ Este README contiene instrucciones para que una IA configure correctamente un nu
 Instala GC-UI-COMPONENTS desde GitHub:
 
 ```bash
-npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile
+npm install git+https://github.com/fhidalgoGC/test-components-system.git#version1.1.0_NativeWinds
 ```
 
 ---
@@ -86,14 +86,24 @@ Para poder ejecutar los comandos de estructura (`new-app`, `features`) directame
 | `--name=<nombre>` | Nombre del feature (solo para `features`) |
 | `--help` o `-h` | Muestra ayuda |
 
+### ⚠️ IMPORTANTE: Ejecutar después de instalar
+
+Después de configurar los scripts, **SIEMPRE ejecutar**:
+
+```bash
+npm run setup:new-app:force
+```
+
+Este comando crea la estructura base del proyecto sobrescribiendo cualquier carpeta existente para asegurar la configuración correcta.
+
 ### Ejemplos de uso:
 
 ```bash
-# Crear estructura de aplicación en src/
-npm run setup:new-app
+# OBLIGATORIO después de instalar - Crear estructura base
+npm run setup:new-app:force
 
 # Crear estructura en ruta personalizada
-npm run setup:new-app -- --path=app/src
+npm run setup:new-app:force -- --path=app/src
 
 # Crear feature de login
 npm run setup:features -- --name=login
@@ -143,20 +153,21 @@ Después de la instalación, consultar:
 - **README-INSTALL-IA.md**: Guía de instalación detallada
 
 **Enlaces GitHub:**
-- [📄 README-INSTALL-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/README-INSTALL-IA.md)
-- [📄 README-INDEX.md](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/lib/ui-library/README-INDEX.md)
-- [📄 CLI gc-ui-setup](https://github.com/fhidalgoGC/test-components-system/blob/version.1.0.2-mobile/client/src/commands/create-structure/README.md)
+- [📄 README-INSTALL-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/version1.1.0_NativeWinds/client/src/lib/ui-library/README-INSTALL-IA.md)
+- [📄 README-INDEX.md](https://github.com/fhidalgoGC/test-components-system/blob/version1.1.0_NativeWinds/client/src/lib/ui-library/README-INDEX.md)
+- [📄 CLI gc-ui-setup](https://github.com/fhidalgoGC/test-components-system/blob/version1.1.0_NativeWinds/client/src/commands/create-structure/README.md)
 
 ---
 
 ## 🔄 Resumen de Pasos
 
-1. ✅ `npm install git+https://github.com/fhidalgoGC/test-components-system.git#version.1.0.2-mobile`
+1. ✅ `npm install git+https://github.com/fhidalgoGC/test-components-system.git#version1.1.0_NativeWinds`
 2. ✅ Instalar dependencias peer
 3. ✅ Configurar alias `@/lib/ui-library` en `vite.config.ts`
 4. ✅ Agregar scripts de `gc-ui-setup` en `package.json`
 5. ✅ Configurar paths en `tsconfig.json`
-6. ✅ Verificar instalación
+6. ✅ **Ejecutar `npm run setup:new-app:force`** (OBLIGATORIO)
+7. ✅ Verificar instalación
 
 ---
 
