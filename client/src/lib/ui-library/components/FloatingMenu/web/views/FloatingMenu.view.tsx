@@ -1,4 +1,4 @@
-import type { FloatingMenuProps, FloatingMenuItem, FloatingMenuLayout, FloatingMenuItemConfig } from '../types';
+import type { FloatingMenuProps, FloatingMenuItem, FloatingMenuLayout, FloatingMenuItemConfig, FloatingMenuSectionConfig } from '../types';
 import styles from '../css/FloatingMenu.module.css';
 
 const getLayoutStyles = (layout?: FloatingMenuLayout): React.CSSProperties => {
@@ -39,6 +39,29 @@ const getLayoutStyles = (layout?: FloatingMenuLayout): React.CSSProperties => {
   return style;
 };
 
+const getSectionStyles = (config?: FloatingMenuSectionConfig): React.CSSProperties => {
+  if (!config) return {};
+  
+  const style: React.CSSProperties = {};
+  
+  if (config.heightMode === 'full') {
+    style.height = '100%';
+  } else if (config.heightMode === 'fixed' && config.height) {
+    style.height = typeof config.height === 'number' ? `${config.height}px` : config.height;
+  } else if (config.heightMode === 'auto') {
+    style.height = 'auto';
+  }
+  
+  if (config.minHeight) {
+    style.minHeight = typeof config.minHeight === 'number' ? `${config.minHeight}px` : config.minHeight;
+  }
+  if (config.maxHeight) {
+    style.maxHeight = typeof config.maxHeight === 'number' ? `${config.maxHeight}px` : config.maxHeight;
+  }
+  
+  return style;
+};
+
 const getItemStyles = (itemConfig?: FloatingMenuItemConfig): React.CSSProperties => {
   if (!itemConfig) return {};
   
@@ -63,6 +86,8 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   const { 
     items, 
     layout, 
+    header,
+    footer,
     itemConfig,
     scroll = 'auto',
     isOpen = true,
@@ -70,7 +95,9 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
     onItemClick,
     onClose,
     className = '',
-    itemClassName = ''
+    itemClassName = '',
+    headerClassName = '',
+    footerClassName = ''
   } = props;
 
   if (!isOpen) return null;
@@ -87,6 +114,12 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   const layoutStyles = getLayoutStyles(layout);
   const itemStyles = getItemStyles(itemConfig);
   const scrollClass = scroll === 'auto' ? styles.scrollAuto : styles.scrollNone;
+  
+  const showHeader = header?.show !== false && header?.renderType === 'component' && header?.render;
+  const showFooter = footer?.show !== false && footer?.renderType === 'component' && footer?.render;
+  
+  const headerStyles = getSectionStyles(header);
+  const footerStyles = getSectionStyles(footer);
 
   return (
     <>
@@ -98,23 +131,45 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
         />
       )}
       <div 
-        className={`${styles.floatingMenu} ${scrollClass} ${className}`}
+        className={`${styles.floatingMenu} ${className}`}
         style={layoutStyles}
         data-testid="floatingmenu"
       >
-        <div className={styles.itemsContainer}>
-          {items.map((item, index) => (
-            <div
-              key={item.id}
-              className={`${styles.menuItem} ${item.disabled ? styles.disabled : ''} ${itemClassName}`}
-              style={itemStyles}
-              onClick={() => handleItemClick(item, index)}
-              data-testid={`floatingmenu-item-${item.id}`}
-            >
-              {item.render(item)}
-            </div>
-          ))}
+        {showHeader && (
+          <div 
+            className={`${styles.header} ${headerClassName}`}
+            style={headerStyles}
+            data-testid="floatingmenu-header"
+          >
+            {header.render!()}
+          </div>
+        )}
+        
+        <div className={`${styles.body} ${scrollClass}`} data-testid="floatingmenu-body">
+          <div className={styles.itemsContainer}>
+            {items.map((item, index) => (
+              <div
+                key={item.id}
+                className={`${styles.menuItem} ${item.disabled ? styles.disabled : ''} ${itemClassName}`}
+                style={itemStyles}
+                onClick={() => handleItemClick(item, index)}
+                data-testid={`floatingmenu-item-${item.id}`}
+              >
+                {item.render(item)}
+              </div>
+            ))}
+          </div>
         </div>
+        
+        {showFooter && (
+          <div 
+            className={`${styles.footer} ${footerClassName}`}
+            style={footerStyles}
+            data-testid="floatingmenu-footer"
+          >
+            {footer.render!()}
+          </div>
+        )}
       </div>
     </>
   );

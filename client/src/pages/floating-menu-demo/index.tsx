@@ -57,12 +57,16 @@ export default function FloatingMenuDemo() {
   const [isOpen1, setIsOpen1] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
+  const [isOpen4, setIsOpen4] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(null);
   const [scrollMode, setScrollMode] = useState<'auto' | 'none'>('auto');
+  const [showHeader, setShowHeader] = useState(true);
+  const [showFooter, setShowFooter] = useState(true);
   
   const trigger1Ref = useRef<HTMLButtonElement>(null);
   const trigger2Ref = useRef<HTMLButtonElement>(null);
   const trigger3Ref = useRef<HTMLButtonElement>(null);
+  const trigger4Ref = useRef<HTMLButtonElement>(null);
 
   const handleLanguageSelect = (item: FloatingMenuItem<LanguageData>) => {
     setSelectedLanguage(item.data || null);
@@ -73,7 +77,7 @@ export default function FloatingMenuDemo() {
     <div className="p-8 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-2">FloatingMenu</h1>
       <p className="text-gray-600 mb-8">
-        Componente de menú flotante con items renderizables, layout configurable y scroll opcional.
+        Componente de menú flotante con header, body (items), footer, layout configurable y scroll opcional.
       </p>
 
       <div className="space-y-12">
@@ -120,6 +124,93 @@ export default function FloatingMenuDemo() {
               Idioma seleccionado: <strong>{selectedLanguage.name}</strong> ({selectedLanguage.code})
             </p>
           )}
+        </section>
+
+        <section className="bg-white rounded-lg border p-6">
+          <h2 className="text-xl font-semibold mb-4">Ejemplo: Header, Body y Footer</h2>
+          <p className="text-gray-600 mb-4">
+            Menú con secciones personalizables. Puedes mostrar/ocultar header y footer.
+          </p>
+
+          <div className="flex items-center gap-6 mb-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showHeader}
+                onChange={(e) => setShowHeader(e.target.checked)}
+                data-testid="checkbox-show-header"
+              />
+              <span className="text-sm font-medium">Show Header</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showFooter}
+                onChange={(e) => setShowFooter(e.target.checked)}
+                data-testid="checkbox-show-footer"
+              />
+              <span className="text-sm font-medium">Show Footer</span>
+            </label>
+          </div>
+          
+          <div className="relative inline-block">
+            <button
+              ref={trigger4Ref}
+              onClick={() => setIsOpen4(!isOpen4)}
+              className="px-4 py-2 bg-purple-500 text-white hover:bg-purple-600 rounded-lg"
+              data-testid="button-sections-trigger"
+            >
+              Abrir menú con secciones
+            </button>
+            
+            <div className="absolute top-full left-0 mt-2">
+              <FloatingMenu
+                items={manyItems.slice(0, 8)}
+                isOpen={isOpen4}
+                onClose={() => setIsOpen4(false)}
+                onItemClick={(item) => {
+                  console.log('Clicked:', item.data?.label);
+                  setIsOpen4(false);
+                }}
+                header={{
+                  renderType: 'component',
+                  show: showHeader,
+                  heightMode: 'auto',
+                  render: () => (
+                    <div className="p-3 bg-gray-50">
+                      <h3 className="font-semibold text-sm">Seleccionar opción</h3>
+                      <p className="text-xs text-gray-500">Elige una de las siguientes</p>
+                    </div>
+                  ),
+                }}
+                footer={{
+                  renderType: 'component',
+                  show: showFooter,
+                  heightMode: 'fixed',
+                  height: 50,
+                  render: () => (
+                    <div className="p-3 bg-gray-50 h-full flex items-center justify-between">
+                      <span className="text-xs text-gray-500">8 opciones disponibles</span>
+                      <button 
+                        className="text-xs text-blue-500 hover:underline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsOpen4(false);
+                        }}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  ),
+                }}
+                layout={{
+                  widthMode: 'fixed',
+                  width: 280,
+                  maxHeight: 350,
+                }}
+              />
+            </div>
+          </div>
         </section>
 
         <section className="bg-white rounded-lg border p-6">
@@ -237,6 +328,18 @@ export default function FloatingMenuDemo() {
                   <td className="py-2 px-3 font-sans">Array de items con render function</td>
                 </tr>
                 <tr className="border-b">
+                  <td className="py-2 px-3">header</td>
+                  <td className="py-2 px-3">FloatingMenuSectionConfig</td>
+                  <td className="py-2 px-3">-</td>
+                  <td className="py-2 px-3 font-sans">Configuración del header (render, height, show)</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-3">footer</td>
+                  <td className="py-2 px-3">FloatingMenuSectionConfig</td>
+                  <td className="py-2 px-3">-</td>
+                  <td className="py-2 px-3 font-sans">Configuración del footer (render, height, show)</td>
+                </tr>
+                <tr className="border-b">
                   <td className="py-2 px-3">layout</td>
                   <td className="py-2 px-3">FloatingMenuLayout</td>
                   <td className="py-2 px-3">-</td>
@@ -246,7 +349,7 @@ export default function FloatingMenuDemo() {
                   <td className="py-2 px-3">scroll</td>
                   <td className="py-2 px-3">'auto' | 'none'</td>
                   <td className="py-2 px-3">'auto'</td>
-                  <td className="py-2 px-3 font-sans">Modo de scroll del contenedor</td>
+                  <td className="py-2 px-3 font-sans">Modo de scroll del body</td>
                 </tr>
                 <tr className="border-b">
                   <td className="py-2 px-3">isOpen</td>
@@ -265,6 +368,51 @@ export default function FloatingMenuDemo() {
                   <td className="py-2 px-3">() =&gt; void</td>
                   <td className="py-2 px-3">-</td>
                   <td className="py-2 px-3 font-sans">Callback al cerrar el menú (click fuera)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="text-lg font-semibold mt-6 mb-3">FloatingMenuSectionConfig</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-2 px-3">Prop</th>
+                  <th className="text-left py-2 px-3">Tipo</th>
+                  <th className="text-left py-2 px-3">Descripción</th>
+                </tr>
+              </thead>
+              <tbody className="font-mono text-xs">
+                <tr className="border-b">
+                  <td className="py-2 px-3">renderType</td>
+                  <td className="py-2 px-3">'component' | 'none'</td>
+                  <td className="py-2 px-3 font-sans">Tipo de renderizado</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-3">render</td>
+                  <td className="py-2 px-3">() =&gt; ReactNode</td>
+                  <td className="py-2 px-3 font-sans">Función que retorna el contenido</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-3">show</td>
+                  <td className="py-2 px-3">boolean</td>
+                  <td className="py-2 px-3 font-sans">Mostrar/ocultar la sección</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-3">heightMode</td>
+                  <td className="py-2 px-3">'full' | 'auto' | 'fixed'</td>
+                  <td className="py-2 px-3 font-sans">Modo de altura</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-3">height</td>
+                  <td className="py-2 px-3">number | string</td>
+                  <td className="py-2 px-3 font-sans">Altura (cuando heightMode es 'fixed')</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-3">minHeight</td>
+                  <td className="py-2 px-3">number | string</td>
+                  <td className="py-2 px-3 font-sans">Altura mínima</td>
                 </tr>
               </tbody>
             </table>

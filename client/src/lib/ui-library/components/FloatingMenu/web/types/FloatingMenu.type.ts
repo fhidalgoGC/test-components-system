@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'full' | 'auto' | 'fixed';
 export type ScrollMode = 'auto' | 'none';
+export type RenderType = 'component' | 'none';
 
 export interface FloatingMenuLayout {
   widthMode?: WidthMode;
@@ -13,6 +14,16 @@ export interface FloatingMenuLayout {
   height?: number | string;
   minHeight?: number | string;
   maxHeight?: number | string;
+}
+
+export interface FloatingMenuSectionConfig {
+  renderType?: RenderType;
+  render?: () => ReactNode;
+  heightMode?: HeightMode;
+  height?: number | string;
+  minHeight?: number | string;
+  maxHeight?: number | string;
+  show?: boolean;
 }
 
 export interface FloatingMenuItemConfig {
@@ -31,6 +42,8 @@ export interface FloatingMenuItem<T = unknown> {
 export interface FloatingMenuProps<T = unknown> {
   items: FloatingMenuItem<T>[];
   layout?: FloatingMenuLayout;
+  header?: FloatingMenuSectionConfig;
+  footer?: FloatingMenuSectionConfig;
   itemConfig?: FloatingMenuItemConfig;
   scroll?: ScrollMode;
   isOpen?: boolean;
@@ -39,5 +52,6 @@ export interface FloatingMenuProps<T = unknown> {
   onClose?: () => void;
   className?: string;
   itemClassName?: string;
+  headerClassName?: string;
+  footerClassName?: string;
 }
-
