@@ -61,6 +61,7 @@ import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 | `slotGap` | `SlotGapToken` | - | Espacio entre slots |
 | `slotDivider` | `SlotDividerToken` | - | Línea divisora entre SLOTS |
 | `slotAlignDivider` | `SlotAlignDividerToken` | - | Línea divisora entre GRUPOS DE ALINEACIÓN |
+| `controller` | `UseLayoutColumnReturn` | - | Controller del hook `useLayoutColumn` (opcional). Controla visibilidad de slots y contenido override |
 | `components` | `LayoutColumnComponent[]` | requerido | Array de componentes |
 | `className` | `string` | - | Clase CSS adicional |
 
@@ -436,6 +437,10 @@ function MyComponent() {
 | `isSlotVisible(index)` | `(index: number) => boolean` | Slot tiene contenido? |
 | `isSlotEmpty(index)` | `(index: number) => boolean` | Slot vacío? |
 | `resetVisibility()` | `() => void` | Restaurar estado inicial |
+| `setSlotContent(index, content)` | `(index: number, content: ReactNode) => void` | Reemplazar contenido de un slot |
+| `clearSlotContent(index)` | `(index: number) => void` | Restaurar contenido original del slot |
+| `getSlotContent(index)` | `(index: number) => ReactNode \| undefined` | Obtener el contenido override actual |
+| `slotContentOverrides` | `Record<number, ReactNode>` | Mapa de overrides activos |
 
 ## Tokens de Referencia
 
@@ -572,5 +577,130 @@ function MyComponent() {
     { component: <CardContent />, align: "center", slot: 0, sizeMode: "full" },
     { component: <CardActions />, align: "bottom", slot: 0, height: 50 },
   ]}
+/>
+```
+
+## Controller (prop `controller`)
+
+El prop `controller` permite controlar el LayoutColumn desde afuera sin modificar las props originales. Es **completamente opcional** — si no lo pasas, el componente funciona exactamente igual que siempre.
+
+### Uso con controller
+
+```tsx
+import { LayoutColumn, useLayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
+
+const initialComponents = [
+  { id: 'header', component: <Header />, align: 'top' as const, slot: 0 },
+  { id: 'content', component: <MainContent />, align: 'top' as const, slot: 1, sizeMode: 'full' as const },
+  { id: 'footer', component: <Footer />, align: 'bottom' as const, slot: 2 },
+];
+
+function MyPage() {
+  const controller = useLayoutColumn({ components: initialComponents, slots: 3 });
+
+  return (
+    <>
+      <button onClick={() => controller.toggleSlot(1)}>Toggle Content</button>
+      <button onClick={() => controller.setSlotContent(1, <SettingsPanel />)}>
+        Mostrar Settings
+      </button>
+      <button onClick={() => controller.clearSlotContent(1)}>
+        Restaurar Content Original
+      </button>
+
+      <LayoutColumn
+        slots={3}
+        heightMode="full"
+        controller={controller}
+        components={controller.visibleComponents}
+      />
+    </>
+  );
+}
+```
+
+### Ocultar/Mostrar Slots
+
+Cuando ocultas un slot, los demás slots se redistribuyen automáticamente para llenar el espacio:
+
+```tsx
+const controller = useLayoutColumn({ components, slots: 3 });
+
+controller.hideSlot(0);     // Oculta slot 0, los slots 1 y 2 toman su espacio
+controller.showSlot(0);     // Vuelve a mostrar slot 0
+controller.toggleSlot(0);   // Alterna visibilidad
+controller.isSlotVisible(0); // Consulta si está visible
+```
+
+### Cambiar Contenido de un Slot
+
+`setSlotContent` reemplaza todo el contenido de un slot con un componente diferente, sin tocar la configuración original:
+
+```tsx
+const controller = useLayoutColumn({ components, slots: 3 });
+
+// Reemplazar el contenido del slot 1 con otro componente
+controller.setSlotContent(1, <SettingsPanel />);
+
+// Ver qué contenido override tiene el slot
+controller.getSlotContent(1); // → <SettingsPanel />
+
+// Restaurar el contenido original del slot
+controller.clearSlotContent(1);
+
+// Ver todos los overrides activos
+console.log(controller.slotContentOverrides); // { 1: <SettingsPanel /> }
+```
+
+### Combinando Visibilidad + Content Override
+
+```tsx
+function Dashboard() {
+  const controller = useLayoutColumn({ components: dashboardComponents, slots: 3 });
+  const [showSettings, setShowSettings] = useState(false);
+
+  const handleToggleSettings = () => {
+    if (showSettings) {
+      controller.clearSlotContent(1);    // Restaurar contenido original
+    } else {
+      controller.setSlotContent(1, <SettingsPanel />);  // Mostrar settings
+    }
+    setShowSettings(!showSettings);
+  };
+
+  return (
+    <>
+      <button onClick={handleToggleSettings}>
+        {showSettings ? 'Volver al Dashboard' : 'Configuración'}
+      </button>
+      <button onClick={() => controller.toggleSlot(2)}>
+        Toggle Footer
+      </button>
+
+      <LayoutColumn
+        slots={3}
+        heightMode="full"
+        slotConfig={[
+          { heightMode: 'fixed', height: 60 },
+          { heightMode: 'full' },
+          { heightMode: 'fixed', height: 60 },
+        ]}
+        controller={controller}
+        components={controller.visibleComponents}
+      />
+    </>
+  );
+}
+```
+
+### Sin Controller (comportamiento original)
+
+Si no pasas `controller`, todo funciona igual que antes:
+
+```tsx
+<LayoutColumn
+  slots={3}
+  heightMode="full"
+  components={components}
 />
 ```

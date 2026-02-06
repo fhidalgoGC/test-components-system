@@ -199,6 +199,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
   const {
     slots,
     slotConfig,
+    controller,
     widthMode = 'full',
     width,
     heightMode = 'auto',
@@ -255,8 +256,15 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
     ...getSpacingStyle(paddingX, paddingY, marginX, marginY),
   };
 
+  const slotContentOverrides = controller?.slotContentOverrides || {};
+
   const slotsToRender = Array.from({ length: slots }, (_, i) => i)
     .filter((slotIndex) => {
+      const hasOverride = slotIndex in slotContentOverrides;
+      if (hasOverride) return true;
+      if (controller && !controller.isSlotVisible(slotIndex)) {
+        return false;
+      }
       const slotComponents = groupedBySlot[slotIndex];
       return slotComponents && slotComponents.length > 0;
     });
@@ -272,6 +280,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
   return (
     <div className={containerClasses} style={inlineStyles} data-testid="layoutcolumn">
       {slotsToRender.map((slotIndex, arrayIndex) => {
+        const hasContentOverride = slotIndex in slotContentOverrides;
         const slotComponents = groupedBySlot[slotIndex] || [];
         
         const topComponents = slotComponents.filter(c => c.align === 'top');
@@ -294,6 +303,18 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
               className={styles.slot}
               data-testid={`layoutcolumn-slot-${slotIndex}`}
             >
+            {hasContentOverride ? (
+              <div
+                className={`${styles.slotContent} ${styles.alignTop}`}
+                style={{ flex: 1 }}
+                data-testid={`layoutcolumn-slot-${slotIndex}-override`}
+              >
+                <div className={`${styles.componentWrapper} ${styles.componentFull}`}>
+                  {slotContentOverrides[slotIndex]}
+                </div>
+              </div>
+            ) : (
+            <>
             {hasTop && (
               <div
                 className={`${styles.slotContent} ${styles.alignTop} ${getComponentGapClass(componentGap)}`}
@@ -369,6 +390,8 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
                   );
                 })}
               </div>
+            )}
+            </>
             )}
             </div>
             {showDivider && dividerStyle && (

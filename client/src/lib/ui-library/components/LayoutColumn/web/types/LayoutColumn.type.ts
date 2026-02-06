@@ -54,11 +54,16 @@ export interface UseLayoutColumnReturn {
   isSlotVisible: (slotIndex: number) => boolean;
   isSlotEmpty: (slotIndex: number) => boolean;
   resetVisibility: () => void;
+  setSlotContent: (slotIndex: number, content: ReactNode) => void;
+  clearSlotContent: (slotIndex: number) => void;
+  getSlotContent: (slotIndex: number) => ReactNode | undefined;
+  slotContentOverrides: Record<number, ReactNode>;
 }
 
 export interface LayoutColumnProps {
   slots: number;
   slotConfig?: SlotConfig[];
+  controller?: UseLayoutColumnReturn;
   widthMode?: WidthMode;
   width?: SizeToken | number;
   heightMode?: HeightMode;

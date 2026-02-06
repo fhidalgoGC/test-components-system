@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, type ReactNode } from 'react';
 import type { LayoutColumnComponent, UseLayoutColumnOptions, UseLayoutColumnReturn } from '../types';
 
 export const useLayoutColumn = (options: UseLayoutColumnOptions): UseLayoutColumnReturn => {
@@ -128,6 +128,27 @@ export const useLayoutColumn = (options: UseLayoutColumnOptions): UseLayoutColum
     setHiddenComponentIds(initialHidden);
   }, [componentsWithIds]);
 
+  const [slotContentOverrides, setSlotContentOverrides] = useState<Record<number, ReactNode>>({});
+
+  const setSlotContent = useCallback((slotIndex: number, content: ReactNode) => {
+    setSlotContentOverrides((prev) => ({
+      ...prev,
+      [slotIndex]: content,
+    }));
+  }, []);
+
+  const clearSlotContent = useCallback((slotIndex: number) => {
+    setSlotContentOverrides((prev) => {
+      const next = { ...prev };
+      delete next[slotIndex];
+      return next;
+    });
+  }, []);
+
+  const getSlotContent = useCallback((slotIndex: number): ReactNode | undefined => {
+    return slotContentOverrides[slotIndex];
+  }, [slotContentOverrides]);
+
   return {
     visibleComponents,
     allComponents,
@@ -142,5 +163,9 @@ export const useLayoutColumn = (options: UseLayoutColumnOptions): UseLayoutColum
     isSlotVisible,
     isSlotEmpty,
     resetVisibility,
+    setSlotContent,
+    clearSlotContent,
+    getSlotContent,
+    slotContentOverrides,
   };
 };
