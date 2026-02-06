@@ -56,6 +56,7 @@ import { LayoutRow } from "@/lib/ui-library/components/LayoutRow";
 | `componentVerticalAlign` | `'top' \| 'center' \| 'bottom' \| 'stretch'` | `'center'` | Alineación vertical de componentes |
 | `componentGap` | `GapToken \| number` | `'md'` | Espacio entre componentes del mismo grupo |
 | `slotGap` | `SlotGapToken` | - | Espacio entre slots |
+| `slotConfig` | `SlotConfig[]` | - | Configuración individual por slot (ancho) |
 | `components` | `LayoutRowComponent[]` | requerido | Array de componentes |
 | `className` | `string` | - | Clase CSS adicional |
 
@@ -86,6 +87,48 @@ interface LayoutRowComponent {
 | `heightMode` | `'full' \| 'auto' \| 'fixed'` | `'auto'` | `full`: llena la altura del slot. `auto`: tamaño natural. `fixed`: usa `height` |
 | `height` | `number` | - | Altura en píxeles cuando `heightMode="fixed"` |
 | `minHeight` | `number` | - | Altura mínima garantizada en píxeles |
+
+## SlotConfig - Configuración Individual por Slot
+
+Permite definir anchos diferentes para cada slot en lugar de dividir el espacio equitativamente.
+
+### Interface SlotConfig
+
+```tsx
+interface SlotConfig {
+  widthMode?: 'full' | 'auto' | 'fixed' | 'percentage';
+  width?: number;      // Ancho en píxeles (fixed) o porcentaje (percentage)
+  minWidth?: number;   // Ancho mínimo
+}
+```
+
+### Comportamiento de widthMode por Slot
+
+| WidthMode | CSS | Descripción |
+|-----------|-----|-------------|
+| `full` | `flex: 1` | Toma el espacio restante |
+| `auto` | `flex: 0 0 auto` | Crece según el contenido |
+| `fixed` | `width: Xpx` | Ancho fijo en píxeles |
+| `percentage` | `flex: 0 0 X%; width: X%` | Porcentaje del contenedor padre |
+
+### Porcentajes
+
+```tsx
+slotConfig={[
+  { widthMode: 'percentage', width: 60 },  // Slot 0: 60% del contenedor
+  { widthMode: 'percentage', width: 40 },  // Slot 1: 40% del contenedor
+]}
+```
+
+Se puede combinar con otros modos:
+
+```tsx
+slotConfig={[
+  { widthMode: 'fixed', width: 200 },       // Sidebar: 200px fijo
+  { widthMode: 'percentage', width: 60 },   // Content: 60% del contenedor
+  { widthMode: 'auto' },                    // Info: ajusta al contenido
+]}
+```
 
 ## Comportamiento del Contenedor
 

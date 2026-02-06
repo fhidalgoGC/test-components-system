@@ -7,3 +7,4 @@ export { VerticalAlignDemo } from './VerticalAlignDemo';
 export { SpacingDemo } from './SpacingDemo';
 export { HeightDemo } from './HeightDemo';
 export { ComponentSizingDemo } from './ComponentSizingDemo';
+export { PercentageDemo } from './PercentageDemo';

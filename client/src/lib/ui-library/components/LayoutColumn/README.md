@@ -87,8 +87,8 @@ Permite definir alturas diferentes para cada slot en lugar de dividir el espacio
 
 ```tsx
 interface SlotConfig {
-  heightMode?: 'full' | 'auto' | 'fixed';
-  height?: number;      // Altura en píxeles (solo para fixed)
+  heightMode?: 'full' | 'auto' | 'fixed' | 'percentage';
+  height?: number;      // Altura en píxeles (fixed) o porcentaje (percentage)
   minHeight?: number;   // Altura mínima
   maxHeight?: number;   // Altura máxima
 }
@@ -111,6 +111,7 @@ interface SlotConfig {
 | `fixed` | `flex: 0 0 auto; height: Xpx` | Altura fija en píxeles |
 | `auto` | `flex: 0 0 auto` | Crece según el contenido |
 | `full` | `flex: 1 1 0` | Toma el espacio restante |
+| `percentage` | `flex: 0 0 X%; height: X%` | Porcentaje del contenedor padre |
 
 ### División del espacio con múltiples slots `full`
 
@@ -128,6 +129,25 @@ slotConfig={[
 // - Espacio restante: 400px
 // - Slot 1: 200px (50% del resto)
 // - Slot 2: 200px (50% del resto)
+```
+
+### Porcentajes
+
+```tsx
+slotConfig={[
+  { heightMode: 'percentage', height: 60 },  // Slot 0: 60% del contenedor
+  { heightMode: 'percentage', height: 40 },  // Slot 1: 40% del contenedor
+]}
+```
+
+Se puede combinar con otros modos:
+
+```tsx
+slotConfig={[
+  { heightMode: 'fixed', height: 60 },       // Nav: 60px fijo
+  { heightMode: 'percentage', height: 70 },  // Content: 70% del contenedor
+  { heightMode: 'auto' },                    // Footer: ajusta al contenido
+]}
 ```
 
 ```tsx

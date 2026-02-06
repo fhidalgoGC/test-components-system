@@ -154,6 +154,7 @@ const getSlotClasses = (config: SlotConfig | undefined): string => {
     case 'full': return styles.slotFull;
     case 'auto': return styles.slotAuto;
     case 'fixed': return styles.slotFixed;
+    case 'percentage': return styles.slotFixed;
     default: return '';
   }
 };
@@ -161,7 +162,10 @@ const getSlotClasses = (config: SlotConfig | undefined): string => {
 const getSlotStyle = (config: SlotConfig | undefined): React.CSSProperties => {
   if (!config) return {};
   const style: React.CSSProperties = {};
-  if (config.widthMode === 'fixed' && config.width !== undefined) {
+  if (config.widthMode === 'percentage' && config.width !== undefined) {
+    style.width = `${config.width}%`;
+    style.flex = `0 0 ${config.width}%`;
+  } else if (config.widthMode === 'fixed' && config.width !== undefined) {
     style.width = `${config.width}px`;
   }
   if (config.minWidth !== undefined) {

@@ -6,3 +6,4 @@ export { MarginsDemo } from './MarginsDemo';
 export { SidebarDemo } from './SidebarDemo';
 export { HookDemo } from './HookDemo';
 export { ControllerDemo } from './ControllerDemo';
+export { PercentageDemo } from './PercentageDemo';

@@ -16,7 +16,7 @@ export type DividerStyle = 'solid' | 'dashed' | 'dotted';
 export type SlotDividerToken = `${DividerSize}-${DividerColor}`;
 export type SlotAlignDividerToken = `${DividerSize}-${DividerColor}-${DividerStyle}`;
 
-export type SlotHeightMode = 'full' | 'auto' | 'fixed';
+export type SlotHeightMode = 'full' | 'auto' | 'fixed' | 'percentage';
 
 export interface SlotConfig {
   heightMode?: SlotHeightMode;

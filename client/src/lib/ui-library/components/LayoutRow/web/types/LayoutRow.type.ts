@@ -25,7 +25,7 @@ export interface LayoutRowComponent {
   hide?: boolean;
 }
 
-export type SlotWidthMode = 'full' | 'auto' | 'fixed';
+export type SlotWidthMode = 'full' | 'auto' | 'fixed' | 'percentage';
 
 export interface SlotConfig {
   widthMode?: SlotWidthMode;

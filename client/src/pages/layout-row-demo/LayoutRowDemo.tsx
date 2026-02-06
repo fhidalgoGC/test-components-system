@@ -8,6 +8,7 @@ import {
   SpacingDemo,
   HeightDemo,
   ComponentSizingDemo,
+  PercentageDemo,
 } from "./components";
 import styles from "./css/LayoutRowDemo.module.scss";
 
@@ -34,6 +35,7 @@ export function LayoutRowDemo() {
         <SpacingDemo />
         <HeightDemo />
         <ComponentSizingDemo />
+        <PercentageDemo />
       </div>
     </div>
   );

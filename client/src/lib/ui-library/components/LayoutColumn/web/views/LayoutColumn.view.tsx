@@ -162,7 +162,10 @@ const getSlotWrapperStyle = (config: SlotConfig | undefined): React.CSSPropertie
   const style: React.CSSProperties = {};
   const heightMode = config.heightMode || 'auto';
   
-  if (heightMode === 'fixed' && config.height !== undefined) {
+  if (heightMode === 'percentage' && config.height !== undefined) {
+    style.flex = `0 0 ${config.height}%`;
+    style.height = `${config.height}%`;
+  } else if (heightMode === 'fixed' && config.height !== undefined) {
     style.flex = '0 0 auto';
     style.height = `${config.height}px`;
   } else if (heightMode === 'full') {
@@ -189,7 +192,7 @@ const getSlotWrapperClass = (config: SlotConfig | undefined): string => {
   
   if (heightMode === 'full') {
     return `${styles.slotWrapper} ${styles.slotWrapperFull}`;
-  } else if (heightMode === 'fixed') {
+  } else if (heightMode === 'fixed' || heightMode === 'percentage') {
     return `${styles.slotWrapper} ${styles.slotWrapperFixed}`;
   }
   return `${styles.slotWrapper} ${styles.slotWrapperAuto}`;
