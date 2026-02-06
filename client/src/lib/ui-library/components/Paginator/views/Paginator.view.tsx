@@ -113,7 +113,7 @@ export const PaginatorView = (props: PaginatorProps) => {
     itemsPerPageOptions = [10, 25, 50, 100],
     showItemsPerPage = true,
     showPageNumbers = true,
-    maxVisiblePages = 5,
+    maxVisiblePages = 4,
   } = props;
   
   const { 
