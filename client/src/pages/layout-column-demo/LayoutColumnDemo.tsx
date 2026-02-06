@@ -6,6 +6,7 @@ import {
   MarginsDemo,
   SidebarDemo,
   HookDemo,
+  ControllerDemo,
 } from "./components";
 import styles from "./css/LayoutColumnDemo.module.scss";
 
@@ -33,6 +34,7 @@ export function LayoutColumnDemo() {
         <MarginsDemo />
         <SidebarDemo />
         <HookDemo />
+        <ControllerDemo />
       </div>
     </div>
   );
