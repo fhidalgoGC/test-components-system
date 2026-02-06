@@ -5,6 +5,8 @@ This project is a dual-platform React component library designed to provide a co
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
+Preferred language: Spanish.
+Important rule: Always update the component's README.md when making changes to any component.
 
 # System Architecture
 
