@@ -87,10 +87,16 @@ export const TableBody = ({
   const showDividers = rowsDefault?.dividers !== false;
   const rowStretchCount = rowsDefault?.stretchCount;
 
+  const maxVisibleRows = rowsDefault?.maxVisibleRows;
+
   const isStretch = rowHeightMode === 'stretch' && rowStretchCount && rowStretchCount > 0;
   const stretchRowHeightPx = isStretch && bodyContainerHeight > 0 
     ? Math.floor(bodyContainerHeight / rowStretchCount) 
     : 0;
+
+  const visibleData = maxVisibleRows !== undefined && maxVisibleRows > 0
+    ? data.slice(0, maxVisibleRows)
+    : data;
 
   const tbodyClasses = [
     styles.tbody,
@@ -99,7 +105,7 @@ export const TableBody = ({
 
   return (
     <tbody className={tbodyClasses}>
-      {data.map((row, rowIndex) => {
+      {visibleData.map((row, rowIndex) => {
         const trClasses = [
           styles.tr,
           isRowHoverable && styles.hoverable,

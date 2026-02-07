@@ -370,7 +370,7 @@ interface RowsDefaultConfig {
   heightMode?: 'fixed' | 'auto' | 'stretch'; // Modo de alto
   minHeight?: number;                      // Alto minimo en pixeles
   maxHeight?: number | 'stretch' | 'container'; // Alto maximo
-  maxVisibleRows?: number;
+  maxVisibleRows?: number;                // Limita filas visibles, corta el arreglo (sin scroll)
   scroll?: boolean;
   hoverable?: boolean;
   dividers?: boolean;                      // Mostrar divisores entre filas (default: true)
@@ -415,6 +415,36 @@ El espacio se divide para `stretchCount` filas. Si hay menos filas de datos que 
 |-----------|-------------|
 | `heightMode: 'stretch'` | Activa el modo stretch |
 | `stretchCount` | Numero de filas para dividir el espacio (requerido) |
+
+#### maxVisibleRows
+
+Limita la cantidad de filas visibles en la tabla. Corta el arreglo de datos internamente, mostrando solo las primeras N filas. **No genera scroll**, simplemente no renderiza las filas que excedan el limite.
+
+```tsx
+// Solo muestra 5 filas, aunque el arreglo tenga 100
+<BaseTable
+  data={bigDataArray}
+  state="success"
+  config={{
+    columns,
+    layout: {
+      widthMode: 'full',
+      heightMode: 'auto',
+    },
+    rowsDefault: {
+      heightMode: 'fixed',
+      height: 40,
+      hoverable: true,
+      dividers: true,
+      maxVisibleRows: 5,
+    },
+  }}
+/>
+```
+
+| Propiedad | Descripcion |
+|-----------|-------------|
+| `maxVisibleRows` | Numero maximo de filas a mostrar. El arreglo se corta en ese indice. |
 
 **Nota**: `stretchCount` normalmente coincide con `itemsPerPage` del paginador.
 

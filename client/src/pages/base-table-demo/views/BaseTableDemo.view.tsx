@@ -7,6 +7,7 @@ import {
   ApiSimulationDemo,
   TextWrapDemo,
   StretchDemo,
+  MaxVisibleRowsDemo,
 } from "../components";
 import styles from "../css/BaseTableDemo.module.scss";
 
@@ -32,6 +33,7 @@ export const BaseTableDemoView = () => {
         <ApiSimulationDemo />
         <TextWrapDemo />
         <StretchDemo />
+        <MaxVisibleRowsDemo />
       </div>
     </div>
   );
