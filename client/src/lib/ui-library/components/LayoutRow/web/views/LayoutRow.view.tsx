@@ -137,7 +137,7 @@ const getComponentWrapperClasses = (comp: LayoutRowComponent): string => {
 
   const wm = comp.widthMode || 'auto';
   if (wm === 'full') classes.push(styles.componentWidthFull);
-  else if (wm === 'fixed') classes.push(styles.componentWidthFixed);
+  else if (wm === 'fixed' || wm === 'percentage') classes.push(styles.componentWidthFixed);
   else classes.push(styles.componentWidthAuto);
 
   const hm = comp.heightMode || 'auto';
@@ -179,6 +179,8 @@ const getComponentWrapperStyle = (comp: LayoutRowComponent): React.CSSProperties
 
   if (comp.widthMode === 'fixed' && comp.width !== undefined) {
     style.width = `${comp.width}px`;
+  } else if (comp.widthMode === 'percentage' && comp.width !== undefined) {
+    style.width = `${comp.width}%`;
   }
   if (comp.minWidth !== undefined) {
     style.minWidth = `${comp.minWidth}px`;

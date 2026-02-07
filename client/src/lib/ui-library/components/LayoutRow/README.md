@@ -379,6 +379,7 @@ Cada componente dentro del LayoutRow puede controlar su propio ancho y alto de f
     { component: <A />, align: "left", slot: 0, widthMode: "full" },    // llena todo el slot
     { component: <B />, align: "center", slot: 1, widthMode: "auto" },  // tamaño natural
     { component: <C />, align: "right", slot: 2, widthMode: "fixed", width: 150 }, // 150px fijo
+    { component: <D />, align: "left", slot: 3, widthMode: "percentage", width: 50 }, // 50% del slot
   ]}
 />
 ```

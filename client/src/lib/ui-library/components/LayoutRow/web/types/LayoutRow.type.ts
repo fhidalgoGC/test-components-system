@@ -9,7 +9,7 @@ export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'full' | 'auto' | 'fixed';
 export type VerticalAlign = 'top' | 'center' | 'bottom' | 'stretch';
 export type HorizontalAlign = 'left' | 'center' | 'right';
-export type ComponentWidthMode = 'full' | 'auto' | 'fixed';
+export type ComponentWidthMode = 'full' | 'auto' | 'fixed' | 'percentage';
 export type ComponentHeightMode = 'full' | 'auto' | 'fixed';
 
 export interface LayoutRowComponent {
