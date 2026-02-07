@@ -37,7 +37,9 @@ export const BaseTableView = (props: BaseTableProps) => {
     }
   }, []);
 
-  const useSeparatedLayout = layout?.stickyHeader && layout?.heightMode === 'fixed' && layout?.height;
+  const isRowStretch = rowsDefault?.heightMode === 'stretch' && rowsDefault?.stretchCount && rowsDefault.stretchCount > 0;
+
+  const useSeparatedLayout = (layout?.stickyHeader && layout?.heightMode === 'fixed' && layout?.height) || isRowStretch;
 
   const wrapperClasses = useMemo(() => {
     const classes = [styles.tableWrapper];
@@ -104,9 +106,11 @@ export const BaseTableView = (props: BaseTableProps) => {
     };
     if (layout?.height) {
       style.height = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
+    } else if (isRowStretch && layout?.heightMode === 'full') {
+      style.height = '100%';
     }
     return style;
-  }, [layout, useSeparatedLayout]);
+  }, [layout, useSeparatedLayout, isRowStretch]);
 
   const visibleColumns = useMemo(() => {
     return columns.filter(
@@ -144,10 +148,10 @@ export const BaseTableView = (props: BaseTableProps) => {
   const tableClasses = useMemo(() => {
     const classes = [styles.table];
     if (layout?.widthMode === 'fixed') classes.push(styles.tableFixed);
-    // Solo usar table-layout: fixed cuando hay stretch explícito (no auto)
     if (hasExplicitStretchColumns) classes.push(styles.tableFixed);
+    if (isRowStretch) classes.push(styles.tableStretch);
     return classes.join(' ');
-  }, [layout, hasExplicitStretchColumns]);
+  }, [layout, hasExplicitStretchColumns, isRowStretch]);
 
   const visibleColumnsCount = visibleColumns.length;
 

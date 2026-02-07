@@ -200,15 +200,48 @@ interface CellsDefaultConfig {
 ```typescript
 interface RowsDefaultConfig {
   height?: number | string;
-  heightMode?: 'fixed' | 'auto';
+  heightMode?: 'fixed' | 'auto' | 'stretch';
   minHeight?: number;
   maxHeight?: number | 'stretch' | 'container';
   maxVisibleRows?: number;
   scroll?: boolean;
   hoverable?: boolean;
   dividers?: boolean;            // Show row dividers (default: true)
+  stretchCount?: number;         // Number of rows to divide space (required for stretch mode)
 }
 ```
+
+#### heightMode: 'stretch'
+
+Cuando `heightMode` es `'stretch'`, las filas se reparten el espacio vertical disponible equitativamente según `stretchCount`. Se usa junto con `layout.heightMode: 'full'` (o `'fixed'`) para que la tabla tenga un alto definido.
+
+El espacio se divide para `stretchCount` filas. Si hay menos filas de datos que `stretchCount`, las filas visibles mantienen el tamaño calculado y el espacio restante queda vacío.
+
+```tsx
+// Tabla con 10 slots de fila, cada una ocupa 10% del alto disponible
+<BaseTable
+  data={data}
+  state="success"
+  config={{
+    columns,
+    layout: {
+      widthMode: 'full',
+      heightMode: 'full',
+    },
+    rowsDefault: {
+      heightMode: 'stretch',
+      stretchCount: 10,
+    },
+  }}
+/>
+```
+
+| Propiedad | Descripción |
+|-----------|-------------|
+| `heightMode: 'stretch'` | Activa el modo stretch |
+| `stretchCount` | Número de filas para dividir el espacio (requerido) |
+
+**Nota**: `stretchCount` normalmente coincide con `itemsPerPage` del paginador.
 
 ### ColumnsDefaultConfig
 

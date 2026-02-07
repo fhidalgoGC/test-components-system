@@ -9,4 +9,5 @@ export interface RowsDefaultConfig {
   scroll?: boolean;
   hoverable?: boolean;
   dividers?: boolean;
+  stretchCount?: number;
 }

@@ -318,3 +318,12 @@
 .separatedLayout .table {
   width: 100%;
 }
+
+/* Stretch mode: tabla y tbody llenan el espacio disponible */
+.tableStretch {
+  height: 100%;
+}
+
+.tbodyStretch {
+  height: 100%;
+}

@@ -83,9 +83,18 @@ export const TableBody = ({
   const minHeight = rowsDefault?.minHeight;
   const maxHeight = rowsDefault?.maxHeight;
   const showDividers = rowsDefault?.dividers !== false;
+  const rowStretchCount = rowsDefault?.stretchCount;
+
+  const isStretch = rowHeightMode === 'stretch' && rowStretchCount && rowStretchCount > 0;
+  const stretchRowHeight = isStretch ? `${100 / rowStretchCount}%` : undefined;
+
+  const tbodyClasses = [
+    styles.tbody,
+    isStretch && styles.tbodyStretch,
+  ].filter(Boolean).join(' ');
 
   return (
-    <tbody className={styles.tbody}>
+    <tbody className={tbodyClasses}>
       {data.map((row, rowIndex) => {
         const trClasses = [
           styles.tr,
@@ -94,7 +103,10 @@ export const TableBody = ({
         ].filter(Boolean).join(' ');
 
         const rowStyle: React.CSSProperties = {};
-        if (rowHeight !== undefined) {
+        if (isStretch && stretchRowHeight) {
+          rowStyle.height = stretchRowHeight;
+          rowStyle.overflow = 'hidden';
+        } else if (rowHeight !== undefined) {
           if (rowHeightMode === 'fixed') {
             rowStyle.height = rowHeight;
             rowStyle.overflow = 'hidden';
@@ -102,7 +114,7 @@ export const TableBody = ({
             rowStyle.minHeight = rowHeight;
           }
         }
-        if (minHeight && !rowHeight) rowStyle.minHeight = minHeight;
+        if (minHeight && !rowHeight && !isStretch) rowStyle.minHeight = minHeight;
         if (typeof maxHeight === 'number') rowStyle.maxHeight = maxHeight;
 
         return (
@@ -133,7 +145,10 @@ export const TableBody = ({
 
               const cellStyle: React.CSSProperties = {};
               if (minWidth) cellStyle.minWidth = minWidth;
-              if (rowHeightMode === 'fixed' && rowHeight !== undefined) {
+              if (isStretch) {
+                cellStyle.height = '100%';
+                cellStyle.overflow = 'hidden';
+              } else if (rowHeightMode === 'fixed' && rowHeight !== undefined) {
                 cellStyle.height = rowHeight;
                 cellStyle.maxHeight = rowHeight;
                 cellStyle.overflow = 'hidden';
@@ -184,10 +199,11 @@ export const TableBody = ({
                   default: return 'flex-start';
                 }
               };
-              const wrappedContent = rowHeightMode === 'fixed' && rowHeight !== undefined ? (
+              const useWrappedContent = isStretch || (rowHeightMode === 'fixed' && rowHeight !== undefined);
+              const wrappedContent = useWrappedContent ? (
                 <div style={{ 
                   height: '100%', 
-                  maxHeight: rowHeight, 
+                  maxHeight: isStretch ? undefined : rowHeight, 
                   overflow: 'hidden',
                   display: 'flex',
                   alignItems: getFlexAlignVertical(mergedCellConfig.verticalAlign),
