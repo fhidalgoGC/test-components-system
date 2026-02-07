@@ -95,28 +95,6 @@ export function SidebarView(props: SidebarProps) {
 
   return (
     <>
-      {/* Mobile Menu Button - Fixed position, always visible on mobile */}
-      <button
-        onClick={handleToggleMobileMenu}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
-        data-testid="button-mobile-menu"
-        aria-label="Toggle mobile menu"
-      >
-        {isMobileMenuOpen ? (
-          <X className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-        ) : (
-          <Menu className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-        )}
-      </button>
-
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 bg-black/50 z-30"
-          onClick={handleToggleMobileMenu}
-          data-testid="mobile-overlay"
-        />
-      )}
 
       {/* Sidebar */}
       <div 
