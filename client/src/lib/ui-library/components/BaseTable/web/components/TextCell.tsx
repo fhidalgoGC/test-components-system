@@ -21,12 +21,12 @@ const MIN_WIDTH = 20;
 
 const defaultStyle: CSSProperties = {
   display: "inline-block",
-  width: 80,
+  width: '100%',
   minHeight: MIN_HEIGHT,
   minWidth: MIN_WIDTH,
   boxSizing: "border-box",
   textAlign: "inherit",
-  backgroundColor: "#d4edda", // TEMP: verde claro para visualizar
+  backgroundColor: "#d4edda",
 };
 
 const textWrapStyles: Record<TextWrapMode, CSSProperties> = {
