@@ -300,10 +300,14 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
         const slotWrapperClass = getSlotWrapperClass(currentSlotConfig);
         const slotWrapperStyle = getSlotWrapperStyle(currentSlotConfig);
 
+        const slotHeightMode = currentSlotConfig?.heightMode || 'auto';
+        const slotStyle: React.CSSProperties = slotHeightMode === 'auto' ? { overflow: 'visible' } : {};
+
         return (
           <div key={slotIndex} className={slotWrapperClass} style={slotWrapperStyle}>
             <div
               className={styles.slot}
+              style={slotStyle}
               data-testid={`layoutcolumn-slot-${slotIndex}`}
             >
             {hasContentOverride ? (

@@ -34,7 +34,7 @@ LayoutColumn (contenedor principal)
 
 ### Nivel 3: COMPONENTES
 - Los componentes se renderizan dentro de su grupo de alineación
-- Si hay más componentes de los que caben, se cortan visualmente (overflow: hidden)
+- Si hay más componentes de los que caben, se cortan visualmente (overflow: hidden). Los slots con `heightMode: "auto"` usan `overflow: visible` para permitir que el contenido defina la altura del slot
 - Los grupos mantienen su tamaño proporcional independientemente del contenido
 
 ## Importación
