@@ -117,16 +117,16 @@ interface LayoutConfig {
 ```typescript
 interface ColumnConfig {
   metadata: {
-    columnId: string;      // Unique column identifier (matches data key)
-    order?: number;        // Display order
+    columnId: string;      // Identificador unico (coincide con la key del objeto de datos)
+    order?: number;        // Orden de visualizacion
   };
   header?: {
     cell?: ColumnHeaderCellConfig;
   };
   cell?: ColumnCellConfig;
   visible?: boolean;
-  minWidth?: number;
-  maxWidth?: number | 'stretch' | 'container';
+  minWidth?: number;               // Ancho minimo en pixeles
+  maxWidth?: number | 'stretch' | 'container';  // Ancho maximo o modo de distribucion
   sortable?: boolean;
 }
 ```
@@ -155,12 +155,179 @@ interface ColumnCellConfig {
 }
 ```
 
+---
+
+## Sistema de Sizing de Columnas
+
+El ancho de cada columna se controla con dos propiedades: `minWidth` y `maxWidth`. Estas se pueden configurar por columna individual (`ColumnConfig`) o como default para todas las columnas (`ColumnsDefaultConfig`). La columna individual siempre tiene prioridad sobre el default.
+
+### minWidth
+
+Establece el ancho minimo en pixeles. La columna nunca sera mas estrecha que este valor, independientemente del contenido o del espacio disponible.
+
+| Nivel | Propiedad | Tipo | Descripcion |
+|-------|-----------|------|-------------|
+| Columna | `minWidth` | `number` | Ancho minimo para esta columna especifica |
+| Default | `columnsDefault.minWidth` | `number` | Ancho minimo para todas las columnas |
+
+```tsx
+// minWidth por columna
+const columns: ColumnConfig[] = [
+  { metadata: { columnId: 'id' }, minWidth: 60 },
+  { metadata: { columnId: 'name' }, minWidth: 200 },
+  { metadata: { columnId: 'email' }, minWidth: 150 },
+];
+
+// minWidth global (aplica a todas las columnas)
+config={{
+  columns,
+  columnsDefault: { minWidth: 120 },
+}}
+```
+
+**Cadena de prioridad**: `column.minWidth` > `columnsDefault.minWidth` > sin minimo
+
+### maxWidth
+
+Controla como la columna usa el espacio horizontal disponible. Acepta tres tipos de valores:
+
+| Valor | Tipo | Comportamiento |
+|-------|------|----------------|
+| `number` | `number` | Ancho maximo fijo en pixeles. La columna se ajusta al contenido hasta ese maximo. |
+| `'stretch'` | `string` | La columna se estira para ocupar su parte proporcional del espacio sobrante. |
+| `'container'` | `string` | La columna se ajusta al contenido (equivalente a no definir maxWidth). |
+| `undefined` | - | Comportamiento por defecto: se ajusta al contenido. |
+
+#### maxWidth: number (ancho maximo fijo)
+
+La columna se ajusta al contenido pero no supera el ancho indicado en pixeles. El contenido que exceda se oculta.
+
+```tsx
+const columns: ColumnConfig[] = [
+  { metadata: { columnId: 'id' }, maxWidth: 80 },        // Maximo 80px
+  { metadata: { columnId: 'name' }, maxWidth: 250 },     // Maximo 250px
+  { metadata: { columnId: 'description' }, maxWidth: 400 }, // Maximo 400px
+];
+```
+
+**Comportamiento CSS**: `width: 1%; white-space: nowrap; max-width: Xpx` — la columna se encoge al contenido pero no supera X pixeles.
+
+#### maxWidth: 'stretch' (distribucion proporcional)
+
+Las columnas con `maxWidth: 'stretch'` se reparten equitativamente el espacio horizontal sobrante (despues de descontar las columnas con ancho fijo).
+
+```tsx
+const columns: ColumnConfig[] = [
+  { metadata: { columnId: 'id' }, maxWidth: 80 },          // Fija: 80px
+  { metadata: { columnId: 'name' }, maxWidth: 'stretch' }, // Stretch: comparte espacio
+  { metadata: { columnId: 'email' }, maxWidth: 'stretch' },// Stretch: comparte espacio
+];
+// 'id' ocupa 80px, 'name' y 'email' se dividen el resto 50/50
+```
+
+**Calculo del ancho**:
+- Si hay columnas con ancho fijo: `width: calc((100% - fixedWidthTotal) / stretchCount)`
+- Si todas son stretch: `width: 100% / stretchCount`
+
+**Ejemplo con mix fijo + stretch**:
+```tsx
+const columns: ColumnConfig[] = [
+  { metadata: { columnId: 'avatar' }, maxWidth: 60 },       // 60px fijo
+  { metadata: { columnId: 'name' }, maxWidth: 'stretch' },  // (100% - 160px) / 2
+  { metadata: { columnId: 'email' }, maxWidth: 'stretch' }, // (100% - 160px) / 2
+  { metadata: { columnId: 'actions' }, maxWidth: 100 },      // 100px fijo
+];
+// fixedWidthTotal = 60 + 100 = 160px
+// Cada stretch = calc((100% - 160px) / 2)
+```
+
+**Nota**: Cuando hay columnas `stretch`, la tabla usa `table-layout: fixed` automaticamente para que la distribucion funcione correctamente.
+
+#### maxWidth: 'container'
+
+Equivalente a no definir `maxWidth`. La columna se ajusta al contenido sin limite de ancho.
+
+#### Comportamiento automatico (sin stretch explicito)
+
+Cuando ninguna columna tiene `maxWidth: 'stretch'`, la **ultima columna visible** absorbe automaticamente el espacio restante (`width: 100%`). Esto evita que quede espacio vacio a la derecha de la tabla.
+
+```tsx
+// Sin stretch explicito: la ultima columna ('status') absorbe el espacio sobrante
+const columns: ColumnConfig[] = [
+  { metadata: { columnId: 'id' }, minWidth: 60 },
+  { metadata: { columnId: 'name' }, minWidth: 150 },
+  { metadata: { columnId: 'status' } },  // <-- absorbe espacio restante automaticamente
+];
+```
+
+### Combinando minWidth y maxWidth
+
+```tsx
+const columns: ColumnConfig[] = [
+  {
+    metadata: { columnId: 'id', order: 0 },
+    minWidth: 60,          // Nunca menos de 60px
+    maxWidth: 80,          // Nunca mas de 80px
+  },
+  {
+    metadata: { columnId: 'name', order: 1 },
+    minWidth: 150,         // Nunca menos de 150px
+    maxWidth: 'stretch',   // Ocupa su parte del espacio sobrante
+  },
+  {
+    metadata: { columnId: 'email', order: 2 },
+    minWidth: 200,         // Nunca menos de 200px
+    maxWidth: 'stretch',   // Ocupa su parte del espacio sobrante
+  },
+  {
+    metadata: { columnId: 'actions', order: 3 },
+    minWidth: 100,         // Nunca menos de 100px
+    maxWidth: 120,         // Nunca mas de 120px
+  },
+];
+```
+
+### ColumnsDefaultConfig
+
+Configuracion por defecto que aplica a todas las columnas. Cada columna individual puede sobreescribir estos valores.
+
+```typescript
+interface ColumnsDefaultConfig {
+  maxVisibleColumns?: number;
+  scroll?: boolean;
+  minWidth?: number;                        // minWidth por defecto para todas las columnas
+  maxWidth?: number | 'stretch' | 'container'; // maxWidth por defecto para todas las columnas
+  sortable?: boolean;
+  visible?: boolean;
+}
+```
+
+```tsx
+// Todas las columnas con minWidth 120 y stretch, excepto 'id' que tiene ancho fijo
+config={{
+  columns: [
+    { metadata: { columnId: 'id' }, minWidth: 60, maxWidth: 80 },
+    { metadata: { columnId: 'name' } },    // hereda minWidth: 120, maxWidth: 'stretch'
+    { metadata: { columnId: 'email' } },   // hereda minWidth: 120, maxWidth: 'stretch'
+    { metadata: { columnId: 'role' } },    // hereda minWidth: 120, maxWidth: 'stretch'
+  ],
+  columnsDefault: {
+    minWidth: 120,
+    maxWidth: 'stretch',
+  },
+}}
+```
+
+---
+
+## Sistema de Sizing de Filas
+
 ### HeadersDefaultConfig
 
 ```typescript
 interface HeadersDefaultConfig {
-  enabled?: boolean;             // Show/hide headers (default: true)
-  dividers?: boolean;            // Show column dividers (default: true)
+  enabled?: boolean;             // Mostrar/ocultar headers (default: true)
+  dividers?: boolean;            // Mostrar divisores entre columnas (default: true)
   height?: number | string;
   heightMode?: 'fixed' | 'auto';
   cell?: HeaderCellConfig;
@@ -199,23 +366,31 @@ interface CellsDefaultConfig {
 
 ```typescript
 interface RowsDefaultConfig {
-  height?: number | string;
-  heightMode?: 'fixed' | 'auto' | 'stretch';
-  minHeight?: number;
-  maxHeight?: number | 'stretch' | 'container';
+  height?: number | string;                // Alto de fila (fixed/auto)
+  heightMode?: 'fixed' | 'auto' | 'stretch'; // Modo de alto
+  minHeight?: number;                      // Alto minimo en pixeles
+  maxHeight?: number | 'stretch' | 'container'; // Alto maximo
   maxVisibleRows?: number;
   scroll?: boolean;
   hoverable?: boolean;
-  dividers?: boolean;            // Show row dividers (default: true)
-  stretchCount?: number;         // Number of rows to divide space (required for stretch mode)
+  dividers?: boolean;                      // Mostrar divisores entre filas (default: true)
+  stretchCount?: number;                   // Filas para dividir espacio (requerido en stretch)
 }
 ```
 
+### heightMode de filas
+
+| Valor | Comportamiento |
+|-------|----------------|
+| `'auto'` | La fila se ajusta al contenido (default) |
+| `'fixed'` | Alto fijo definido por `height`. Contenido que exceda se oculta. |
+| `'stretch'` | Las filas se reparten el espacio vertical disponible segun `stretchCount`. |
+
 #### heightMode: 'stretch'
 
-Cuando `heightMode` es `'stretch'`, las filas se reparten el espacio vertical disponible equitativamente según `stretchCount`. Se usa junto con `layout.heightMode: 'full'` (o `'fixed'`) para que la tabla tenga un alto definido.
+Cuando `heightMode` es `'stretch'`, las filas se reparten el espacio vertical disponible equitativamente segun `stretchCount`. Se usa junto con `layout.heightMode: 'full'` (o `'fixed'` con `height`) para que la tabla tenga un alto definido.
 
-El espacio se divide para `stretchCount` filas. Si hay menos filas de datos que `stretchCount`, las filas visibles mantienen el tamaño calculado y el espacio restante queda vacío.
+El espacio se divide para `stretchCount` filas. Si hay menos filas de datos que `stretchCount`, las filas visibles mantienen el tamaño calculado y el espacio restante queda vacio.
 
 ```tsx
 // Tabla con 10 slots de fila, cada una ocupa 10% del alto disponible
@@ -236,25 +411,14 @@ El espacio se divide para `stretchCount` filas. Si hay menos filas de datos que 
 />
 ```
 
-| Propiedad | Descripción |
+| Propiedad | Descripcion |
 |-----------|-------------|
 | `heightMode: 'stretch'` | Activa el modo stretch |
-| `stretchCount` | Número de filas para dividir el espacio (requerido) |
+| `stretchCount` | Numero de filas para dividir el espacio (requerido) |
 
 **Nota**: `stretchCount` normalmente coincide con `itemsPerPage` del paginador.
 
-### ColumnsDefaultConfig
-
-```typescript
-interface ColumnsDefaultConfig {
-  maxVisibleColumns?: number;
-  scroll?: boolean;
-  minWidth?: number;
-  maxWidth?: number | 'stretch' | 'container';
-  sortable?: boolean;
-  visible?: boolean;
-}
-```
+**Internamente**: Stretch activa automaticamente un layout separado (header fijo arriba, body con `flex: 1` abajo) para que los altos porcentuales de las filas funcionen correctamente sin verse afectados por el header.
 
 ### BehaviorsConfig
 
