@@ -13,6 +13,7 @@ interface TableBodyProps {
   stretchCount?: number;
   fixedWidthTotal?: number;
   autoStretchLastColumnId?: string | null;
+  bodyContainerHeight?: number;
 }
 
 const mergeCellConfig = (
@@ -37,6 +38,7 @@ export const TableBody = ({
   stretchCount = 0,
   fixedWidthTotal = 0,
   autoStretchLastColumnId,
+  bodyContainerHeight = 0,
 }: TableBodyProps) => {
   const visibleColumns = useMemo(() => {
     return columns
@@ -86,7 +88,9 @@ export const TableBody = ({
   const rowStretchCount = rowsDefault?.stretchCount;
 
   const isStretch = rowHeightMode === 'stretch' && rowStretchCount && rowStretchCount > 0;
-  const stretchRowHeight = isStretch ? `${100 / rowStretchCount}%` : undefined;
+  const stretchRowHeightPx = isStretch && bodyContainerHeight > 0 
+    ? Math.floor(bodyContainerHeight / rowStretchCount) 
+    : 0;
 
   const tbodyClasses = [
     styles.tbody,
@@ -103,8 +107,9 @@ export const TableBody = ({
         ].filter(Boolean).join(' ');
 
         const rowStyle: React.CSSProperties = {};
-        if (isStretch && stretchRowHeight) {
-          rowStyle.height = stretchRowHeight;
+        if (isStretch && stretchRowHeightPx > 0) {
+          rowStyle.height = stretchRowHeightPx;
+          rowStyle.maxHeight = stretchRowHeightPx;
           rowStyle.overflow = 'hidden';
         } else if (rowHeight !== undefined) {
           if (rowHeightMode === 'fixed') {
@@ -225,11 +230,12 @@ export const TableBody = ({
           </tr>
         );
       })}
-      {isStretch && rowStretchCount && data.length < rowStretchCount && (
+      {isStretch && rowStretchCount && stretchRowHeightPx > 0 && data.length < rowStretchCount && (
         (() => {
           const emptyCount = rowStretchCount - data.length;
           const spacerStyle: React.CSSProperties = {
-            height: stretchRowHeight,
+            height: stretchRowHeightPx,
+            maxHeight: stretchRowHeightPx,
             overflow: 'hidden',
           };
           return Array.from({ length: emptyCount }, (_, i) => (

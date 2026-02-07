@@ -1,4 +1,4 @@
-import { useMemo, useRef, useCallback } from 'react';
+import { useMemo, useRef, useCallback, useState, useEffect } from 'react';
 import type { BaseTableProps, TableState } from '../types';
 import { TableHeader } from './TableHeader';
 import { TableBody } from './TableBody';
@@ -29,6 +29,9 @@ export const BaseTableView = (props: BaseTableProps) => {
 
   const headerScrollRef = useRef<HTMLDivElement>(null);
   const bodyScrollRef = useRef<HTMLDivElement>(null);
+  const [bodyContainerHeight, setBodyContainerHeight] = useState<number>(0);
+
+  const isRowStretch = rowsDefault?.heightMode === 'stretch' && rowsDefault?.stretchCount && rowsDefault.stretchCount > 0;
 
   // Sincronizar scroll horizontal entre header y body
   const handleBodyScroll = useCallback(() => {
@@ -37,7 +40,18 @@ export const BaseTableView = (props: BaseTableProps) => {
     }
   }, []);
 
-  const isRowStretch = rowsDefault?.heightMode === 'stretch' && rowsDefault?.stretchCount && rowsDefault.stretchCount > 0;
+  useEffect(() => {
+    const el = bodyScrollRef.current;
+    if (!el || !isRowStretch) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setBodyContainerHeight(entry.contentRect.height);
+      }
+    });
+    observer.observe(el);
+    setBodyContainerHeight(el.clientHeight);
+    return () => observer.disconnect();
+  }, [isRowStretch]);
 
   const useSeparatedLayout = (layout?.stickyHeader && layout?.heightMode === 'fixed' && layout?.height) || isRowStretch;
 
@@ -226,6 +240,7 @@ export const BaseTableView = (props: BaseTableProps) => {
                 stretchCount={columnWidthInfo.stretchCount}
                 fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
                 autoStretchLastColumnId={columnWidthInfo.lastColumnId}
+                bodyContainerHeight={bodyContainerHeight}
               />
             ) : shouldShowStateMessage ? (
               <TableStates

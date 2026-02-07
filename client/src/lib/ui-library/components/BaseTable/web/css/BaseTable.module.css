@@ -319,11 +319,11 @@
   width: 100%;
 }
 
-/* Stretch mode: tabla y tbody llenan el espacio disponible */
+/* Stretch mode */
 .tableStretch {
   height: 100%;
 }
 
 .tbodyStretch {
-  height: 100%;
+  /* no extra styles needed - row heights set via JS */
 }
