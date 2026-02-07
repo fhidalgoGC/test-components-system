@@ -5,3 +5,4 @@ export { CustomCellsDemo } from "./CustomCellsDemo";
 export { SortableDemo } from "./SortableDemo";
 export { ApiSimulationDemo } from "./ApiSimulationDemo";
 export { TextWrapDemo } from "./TextWrapDemo";
+export { StretchDemo } from "./StretchDemo";
