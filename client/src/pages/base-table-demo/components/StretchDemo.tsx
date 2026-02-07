@@ -22,6 +22,7 @@ const allData = [
   { id: 12, product: "iPhone 15", category: "Phones", price: "$799", stock: 234 },
 ];
 
+const STRETCH_COUNT = 10;
 const ITEMS_PER_PAGE = 5;
 
 const columns: ColumnConfig[] = [
@@ -94,14 +95,14 @@ export function StretchDemo() {
 
       <div className={styles.infoBox}>
         <span><strong>heightMode:</strong> 'stretch' — reparte el alto del body entre stretchCount filas</span>
-        <span><strong>stretchCount:</strong> {ITEMS_PER_PAGE} — coincide con itemsPerPage para que cada pagina llene la tabla</span>
-        <span><strong>layout.heightMode:</strong> 'fixed' con height: 350px — la tabla tiene un alto definido</span>
+        <span><strong>stretchCount:</strong> {STRETCH_COUNT} — el body se divide en {STRETCH_COUNT} slots, con {ITEMS_PER_PAGE} filas por pagina el espacio sobrante queda vacio</span>
+        <span><strong>layout.heightMode:</strong> 'fixed' con height: 500px — la tabla tiene un alto definido</span>
       </div>
 
       <div
         className={styles.demoBox}
         data-testid="demo-stretch-table"
-        style={{ height: 350 }}
+        style={{ height: 500 }}
       >
         <BaseTable
           data={pageData}
@@ -123,7 +124,7 @@ export function StretchDemo() {
             },
             rowsDefault: {
               heightMode: "stretch",
-              stretchCount: ITEMS_PER_PAGE,
+              stretchCount: STRETCH_COUNT,
               hoverable: true,
               dividers: true,
             },

@@ -155,10 +155,8 @@ export const TableBody = ({
               }
               
               if (isAutoStretchColumn) {
-                // Última columna absorbe espacio restante automáticamente
                 cellStyle.width = '100%';
               } else if (typeof maxWidth === 'number') {
-                // Columna se ajusta al contenido hasta el máximo
                 cellStyle.width = '1%';
                 cellStyle.whiteSpace = 'nowrap';
                 cellStyle.maxWidth = maxWidth;
@@ -169,7 +167,6 @@ export const TableBody = ({
                   cellStyle.width = `${100 / stretchCount}%`;
                 }
               } else {
-                // container o undefined: ajustar al contenido
                 cellStyle.width = '1%';
                 cellStyle.whiteSpace = 'nowrap';
               }
@@ -228,6 +225,25 @@ export const TableBody = ({
           </tr>
         );
       })}
+      {isStretch && rowStretchCount && data.length < rowStretchCount && (
+        (() => {
+          const emptyCount = rowStretchCount - data.length;
+          const spacerStyle: React.CSSProperties = {
+            height: stretchRowHeight,
+            overflow: 'hidden',
+          };
+          return Array.from({ length: emptyCount }, (_, i) => (
+            <tr
+              key={`stretch-spacer-${i}`}
+              style={spacerStyle}
+              className={styles.tr}
+              data-testid={`tr-spacer-${i}`}
+            >
+              <td colSpan={visibleColumns.length} style={{ padding: 0 }} />
+            </tr>
+          ));
+        })()
+      )}
     </tbody>
   );
 };
