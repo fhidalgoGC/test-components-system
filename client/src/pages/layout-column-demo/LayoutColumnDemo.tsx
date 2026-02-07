@@ -8,6 +8,7 @@ import {
   HookDemo,
   ControllerDemo,
   PercentageDemo,
+  NestedAutoDemo,
 } from "./components";
 import styles from "./css/LayoutColumnDemo.module.scss";
 
@@ -37,6 +38,7 @@ export function LayoutColumnDemo() {
         <HookDemo />
         <ControllerDemo />
         <PercentageDemo />
+        <NestedAutoDemo />
       </div>
     </div>
   );

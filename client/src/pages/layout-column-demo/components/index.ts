@@ -7,3 +7,4 @@ export { SidebarDemo } from './SidebarDemo';
 export { HookDemo } from './HookDemo';
 export { ControllerDemo } from './ControllerDemo';
 export { PercentageDemo } from './PercentageDemo';
+export { NestedAutoDemo } from './NestedAutoDemo';

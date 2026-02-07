@@ -301,22 +301,31 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
         const slotWrapperStyle = getSlotWrapperStyle(currentSlotConfig);
 
         const slotHeightMode = currentSlotConfig?.heightMode || 'auto';
-        const slotStyle: React.CSSProperties = slotHeightMode === 'auto' ? { overflow: 'visible' } : {};
+        const isAutoSlot = slotHeightMode === 'auto';
+        const slotAutoOverride: React.CSSProperties = isAutoSlot
+          ? { overflow: 'visible', flex: '0 0 auto', minHeight: 'auto' }
+          : {};
+        const slotContentAutoOverride: React.CSSProperties = isAutoSlot
+          ? { overflow: 'visible', flex: '0 0 auto', minHeight: 'auto' }
+          : {};
+        const componentAutoOverride: React.CSSProperties = isAutoSlot
+          ? { flex: '0 0 auto', minHeight: 'auto' }
+          : {};
 
         return (
           <div key={slotIndex} className={slotWrapperClass} style={slotWrapperStyle}>
             <div
               className={styles.slot}
-              style={slotStyle}
+              style={slotAutoOverride}
               data-testid={`layoutcolumn-slot-${slotIndex}`}
             >
             {hasContentOverride ? (
               <div
                 className={`${styles.slotContent} ${styles.alignTop}`}
-                style={{ flex: 1 }}
+                style={{ ...(isAutoSlot ? slotContentAutoOverride : { flex: 1 }) }}
                 data-testid={`layoutcolumn-slot-${slotIndex}-override`}
               >
-                <div className={`${styles.componentWrapper} ${styles.componentFull}`}>
+                <div className={`${styles.componentWrapper} ${styles.componentFull}`} style={componentAutoOverride}>
                   {slotContentOverrides[slotIndex]}
                 </div>
               </div>
@@ -325,7 +334,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
             {hasTop && (
               <div
                 className={`${styles.slotContent} ${styles.alignTop} ${getComponentGapClass(componentGap)}`}
-                style={getComponentGapStyle(componentGap)}
+                style={{ ...getComponentGapStyle(componentGap), ...slotContentAutoOverride }}
                 data-testid={`layoutcolumn-slot-${slotIndex}-top`}
               >
                 {topComponents.map((comp, idx) => {
@@ -335,7 +344,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
                     <div 
                       key={comp.id || idx} 
                       className={`${styles.componentWrapper} ${wrapperClass}`}
-                      style={getComponentHeightStyle(comp)}
+                      style={{ ...getComponentHeightStyle(comp), ...(sizeMode === 'full' ? componentAutoOverride : {}) }}
                       data-testid={`layoutcolumn-component-${slotIndex}-top-${idx}`}
                     >
                       {comp.component}
@@ -352,7 +361,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
             {hasCenter && (
               <div
                 className={`${styles.slotContent} ${styles.alignCenter} ${getComponentGapClass(componentGap)}`}
-                style={getComponentGapStyle(componentGap)}
+                style={{ ...getComponentGapStyle(componentGap), ...slotContentAutoOverride }}
                 data-testid={`layoutcolumn-slot-${slotIndex}-center`}
               >
                 {centerComponents.map((comp, idx) => {
@@ -362,7 +371,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
                     <div 
                       key={comp.id || idx} 
                       className={`${styles.componentWrapper} ${wrapperClass}`}
-                      style={getComponentHeightStyle(comp)}
+                      style={{ ...getComponentHeightStyle(comp), ...(sizeMode === 'full' ? componentAutoOverride : {}) }}
                       data-testid={`layoutcolumn-component-${slotIndex}-center-${idx}`}
                     >
                       {comp.component}
@@ -379,7 +388,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
             {hasBottom && (
               <div
                 className={`${styles.slotContent} ${styles.alignBottom} ${getComponentGapClass(componentGap)}`}
-                style={getComponentGapStyle(componentGap)}
+                style={{ ...getComponentGapStyle(componentGap), ...slotContentAutoOverride }}
                 data-testid={`layoutcolumn-slot-${slotIndex}-bottom`}
               >
                 {bottomComponents.map((comp, idx) => {
@@ -389,7 +398,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
                     <div 
                       key={comp.id || idx} 
                       className={`${styles.componentWrapper} ${wrapperClass}`}
-                      style={getComponentHeightStyle(comp)}
+                      style={{ ...getComponentHeightStyle(comp), ...(sizeMode === 'full' ? componentAutoOverride : {}) }}
                       data-testid={`layoutcolumn-component-${slotIndex}-bottom-${idx}`}
                     >
                       {comp.component}
