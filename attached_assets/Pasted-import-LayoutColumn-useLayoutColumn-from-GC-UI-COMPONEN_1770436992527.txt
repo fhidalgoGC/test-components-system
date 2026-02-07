@@ -1,0 +1,126 @@
+import {
+  LayoutColumn,
+  useLayoutColumn,
+} from "GC-UI-COMPONENTS/client/src/lib/ui-library/components/LayoutColumn";
+import type { LayoutColumnComponent } from "GC-UI-COMPONENTS/client/src/lib/ui-library/components/LayoutColumn";
+import { Card } from "@/components/ui/card";
+import { useDataListFilters } from "../hooks";
+import {
+  FilterSectionOne,
+  FilterSectionTwo,
+  FilterSectionThree,
+  FilterSectionFour,
+  FilterSectionFive,
+} from "../components";
+import type { DataListFiltersProps } from "../types";
+
+export function DataListFilters({ className }: DataListFiltersProps) {
+  const { slotConfig } = useDataListFilters();
+
+  const components: LayoutColumnComponent[] = [
+    {
+      id: "filter-section-1",
+      component: (
+        <div className="w-full h-full flex flex-col">
+          <div className="flex-1 min-h-0">
+            <FilterSectionOne />
+          </div>
+          <div
+            className="w-full h-px bg-gray-200"
+            data-testid="divider-section-one"
+          />
+        </div>
+      ),
+      align: "top",
+      slot: 0,
+      sizeMode: "full",
+    },
+    {
+      id: "filter-section-2",
+      component: null,
+      align: "top",
+      slot: 1,
+      sizeMode: "full",
+    },
+    {
+      id: "filter-section-3",
+      component: <FilterSectionThree />,
+      align: "top",
+      slot: 2,
+      sizeMode: "full",
+    },
+    {
+      id: "filter-section-4",
+      component: (
+        <div className="w-full h-full flex flex-col">
+          <div className="flex-1 min-h-0">
+            <FilterSectionFour />
+          </div>
+          <div
+            className="w-full h-px bg-gray-200"
+            data-testid="divider-section-four"
+          />
+        </div>
+      ),
+      align: "top",
+      slot: 3,
+      sizeMode: "full",
+    },
+    {
+      id: "filter-section-5",
+      component: <FilterSectionFive />,
+      align: "top",
+      slot: 4,
+      sizeMode: "full",
+    },
+  ];
+
+  const controller = useLayoutColumn({ components, slots: 5 });
+
+  const onToggleFilterSection = () => {
+    controller.toggleComponent("filter-section-3");
+  };
+
+  const isFilterVisible = controller.isComponentVisible("filter-section-3");
+
+  const updatedComponents: LayoutColumnComponent[] = [
+    components[0],
+    {
+      ...components[1],
+      component: (
+        <div className="w-full h-full flex flex-col">
+          <div className="flex-1 min-h-0">
+            <FilterSectionTwo
+              onToggleFilter={onToggleFilterSection}
+              isFilterVisible={isFilterVisible}
+            />
+          </div>
+          <div
+            className="w-full h-px bg-gray-200"
+            data-testid="divider-section-two"
+          />
+        </div>
+      ),
+    },
+    components[2],
+    components[3],
+    components[4],
+  ];
+
+  return (
+    <Card
+      className={`h-full w-full overflow-hidden ${className ?? ""}`}
+      data-testid="card-data-list-filters"
+    >
+      <LayoutColumn
+        slots={5}
+        slotConfig={slotConfig}
+        controller={controller}
+        widthMode="full"
+        heightMode="auto"
+        slotGap="none"
+        components={updatedComponents}
+      />
+    </Card>
+  );
+}

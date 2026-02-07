@@ -1,10 +1,28 @@
-import { LayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
+import { LayoutColumn, useLayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
 import type { SlotConfig } from "@/lib/ui-library/components/LayoutColumn/web/types";
 import type { LayoutColumnComponent } from "@/lib/ui-library/components/LayoutColumn/web/types";
 import styles from "../css/LayoutColumnDemo.module.scss";
 
-function InnerLayoutColumn() {
-  const innerSlotConfig: SlotConfig[] = [
+function FilterSection({ label, height }: { label: string; height?: number }) {
+  return (
+    <div
+      style={{
+        background: "#f8fafc",
+        height: height || "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "1px solid #e2e8f0",
+        padding: "8px 16px",
+      }}
+    >
+      {label}
+    </div>
+  );
+}
+
+function DataListFilters() {
+  const slotConfig: SlotConfig[] = [
     { heightMode: "fixed", height: 75 },
     { heightMode: "fixed", height: 75 },
     { heightMode: "fixed", height: 100 },
@@ -12,11 +30,15 @@ function InnerLayoutColumn() {
     { heightMode: "fixed", height: 50 },
   ];
 
-  const innerComponents: LayoutColumnComponent[] = [
+  const components: LayoutColumnComponent[] = [
     {
+      id: "filter-section-1",
       component: (
-        <div style={{ background: "#e0f2fe", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #0ea5e9" }}>
-          Inner Slot 0 (75px)
+        <div className="w-full h-full flex flex-col">
+          <div className="flex-1 min-h-0">
+            <FilterSection label="FilterSection 1 (75px)" />
+          </div>
+          <div className="w-full h-px bg-gray-200" />
         </div>
       ),
       align: "top",
@@ -24,9 +46,13 @@ function InnerLayoutColumn() {
       sizeMode: "full",
     },
     {
+      id: "filter-section-2",
       component: (
-        <div style={{ background: "#dbeafe", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #3b82f6" }}>
-          Inner Slot 1 (75px)
+        <div className="w-full h-full flex flex-col">
+          <div className="flex-1 min-h-0">
+            <FilterSection label="FilterSection 2 (75px)" />
+          </div>
+          <div className="w-full h-px bg-gray-200" />
         </div>
       ),
       align: "top",
@@ -34,19 +60,20 @@ function InnerLayoutColumn() {
       sizeMode: "full",
     },
     {
-      component: (
-        <div style={{ background: "#e0e7ff", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #6366f1" }}>
-          Inner Slot 2 (100px)
-        </div>
-      ),
+      id: "filter-section-3",
+      component: <FilterSection label="FilterSection 3 (100px)" />,
       align: "top",
       slot: 2,
       sizeMode: "full",
     },
     {
+      id: "filter-section-4",
       component: (
-        <div style={{ background: "#ede9fe", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #8b5cf6" }}>
-          Inner Slot 3 (400px)
+        <div className="w-full h-full flex flex-col">
+          <div className="flex-1 min-h-0">
+            <FilterSection label="FilterSection 4 (400px)" />
+          </div>
+          <div className="w-full h-px bg-gray-200" />
         </div>
       ),
       align: "top",
@@ -54,26 +81,67 @@ function InnerLayoutColumn() {
       sizeMode: "full",
     },
     {
-      component: (
-        <div style={{ background: "#fae8ff", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #a855f7" }}>
-          Inner Slot 4 (50px)
-        </div>
-      ),
+      id: "filter-section-5",
+      component: <FilterSection label="FilterSection 5 (50px)" />,
       align: "top",
       slot: 4,
       sizeMode: "full",
     },
   ];
 
+  const controller = useLayoutColumn({ components, slots: 5 });
+
   return (
-    <LayoutColumn
-      slots={5}
-      slotConfig={innerSlotConfig}
-      widthMode="full"
-      heightMode="auto"
-      slotGap="none"
-      components={innerComponents}
-    />
+    <div
+      className="h-full w-full overflow-hidden rounded-lg border bg-white shadow-sm"
+      data-testid="card-data-list-filters"
+    >
+      <LayoutColumn
+        slots={5}
+        slotConfig={slotConfig}
+        controller={controller}
+        widthMode="full"
+        heightMode="auto"
+        slotGap="none"
+        components={components}
+      />
+    </div>
+  );
+}
+
+function ListMetricsCards() {
+  return (
+    <div
+      style={{
+        background: "#fef3c7",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "2px solid #f59e0b",
+        borderRadius: 8,
+      }}
+    >
+      ListMetricsCards (Slot 0 - fixed 100px)
+    </div>
+  );
+}
+
+function ListTripsLocations() {
+  return (
+    <div
+      style={{
+        background: "#dcfce7",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "2px solid #22c55e",
+        borderRadius: 8,
+      }}
+    >
+      ListTripsLocations (Slot 2 - fixed 500px)
+    </div>
   );
 }
 
@@ -86,28 +154,23 @@ export function NestedAutoDemo() {
 
   const outerComponents: LayoutColumnComponent[] = [
     {
-      component: (
-        <div style={{ background: "#fef3c7", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #f59e0b" }}>
-          Outer Slot 0 (fixed 100px)
-        </div>
-      ),
-      align: "top",
+      id: "section-1",
+      component: <ListMetricsCards />,
+      align: "center",
       slot: 0,
       sizeMode: "full",
     },
     {
-      component: <InnerLayoutColumn />,
-      align: "top",
+      id: "section-2",
+      component: <DataListFilters />,
+      align: "center",
       slot: 1,
       sizeMode: "full",
     },
     {
-      component: (
-        <div style={{ background: "#dcfce7", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #22c55e" }}>
-          Outer Slot 2 (fixed 500px)
-        </div>
-      ),
-      align: "top",
+      id: "section-3",
+      component: <ListTripsLocations />,
+      align: "center",
       slot: 2,
       sizeMode: "full",
     },
@@ -118,11 +181,13 @@ export function NestedAutoDemo() {
       <div className={styles.componentName}>10-NestedAutoDemo.tsx</div>
       <h2 className={styles.section__title}>LayoutColumn Anidado con Auto</h2>
       <p className={styles.section__description}>
-        Slot 0: fixed 100px. Slot 1: auto (contiene otro LayoutColumn con 5 slots fijos = 700px total).
-        Slot 2: fixed 500px. Total esperado: 1300px.
+        Replica el caso real: DashboardPage con 3 slots (100px fixed, auto, 500px fixed).
+        El slot auto contiene DataListFilters que es otro LayoutColumn con 5 slots fijos (75+75+100+400+50 = 700px).
+        Total esperado: 100 + 700 + 500 + gaps = ~1324px.
       </p>
       <div
-        style={{ border: "3px solid red", background: "#fff" }}
+        className="w-full"
+        style={{ border: "3px solid red", background: "#f9fafb" }}
         data-testid="demo-nested-auto"
       >
         <LayoutColumn
@@ -130,7 +195,7 @@ export function NestedAutoDemo() {
           slotConfig={outerSlotConfig}
           widthMode="full"
           heightMode="auto"
-          slotGap="none"
+          slotGap="lg"
           components={outerComponents}
         />
       </div>
