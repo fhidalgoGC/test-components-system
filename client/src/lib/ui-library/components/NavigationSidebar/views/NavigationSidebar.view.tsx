@@ -70,27 +70,6 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
 
   return (
     <>
-      <button
-        onClick={handleToggleMobileMenu}
-        className={`lg:hidden ${styles.mobileMenuButton} ${isDark ? styles.dark : ''}`}
-        data-testid="button-mobile-menu"
-        aria-label={isMobileMenuOpen ? t('navigationsidebar.menu.closeMobile') : t('navigationsidebar.menu.openMobile')}
-      >
-        {isMobileMenuOpen ? (
-          <X className={`${styles.iconMedium} ${isDark ? 'text-gray-300' : 'text-gray-700'}`} />
-        ) : (
-          <Menu className={`${styles.iconMedium} ${isDark ? 'text-gray-300' : 'text-gray-700'}`} />
-        )}
-      </button>
-
-      {isMobileMenuOpen && (
-        <div
-          className={`lg:hidden ${styles.mobileOverlay}`}
-          onClick={handleToggleMobileMenu}
-          data-testid="mobile-overlay"
-        />
-      )}
-
       <div
         className={`
           ${styles.sidebar}
