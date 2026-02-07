@@ -69,41 +69,39 @@ const ItemsPerPageSelect = ({
   </div>
 );
 
-const generatePageNumbers = (currentPage: number, totalPages: number, maxVisible: number = 5): (number | string)[] => {
+const generatePageNumbers = (currentPage: number, totalPages: number, maxVisible: number = 4): (number | string)[] => {
   if (totalPages <= maxVisible) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
-  const pages: (number | string)[] = [];
-  const halfVisible = Math.floor((maxVisible - 2) / 2);
-  
-  pages.push(1);
-  
-  let start = Math.max(2, currentPage - halfVisible);
-  let end = Math.min(totalPages - 1, currentPage + halfVisible);
-  
-  if (currentPage <= halfVisible + 1) {
-    end = maxVisible - 1;
-  } else if (currentPage >= totalPages - halfVisible) {
-    start = totalPages - maxVisible + 2;
-  }
-  
-  if (start > 2) {
+  const blockSize = maxVisible - 1;
+
+  if (currentPage <= blockSize) {
+    const pages: (number | string)[] = [];
+    for (let i = 1; i <= blockSize; i++) {
+      pages.push(i);
+    }
     pages.push('...');
+    pages.push(totalPages);
+    return pages;
   }
-  
+
+  if (currentPage >= totalPages - blockSize + 1) {
+    const pages: (number | string)[] = [1, '...'];
+    for (let i = totalPages - blockSize + 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  const offset = Math.floor((blockSize - 1) / 2);
+  const start = currentPage - offset;
+  const end = start + blockSize - 1;
+
+  const pages: (number | string)[] = [1, '...'];
   for (let i = start; i <= end; i++) {
     pages.push(i);
   }
-  
-  if (end < totalPages - 1) {
-    pages.push('...');
-  }
-  
-  if (totalPages > 1) {
-    pages.push(totalPages);
-  }
-  
   return pages;
 };
 

@@ -26,28 +26,38 @@ import { Paginator } from "@/lib/ui-library/components/Paginator";
 | `i18nOrder` | `'global-first' \| 'local-first'` | `'local-first'` | Prioridad de traducciones |
 | `config` | `VisibilityConfig` | - | Configuración de visibilidad responsive |
 
-## maxVisiblePages - Límite de números visibles
+## maxVisiblePages - Limite de numeros visibles
 
-Controla cuántos números de página se muestran. Por defecto muestra máximo **4** números con ellipsis para las páginas intermedias.
+Controla cuantos numeros de pagina se muestran. Por defecto muestra maximo **4** numeros. Solo aparece un unico `...` y solo cuando hay mas paginas de las que caben.
 
-### Ejemplos
+### Reglas
 
-```tsx
-// Default (maxVisiblePages=4), 44 páginas, página actual 1:
-// [1] 2 3 ... 44
+1. Nunca aparecen dos `...`
+2. `...` solo aparece si `totalPages > maxVisiblePages`
+3. Se muestran exactamente `maxVisiblePages` numeros de pagina (sin contar el `...`)
 
-// maxVisiblePages=4, 44 páginas, página actual 22:
-// 1 ... 22 ... 44
+### Ejemplos (maxVisiblePages=4, 10 paginas)
 
-// maxVisiblePages=4, 4 páginas (muestra todas sin ellipsis):
-// 1 2 3 4
+```
+Pagina 1:   [1]  2   3  ...  10    (cerca del inicio)
+Pagina 3:    1   2  [3] ...  10    (cerca del inicio)
+Pagina 4:    1  ...  3  [4]  5     (zona media)
+Pagina 5:    1  ...  4  [5]  6     (zona media)
+Pagina 8:    1  ...  [8] 9   10   (cerca del final)
+Pagina 10:   1  ...   8  9  [10]   (cerca del final)
+4 paginas:   1   2   3   4         (sin ellipsis, caben todas)
+```
 
-// maxVisiblePages=6, 44 páginas, página actual 1:
-// [1] 2 3 4 5 ... 44
+### Ejemplos (maxVisiblePages=6, 44 paginas)
+
+```
+Pagina 1:   [1]  2   3   4   5  ...  44
+Pagina 22:   1  ...  21  22  23  24  25
+Pagina 44:   1  ...  40  41  42  43  [44]
 ```
 
 ```tsx
-<Paginator totalItems={435} maxVisiblePages={4} />
+<Paginator totalItems={100} maxVisiblePages={4} />
 
 <Paginator totalItems={435} maxVisiblePages={6} />
 ```
