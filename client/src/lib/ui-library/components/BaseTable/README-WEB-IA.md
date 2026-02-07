@@ -418,7 +418,7 @@ El espacio se divide para `stretchCount` filas. Si hay menos filas de datos que 
 
 **Nota**: `stretchCount` normalmente coincide con `itemsPerPage` del paginador.
 
-**Internamente**: Stretch activa automaticamente un layout separado (header fijo arriba, body con `flex: 1` abajo) para que los altos porcentuales de las filas funcionen correctamente sin verse afectados por el header.
+**Internamente**: Stretch activa automaticamente un layout separado (header fijo arriba, body con `flex: 1` abajo). Un `ResizeObserver` mide la altura real del body en pixeles, y cada fila recibe `height = Math.floor(bodyHeight / stretchCount)` en pixeles absolutos (no porcentajes). Las filas spacer rellenan los slots vacios con la misma altura. La compensacion del scrollbar entre header y body se calcula dinamicamente midiendo `offsetWidth - clientWidth` del body container, aplicando `paddingRight` al header solo cuando existe un scrollbar real.
 
 ### BehaviorsConfig
 

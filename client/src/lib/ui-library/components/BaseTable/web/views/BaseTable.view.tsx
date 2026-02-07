@@ -30,10 +30,10 @@ export const BaseTableView = (props: BaseTableProps) => {
   const headerScrollRef = useRef<HTMLDivElement>(null);
   const bodyScrollRef = useRef<HTMLDivElement>(null);
   const [bodyContainerHeight, setBodyContainerHeight] = useState<number>(0);
+  const [scrollbarWidth, setScrollbarWidth] = useState<number>(0);
 
   const isRowStretch = rowsDefault?.heightMode === 'stretch' && rowsDefault?.stretchCount && rowsDefault.stretchCount > 0;
 
-  // Sincronizar scroll horizontal entre header y body
   const handleBodyScroll = useCallback(() => {
     if (headerScrollRef.current && bodyScrollRef.current) {
       headerScrollRef.current.scrollLeft = bodyScrollRef.current.scrollLeft;
@@ -42,14 +42,21 @@ export const BaseTableView = (props: BaseTableProps) => {
 
   useEffect(() => {
     const el = bodyScrollRef.current;
-    if (!el || !isRowStretch) return;
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setBodyContainerHeight(entry.contentRect.height);
+    if (!el) return;
+
+    const measure = () => {
+      if (isRowStretch) {
+        setBodyContainerHeight(el.clientHeight);
       }
+      const sbWidth = el.offsetWidth - el.clientWidth;
+      setScrollbarWidth(sbWidth);
+    };
+
+    const observer = new ResizeObserver(() => {
+      measure();
     });
     observer.observe(el);
-    setBodyContainerHeight(el.clientHeight);
+    measure();
     return () => observer.disconnect();
   }, [isRowStretch]);
 
@@ -192,7 +199,7 @@ export const BaseTableView = (props: BaseTableProps) => {
         )}
         
         {/* Header container - fijo arriba */}
-        <div className={`${styles.headerContainer} ${layout?.verticalScroll ? styles.headerWithScrollbarCompensation : ''}`} ref={headerScrollRef}>
+        <div className={styles.headerContainer} ref={headerScrollRef} style={scrollbarWidth > 0 ? { paddingRight: scrollbarWidth } : undefined}>
           <table className={tableClasses}>
             <TableColgroup
               columns={columns}
