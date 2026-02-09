@@ -6,6 +6,7 @@ export const ModalDemoWebView = () => {
   const basicModal = useModalController();
   const statesModal = useModalController();
   const customModal = useModalController();
+  const noOverlayModal = useModalController();
   const [currentState, setCurrentState] = useState<ModalState>('idle');
 
   const handleStateChange = (state: ModalState) => {
@@ -192,6 +193,58 @@ export const ModalDemoWebView = () => {
             horizontalAlign: 'center',
           }}
           callbacks={{ onClose: customModal.close }}
+        />
+      </section>
+
+      <section className="space-y-4 border rounded-lg p-4">
+        <h2 className="text-lg font-semibold" data-testid="text-section-no-overlay">Modal Sin Oscurecer</h2>
+        <p className="text-sm text-gray-500">Modal que se abre sin oscurecer el fondo (overlay desactivado).</p>
+        <button
+          className="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 transition"
+          onClick={noOverlayModal.open}
+          data-testid="button-open-no-overlay"
+        >
+          Abrir Modal Sin Overlay
+        </button>
+
+        <Modal
+          isOpen={noOverlayModal.isOpen}
+          state={noOverlayModal.state}
+          overlay={{ enabled: false }}
+          closeButton={{ visible: true, position: 'top-right' }}
+          layout={{ widthMode: 'fixed', width: 450, heightMode: 'auto' }}
+          header={{
+            render: <h3 className="text-lg font-semibold">Sin Oscurecer</h3>,
+            horizontalAlign: 'left',
+          }}
+          body={{
+            render: (
+              <div className="space-y-3">
+                <div className="bg-teal-50 p-3 rounded">
+                  <p className="text-sm">Este modal se abre sin oscurecer el fondo.</p>
+                </div>
+                <div className="bg-teal-50 p-3 rounded">
+                  <p className="text-sm">Configuración: <code className="bg-gray-100 px-1 rounded">overlay: {"{"} enabled: false {"}"}</code></p>
+                </div>
+                <p className="text-sm text-gray-500">Puedes seguir viendo e interactuando con el contenido detrás del modal.</p>
+              </div>
+            ),
+          }}
+          footer={{
+            render: (
+              <div className="flex justify-end">
+                <button
+                  className="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 transition"
+                  onClick={noOverlayModal.close}
+                  data-testid="button-close-no-overlay"
+                >
+                  Cerrar
+                </button>
+              </div>
+            ),
+            horizontalAlign: 'right',
+          }}
+          callbacks={{ onClose: noOverlayModal.close }}
         />
       </section>
     </div>

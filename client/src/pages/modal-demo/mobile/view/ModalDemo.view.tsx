@@ -6,6 +6,7 @@ export const ModalDemoMobileView = () => {
   const basicModal = useModalController();
   const statesModal = useModalController();
   const customModal = useModalController();
+  const noOverlayModal = useModalController();
   const [currentState, setCurrentState] = useState<ModalState>('idle');
 
   const handleStateChange = (state: ModalState) => {
@@ -191,6 +192,56 @@ export const ModalDemoMobileView = () => {
             horizontalAlign: 'center',
           }}
           callbacks={{ onClose: customModal.close }}
+        />
+      </section>
+
+      <section className="space-y-3 border rounded-lg p-3">
+        <h2 className="text-base font-semibold" data-testid="text-section-no-overlay">Modal Sin Oscurecer</h2>
+        <p className="text-xs text-gray-500">Modal sin oscurecer el fondo (overlay desactivado).</p>
+        <button
+          className="w-full px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 transition text-sm"
+          onClick={noOverlayModal.open}
+          data-testid="button-open-no-overlay"
+        >
+          Abrir Modal Sin Overlay
+        </button>
+
+        <Modal
+          isOpen={noOverlayModal.isOpen}
+          state={noOverlayModal.state}
+          overlay={{ enabled: false }}
+          closeButton={{ visible: true, position: 'top-right' }}
+          layout={{ heightMode: 'auto' }}
+          header={{
+            render: <h3 className="text-base font-semibold">Sin Oscurecer</h3>,
+            horizontalAlign: 'left',
+          }}
+          body={{
+            render: (
+              <div className="space-y-2">
+                <div className="bg-teal-50 p-2 rounded">
+                  <p className="text-xs">Este modal se abre sin oscurecer el fondo.</p>
+                </div>
+                <div className="bg-teal-50 p-2 rounded">
+                  <p className="text-xs">Configuración: overlay: {"{"} enabled: false {"}"}</p>
+                </div>
+              </div>
+            ),
+          }}
+          footer={{
+            render: (
+              <div className="w-full">
+                <button
+                  className="w-full px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 transition text-sm"
+                  onClick={noOverlayModal.close}
+                  data-testid="button-close-no-overlay"
+                >
+                  Cerrar
+                </button>
+              </div>
+            ),
+          }}
+          callbacks={{ onClose: noOverlayModal.close }}
         />
       </section>
     </div>
