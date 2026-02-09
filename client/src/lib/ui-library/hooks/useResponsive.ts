@@ -6,8 +6,8 @@ type Orientation = 'portrait' | 'landscape';
 export const useResponsive = () => {
   const getDeviceType = (): DeviceType => {
     const width = window.innerWidth;
-    if (width < 768) return 'mobile';       // Tailwind 'md'
-    if (width < 1024) return 'tablet';      // Tailwind 'lg'
+    if (width < 768) return 'mobile';
+    if (width < 1024) return 'tablet';
     return 'desktop';
   };
 
@@ -47,7 +47,6 @@ export const useResponsive = () => {
   };
 };
 
-// Backward compatibility: export useIsMobile that returns only boolean
 export function useIsMobile() {
   const { isMobile } = useResponsive();
   return isMobile;

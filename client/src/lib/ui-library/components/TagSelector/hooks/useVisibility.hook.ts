@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { VisibilityConfig, Device, Orientation, VisibilitySetting, BreakpointRule } from '../../../types/shared.types';
-import { useResponsive } from '../../../hooks/use-mobile';
+import { useResponsive } from '../../../hooks/useResponsive';
 
 // Helper function to map deviceType from useResponsive to Device type
 const mapDeviceType = (deviceType: 'mobile' | 'tablet' | 'desktop'): Device => {

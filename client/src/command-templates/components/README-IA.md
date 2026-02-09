@@ -511,5 +511,5 @@ Todos los componentes generados incluyen:
 - **Componente de referencia mobile/web**: `client/src/lib/ui-library/components/HeterogeneousList`
 - **Componente de referencia i18n**: `client/src/lib/ui-library/components/TagSelector`
 - **Utilidades i18n**: `client/src/lib/ui-library/utils/i18n.util.ts`
-- **Hook responsivo**: `client/src/lib/ui-library/hooks/use-mobile.tsx`
+- **Hook responsivo (useResponsive + useIsMobile)**: `client/src/lib/ui-library/hooks/useResponsive.ts`
 - **NotImplemented**: `client/src/lib/ui-library/components/NotImplemented`
