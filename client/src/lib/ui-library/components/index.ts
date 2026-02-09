@@ -27,3 +27,4 @@ export * from './Paginator';
 export * from './Accordion';
 export * from './List';
 export * from './FloatingMenu';
+export * from './Modal';

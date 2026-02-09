@@ -1,0 +1,8 @@
+{
+  "modal": {
+    "close": "Cerrar",
+    "loading": "Cargando...",
+    "empty": "No hay datos disponibles",
+    "error": "Ocurrió un error"
+  }
+}
