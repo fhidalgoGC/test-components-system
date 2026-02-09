@@ -1,30 +1,130 @@
 # Modal Component
 
-A flexible, reusable component that works across Web, Mobile Responsive, and Native platforms.
+Componente modal agnóstico con control 100% externo vía `useModalController`. No gestiona estado interno; solo interpreta configuración recibida por props.
 
-## Features
+## Características
 
-- Dynamic Component Rendering
-- Flexible Sizing (px, %, Tailwind classes)
-- Customizable Styles
-- Multi-platform Support (Web, Mobile, Native)
+- Control externo completo vía `useModalController` hook
+- Estados visuales: `idle`, `loading`, `success`, `empty`, `error`
+- Overlay configurable (opacidad, color, blur, cierre al click)
+- Botón cerrar personalizable (posición, render custom)
+- Layout flexible: header / body / footer con alineación
+- Modos de tamaño: `full`, `auto`, `fixed`
+- Cierre con tecla Escape
+- Bloqueo de scroll del body cuando está abierto
+- Soporte dual Web (centrado) y Mobile (bottom sheet)
 
 ## Platform Documentation
 
 | Platform | File | Description |
 |----------|------|-------------|
-| Web | [README-WEB-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/main/client/src/lib/ui-library/components/Modal/README-WEB-IA.md) | Vite + Tailwind CSS + Radix UI |
-| Mobile Responsive | [README-MOBILE-IA.md](https://github.com/fhidalgoGC/test-components-system/blob/main/client/src/lib/ui-library/components/Modal/README-MOBILE-IA.md) | Web responsive for small screens |
-| Native (iOS/Android) | [README-MOBILE-NATIVE.md](https://github.com/fhidalgoGC/test-components-system/blob/main/client/src/lib/ui-library/components/Modal/README-MOBILE-NATIVE.md) | Expo + React Native + StyleSheet |
+| Web | [README-WEB-IA.md](./README-WEB-IA.md) | Modal centrado en pantalla |
+| Mobile Responsive | [README-MOBILE-IA.md](./README-MOBILE-IA.md) | Bottom sheet desde abajo |
 
 ## Folder Structure
 
 ```
 Modal/
-├── token.shared/       # Shared design tokens (Tailwind-style)
-├── web/                # Web implementation
-├── mobile/             # Mobile responsive implementation
-├── native/             # Native (iOS/Android) implementation
-├── index.tsx           # Web/Mobile dispatch (useIsMobile)
-└── index.native.tsx    # Native export (Metro bundler)
+├── types.ts                # Tipos compartidos (ModalProps, ModalState, etc.)
+├── hooks/
+│   ├── index.ts
+│   └── useModalController.ts  # Hook de control externo
+├── web/
+│   ├── css/Modal.module.css
+│   ├── views/Modal.view.tsx
+│   ├── types/Modal.type.ts    # Re-exporta tipos compartidos
+│   ├── i18n/en.json, es.json
+│   └── index.tsx
+├── mobile/
+│   ├── css/Modal.module.css
+│   ├── views/Modal.view.tsx
+│   ├── types/Modal.type.ts
+│   ├── i18n/en.json, es.json
+│   └── index.tsx
+└── index.tsx               # Dispatch Web/Mobile via useIsMobile
 ```
+
+## Usage
+
+```tsx
+import { Modal, useModalController } from 'GC-UI-COMPONENTS';
+
+const MyComponent = () => {
+  const modal = useModalController();
+
+  return (
+    <>
+      <button onClick={modal.open}>Abrir Modal</button>
+
+      <Modal
+        isOpen={modal.isOpen}
+        state={modal.state}
+        overlay={{ enabled: true, opacity: 0.5, closeOnClick: true }}
+        closeButton={{ visible: true, position: 'top-right' }}
+        layout={{ widthMode: 'fixed', width: 480 }}
+        header={{
+          render: <h3>Título</h3>,
+          horizontalAlign: 'left',
+        }}
+        body={{
+          render: <p>Contenido del modal</p>,
+        }}
+        footer={{
+          render: (
+            <div className="flex gap-2 justify-end">
+              <button onClick={modal.close}>Cancelar</button>
+              <button onClick={() => modal.close()}>Confirmar</button>
+            </div>
+          ),
+        }}
+        callbacks={{ onClose: modal.close }}
+      />
+    </>
+  );
+};
+```
+
+## useModalController API
+
+```tsx
+const modal = useModalController<T>();
+
+modal.isOpen          // boolean
+modal.state           // ModalState
+modal.open()          // Abre el modal (state → 'idle')
+modal.close()         // Cierra el modal (limpia selectedData)
+modal.closeWithData(data)  // Cierra guardando data
+modal.setState(state) // Cambia estado visual
+modal.setSelectedData(data)
+modal.selectedData    // T | undefined
+```
+
+## Props Reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `isOpen` | `boolean` | required | Controla visibilidad |
+| `state` | `ModalState` | `'idle'` | Estado visual actual |
+| `overlay` | `OverlayConfig` | `{ enabled: true }` | Configuración del overlay |
+| `closeButton` | `CloseButtonConfig` | `{ visible: true }` | Botón de cerrar |
+| `layout` | `LayoutConfig` | `{ widthMode: 'auto' }` | Dimensiones del modal |
+| `header` | `SectionConfig` | - | Sección header |
+| `body` | `SectionConfig` | - | Sección body |
+| `footer` | `SectionConfig` | - | Sección footer |
+| `statesComponents` | `StatesComponents` | - | Renders por estado |
+| `callbacks` | `ModalCallbacks` | - | `onClose`, `onConfirm` |
+| `data` | `ModalDataItem[]` | - | Datos opcionales |
+| `className` | `string` | - | Clase CSS adicional |
+
+## States Components
+
+```tsx
+statesComponents={{
+  loading: { renderType: 'self' },           // Spinner por defecto
+  empty: { renderType: 'self' },             // Mensaje "No data"
+  error: { renderType: 'component', render: <MyError /> },  // Custom
+}}
+```
+
+- `renderType: 'self'` → Usa render interno por defecto (spinner, mensaje)
+- `renderType: 'component'` → Usa el `render` proporcionado

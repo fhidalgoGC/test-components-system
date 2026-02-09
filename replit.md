@@ -52,6 +52,15 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
   - **Empty state**: Configurable position (`center`, `over`) with custom component support
   - **Data source**: When controller is provided, `data` prop is optional - controller becomes single source of truth
   - **InfiniteScroll**: Uses IntersectionObserver with configurable threshold, triggers `onLoadMore` callback, uses `controller.appendData()` for new data
+- **Modal Component**: Agnostic dialog with 100% external control via `useModalController` hook. Features:
+  - **External control**: `useModalController` hook manages open/close/state/selectedData
+  - **Visual states**: `idle`, `loading`, `success`, `empty`, `error` with configurable renders (`self` or `component`)
+  - **Layout**: Configurable header/body/footer sections with alignment (vertical/horizontal)
+  - **Overlay**: Configurable opacity, color, blur, closeOnClick
+  - **Close button**: Position (`top-left`/`top-right`), custom render support
+  - **Size modes**: `widthMode` and `heightMode` (`full`/`auto`/`fixed`)
+  - **Responsive**: Web (centered dialog) and Mobile (bottom sheet)
+  - **Keyboard**: Escape key closes modal, body scroll lock when open
 
 # External Dependencies
 

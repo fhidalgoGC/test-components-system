@@ -38,6 +38,18 @@ export const getAvailableComponents = (): ComponentInfo[] => [
       '• "Select All" functionality'
     ],
     href: '/components/tag-selector'
+  },
+  {
+    name: 'Modal',
+    description: 'Dialog component with external control',
+    icon: 'maximize',
+    iconColor: 'text-blue-500',
+    features: [
+      '• External control via useModalController',
+      '• Visual states (idle/loading/empty/error)',
+      '• Configurable overlay, header/body/footer'
+    ],
+    href: '/components/modal'
   }
 ];
 
@@ -58,14 +70,6 @@ export const getComingSoonComponents = (): ComponentInfo[] => [
     features: [],
     href: '#'
   },
-  {
-    name: 'Modal',
-    description: 'Dialog component',
-    icon: 'maximize', // Using lucide-react icon name
-    iconColor: 'text-muted-foreground',
-    features: [],
-    href: '#'
-  }
 ];
 
 export const getLibraryFeatures = (): LibraryFeature[] => [

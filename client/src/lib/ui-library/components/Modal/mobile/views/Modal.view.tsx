@@ -119,13 +119,14 @@ export const ModalView = (props: ModalProps) => {
   if (!isOpen) return null;
 
   const modalStyle = getSizeStyle(
-    layout.widthMode,
-    layout.width,
-    layout.minWidth,
+    undefined,
+    undefined,
+    undefined,
     layout.heightMode,
     layout.height,
     layout.minHeight
   );
+  modalStyle.width = '100%';
 
   const handleOverlayClick = () => {
     if (overlay.closeOnClick && callbacks?.onClose) {

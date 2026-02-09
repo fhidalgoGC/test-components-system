@@ -1,68 +1,75 @@
 # Modal - Mobile Responsive Version
 
 ## Overview
-Mobile responsive implementation for web browsers on small screens. Uses the same React DOM runtime as web, but with mobile-optimized layouts and touch interactions.
+Implementación mobile responsive del Modal. Se renderiza como bottom sheet, deslizándose desde la parte inferior de la pantalla. Comparte la misma lógica que la versión web pero con estilos optimizados para móvil.
 
-## Current Status
+## Status
 
-**Not Implemented** - Currently shows `NotImplemented` placeholder.
+**Implementado** — Bottom sheet con estilos mobile-optimized.
 
 ## Folder Structure
 
 ```
 mobile/
-└── index.tsx    # Currently returns NotImplemented
-```
-
-## Planned Structure (when implemented)
-
-```
-mobile/
 ├── css/
-│   ├── index.ts
-│   └── Modal.module.css    # Mobile-specific CSS
-├── hooks/
-│   ├── index.ts
-│   └── useModal.hook.ts    # Mobile touch logic
-├── types/
-│   ├── index.ts
-│   └── Modal.type.ts       # Mobile-specific types
+│   └── Modal.module.css       # Estilos mobile (bottom sheet)
 ├── views/
 │   ├── index.ts
-│   └── Modal.view.tsx      # Mobile React component
-└── index.tsx                            # Main export
+│   └── Modal.view.tsx         # Componente React principal
+├── types/
+│   ├── index.ts
+│   └── Modal.type.ts          # Re-exporta tipos compartidos
+├── i18n/
+│   ├── en.json
+│   └── es.json
+├── providers/
+│   └── Modal.provider.tsx     # Provider (no usado, control externo)
+└── index.tsx                  # Export principal
 ```
 
-## Using Shared Tokens
+## Comportamiento Mobile
 
-Same as web version - import from `token.shared/`:
+- Modal anclado a la parte inferior de la pantalla (bottom sheet)
+- `width: 100%`, `max-height: 85vh`
+- Border radius superior: `16px 16px 0 0`
+- Sombra hacia arriba: `0 -10px 40px rgba(0,0,0,0.2)`
+- Alineación: `align-items: flex-end` en el contenedor overlay
+- Padding reducido respecto a web (16px horizontal, 12px vertical en body/footer)
 
-```typescript
-import { colors, spacing, borderRadius } from '../../token.shared';
+## Diferencias con Web
 
-const mobileStyle = {
-  padding: spacing['4'],           // 16px
-  backgroundColor: colors['white'],
-  borderRadius: borderRadius['lg'],
-};
-```
+| Aspecto | Web | Mobile |
+|---------|-----|--------|
+| Posición | Centrado en pantalla | Anclado abajo (bottom sheet) |
+| Ancho | Configurable (auto/fixed/full) | 100% siempre |
+| Border radius | 8px (todos los lados) | 16px solo arriba |
+| Max height | 90vh | 85vh |
+| Padding body | 16px 20px | 12px 16px |
+| Sombra | Hacia abajo | Hacia arriba |
 
 ## Platform Resolution
 
-The main `index.tsx` uses `useIsMobile()` hook to dispatch:
-
 ```typescript
 if (isMobile) {
-  return <ModalMobile {...props} />;  // < 768px
+  return <ModalMobile {...props} />;  // < 768px → bottom sheet
 }
-return <ModalWeb {...props} />;        // >= 768px
+return <ModalWeb {...props} />;        // >= 768px → centrado
 ```
 
-## Implementation Guidelines
+## Usage
 
-When implementing the mobile version:
+El componente se usa igual que la versión web. El dispatch automático selecciona la versión correcta:
 
-1. **Touch-first interactions** - Larger touch targets, swipe gestures
-2. **Full-width layouts** - Components should span screen width on mobile
-3. **Simplified UI** - Hide secondary actions, focus on primary content
-4. **Performance** - Optimize for lower-powered devices
+```tsx
+import { Modal, useModalController } from 'GC-UI-COMPONENTS';
+
+const modal = useModalController();
+
+<Modal
+  isOpen={modal.isOpen}
+  state={modal.state}
+  header={{ render: <h3>Título</h3> }}
+  body={{ render: <p>Contenido</p> }}
+  callbacks={{ onClose: modal.close }}
+/>
+```
