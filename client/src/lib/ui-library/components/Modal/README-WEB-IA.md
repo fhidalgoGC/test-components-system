@@ -87,5 +87,7 @@ import { Modal } from './web';
 
 ## Platform Resolution
 
-- `index.tsx` despacha a `web/` o `mobile/` basado en `useIsMobile()` hook
+- `index.tsx` despacha a `web/` o `mobile/` basado en `useIsMobile()` de `useResponsive` hook
+- Source: `client/src/lib/ui-library/hooks/useResponsive.ts`
 - Desktop browsers (>= 768px) usan la implementación `web/`
+- `useIsMobile()` es un atajo de `useResponsive()` que retorna `true` cuando `window.innerWidth < 768`

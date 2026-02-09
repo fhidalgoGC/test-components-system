@@ -62,40 +62,28 @@ client/src/pages/[nombre-pagina]/
 ├── shared/               # (Opcional) Código compartido entre web y mobile
 │   ├── types/
 │   └── utils/
-├── usePlatform.ts        # Hook que detecta la plataforma
-└── index.tsx             # Exporta la página correcta según plataforma
+└── index.tsx             # Exporta la página correcta según plataforma (usa useResponsive)
 ```
 
 ---
 
-## 1. Crear el Hook usePlatform
+## 1. Detección de Plataforma con useResponsive
 
-Este hook detecta si el usuario está en web o mobile y retorna la plataforma:
+Para detectar si el usuario está en web o mobile se usa el hook centralizado `useResponsive` de la librería:
 
 ```typescript
-// client/src/pages/[nombre-pagina]/usePlatform.ts
-import { useState, useEffect } from 'react';
+// client/src/lib/ui-library/hooks/useResponsive.ts
+import { useResponsive } from '@/lib/ui-library/hooks/useResponsive';
 
-export type Platform = 'web' | 'mobile';
-
-export const usePlatform = (): Platform => {
-  const [platform, setPlatform] = useState<Platform>('web');
-
-  useEffect(() => {
-    const checkPlatform = () => {
-      const isMobile = window.innerWidth < 768;
-      setPlatform(isMobile ? 'mobile' : 'web');
-    };
-
-    checkPlatform();
-    window.addEventListener('resize', checkPlatform);
-    
-    return () => window.removeEventListener('resize', checkPlatform);
-  }, []);
-
-  return platform;
-};
+const { isMobile, isTablet, isDesktop, orientation } = useResponsive();
 ```
+
+**NO crear hooks locales `usePlatform.ts`** en cada página. Usar siempre `useResponsive` del archivo `client/src/lib/ui-library/hooks/useResponsive.ts`.
+
+Breakpoints:
+- `isMobile`: < 768px
+- `isTablet`: 768px - 1023px
+- `isDesktop`: >= 1024px
 
 ---
 
@@ -135,14 +123,14 @@ export const [NombrePagina]MobileView = () => {
 
 ```typescript
 // client/src/pages/[nombre-pagina]/index.tsx
-import { usePlatform } from './usePlatform';
+import { useResponsive } from '@/lib/ui-library/hooks/useResponsive';
 import { [NombrePagina]WebView } from './web/view/[NombrePagina].view';
 import { [NombrePagina]MobileView } from './mobile/view/[NombrePagina].view';
 
 const [NombrePagina]Demo = () => {
-  const platform = usePlatform();
+  const { isMobile } = useResponsive();
 
-  if (platform === 'mobile') {
+  if (isMobile) {
     return <[NombrePagina]MobileView />;
   }
 
@@ -350,10 +338,9 @@ Ver lista completa en: https://lucide.dev/icons
 ## Checklist para Nueva Página
 
 - [ ] Crear estructura de carpetas (web/, mobile/, shared/)
-- [ ] Crear `usePlatform.ts`
 - [ ] Crear vista web en `web/view/`
 - [ ] Crear vista mobile en `mobile/view/`
-- [ ] Crear `index.tsx` con selector de plataforma
+- [ ] Crear `index.tsx` con `useResponsive` para selector de plataforma
 - [ ] Registrar ruta en `client/src/routes/index.tsx`
 - [ ] Agregar al menú en `client/src/layouts/app-layout/utils/AppLayout.utils.ts`
 - [ ] Si es página independiente, agregar `openInNewTab: true`

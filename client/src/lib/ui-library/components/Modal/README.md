@@ -12,7 +12,7 @@ Componente modal agnóstico con control 100% externo vía `useModalController`. 
 - Modos de tamaño: `full`, `auto`, `fixed`
 - Cierre con tecla Escape
 - Bloqueo de scroll del body cuando está abierto
-- Soporte dual Web (centrado) y Mobile (bottom sheet)
+- Soporte dual Web (centrado) y Mobile (bottom sheet) via `useResponsive` hook (`client/src/lib/ui-library/hooks/useResponsive.ts`)
 
 ## Platform Documentation
 
@@ -41,7 +41,7 @@ Modal/
 │   ├── types/Modal.type.ts
 │   ├── i18n/en.json, es.json
 │   └── index.tsx
-└── index.tsx               # Dispatch Web/Mobile via useIsMobile
+└── index.tsx               # Dispatch Web/Mobile via useResponsive (useIsMobile)
 ```
 
 ## Usage
@@ -128,3 +128,24 @@ statesComponents={{
 
 - `renderType: 'self'` → Usa render interno por defecto (spinner, mensaje)
 - `renderType: 'component'` → Usa el `render` proporcionado
+
+## Platform Detection
+
+El componente usa `useIsMobile()` de `client/src/lib/ui-library/hooks/useResponsive.ts` para detectar la plataforma:
+
+```typescript
+import { useIsMobile } from '../../hooks';
+
+const isMobile = useIsMobile(); // < 768px → mobile (bottom sheet)
+                                 // >= 768px → web (centrado)
+```
+
+`useIsMobile` es un atajo del hook `useResponsive`, que también expone:
+
+```typescript
+const { deviceType, orientation, isMobile, isTablet, isDesktop, isPortrait, isLandscape } = useResponsive();
+```
+
+- `mobile`: < 768px
+- `tablet`: 768px - 1023px
+- `desktop`: >= 1024px

@@ -49,12 +49,20 @@ mobile/
 
 ## Platform Resolution
 
+Usa `useIsMobile()` de `useResponsive` hook (`client/src/lib/ui-library/hooks/useResponsive.ts`):
+
 ```typescript
+import { useIsMobile } from '../../hooks';
+
+const isMobile = useIsMobile(); // useResponsive().isMobile
+
 if (isMobile) {
   return <ModalMobile {...props} />;  // < 768px → bottom sheet
 }
 return <ModalWeb {...props} />;        // >= 768px → centrado
 ```
+
+`useIsMobile` es un atajo del hook `useResponsive` que también expone `deviceType`, `orientation`, `isTablet`, `isDesktop`, etc.
 
 ## Usage
 
