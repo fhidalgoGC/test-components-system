@@ -30,6 +30,7 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'accordion', label: 'Accordion', i18n: { en: 'Accordion', es: 'Acordeón', default: 'Accordion' }, path: '/components/accordion', icon: 'ChevronDown' },
         { id: 'list', label: 'List', i18n: { en: 'List', es: 'Lista', default: 'List' }, path: '/components/list', icon: 'List' },
         { id: 'floating-menu', label: 'FloatingMenu', i18n: { en: 'FloatingMenu', es: 'Menú Flotante', default: 'FloatingMenu' }, path: '/components/floating-menu', icon: 'Menu' },
+        { id: 'modal', label: 'Modal', i18n: { en: 'Modal', es: 'Modal', default: 'Modal' }, path: '/components/modal', icon: 'Square' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
       ]
     },
