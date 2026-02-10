@@ -66,13 +66,19 @@ export interface SelectionStyle {
   custom?: CSSProperties;
 }
 
+export interface SelectionItemActionEvent<R = any> {
+  item: R;
+  action: 'selected' | 'deselected';
+}
+
 export interface SelectionConfig<T = any> {
   getItemId: (item: T, index: number) => string;
+  getItem?: (item: T, index: number) => any;
   multiSelect?: boolean;
   selectedIds?: string[];
   defaultSelectedIds?: string[];
-  onSelectionChange?: (selectedIds: string[]) => void;
-  onItemAction?: (event: ItemActionEvent) => void;
+  onSelectionChange?: (selectedItems: any[]) => void;
+  onItemAction?: (event: SelectionItemActionEvent) => void;
   selectionStyle?: SelectionStyle;
 }
 

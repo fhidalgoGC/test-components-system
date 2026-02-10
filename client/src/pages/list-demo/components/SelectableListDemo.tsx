@@ -3,8 +3,13 @@ import { List } from '@/lib/ui-library/components/List';
 import { mockProducts, ProductCard } from './shared';
 import type { Product } from './shared';
 
+interface ProductSummary {
+  id: number;
+  name: string;
+}
+
 export const SelectableListDemo = () => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<ProductSummary[]>([]);
   const [singleSelectedIds, setSingleSelectedIds] = useState<string[]>([]);
   const [lastAction, setLastAction] = useState<string>('');
 
@@ -14,25 +19,28 @@ export const SelectableListDemo = () => {
     <div className="space-y-8">
       <section className="space-y-4 border rounded-lg p-4">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white" data-testid="text-section-multi-select">
-          Multi-Select
+          Multi-Select con getItem
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Haz click en los items para seleccionar varios. El borde azul indica selección.
+          Usa getItem para transformar T en la interfaz que necesites. Aquí solo devuelve id y name.
         </p>
 
         <div className="flex gap-2 flex-wrap mb-2">
           <span className="text-sm text-gray-600 dark:text-gray-300" data-testid="text-selected-count">
-            Seleccionados: {selectedIds.length}
+            Seleccionados: {selectedItems.length}
           </span>
-          {selectedIds.length > 0 && (
-            <span className="text-xs text-gray-400" data-testid="text-selected-ids">
-              IDs: [{selectedIds.join(', ')}]
-            </span>
-          )}
         </div>
 
+        {selectedItems.length > 0 && (
+          <div className="text-xs bg-gray-100 dark:bg-gray-700 p-2 rounded space-y-1" data-testid="text-selected-items">
+            {selectedItems.map((item) => (
+              <div key={item.id}>#{item.id} - {item.name}</div>
+            ))}
+          </div>
+        )}
+
         {lastAction && (
-          <div className="text-xs bg-gray-100 dark:bg-gray-700 p-2 rounded" data-testid="text-last-action">
+          <div className="text-xs bg-blue-50 dark:bg-blue-900 p-2 rounded" data-testid="text-last-action">
             Última acción: {lastAction}
           </div>
         )}
@@ -47,10 +55,10 @@ export const SelectableListDemo = () => {
           }}
           selectionConfig={{
             getItemId: (product) => String(product.id),
+            getItem: (product): ProductSummary => ({ id: product.id, name: product.name }),
             multiSelect: true,
-            selectedIds: selectedIds,
-            onSelectionChange: setSelectedIds,
-            onItemAction: (event) => setLastAction(`${event.id} → ${event.action}`),
+            onSelectionChange: setSelectedItems,
+            onItemAction: (event) => setLastAction(`${JSON.stringify(event.item)} → ${event.action}`),
             selectionStyle: {
               border: '2px solid #3b82f6',
               borderRadius: 8,
@@ -62,10 +70,10 @@ export const SelectableListDemo = () => {
 
       <section className="space-y-4 border rounded-lg p-4">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white" data-testid="text-section-single-select">
-          Single-Select
+          Single-Select sin getItem
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Solo un item puede estar seleccionado a la vez. Estilo con borde verde.
+          Sin getItem, los callbacks devuelven solo los IDs (string[]).
         </p>
 
         <div className="mb-2">

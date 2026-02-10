@@ -52,13 +52,15 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
   - **Empty state**: Configurable position (`center`, `over`) with custom component support
   - **Data source**: When controller is provided, `data` prop is optional - controller becomes single source of truth
   - **InfiniteScroll**: Uses IntersectionObserver with configurable threshold, triggers `onLoadMore` callback, uses `controller.appendData()` for new data
+  - **Layout gap**: `layout.gap` controls spacing between items (responsibility of the List, not the item component)
   - **Selection integration**: Optional `selectionConfig` prop integrates `WrapperItemsSelected` for item selection
-    - Two internal layouts: normal (sin selección) and selectable (con selección) - solo se carga en memoria si se necesita
+    - Two internal layouts in `layouts/` folder: `List.normal.layout.tsx` and `List.selectable.layout.tsx` - solo se carga en memoria si se necesita
     - `getItemId`: Function to extract ID from each item (agnóstico)
+    - `getItem`: Optional function to transform T → R for callbacks (agnóstico, el consumidor decide qué interfaz recibir)
     - `multiSelect`: Single or multi-select mode
     - `selectedIds` / `defaultSelectedIds`: Controlled or uncontrolled selection
-    - `onSelectionChange`: Callback with full array of selected IDs
-    - `onItemAction`: Callback for each select/deselect action
+    - `onSelectionChange`: Callback with transformed items (R[]) when getItem provided, or string[] (IDs) when not
+    - `onItemAction`: Callback for each select/deselect action with `{ item: R, action }` event
     - `selectionStyle`: Visual configuration (border, borderRadius, backgroundColor, boxShadow, outline, custom CSSProperties)
 - **Modal Component**: Agnostic dialog with 100% external control via `useModalController` hook. Features:
   - **External control**: `useModalController` hook manages open/close/state/selectedData

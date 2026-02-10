@@ -4,8 +4,14 @@ import { useListController } from '@/lib/ui-library/components/List/shared/useLi
 import type { InternalListController } from '@/lib/ui-library/components/List/shared/List.types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { RefreshCw, Loader2 } from 'lucide-react';
+import { RefreshCw, Loader2, X } from 'lucide-react';
 import { Product, mockProducts, fetchProducts, ProductCard } from './shared';
+
+interface SelectedProduct {
+  id: number;
+  name: string;
+  price: number;
+}
 
 export const InfiniteScrollDemo = () => {
   const [loading, setLoading] = useState(true);
@@ -13,6 +19,7 @@ export const InfiniteScrollDemo = () => {
   const pageSize = 8;
 
   const controller = useListController<Product>();
+  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
   
   const [controllerState, setControllerState] = useState({
     currentPage: 0,
@@ -51,6 +58,7 @@ export const InfiniteScrollDemo = () => {
 
   const handleReset = async () => {
     setLoading(true);
+    setSelectedProducts([]);
     controller.reload();
     const data = await fetchProducts(1, pageSize);
     controller.setData(data);
@@ -78,9 +86,9 @@ export const InfiniteScrollDemo = () => {
     return (
       <Card data-testid="card-example2">
         <CardHeader>
-          <CardTitle>Example 2: Infinite Scroll</CardTitle>
+          <CardTitle>Example 2: Infinite Scroll + Multi-Select</CardTitle>
           <CardDescription>
-            Scroll infinito usando IntersectionObserver. Dispara onScrollInfinity al llegar al final.
+            Scroll infinito con selección múltiple. Usa getItem para devolver solo id, name y price.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -96,28 +104,56 @@ export const InfiniteScrollDemo = () => {
   return (
     <Card data-testid="card-example2">
       <CardHeader>
-        <CardTitle>Example 2: Infinite Scroll</CardTitle>
+        <CardTitle>Example 2: Infinite Scroll + Multi-Select</CardTitle>
         <CardDescription>
-          Scroll infinito usando IntersectionObserver. Dispara onScrollInfinity al llegar al final.
+          Scroll infinito con selección múltiple. Usa getItem para devolver solo id, name y price.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex items-center gap-4">
+        <div className="mb-4 flex items-center gap-4 flex-wrap">
           <Button onClick={handleReset} variant="outline" size="sm" data-testid="button-reset-example2">
             <RefreshCw className="w-4 h-4 mr-2" />
             Reset
           </Button>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-500" data-testid="text-pagination-info">
             Showing {controllerState.loadedItems} of {controllerState.totalItems} items (Page {controllerState.currentPage} of {controllerState.totalPages})
           </span>
         </div>
-        <List
+
+        {selectedProducts.length > 0 && (
+          <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-950 rounded-lg" data-testid="text-selected-summary">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                {selectedProducts.length} seleccionados — Total: ${selectedProducts.reduce((sum, p) => sum + p.price, 0)}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedProducts([])}
+                className="h-6 px-2 text-blue-600"
+                data-testid="button-clear-selection"
+              >
+                <X className="w-3 h-3 mr-1" />
+                Limpiar
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {selectedProducts.map((p) => (
+                <span key={p.id} className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded" data-testid={`tag-selected-${p.id}`}>
+                  {p.name} (${p.price})
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <List<Product>
           id="infinite-list"
           controller={controller}
           layout={{
             widthMode: 'full',
             heightMode: 'fixed',
-            height: 250,
+            height: 300,
             gap: 8
           }}
           behaviors={{
@@ -134,6 +170,21 @@ export const InfiniteScrollDemo = () => {
           item={{
             renderType: 'component',
             render: (product) => <ProductCard product={product} />
+          }}
+          selectionConfig={{
+            getItemId: (product) => String(product.id),
+            getItem: (product): SelectedProduct => ({
+              id: product.id,
+              name: product.name,
+              price: product.price,
+            }),
+            multiSelect: true,
+            onSelectionChange: setSelectedProducts,
+            selectionStyle: {
+              border: '2px solid #3b82f6',
+              borderRadius: 8,
+              backgroundColor: 'rgba(59, 130, 246, 0.05)',
+            },
           }}
         />
         {controllerState.currentPage === controllerState.totalPages && controllerState.loadedItems > 0 && (

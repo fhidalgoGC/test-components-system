@@ -1,7 +1,9 @@
 import type { ListProps, SelectionStyle } from '../../shared/List.types';
 import { WrapperItemsSelected, useSelectionSafe } from '../../../WrapperItemsSelected';
 import { ListNormalLayout } from './List.normal.layout';
+import { useRef, useCallback } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
+import type { ItemActionEvent } from '../../../WrapperItemsSelected/types';
 
 interface SelectableItemProps {
   itemId: string;
@@ -60,12 +62,48 @@ export const ListSelectableLayout = <T,>(props: ListProps<T>) => {
     return <ListNormalLayout {...props} />;
   }
 
-  const { getItemId, multiSelect = true, selectedIds, defaultSelectedIds, onSelectionChange, onItemAction, selectionStyle } = selectionConfig;
+  const { getItemId, getItem, multiSelect = true, selectedIds, defaultSelectedIds, onSelectionChange, onItemAction, selectionStyle } = selectionConfig;
+
+  const itemMapRef = useRef<Map<string, { data: T; index: number }>>(new Map());
+
+  const handleSelectionChange = useCallback((ids: string[]) => {
+    if (!onSelectionChange) return;
+
+    if (!getItem) {
+      onSelectionChange(ids as any);
+      return;
+    }
+
+    const transformedItems = ids
+      .map((itemId) => {
+        const entry = itemMapRef.current.get(itemId);
+        if (entry) return getItem(entry.data, entry.index);
+        return undefined;
+      })
+      .filter((item): item is any => item !== undefined);
+
+    onSelectionChange(transformedItems);
+  }, [onSelectionChange, getItem]);
+
+  const handleItemAction = useCallback((event: ItemActionEvent) => {
+    if (!onItemAction) return;
+
+    if (!getItem) {
+      onItemAction({ item: event.id as any, action: event.action });
+      return;
+    }
+
+    const entry = itemMapRef.current.get(event.id);
+    if (entry) {
+      onItemAction({ item: getItem(entry.data, entry.index), action: event.action });
+    }
+  }, [onItemAction, getItem]);
 
   const wrappedItem = {
     ...item,
     render: (dataItem: T, index: number) => {
       const itemId = getItemId(dataItem, index);
+      itemMapRef.current.set(itemId, { data: dataItem, index });
       return (
         <SelectableItem
           itemId={itemId}
@@ -83,8 +121,8 @@ export const ListSelectableLayout = <T,>(props: ListProps<T>) => {
       multiSelect={multiSelect}
       selectedIds={selectedIds}
       defaultSelectedIds={defaultSelectedIds}
-      onSelectionChange={onSelectionChange}
-      onItemAction={onItemAction}
+      onSelectionChange={handleSelectionChange}
+      onItemAction={handleItemAction}
     >
       <ListNormalLayout {...restProps} id={id} item={wrappedItem} />
     </WrapperItemsSelected>

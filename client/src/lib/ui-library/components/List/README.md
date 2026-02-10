@@ -67,11 +67,12 @@ type ListProps<T> = {
 
   selectionConfig?: {
     getItemId: (item: T, index: number) => string;
+    getItem?: (item: T, index: number) => R;
     multiSelect?: boolean;
     selectedIds?: string[];
     defaultSelectedIds?: string[];
-    onSelectionChange?: (selectedIds: string[]) => void;
-    onItemAction?: (event: ItemActionEvent) => void;
+    onSelectionChange?: (selectedItems: R[]) => void;
+    onItemAction?: (event: { item: R; action: 'selected' | 'deselected' }) => void;
     selectionStyle?: {
       border?: string;
       borderRadius?: string | number;
@@ -205,6 +206,7 @@ const products: Product[] = [
 <List<Product>
   id="selectable-list"
   data={products}
+  layout={{ gap: 8 }}
   item={{
     renderType: 'component',
     render: (item) => (
@@ -216,8 +218,8 @@ const products: Product[] = [
   selectionConfig={{
     getItemId: (item) => item.id,
     multiSelect: true,
-    onSelectionChange: (ids) => console.log('Selected:', ids),
-    onItemAction: (event) => console.log(event.id, event.action),
+    onSelectionChange: (ids) => console.log('Selected IDs:', ids),
+    onItemAction: (event) => console.log(event.item, event.action),
     selectionStyle: {
       border: '2px solid #3b82f6',
       backgroundColor: 'rgba(59, 130, 246, 0.05)',
@@ -227,7 +229,40 @@ const products: Product[] = [
 />
 ```
 
-### Selección Controlada (Externamente)
+### Selección con getItem (Transformar T → R)
+
+Cuando necesitas que los callbacks devuelvan objetos transformados en vez de solo IDs:
+
+```tsx
+interface ProductSummary {
+  id: string;
+  name: string;
+}
+
+const [selected, setSelected] = useState<ProductSummary[]>([]);
+
+<List<Product>
+  id="selectable-with-getItem"
+  data={products}
+  layout={{ gap: 8 }}
+  item={{
+    renderType: 'component',
+    render: (item) => <ProductCard {...item} />,
+  }}
+  selectionConfig={{
+    getItemId: (item) => item.id,
+    getItem: (item): ProductSummary => ({ id: item.id, name: item.name }),
+    multiSelect: true,
+    onSelectionChange: setSelected, // recibe ProductSummary[]
+    onItemAction: (event) => console.log(event.item.name, event.action),
+    selectionStyle: {
+      border: '2px solid #3b82f6',
+    },
+  }}
+/>
+```
+
+### Selección Controlada sin getItem (solo IDs)
 
 ```tsx
 const [selectedIds, setSelectedIds] = useState<string[]>(['1']);
@@ -235,6 +270,7 @@ const [selectedIds, setSelectedIds] = useState<string[]>(['1']);
 <List<Product>
   id="controlled-selectable"
   data={products}
+  layout={{ gap: 8 }}
   item={{
     renderType: 'component',
     render: (item) => <ProductCard {...item} />,
@@ -243,7 +279,7 @@ const [selectedIds, setSelectedIds] = useState<string[]>(['1']);
     getItemId: (item) => item.id,
     multiSelect: false,
     selectedIds: selectedIds,
-    onSelectionChange: setSelectedIds,
+    onSelectionChange: setSelectedIds, // recibe string[]
     selectionStyle: {
       border: '2px solid #10b981',
     },
@@ -253,13 +289,21 @@ const [selectedIds, setSelectedIds] = useState<string[]>(['1']);
 
 ## Arquitectura de Selección
 
-Cuando `selectionConfig` está presente, el List usa un layout interno diferente (`List.selectable.view.tsx`) que:
+Cuando `selectionConfig` está presente, el List usa un layout interno diferente (`List.selectable.layout.tsx`) que:
 
 1. Envuelve la lista con `WrapperItemsSelected` (Provider + Context)
 2. Envuelve cada item con un `SelectableItem` que aplica estilos según el estado de selección
 3. Los estilos se aplican sobre el contenedor del item, sin modificar el componente interno (agnóstico)
+4. Mantiene un mapa interno `itemId → T` para transformar callbacks cuando `getItem` está presente
 
 Cuando `selectionConfig` NO está presente, se usa el layout normal sin cargar ningún código de selección en memoria.
+
+### getItem vs getItemId
+
+- `getItemId(item, index) → string`: Obligatorio. Extrae un identificador único del item para el sistema de selección interno.
+- `getItem(item, index) → R`: Opcional. Transforma T en la interfaz que el consumidor quiera recibir en los callbacks.
+  - Si se provee: `onSelectionChange` recibe `R[]` y `onItemAction.item` es de tipo `R`
+  - Si NO se provee: `onSelectionChange` recibe `string[]` (los IDs) y `onItemAction.item` es `string`
 
 ### SelectionStyle
 
@@ -292,20 +336,20 @@ Cuando `selectionConfig` NO está presente, se usa el layout normal sin cargar n
 
 ```
 List/
-├── shared/                          # Tipos y hooks compartidos
-│   ├── List.types.ts                # Incluye SelectionConfig, SelectionStyle
+├── shared/                              # Tipos y hooks compartidos
+│   ├── List.types.ts                    # Incluye SelectionConfig, SelectionStyle, SelectionItemActionEvent
 │   ├── useListController.ts
 │   └── index.ts
 ├── web/
-│   ├── views/
-│   │   ├── List.view.tsx            # Layout normal (sin selección)
-│   │   └── List.selectable.view.tsx # Layout con selección (WrapperItemsSelected)
-│   └── index.tsx                    # Despacho según selectionConfig
+│   ├── layouts/
+│   │   ├── List.normal.layout.tsx       # Layout normal (sin selección)
+│   │   └── List.selectable.layout.tsx   # Layout con selección (WrapperItemsSelected + getItem)
+│   └── index.tsx                        # Despacho según selectionConfig
 ├── mobile/
-│   ├── views/
-│   │   ├── List.view.tsx            # Layout normal (sin selección)
-│   │   └── List.selectable.view.tsx # Layout con selección (WrapperItemsSelected)
-│   └── index.tsx                    # Despacho según selectionConfig
-├── index.tsx                        # Web/Mobile dispatch
+│   ├── layouts/
+│   │   ├── List.normal.layout.tsx       # Layout normal (sin selección)
+│   │   └── List.selectable.layout.tsx   # Layout con selección (WrapperItemsSelected + getItem)
+│   └── index.tsx                        # Despacho según selectionConfig
+├── index.tsx                            # Web/Mobile dispatch
 └── README.md
 ```
