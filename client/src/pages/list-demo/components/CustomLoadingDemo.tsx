@@ -71,7 +71,8 @@ export const CustomLoadingDemo = () => {
           layout={{
             widthMode: 'full',
             heightMode: 'auto',
-            minHeight: 150
+            minHeight: 150,
+            gap: 8
           }}
           behaviors={{
             scroll: 'none'

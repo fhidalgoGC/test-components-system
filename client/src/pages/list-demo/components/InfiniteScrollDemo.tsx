@@ -117,7 +117,8 @@ export const InfiniteScrollDemo = () => {
           layout={{
             widthMode: 'full',
             heightMode: 'fixed',
-            height: 250
+            height: 250,
+            gap: 8
           }}
           behaviors={{
             scroll: 'infinityScroll',

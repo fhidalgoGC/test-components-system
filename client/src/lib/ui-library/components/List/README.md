@@ -33,6 +33,7 @@ type ListProps<T> = {
     heightMode?: 'full' | 'auto' | 'fixed';
     height?: number | 'auto';
     minHeight?: number;
+    gap?: number | string;
   };
 
   callbacks?: {

@@ -34,6 +34,7 @@ export const ListNormalLayout = <T,>(props: ListProps<T>) => {
     heightMode = 'auto',
     height,
     minHeight,
+    gap,
   } = layout;
 
   const { onScroll, onScrollInfinity } = callbacks;
@@ -143,6 +144,9 @@ export const ListNormalLayout = <T,>(props: ListProps<T>) => {
   if (heightMode === 'fixed' && height && height !== 'auto') {
     listStyle.height = height;
     listStyle.maxHeight = height;
+  }
+  if (gap !== undefined) {
+    listStyle.gap = typeof gap === 'number' ? `${gap}px` : gap;
   }
 
   const itemClasses = [

@@ -124,7 +124,8 @@ export const RenderStatesDemo = () => {
           layout={{
             widthMode: 'full',
             heightMode: 'fixed',
-            height: 200
+            height: 200,
+            gap: 8
           }}
           behaviors={{
             scroll: 'normal'

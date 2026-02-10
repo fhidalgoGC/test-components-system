@@ -20,6 +20,7 @@ export interface ListLayout {
   heightMode?: HeightMode;
   height?: number | 'auto';
   minHeight?: number;
+  gap?: number | string;
 }
 
 export interface ListCallbacks {

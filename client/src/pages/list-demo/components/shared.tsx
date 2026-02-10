@@ -30,7 +30,7 @@ export const fetchProducts = async (page: number, pageSize: number): Promise<Pro
 };
 
 export const ProductCard = ({ product }: { product: Product }) => (
-  <div className="flex items-center justify-between p-4 border rounded-lg bg-white dark:bg-gray-800 mb-2 shadow-sm hover:shadow-md transition-shadow">
+  <div className="flex items-center justify-between p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow">
     <div className="flex items-center gap-3">
       <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
         <Package className="w-5 h-5 text-blue-600 dark:text-blue-400" />

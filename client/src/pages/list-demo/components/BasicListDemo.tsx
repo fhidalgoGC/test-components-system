@@ -65,7 +65,8 @@ export const BasicListDemo = () => {
           layout={{
             widthMode: 'full',
             heightMode: 'fixed',
-            height: 300
+            height: 300,
+            gap: 8
           }}
           behaviors={{
             scroll: 'normal'

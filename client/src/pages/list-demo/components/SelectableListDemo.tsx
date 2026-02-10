@@ -40,7 +40,7 @@ export const SelectableListDemo = () => {
         <List<Product>
           id="multi-select-list"
           data={demoProducts}
-          layout={{ widthMode: 'full', heightMode: 'auto' }}
+          layout={{ widthMode: 'full', heightMode: 'auto', gap: 8 }}
           item={{
             renderType: 'component',
             render: (product) => <ProductCard product={product} />,
@@ -77,7 +77,7 @@ export const SelectableListDemo = () => {
         <List<Product>
           id="single-select-list"
           data={demoProducts.slice(0, 4)}
-          layout={{ widthMode: 'full', heightMode: 'auto' }}
+          layout={{ widthMode: 'full', heightMode: 'auto', gap: 8 }}
           item={{
             renderType: 'component',
             render: (product) => <ProductCard product={product} />,
@@ -107,7 +107,7 @@ export const SelectableListDemo = () => {
         <List<Product>
           id="custom-style-list"
           data={demoProducts.slice(0, 4)}
-          layout={{ widthMode: 'full', heightMode: 'auto' }}
+          layout={{ widthMode: 'full', heightMode: 'auto', gap: 8 }}
           item={{
             renderType: 'component',
             render: (product) => <ProductCard product={product} />,
