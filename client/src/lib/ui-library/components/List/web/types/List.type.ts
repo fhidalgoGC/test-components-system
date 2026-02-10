@@ -12,6 +12,8 @@ export type {
   ListPaginator,
   ListBehaviors,
   ListLoading,
+  SelectionConfig,
+  SelectionStyle,
 } from '../../shared/List.types';
 
 export interface ListContext {

@@ -2,6 +2,7 @@ import { BasicListDemo } from './components/BasicListDemo';
 import { InfiniteScrollDemo } from './components/InfiniteScrollDemo';
 import { RenderStatesDemo } from './components/RenderStatesDemo';
 import { CustomLoadingDemo } from './components/CustomLoadingDemo';
+import { SelectableListDemo } from './components/SelectableListDemo';
 
 const ListDemo = () => {
   return (
@@ -14,6 +15,7 @@ const ListDemo = () => {
         </p>
       </div>
 
+      <SelectableListDemo />
       <BasicListDemo />
       <InfiniteScrollDemo />
       <RenderStatesDemo />

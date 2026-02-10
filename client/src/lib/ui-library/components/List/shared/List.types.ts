@@ -1,4 +1,5 @@
-import type { ReactNode, ComponentType } from 'react';
+import type { ReactNode, ComponentType, CSSProperties } from 'react';
+import type { ItemActionEvent } from '../../WrapperItemsSelected/types';
 
 export type RenderState =
   | 'renderIdle'
@@ -55,6 +56,25 @@ export interface ListItemConfig<T> {
   minHeight?: number;
 }
 
+export interface SelectionStyle {
+  border?: string;
+  borderRadius?: string | number;
+  backgroundColor?: string;
+  boxShadow?: string;
+  outline?: string;
+  custom?: CSSProperties;
+}
+
+export interface SelectionConfig<T = any> {
+  getItemId: (item: T, index: number) => string;
+  multiSelect?: boolean;
+  selectedIds?: string[];
+  defaultSelectedIds?: string[];
+  onSelectionChange?: (selectedIds: string[]) => void;
+  onItemAction?: (event: ItemActionEvent) => void;
+  selectionStyle?: SelectionStyle;
+}
+
 export interface ListProps<T = any> {
   id: string;
   layout?: ListLayout;
@@ -65,6 +85,7 @@ export interface ListProps<T = any> {
   item: ListItemConfig<T>;
   data?: T[];
   controller?: ListController<T>;
+  selectionConfig?: SelectionConfig<T>;
   className?: string;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';

@@ -52,6 +52,14 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
   - **Empty state**: Configurable position (`center`, `over`) with custom component support
   - **Data source**: When controller is provided, `data` prop is optional - controller becomes single source of truth
   - **InfiniteScroll**: Uses IntersectionObserver with configurable threshold, triggers `onLoadMore` callback, uses `controller.appendData()` for new data
+  - **Selection integration**: Optional `selectionConfig` prop integrates `WrapperItemsSelected` for item selection
+    - Two internal layouts: normal (sin selección) and selectable (con selección) - solo se carga en memoria si se necesita
+    - `getItemId`: Function to extract ID from each item (agnóstico)
+    - `multiSelect`: Single or multi-select mode
+    - `selectedIds` / `defaultSelectedIds`: Controlled or uncontrolled selection
+    - `onSelectionChange`: Callback with full array of selected IDs
+    - `onItemAction`: Callback for each select/deselect action
+    - `selectionStyle`: Visual configuration (border, borderRadius, backgroundColor, boxShadow, outline, custom CSSProperties)
 - **Modal Component**: Agnostic dialog with 100% external control via `useModalController` hook. Features:
   - **External control**: `useModalController` hook manages open/close/state/selectedData
   - **Visual states**: `idle`, `loading`, `success`, `empty`, `error` with configurable renders (`self` or `component`)

@@ -9,6 +9,9 @@ Componente List agnóstico y reutilizable con control externo del ciclo de rende
 - Soporte para scroll normal, infinite scroll y sin scroll
 - Paginación configurable
 - Loading indicator customizable (top, bottom, over)
+- Selección de items integrada vía `WrapperItemsSelected` (single/multi-select)
+- Estilos de selección configurables (borde, fondo, sombra, etc.)
+- Dos layouts internos: normal y selectable (solo se carga en memoria si se necesita)
 - Multi-plataforma (Web y Mobile)
 
 ## Instalación
@@ -60,6 +63,23 @@ type ListProps<T> = {
 
   data: T[];
   controller?: ListController<T>;
+
+  selectionConfig?: {
+    getItemId: (item: T, index: number) => string;
+    multiSelect?: boolean;
+    selectedIds?: string[];
+    defaultSelectedIds?: string[];
+    onSelectionChange?: (selectedIds: string[]) => void;
+    onItemAction?: (event: ItemActionEvent) => void;
+    selectionStyle?: {
+      border?: string;
+      borderRadius?: string | number;
+      backgroundColor?: string;
+      boxShadow?: string;
+      outline?: string;
+      custom?: CSSProperties;
+    };
+  };
 };
 ```
 
@@ -166,6 +186,91 @@ const controller = useListController<Item>();
 />
 ```
 
+### Lista con Selección
+
+```tsx
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+}
+
+const products: Product[] = [
+  { id: '1', name: 'Laptop', price: 999 },
+  { id: '2', name: 'Mouse', price: 29 },
+  { id: '3', name: 'Keyboard', price: 79 },
+];
+
+<List<Product>
+  id="selectable-list"
+  data={products}
+  item={{
+    renderType: 'component',
+    render: (item) => (
+      <div className="p-3">
+        <span>{item.name}</span> - ${item.price}
+      </div>
+    ),
+  }}
+  selectionConfig={{
+    getItemId: (item) => item.id,
+    multiSelect: true,
+    onSelectionChange: (ids) => console.log('Selected:', ids),
+    onItemAction: (event) => console.log(event.id, event.action),
+    selectionStyle: {
+      border: '2px solid #3b82f6',
+      backgroundColor: 'rgba(59, 130, 246, 0.05)',
+      borderRadius: 8,
+    },
+  }}
+/>
+```
+
+### Selección Controlada (Externamente)
+
+```tsx
+const [selectedIds, setSelectedIds] = useState<string[]>(['1']);
+
+<List<Product>
+  id="controlled-selectable"
+  data={products}
+  item={{
+    renderType: 'component',
+    render: (item) => <ProductCard {...item} />,
+  }}
+  selectionConfig={{
+    getItemId: (item) => item.id,
+    multiSelect: false,
+    selectedIds: selectedIds,
+    onSelectionChange: setSelectedIds,
+    selectionStyle: {
+      border: '2px solid #10b981',
+    },
+  }}
+/>
+```
+
+## Arquitectura de Selección
+
+Cuando `selectionConfig` está presente, el List usa un layout interno diferente (`List.selectable.view.tsx`) que:
+
+1. Envuelve la lista con `WrapperItemsSelected` (Provider + Context)
+2. Envuelve cada item con un `SelectableItem` que aplica estilos según el estado de selección
+3. Los estilos se aplican sobre el contenedor del item, sin modificar el componente interno (agnóstico)
+
+Cuando `selectionConfig` NO está presente, se usa el layout normal sin cargar ningún código de selección en memoria.
+
+### SelectionStyle
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `border` | `string` | Borde del item seleccionado (ej: `'2px solid #3b82f6'`) |
+| `borderRadius` | `string \| number` | Radio del borde |
+| `backgroundColor` | `string` | Color de fondo del item seleccionado |
+| `boxShadow` | `string` | Sombra del item seleccionado |
+| `outline` | `string` | Outline del item seleccionado |
+| `custom` | `CSSProperties` | Estilos CSS adicionales |
+
 ## Estados de Render
 
 | Estado | Descripción |
@@ -186,12 +291,20 @@ const controller = useListController<Item>();
 
 ```
 List/
-├── shared/             # Tipos y hooks compartidos
-│   ├── List.types.ts
+├── shared/                          # Tipos y hooks compartidos
+│   ├── List.types.ts                # Incluye SelectionConfig, SelectionStyle
 │   ├── useListController.ts
 │   └── index.ts
-├── web/                # Implementación web
-├── mobile/             # Implementación mobile
-├── index.tsx           # Web/Mobile dispatch
+├── web/
+│   ├── views/
+│   │   ├── List.view.tsx            # Layout normal (sin selección)
+│   │   └── List.selectable.view.tsx # Layout con selección (WrapperItemsSelected)
+│   └── index.tsx                    # Despacho según selectionConfig
+├── mobile/
+│   ├── views/
+│   │   ├── List.view.tsx            # Layout normal (sin selección)
+│   │   └── List.selectable.view.tsx # Layout con selección (WrapperItemsSelected)
+│   └── index.tsx                    # Despacho según selectionConfig
+├── index.tsx                        # Web/Mobile dispatch
 └── README.md
 ```
