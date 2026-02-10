@@ -1,12 +1,12 @@
 import type { ListProps } from '../shared/List.types';
-import { ListView } from './views';
-import { ListSelectableView } from './views';
+import { ListNormalLayout } from './layouts';
+import { ListSelectableLayout } from './layouts';
 
 export const List = <T,>(props: ListProps<T>) => {
   if (props.selectionConfig) {
-    return <ListSelectableView {...props} />;
+    return <ListSelectableLayout {...props} />;
   }
-  return <ListView {...props} />;
+  return <ListNormalLayout {...props} />;
 };
 
 export type { ListProps, ListController, RenderState } from './types';

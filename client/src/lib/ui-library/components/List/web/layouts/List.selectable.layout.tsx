@@ -1,6 +1,6 @@
 import type { ListProps, SelectionStyle } from '../../shared/List.types';
 import { WrapperItemsSelected, useSelectionSafe } from '../../../WrapperItemsSelected';
-import { ListView } from './List.view';
+import { ListNormalLayout } from './List.normal.layout';
 import type { CSSProperties, ReactNode } from 'react';
 
 interface SelectableItemProps {
@@ -53,11 +53,11 @@ const SelectableItem = ({ itemId, selectionStyle, children, testId }: Selectable
   );
 };
 
-export const ListSelectableView = <T,>(props: ListProps<T>) => {
+export const ListSelectableLayout = <T,>(props: ListProps<T>) => {
   const { selectionConfig, item, id, ...restProps } = props;
 
   if (!selectionConfig) {
-    return <ListView {...props} />;
+    return <ListNormalLayout {...props} />;
   }
 
   const { getItemId, multiSelect = true, selectedIds, defaultSelectedIds, onSelectionChange, onItemAction, selectionStyle } = selectionConfig;
@@ -86,7 +86,7 @@ export const ListSelectableView = <T,>(props: ListProps<T>) => {
       onSelectionChange={onSelectionChange}
       onItemAction={onItemAction}
     >
-      <ListView {...restProps} id={id} item={wrappedItem} />
+      <ListNormalLayout {...restProps} id={id} item={wrappedItem} />
     </WrapperItemsSelected>
   );
 };

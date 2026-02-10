@@ -10,21 +10,17 @@ interface ListState<T> {
   nextPage: number;
 }
 
-export const ListView = <T,>(props: ListProps<T>) => {
+export const ListNormalLayout = <T,>(props: ListProps<T>) => {
   const {
     id,
     layout = {},
     callbacks = {},
     behaviors = {},
     loading = {},
-    empty = {},
     item,
     data,
     controller: externalController,
     className,
-    renderIdle: propRenderIdle,
-    renderLoading: propRenderLoading,
-    renderError: propRenderError,
   } = props;
 
   const {
@@ -39,7 +35,6 @@ export const ListView = <T,>(props: ListProps<T>) => {
   const { onScroll, onScrollInfinity } = callbacks;
   const { scroll = 'normal', paginator } = behaviors;
   const { renderType: loadingRenderType = 'self', render: loadingRender, position: loadingPosition = 'bottom' } = loading;
-  const { renderType: emptyRenderType = 'self', render: emptyRender, position: emptyPosition = 'center' } = empty;
 
   const internalController = useListController<T>();
   const controller = (externalController || internalController) as InternalListController<T>;
@@ -191,58 +186,27 @@ export const ListView = <T,>(props: ListProps<T>) => {
     );
   };
 
-  const renderEmptyIndicator = () => {
-    if (state.renderState !== 'renderEmpty') return null;
-
-    const emptyClasses = [
-      styles.emptyContainer,
-      emptyPosition === 'center' && styles.emptyCenter,
-      emptyPosition === 'over' && styles.emptyOver,
-    ].filter(Boolean).join(' ');
-
-    const content = emptyRenderType === 'component' && emptyRender ? (
-      typeof emptyRender === 'function' ? (
-        (() => {
-          const EmptyComponent = emptyRender as React.ComponentType;
-          return <EmptyComponent />;
-        })()
-      ) : emptyRender
-    ) : (
-      <div className={styles.emptyDefault}>
-        <span>No items found</span>
-      </div>
-    );
-
-    return (
-      <div className={emptyClasses} data-testid={`${id}-empty`}>
-        {content}
-      </div>
-    );
-  };
-
   const renderContent = () => {
     const currentData = state.data;
-    const currentRenderState = state.renderState;
+    const renderState = state.renderState as RenderState;
 
-    if (currentRenderState === 'renderIdle' && propRenderIdle) {
-      const IdleComponent = propRenderIdle;
+    if (renderState === 'renderIdle' && currentData.length === 0) {
       return (
         <div className={styles.idleState} data-testid={`${id}-idle`}>
-          {typeof IdleComponent === 'function' ? <IdleComponent /> : IdleComponent}
+          Waiting for data...
         </div>
       );
     }
 
-    if (currentRenderState === 'renderError' && propRenderError) {
-      const ErrorComponent = propRenderError;
+    if (renderState === 'renderError') {
       return (
         <div className={styles.errorState} data-testid={`${id}-error`}>
-          {typeof ErrorComponent === 'function' ? <ErrorComponent /> : ErrorComponent}
+          Error loading data
         </div>
       );
     }
 
-    if (currentData.length === 0 && currentRenderState === 'renderComplete') {
+    if (renderState === 'renderComplete' && currentData.length === 0) {
       return (
         <div className={styles.emptyState} data-testid={`${id}-empty`}>
           No items to display
@@ -286,7 +250,6 @@ export const ListView = <T,>(props: ListProps<T>) => {
       data-testid={`${id}-container`}
     >
       {loadingPosition === 'over' && renderLoadingIndicator()}
-      {emptyPosition === 'over' && renderEmptyIndicator()}
       
       <div
         ref={listRef}
@@ -297,8 +260,7 @@ export const ListView = <T,>(props: ListProps<T>) => {
         aria-busy={state.renderState === 'renderLoading'}
         data-testid={id}
       >
-        {state.renderState === 'renderEmpty' && emptyPosition === 'center' && renderEmptyIndicator()}
-        {state.renderState !== 'renderEmpty' && renderContent()}
+        {renderContent()}
       </div>
     </div>
   );
