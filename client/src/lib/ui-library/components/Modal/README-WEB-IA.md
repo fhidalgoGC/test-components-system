@@ -1,27 +1,17 @@
-# Modal - Web Version
+# Modal Component - Web
 
-## Overview
-Implementación web del Modal. Se renderiza centrado en pantalla con overlay de fondo. Soporta cierre por Escape, click en overlay, y botón de cerrar.
+Componente modal agnóstico con control 100% externo vía `useModalController`. No gestiona estado interno; solo interpreta configuración recibida por props.
 
-## Folder Structure
+## Características
 
-```
-web/
-├── css/
-│   └── Modal.module.css       # Estilos del modal web
-├── views/
-│   ├── index.ts
-│   └── Modal.view.tsx         # Componente React principal
-├── types/
-│   ├── index.ts
-│   └── Modal.type.ts          # Re-exporta tipos compartidos
-├── i18n/
-│   ├── en.json
-│   └── es.json
-├── providers/
-│   └── Modal.provider.tsx     # Provider (no usado, control externo)
-└── index.tsx                  # Export principal
-```
+- Control externo completo vía `useModalController` hook
+- Estados visuales: `idle`, `loading`, `success`, `empty`, `error`
+- Overlay configurable (opacidad, color, blur, cierre al click)
+- Botón cerrar personalizable (posición, render custom)
+- Layout flexible: header / body / footer con alineación
+- Modos de tamaño: `full`, `auto`, `fixed`
+- Cierre con tecla Escape
+- Bloqueo de scroll del body cuando está abierto
 
 ## Comportamiento Web
 
@@ -32,6 +22,44 @@ web/
 - Cierre con tecla `Escape`
 - Sombra: `0 20px 60px rgba(0,0,0,0.3)`
 - Border radius: `8px`
+
+## Instalación
+
+```tsx
+import { Modal, useModalController } from 'GC-UI-COMPONENTS';
+```
+
+## useModalController API
+
+```tsx
+const modal = useModalController<T>();
+
+modal.isOpen          // boolean
+modal.state           // ModalState
+modal.open()          // Abre el modal (state → 'idle')
+modal.close()         // Cierra el modal (limpia selectedData)
+modal.closeWithData(data)  // Cierra guardando data
+modal.setState(state) // Cambia estado visual
+modal.setSelectedData(data)
+modal.selectedData    // T | undefined
+```
+
+## Props Reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `isOpen` | `boolean` | required | Controla visibilidad |
+| `state` | `ModalState` | `'idle'` | Estado visual actual |
+| `overlay` | `OverlayConfig` | `{ enabled: true }` | Configuración del overlay |
+| `closeButton` | `CloseButtonConfig` | `{ visible: true }` | Botón de cerrar |
+| `layout` | `LayoutConfig` | `{ widthMode: 'auto' }` | Dimensiones del modal |
+| `header` | `SectionConfig` | - | Sección header |
+| `body` | `SectionConfig` | - | Sección body |
+| `footer` | `SectionConfig` | - | Sección footer |
+| `statesComponents` | `StatesComponents` | - | Renders por estado |
+| `callbacks` | `ModalCallbacks` | - | `onClose`, `onConfirm` |
+| `data` | `ModalDataItem[]` | - | Datos opcionales |
+| `className` | `string` | - | Clase CSS adicional |
 
 ## Layout
 
@@ -67,27 +95,99 @@ closeButton={{
 
 Por defecto usa el icono `X` de `lucide-react`.
 
-## Usage
+## States Components
 
 ```tsx
-import { Modal } from './web';
-
-<Modal
-  isOpen={true}
-  state="idle"
-  overlay={{ enabled: true, closeOnClick: true }}
-  closeButton={{ visible: true, position: 'top-right' }}
-  layout={{ widthMode: 'fixed', width: 500 }}
-  header={{ render: <h3>Título</h3> }}
-  body={{ render: <p>Contenido</p> }}
-  footer={{ render: <button>Aceptar</button> }}
-  callbacks={{ onClose: () => {} }}
-/>
+statesComponents={{
+  loading: { renderType: 'self' },           // Spinner por defecto
+  empty: { renderType: 'self' },             // Mensaje "No data"
+  error: { renderType: 'component', render: <MyError /> },  // Custom
+}}
 ```
 
-## Platform Resolution
+- `renderType: 'self'` → Usa render interno por defecto (spinner, mensaje)
+- `renderType: 'component'` → Usa el `render` proporcionado
 
-- `index.tsx` despacha a `web/` o `mobile/` basado en `useIsMobile()` de `useResponsive` hook
-- Source: `client/src/lib/ui-library/hooks/useResponsive.ts`
-- Desktop browsers (>= 768px) usan la implementación `web/`
-- `useIsMobile()` es un atajo de `useResponsive()` que retorna `true` cuando `window.innerWidth < 768`
+## Uso Básico
+
+```tsx
+import { Modal, useModalController } from 'GC-UI-COMPONENTS';
+
+const MyComponent = () => {
+  const modal = useModalController();
+
+  return (
+    <>
+      <button onClick={modal.open}>Abrir Modal</button>
+
+      <Modal
+        isOpen={modal.isOpen}
+        state={modal.state}
+        overlay={{ enabled: true, opacity: 0.5, closeOnClick: true }}
+        closeButton={{ visible: true, position: 'top-right' }}
+        layout={{ widthMode: 'fixed', width: 480 }}
+        header={{
+          render: <h3>Título</h3>,
+          horizontalAlign: 'left',
+        }}
+        body={{
+          render: <p>Contenido del modal</p>,
+        }}
+        footer={{
+          render: (
+            <div className="flex gap-2 justify-end">
+              <button onClick={modal.close}>Cancelar</button>
+              <button onClick={() => modal.close()}>Confirmar</button>
+            </div>
+          ),
+        }}
+        callbacks={{ onClose: modal.close }}
+      />
+    </>
+  );
+};
+```
+
+## Platform Detection
+
+El componente usa `useIsMobile()` de `useResponsive` hook (`client/src/lib/ui-library/hooks/useResponsive.ts`) para detectar la plataforma:
+
+```typescript
+import { useIsMobile } from '../../hooks';
+
+const isMobile = useIsMobile(); // < 768px → mobile (bottom sheet)
+                                 // >= 768px → web (centrado)
+```
+
+`useIsMobile` es un atajo del hook `useResponsive`, que también expone:
+
+```typescript
+const { deviceType, orientation, isMobile, isTablet, isDesktop, isPortrait, isLandscape } = useResponsive();
+```
+
+- `mobile`: < 768px
+- `tablet`: 768px - 1023px
+- `desktop`: >= 1024px
+
+## Folder Structure
+
+```
+Modal/
+├── types.ts                # Tipos compartidos (ModalProps, ModalState, etc.)
+├── hooks/
+│   ├── index.ts
+│   └── useModalController.ts  # Hook de control externo
+├── web/
+│   ├── css/Modal.module.css
+│   ├── views/Modal.view.tsx
+│   ├── types/Modal.type.ts    # Re-exporta tipos compartidos
+│   ├── i18n/en.json, es.json
+│   └── index.tsx
+├── mobile/
+│   ├── css/Modal.module.css
+│   ├── views/Modal.view.tsx
+│   ├── types/Modal.type.ts
+│   ├── i18n/en.json, es.json
+│   └── index.tsx
+└── index.tsx               # Dispatch Web/Mobile via useResponsive (useIsMobile)
+```

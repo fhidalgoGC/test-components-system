@@ -1,83 +1,118 @@
-# List - Web Version
+# List Component - Web
 
-## Overview
+Componente List agnóstico y reutilizable con control externo del ciclo de render. El componente no interpreta, transforma ni obtiene data - su única responsabilidad es renderizar una colección de ítems.
 
-Implementación web del componente List usando React DOM. Renderiza listas con control externo del ciclo de vida, soporte para scroll infinito y estados de render declarativos.
+## Características
 
-## Folder Structure
+- Control externo mediante `useListController` hook
+- Estados de render explícitos: `renderIdle`, `renderLoading`, `renderComplete`, `renderError`
+- Soporte para scroll normal, infinite scroll y sin scroll
+- Paginación configurable
+- Loading indicator customizable (top, bottom, over)
+- Selección de items integrada vía `WrapperItemsSelected` (single/multi-select)
+- Transformación de callbacks con `getItem` (T → R)
+- Estilos de selección configurables (borde, fondo, sombra, etc.)
+- Dos layouts internos: normal y selectable (solo se carga en memoria si se necesita)
+- `layout.gap` controla el spacing entre items (responsabilidad del List, no del item)
 
-```
-web/
-├── css/
-│   ├── index.ts
-│   └── List.module.css      # Estilos CSS
-├── hooks/
-│   ├── index.ts
-│   └── useList.hook.ts      # Lógica del componente
-├── types/
-│   ├── index.ts
-│   └── List.type.ts         # Re-export de tipos compartidos
-├── views/
-│   ├── index.ts
-│   └── List.view.tsx        # Componente React
-└── index.tsx                # Export principal
-```
+## Comportamiento Web
 
-## Uso
+- Usa React DOM con CSS Modules
+- `IntersectionObserver` para infinite scroll
+- Scroll nativo del navegador
+- CSS classes: `.container`, `.list`, `.item`, `.loadingContainer`, `.spinner`, `.errorState`, `.emptyState`, `.sentinel`
+
+## Instalación
 
 ```tsx
 import { List, useListController } from '@/lib/ui-library/components/List';
+```
 
-interface Product {
+## API del Componente
+
+```tsx
+type ListProps<T> = {
   id: string;
-  name: string;
-  price: number;
-}
 
-const ProductList = () => {
-  const controller = useListController<Product>();
+  layout?: {
+    widthMode?: 'full' | 'auto' | 'fixed';
+    width?: number;
+    minWidth?: number;
+    heightMode?: 'full' | 'auto' | 'fixed';
+    height?: number | 'auto';
+    minHeight?: number;
+    gap?: number | string;
+  };
 
-  useEffect(() => {
-    controller.setRenderState('renderLoading');
-    
-    fetch('/api/products')
-      .then(res => res.json())
-      .then(data => {
-        controller.setData(data);
-        controller.setRenderState('renderComplete');
-      });
-  }, []);
+  callbacks?: {
+    onScroll?: (id: string) => void;
+    onScrollInfinity?: (page: number) => void;
+  };
 
-  return (
-    <List
-      id="products"
-      controller={controller}
-      layout={{
-        widthMode: 'full',
-        heightMode: 'fixed',
-        height: 400
-      }}
-      behaviors={{
-        scroll: 'normal'
-      }}
-      data={[]}
-      item={{
-        renderType: 'component',
-        render: (product) => (
-          <div className="product-card">
-            <h3>{product.name}</h3>
-            <p>${product.price}</p>
-          </div>
-        )
-      }}
-    />
-  );
+  behaviors?: {
+    scroll?: 'normal' | 'infinityScroll' | 'none';
+    paginator?: {
+      maxItem: number;
+    };
+  };
+
+  loading?: {
+    renderType?: 'component' | 'self';
+    render?: ReactNode | Component;
+    position?: 'top' | 'bottom' | 'over';
+  };
+
+  item: {
+    renderType: 'component';
+    render: (item: T, index: number) => ReactNode;
+    heightMode?: 'full' | 'auto' | 'fixed';
+    height?: number | 'auto';
+    minHeight?: number;
+  };
+
+  data: T[];
+  controller?: ListController<T>;
+
+  selectionConfig?: {
+    getItemId: (item: T, index: number) => string;
+    getItem?: (item: T, index: number) => R;
+    multiSelect?: boolean;
+    selectedIds?: string[];
+    defaultSelectedIds?: string[];
+    onSelectionChange?: (selectedItems: R[]) => void;
+    onItemAction?: (event: { item: R; action: 'selected' | 'deselected' }) => void;
+    selectionStyle?: {
+      border?: string;
+      borderRadius?: string | number;
+      backgroundColor?: string;
+      boxShadow?: string;
+      outline?: string;
+      custom?: CSSProperties;
+    };
+  };
 };
 ```
 
-## Props Específicas Web
+## useListController API
 
-### Layout
+```tsx
+type ListController<T> = {
+  setData: (data: T[]) => void;
+  appendData: (data: T[]) => void;
+  setPage: (page: number) => void;
+  setPageSize: (size: number) => void;
+  setRenderState: (state: RenderState) => void;
+  getRenderState: () => RenderState;
+  reload: () => void;
+  getPage: () => number;
+  getPageSize: () => number;
+  getTotalItems: () => number;
+};
+
+type RenderState = 'renderIdle' | 'renderLoading' | 'renderComplete' | 'renderError';
+```
+
+## Layout
 
 ```tsx
 layout={{
@@ -87,10 +122,11 @@ layout={{
   heightMode: 'full' | 'auto' | 'fixed',
   height: number | 'auto', // Solo si heightMode='fixed'
   minHeight: number,
+  gap: number | string,   // Spacing entre items (CSS gap)
 }}
 ```
 
-### Behaviors
+## Behaviors
 
 ```tsx
 behaviors={{
@@ -101,7 +137,7 @@ behaviors={{
 }}
 ```
 
-### Loading
+## Loading
 
 ```tsx
 loading={{
@@ -111,45 +147,230 @@ loading={{
 }}
 ```
 
-## Infinite Scroll
+## Uso Básico
 
-El componente usa `IntersectionObserver` para detectar cuando el usuario se acerca al final de la lista:
+### Lista Estática
 
 ```tsx
+const items = [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }];
+
 <List
-  id="infinite"
-  behaviors={{
-    scroll: 'infinityScroll',
-    paginator: { maxItem: 20 }
+  id="simple-list"
+  data={items}
+  item={{
+    renderType: 'component',
+    render: (item) => <div>{item.name}</div>
   }}
-  callbacks={{
-    onScrollInfinity: (page) => {
-      // Se dispara cuando el sentinel entra en el viewport
-      controller.setRenderState('renderLoading');
-      loadMore(page).then(data => {
-        controller.appendData(data);
-        controller.setRenderState('renderComplete');
-      });
-    }
-  }}
-  // ...
 />
 ```
 
-## CSS Classes
+### Con Control Externo
 
-El componente usa CSS modules con las siguientes clases:
+```tsx
+const controller = useListController<Item>();
 
-- `.container` - Contenedor principal
-- `.list` - Lista de items
-- `.item` - Wrapper de cada item
-- `.loadingContainer` - Contenedor del loading
-- `.spinner` - Spinner de carga por defecto
-- `.errorState` - Estado de error
-- `.emptyState` - Estado vacío
-- `.sentinel` - Elemento invisible para infinite scroll
+useEffect(() => {
+  controller.setRenderState('renderLoading');
+  
+  fetchData()
+    .then(data => {
+      controller.setData(data);
+      controller.setRenderState('renderComplete');
+    })
+    .catch(() => {
+      controller.setRenderState('renderError');
+    });
+}, []);
 
-## Platform Resolution
+<List
+  id="controlled-list"
+  controller={controller}
+  data={[]}
+  item={{
+    renderType: 'component',
+    render: (item) => <ItemCard {...item} />
+  }}
+/>
+```
+
+### Infinite Scroll
+
+```tsx
+const controller = useListController<Item>();
+
+<List
+  id="infinite-list"
+  controller={controller}
+  behaviors={{
+    scroll: 'infinityScroll',
+    paginator: { maxItem: 10 }
+  }}
+  loading={{
+    renderType: 'self',
+    position: 'bottom'
+  }}
+  callbacks={{
+    onScrollInfinity: (page) => {
+      controller.setRenderState('renderLoading');
+      
+      fetchMore(page)
+        .then(data => {
+          controller.appendData(data);
+          controller.setRenderState('renderComplete');
+        })
+        .catch(() => {
+          controller.setRenderState('renderError');
+        });
+    }
+  }}
+  data={[]}
+  item={{
+    renderType: 'component',
+    render: (item) => <ItemCard {...item} />
+  }}
+/>
+```
+
+## Selección de Items
+
+### Lista con Selección Básica (sin getItem, recibe IDs)
+
+```tsx
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+}
+
+const products: Product[] = [
+  { id: '1', name: 'Laptop', price: 999 },
+  { id: '2', name: 'Mouse', price: 29 },
+  { id: '3', name: 'Keyboard', price: 79 },
+];
+
+<List<Product>
+  id="selectable-list"
+  data={products}
+  layout={{ gap: 8 }}
+  item={{
+    renderType: 'component',
+    render: (item) => (
+      <div className="p-3">
+        <span>{item.name}</span> - ${item.price}
+      </div>
+    ),
+  }}
+  selectionConfig={{
+    getItemId: (item) => item.id,
+    multiSelect: true,
+    onSelectionChange: (ids) => console.log('Selected IDs:', ids),
+    onItemAction: (event) => console.log(event.item, event.action),
+    selectionStyle: {
+      border: '2px solid #3b82f6',
+      backgroundColor: 'rgba(59, 130, 246, 0.05)',
+      borderRadius: 8,
+    },
+  }}
+/>
+```
+
+### Selección con getItem (Transformar T → R)
+
+Cuando necesitas que los callbacks devuelvan objetos transformados en vez de solo IDs:
+
+```tsx
+interface ProductSummary {
+  id: string;
+  name: string;
+}
+
+const [selected, setSelected] = useState<ProductSummary[]>([]);
+
+<List<Product>
+  id="selectable-with-getItem"
+  data={products}
+  layout={{ gap: 8 }}
+  item={{
+    renderType: 'component',
+    render: (item) => <ProductCard {...item} />,
+  }}
+  selectionConfig={{
+    getItemId: (item) => item.id,
+    getItem: (item): ProductSummary => ({ id: item.id, name: item.name }),
+    multiSelect: true,
+    onSelectionChange: setSelected, // recibe ProductSummary[]
+    onItemAction: (event) => console.log(event.item.name, event.action),
+    selectionStyle: {
+      border: '2px solid #3b82f6',
+    },
+  }}
+/>
+```
+
+### Selección Controlada sin getItem (solo IDs)
+
+```tsx
+const [selectedIds, setSelectedIds] = useState<string[]>(['1']);
+
+<List<Product>
+  id="controlled-selectable"
+  data={products}
+  layout={{ gap: 8 }}
+  item={{
+    renderType: 'component',
+    render: (item) => <ProductCard {...item} />,
+  }}
+  selectionConfig={{
+    getItemId: (item) => item.id,
+    multiSelect: false,
+    selectedIds: selectedIds,
+    onSelectionChange: setSelectedIds, // recibe string[]
+    selectionStyle: {
+      border: '2px solid #10b981',
+    },
+  }}
+/>
+```
+
+## Arquitectura de Selección
+
+Cuando `selectionConfig` está presente, el List usa un layout interno diferente (`List.selectable.layout.tsx`) que:
+
+1. Envuelve la lista con `WrapperItemsSelected` (Provider + Context)
+2. Envuelve cada item con un `SelectableItem` que aplica estilos según el estado de selección
+3. Los estilos se aplican sobre el contenedor del item, sin modificar el componente interno (agnóstico)
+4. Mantiene un mapa interno `itemId → T` para transformar callbacks cuando `getItem` está presente
+
+Cuando `selectionConfig` NO está presente, se usa el layout normal sin cargar ningún código de selección en memoria.
+
+### getItem vs getItemId
+
+- `getItemId(item, index) → string`: Obligatorio. Extrae un identificador único del item para el sistema de selección interno.
+- `getItem(item, index) → R`: Opcional. Transforma T en la interfaz que el consumidor quiera recibir en los callbacks.
+  - Si se provee: `onSelectionChange` recibe `R[]` y `onItemAction.item` es de tipo `R`
+  - Si NO se provee: `onSelectionChange` recibe `string[]` (los IDs) y `onItemAction.item` es `string`
+
+### SelectionStyle
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `border` | `string` | Borde del item seleccionado (ej: `'2px solid #3b82f6'`) |
+| `borderRadius` | `string \| number` | Radio del borde |
+| `backgroundColor` | `string` | Color de fondo del item seleccionado |
+| `boxShadow` | `string` | Sombra del item seleccionado |
+| `outline` | `string` | Outline del item seleccionado |
+| `custom` | `CSSProperties` | Estilos CSS adicionales |
+
+## Estados de Render
+
+| Estado | Descripción |
+|--------|-------------|
+| `renderIdle` | Estado inicial, sin data ni loading |
+| `renderLoading` | Estado visual de carga |
+| `renderComplete` | Data cargada y renderizada |
+| `renderError` | Error durante la carga |
+
+## Platform Detection
 
 El `index.tsx` principal usa `useIsMobile()` para dispatch:
 
@@ -158,4 +379,35 @@ if (isMobile) {
   return <ListMobile {...props} />;  // < 768px
 }
 return <ListWeb {...props} />;        // >= 768px
+```
+
+## Folder Structure
+
+```
+List/
+├── shared/                              # Tipos y hooks compartidos
+│   ├── List.types.ts                    # Incluye SelectionConfig, SelectionStyle, SelectionItemActionEvent
+│   ├── useListController.ts
+│   └── index.ts
+├── web/
+│   ├── layouts/
+│   │   ├── List.normal.layout.tsx       # Layout normal (sin selección)
+│   │   └── List.selectable.layout.tsx   # Layout con selección (WrapperItemsSelected + getItem)
+│   ├── css/
+│   │   └── List.module.css
+│   ├── hooks/
+│   │   └── useList.hook.ts
+│   └── index.tsx                        # Despacho según selectionConfig
+├── mobile/
+│   ├── layouts/
+│   │   ├── List.normal.layout.tsx       # Layout normal (sin selección)
+│   │   └── List.selectable.layout.tsx   # Layout con selección (WrapperItemsSelected + getItem)
+│   ├── css/
+│   │   └── List.module.css
+│   ├── hooks/
+│   │   └── useList.hook.ts
+│   └── index.tsx                        # Despacho según selectionConfig
+├── index.tsx                            # Web/Mobile dispatch
+├── README-WEB-IA.md
+└── README-MOBILE-IA.md
 ```
