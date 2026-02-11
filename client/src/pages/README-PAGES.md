@@ -4,7 +4,52 @@ Esta guía documenta cómo crear nuevas páginas de demostración para component
 
 ## Estructura de Carpetas
 
-Cada página debe seguir esta estructura con soporte para web y mobile:
+La estructura de la página de demo depende de las plataformas que soporta el componente. **Solo se crean las carpetas de las plataformas que el componente implementa.**
+
+### Componente universal (funciona en todas las plataformas)
+
+Si el componente no tiene distinción de plataforma, **no se crean subcarpetas** `web/` ni `mobile/`. La estructura va directa:
+
+```
+client/src/pages/[nombre-pagina]/
+├── components/       # Un archivo por cada ejemplo/demo de la página
+├── types/            # Tipos TypeScript
+├── view/             # Vista principal (importa y renderiza los ejemplos)
+├── css/              # Estilos CSS/SCSS
+└── index.tsx         # Exporta la vista directamente
+```
+
+### Componente solo web (web-only)
+
+Si el componente solo tiene implementación web, la página solo necesita la carpeta `web/`:
+
+```
+client/src/pages/[nombre-pagina]/
+├── web/
+│   ├── components/       # Un archivo por cada ejemplo/demo de la página
+│   ├── types/            # Tipos TypeScript para web
+│   ├── view/             # Vista principal web (importa y renderiza los ejemplos)
+│   └── css/              # Estilos CSS/SCSS para web
+└── index.tsx             # Exporta la vista web directamente
+```
+
+### Componente solo mobile (mobile-only)
+
+Si el componente solo tiene implementación mobile, la página solo necesita la carpeta `mobile/`:
+
+```
+client/src/pages/[nombre-pagina]/
+├── mobile/
+│   ├── components/       # Un archivo por cada ejemplo/demo de la página
+│   ├── types/            # Tipos TypeScript para mobile
+│   ├── view/             # Vista principal mobile
+│   └── css/              # Estilos CSS/SCSS para mobile
+└── index.tsx             # Exporta la vista mobile directamente
+```
+
+### Componente con web y mobile (implementaciones diferentes por plataforma)
+
+Si el componente tiene implementaciones distintas para web y mobile, se crean ambas carpetas y el `index.tsx` usa `useResponsive` para elegir cuál renderizar:
 
 ```
 client/src/pages/[nombre-pagina]/
@@ -21,8 +66,12 @@ client/src/pages/[nombre-pagina]/
 ├── shared/               # (Opcional) Código compartido entre web y mobile
 │   ├── types/
 │   └── utils/
-└── index.tsx             # Exporta la página correcta según plataforma (usa useResponsive)
+└── index.tsx             # Usa useResponsive para elegir vista web o mobile
 ```
+
+### Regla general
+
+> La estructura depende de las plataformas del componente: universal → sin subcarpetas; solo una plataforma → solo esa carpeta; varias plataformas → una carpeta por cada una. No se crean carpetas vacías ni vistas placeholder para plataformas no soportadas.
 
 ## Ejemplos como Componentes Independientes
 
@@ -115,7 +164,9 @@ Breakpoints:
 
 ---
 
-## 2. Crear las Vistas Web y Mobile
+## 2. Crear las Vistas
+
+Solo se crean las vistas de las plataformas que el componente implementa.
 
 ### Vista Web
 ```typescript
@@ -131,7 +182,7 @@ export const [NombrePagina]WebView = () => {
 };
 ```
 
-### Vista Mobile
+### Vista Mobile (solo si el componente tiene implementación mobile)
 ```typescript
 // client/src/pages/[nombre-pagina]/mobile/view/[NombrePagina].view.tsx
 import styles from '../css/[NombrePagina].module.css';
@@ -147,7 +198,56 @@ export const [NombrePagina]MobileView = () => {
 
 ---
 
-## 3. Crear el Index con Selector de Plataforma
+## 3. Crear el Index según las Plataformas del Componente
+
+### Componente universal
+
+No necesita `useResponsive` ni subcarpetas, exporta la vista directamente:
+
+```typescript
+// client/src/pages/[nombre-pagina]/index.tsx
+import { [NombrePagina]View } from './view/[NombrePagina].view';
+
+const [NombrePagina]Demo = () => {
+  return <[NombrePagina]View />;
+};
+
+export default [NombrePagina]Demo;
+```
+
+### Componente solo web (web-only)
+
+No necesita `useResponsive`, exporta la vista web directamente:
+
+```typescript
+// client/src/pages/[nombre-pagina]/index.tsx
+import { [NombrePagina]WebView } from './web/view/[NombrePagina].view';
+
+const [NombrePagina]Demo = () => {
+  return <[NombrePagina]WebView />;
+};
+
+export default [NombrePagina]Demo;
+```
+
+### Componente solo mobile (mobile-only)
+
+No necesita `useResponsive`, exporta la vista mobile directamente:
+
+```typescript
+// client/src/pages/[nombre-pagina]/index.tsx
+import { [NombrePagina]MobileView } from './mobile/view/[NombrePagina].view';
+
+const [NombrePagina]Demo = () => {
+  return <[NombrePagina]MobileView />;
+};
+
+export default [NombrePagina]Demo;
+```
+
+### Componente con web y mobile (implementaciones diferentes)
+
+Usa `useResponsive` para elegir la vista correcta:
 
 ```typescript
 // client/src/pages/[nombre-pagina]/index.tsx
