@@ -50,12 +50,12 @@ Cada página debe seguir esta estructura con soporte para web y mobile:
 ```
 client/src/pages/[nombre-pagina]/
 ├── web/
-│   ├── components/       # Componentes específicos de la demo web
+│   ├── components/       # Un archivo por cada ejemplo/demo de la página
 │   ├── types/            # Tipos TypeScript para web
-│   ├── view/             # Vista principal web
+│   ├── view/             # Vista principal web (importa y renderiza los ejemplos)
 │   └── css/              # Estilos CSS/SCSS para web
 ├── mobile/
-│   ├── components/       # Componentes específicos de la demo mobile
+│   ├── components/       # Un archivo por cada ejemplo/demo de la página (mobile)
 │   ├── types/            # Tipos TypeScript para mobile
 │   ├── view/             # Vista principal mobile
 │   └── css/              # Estilos CSS/SCSS para mobile
@@ -63,6 +63,75 @@ client/src/pages/[nombre-pagina]/
 │   ├── types/
 │   └── utils/
 └── index.tsx             # Exporta la página correcta según plataforma (usa useResponsive)
+```
+
+## Ejemplos como Componentes Independientes
+
+Cada página de demo contiene **varios ejemplos** que demuestran distintas funcionalidades del componente. Cada ejemplo debe ser un **componente independiente** dentro de la carpeta `components/`, con **un archivo por cada ejemplo**.
+
+La vista principal (`view/`) solo se encarga de importar y renderizar los ejemplos en orden, sin contener lógica de demo directamente.
+
+### Estructura de la carpeta `components/`
+
+```
+client/src/pages/[nombre-pagina]/web/components/
+├── BasicExample.tsx          # Ejemplo básico del componente
+├── InfiniteScrollExample.tsx # Ejemplo con scroll infinito
+├── StatesExample.tsx         # Ejemplo de estados visuales
+└── CustomRenderExample.tsx   # Ejemplo con renders personalizados
+```
+
+### Reglas
+
+1. **Un archivo = Un ejemplo**: Cada archivo en `components/` representa una demo autocontenida con su propio estado y lógica.
+2. **Nombre descriptivo**: El nombre del archivo debe describir qué funcionalidad demuestra (ej: `BasicExample.tsx`, `WithControllerExample.tsx`).
+3. **Autocontenido**: Cada ejemplo maneja su propio estado, callbacks y datos de prueba. No depende de otros ejemplos.
+4. **La vista principal solo compone**: El archivo en `view/` importa los ejemplos y los renderiza, sin duplicar lógica de demo.
+
+### Ejemplo de vista principal componiendo ejemplos
+
+```typescript
+// client/src/pages/grid-demo/web/view/GridDemo.view.tsx
+import { BasicGridExample } from '../components/BasicGridExample';
+import { InfiniteScrollExample } from '../components/InfiniteScrollExample';
+import { StatesExample } from '../components/StatesExample';
+import styles from '../css/GridDemo.module.css';
+
+export function GridDemoWebView() {
+  return (
+    <div className={styles.container}>
+      <h1>Grid Component</h1>
+      <BasicGridExample />
+      <InfiniteScrollExample />
+      <StatesExample />
+    </div>
+  );
+}
+```
+
+### Ejemplo de un componente de ejemplo
+
+```typescript
+// client/src/pages/grid-demo/web/components/BasicGridExample.tsx
+import { useState } from 'react';
+import { Grid } from '@/lib/ui-library/components/Grid';
+import styles from '../css/GridDemo.module.css';
+
+export function BasicGridExample() {
+  const [data] = useState(() => generateData(8));
+
+  return (
+    <div className={styles.section}>
+      <h2>Grid Estático</h2>
+      <p>Grid básico sin controller.</p>
+      <Grid
+        data={data}
+        grid={{ minColumns: 1, maxColumns: 4, minCardWidth: 220 }}
+        item={{ renderType: 'component', render: (item) => <Card item={item} /> }}
+      />
+    </div>
+  );
+}
 ```
 
 ---
@@ -338,7 +407,8 @@ Ver lista completa en: https://lucide.dev/icons
 ## Checklist para Nueva Página
 
 - [ ] Crear estructura de carpetas (web/, mobile/, shared/)
-- [ ] Crear vista web en `web/view/`
+- [ ] Crear carpeta `web/components/` con un archivo por cada ejemplo
+- [ ] Crear vista web en `web/view/` que importe y componga los ejemplos
 - [ ] Crear vista mobile en `mobile/view/`
 - [ ] Crear `index.tsx` con `useResponsive` para selector de plataforma
 - [ ] Registrar ruta en `client/src/routes/index.tsx`
