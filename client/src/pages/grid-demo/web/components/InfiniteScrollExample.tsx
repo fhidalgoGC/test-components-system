@@ -1,66 +1,69 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Grid, useGridController } from '@/lib/ui-library/components/Grid';
 import type { GridCapacityInfo } from '@/lib/ui-library/components/Grid/shared';
 import { generateProducts, ProductCard } from './GridDemo.data';
 import type { Product } from './GridDemo.data';
 import styles from '../css/GridDemo.module.css';
 
+const TOTAL_ITEMS = 100;
+const PAGE_SIZE = 20;
+
+function simulateApiFetch(startIndex: number, count: number): Promise<Product[]> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(generateProducts(startIndex, count));
+    }, 500);
+  });
+}
+
 export function InfiniteScrollExample() {
-  const [products, setProducts] = useState(() => generateProducts(0, 12));
+  const [products, setProducts] = useState<Product[]>(() => generateProducts(0, PAGE_SIZE));
   const [capacity, setCapacity] = useState<GridCapacityInfo | null>(null);
   const [loadCount, setLoadCount] = useState(0);
   const controller = useGridController();
+  const loadedRef = useRef(PAGE_SIZE);
 
-  const handleReachEnd = useCallback(() => {
+  const handleReachEnd = useCallback(async () => {
+    if (loadedRef.current >= TOTAL_ITEMS) return;
+
     controller.setState('loading');
     setLoadCount((c) => c + 1);
 
-    setTimeout(() => {
-      const newProducts = generateProducts(products.length, 8);
-      setProducts((prev) => [...prev, ...newProducts]);
-      controller.setState('idle');
-    }, 1200);
-  }, [products.length, controller]);
+    const remaining = TOTAL_ITEMS - loadedRef.current;
+    const toLoad = Math.min(PAGE_SIZE, remaining);
 
-  const handleReset = useCallback(() => {
-    setProducts(generateProducts(0, 12));
-    setLoadCount(0);
+    const newProducts = await simulateApiFetch(loadedRef.current, toLoad);
+    loadedRef.current += toLoad;
+
+    setProducts((prev) => [...prev, ...newProducts]);
     controller.setState('idle');
   }, [controller]);
 
-  const handleSetEmpty = useCallback(() => {
-    setProducts([]);
-    controller.setState('empty');
-  }, [controller]);
-
-  const handleSetError = useCallback(() => {
-    controller.setState('error');
+  const handleReset = useCallback(() => {
+    const initial = generateProducts(0, PAGE_SIZE);
+    setProducts(initial);
+    loadedRef.current = PAGE_SIZE;
+    setLoadCount(0);
+    controller.setState('idle');
   }, [controller]);
 
   return (
     <div className={styles.section}>
       <div className={styles.sectionTitle} data-testid="text-infinite-title">Infinite Scroll Grid</div>
       <div className={styles.sectionDescription}>
-        Grid con scroll infinito. Al llegar al final dispara onReachEnd, el padre controla la carga.
-        onReachEnd solo se dispara cuando state === "idle".
+        Carga {TOTAL_ITEMS} productos en bloques de {PAGE_SIZE}. Al llegar al final simula una llamada API (0.5s de espera) y muestra el indicador de carga.
       </div>
 
       <div className={styles.controls}>
         <button className={`${styles.controlBtn} ${styles.controlBtnPrimary}`} onClick={handleReset} data-testid="button-reset">
           Reset
         </button>
-        <button className={styles.controlBtn} onClick={handleSetEmpty} data-testid="button-empty">
-          Set Empty
-        </button>
-        <button className={`${styles.controlBtn} ${styles.controlBtnDanger}`} onClick={handleSetError} data-testid="button-error">
-          Set Error
-        </button>
       </div>
 
       <div className={styles.info}>
         <span className={styles.infoBadge} data-testid="text-state">State: {controller.getState()}</span>
-        <span className={styles.infoBadge} data-testid="text-items">Items: {products.length}</span>
-        <span className={styles.infoBadge} data-testid="text-loads">Loads: {loadCount}</span>
+        <span className={styles.infoBadge} data-testid="text-items">Items: {products.length} / {TOTAL_ITEMS}</span>
+        <span className={styles.infoBadge} data-testid="text-loads">Cargas: {loadCount}</span>
         {capacity && (
           <>
             <span className={styles.infoBadge} data-testid="text-columns">Cols: {capacity.columns}</span>
