@@ -71,6 +71,15 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
   - **Size modes**: `widthMode` and `heightMode` (`full`/`auto`/`fixed`)
   - **Responsive**: Web (centered dialog) and Mobile (bottom sheet)
   - **Keyboard**: Escape key closes modal, body scroll lock when open
+- **Grid Component (web-only)**: Declarative Grid Engine, agnostic to data. Features:
+  - **Layout Engine**: Auto-calculates columns based on container width and `minCardWidth`
+  - **State Machine**: `idle`, `loading`, `empty`, `error` with configurable visual renders
+  - **Scroll End Detector**: Fires `onReachEnd` only when `state === 'idle'`
+  - **Capacity Calculator**: Emits `onCapacityChange` with `{ columns, rows, visibleItems }`
+  - **External control**: `useGridController` hook with `setState`, `getState`, `refreshLayout`
+  - **Grid config**: `minColumns`, `maxColumns`, `minCardWidth`, `minCardHeight`, `rowGap`, `columnGap`
+  - **Layout modes**: `widthMode` and `heightMode` (`full`/`auto`/`fixed`)
+  - **ResizeObserver**: Auto-recalculates on container resize
 
 # External Dependencies
 

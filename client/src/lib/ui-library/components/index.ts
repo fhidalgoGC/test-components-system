@@ -28,3 +28,4 @@ export * from './Accordion';
 export * from './List';
 export * from './FloatingMenu';
 export * from './Modal';
+export * from './Grid';

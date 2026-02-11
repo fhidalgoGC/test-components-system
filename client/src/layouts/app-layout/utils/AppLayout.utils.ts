@@ -31,6 +31,7 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'list', label: 'List', i18n: { en: 'List', es: 'Lista', default: 'List' }, path: '/components/list', icon: 'List' },
         { id: 'floating-menu', label: 'FloatingMenu', i18n: { en: 'FloatingMenu', es: 'Menú Flotante', default: 'FloatingMenu' }, path: '/components/floating-menu', icon: 'Menu' },
         { id: 'modal', label: 'Modal', i18n: { en: 'Modal', es: 'Modal', default: 'Modal' }, path: '/components/modal', icon: 'Square' },
+        { id: 'grid', label: 'Grid', i18n: { en: 'Grid', es: 'Grilla', default: 'Grid' }, path: '/components/grid', icon: 'Grid' },
         { id: 'external-app', label: 'External App Demo', path: '/external-app-demo', icon: 'Building2' }
       ]
     },

@@ -37,6 +37,7 @@ const ListDemo = lazy(() => import("@/pages/list-demo"));
 const ApiInterceptorDemo = lazy(() => import("@/pages/api-interceptor-demo"));
 const FloatingMenuDemo = lazy(() => import("@/pages/floating-menu-demo"));
 const ModalDemo = lazy(() => import("@/pages/modal-demo"));
+const GridDemo = lazy(() => import("@/pages/grid-demo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -109,6 +110,7 @@ export function Router() {
           <Route path="/utils/api-interceptor" component={ApiInterceptorDemo} />
           <Route path="/components/floating-menu" component={FloatingMenuDemo} />
           <Route path="/components/modal" component={ModalDemo} />
+          <Route path="/components/grid" component={GridDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
