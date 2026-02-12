@@ -28,7 +28,6 @@ export function PaginatorExample() {
   const goToPage = useCallback(async (page: number) => {
     if (page < 1 || page > TOTAL_PAGES) return;
 
-    setProducts([]);
     controller.setState('loading');
     setCurrentPage(page);
 
@@ -97,7 +96,7 @@ export function PaginatorExample() {
           grid={{ minColumns: minCols, maxColumns: maxCols, minCardWidth: 220, rowGap: 16, columnGap: 16 }}
           scroll={{ enabled: false }}
           statesComponents={{
-            loading: { renderType: 'self' },
+            loading: { renderType: 'self', position: 'over' },
           }}
           item={{
             renderType: 'component',

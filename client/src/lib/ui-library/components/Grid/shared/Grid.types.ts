@@ -37,11 +37,14 @@ export interface GridScrollConfig {
   threshold?: number;
 }
 
+export type LoadingPosition = 'bottom' | 'over';
+
 export interface GridStateComponent {
   renderType: 'component' | 'self';
   render?: ReactNode | ComponentType;
   verticalAlign?: VerticalAlign;
   horizontalAlign?: HorizontalAlign;
+  position?: LoadingPosition;
 }
 
 export interface GridStatesComponents {

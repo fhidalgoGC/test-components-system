@@ -160,14 +160,27 @@ export function GridView<T>(props: GridProps<T>) {
       </div>
 
       {state === 'loading' && data.length > 0 && (
-        <div className={getAlignClasses(statesComponents?.loading)}>
-          {renderStateContent(statesComponents?.loading, (
-            <div className={styles.defaultLoading}>
-              <div className={styles.spinner} />
-              <span>Loading more...</span>
+        statesComponents?.loading?.position === 'over' ? (
+          <div className={styles.loadingOverlay}>
+            <div className={getAlignClasses(statesComponents?.loading)}>
+              {renderStateContent(statesComponents?.loading, (
+                <div className={styles.defaultLoading}>
+                  <div className={styles.spinner} />
+                  <span>Loading...</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ) : (
+          <div className={getAlignClasses(statesComponents?.loading)}>
+            {renderStateContent(statesComponents?.loading, (
+              <div className={styles.defaultLoading}>
+                <div className={styles.spinner} />
+                <span>Loading more...</span>
+              </div>
+            ))}
+          </div>
+        )
       )}
 
       {scroll?.enabled !== false && (
