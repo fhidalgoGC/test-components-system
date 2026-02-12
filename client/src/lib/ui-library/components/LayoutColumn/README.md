@@ -457,10 +457,10 @@ function MyComponent() {
 | `isSlotVisible(index)` | `(index: number) => boolean` | Slot tiene contenido? |
 | `isSlotEmpty(index)` | `(index: number) => boolean` | Slot vacío? |
 | `resetVisibility()` | `() => void` | Restaurar estado inicial |
-| `setSlotContent(index, content)` | `(index: number, content: ReactNode) => void` | Reemplazar contenido de un slot |
+| `setSlotContent(index, content, options?)` | `(index: number, content: ReactNode, options?: { unmount?: boolean }) => void` | Reemplazar contenido de un slot |
 | `clearSlotContent(index)` | `(index: number) => void` | Restaurar contenido original del slot |
 | `getSlotContent(index)` | `(index: number) => ReactNode \| undefined` | Obtener el contenido override actual |
-| `slotContentOverrides` | `Record<number, ReactNode>` | Mapa de overrides activos |
+| `slotContentOverrides` | `Record<number, SlotContentEntry>` | Mapa de overrides activos (content + revisionKey) |
 
 ## Tokens de Referencia
 
@@ -659,17 +659,34 @@ controller.isSlotVisible(0); // Consulta si está visible
 ```tsx
 const controller = useLayoutColumn({ components, slots: 3 });
 
-// Reemplazar el contenido del slot 1 con otro componente
+// Reemplazar contenido (por defecto mantiene la instancia anterior, sin desmontar)
 controller.setSlotContent(1, <SettingsPanel />);
+
+// Reemplazar con desmontaje: destruye el componente anterior y monta uno nuevo
+controller.setSlotContent(1, <SettingsPanel />, { unmount: true });
 
 // Ver qué contenido override tiene el slot
 controller.getSlotContent(1); // → <SettingsPanel />
 
 // Restaurar el contenido original del slot
 controller.clearSlotContent(1);
+```
 
-// Ver todos los overrides activos
-console.log(controller.slotContentOverrides); // { 1: <SettingsPanel /> }
+#### Opción `unmount`
+
+| Valor | Comportamiento |
+|-------|---------------|
+| `false` (default) | React reconcilia: si el componente es del mismo tipo, reutiliza la instancia anterior (transición suave) |
+| `true` | Fuerza desmontaje completo del componente anterior y monta uno nuevo desde cero (instancia limpia) |
+
+```tsx
+// Sin unmount: React reutiliza la instancia si el tipo es igual
+controller.setSlotContent(1, <ProductList category="electronics" />);
+controller.setSlotContent(1, <ProductList category="audio" />); // misma instancia, solo cambia prop
+
+// Con unmount: siempre se destruye y crea una nueva instancia
+controller.setSlotContent(1, <ProductList category="electronics" />, { unmount: true });
+controller.setSlotContent(1, <ProductList category="audio" />, { unmount: true }); // nueva instancia
 ```
 
 ### Combinando Visibilidad + Content Override

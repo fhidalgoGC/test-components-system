@@ -321,12 +321,13 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
             >
             {hasContentOverride ? (
               <div
+                key={slotContentOverrides[slotIndex].revisionKey}
                 className={`${styles.slotContent} ${styles.alignTop}`}
                 style={{ ...(isAutoSlot ? slotContentAutoOverride : { flex: 1 }) }}
                 data-testid={`layoutcolumn-slot-${slotIndex}-override`}
               >
                 <div className={`${styles.componentWrapper} ${styles.componentFull}`} style={componentAutoOverride}>
-                  {slotContentOverrides[slotIndex]}
+                  {slotContentOverrides[slotIndex].content}
                 </div>
               </div>
             ) : (

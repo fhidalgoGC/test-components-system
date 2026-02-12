@@ -40,6 +40,11 @@ export interface UseLayoutColumnOptions {
   slots: number;
 }
 
+export interface SlotContentEntry {
+  content: ReactNode;
+  revisionKey: number;
+}
+
 export interface UseLayoutColumnReturn {
   visibleComponents: LayoutColumnComponent[];
   allComponents: LayoutColumnComponent[];
@@ -54,10 +59,10 @@ export interface UseLayoutColumnReturn {
   isSlotVisible: (slotIndex: number) => boolean;
   isSlotEmpty: (slotIndex: number) => boolean;
   resetVisibility: () => void;
-  setSlotContent: (slotIndex: number, content: ReactNode) => void;
+  setSlotContent: (slotIndex: number, content: ReactNode, options?: { unmount?: boolean }) => void;
   clearSlotContent: (slotIndex: number) => void;
   getSlotContent: (slotIndex: number) => ReactNode | undefined;
-  slotContentOverrides: Record<number, ReactNode>;
+  slotContentOverrides: Record<number, SlotContentEntry>;
 }
 
 export interface LayoutColumnProps {

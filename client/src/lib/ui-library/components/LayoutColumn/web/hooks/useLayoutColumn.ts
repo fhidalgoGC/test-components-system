@@ -1,5 +1,5 @@
-import { useState, useCallback, useMemo, type ReactNode } from 'react';
-import type { LayoutColumnComponent, UseLayoutColumnOptions, UseLayoutColumnReturn } from '../types';
+import { useState, useCallback, useMemo, useRef, type ReactNode } from 'react';
+import type { LayoutColumnComponent, SlotContentEntry, UseLayoutColumnOptions, UseLayoutColumnReturn } from '../types';
 
 export const useLayoutColumn = (options: UseLayoutColumnOptions): UseLayoutColumnReturn => {
   const { components: initialComponents, slots } = options;
@@ -128,13 +128,21 @@ export const useLayoutColumn = (options: UseLayoutColumnOptions): UseLayoutColum
     setHiddenComponentIds(initialHidden);
   }, [componentsWithIds]);
 
-  const [slotContentOverrides, setSlotContentOverrides] = useState<Record<number, ReactNode>>({});
+  const [slotContentOverrides, setSlotContentOverrides] = useState<Record<number, SlotContentEntry>>({});
+  const revisionCounterRef = useRef(0);
 
-  const setSlotContent = useCallback((slotIndex: number, content: ReactNode) => {
-    setSlotContentOverrides((prev) => ({
-      ...prev,
-      [slotIndex]: content,
-    }));
+  const setSlotContent = useCallback((slotIndex: number, content: ReactNode, options?: { unmount?: boolean }) => {
+    const shouldUnmount = options?.unmount ?? false;
+    const revisionKey = shouldUnmount
+      ? ++revisionCounterRef.current
+      : (0);
+    setSlotContentOverrides((prev) => {
+      const prevKey = prev[slotIndex]?.revisionKey ?? 0;
+      return {
+        ...prev,
+        [slotIndex]: { content, revisionKey: shouldUnmount ? revisionKey : prevKey },
+      };
+    });
   }, []);
 
   const clearSlotContent = useCallback((slotIndex: number) => {
@@ -146,7 +154,7 @@ export const useLayoutColumn = (options: UseLayoutColumnOptions): UseLayoutColum
   }, []);
 
   const getSlotContent = useCallback((slotIndex: number): ReactNode | undefined => {
-    return slotContentOverrides[slotIndex];
+    return slotContentOverrides[slotIndex]?.content;
   }, [slotContentOverrides]);
 
   return {
