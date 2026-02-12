@@ -28,13 +28,14 @@ export function PaginatorExample() {
   const [maxRows, setMaxRows] = useState<number | undefined>(undefined);
   const [showBorder, setShowBorder] = useState(true);
   const [enableSelection, setEnableSelection] = useState(false);
+  const [multiSelect, setMultiSelect] = useState(true);
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const controller = useGridController();
 
   const selectionConfig: GridSelectionConfig<Product> | undefined = enableSelection ? {
     getItemId: (product) => String(product.id),
     getItem: (product) => product,
-    multiSelect: true,
+    multiSelect,
     onSelectionChange: (items: Product[]) => setSelectedProducts(items),
     selectionStyle: {
       border: '2px solid #3b82f6',
@@ -146,6 +147,24 @@ export function PaginatorExample() {
           />
           selectionConfig
         </label>
+
+        {enableSelection && (
+          <label className={styles.controlLabel} data-testid="label-pag-multi-select">
+            multiSelect:
+            <select
+              className={styles.controlSelect}
+              value={multiSelect ? 'multiple' : 'simple'}
+              onChange={(e) => {
+                setMultiSelect(e.target.value === 'multiple');
+                setSelectedProducts([]);
+              }}
+              data-testid="select-pag-multi-select"
+            >
+              <option value="simple">Simple</option>
+              <option value="multiple">Multiple</option>
+            </select>
+          </label>
+        )}
       </div>
 
       <div className={styles.info}>

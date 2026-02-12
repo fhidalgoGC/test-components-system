@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { Grid, useGridController } from '@/lib/ui-library/components/Grid';
+import type { GridSelectionConfig } from '@/lib/ui-library/components/Grid';
 import type { GridCapacityInfo } from '@/lib/ui-library/components/Grid/shared';
 import { generateProducts, ProductCard } from './GridDemo.data';
 import type { Product } from './GridDemo.data';
@@ -22,8 +23,23 @@ export function InfiniteScrollExample() {
   const [loadCount, setLoadCount] = useState(0);
   const [minCols, setMinCols] = useState(1);
   const [maxCols, setMaxCols] = useState(4);
+  const [enableSelection, setEnableSelection] = useState(false);
+  const [multiSelect, setMultiSelect] = useState(true);
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const controller = useGridController();
   const loadedRef = useRef(PAGE_SIZE);
+
+  const selectionConfig: GridSelectionConfig<Product> | undefined = enableSelection ? {
+    getItemId: (product) => String(product.id),
+    getItem: (product) => product,
+    multiSelect,
+    onSelectionChange: (items: Product[]) => setSelectedProducts(items),
+    selectionStyle: {
+      border: '2px solid #10b981',
+      borderRadius: '8px',
+      boxShadow: '0 0 0 2px rgba(16, 185, 129, 0.2)',
+    },
+  } : undefined;
 
   const handleReachEnd = useCallback(async () => {
     if (loadedRef.current >= TOTAL_ITEMS) return;
@@ -84,6 +100,37 @@ export function InfiniteScrollExample() {
             {[1, 2, 3, 4, 5, 6].map((v) => <option key={v} value={v}>{v}</option>)}
           </select>
         </label>
+
+        <label className={styles.controlLabel} data-testid="label-inf-enable-selection">
+          <input
+            type="checkbox"
+            checked={enableSelection}
+            onChange={(e) => {
+              setEnableSelection(e.target.checked);
+              if (!e.target.checked) setSelectedProducts([]);
+            }}
+            data-testid="checkbox-inf-enable-selection"
+          />
+          selectionConfig
+        </label>
+
+        {enableSelection && (
+          <label className={styles.controlLabel} data-testid="label-inf-multi-select">
+            multiSelect:
+            <select
+              className={styles.controlSelect}
+              value={multiSelect ? 'multiple' : 'simple'}
+              onChange={(e) => {
+                setMultiSelect(e.target.value === 'multiple');
+                setSelectedProducts([]);
+              }}
+              data-testid="select-inf-multi-select"
+            >
+              <option value="simple">Simple</option>
+              <option value="multiple">Multiple</option>
+            </select>
+          </label>
+        )}
       </div>
 
       <div className={styles.info}>
@@ -96,6 +143,11 @@ export function InfiniteScrollExample() {
             <span className={styles.infoBadge} data-testid="text-rows">Rows: {capacity.rows}</span>
           </>
         )}
+        {enableSelection && (
+          <span className={styles.infoBadge} data-testid="text-inf-selected">
+            Selected: {selectedProducts.length}
+          </span>
+        )}
       </div>
 
       <div className={styles.gridContainer}>
@@ -106,6 +158,7 @@ export function InfiniteScrollExample() {
           layout={{ widthMode: 'full', heightMode: 'fixed', height: 500 }}
           grid={{ minColumns: minCols, maxColumns: maxCols, minCardWidth: 220, rowGap: 16, columnGap: 16 }}
           scroll={{ enabled: true, threshold: 50 }}
+          selectionConfig={selectionConfig}
           callbacks={{
             onReachEnd: handleReachEnd,
             onCapacityChange: setCapacity,
