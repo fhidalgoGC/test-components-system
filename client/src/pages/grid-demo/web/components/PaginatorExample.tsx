@@ -23,6 +23,8 @@ export function PaginatorExample() {
   const [products, setProducts] = useState<Product[]>(() => allProducts.slice(0, PAGE_SIZE));
   const [minCols, setMinCols] = useState(1);
   const [maxCols, setMaxCols] = useState(4);
+  const [minRows, setMinRows] = useState<number | undefined>(undefined);
+  const [maxRows, setMaxRows] = useState<number | undefined>(undefined);
   const [showBorder, setShowBorder] = useState(true);
   const controller = useGridController();
 
@@ -81,6 +83,32 @@ export function PaginatorExample() {
           </select>
         </label>
 
+        <label className={styles.controlLabel} data-testid="label-pag-min-rows">
+          minRows:
+          <select
+            className={styles.controlSelect}
+            value={minRows ?? ''}
+            onChange={(e) => setMinRows(e.target.value ? Number(e.target.value) : undefined)}
+            data-testid="select-pag-min-rows"
+          >
+            <option value="">-</option>
+            {[1, 2, 3, 4, 5].map((v) => <option key={v} value={v}>{v}</option>)}
+          </select>
+        </label>
+
+        <label className={styles.controlLabel} data-testid="label-pag-max-rows">
+          maxRows:
+          <select
+            className={styles.controlSelect}
+            value={maxRows ?? ''}
+            onChange={(e) => setMaxRows(e.target.value ? Number(e.target.value) : undefined)}
+            data-testid="select-pag-max-rows"
+          >
+            <option value="">-</option>
+            {[1, 2, 3, 4, 5].map((v) => <option key={v} value={v}>{v}</option>)}
+          </select>
+        </label>
+
         <label className={styles.controlLabel} data-testid="label-pag-show-border">
           <input
             type="checkbox"
@@ -104,7 +132,7 @@ export function PaginatorExample() {
           data={products}
           controller={controller}
           layout={{ widthMode: 'full', heightMode: 'auto' }}
-          grid={{ minColumns: minCols, maxColumns: maxCols, minCardWidth: 220, rowGap: 16, columnGap: 16 }}
+          grid={{ minColumns: minCols, maxColumns: maxCols, minRows, maxRows, minCardWidth: 220, rowGap: 16, columnGap: 16 }}
           scroll={{ enabled: false }}
           showBorder={showBorder}
           statesComponents={{

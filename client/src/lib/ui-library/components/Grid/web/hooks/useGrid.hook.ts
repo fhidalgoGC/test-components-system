@@ -71,11 +71,14 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
     setColumns(cols);
 
     const maxRows = grid?.maxRows;
+    const minRows = grid?.minRows;
+    const naturalRows = Math.ceil(data.length / cols);
+    const effectiveRows = maxRows ? Math.min(naturalRows, maxRows) : naturalRows;
     const visibleItems = maxRows ? cols * maxRows : data.length;
 
     const newCapacity: GridCapacityInfo = {
       columns: cols,
-      rows: maxRows ?? Math.ceil(data.length / cols),
+      rows: effectiveRows,
       visibleItems: Math.min(visibleItems, data.length),
     };
 
@@ -89,7 +92,7 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
       prevCapacityRef.current = newCapacity;
       callbacks?.onCapacityChange?.(newCapacity);
     }
-  }, [minColumns, maxColumns, minCardWidth, columnGap, grid?.maxRows, data.length, callbacks]);
+  }, [minColumns, maxColumns, minCardWidth, columnGap, grid?.minRows, grid?.maxRows, data.length, callbacks]);
 
   useEffect(() => {
     calculateColumns();
@@ -174,20 +177,39 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
     return style;
   }, [layout]);
 
+  const visibleData = useMemo(() => {
+    if (grid?.maxRows && columns > 0) {
+      const maxItems = columns * grid.maxRows;
+      return data.slice(0, maxItems);
+    }
+    return data;
+  }, [data, columns, grid?.maxRows]);
+
   const gridStyle = useMemo<React.CSSProperties>(() => {
-    return {
+    const style: React.CSSProperties = {
       gridTemplateColumns: `repeat(${columns}, 1fr)`,
       rowGap,
       columnGap,
-      minHeight: grid?.minCardHeight ? grid.minCardHeight : undefined,
     };
-  }, [columns, rowGap, columnGap, grid?.minCardHeight]);
+    if (grid?.minCardHeight) {
+      style.minHeight = grid.minCardHeight;
+    }
+    if (grid?.minRows && grid?.minCardHeight) {
+      const minGridHeight = grid.minRows * grid.minCardHeight + (grid.minRows - 1) * rowGap;
+      style.minHeight = Math.max(minGridHeight, grid.minCardHeight);
+    }
+    if (grid?.maxRows && grid?.minCardHeight) {
+      const maxGridHeight = grid.maxRows * grid.minCardHeight + (grid.maxRows - 1) * rowGap;
+      style.maxHeight = maxGridHeight;
+    }
+    return style;
+  }, [columns, rowGap, columnGap, grid?.minCardHeight, grid?.minRows, grid?.maxRows]);
 
   return {
     state: currentState,
-    data,
+    data: visibleData,
     columns,
-    rows: Math.ceil(data.length / columns),
+    rows: Math.ceil(visibleData.length / columns),
     containerRef,
     sentinelRef,
     containerStyle,
