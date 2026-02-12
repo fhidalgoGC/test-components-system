@@ -408,6 +408,44 @@ npm run new-component -- Alert --mobile -all-folders --languages en,es,fr,de
 # ✅ Componente reactivo al cambio de idioma
 ```
 
+### Con READMEs por plataforma (`-readme`)
+```bash
+npm run new-component -- Alert --web -readme
+# ✅ Crea README.md (principal con links a cada plataforma)
+# ✅ Crea README-WEB-IA.md (documentación específica web)
+
+npm run new-component -- Alert --mobile -readme
+# ✅ Crea README.md
+# ✅ Crea README-MOBILE-IA.md (documentación específica mobile responsive)
+
+npm run new-component -- Alert --native -readme
+# ✅ Crea README.md
+# ✅ Crea README-MOBILE-NATIVE.md (documentación específica native iOS/Android)
+
+npm run new-component -- Alert --web --mobile --native -readme
+# ✅ Crea README.md
+# ✅ Crea README-WEB-IA.md
+# ✅ Crea README-MOBILE-IA.md
+# ✅ Crea README-MOBILE-NATIVE.md
+```
+
+**READMEs generados según plataforma:**
+
+| Flag | README generado | Descripción |
+|------|----------------|-------------|
+| (siempre) | `README.md` | README principal con links a cada plataforma |
+| `--web` | `README-WEB-IA.md` | Documentación de la implementación web (Vite + Tailwind) |
+| `--mobile` | `README-MOBILE-IA.md` | Documentación de la implementación mobile responsive |
+| `--native` | `README-MOBILE-NATIVE.md` | Documentación de la implementación native (Expo + RN) |
+
+**Templates disponibles en** `command-templates/components/readme/`:
+- `README.md.template` → README principal
+- `README-WEB-IA.md.template` → Template web
+- `README-MOBILE-IA.md.template` → Template mobile responsive
+- `README-MOBILE-NATIVE.md.template` → Template native
+
+**Nota:** El flag `-readme` solo genera los READMEs correspondientes a las plataformas que existen en el componente. Si ejecutás el generador incrementalmente (primero `--web`, después `--mobile`), debés pasar `-readme` en cada ejecución para que genere el README de la nueva plataforma.
+
 ---
 
 ## 🔧 ConfigProvider Integration
