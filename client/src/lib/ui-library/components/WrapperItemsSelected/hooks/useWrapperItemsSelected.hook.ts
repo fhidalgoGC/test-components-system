@@ -15,10 +15,24 @@ export const useWrapperItemsSelected = (props: WrapperItemsSelectedProps) => {
   const selectedIds = isControlled ? controlledSelectedIds : internalSelectedIds;
   
   const previousSelectedIdsRef = useRef<string[]>(selectedIds);
+  const previousMultiSelectRef = useRef<boolean>(multiSelect);
 
   useEffect(() => {
     previousSelectedIdsRef.current = selectedIds;
   }, [selectedIds]);
+
+  useEffect(() => {
+    if (previousMultiSelectRef.current !== multiSelect) {
+      previousMultiSelectRef.current = multiSelect;
+      if (selectedIds.length > 0) {
+        const previousIds = [...selectedIds];
+        updateSelection([]);
+        previousIds.forEach((id) => {
+          notifyItemAction({ id, action: 'deselected' });
+        });
+      }
+    }
+  }, [multiSelect]);
 
   const updateSelection = useCallback(
     (newSelectedIds: string[]) => {

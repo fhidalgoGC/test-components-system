@@ -408,6 +408,10 @@ Clears all selections. Triggers `onItemAction` for each deselected item.
 clearSelection(); // Deselects all items
 ```
 
+### Auto-clear on multiSelect change
+
+When the `multiSelect` prop changes (e.g., from `true` to `false` or vice versa), the selection is automatically cleared. This triggers `onSelectionChange` with `[]` and `onItemAction` with `action: 'deselected'` for each previously selected item. No manual clearing is needed.
+
 ### selectAll(ids)
 Selects multiple items at once. In single-select mode, only selects the first item.
 
