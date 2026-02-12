@@ -92,7 +92,7 @@ export function PaginatorExample() {
           id="paginator-grid"
           data={products}
           controller={controller}
-          layout={{ widthMode: 'full', heightMode: 'fixed', height: 480 }}
+          layout={{ widthMode: 'full', heightMode: 'auto' }}
           grid={{ minColumns: minCols, maxColumns: maxCols, minCardWidth: 220, rowGap: 16, columnGap: 16 }}
           scroll={{ enabled: false }}
           statesComponents={{
