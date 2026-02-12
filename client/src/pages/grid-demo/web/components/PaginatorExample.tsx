@@ -28,6 +28,7 @@ export function PaginatorExample() {
   const goToPage = useCallback(async (page: number) => {
     if (page < 1 || page > TOTAL_PAGES) return;
 
+    setProducts([]);
     controller.setState('loading');
     setCurrentPage(page);
 
