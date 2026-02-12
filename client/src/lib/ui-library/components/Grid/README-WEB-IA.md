@@ -68,6 +68,8 @@ type GridProps<T> = {
     onStateChange?: (newState: GridState) => void;
   };
 
+  selectionConfig?: GridSelectionConfig<T>;
+  showBorder?: boolean;       // default: false
   controller?: GridController;
   className?: string;
 };
@@ -215,6 +217,31 @@ statesComponents={{
 - `renderType: 'component'` → Usa el `render` proporcionado
 - `verticalAlign`: `'top'` | `'middle'` | `'bottom'` (default: `'middle'`)
 - `horizontalAlign`: `'left'` | `'center'` | `'right'` (default: `'center'`)
+- `position`: `'bottom'` | `'over'` (default: `'bottom'`)
+
+### Loading Position
+
+La propiedad `position` en el estado `loading` controla dónde se muestra el indicador:
+
+- `'bottom'` (default): indicador al final de los datos, ideal para **scroll infinito** (append de datos).
+- `'over'`: overlay semi-transparente centrado sobre los datos existentes, ideal para **paginador** (reemplazo de datos).
+
+```tsx
+statesComponents={{
+  loading: { renderType: 'self', position: 'over' },
+}}
+```
+
+## showBorder
+
+Prop opcional para mostrar un borde alrededor del contenedor del Grid. Por defecto es `false`.
+
+```tsx
+<Grid
+  showBorder={true}
+  ...
+/>
+```
 
 ## Callbacks
 
@@ -236,6 +263,65 @@ columns = clamp(minColumns, columns, maxColumns)
 
 Usa `ResizeObserver` para recalcular en cada cambio de tamaño del contenedor.
 
+## Selection Integration
+
+Prop opcional `selectionConfig` que integra `WrapperItemsSelected` para habilitar selección de items. Cuando está presente, el Grid usa un layout interno diferente (`Grid.selectable.layout.tsx`) que solo se carga en memoria si se necesita.
+
+### GridSelectionConfig
+
+```tsx
+type GridSelectionConfig<T, R = T> = {
+  getItemId: (item: T) => string;
+  getItem?: (item: T) => R;
+  multiSelect?: boolean;          // default: true
+  selectedIds?: string[];         // modo controlado
+  defaultSelectedIds?: string[];  // modo no controlado
+  onSelectionChange?: (items: R[] | string[]) => void;
+  onItemAction?: (event: { item: R; action: 'selected' | 'deselected' }) => void;
+  selectionStyle?: GridSelectionStyle;
+};
+
+type GridSelectionStyle = {
+  border?: string;
+  borderRadius?: string;
+  backgroundColor?: string;
+  boxShadow?: string;
+  outline?: string;
+  custom?: CSSProperties;
+};
+```
+
+### Uso
+
+```tsx
+<Grid<Product>
+  data={products}
+  selectionConfig={{
+    getItemId: (p) => String(p.id),
+    getItem: (p) => p,
+    multiSelect: true,
+    onSelectionChange: (items) => console.log('Selected:', items),
+    onItemAction: (event) => console.log(event.item, event.action),
+    selectionStyle: {
+      border: '2px solid #3b82f6',
+      borderRadius: '8px',
+      boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.2)',
+    },
+  }}
+  item={{
+    renderType: 'component',
+    render: (product) => <ProductCard product={product} />,
+  }}
+/>
+```
+
+### Patrón agnóstico
+
+- `getItemId`: extrae el ID único de cada item. El Grid no conoce la estructura de los datos.
+- `getItem`: transforma `T` → `R` para los callbacks. Si pasás `getItem: (p) => ({ id: p.id, name: p.name })`, los callbacks reciben solo esos campos. Si no se proporciona `getItem`, los callbacks reciben `string[]` (IDs).
+- `multiSelect: false`: selección simple (un solo item a la vez). Al seleccionar uno nuevo, el anterior se deselecciona automáticamente.
+- `multiSelect: true`: selección múltiple (toggle individual por item).
+
 ## Platform Detection
 
 Solo disponible para Web. En mobile muestra componente `NotImplemented`:
@@ -252,7 +338,7 @@ if (isMobile) {
 ```
 Grid/
 ├── shared/
-│   ├── Grid.types.ts          # Tipos compartidos (GridProps, GridState, etc.)
+│   ├── Grid.types.ts          # Tipos compartidos (GridProps, GridState, SelectionConfig, etc.)
 │   ├── useGridController.ts   # Hook de control externo
 │   └── index.ts
 ├── web/
@@ -260,11 +346,13 @@ Grid/
 │   │   └── Grid.module.css    # Estilos del Grid
 │   ├── hooks/
 │   │   └── useGrid.hook.ts    # Lógica (layout calc, scroll detection, state)
+│   ├── layouts/
+│   │   └── Grid.selectable.layout.tsx  # Layout con selección (solo carga si selectionConfig presente)
 │   ├── views/
-│   │   └── Grid.view.tsx      # Componente React
+│   │   └── Grid.view.tsx      # Componente React (layout normal)
 │   ├── types/
 │   │   └── Grid.type.ts       # Re-export de tipos compartidos
-│   └── index.tsx
-├── index.tsx                  # Dispatch Web/Mobile
+│   └── index.tsx              # Routing entre layout normal y selectable
+├── index.tsx                  # Dispatch Web/Mobile + exports
 └── README-WEB-IA.md
 ```
