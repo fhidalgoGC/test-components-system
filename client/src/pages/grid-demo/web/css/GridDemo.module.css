@@ -75,6 +75,24 @@
   background: #dc2626;
 }
 
+.controlLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.controlSelect {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+}
+
 .info {
   display: flex;
   gap: 16px;
@@ -149,4 +167,76 @@
 .cardRating {
   font-size: 12px;
   color: #f59e0b;
+}
+
+.paginatorBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  background: #fafafa;
+}
+
+.pagBtn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.pagBtn:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.pagBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagPages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pagPageBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagPageBtn:hover {
+  background: #f3f4f6;
+}
+
+.pagPageActive {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.pagPageActive:hover {
+  background: #2563eb;
+}
+
+.pagEllipsis {
+  width: 34px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 13px;
 }

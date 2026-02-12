@@ -1,5 +1,6 @@
 import { BasicGridExample } from '../components/BasicGridExample';
 import { InfiniteScrollExample } from '../components/InfiniteScrollExample';
+import { PaginatorExample } from '../components/PaginatorExample';
 import { StatesExample } from '../components/StatesExample';
 import styles from '../css/GridDemo.module.css';
 
@@ -13,6 +14,7 @@ export function GridDemoWebView() {
 
       <BasicGridExample />
       <InfiniteScrollExample />
+      <PaginatorExample />
       <StatesExample />
     </div>
   );
