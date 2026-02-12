@@ -23,6 +23,7 @@ export function PaginatorExample() {
   const [products, setProducts] = useState<Product[]>(() => allProducts.slice(0, PAGE_SIZE));
   const [minCols, setMinCols] = useState(1);
   const [maxCols, setMaxCols] = useState(4);
+  const [showBorder, setShowBorder] = useState(true);
   const controller = useGridController();
 
   const goToPage = useCallback(async (page: number) => {
@@ -79,6 +80,16 @@ export function PaginatorExample() {
             {[1, 2, 3, 4, 5, 6].map((v) => <option key={v} value={v}>{v}</option>)}
           </select>
         </label>
+
+        <label className={styles.controlLabel} data-testid="label-pag-show-border">
+          <input
+            type="checkbox"
+            checked={showBorder}
+            onChange={(e) => setShowBorder(e.target.checked)}
+            data-testid="checkbox-pag-show-border"
+          />
+          showBorder
+        </label>
       </div>
 
       <div className={styles.info}>
@@ -95,6 +106,7 @@ export function PaginatorExample() {
           layout={{ widthMode: 'full', heightMode: 'auto' }}
           grid={{ minColumns: minCols, maxColumns: maxCols, minCardWidth: 220, rowGap: 16, columnGap: 16 }}
           scroll={{ enabled: false }}
+          showBorder={showBorder}
           statesComponents={{
             loading: { renderType: 'self', position: 'over' },
           }}

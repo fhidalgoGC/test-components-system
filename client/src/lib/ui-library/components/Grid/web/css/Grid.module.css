@@ -3,6 +3,11 @@
   box-sizing: border-box;
 }
 
+.containerBorder {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
 .container.widthFull {
   width: 100%;
 }

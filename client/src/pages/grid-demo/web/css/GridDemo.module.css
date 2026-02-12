@@ -110,8 +110,6 @@
 }
 
 .gridContainer {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
   overflow: hidden;
 }
 
@@ -176,9 +174,9 @@
   gap: 12px;
   padding: 16px;
   border: 1px solid #e5e7eb;
-  border-top: none;
-  border-radius: 0 0 12px 12px;
+  border-radius: 8px;
   background: #fafafa;
+  margin-top: 12px;
 }
 
 .pagBtn {

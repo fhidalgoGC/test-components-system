@@ -82,6 +82,7 @@ export interface GridProps<T = any> {
   statesComponents?: GridStatesComponents;
   callbacks?: GridCallbacks;
   controller?: GridController;
+  showBorder?: boolean;
   className?: string;
 }
 

@@ -32,7 +32,7 @@ function renderStateContent(config: GridStateComponent | undefined, fallback: Re
 }
 
 export function GridView<T>(props: GridProps<T>) {
-  const { id, item, scroll, statesComponents, className } = props;
+  const { id, item, scroll, statesComponents, showBorder, className } = props;
 
   const {
     state,
@@ -50,6 +50,7 @@ export function GridView<T>(props: GridProps<T>) {
     layout?.widthMode === 'full' ? styles.widthFull : layout?.widthMode === 'auto' ? styles.widthAuto : '',
     layout?.heightMode === 'full' ? styles.heightFull : layout?.heightMode === 'auto' ? styles.heightAuto : '',
     scroll?.enabled !== false ? styles.scrollable : styles.noScroll,
+    showBorder ? styles.containerBorder : '',
     className,
   ].filter(Boolean).join(' ');
 
