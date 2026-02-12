@@ -1,4 +1,4 @@
-import type { ReactNode, ComponentType } from 'react';
+import type { ReactNode, ComponentType, CSSProperties } from 'react';
 
 export type GridState = 'idle' | 'loading' | 'empty' | 'error';
 
@@ -72,6 +72,31 @@ export interface GridCallbacks {
   onStateChange?: (newState: GridState) => void;
 }
 
+export interface GridSelectionStyle {
+  border?: string;
+  borderRadius?: string | number;
+  backgroundColor?: string;
+  boxShadow?: string;
+  outline?: string;
+  custom?: CSSProperties;
+}
+
+export interface GridSelectionItemActionEvent<R = any> {
+  item: R;
+  action: 'selected' | 'deselected';
+}
+
+export interface GridSelectionConfig<T = any> {
+  getItemId: (item: T, index: number) => string;
+  getItem?: (item: T, index: number) => any;
+  multiSelect?: boolean;
+  selectedIds?: string[];
+  defaultSelectedIds?: string[];
+  onSelectionChange?: (selectedItems: any[]) => void;
+  onItemAction?: (event: GridSelectionItemActionEvent) => void;
+  selectionStyle?: GridSelectionStyle;
+}
+
 export interface GridProps<T = any> {
   id?: string;
   data?: T[];
@@ -82,6 +107,7 @@ export interface GridProps<T = any> {
   statesComponents?: GridStatesComponents;
   callbacks?: GridCallbacks;
   controller?: GridController;
+  selectionConfig?: GridSelectionConfig<T>;
   showBorder?: boolean;
   className?: string;
 }

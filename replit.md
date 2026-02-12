@@ -77,9 +77,20 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
   - **Scroll End Detector**: Fires `onReachEnd` only when `state === 'idle'`
   - **Capacity Calculator**: Emits `onCapacityChange` with `{ columns, rows, visibleItems }`
   - **External control**: `useGridController` hook with `setState`, `getState`, `refreshLayout`
-  - **Grid config**: `minColumns`, `maxColumns`, `minCardWidth`, `minCardHeight`, `rowGap`, `columnGap`
+  - **Grid config**: `minColumns`, `maxColumns`, `minRows`, `maxRows`, `minCardWidth`, `minCardHeight`, `rowGap`, `columnGap`
   - **Layout modes**: `widthMode` and `heightMode` (`full`/`auto`/`fixed`)
   - **ResizeObserver**: Auto-recalculates on container resize
+  - **showBorder**: Optional prop to toggle border visibility on the Grid container
+  - **Loading position**: `position` prop on loading state (`'bottom'` for append/scroll infinito, `'over'` for overlay centrado sobre datos existentes)
+  - **Selection integration**: Optional `selectionConfig` prop integrates `WrapperItemsSelected` for item selection
+    - Two internal layouts in `layouts/` folder: `Grid.view.tsx` (normal) and `Grid.selectable.layout.tsx` - solo se carga en memoria si se necesita
+    - `getItemId`: Function to extract ID from each item (agnóstico)
+    - `getItem`: Optional function to transform T → R for callbacks (agnóstico, el consumidor decide qué interfaz recibir)
+    - `multiSelect`: Single or multi-select mode
+    - `selectedIds` / `defaultSelectedIds`: Controlled or uncontrolled selection
+    - `onSelectionChange`: Callback with transformed items (R[]) when getItem provided, or string[] (IDs) when not
+    - `onItemAction`: Callback for each select/deselect action with `{ item: R, action }` event
+    - `selectionStyle`: Visual configuration (border, borderRadius, backgroundColor, boxShadow, outline, custom CSSProperties)
 
 # External Dependencies
 

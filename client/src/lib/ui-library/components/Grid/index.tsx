@@ -13,5 +13,5 @@ export const Grid = <T,>(props: GridProps<T>) => {
   return <GridWeb {...props} />;
 };
 
-export type { GridProps, GridController, GridState } from './shared';
+export type { GridProps, GridController, GridState, GridSelectionConfig, GridSelectionStyle, GridSelectionItemActionEvent } from './shared';
 export { useGridController } from './shared';

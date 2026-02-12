@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Grid, useGridController } from '@/lib/ui-library/components/Grid';
+import type { GridSelectionConfig } from '@/lib/ui-library/components/Grid';
 import { generateProducts, ProductCard } from './GridDemo.data';
 import type { Product } from './GridDemo.data';
 import styles from '../css/GridDemo.module.css';
@@ -26,7 +27,21 @@ export function PaginatorExample() {
   const [minRows, setMinRows] = useState<number | undefined>(undefined);
   const [maxRows, setMaxRows] = useState<number | undefined>(undefined);
   const [showBorder, setShowBorder] = useState(true);
+  const [enableSelection, setEnableSelection] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const controller = useGridController();
+
+  const selectionConfig: GridSelectionConfig<Product> | undefined = enableSelection ? {
+    getItemId: (product) => String(product.id),
+    getItem: (product) => product,
+    multiSelect: true,
+    onSelectionChange: (items: Product[]) => setSelectedProducts(items),
+    selectionStyle: {
+      border: '2px solid #3b82f6',
+      borderRadius: '8px',
+      boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.2)',
+    },
+  } : undefined;
 
   const goToPage = useCallback(async (page: number) => {
     if (page < 1 || page > TOTAL_PAGES) return;
@@ -118,12 +133,30 @@ export function PaginatorExample() {
           />
           showBorder
         </label>
+
+        <label className={styles.controlLabel} data-testid="label-pag-enable-selection">
+          <input
+            type="checkbox"
+            checked={enableSelection}
+            onChange={(e) => {
+              setEnableSelection(e.target.checked);
+              if (!e.target.checked) setSelectedProducts([]);
+            }}
+            data-testid="checkbox-pag-enable-selection"
+          />
+          selectionConfig
+        </label>
       </div>
 
       <div className={styles.info}>
         <span className={styles.infoBadge} data-testid="text-pag-state">State: {controller.getState()}</span>
         <span className={styles.infoBadge} data-testid="text-pag-page">Página: {currentPage} / {TOTAL_PAGES}</span>
         <span className={styles.infoBadge} data-testid="text-pag-total">Total: {TOTAL_ITEMS} items</span>
+        {enableSelection && (
+          <span className={styles.infoBadge} data-testid="text-pag-selected">
+            Selected: {selectedProducts.length}
+          </span>
+        )}
       </div>
 
       <div className={styles.gridContainer}>
@@ -135,6 +168,7 @@ export function PaginatorExample() {
           grid={{ minColumns: minCols, maxColumns: maxCols, minRows, maxRows, minCardWidth: 220, rowGap: 16, columnGap: 16 }}
           scroll={{ enabled: false }}
           showBorder={showBorder}
+          selectionConfig={selectionConfig}
           statesComponents={{
             loading: { renderType: 'self', position: 'over' },
           }}
