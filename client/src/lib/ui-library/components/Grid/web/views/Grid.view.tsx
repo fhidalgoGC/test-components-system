@@ -151,6 +151,14 @@ export function GridView<T>(props: GridProps<T>) {
       data-testid={id ? `grid-${id}` : 'grid'}
       data-state={state}
     >
+      <div className={styles.grid} style={gridStyle}>
+        {data.map((dataItem, index) => (
+          <div key={index} data-testid={`grid-item-${index}`}>
+            {item.render(dataItem, index)}
+          </div>
+        ))}
+      </div>
+
       {state === 'loading' && data.length > 0 && (
         <div className={getAlignClasses(statesComponents?.loading)}>
           {renderStateContent(statesComponents?.loading, (
@@ -161,14 +169,6 @@ export function GridView<T>(props: GridProps<T>) {
           ))}
         </div>
       )}
-
-      <div className={styles.grid} style={gridStyle}>
-        {data.map((dataItem, index) => (
-          <div key={index} data-testid={`grid-item-${index}`}>
-            {item.render(dataItem, index)}
-          </div>
-        ))}
-      </div>
 
       {scroll?.enabled !== false && (
         <div ref={sentinelRef} className={styles.sentinel} />

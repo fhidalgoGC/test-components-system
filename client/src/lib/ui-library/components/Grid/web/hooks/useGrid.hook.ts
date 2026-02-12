@@ -24,6 +24,8 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const prevCapacityRef = useRef<GridCapacityInfo | null>(null);
   const reachEndFiredRef = useRef(false);
+  const controllerStateRef = useRef<GridState>('idle');
+  const callbacksRef = useRef(callbacks);
 
   const [internalState, setInternalState] = useState<GridState>('idle');
   const [columns, setColumns] = useState(grid?.minColumns ?? 1);
@@ -43,6 +45,9 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
 
   const controllerState = internalController ? internalController._getState() : internalState;
   const data = propData ?? [];
+
+  controllerStateRef.current = controllerState;
+  callbacksRef.current = callbacks;
 
   const currentState: GridState =
     controllerState === 'idle' && data.length === 0 ? 'empty' : controllerState;
@@ -106,9 +111,13 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
     return () => resizeObserver.disconnect();
   }, [calculateColumns, callbacks]);
 
+  const dataLengthRef = useRef(data.length);
+  dataLengthRef.current = data.length;
+
   useEffect(() => {
     if (!scroll?.enabled) return;
     if (!sentinelRef.current) return;
+    if (!containerRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -118,12 +127,12 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
           return;
         }
 
-        if (controllerState !== 'idle') return;
+        if (controllerStateRef.current !== 'idle') return;
         if (reachEndFiredRef.current) return;
-        if (data.length === 0) return;
+        if (dataLengthRef.current === 0) return;
 
         reachEndFiredRef.current = true;
-        callbacks?.onReachEnd?.();
+        callbacksRef.current?.onReachEnd?.();
       },
       {
         root: containerRef.current,
@@ -134,7 +143,7 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
 
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
-  }, [scroll?.enabled, scroll?.threshold, currentState, data.length, callbacks, internalController]);
+  }, [scroll?.enabled, scroll?.threshold]);
 
   useEffect(() => {
     if (currentState === 'idle') {
