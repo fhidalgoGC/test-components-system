@@ -80,6 +80,7 @@ function App() {
     <ControlDataProvider<ApiParams, ApiResponse>
       fetchFn={fetchData}
       mapParams={mapParams}
+      defaultState={{ page: 1, search: '' }}
       debounceMs={400}
     >
       <SearchFilter />
@@ -105,7 +106,8 @@ function MyComponent() {
     error,        // Error | null - error si ocurrió
     state,        // ControlDataState - estado interno actual
     applyToState, // función para modificar estado
-    resetState,   // limpia todo el estado
+    resetState,   // regresa al defaultState original
+    clearState,   // limpia todo el estado (deja vacío {})
     reload,       // fuerza recarga de datos
   } = useControlDataContext<ApiResponse>();
 }
@@ -271,7 +273,7 @@ function DateFilter() {
 | `fetchFn` | `FetchFunction<TParams, TResponse>` | Función async que llama a tu API |
 | `mapParams` | `MapParamsAdapter<TParams>` | Transforma estado interno a parámetros de API |
 | `debounceMs` | `number` (default: 400) | Milisegundos de espera antes de llamar API |
-| `initialState` | `Partial<ControlDataState>` | Estado inicial opcional |
+| `defaultState` | `Partial<ControlDataState>` | Estado por defecto. Se usa como punto de partida y como valor de `resetState()` |
 
 ## Flujo de Datos
 

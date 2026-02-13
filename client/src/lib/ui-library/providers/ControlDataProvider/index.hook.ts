@@ -23,12 +23,13 @@ const DEFAULT_STATE: ControlDataState = {};
 export function useControlData<TParams = unknown, TResponse = unknown>(
   fetchFn: FetchFunction<TParams, TResponse>,
   mapParams: MapParamsAdapter<TParams>,
-  initialState?: Partial<ControlDataState>,
+  defaultState?: Partial<ControlDataState>,
   debounceMs: number = 400
 ): ControlDataContextValue<TResponse> {
+  const defaultRef = useRef<ControlDataState>({ ...DEFAULT_STATE, ...defaultState });
+
   const [state, setState] = useState<ControlDataState>({
-    ...DEFAULT_STATE,
-    ...initialState,
+    ...defaultRef.current,
   });
 
   const [data, setData] = useState<TResponse | null>(null);
@@ -90,6 +91,10 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
   }, []);
 
   const resetState = useCallback(() => {
+    setState({ ...defaultRef.current });
+  }, []);
+
+  const clearState = useCallback(() => {
     setState({ ...DEFAULT_STATE });
   }, []);
 
@@ -104,6 +109,7 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     state,
     applyToState,
     resetState,
+    clearState,
     reload,
   };
 }

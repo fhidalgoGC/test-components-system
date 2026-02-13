@@ -17,6 +17,7 @@ export type ControlDataContextValue<TData = unknown> = {
   state: ControlDataState;
   applyToState: <T = unknown, R = unknown>(key: StateKey, transformer: StateTransformer<T, R>, rawData: T) => void;
   resetState: () => void;
+  clearState: () => void;
   reload: () => void;
 };
 
@@ -24,6 +25,6 @@ export type ControlDataProviderProps<TParams = unknown, TResponse = unknown> = {
   children: React.ReactNode;
   fetchFn: FetchFunction<TParams, TResponse>;
   mapParams: MapParamsAdapter<TParams>;
-  initialState?: Partial<ControlDataState>;
+  defaultState?: Partial<ControlDataState>;
   debounceMs?: number;
 };

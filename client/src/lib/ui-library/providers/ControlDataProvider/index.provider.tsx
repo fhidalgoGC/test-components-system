@@ -6,13 +6,13 @@ export function ControlDataProvider<TParams = unknown, TResponse = unknown>({
   children,
   fetchFn,
   mapParams,
-  initialState,
+  defaultState,
   debounceMs = 400,
 }: ControlDataProviderProps<TParams, TResponse>) {
   const controlData = useControlData<TParams, TResponse>(
     fetchFn,
     mapParams,
-    initialState,
+    defaultState,
     debounceMs
   );
 
