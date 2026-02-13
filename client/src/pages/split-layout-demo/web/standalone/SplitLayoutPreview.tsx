@@ -3,7 +3,7 @@ import { SplitLayout } from '@/layouts/split-layout-component';
 import type { MainSide, VerticalAlign, HorizontalAlign, SpacingToken } from '@/layouts/split-layout-component';
 import heroImg from '@assets/Screenshot_2026-02-13_at_12.11.37_p.m._1771006299518.png';
 
-type ExampleKey = 'login' | 'reversed' | 'interactive';
+type ExampleKey = 'login' | 'reversed' | 'scroll' | 'interactive';
 
 const toolbarStyle: React.CSSProperties = {
   position: 'fixed',
@@ -121,6 +121,45 @@ function InteractiveMain({ ratio, side, vAlign, hAlign, padding }: { ratio: numb
   );
 }
 
+function ScrollLongForm() {
+  const fields = [
+    { label: 'Full Name', type: 'text', placeholder: 'John Doe' },
+    { label: 'Email', type: 'email', placeholder: 'john@example.com' },
+    { label: 'Phone', type: 'tel', placeholder: '+1 (555) 000-0000' },
+    { label: 'Company', type: 'text', placeholder: 'Acme Inc.' },
+    { label: 'Address', type: 'text', placeholder: '123 Main St' },
+    { label: 'City', type: 'text', placeholder: 'New York' },
+    { label: 'Password', type: 'password', placeholder: 'Min. 8 characters' },
+    { label: 'Confirm Password', type: 'password', placeholder: 'Repeat password' },
+  ];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, width: '100%', maxWidth: 400 }}>
+      <h2 style={{ fontSize: 22, fontWeight: 700, color: '#111827' }}>Complete Registration</h2>
+      <p style={{ fontSize: 13, color: '#6b7280' }}>Fill in all the fields below</p>
+      {fields.map((f) => (
+        <div key={f.label} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={{ fontSize: 12, fontWeight: 600, color: '#374151' }}>{f.label}</label>
+          <input type={f.type} placeholder={f.placeholder} style={{ padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: 8, fontSize: 13 }} />
+        </div>
+      ))}
+      <textarea style={{ padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: 8, fontSize: 13, minHeight: 80 }} placeholder="Bio..." />
+      <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#6b7280' }}>
+        <input type="checkbox" /> I agree to the Terms
+      </label>
+      <button style={{ padding: 12, background: '#f97316', color: 'white', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>Create Account</button>
+    </div>
+  );
+}
+
+function ScrollBrand() {
+  return (
+    <div style={{ color: 'white', maxWidth: 360 }}>
+      <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>Join our community</h1>
+      <p style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.7 }}>Create your account and get access to all features.</p>
+    </div>
+  );
+}
+
 function InteractiveSecondary({ ratio }: { ratio: number }) {
   return (
     <div style={{ color: 'white', textAlign: 'center' }}>
@@ -142,6 +181,7 @@ export default function SplitLayoutPreview() {
     setExample(key);
     if (key === 'login') { setRatio(45); setSide('right'); setVAlign('center'); setHAlign('center'); setPadding('lg'); }
     if (key === 'reversed') { setRatio(45); setSide('left'); setVAlign('center'); setHAlign('center'); setPadding('lg'); }
+    if (key === 'scroll') { setRatio(50); setSide('right'); setVAlign('center'); setHAlign('center'); setPadding('lg'); }
     if (key === 'interactive') { setRatio(50); setSide('right'); setVAlign('center'); setHAlign('center'); setPadding('lg'); }
   };
 
@@ -151,6 +191,18 @@ export default function SplitLayoutPreview() {
         <SplitLayout
           mainPanel={{ content: <LoginForm />, verticalAlign: vAlign, horizontalAlign: hAlign, padding }}
           secondPanel={{ content: <LoginHero />, verticalAlign: 'bottom', horizontalAlign: 'left', background: { image: heroImg, size: 'cover', position: 'center', overlay: 'rgba(0,0,0,0.5)' } }}
+          mainSide={side}
+          mainWidthPercent={ratio}
+          fullHeight
+          style={{ paddingTop: 52 }}
+        />
+      );
+    }
+    if (example === 'scroll') {
+      return (
+        <SplitLayout
+          mainPanel={{ content: <ScrollLongForm />, verticalAlign: vAlign, horizontalAlign: hAlign, padding }}
+          secondPanel={{ content: <ScrollBrand />, background: { gradient: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%)' } }}
           mainSide={side}
           mainWidthPercent={ratio}
           fullHeight
@@ -189,6 +241,7 @@ export default function SplitLayoutPreview() {
         <select style={selectStyle} value={example} onChange={(e) => handleExampleChange(e.target.value as ExampleKey)} data-testid="select-example">
           <option value="login">Login</option>
           <option value="reversed">Reversed</option>
+          <option value="scroll">Scroll</option>
           <option value="interactive">Interactive</option>
         </select>
 
