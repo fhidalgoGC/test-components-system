@@ -1,0 +1,287 @@
+.section {
+  margin-bottom: 48px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.sectionDescription {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.demoWrapper {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 500px;
+}
+
+.controlsBar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.controlLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-right: 4px;
+}
+
+.controlSelect {
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  background: white;
+  color: #374151;
+}
+
+.controlInput {
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  width: 60px;
+  color: #374151;
+}
+
+.heroPanel {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.heroTitle {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.heroTitleAccent {
+  color: #f97316;
+  font-style: italic;
+}
+
+.heroText {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+.heroCopyright {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 24px;
+}
+
+.formPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.formLogo {
+  width: 40px;
+  height: 40px;
+  background: #f97316;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  align-self: flex-end;
+}
+
+.formTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.formSubtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: -8px;
+}
+
+.formInput {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+  color: #374151;
+}
+
+.formInput::placeholder {
+  color: #9ca3af;
+}
+
+.formRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.formCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.formLink {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.formLink:hover {
+  color: #374151;
+}
+
+.formButton {
+  padding: 10px;
+  background: #f97316;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.formButton:hover {
+  background: #ea580c;
+}
+
+.formFooter {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.formFooterLink {
+  color: #f97316;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.formHelp {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.formHelpLink {
+  color: #f97316;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.propsContainer {
+  padding: 24px;
+  max-width: 1200px;
+}
+
+.propsTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.propsSubtitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 32px;
+  margin-bottom: 4px;
+}
+
+.propsDescription {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.propsTableWrapper {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.propsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.propsTable th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  color: #374151;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.propsTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #4b5563;
+  vertical-align: top;
+}
+
+.propsTable tr:hover td {
+  background: #f9fafb;
+}
+
+.propsTable code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #1f2937;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.minimalPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.minimalTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.minimalText {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.6;
+}

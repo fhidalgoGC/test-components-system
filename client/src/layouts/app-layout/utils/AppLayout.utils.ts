@@ -49,6 +49,15 @@ export function getDefaultMenuItems(): MenuItem[] {
       ]
     },
     { 
+      id: 'layouts', 
+      label: 'Layouts',
+      i18n: { en: 'Layouts', es: 'Layouts', default: 'Layouts' },
+      icon: 'LayoutTemplate',
+      children: [
+        { id: 'split-layout', label: 'SplitLayout', i18n: { en: 'SplitLayout', es: 'SplitLayout', default: 'SplitLayout' }, path: '/layouts/split-layout', icon: 'Columns' },
+      ]
+    },
+    { 
       id: 'sidebar-layout', 
       label: 'SidebarLayout', 
       icon: 'LayoutDashboard',

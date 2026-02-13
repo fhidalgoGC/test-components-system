@@ -91,6 +91,15 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
     - `onSelectionChange`: Callback with transformed items (R[]) when getItem provided, or string[] (IDs) when not
     - `onItemAction`: Callback for each select/deselect action with `{ item: R, action }` event
     - `selectionStyle`: Visual configuration (border, borderRadius, backgroundColor, boxShadow, outline, custom CSSProperties)
+- **SplitLayout**: Two-panel responsive layout. Features:
+  - **Dual panels**: Each accepts ReactNode with independent alignment, padding, and background
+  - **Side selection**: `mainSide` ('left' | 'right') controls which side is the main panel
+  - **Width ratio**: `mainWidthPercent` defines panel proportions (secondary = 100 - main)
+  - **Responsive collapse**: Secondary panel hides at configurable breakpoint (default 768px) via CSS media query
+  - **Panel backgrounds**: Color, image (cover), gradient, overlay support per panel
+  - **Alignment**: Vertical (top/center/bottom) and horizontal (left/center/right) per panel
+  - **Padding tokens**: none, xs, sm, md, lg, xl per panel
+  - **Height**: fullHeight (100vh default) or custom fixed height
 
 # External Dependencies
 

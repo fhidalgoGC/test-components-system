@@ -1,0 +1,59 @@
+import { SplitLayout } from '@/lib/ui-library/components/SplitLayout';
+import styles from '../css/SplitLayoutDemo.module.css';
+
+function LeftFormContent() {
+  return (
+    <div className={styles.formPanel}>
+      <h2 className={styles.formTitle}>Create Account</h2>
+      <p className={styles.formSubtitle}>Join our platform today</p>
+      <input className={styles.formInput} type="text" placeholder="Full Name" data-testid="input-name-reversed" />
+      <input className={styles.formInput} type="email" placeholder="Email" data-testid="input-email-reversed" />
+      <input className={styles.formInput} type="password" placeholder="Password" data-testid="input-password-reversed" />
+      <button className={styles.formButton} data-testid="button-signup">Create Account</button>
+    </div>
+  );
+}
+
+function RightHeroContent() {
+  return (
+    <div style={{ color: 'white', maxWidth: 400 }}>
+      <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 12 }}>Start your journey</h1>
+      <p style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.6 }}>
+        Access powerful tools to manage your workflow, collaborate with your team, and grow your business.
+      </p>
+    </div>
+  );
+}
+
+export function ReversedExample() {
+  return (
+    <div className={styles.section}>
+      <h2 className={styles.sectionTitle} data-testid="text-reversed-title">Form a la izquierda (mainSide: left)</h2>
+      <p className={styles.sectionDescription}>
+        El panel principal (formulario) está a la izquierda, y el hero decorativo a la derecha. Usa gradiente de fondo.
+      </p>
+      <div className={styles.demoWrapper}>
+        <SplitLayout
+          mainPanel={{
+            content: <LeftFormContent />,
+            verticalAlign: 'center',
+            horizontalAlign: 'center',
+            padding: 'lg',
+            background: { color: '#ffffff' },
+          }}
+          secondaryPanel={{
+            content: <RightHeroContent />,
+            verticalAlign: 'center',
+            horizontalAlign: 'center',
+            padding: 'xl',
+            background: {
+              gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            },
+          }}
+          mainSide="left"
+          mainWidthPercent={45}
+        />
+      </div>
+    </div>
+  );
+}
