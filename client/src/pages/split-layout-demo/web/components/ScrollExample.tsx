@@ -66,11 +66,13 @@ function LongFormContent() {
 
 function BrandPanel() {
   return (
-    <div style={{ color: 'white', maxWidth: 360 }}>
-      <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>Join our community</h1>
-      <p style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.7 }}>
-        Create your account and get access to all features. Connect with thousands of professionals worldwide.
-      </p>
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
+      <div style={{ color: 'white', maxWidth: 360 }}>
+        <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>Join our community</h1>
+        <p style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.7 }}>
+          Create your account and get access to all features. Connect with thousands of professionals worldwide.
+        </p>
+      </div>
     </div>
   );
 }
@@ -80,7 +82,7 @@ export function ScrollExample() {
     <div className={styles.section}>
       <h2 className={styles.sectionTitle} data-testid="text-scroll-title">Scroll vertical (contenido largo)</h2>
       <p className={styles.sectionDescription}>
-        Cuando el contenido del panel es más alto que el espacio disponible, se activa scroll vertical automáticamente. El scroll horizontal no existe, el contenido se corta.
+        Cuando el contenido del panel es mas alto que el espacio disponible, se activa scroll vertical automaticamente (scroll.vertical: true por defecto). El scroll horizontal esta desactivado por defecto.
       </p>
       <a href="/layouts/split-layout/preview/scroll" target="_blank" rel="noopener noreferrer" className={styles.previewLink} data-testid="link-preview-scroll">
         <svg className={styles.previewLinkIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
@@ -88,17 +90,17 @@ export function ScrollExample() {
       </a>
       <div className={styles.demoWrapper}>
         <SplitLayout
-          mainPanel={{
-            content: <LongFormContent />,
+          layout={{ heightMode: 'fixed', height: 500 }}
+          main={{
+            render: <LongFormContent />,
+            widthMode: 'percentage',
+            width: 50,
+            scroll: { vertical: true, horizontal: false },
           }}
-          secondPanel={{
-            content: <BrandPanel />,
-            background: {
-              gradient: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%)',
-            },
+          secondary={{
+            render: <BrandPanel />,
+            scroll: { vertical: false },
           }}
-          mainSide="right"
-          mainWidthPercent={50}
         />
       </div>
     </div>

@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'wouter';
 import { SplitLayout } from '@/layouts/split-layout-component';
-import type { MainSide, VerticalAlign, HorizontalAlign, SpacingToken } from '@/layouts/split-layout-component';
-import heroImg from '@assets/Screenshot_2026-02-13_at_12.11.37_p.m._1771006299518.png';
+import type { SizeMode, VerticalAlign, HorizontalAlign } from '@/layouts/split-layout-component';
 
 type ExampleKey = 'login' | 'reversed' | 'scroll' | 'interactive';
 const validExamples: ExampleKey[] = ['login', 'reversed', 'scroll', 'interactive'];
@@ -53,20 +52,6 @@ const dividerStyle: React.CSSProperties = {
   background: '#334155',
 };
 
-function LoginHero() {
-  return (
-    <div style={{ color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 12 }}>
-      <h1 style={{ fontSize: 28, fontWeight: 700, lineHeight: 1.2 }}>
-        <span style={{ color: '#f97316', fontStyle: 'italic' }}>Simplified</span> logistics management
-      </h1>
-      <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, maxWidth: 400 }}>
-        Coordinate and manage the transportation of your commodities from the collection point to final delivery.
-      </p>
-      <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 24 }}>&copy; 2026 FarmChain All Rights Reserved.</p>
-    </div>
-  );
-}
-
 function LoginForm() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 360 }}>
@@ -88,6 +73,22 @@ function LoginForm() {
   );
 }
 
+function LoginHero() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%)', display: 'flex', alignItems: 'flex-end', padding: 40 }}>
+      <div style={{ color: 'white', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <h1 style={{ fontSize: 28, fontWeight: 700, lineHeight: 1.2 }}>
+          <span style={{ color: '#f97316', fontStyle: 'italic' }}>Simplified</span> logistics management
+        </h1>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, maxWidth: 400 }}>
+          Coordinate and manage the transportation of your commodities from the collection point to final delivery.
+        </p>
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 24 }}>&copy; 2026 FarmChain All Rights Reserved.</p>
+      </div>
+    </div>
+  );
+}
+
 function SignupForm() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 360 }}>
@@ -103,22 +104,13 @@ function SignupForm() {
 
 function JourneyHero() {
   return (
-    <div style={{ color: 'white', maxWidth: 400 }}>
-      <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 12 }}>Start your journey</h1>
-      <p style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.6 }}>
-        Access powerful tools to manage your workflow, collaborate with your team, and grow your business.
-      </p>
-    </div>
-  );
-}
-
-function InteractiveMain({ ratio, side, vAlign, hAlign, padding }: { ratio: number; side: string; vAlign: string; hAlign: string; padding: string }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827' }}>Main Panel</h2>
-      <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6 }}>
-        width: {ratio}% | side: {side} | vAlign: {vAlign} | hAlign: {hAlign} | padding: {padding}
-      </p>
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
+      <div style={{ color: 'white', maxWidth: 400 }}>
+        <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 12 }}>Start your journey</h1>
+        <p style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.6 }}>
+          Access powerful tools to manage your workflow, collaborate with your team, and grow your business.
+        </p>
+      </div>
     </div>
   );
 }
@@ -155,18 +147,33 @@ function ScrollLongForm() {
 
 function ScrollBrand() {
   return (
-    <div style={{ color: 'white', maxWidth: 360 }}>
-      <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>Join our community</h1>
-      <p style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.7 }}>Create your account and get access to all features.</p>
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
+      <div style={{ color: 'white', maxWidth: 360 }}>
+        <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>Join our community</h1>
+        <p style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.7 }}>Create your account and get access to all features.</p>
+      </div>
     </div>
   );
 }
 
-function InteractiveSecondary({ ratio }: { ratio: number }) {
+function InteractiveMain({ mainWidth, widthMode, vAlign, hAlign }: { mainWidth: number; widthMode: string; vAlign: string; hAlign: string }) {
   return (
-    <div style={{ color: 'white', textAlign: 'center' }}>
-      <h2 style={{ fontSize: 24, fontWeight: 700 }}>Secondary</h2>
-      <p style={{ fontSize: 13, opacity: 0.8 }}>width: {100 - ratio}%</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827' }}>Main Panel</h2>
+      <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6 }}>
+        widthMode: {widthMode} | width: {mainWidth} | vAlign: {vAlign} | hAlign: {hAlign}
+      </p>
+    </div>
+  );
+}
+
+function InteractiveSecondary() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ color: 'white', textAlign: 'center' }}>
+        <h2 style={{ fontSize: 24, fontWeight: 700 }}>Secondary</h2>
+        <p style={{ fontSize: 13, opacity: 0.8 }}>widthMode: full</p>
+      </div>
     </div>
   );
 }
@@ -175,65 +182,91 @@ export default function SplitLayoutPreview() {
   const params = useParams<{ example?: string }>();
   const initialExample = validExamples.includes(params.example as ExampleKey) ? (params.example as ExampleKey) : 'login';
   const [example, setExample] = useState<ExampleKey>(initialExample);
-  const [ratio, setRatio] = useState(initialExample === 'login' || initialExample === 'reversed' ? 45 : 50);
-  const [side, setSide] = useState<MainSide>(initialExample === 'reversed' ? 'left' : 'right');
-  const [vAlign, setVAlign] = useState<VerticalAlign>('center');
+  const [mainWidth, setMainWidth] = useState(45);
+  const [layoutHeight, setLayoutHeight] = useState(0);
+  const [vAlign, setVAlign] = useState<VerticalAlign>('middle');
   const [hAlign, setHAlign] = useState<HorizontalAlign>('center');
-  const [padding, setPadding] = useState<SpacingToken>('lg');
+  const [mainWidthMode, setMainWidthMode] = useState<SizeMode>('percentage');
 
   const handleExampleChange = (key: ExampleKey) => {
     setExample(key);
-    if (key === 'login') { setRatio(45); setSide('right'); setVAlign('center'); setHAlign('center'); setPadding('lg'); }
-    if (key === 'reversed') { setRatio(45); setSide('left'); setVAlign('center'); setHAlign('center'); setPadding('lg'); }
-    if (key === 'scroll') { setRatio(50); setSide('right'); setVAlign('center'); setHAlign('center'); setPadding('lg'); }
-    if (key === 'interactive') { setRatio(50); setSide('right'); setVAlign('center'); setHAlign('center'); setPadding('lg'); }
+    setMainWidth(key === 'login' || key === 'reversed' ? 45 : 50);
+    setVAlign('middle');
+    setHAlign('center');
+    setMainWidthMode('percentage');
+    setLayoutHeight(0);
   };
+
+  const layoutConfig = layoutHeight > 0
+    ? { heightMode: 'fixed' as SizeMode, height: layoutHeight }
+    : { heightMode: 'full' as SizeMode };
+
+  const fullLayoutStyle = layoutHeight <= 0 ? { paddingTop: 52 } : undefined;
 
   const renderLayout = () => {
     if (example === 'login') {
       return (
         <SplitLayout
-          mainPanel={{ content: <LoginForm />, verticalAlign: vAlign, horizontalAlign: hAlign, padding }}
-          secondPanel={{ content: <LoginHero />, verticalAlign: 'bottom', horizontalAlign: 'left', background: { image: heroImg, size: 'cover', position: 'center', overlay: 'rgba(0,0,0,0.5)' } }}
-          mainSide={side}
-          mainWidthPercent={ratio}
-          fullHeight
-          style={{ paddingTop: 52 }}
+          layout={{ ...layoutConfig, ...(fullLayoutStyle ? {} : {}) }}
+          main={{
+            render: <LoginForm />,
+            widthMode: mainWidthMode,
+            width: mainWidth,
+            align: { vertical: vAlign, horizontal: hAlign },
+          }}
+          secondary={{
+            render: <LoginHero />,
+            align: { vertical: 'bottom', horizontal: 'left' },
+          }}
         />
       );
     }
     if (example === 'scroll') {
       return (
         <SplitLayout
-          mainPanel={{ content: <ScrollLongForm />, verticalAlign: vAlign, horizontalAlign: hAlign, padding }}
-          secondPanel={{ content: <ScrollBrand />, background: { gradient: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%)' } }}
-          mainSide={side}
-          mainWidthPercent={ratio}
-          fullHeight
-          style={{ paddingTop: 52 }}
+          layout={layoutConfig}
+          main={{
+            render: <ScrollLongForm />,
+            widthMode: mainWidthMode,
+            width: mainWidth,
+            align: { vertical: vAlign, horizontal: hAlign },
+            scroll: { vertical: true },
+          }}
+          secondary={{
+            render: <ScrollBrand />,
+            scroll: { vertical: false },
+          }}
         />
       );
     }
     if (example === 'reversed') {
       return (
         <SplitLayout
-          mainPanel={{ content: <SignupForm />, verticalAlign: vAlign, horizontalAlign: hAlign, padding, background: { color: '#ffffff' } }}
-          secondPanel={{ content: <JourneyHero />, background: { gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' } }}
-          mainSide={side}
-          mainWidthPercent={ratio}
-          fullHeight
-          style={{ paddingTop: 52 }}
+          layout={{ ...layoutConfig, componentMainAlign: 'right' }}
+          main={{
+            render: <SignupForm />,
+            widthMode: mainWidthMode,
+            width: mainWidth,
+            align: { vertical: vAlign, horizontal: hAlign },
+          }}
+          secondary={{
+            render: <JourneyHero />,
+          }}
         />
       );
     }
     return (
       <SplitLayout
-        mainPanel={{ content: <InteractiveMain ratio={ratio} side={side} vAlign={vAlign} hAlign={hAlign} padding={padding} />, verticalAlign: vAlign, horizontalAlign: hAlign, padding, background: { color: '#f9fafb' } }}
-        secondPanel={{ content: <InteractiveSecondary ratio={ratio} />, background: { gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)' } }}
-        mainSide={side}
-        mainWidthPercent={ratio}
-        fullHeight
-        style={{ paddingTop: 52 }}
+        layout={layoutConfig}
+        main={{
+          render: <InteractiveMain mainWidth={mainWidth} widthMode={mainWidthMode} vAlign={vAlign} hAlign={hAlign} />,
+          widthMode: mainWidthMode,
+          width: mainWidth,
+          align: { vertical: vAlign, horizontal: hAlign },
+        }}
+        secondary={{
+          render: <InteractiveSecondary />,
+        }}
       />
     );
   };
@@ -251,19 +284,26 @@ export default function SplitLayoutPreview() {
 
         <div style={dividerStyle} />
 
-        <span style={labelStyle}>Width %:</span>
-        <input style={inputStyle} type="number" min={20} max={80} value={ratio} onChange={(e) => setRatio(Number(e.target.value))} data-testid="input-ratio-preview" />
-
-        <span style={labelStyle}>Side:</span>
-        <select style={selectStyle} value={side} onChange={(e) => setSide(e.target.value as MainSide)} data-testid="select-side-preview">
-          <option value="left">left</option>
-          <option value="right">right</option>
+        <span style={labelStyle}>WidthMode:</span>
+        <select style={selectStyle} value={mainWidthMode} onChange={(e) => setMainWidthMode(e.target.value as SizeMode)} data-testid="select-width-mode-preview">
+          <option value="full">full</option>
+          <option value="auto">auto</option>
+          <option value="fixed">fixed</option>
+          <option value="percentage">percentage</option>
         </select>
+
+        <span style={labelStyle}>Width:</span>
+        <input style={inputStyle} type="number" min={50} max={800} value={mainWidth} onChange={(e) => setMainWidth(Number(e.target.value))} data-testid="input-width-preview" />
+
+        <span style={labelStyle}>Layout H:</span>
+        <input style={inputStyle} type="number" min={0} max={1000} value={layoutHeight} onChange={(e) => setLayoutHeight(Number(e.target.value))} data-testid="input-height-preview" />
+
+        <div style={dividerStyle} />
 
         <span style={labelStyle}>V-Align:</span>
         <select style={selectStyle} value={vAlign} onChange={(e) => setVAlign(e.target.value as VerticalAlign)} data-testid="select-valign-preview">
           <option value="top">top</option>
-          <option value="center">center</option>
+          <option value="middle">middle</option>
           <option value="bottom">bottom</option>
         </select>
 
@@ -273,19 +313,11 @@ export default function SplitLayoutPreview() {
           <option value="center">center</option>
           <option value="right">right</option>
         </select>
-
-        <span style={labelStyle}>Padding:</span>
-        <select style={selectStyle} value={padding} onChange={(e) => setPadding(e.target.value as SpacingToken)} data-testid="select-padding-preview">
-          <option value="none">none</option>
-          <option value="xs">xs</option>
-          <option value="sm">sm</option>
-          <option value="md">md</option>
-          <option value="lg">lg</option>
-          <option value="xl">xl</option>
-        </select>
       </div>
 
-      {renderLayout()}
+      <div style={fullLayoutStyle}>
+        {renderLayout()}
+      </div>
     </>
   );
 }

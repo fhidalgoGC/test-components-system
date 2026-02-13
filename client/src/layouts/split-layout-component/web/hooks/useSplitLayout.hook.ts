@@ -1,19 +1,10 @@
 import { useMemo, CSSProperties } from 'react';
-import type { SplitLayoutProps, PanelConfig, PanelBackground } from '../types';
+import type { SplitLayoutProps, PanelConfig, SizeMode } from '../types';
 import styles from '../css/SplitLayout.module.css';
-
-const paddingMap: Record<string, string> = {
-  none: styles.padNone,
-  xs: styles.padXs,
-  sm: styles.padSm,
-  md: styles.padMd,
-  lg: styles.padLg,
-  xl: styles.padXl,
-};
 
 const vAlignMap: Record<string, string> = {
   top: styles.vTop,
-  center: styles.vCenter,
+  middle: styles.vMiddle,
   bottom: styles.vBottom,
 };
 
@@ -23,33 +14,19 @@ const hAlignMap: Record<string, string> = {
   right: styles.hRight,
 };
 
-const gapMap: Record<string, string> = {
-  none: styles.gapNone,
-  xs: styles.gapXs,
-  sm: styles.gapSm,
-  md: styles.gapMd,
-  lg: styles.gapLg,
-  xl: styles.gapXl,
-};
-
-function buildBackgroundStyle(bg?: PanelBackground): CSSProperties {
-  if (!bg) return {};
-  const style: CSSProperties = {};
-
-  if (bg.gradient) {
-    style.background = bg.gradient;
-  } else if (bg.image) {
-    style.backgroundImage = `url(${bg.image})`;
-    style.backgroundSize = bg.size || 'cover';
-    style.backgroundPosition = bg.position || 'center';
-    style.backgroundRepeat = 'no-repeat';
+function resolveSizeValue(mode: SizeMode, value: string | number | undefined, useVh: boolean): string {
+  switch (mode) {
+    case 'full':
+      return useVh ? '100vh' : '100%';
+    case 'auto':
+      return 'auto';
+    case 'fixed':
+      return typeof value === 'number' ? `${value}px` : (value || 'auto');
+    case 'percentage':
+      return typeof value === 'number' ? `${value}%` : (value || 'auto');
+    default:
+      return 'auto';
   }
-
-  if (bg.color && !bg.gradient && !bg.image) {
-    style.backgroundColor = bg.color;
-  }
-
-  return style;
 }
 
 function buildPanelClasses(panel: PanelConfig, isMain: boolean): string {
@@ -58,10 +35,11 @@ function buildPanelClasses(panel: PanelConfig, isMain: boolean): string {
     isMain ? styles.mainPanel : styles.secondPanel,
   ];
 
-  const padding = panel.padding || 'none';
-  classes.push(paddingMap[padding] || styles.padNone);
+  const scrollV = panel.scroll?.vertical !== false;
+  const scrollH = panel.scroll?.horizontal === true;
 
-  if (panel.className) classes.push(panel.className);
+  classes.push(scrollV ? styles.scrollYAuto : styles.scrollYHidden);
+  classes.push(scrollH ? styles.scrollXAuto : styles.scrollXHidden);
 
   return classes.join(' ');
 }
@@ -69,101 +47,102 @@ function buildPanelClasses(panel: PanelConfig, isMain: boolean): string {
 function buildInnerClasses(panel: PanelConfig): string {
   const classes = [styles.panelInner];
 
-  const vAlign = panel.verticalAlign || 'center';
-  const hAlign = panel.horizontalAlign || 'center';
+  const vAlign = panel.align?.vertical || 'middle';
+  const hAlign = panel.align?.horizontal || 'center';
 
-  classes.push(vAlignMap[vAlign] || styles.vCenter);
+  classes.push(vAlignMap[vAlign] || styles.vMiddle);
   classes.push(hAlignMap[hAlign] || styles.hCenter);
 
   return classes.join(' ');
 }
 
+function buildPanelStyle(panel: PanelConfig): CSSProperties {
+  const s: CSSProperties = {};
+
+  const widthMode = panel.widthMode || 'full';
+  const resolved = resolveSizeValue(widthMode, panel.width, false);
+
+  if (widthMode === 'percentage' || widthMode === 'fixed') {
+    s.flexBasis = resolved;
+    s.width = resolved;
+    s.flexGrow = 0;
+    s.flexShrink = 0;
+  } else if (widthMode === 'full') {
+    s.flex = 1;
+    s.minWidth = 0;
+  } else {
+    s.flexGrow = 0;
+    s.flexShrink = 0;
+    s.flexBasis = 'auto';
+    s.width = 'auto';
+  }
+
+  const heightMode = panel.heightMode || 'full';
+  if (heightMode === 'full') {
+    s.height = '100%';
+  } else if (heightMode === 'auto') {
+    s.height = 'auto';
+  } else {
+    s.height = resolveSizeValue(heightMode, panel.height, false);
+  }
+
+  if (panel.minWidth != null) s.minWidth = panel.minWidth;
+  if (panel.minHeight != null) s.minHeight = panel.minHeight;
+
+  return s;
+}
+
 export function useSplitLayout(props: SplitLayoutProps) {
-  const {
-    mainPanel,
-    secondPanel,
-    mainSide = 'right',
-    mainWidthPercent = 50,
-    collapseBreakpoint = 768,
-    gap = 'none',
-    fullHeight = true,
-    height,
-    className,
-    style,
-  } = props;
+  const { layout, main, secondary } = props;
+
+  const mainAlign = layout?.componentMainAlign || 'left';
+  const isReversed = mainAlign === 'right';
 
   const containerClasses = useMemo(() => {
-    const classes = [styles.container];
-    if (fullHeight && !height) classes.push(styles.fullHeight);
-    if (gap !== 'none') classes.push(gapMap[gap] || '');
-    if (className) classes.push(className);
-    return classes.join(' ');
-  }, [fullHeight, height, gap, className]);
+    return styles.container;
+  }, []);
 
   const containerStyle = useMemo((): CSSProperties => {
     const s: CSSProperties = {};
-    if (height) s.height = height;
-    if (style) Object.assign(s, style);
-    return s;
-  }, [height, style]);
 
-  const secondaryWidthPercent = 100 - mainWidthPercent;
+    const widthMode = layout?.widthMode || 'full';
+    s.width = resolveSizeValue(widthMode, layout?.width, false);
+    if (layout?.minWidth != null) s.minWidth = layout.minWidth;
 
-  const leftPanel = mainSide === 'left' ? mainPanel : secondPanel;
-  const rightPanel = mainSide === 'right' ? mainPanel : secondPanel;
-  const isLeftMain = mainSide === 'left';
+    const heightMode = layout?.heightMode || 'full';
+    s.height = resolveSizeValue(heightMode, layout?.height, true);
+    if (layout?.minHeight != null) s.minHeight = layout.minHeight;
 
-  const leftClasses = buildPanelClasses(leftPanel, isLeftMain);
-  const rightClasses = buildPanelClasses(rightPanel, !isLeftMain);
-  const leftInnerClasses = buildInnerClasses(leftPanel);
-  const rightInnerClasses = buildInnerClasses(rightPanel);
-
-  const leftStyle = useMemo((): CSSProperties => {
-    const widthPct = isLeftMain ? mainWidthPercent : secondaryWidthPercent;
-    const s: CSSProperties = {
-      flexBasis: `${widthPct}%`,
-      width: `${widthPct}%`,
-      ...buildBackgroundStyle(leftPanel.background),
-    };
-    if (leftPanel.style) Object.assign(s, leftPanel.style);
-    return s;
-  }, [isLeftMain, mainWidthPercent, secondaryWidthPercent, leftPanel]);
-
-  const rightStyle = useMemo((): CSSProperties => {
-    const widthPct = isLeftMain ? secondaryWidthPercent : mainWidthPercent;
-    const s: CSSProperties = {
-      flexBasis: `${widthPct}%`,
-      width: `${widthPct}%`,
-      ...buildBackgroundStyle(rightPanel.background),
-    };
-    if (rightPanel.style) Object.assign(s, rightPanel.style);
-    return s;
-  }, [isLeftMain, mainWidthPercent, secondaryWidthPercent, rightPanel]);
-
-  const leftOverlay = leftPanel.background?.overlay;
-  const rightOverlay = rightPanel.background?.overlay;
-
-  const collapseMediaQuery = useMemo(() => {
-    if (collapseBreakpoint !== 768) {
-      return `@media (max-width: ${collapseBreakpoint}px) { [data-split-secondary] { display: none !important; } [data-split-main] { flex-basis: 100% !important; width: 100% !important; } }`;
+    if (isReversed) {
+      s.flexDirection = 'row-reverse';
     }
-    return null;
-  }, [collapseBreakpoint]);
+
+    return s;
+  }, [layout, isReversed]);
+
+  const mainClasses = buildPanelClasses(main, true);
+  const secondaryClasses = buildPanelClasses(secondary, false);
+  const mainInnerClasses = buildInnerClasses(main);
+  const secondaryInnerClasses = buildInnerClasses(secondary);
+
+  const mainStyle = useMemo((): CSSProperties => {
+    return buildPanelStyle(main);
+  }, [main]);
+
+  const secondaryStyle = useMemo((): CSSProperties => {
+    return buildPanelStyle(secondary);
+  }, [secondary]);
 
   return {
     containerClasses,
     containerStyle,
-    leftPanel,
-    rightPanel,
-    leftClasses,
-    rightClasses,
-    leftInnerClasses,
-    rightInnerClasses,
-    leftStyle,
-    rightStyle,
-    leftOverlay,
-    rightOverlay,
-    isLeftMain,
-    collapseMediaQuery,
+    mainPanel: main,
+    secondaryPanel: secondary,
+    mainClasses,
+    secondaryClasses,
+    mainInnerClasses,
+    secondaryInnerClasses,
+    mainStyle,
+    secondaryStyle,
   };
 }

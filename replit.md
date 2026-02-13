@@ -92,15 +92,15 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
     - `onItemAction`: Callback for each select/deselect action with `{ item: R, action }` event
     - `selectionStyle`: Visual configuration (border, borderRadius, backgroundColor, boxShadow, outline, custom CSSProperties)
 - **SplitLayout** (ubicado en `client/src/layouts/split-layout-component/`): Two-panel responsive layout. Features:
-  - **Dual panels**: `mainPanel` and `secondPanel` - each accepts ReactNode with independent alignment, padding, and background
-  - **Side selection**: `mainSide` ('left' | 'right') controls which side is the main panel
-  - **Width ratio**: `mainWidthPercent` defines panel proportions (second = 100 - main)
-  - **Responsive collapse**: Second panel hides at configurable breakpoint (default 768px) via CSS media query
-  - **Panel backgrounds**: Color, image (cover), gradient, overlay support per panel
-  - **Alignment**: Vertical (top/center/bottom) and horizontal (left/center/right) per panel, defaults to center/center
-  - **Padding tokens**: none, xs, sm, md, lg, xl per panel
-  - **Height**: fullHeight (100vh default) or custom fixed height
-  - **Scroll behavior**: Vertical scroll auto when content overflows, horizontal scroll disabled (content clipped)
+  - **Three-level config**: `layout` (container), `main` (panel principal), `secondary` (panel secundario)
+  - **componentMainAlign**: `'left'` | `'right'` — controla en qué lado se renderiza el panel main (default: `'left'`). Usa `flexDirection: row-reverse` internamente.
+  - **SizeMode**: `full`, `auto`, `fixed`, `percentage` for width/height at layout and panel level
+  - **Panel dimensions**: Each panel has independent `widthMode`, `width`, `minWidth`, `heightMode`, `height`, `minHeight`
+  - **Layout dimensions**: Container has `widthMode`, `width`, `minWidth`, `heightMode`, `height`, `minHeight`
+  - **Responsive collapse**: Secondary panel hides at 768px via CSS media query, main always visible
+  - **Alignment**: `align: { vertical: 'top'|'middle'|'bottom', horizontal: 'left'|'center'|'right' }` per panel, defaults to middle/center
+  - **Scroll control**: `scroll: { vertical: boolean, horizontal: boolean }` per panel, defaults to vertical=true, horizontal=false
+  - **Render**: `render` prop accepts ReactNode, `renderType` is always 'component'
 
 # External Dependencies
 

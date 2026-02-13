@@ -1,38 +1,46 @@
-import { ReactNode, CSSProperties } from 'react';
+import { ReactNode } from 'react';
 
-export type MainSide = 'left' | 'right';
-export type VerticalAlign = 'top' | 'center' | 'bottom';
+export type SizeMode = 'full' | 'auto' | 'fixed' | 'percentage';
+export type VerticalAlign = 'middle' | 'top' | 'bottom';
 export type HorizontalAlign = 'left' | 'center' | 'right';
-export type SpacingToken = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-export interface PanelConfig {
-  content: ReactNode;
-  verticalAlign?: VerticalAlign;
-  horizontalAlign?: HorizontalAlign;
-  padding?: SpacingToken;
-  background?: PanelBackground;
-  style?: CSSProperties;
-  className?: string;
+export type ComponentMainAlign = 'left' | 'right';
+
+export interface LayoutConfig {
+  componentMainAlign?: ComponentMainAlign;
+  widthMode?: SizeMode;
+  width?: string | number;
+  minWidth?: number;
+  heightMode?: SizeMode;
+  height?: string | number;
+  minHeight?: number;
 }
 
-export interface PanelBackground {
-  color?: string;
-  image?: string;
-  gradient?: string;
-  size?: string;
-  position?: string;
-  overlay?: string;
+export interface PanelAlign {
+  vertical?: VerticalAlign;
+  horizontal?: HorizontalAlign;
+}
+
+export interface PanelScroll {
+  vertical?: boolean;
+  horizontal?: boolean;
+}
+
+export interface PanelConfig {
+  renderType?: 'component';
+  render: ReactNode;
+  widthMode?: SizeMode;
+  width?: string | number;
+  minWidth?: number;
+  heightMode?: SizeMode;
+  height?: string | number;
+  minHeight?: number;
+  align?: PanelAlign;
+  scroll?: PanelScroll;
 }
 
 export interface SplitLayoutProps {
-  mainPanel: PanelConfig;
-  secondPanel: PanelConfig;
-  mainSide?: MainSide;
-  mainWidthPercent?: number;
-  collapseBreakpoint?: number;
-  gap?: SpacingToken;
-  fullHeight?: boolean;
-  height?: string;
-  className?: string;
-  style?: CSSProperties;
+  layout?: LayoutConfig;
+  main: PanelConfig;
+  secondary: PanelConfig;
 }

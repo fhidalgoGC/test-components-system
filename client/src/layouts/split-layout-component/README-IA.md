@@ -2,38 +2,36 @@
 
 ## Overview
 
-Layout de dos paneles (split-screen) responsivo. Muestra dos paneles lado a lado en pantallas grandes; al reducirse por debajo del breakpoint configurable (default 768px), el panel secundario desaparece y el panel principal ocupa el 100% del ancho. Ideal para páginas de login, onboarding, landing pages con hero + formulario.
+Layout de dos paneles (split-screen) responsivo. Muestra dos paneles lado a lado en pantallas grandes; al reducirse por debajo de 768px, el panel secundario desaparece y el panel principal ocupa el 100% del ancho. Ideal para paginas de login, onboarding, landing pages con hero + formulario.
 
-**Ubicación**: `client/src/layouts/split-layout-component/` - Disponible para las apps que implementan la librería.
+**Ubicacion**: `client/src/layouts/split-layout-component/` - Disponible para las apps que implementan la libreria.
 
 ## Key Features
 
-- **Dos paneles configurables**: Cada panel acepta un ReactNode con alineación, padding y fondo independientes
-- **Selección de lado**: `mainSide` controla si el panel principal va a la izquierda o derecha
-- **Ratio configurable**: `mainWidthPercent` define el porcentaje del panel principal (el secundario es el complemento)
-- **Responsive con collapse**: El panel secundario se oculta con CSS media query al alcanzar el breakpoint
-- **Fondos flexibles**: Color sólido, imagen con cover, gradiente CSS, overlay semitransparente
-- **Alineación**: Vertical (top/center/bottom) y horizontal (left/center/right) por panel
-- **Padding tokens**: none, xs, sm, md, lg, xl por panel
-- **Altura**: fullHeight (100vh por defecto) o altura fija personalizada
+- **Dos paneles configurables**: `main` (izquierda, siempre visible) y `secondary` (derecha, se oculta en mobile)
+- **Control de dimensiones por nivel**: `layout` controla el contenedor, cada panel controla sus propias dimensiones
+- **SizeMode flexible**: `full`, `auto`, `fixed`, `percentage` para width y height a nivel layout y panel
+- **Alineacion**: Vertical (top/middle/bottom) y horizontal (left/center/right) por panel
+- **Scroll configurable**: Control independiente de scroll vertical y horizontal por panel
+- **Responsive con collapse**: El panel secundario se oculta con CSS media query a 768px
 
 ## File Structure
 
 ```
 SplitLayout/
-├── index.tsx                         # Root export con web/mobile split (useIsMobile)
+├── index.tsx                         # Root export
 └── web/
     ├── index.ts                      # Web exports
     ├── views/
     │   ├── index.ts
     │   └── SplitLayout.view.tsx      # Vista principal
     ├── hooks/
-    │   └── useSplitLayout.hook.ts    # Lógica: clases, estilos, orden de paneles
+    │   └── useSplitLayout.hook.ts    # Logica: clases, estilos, dimensiones
     ├── types/
     │   ├── index.ts
-    │   └── SplitLayout.types.ts      # SplitLayoutProps, PanelConfig, PanelBackground
+    │   └── SplitLayout.types.ts      # SplitLayoutProps, PanelConfig, LayoutConfig
     └── css/
-        └── SplitLayout.module.css    # Flex layout, responsive, alineación, padding tokens
+        └── SplitLayout.module.css    # Flex layout, responsive, alineacion, scroll
 ```
 
 ## Interfaces
@@ -42,39 +40,58 @@ SplitLayout/
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mainPanel` | `PanelConfig` | **Required** | Panel principal (siempre visible) |
-| `secondPanel` | `PanelConfig` | **Required** | Panel secundario (se oculta en mobile) |
-| `mainSide` | `'left' \| 'right'` | `'right'` | Lado donde aparece el panel principal |
-| `mainWidthPercent` | `number` | `50` | Porcentaje de ancho del panel principal |
-| `collapseBreakpoint` | `number` | `768` | Breakpoint (px) donde el secundario desaparece |
-| `gap` | `SpacingToken` | `'none'` | Espacio entre paneles |
-| `fullHeight` | `boolean` | `true` | Ocupa 100vh (se ignora si height está definido) |
-| `height` | `string` | `undefined` | Altura fija (ej: '600px') |
-| `className` | `string` | `undefined` | Clase CSS adicional |
-| `style` | `CSSProperties` | `undefined` | Estilos inline adicionales |
+| `layout` | `LayoutConfig` | `undefined` | Configuracion de dimensiones del contenedor |
+| `main` | `PanelConfig` | **Required** | Panel principal (izquierda, siempre visible en mobile) |
+| `secondary` | `PanelConfig` | **Required** | Panel secundario (derecha, se oculta en mobile) |
+
+### LayoutConfig
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `widthMode` | `SizeMode` | `'full'` | Modo de ancho del contenedor |
+| `width` | `string \| number` | `undefined` | Valor de ancho (para fixed o percentage) |
+| `minWidth` | `number` | `undefined` | Ancho minimo en px |
+| `heightMode` | `SizeMode` | `'full'` | Modo de altura (full = 100vh) |
+| `height` | `string \| number` | `undefined` | Valor de altura (para fixed o percentage) |
+| `minHeight` | `number` | `undefined` | Altura minima en px |
 
 ### PanelConfig
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `content` | `ReactNode` | **Required** | Contenido del panel |
-| `verticalAlign` | `VerticalAlign` | `'center'` | Alineación vertical |
-| `horizontalAlign` | `HorizontalAlign` | `'center'` | Alineación horizontal |
-| `padding` | `SpacingToken` | `'none'` | Padding interno |
-| `background` | `PanelBackground` | `undefined` | Configuración del fondo |
-| `style` | `CSSProperties` | `undefined` | Estilos inline |
-| `className` | `string` | `undefined` | Clase CSS adicional |
+| `render` | `ReactNode` | **Required** | Contenido a renderizar |
+| `renderType` | `'component'` | `'component'` | Tipo de render |
+| `widthMode` | `SizeMode` | `'full'` | Modo de ancho del panel |
+| `width` | `string \| number` | `undefined` | Valor de ancho |
+| `minWidth` | `number` | `undefined` | Ancho minimo en px |
+| `heightMode` | `SizeMode` | `'full'` | Modo de altura del panel |
+| `height` | `string \| number` | `undefined` | Valor de altura |
+| `minHeight` | `number` | `undefined` | Altura minima en px |
+| `align` | `PanelAlign` | `{ vertical: 'middle', horizontal: 'center' }` | Alineacion del contenido |
+| `scroll` | `PanelScroll` | `{ vertical: true, horizontal: false }` | Control de scroll |
 
-### PanelBackground
+### PanelAlign
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `color` | `string` | - | Color de fondo (se ignora con gradient/image) |
-| `image` | `string` | - | URL de imagen de fondo |
-| `gradient` | `string` | - | Gradiente CSS |
-| `size` | `string` | `'cover'` | background-size |
-| `position` | `string` | `'center'` | background-position |
-| `overlay` | `string` | - | Capa semitransparente sobre el fondo |
+| `vertical` | `'top' \| 'middle' \| 'bottom'` | `'middle'` | Alineacion vertical |
+| `horizontal` | `'left' \| 'center' \| 'right'` | `'center'` | Alineacion horizontal |
+
+### PanelScroll
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `vertical` | `boolean` | `true` | Scroll vertical cuando contenido excede altura |
+| `horizontal` | `boolean` | `false` | Scroll horizontal cuando contenido excede ancho |
+
+### SizeMode
+
+| Value | Description |
+|-------|-------------|
+| `'full'` | 100% del contenedor (100vh para height a nivel layout) |
+| `'auto'` | Se adapta al contenido |
+| `'fixed'` | Valor fijo en px (usa el prop width/height) |
+| `'percentage'` | Valor en porcentaje (usa el prop width/height) |
 
 ## Usage
 
@@ -82,34 +99,26 @@ SplitLayout/
 import { SplitLayout } from '@/layouts/split-layout-component';
 
 <SplitLayout
-  mainPanel={{
-    content: <LoginForm />,
-    verticalAlign: 'center',
-    horizontalAlign: 'center',
-    padding: 'lg',
+  layout={{ heightMode: 'fixed', height: 500 }}
+  main={{
+    render: <LoginForm />,
+    widthMode: 'percentage',
+    width: 45,
+    align: { vertical: 'middle', horizontal: 'center' },
   }}
-  secondPanel={{
-    content: <HeroContent />,
-    verticalAlign: 'bottom',
-    horizontalAlign: 'left',
-    padding: 'lg',
-    background: {
-      image: '/hero.jpg',
-      overlay: 'rgba(0, 0, 0, 0.5)',
-    },
+  secondary={{
+    render: <HeroContent />,
+    align: { vertical: 'bottom', horizontal: 'left' },
+    scroll: { vertical: false },
   }}
-  mainSide="right"
-  mainWidthPercent={45}
 />
 ```
 
 ## Responsive Behavior
 
-- **Desktop (> breakpoint)**: Ambos paneles visibles con ratio definido
-- **Mobile (<= breakpoint)**: Solo el mainPanel visible al 100%
+- **Desktop (> 768px)**: Ambos paneles visibles con dimensiones configuradas
+- **Mobile (<= 768px)**: Solo el panel `main` visible al 100%
 - Implementado con CSS `@media` query, sin JS resize listeners
-- Breakpoint configurable via `collapseBreakpoint` (default 768px)
-- Si se usa un breakpoint diferente a 768px, se inyecta un `<style>` tag dinámico
 
 ## Dependencies
 

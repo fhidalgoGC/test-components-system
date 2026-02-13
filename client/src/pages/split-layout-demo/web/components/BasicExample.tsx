@@ -4,14 +4,17 @@ import heroImg from '@assets/Screenshot_2026-02-13_at_12.11.37_p.m._177100629951
 
 function HeroContent() {
   return (
-    <div className={styles.heroPanel}>
-      <h1 className={styles.heroTitle}>
-        <span className={styles.heroTitleAccent}>Simplified</span> logistics management
-      </h1>
-      <p className={styles.heroText}>
-        Coordinate and manage the transportation of your commodities from the collection point to final delivery.
-      </p>
-      <p className={styles.heroCopyright}>© 2026 FarmChain All Rights Reserved.</p>
+    <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${heroImg})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'flex-end', padding: 40 }}>
+      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)' }} />
+      <div className={styles.heroPanel} style={{ position: 'relative', zIndex: 1 }}>
+        <h1 className={styles.heroTitle}>
+          <span className={styles.heroTitleAccent}>Simplified</span> logistics management
+        </h1>
+        <p className={styles.heroText}>
+          Coordinate and manage the transportation of your commodities from the collection point to final delivery.
+        </p>
+        <p className={styles.heroCopyright}>&copy; 2026 FarmChain All Rights Reserved.</p>
+      </div>
     </div>
   );
 }
@@ -48,9 +51,9 @@ function FormContent() {
 export function BasicExample() {
   return (
     <div className={styles.section}>
-      <h2 className={styles.sectionTitle} data-testid="text-basic-title">Login Layout (Form a la derecha)</h2>
+      <h2 className={styles.sectionTitle} data-testid="text-basic-title">Login Layout (Form a la izquierda)</h2>
       <p className={styles.sectionDescription}>
-        Layout tipo login con imagen de fondo a la izquierda y formulario a la derecha. El panel izquierdo desaparece en pantallas menores a 768px.
+        Layout tipo login con imagen de fondo a la derecha y formulario a la izquierda. El panel secundario desaparece en pantallas menores a 768px.
       </p>
       <a href="/layouts/split-layout/preview/login" target="_blank" rel="noopener noreferrer" className={styles.previewLink} data-testid="link-preview-basic">
         <svg className={styles.previewLinkIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
@@ -58,22 +61,16 @@ export function BasicExample() {
       </a>
       <div className={styles.demoWrapper}>
         <SplitLayout
-          mainPanel={{
-            content: <FormContent />,
+          layout={{ heightMode: 'fixed', height: 500 }}
+          main={{
+            render: <FormContent />,
+            widthMode: 'percentage',
+            width: 45,
           }}
-          secondPanel={{
-            content: <HeroContent />,
-            verticalAlign: 'bottom',
-            horizontalAlign: 'left',
-            background: {
-              image: heroImg,
-              size: 'cover',
-              position: 'center',
-              overlay: 'rgba(0, 0, 0, 0.5)',
-            },
+          secondary={{
+            render: <HeroContent />,
+            align: { vertical: 'bottom', horizontal: 'left' },
           }}
-          mainSide="right"
-          mainWidthPercent={45}
         />
       </div>
     </div>

@@ -1,9 +1,10 @@
 export type {
   SplitLayoutProps,
+  LayoutConfig,
   PanelConfig,
-  PanelBackground,
-  MainSide,
+  PanelAlign,
+  PanelScroll,
+  SizeMode,
   VerticalAlign,
   HorizontalAlign,
-  SpacingToken,
 } from './SplitLayout.types';

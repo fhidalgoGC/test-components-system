@@ -1,19 +1,12 @@
 .container {
   display: flex;
-  width: 100%;
   overflow: hidden;
-}
-
-.fullHeight {
-  height: 100vh;
 }
 
 .panel {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: flex-basis 0.3s ease, opacity 0.3s ease;
+  position: relative;
 }
 
 .mainPanel {
@@ -23,21 +16,6 @@
 
 .secondPanel {
   min-width: 0;
-  position: relative;
-}
-
-.panelContent {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.backgroundOverlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .panelInner {
@@ -51,7 +29,7 @@
 
 /* Vertical Align */
 .vTop { justify-content: flex-start; }
-.vCenter { justify-content: center; }
+.vMiddle { justify-content: center; }
 .vBottom { justify-content: flex-end; }
 
 /* Horizontal Align */
@@ -59,21 +37,11 @@
 .hCenter { align-items: center; }
 .hRight { align-items: flex-end; }
 
-/* Padding tokens */
-.padNone { padding: 0; }
-.padXs { padding: 8px; }
-.padSm { padding: 16px; }
-.padMd { padding: 24px; }
-.padLg { padding: 40px; }
-.padXl { padding: 64px; }
-
-/* Gap tokens */
-.gapNone { gap: 0; }
-.gapXs { gap: 4px; }
-.gapSm { gap: 8px; }
-.gapMd { gap: 16px; }
-.gapLg { gap: 24px; }
-.gapXl { gap: 32px; }
+/* Scroll */
+.scrollYAuto { overflow-y: auto; }
+.scrollYHidden { overflow-y: hidden; }
+.scrollXAuto { overflow-x: auto; }
+.scrollXHidden { overflow-x: hidden; }
 
 @media (max-width: 768px) {
   .secondPanel {
