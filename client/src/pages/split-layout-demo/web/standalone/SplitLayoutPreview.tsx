@@ -150,7 +150,7 @@ export default function SplitLayoutPreview() {
       return (
         <SplitLayout
           mainPanel={{ content: <LoginForm />, verticalAlign: vAlign, horizontalAlign: hAlign, padding }}
-          secondaryPanel={{ content: <LoginHero />, verticalAlign: 'bottom', horizontalAlign: 'left', padding: 'lg', background: { image: heroImg, size: 'cover', position: 'center', overlay: 'rgba(0,0,0,0.5)' } }}
+          secondPanel={{ content: <LoginHero />, verticalAlign: 'bottom', horizontalAlign: 'left', padding: 'lg', background: { image: heroImg, size: 'cover', position: 'center', overlay: 'rgba(0,0,0,0.5)' } }}
           mainSide={side}
           mainWidthPercent={ratio}
           fullHeight
@@ -162,7 +162,7 @@ export default function SplitLayoutPreview() {
       return (
         <SplitLayout
           mainPanel={{ content: <SignupForm />, verticalAlign: vAlign, horizontalAlign: hAlign, padding, background: { color: '#ffffff' } }}
-          secondaryPanel={{ content: <JourneyHero />, verticalAlign: 'center', horizontalAlign: 'center', padding: 'xl', background: { gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' } }}
+          secondPanel={{ content: <JourneyHero />, verticalAlign: 'center', horizontalAlign: 'center', padding: 'xl', background: { gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' } }}
           mainSide={side}
           mainWidthPercent={ratio}
           fullHeight
@@ -173,7 +173,7 @@ export default function SplitLayoutPreview() {
     return (
       <SplitLayout
         mainPanel={{ content: <InteractiveMain ratio={ratio} side={side} vAlign={vAlign} hAlign={hAlign} padding={padding} />, verticalAlign: vAlign, horizontalAlign: hAlign, padding, background: { color: '#f9fafb' } }}
-        secondaryPanel={{ content: <InteractiveSecondary ratio={ratio} />, verticalAlign: 'center', horizontalAlign: 'center', padding: 'lg', background: { gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)' } }}
+        secondPanel={{ content: <InteractiveSecondary ratio={ratio} />, verticalAlign: 'center', horizontalAlign: 'center', padding: 'lg', background: { gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)' } }}
         mainSide={side}
         mainWidthPercent={ratio}
         fullHeight

@@ -55,7 +55,7 @@ function buildBackgroundStyle(bg?: PanelBackground): CSSProperties {
 function buildPanelClasses(panel: PanelConfig, isMain: boolean): string {
   const classes = [
     styles.panel,
-    isMain ? styles.mainPanel : styles.secondaryPanel,
+    isMain ? styles.mainPanel : styles.secondPanel,
   ];
 
   const vAlign = panel.verticalAlign || 'center';
@@ -74,7 +74,7 @@ function buildPanelClasses(panel: PanelConfig, isMain: boolean): string {
 export function useSplitLayout(props: SplitLayoutProps) {
   const {
     mainPanel,
-    secondaryPanel,
+    secondPanel,
     mainSide = 'right',
     mainWidthPercent = 50,
     collapseBreakpoint = 768,
@@ -102,8 +102,8 @@ export function useSplitLayout(props: SplitLayoutProps) {
 
   const secondaryWidthPercent = 100 - mainWidthPercent;
 
-  const leftPanel = mainSide === 'left' ? mainPanel : secondaryPanel;
-  const rightPanel = mainSide === 'right' ? mainPanel : secondaryPanel;
+  const leftPanel = mainSide === 'left' ? mainPanel : secondPanel;
+  const rightPanel = mainSide === 'right' ? mainPanel : secondPanel;
   const isLeftMain = mainSide === 'left';
 
   const leftClasses = buildPanelClasses(leftPanel, isLeftMain);

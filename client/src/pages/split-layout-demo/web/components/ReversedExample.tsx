@@ -45,7 +45,7 @@ export function ReversedExample() {
             padding: 'lg',
             background: { color: '#ffffff' },
           }}
-          secondaryPanel={{
+          secondPanel={{
             content: <RightHeroContent />,
             verticalAlign: 'center',
             horizontalAlign: 'center',

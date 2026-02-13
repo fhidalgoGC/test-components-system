@@ -11,7 +11,8 @@
 .panel {
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: flex-basis 0.3s ease, opacity 0.3s ease;
 }
 
@@ -20,7 +21,7 @@
   min-width: 0;
 }
 
-.secondaryPanel {
+.secondPanel {
   min-width: 0;
   position: relative;
 }
@@ -75,7 +76,7 @@
 .gapXl { gap: 32px; }
 
 @media (max-width: 768px) {
-  .secondaryPanel {
+  .secondPanel {
     display: none !important;
   }
 

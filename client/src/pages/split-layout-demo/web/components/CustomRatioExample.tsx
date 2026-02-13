@@ -80,7 +80,7 @@ export function CustomRatioExample() {
             padding: padding,
             background: { color: '#f9fafb' },
           }}
-          secondaryPanel={{
+          secondPanel={{
             content: (
               <div style={{ color: 'white', textAlign: 'center' }}>
                 <h2 style={{ fontSize: 24, fontWeight: 700 }}>Secondary</h2>

@@ -24,7 +24,7 @@ export function SplitLayoutPropsTab() {
               <td>Configuración del panel principal (contenido que siempre se muestra)</td>
             </tr>
             <tr>
-              <td><code>secondaryPanel</code></td>
+              <td><code>secondPanel</code></td>
               <td><code>PanelConfig</code></td>
               <td><strong>Required</strong></td>
               <td>Configuración del panel secundario (se oculta en mobile)</td>
@@ -82,7 +82,7 @@ export function SplitLayoutPropsTab() {
       </div>
 
       <h3 className={styles.propsSubtitle}>PanelConfig</h3>
-      <p className={styles.propsDescription}>Configuración de cada panel (mainPanel y secondaryPanel).</p>
+      <p className={styles.propsDescription}>Configuración de cada panel (mainPanel y secondPanel).</p>
       <div className={styles.propsTableWrapper}>
         <table className={styles.propsTable}>
           <thead>

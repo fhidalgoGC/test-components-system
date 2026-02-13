@@ -26,7 +26,7 @@ export interface PanelBackground {
 
 export interface SplitLayoutProps {
   mainPanel: PanelConfig;
-  secondaryPanel: PanelConfig;
+  secondPanel: PanelConfig;
   mainSide?: MainSide;
   mainWidthPercent?: number;
   collapseBreakpoint?: number;

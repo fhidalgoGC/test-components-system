@@ -43,7 +43,7 @@ SplitLayout/
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `mainPanel` | `PanelConfig` | **Required** | Panel principal (siempre visible) |
-| `secondaryPanel` | `PanelConfig` | **Required** | Panel secundario (se oculta en mobile) |
+| `secondPanel` | `PanelConfig` | **Required** | Panel secundario (se oculta en mobile) |
 | `mainSide` | `'left' \| 'right'` | `'right'` | Lado donde aparece el panel principal |
 | `mainWidthPercent` | `number` | `50` | Porcentaje de ancho del panel principal |
 | `collapseBreakpoint` | `number` | `768` | Breakpoint (px) donde el secundario desaparece |
@@ -88,7 +88,7 @@ import { SplitLayout } from '@/layouts/split-layout-component';
     horizontalAlign: 'center',
     padding: 'lg',
   }}
-  secondaryPanel={{
+  secondPanel={{
     content: <HeroContent />,
     verticalAlign: 'bottom',
     horizontalAlign: 'left',

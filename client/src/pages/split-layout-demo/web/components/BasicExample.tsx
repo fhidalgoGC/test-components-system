@@ -64,7 +64,7 @@ export function BasicExample() {
             horizontalAlign: 'center',
             padding: 'lg',
           }}
-          secondaryPanel={{
+          secondPanel={{
             content: <HeroContent />,
             verticalAlign: 'bottom',
             horizontalAlign: 'left',
