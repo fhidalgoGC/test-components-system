@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useParams } from 'wouter';
 import { SplitLayout } from '@/layouts/split-layout-component';
 import type { MainSide, VerticalAlign, HorizontalAlign, SpacingToken } from '@/layouts/split-layout-component';
 import heroImg from '@assets/Screenshot_2026-02-13_at_12.11.37_p.m._1771006299518.png';
 
 type ExampleKey = 'login' | 'reversed' | 'scroll' | 'interactive';
+const validExamples: ExampleKey[] = ['login', 'reversed', 'scroll', 'interactive'];
 
 const toolbarStyle: React.CSSProperties = {
   position: 'fixed',
@@ -170,9 +172,11 @@ function InteractiveSecondary({ ratio }: { ratio: number }) {
 }
 
 export default function SplitLayoutPreview() {
-  const [example, setExample] = useState<ExampleKey>('login');
-  const [ratio, setRatio] = useState(45);
-  const [side, setSide] = useState<MainSide>('right');
+  const params = useParams<{ example?: string }>();
+  const initialExample = validExamples.includes(params.example as ExampleKey) ? (params.example as ExampleKey) : 'login';
+  const [example, setExample] = useState<ExampleKey>(initialExample);
+  const [ratio, setRatio] = useState(initialExample === 'login' || initialExample === 'reversed' ? 45 : 50);
+  const [side, setSide] = useState<MainSide>(initialExample === 'reversed' ? 'left' : 'right');
   const [vAlign, setVAlign] = useState<VerticalAlign>('center');
   const [hAlign, setHAlign] = useState<HorizontalAlign>('center');
   const [padding, setPadding] = useState<SpacingToken>('lg');
