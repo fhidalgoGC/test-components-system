@@ -273,7 +273,34 @@ function DateFilter() {
 | `fetchFn` | `FetchFunction<TParams, TResponse>` | Función async que llama a tu API |
 | `mapParams` | `MapParamsAdapter<TParams>` | Transforma estado interno a parámetros de API |
 | `debounceMs` | `number` (default: 400) | Milisegundos de espera antes de llamar API |
-| `defaultState` | `Partial<ControlDataState>` | Estado por defecto. Se usa como punto de partida y como valor de `resetState()` |
+| `defaultState` | `Partial<ControlDataState>` | Opcional. Estado por defecto con el que arranca el provider. Si no se proporciona, el estado inicial es `{}`. Se usa como punto de partida y como valor de retorno de `resetState()` |
+
+## Métodos del Contexto
+
+| Método | Descripción |
+|--------|-------------|
+| `applyToState(key, transformer, rawData)` | Modifica una key del estado usando un transformer |
+| `resetState()` | Regresa el state al `defaultState` configurado. Si no se definió `defaultState`, regresa a `{}` |
+| `clearState()` | Limpia todo el estado, siempre lo deja en `{}` independientemente del `defaultState` |
+| `reload()` | Fuerza una recarga de datos con el estado actual |
+
+### Comportamiento de resetState vs clearState
+
+```tsx
+// Sin defaultState
+<ControlDataProvider fetchFn={fetch} mapParams={map}>
+  {/* state inicial = {} */}
+  {/* resetState() → {} */}
+  {/* clearState() → {} */}
+</ControlDataProvider>
+
+// Con defaultState
+<ControlDataProvider fetchFn={fetch} mapParams={map} defaultState={{ page: 1, search: '' }}>
+  {/* state inicial = { page: 1, search: '' } */}
+  {/* resetState() → { page: 1, search: '' } */}
+  {/* clearState() → {} */}
+</ControlDataProvider>
+```
 
 ## Flujo de Datos
 
