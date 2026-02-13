@@ -185,6 +185,8 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
     return data;
   }, [data, columns, grid?.maxRows]);
 
+  const heightMode = layout?.heightMode ?? 'auto';
+
   const gridStyle = useMemo<React.CSSProperties>(() => {
     const style: React.CSSProperties = {
       gridTemplateColumns: `repeat(${columns}, 1fr)`,
@@ -198,12 +200,12 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
       const minGridHeight = grid.minRows * grid.minCardHeight + (grid.minRows - 1) * rowGap;
       style.minHeight = Math.max(minGridHeight, grid.minCardHeight);
     }
-    if (grid?.maxRows && grid?.minCardHeight) {
+    if (grid?.maxRows && grid?.minCardHeight && heightMode !== 'auto') {
       const maxGridHeight = grid.maxRows * grid.minCardHeight + (grid.maxRows - 1) * rowGap;
       style.maxHeight = maxGridHeight;
     }
     return style;
-  }, [columns, rowGap, columnGap, grid?.minCardHeight, grid?.minRows, grid?.maxRows]);
+  }, [columns, rowGap, columnGap, grid?.minCardHeight, grid?.minRows, grid?.maxRows, heightMode]);
 
   return {
     state: currentState,
