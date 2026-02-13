@@ -238,3 +238,70 @@
   color: #9ca3af;
   font-size: 13px;
 }
+
+.propsContainer {
+  padding: 24px;
+  max-width: 1200px;
+}
+
+.propsTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.propsSubtitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 32px;
+  margin-bottom: 4px;
+}
+
+.propsDescription {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.propsTableWrapper {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.propsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.propsTable th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  color: #374151;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.propsTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #4b5563;
+  vertical-align: top;
+}
+
+.propsTable tr:hover td {
+  background: #f9fafb;
+}
+
+.propsTable code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #1f2937;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}

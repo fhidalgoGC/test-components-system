@@ -1,21 +1,30 @@
-import { BasicGridExample } from '../components/BasicGridExample';
-import { InfiniteScrollExample } from '../components/InfiniteScrollExample';
-import { PaginatorExample } from '../components/PaginatorExample';
-import { StatesExample } from '../components/StatesExample';
-import styles from '../css/GridDemo.module.css';
+import { ComponentLayoutView } from '@/layouts/component-layout';
+import type { TabConfig } from '@/layouts/component-layout/types/ComponentLayout.types';
+import { GridExamplesTab } from '../components/GridExamplesTab';
+import { GridPropsTab } from '../props/GridProps';
+
+const tabs: TabConfig[] = [
+  {
+    id: 'examples',
+    label: 'Examples',
+    icon: 'fa-eye',
+    content: <GridExamplesTab />,
+  },
+  {
+    id: 'props',
+    label: 'Props',
+    icon: 'fa-list',
+    content: <GridPropsTab />,
+  },
+];
 
 export function GridDemoWebView() {
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title} data-testid="text-page-title">Grid Component</h1>
-      <p className={styles.subtitle}>
-        Grid Engine declarativo y agnóstico. Solo organiza layout, calcula capacidad y detecta final de scroll.
-      </p>
-
-      <BasicGridExample />
-      <InfiniteScrollExample />
-      <PaginatorExample />
-      <StatesExample />
-    </div>
+    <ComponentLayoutView
+      componentName="Grid"
+      componentDescription="Grid Engine declarativo y agnóstico. Solo organiza layout, calcula capacidad y detecta final de scroll."
+      tabs={tabs}
+      defaultTab="examples"
+    />
   );
 }
