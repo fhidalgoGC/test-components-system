@@ -58,15 +58,22 @@ function buildPanelClasses(panel: PanelConfig, isMain: boolean): string {
     isMain ? styles.mainPanel : styles.secondPanel,
   ];
 
-  const vAlign = panel.verticalAlign || 'center';
-  const hAlign = panel.horizontalAlign || 'center';
   const padding = panel.padding || 'none';
-
-  classes.push(vAlignMap[vAlign] || styles.vCenter);
-  classes.push(hAlignMap[hAlign] || styles.hCenter);
   classes.push(paddingMap[padding] || styles.padNone);
 
   if (panel.className) classes.push(panel.className);
+
+  return classes.join(' ');
+}
+
+function buildInnerClasses(panel: PanelConfig): string {
+  const classes = [styles.panelInner];
+
+  const vAlign = panel.verticalAlign || 'center';
+  const hAlign = panel.horizontalAlign || 'center';
+
+  classes.push(vAlignMap[vAlign] || styles.vCenter);
+  classes.push(hAlignMap[hAlign] || styles.hCenter);
 
   return classes.join(' ');
 }
@@ -108,6 +115,8 @@ export function useSplitLayout(props: SplitLayoutProps) {
 
   const leftClasses = buildPanelClasses(leftPanel, isLeftMain);
   const rightClasses = buildPanelClasses(rightPanel, !isLeftMain);
+  const leftInnerClasses = buildInnerClasses(leftPanel);
+  const rightInnerClasses = buildInnerClasses(rightPanel);
 
   const leftStyle = useMemo((): CSSProperties => {
     const widthPct = isLeftMain ? mainWidthPercent : secondaryWidthPercent;
@@ -148,6 +157,8 @@ export function useSplitLayout(props: SplitLayoutProps) {
     rightPanel,
     leftClasses,
     rightClasses,
+    leftInnerClasses,
+    rightInnerClasses,
     leftStyle,
     rightStyle,
     leftOverlay,

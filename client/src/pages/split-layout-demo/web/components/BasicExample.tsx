@@ -60,15 +60,11 @@ export function BasicExample() {
         <SplitLayout
           mainPanel={{
             content: <FormContent />,
-            verticalAlign: 'center',
-            horizontalAlign: 'center',
-            padding: 'lg',
           }}
           secondPanel={{
             content: <HeroContent />,
             verticalAlign: 'bottom',
             horizontalAlign: 'left',
-            padding: 'lg',
             background: {
               image: heroImg,
               size: 'cover',

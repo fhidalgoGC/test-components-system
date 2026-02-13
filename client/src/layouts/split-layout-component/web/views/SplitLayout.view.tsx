@@ -10,6 +10,8 @@ export function SplitLayoutView(props: SplitLayoutProps) {
     rightPanel,
     leftClasses,
     rightClasses,
+    leftInnerClasses,
+    rightInnerClasses,
     leftStyle,
     rightStyle,
     leftOverlay,
@@ -39,7 +41,7 @@ export function SplitLayoutView(props: SplitLayoutProps) {
               data-testid="split-overlay-left"
             />
           )}
-          <div className={styles.panelInner}>
+          <div className={leftInnerClasses}>
             {leftPanel.content}
           </div>
         </div>
@@ -57,7 +59,7 @@ export function SplitLayoutView(props: SplitLayoutProps) {
               data-testid="split-overlay-right"
             />
           )}
-          <div className={styles.panelInner}>
+          <div className={rightInnerClasses}>
             {rightPanel.content}
           </div>
         </div>

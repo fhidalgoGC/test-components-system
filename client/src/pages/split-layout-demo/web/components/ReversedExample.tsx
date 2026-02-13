@@ -40,16 +40,10 @@ export function ReversedExample() {
         <SplitLayout
           mainPanel={{
             content: <LeftFormContent />,
-            verticalAlign: 'center',
-            horizontalAlign: 'center',
-            padding: 'lg',
             background: { color: '#ffffff' },
           }}
           secondPanel={{
             content: <RightHeroContent />,
-            verticalAlign: 'center',
-            horizontalAlign: 'center',
-            padding: 'xl',
             background: {
               gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             },

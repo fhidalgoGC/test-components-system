@@ -87,9 +87,6 @@ export function CustomRatioExample() {
                 <p style={{ fontSize: 13, opacity: 0.8 }}>width: {100 - ratio}%</p>
               </div>
             ),
-            verticalAlign: 'center',
-            horizontalAlign: 'center',
-            padding: 'lg',
             background: {
               gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)',
             },
