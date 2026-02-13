@@ -306,3 +306,68 @@
   color: #6b7280;
   line-height: 1.6;
 }
+
+.controlPresetBtn {
+  padding: 6px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.controlPresetBtn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.controlPresetBtn[data-active='true'] {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.controlsDescription {
+  font-size: 12px;
+  color: #6b7280;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.controlDivider {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: #d1d5db;
+  margin: 0 4px;
+}
+
+.configPreview {
+  background: #1f2937;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+}
+
+.configPreview code {
+  font-size: 11px;
+  color: #a5f3fc;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  white-space: nowrap;
+}
+
+.demoWrapperAuto {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  overflow: hidden;
+  background: repeating-conic-gradient(#f3f4f6 0% 25%, white 0% 50%) 0 0 / 20px 20px;
+  min-height: 100px;
+}
