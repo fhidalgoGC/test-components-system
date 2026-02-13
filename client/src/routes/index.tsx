@@ -39,9 +39,7 @@ const FloatingMenuDemo = lazy(() => import("@/pages/floating-menu-demo"));
 const ModalDemo = lazy(() => import("@/pages/modal-demo"));
 const GridDemo = lazy(() => import("@/pages/grid-demo"));
 const SplitLayoutDemo = lazy(() => import("@/pages/split-layout-demo"));
-const SplitBasicStandalone = lazy(() => import("@/pages/split-layout-demo/web/standalone/BasicStandalone"));
-const SplitReversedStandalone = lazy(() => import("@/pages/split-layout-demo/web/standalone/ReversedStandalone"));
-const SplitCustomRatioStandalone = lazy(() => import("@/pages/split-layout-demo/web/standalone/CustomRatioStandalone"));
+const SplitLayoutPreview = lazy(() => import("@/pages/split-layout-demo/web/standalone/SplitLayoutPreview"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -61,9 +59,7 @@ export function Router() {
     return (
       <Suspense fallback={<PageLoader />}>
         <Switch>
-          <Route path="/layouts/split-layout/preview/basic" component={SplitBasicStandalone} />
-          <Route path="/layouts/split-layout/preview/reversed" component={SplitReversedStandalone} />
-          <Route path="/layouts/split-layout/preview/custom-ratio" component={SplitCustomRatioStandalone} />
+          <Route path="/layouts/split-layout/preview/:example?" component={SplitLayoutPreview} />
         </Switch>
       </Suspense>
     );
