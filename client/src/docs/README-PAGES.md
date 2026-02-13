@@ -2,6 +2,160 @@
 
 Esta guía documenta cómo crear nuevas páginas de demostración para componentes, providers u otras funcionalidades de la librería.
 
+## Tabs Obligatorios: Examples + Props
+
+Cada página de demo **debe tener 2 tabs** usando el `ComponentLayout`:
+
+| Tab | Contenido |
+|-----|-----------|
+| **Examples** | Demos interactivos del componente (ejemplos de uso) |
+| **Props** | Documentación de todas las props, tipos e interfaces del componente |
+
+Se usa el layout `ComponentLayout` (`client/src/layouts/component-layout`) que ya soporta tabs manuales vía la prop `tabs`.
+
+### Estructura de Carpetas con Tabs
+
+```
+client/src/pages/[nombre-pagina]/
+├── web/
+│   ├── components/           # Un archivo por cada ejemplo/demo
+│   ├── props/                # Documentación de props del componente
+│   │   └── [Componente]Props.tsx
+│   ├── view/                 # Vista principal que configura los 2 tabs
+│   └── css/
+└── index.tsx
+```
+
+### Ejemplo de vista principal con tabs
+
+```typescript
+// client/src/pages/grid-demo/web/view/GridDemo.view.tsx
+import { ComponentLayoutView } from '@/layouts/component-layout';
+import type { TabConfig } from '@/layouts/component-layout/types/ComponentLayout.types';
+import { GridExamplesTab } from '../components/GridExamplesTab';
+import { GridPropsTab } from '../props/GridProps';
+
+const tabs: TabConfig[] = [
+  {
+    id: 'examples',
+    label: 'Examples',
+    icon: 'fa-eye',
+    content: <GridExamplesTab />,
+  },
+  {
+    id: 'props',
+    label: 'Props',
+    icon: 'fa-list',
+    content: <GridPropsTab />,
+  },
+];
+
+export function GridDemoWebView() {
+  return (
+    <ComponentLayoutView
+      componentName="Grid"
+      componentDescription="Grid Engine declarativo y agnóstico."
+      tabs={tabs}
+      defaultTab="examples"
+    />
+  );
+}
+```
+
+### Tab "Examples": Wrapper que agrupa los ejemplos
+
+El tab de Examples es un componente wrapper que importa y renderiza todos los ejemplos individuales:
+
+```typescript
+// client/src/pages/grid-demo/web/components/GridExamplesTab.tsx
+import { BasicGridExample } from './BasicGridExample';
+import { InfiniteScrollExample } from './InfiniteScrollExample';
+import { StatesExample } from './StatesExample';
+
+export function GridExamplesTab() {
+  return (
+    <>
+      <BasicGridExample />
+      <InfiniteScrollExample />
+      <StatesExample />
+    </>
+  );
+}
+```
+
+### Tab "Props": Documentación de props
+
+El tab de Props muestra una tabla con todas las props, tipos, defaults y descripción del componente. Se crea un archivo dedicado en la carpeta `props/`:
+
+```typescript
+// client/src/pages/grid-demo/web/props/GridProps.tsx
+import styles from '../css/GridDemo.module.css';
+
+export function GridPropsTab() {
+  return (
+    <div className={styles.propsContainer}>
+      <h2>Grid Props</h2>
+      <table className={styles.propsTable}>
+        <thead>
+          <tr>
+            <th>Prop</th>
+            <th>Tipo</th>
+            <th>Default</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>id</code></td>
+            <td><code>string</code></td>
+            <td><code>undefined</code></td>
+            <td>Identificador único del grid</td>
+          </tr>
+          <tr>
+            <td><code>data</code></td>
+            <td><code>T[]</code></td>
+            <td><code>[]</code></td>
+            <td>Array de datos a renderizar</td>
+          </tr>
+          {/* ... más props */}
+        </tbody>
+      </table>
+
+      <h3>GridLayout</h3>
+      <table className={styles.propsTable}>
+        <thead>
+          <tr>
+            <th>Prop</th>
+            <th>Tipo</th>
+            <th>Default</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>widthMode</code></td>
+            <td><code>'full' | 'auto' | 'fixed'</code></td>
+            <td><code>'auto'</code></td>
+            <td>Modo de ancho del contenedor</td>
+          </tr>
+          {/* ... más sub-props */}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+```
+
+### Convenciones del Tab Props
+
+1. **Un archivo por componente**: `[Componente]Props.tsx` en la carpeta `props/`
+2. **Tablas agrupadas**: Una tabla por cada interfaz/sub-objeto de configuración (ej: `GridLayout`, `GridConfig`, `ScrollConfig`)
+3. **Columnas obligatorias**: `Prop`, `Tipo`, `Default`, `Descripción`
+4. **Tipos con `<code>`**: Los nombres de prop y tipos se envuelven en `<code>` para diferenciación visual
+5. **Sub-props separadas**: Si una prop es un objeto con sub-propiedades (ej: `grid.minColumns`), se documenta en su propia tabla con título `<h3>`
+
+---
+
 ## Estructura de Carpetas
 
 La estructura de la página de demo depende de las plataformas que soporta el componente. **Solo se crean las carpetas de las plataformas que el componente implementa.**
@@ -12,9 +166,10 @@ Si el componente no tiene distinción de plataforma, **no se crean subcarpetas**
 
 ```
 client/src/pages/[nombre-pagina]/
-├── components/       # Un archivo por cada ejemplo/demo de la página
+├── components/       # Un archivo por cada ejemplo/demo + ExamplesTab wrapper
+├── props/            # Documentación de props
 ├── types/            # Tipos TypeScript
-├── view/             # Vista principal (importa y renderiza los ejemplos)
+├── view/             # Vista principal con tabs (Examples + Props)
 ├── css/              # Estilos CSS/SCSS
 └── index.tsx         # Exporta la vista directamente
 ```
@@ -26,9 +181,10 @@ Si el componente solo tiene implementación web, la página solo necesita la car
 ```
 client/src/pages/[nombre-pagina]/
 ├── web/
-│   ├── components/       # Un archivo por cada ejemplo/demo de la página
+│   ├── components/       # Un archivo por cada ejemplo/demo + ExamplesTab wrapper
+│   ├── props/            # Documentación de props
 │   ├── types/            # Tipos TypeScript para web
-│   ├── view/             # Vista principal web (importa y renderiza los ejemplos)
+│   ├── view/             # Vista principal con tabs (Examples + Props)
 │   └── css/              # Estilos CSS/SCSS para web
 └── index.tsx             # Exporta la vista web directamente
 ```
@@ -40,9 +196,10 @@ Si el componente solo tiene implementación mobile, la página solo necesita la 
 ```
 client/src/pages/[nombre-pagina]/
 ├── mobile/
-│   ├── components/       # Un archivo por cada ejemplo/demo de la página
+│   ├── components/       # Un archivo por cada ejemplo/demo + ExamplesTab wrapper
+│   ├── props/            # Documentación de props
 │   ├── types/            # Tipos TypeScript para mobile
-│   ├── view/             # Vista principal mobile
+│   ├── view/             # Vista principal con tabs (Examples + Props)
 │   └── css/              # Estilos CSS/SCSS para mobile
 └── index.tsx             # Exporta la vista mobile directamente
 ```
@@ -54,14 +211,16 @@ Si el componente tiene implementaciones distintas para web y mobile, se crean am
 ```
 client/src/pages/[nombre-pagina]/
 ├── web/
-│   ├── components/       # Un archivo por cada ejemplo/demo de la página
+│   ├── components/       # Un archivo por cada ejemplo/demo + ExamplesTab wrapper
+│   ├── props/            # Documentación de props web
 │   ├── types/            # Tipos TypeScript para web
-│   ├── view/             # Vista principal web (importa y renderiza los ejemplos)
+│   ├── view/             # Vista principal con tabs (Examples + Props)
 │   └── css/              # Estilos CSS/SCSS para web
 ├── mobile/
-│   ├── components/       # Un archivo por cada ejemplo/demo de la página (mobile)
+│   ├── components/       # Un archivo por cada ejemplo/demo + ExamplesTab wrapper (mobile)
+│   ├── props/            # Documentación de props mobile
 │   ├── types/            # Tipos TypeScript para mobile
-│   ├── view/             # Vista principal mobile
+│   ├── view/             # Vista principal con tabs (Examples + Props)
 │   └── css/              # Estilos CSS/SCSS para mobile
 ├── shared/               # (Opcional) Código compartido entre web y mobile
 │   ├── types/
@@ -77,16 +236,17 @@ client/src/pages/[nombre-pagina]/
 
 Cada página de demo contiene **varios ejemplos** que demuestran distintas funcionalidades del componente. Cada ejemplo debe ser un **componente independiente** dentro de la carpeta `components/`, con **un archivo por cada ejemplo**.
 
-La vista principal (`view/`) solo se encarga de importar y renderizar los ejemplos en orden, sin contener lógica de demo directamente.
+La carpeta `components/` contiene los ejemplos individuales **más un wrapper `[Componente]ExamplesTab.tsx`** que los agrupa para el tab de Examples.
 
 ### Estructura de la carpeta `components/`
 
 ```
 client/src/pages/[nombre-pagina]/web/components/
-├── BasicExample.tsx          # Ejemplo básico del componente
-├── InfiniteScrollExample.tsx # Ejemplo con scroll infinito
-├── StatesExample.tsx         # Ejemplo de estados visuales
-└── CustomRenderExample.tsx   # Ejemplo con renders personalizados
+├── [Componente]ExamplesTab.tsx  # Wrapper que importa todos los ejemplos
+├── BasicExample.tsx              # Ejemplo básico del componente
+├── InfiniteScrollExample.tsx     # Ejemplo con scroll infinito
+├── StatesExample.tsx             # Ejemplo de estados visuales
+└── CustomRenderExample.tsx       # Ejemplo con renders personalizados
 ```
 
 ### Reglas
@@ -94,25 +254,24 @@ client/src/pages/[nombre-pagina]/web/components/
 1. **Un archivo = Un ejemplo**: Cada archivo en `components/` representa una demo autocontenida con su propio estado y lógica.
 2. **Nombre descriptivo**: El nombre del archivo debe describir qué funcionalidad demuestra (ej: `BasicExample.tsx`, `WithControllerExample.tsx`).
 3. **Autocontenido**: Cada ejemplo maneja su propio estado, callbacks y datos de prueba. No depende de otros ejemplos.
-4. **La vista principal solo compone**: El archivo en `view/` importa los ejemplos y los renderiza, sin duplicar lógica de demo.
+4. **ExamplesTab agrupa**: El archivo `[Componente]ExamplesTab.tsx` importa y renderiza todos los ejemplos en orden.
+5. **La vista configura tabs**: El archivo en `view/` configura los tabs de `ComponentLayout`, no renderiza ejemplos directamente.
 
-### Ejemplo de vista principal componiendo ejemplos
+### Ejemplo del ExamplesTab wrapper
 
 ```typescript
-// client/src/pages/grid-demo/web/view/GridDemo.view.tsx
-import { BasicGridExample } from '../components/BasicGridExample';
-import { InfiniteScrollExample } from '../components/InfiniteScrollExample';
-import { StatesExample } from '../components/StatesExample';
-import styles from '../css/GridDemo.module.css';
+// client/src/pages/grid-demo/web/components/GridExamplesTab.tsx
+import { BasicGridExample } from './BasicGridExample';
+import { InfiniteScrollExample } from './InfiniteScrollExample';
+import { StatesExample } from './StatesExample';
 
-export function GridDemoWebView() {
+export function GridExamplesTab() {
   return (
-    <div className={styles.container}>
-      <h1>Grid Component</h1>
+    <>
       <BasicGridExample />
       <InfiniteScrollExample />
       <StatesExample />
-    </div>
+    </>
   );
 }
 ```
@@ -467,9 +626,11 @@ Ver lista completa en: https://lucide.dev/icons
 
 - [ ] Crear estructura de carpetas (web/, mobile/, shared/)
 - [ ] Crear carpeta `web/components/` con un archivo por cada ejemplo
-- [ ] Crear vista web en `web/view/` que importe y componga los ejemplos
-- [ ] Crear vista mobile en `mobile/view/`
-- [ ] Crear `index.tsx` con `useResponsive` para selector de plataforma
+- [ ] Crear `[Componente]ExamplesTab.tsx` como wrapper de todos los ejemplos
+- [ ] Crear carpeta `web/props/` con `[Componente]Props.tsx` (tabla de props)
+- [ ] Crear vista en `web/view/` con `ComponentLayout` y 2 tabs (Examples + Props)
+- [ ] Crear vista mobile en `mobile/view/` (si aplica)
+- [ ] Crear `index.tsx` con `useResponsive` para selector de plataforma (si aplica)
 - [ ] Registrar ruta en `client/src/routes/index.tsx`
 - [ ] Agregar al menú en `client/src/layouts/app-layout/utils/AppLayout.utils.ts`
 - [ ] Si es página independiente, agregar `openInNewTab: true`
