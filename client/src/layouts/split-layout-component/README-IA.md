@@ -2,7 +2,9 @@
 
 ## Overview
 
-Layout de dos paneles (split-screen) responsivo para web y mobile. Muestra dos paneles lado a lado en pantallas grandes; al reducirse por debajo del breakpoint configurable (default 768px), el panel secundario desaparece y el panel principal ocupa el 100% del ancho. Ideal para páginas de login, onboarding, landing pages con hero + formulario.
+Layout de dos paneles (split-screen) responsivo. Muestra dos paneles lado a lado en pantallas grandes; al reducirse por debajo del breakpoint configurable (default 768px), el panel secundario desaparece y el panel principal ocupa el 100% del ancho. Ideal para páginas de login, onboarding, landing pages con hero + formulario.
+
+**Ubicación**: `client/src/layouts/split-layout-component/` - Disponible para las apps que implementan la librería.
 
 ## Key Features
 
@@ -77,7 +79,7 @@ SplitLayout/
 ## Usage
 
 ```tsx
-import { SplitLayout } from '@/lib/ui-library/components/SplitLayout';
+import { SplitLayout } from '@/layouts/split-layout-component';
 
 <SplitLayout
   mainPanel={{
@@ -111,6 +113,4 @@ import { SplitLayout } from '@/lib/ui-library/components/SplitLayout';
 
 ## Dependencies
 
-- `useIsMobile` hook (para web/mobile component switch en index.tsx)
-- `NotImplemented` component (fallback para mobile)
 - CSS Modules

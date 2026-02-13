@@ -1,4 +1,4 @@
-import { SplitLayout } from '@/lib/ui-library/components/SplitLayout';
+import { SplitLayout } from '@/layouts/split-layout-component';
 import styles from '../css/SplitLayoutDemo.module.css';
 
 function LeftFormContent() {

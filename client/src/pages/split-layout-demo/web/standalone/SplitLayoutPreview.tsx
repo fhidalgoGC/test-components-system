@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { SplitLayout } from '@/lib/ui-library/components/SplitLayout';
-import type { MainSide, VerticalAlign, HorizontalAlign, SpacingToken } from '@/lib/ui-library/components/SplitLayout';
+import { SplitLayout } from '@/layouts/split-layout-component';
+import type { MainSide, VerticalAlign, HorizontalAlign, SpacingToken } from '@/layouts/split-layout-component';
 import heroImg from '@assets/Screenshot_2026-02-13_at_12.11.37_p.m._1771006299518.png';
 
 type ExampleKey = 'login' | 'reversed' | 'interactive';

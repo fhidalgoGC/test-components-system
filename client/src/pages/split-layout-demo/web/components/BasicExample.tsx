@@ -1,4 +1,4 @@
-import { SplitLayout } from '@/lib/ui-library/components/SplitLayout';
+import { SplitLayout } from '@/layouts/split-layout-component';
 import styles from '../css/SplitLayoutDemo.module.css';
 import heroImg from '@assets/Screenshot_2026-02-13_at_12.11.37_p.m._1771006299518.png';
 

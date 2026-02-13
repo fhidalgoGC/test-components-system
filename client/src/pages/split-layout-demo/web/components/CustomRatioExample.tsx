@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { SplitLayout } from '@/lib/ui-library/components/SplitLayout';
-import type { MainSide, VerticalAlign, HorizontalAlign, SpacingToken } from '@/lib/ui-library/components/SplitLayout';
+import { SplitLayout } from '@/layouts/split-layout-component';
+import type { MainSide, VerticalAlign, HorizontalAlign, SpacingToken } from '@/layouts/split-layout-component';
 import styles from '../css/SplitLayoutDemo.module.css';
 
 export function CustomRatioExample() {
