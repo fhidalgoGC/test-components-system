@@ -29,3 +29,4 @@ export * from './List';
 export * from './FloatingMenu';
 export * from './Modal';
 export * from './Grid';
+export * from './AcordionList';
