@@ -35,18 +35,22 @@ export type AccordionLayout = {
   minHeight?: number;
 };
 
-export type AccordionHeader = {
+export type AccordionItemDataProps<T = unknown> = {
+  itemData: T;
+};
+
+export type AccordionHeader<T = unknown> = {
   renderType: 'component';
-  render: ReactNode | ComponentType;
+  render: ReactNode | ComponentType<AccordionItemDataProps<T>>;
   heightMode?: 'full' | 'auto' | 'fixed';
   height?: number | 'auto';
   minHeight?: number;
   arrowPosition?: 'left' | 'right' | 'none';
 };
 
-export type AccordionBody = {
+export type AccordionBody<T = unknown> = {
   renderType: 'component';
-  render: ReactNode | ComponentType;
+  render: ReactNode | ComponentType<AccordionItemDataProps<T>>;
   heightMode?: 'full' | 'auto' | 'fixed';
   height?: number | 'auto';
   minHeight?: number;
@@ -56,17 +60,18 @@ export type AccordionBody = {
   };
 };
 
-export type AccordionProps = {
+export type AccordionProps<T = unknown> = {
   id: string;
+  itemData?: T;
   controller?: AccordionController;
   isOpen?: boolean;
   defaultOpen?: boolean;
   callbacks?: AccordionCallbacks;
   layout?: AccordionLayout;
-  header: AccordionHeader;
-  body: AccordionBody;
+  header: AccordionHeader<T>;
+  body: AccordionBody<T>;
 };
 
-export type InternalAccordionProps = Omit<AccordionProps, 'controller'> & {
+export type InternalAccordionProps<T = unknown> = Omit<AccordionProps<T>, 'controller'> & {
   controller?: InternalAccordionController;
 };

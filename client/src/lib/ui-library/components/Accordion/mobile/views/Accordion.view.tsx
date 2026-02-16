@@ -3,13 +3,13 @@ import type { AccordionProps, InternalAccordionController } from '../../shared';
 import { useAccordion } from '../hooks';
 import { accordionStyles } from '../css';
 
-function renderContent(content: AccordionProps['header']['render']): JSX.Element {
+function renderContent<T>(content: AccordionProps<T>['header']['render'], itemData?: T): JSX.Element {
   if (isValidElement(content)) {
     return content;
   }
   if (typeof content === 'function') {
     const Component = content;
-    return <Component />;
+    return itemData !== undefined ? <Component itemData={itemData} /> : <Component itemData={undefined as T} />;
   }
   return <>{content}</>;
 }
@@ -42,7 +42,7 @@ function getLayoutStyles(layout: AccordionProps['layout']) {
   return style;
 }
 
-function getHeaderStyles(header: AccordionProps['header']) {
+function getHeaderStyles<T>(header: AccordionProps<T>['header']) {
   const style: React.CSSProperties = {};
 
   if (header.heightMode === 'full') {
@@ -58,7 +58,7 @@ function getHeaderStyles(header: AccordionProps['header']) {
   return style;
 }
 
-function getBodyStyles(body: AccordionProps['body']) {
+function getBodyStyles<T>(body: AccordionProps<T>['body']) {
   const style: React.CSSProperties = {};
 
   if (body.heightMode === 'full') {
@@ -95,8 +95,8 @@ function ChevronIcon() {
   );
 }
 
-export const AccordionView = (props: AccordionProps) => {
-  const { id, layout, header, body } = props;
+export const AccordionView = <T = unknown,>(props: AccordionProps<T>) => {
+  const { id, itemData, layout, header, body } = props;
   const arrowPosition = header.arrowPosition ?? 'none';
   
   const {
@@ -120,7 +120,7 @@ export const AccordionView = (props: AccordionProps) => {
 
   const renderHeaderContent = () => {
     if (arrowPosition === 'none') {
-      return renderContent(header.render);
+      return renderContent(header.render, itemData);
     }
 
     const arrowClasses = `${accordionStyles.arrow} ${isOpen ? accordionStyles.arrowOpen : ''}`;
@@ -134,7 +134,7 @@ export const AccordionView = (props: AccordionProps) => {
           <ChevronIcon />
         </span>
         <div className={accordionStyles.headerContentInner}>
-          {renderContent(header.render)}
+          {renderContent(header.render, itemData)}
         </div>
       </div>
     );
@@ -175,7 +175,7 @@ export const AccordionView = (props: AccordionProps) => {
           key={renderKey}
           data-testid={`accordion-body-${id}`}
         >
-          {renderContent(body.render)}
+          {renderContent(body.render, itemData)}
         </div>
       )}
     </div>

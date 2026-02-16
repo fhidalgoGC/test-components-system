@@ -52,20 +52,48 @@ const controller = useAccordionController();
 />
 ```
 
+## Datos Genéricos (itemData)
+
+El Accordion es genérico (`AccordionProps<T>`). Puedes pasar `itemData` de cualquier tipo y los componentes header/body lo reciben automáticamente:
+
+```tsx
+type DriverData = { name: string; trips: Trip[] };
+
+const DriverHeader: ComponentType<AccordionItemDataProps<DriverData>> = ({ itemData }) => (
+  <div>{itemData.name} — {itemData.trips.length} viajes</div>
+);
+
+const DriverBody: ComponentType<AccordionItemDataProps<DriverData>> = ({ itemData }) => (
+  <table>{itemData.trips.map(t => <tr key={t.id}><td>{t.from}</td></tr>)}</table>
+);
+
+<Accordion
+  id="driver-1"
+  itemData={driverData}
+  header={{ renderType: 'component', render: DriverHeader, arrowPosition: 'right' }}
+  body={{ renderType: 'component', render: DriverBody }}
+/>
+```
+
+- Si `render` es un `ReactNode`, no recibe props adicionales
+- Si `render` es un `ComponentType<AccordionItemDataProps<T>>`, recibe `{ itemData: T }` automáticamente
+- `itemData` se pasa tanto al header como al body
+
 ## API
 
-### AccordionProps
+### AccordionProps<T>
 
 | Prop | Tipo | Descripción |
 |------|------|-------------|
 | `id` | `string` | Identificador único (requerido) |
+| `itemData` | `T` | Datos genéricos pasados al header y body como prop |
 | `controller` | `AccordionController` | Hook de control externo |
 | `isOpen` | `boolean` | Estado controlado |
 | `defaultOpen` | `boolean` | Estado inicial (no controlado) |
 | `callbacks` | `AccordionCallbacks` | Eventos |
 | `layout` | `AccordionLayout` | Configuración de dimensiones |
-| `header` | `AccordionHeader` | Configuración del header |
-| `body` | `AccordionBody` | Configuración del body |
+| `header` | `AccordionHeader<T>` | Configuración del header |
+| `body` | `AccordionBody<T>` | Configuración del body |
 
 ### useAccordionController
 

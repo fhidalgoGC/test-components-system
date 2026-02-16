@@ -6,3 +6,4 @@ export { Example2PropsControl } from './Example2PropsControl';
 export { Example3HookControl } from './Example3HookControl';
 export { Example4RenderStrategies } from './Example4RenderStrategies';
 export { Example5ScrollBehavior } from './Example5ScrollBehavior';
+export { Example6ItemData } from './Example6ItemData';
