@@ -91,6 +91,17 @@ The project supports two distinct compilation targets: Web (Vite, React DOM) and
     - `onSelectionChange`: Callback with transformed items (R[]) when getItem provided, or string[] (IDs) when not
     - `onItemAction`: Callback for each select/deselect action with `{ item: R, action }` event
     - `selectionStyle`: Visual configuration (border, borderRadius, backgroundColor, boxShadow, outline, custom CSSProperties)
+- **AcordionList Component**: Lista genérica de Accordions controlados `<T, R>`. Features:
+  - **Generic forwarding**: `T` is original data type, `R` is transformed type via `getItemData`
+  - **Header modes**: `renderType: 'self'` (uses `getHeaderLabel`) or `renderType: 'component'` (custom component receives `itemData`)
+  - **Body**: Always `renderType: 'component'`, receives `itemData: R`
+  - **Behaviors**: `mode: 'single'` (auto-close others) or `mode: 'multiple'` (many open simultaneously)
+  - **Controller**: `useAcordionListController` hook with `open`, `close`, `toggle`, `closeAll`, `openAll`, `refreshAll`, `refreshItem`, `getOpenIds`, `isOpen`
+  - **Callbacks**: `onToggle(id, isOpen)` per item, `onOpenChange(openIds)` for all state changes
+  - **Layout**: `widthMode` (full/auto/fixed), `gap` between accordions
+  - **getItemId**: Extracts unique string ID from each item (agnóstico)
+  - **getItemData**: Transforms `T → R` so header/body components only receive what they need
+  - **defaultOpenIds / openIds**: Uncontrolled or controlled open state
 - **SplitLayout** (ubicado en `client/src/layouts/split-layout-component/`): Two-panel responsive layout. Features:
   - **Three-level config**: `layout` (container), `main` (panel principal), `secondary` (panel secundario)
   - **componentMainAlign**: `'left'` | `'right'` — controla en qué lado se renderiza el panel main (default: `'left'`). Usa `flexDirection: row-reverse` internamente.

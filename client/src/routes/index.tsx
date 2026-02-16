@@ -39,6 +39,7 @@ const FloatingMenuDemo = lazy(() => import("@/pages/floating-menu-demo"));
 const ModalDemo = lazy(() => import("@/pages/modal-demo"));
 const GridDemo = lazy(() => import("@/pages/grid-demo"));
 const SplitLayoutDemo = lazy(() => import("@/pages/split-layout-demo"));
+const AcordionListDemo = lazy(() => import("@/pages/acordion-list-demo"));
 const SplitLayoutPreview = lazy(() => import("@/pages/split-layout-demo/web/standalone/SplitLayoutPreview"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
@@ -125,6 +126,7 @@ export function Router() {
           <Route path="/components/modal" component={ModalDemo} />
           <Route path="/components/grid" component={GridDemo} />
           <Route path="/layouts/split-layout" component={SplitLayoutDemo} />
+          <Route path="/components/acordion-list" component={AcordionListDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

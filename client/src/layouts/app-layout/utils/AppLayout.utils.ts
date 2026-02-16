@@ -28,6 +28,7 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'base-table', label: 'BaseTable', i18n: { en: 'BaseTable', es: 'Tabla Base', default: 'BaseTable' }, path: '/components/base-table', icon: 'Table' },
         { id: 'paginator', label: 'Paginator', i18n: { en: 'Paginator', es: 'Paginador', default: 'Paginator' }, path: '/components/paginator', icon: 'ChevronLeft' },
         { id: 'accordion', label: 'Accordion', i18n: { en: 'Accordion', es: 'Acordeón', default: 'Accordion' }, path: '/components/accordion', icon: 'ChevronDown' },
+        { id: 'acordion-list', label: 'AcordionList', i18n: { en: 'AcordionList', es: 'Lista Acordeón', default: 'AcordionList' }, path: '/components/acordion-list', icon: 'ListCollapse' },
         { id: 'list', label: 'List', i18n: { en: 'List', es: 'Lista', default: 'List' }, path: '/components/list', icon: 'List' },
         { id: 'floating-menu', label: 'FloatingMenu', i18n: { en: 'FloatingMenu', es: 'Menú Flotante', default: 'FloatingMenu' }, path: '/components/floating-menu', icon: 'Menu' },
         { id: 'modal', label: 'Modal', i18n: { en: 'Modal', es: 'Modal', default: 'Modal' }, path: '/components/modal', icon: 'Square' },

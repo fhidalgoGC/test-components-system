@@ -1,3 +1,19 @@
-.acordionlist {
-  /* Add your styles here */
+.acordionListContainer {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.acordionListItem {
+  box-sizing: border-box;
+}
+
+.selfHeader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  padding: 4px 0;
 }
