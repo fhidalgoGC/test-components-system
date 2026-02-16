@@ -157,6 +157,38 @@ type AcordionListController = {
 | Web | Vite + Tailwind CSS |
 | Mobile Responsive | Web responsive for small screens |
 
+## Ejemplos de Integración
+
+### Con selector de registros visibles
+```tsx
+const [visibleCount, setVisibleCount] = useState(5);
+const visibleData = useMemo(() => allData.slice(0, visibleCount), [visibleCount]);
+
+<select onChange={(e) => setVisibleCount(Number(e.target.value))}>
+  <option value={5}>5 registros</option>
+  <option value={10}>10 registros</option>
+</select>
+
+<AcordionList data={visibleData} ... />
+```
+
+### Con Paginator
+```tsx
+const [currentPage, setCurrentPage] = useState(1);
+const [itemsPerPage, setItemsPerPage] = useState(5);
+const paginatedData = useMemo(() => {
+  const start = (currentPage - 1) * itemsPerPage;
+  return allData.slice(start, start + itemsPerPage);
+}, [currentPage, itemsPerPage]);
+
+<AcordionList data={paginatedData} ... />
+<Paginator
+  totalItems={allData.length}
+  onPageChange={handlePageChange}
+  onItemsPerPageChange={handleItemsPerPageChange}
+/>
+```
+
 ## Demo
 
 Ver la demo en `/components/acordion-list`

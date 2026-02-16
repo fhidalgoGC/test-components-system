@@ -3,6 +3,8 @@ import {
   ExampleComponentHeader,
   ExampleGetItemData,
   ExampleFixedHeight,
+  ExampleVisibleRecords,
+  ExampleWithPaginator,
 } from '../components';
 
 export const AcordionListDemoWebView = () => {
@@ -17,6 +19,8 @@ export const AcordionListDemoWebView = () => {
       <ExampleComponentHeader />
       <ExampleGetItemData />
       <ExampleFixedHeight />
+      <ExampleVisibleRecords />
+      <ExampleWithPaginator />
 
       <div style={{ marginTop: '32px', padding: '16px', background: '#f8fafc', borderRadius: '8px' }}>
         <h4 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: 600 }}>Console Logs</h4>
