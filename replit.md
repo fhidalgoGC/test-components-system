@@ -19,7 +19,8 @@ Important rule: Always update the component's README.md when making changes to a
 - **Theme System**: Custom theme provider supporting light/dark modes and CSS variable-based theming.
 - **Internationalization (i18n)**: Hierarchical system with global and component-specific translations for English and Spanish, including fallback and dynamic language selection.
 - **Modular Architecture**: Organized with a classified folder pattern for layouts, pages, UI components, hooks, utilities, and i18n.
-- **Provider Architecture**: Consistent modular structure for providers (e.g., `AppAuthProvider`, `AppLanguageProvider`), handling authentication with real-time expiration and cross-tab synchronization.
+- **Provider Architecture**: Consistent modular structure for providers (e.g., `AppAuthProvider`, `AppLanguageProvider`, `ControlDataProvider`, `MultiControlDataProvider`), handling authentication with real-time expiration and cross-tab synchronization.
+- **MultiControlDataProvider**: Orchestrates multiple independent `ControlDataProvider` instances, each with its own `fetchFn`, `mapParams`, `state`, `data`, `loading`, and `error`. Uses recursive `SourceLayer` nesting for React hooks compliance. Source keys are immutable after mount. Access via `useMultiControlData<T>(sourceKey)`.
 - **Environment Configuration**: External configuration support, allowing parent applications to override library defaults through a cascaded approach (Props → ConfigProvider → Internal library environment).
 - **Responsive Design**: Components adapt to screen size using the `useResponsive` hook, facilitating conditional rendering of platform-specific variants.
 - **Component Generator**: An automated script (`npm run new-component`) streamlines the creation of new component structures, including i18n, responsive wrappers, and ConfigProvider integration.

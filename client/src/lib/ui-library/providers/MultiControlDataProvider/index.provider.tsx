@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { useControlData } from '../ControlDataProvider/index.hook';
 import type { ControlDataContextValue } from '../ControlDataProvider/index.types';
 import { MultiControlDataContext } from './index.hook';
@@ -11,14 +11,12 @@ function SourceLayer({
   config,
   registry,
   remainingSources,
-  allSources,
   children,
 }: {
   sourceKey: string;
   config: SourceConfig;
   registry: SourceRegistry;
   remainingSources: [string, SourceConfig][];
-  allSources: MultiControlDataProviderProps['sources'];
   children: React.ReactNode;
 }) {
   const controlData = useControlData(
@@ -40,7 +38,6 @@ function SourceLayer({
         config={nextConfig}
         registry={registry}
         remainingSources={nextRemaining}
-        allSources={allSources}
       >
         {children}
       </SourceLayer>
@@ -51,9 +48,27 @@ function SourceLayer({
 }
 
 export function MultiControlDataProvider({ children, sources }: MultiControlDataProviderProps) {
-  const sourceEntries = useMemo(() => {
-    return Object.entries(sources).sort(([a], [b]) => a.localeCompare(b));
+  const sourceKeys = useMemo(() => {
+    return Object.keys(sources).sort();
   }, [sources]);
+
+  const initialKeysRef = useRef<string[]>(sourceKeys);
+
+  useEffect(() => {
+    const initial = initialKeysRef.current;
+    const current = sourceKeys;
+    if (initial.length !== current.length || !initial.every((k, i) => k === current[i])) {
+      throw new Error(
+        `MultiControlDataProvider: source keys must not change after mount. ` +
+        `Initial: [${initial.join(', ')}], Current: [${current.join(', ')}]. ` +
+        `If you need different sources, unmount and remount the provider with a new key.`,
+      );
+    }
+  }, [sourceKeys]);
+
+  const sourceEntries = useMemo(() => {
+    return sourceKeys.map((key) => [key, sources[key]] as [string, SourceConfig]);
+  }, [sourceKeys, sources]);
 
   const registryRef = useRef<SourceRegistry>(new Map());
 
@@ -62,13 +77,14 @@ export function MultiControlDataProvider({ children, sources }: MultiControlData
       const source = registryRef.current.get(sourceKey);
       if (!source) {
         throw new Error(
-          `Source "${sourceKey}" not found in MultiControlDataProvider. Available sources: [${Array.from(registryRef.current.keys()).join(', ')}]`,
+          `Source "${sourceKey}" not found in MultiControlDataProvider. ` +
+          `Available sources: [${sourceKeys.join(', ')}]`,
         );
       }
       return source as ControlDataContextValue<TData>;
     },
-    getSources: () => Array.from(registryRef.current.keys()),
-  }), []);
+    getSources: () => [...sourceKeys],
+  }), [sourceKeys]);
 
   if (sourceEntries.length === 0) {
     return (
@@ -88,7 +104,6 @@ export function MultiControlDataProvider({ children, sources }: MultiControlData
         config={firstConfig}
         registry={registryRef.current}
         remainingSources={remaining}
-        allSources={sources}
       >
         {children}
       </SourceLayer>
