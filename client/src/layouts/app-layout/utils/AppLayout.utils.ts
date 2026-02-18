@@ -85,7 +85,8 @@ export function getDefaultMenuItems(): MenuItem[] {
       i18n: { en: 'Providers', es: 'Providers', default: 'Providers' },
       icon: 'Database',
       children: [
-        { id: 'control-data', label: 'ControlData', i18n: { en: 'ControlData', es: 'ControlData', default: 'ControlData' }, path: '/providers/control-data', icon: 'Filter' }
+        { id: 'control-data', label: 'ControlData', i18n: { en: 'ControlData', es: 'ControlData', default: 'ControlData' }, path: '/providers/control-data', icon: 'Filter' },
+        { id: 'multi-control-data', label: 'MultiControlData', i18n: { en: 'MultiControlData', es: 'MultiControlData', default: 'MultiControlData' }, path: '/providers/multi-control-data', icon: 'Layers' }
       ]
     },
     { 

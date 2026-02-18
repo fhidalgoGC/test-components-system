@@ -32,6 +32,7 @@ const GoogleMapDemo = lazy(() => import("@/pages/google-map-demo/GoogleMapDemo")
 const BaseTableDemo = lazy(() => import("@/pages/base-table-demo").then(m => ({ default: m.default || m.BaseTableDemo })));
 const PaginatorDemo = lazy(() => import("@/pages/paginator-demo"));
 const ControlDataDemo = lazy(() => import("@/pages/control-data-demo"));
+const MultiControlDataDemo = lazy(() => import("@/pages/multi-control-data-demo"));
 const AccordionDemo = lazy(() => import("@/pages/accordion-demo"));
 const ListDemo = lazy(() => import("@/pages/list-demo"));
 const ApiInterceptorDemo = lazy(() => import("@/pages/api-interceptor-demo"));
@@ -119,6 +120,7 @@ export function Router() {
           <Route path="/components/base-table" component={BaseTableDemo} />
           <Route path="/components/paginator" component={PaginatorDemo} />
           <Route path="/providers/control-data" component={ControlDataDemo} />
+          <Route path="/providers/multi-control-data" component={MultiControlDataDemo} />
           <Route path="/components/accordion" component={AccordionDemo} />
           <Route path="/components/list" component={ListDemo} />
           <Route path="/utils/api-interceptor" component={ApiInterceptorDemo} />

@@ -478,6 +478,8 @@ El `MultiControlDataProvider` usa un patron de **anidamiento recursivo** con `So
 2. Registra el resultado en un `Map<string, ControlDataContextValue>` compartido
 3. Renderiza el siguiente `SourceLayer` o los `children` si es el ultimo
 
+El `MultiControlDataContext.Provider` se coloca en el **SourceLayer mas interno** (no en el componente padre). Esto asegura que cuando cualquier source actualiza sus datos, el SourceLayer se re-renderiza, lo que propaga hacia abajo hasta el SourceLayer interno que recrea el context value, forzando un re-render de todos los consumidores.
+
 Esto garantiza que cada hook se llama en su propio componente React, respetando las reglas de hooks. Los sources se ordenan alfabeticamente para mantener un orden estable de hooks.
 
 `getSources()` retorna las keys derivadas del prop `sources` (no del Map interno), lo que garantiza que siempre refleja los sources configurados.

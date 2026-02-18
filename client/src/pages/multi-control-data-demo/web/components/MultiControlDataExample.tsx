@@ -104,11 +104,13 @@ const sources: SourcesMap = {
   files: {
     fetchFn: fetchFiles,
     mapParams: sharedAdapter,
+    defaultState: { page: 1 },
     debounceMs: 400,
   },
   users: {
     fetchFn: fetchUsers,
     mapParams: sharedAdapter,
+    defaultState: { page: 1 },
     debounceMs: 400,
   },
 };

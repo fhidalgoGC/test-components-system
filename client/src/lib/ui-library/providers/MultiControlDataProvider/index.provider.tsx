@@ -2,21 +2,30 @@ import { useMemo, useRef, useEffect } from 'react';
 import { useControlData } from '../ControlDataProvider/index.hook';
 import type { ControlDataContextValue } from '../ControlDataProvider/index.types';
 import { MultiControlDataContext } from './index.hook';
-import type { MultiControlDataProviderProps, SourceConfig } from './index.types';
+import type { MultiControlDataProviderProps, SourceConfig, MultiControlDataContextValue } from './index.types';
 
 type SourceRegistry = Map<string, ControlDataContextValue<unknown>>;
+
+const EMPTY_CONTEXT_VALUE: MultiControlDataContextValue = {
+  getSource: <TData = unknown,>(_key: string): ControlDataContextValue<TData> => {
+    throw new Error('No sources configured in MultiControlDataProvider');
+  },
+  getSources: () => [],
+};
 
 function SourceLayer({
   sourceKey,
   config,
   registry,
   remainingSources,
+  sourceKeys,
   children,
 }: {
   sourceKey: string;
   config: SourceConfig;
   registry: SourceRegistry;
   remainingSources: [string, SourceConfig][];
+  sourceKeys: string[];
   children: React.ReactNode;
 }) {
   const controlData = useControlData(
@@ -38,13 +47,32 @@ function SourceLayer({
         config={nextConfig}
         registry={registry}
         remainingSources={nextRemaining}
+        sourceKeys={sourceKeys}
       >
         {children}
       </SourceLayer>
     );
   }
 
-  return <>{children}</>;
+  const contextValue: MultiControlDataContextValue = {
+    getSource: <TData = unknown,>(key: string): ControlDataContextValue<TData> => {
+      const source = registry.get(key);
+      if (!source) {
+        throw new Error(
+          `Source "${key}" not found in MultiControlDataProvider. ` +
+          `Available sources: [${sourceKeys.join(', ')}]`,
+        );
+      }
+      return source as ControlDataContextValue<TData>;
+    },
+    getSources: () => [...sourceKeys],
+  };
+
+  return (
+    <MultiControlDataContext.Provider value={contextValue}>
+      {children}
+    </MultiControlDataContext.Provider>
+  );
 }
 
 export function MultiControlDataProvider({ children, sources }: MultiControlDataProviderProps) {
@@ -72,23 +100,9 @@ export function MultiControlDataProvider({ children, sources }: MultiControlData
 
   const registryRef = useRef<SourceRegistry>(new Map());
 
-  const contextValue = useMemo(() => ({
-    getSource: <TData = unknown,>(sourceKey: string): ControlDataContextValue<TData> => {
-      const source = registryRef.current.get(sourceKey);
-      if (!source) {
-        throw new Error(
-          `Source "${sourceKey}" not found in MultiControlDataProvider. ` +
-          `Available sources: [${sourceKeys.join(', ')}]`,
-        );
-      }
-      return source as ControlDataContextValue<TData>;
-    },
-    getSources: () => [...sourceKeys],
-  }), [sourceKeys]);
-
   if (sourceEntries.length === 0) {
     return (
-      <MultiControlDataContext.Provider value={contextValue}>
+      <MultiControlDataContext.Provider value={EMPTY_CONTEXT_VALUE}>
         {children}
       </MultiControlDataContext.Provider>
     );
@@ -98,15 +112,14 @@ export function MultiControlDataProvider({ children, sources }: MultiControlData
   const remaining = sourceEntries.slice(1);
 
   return (
-    <MultiControlDataContext.Provider value={contextValue}>
-      <SourceLayer
-        sourceKey={firstKey}
-        config={firstConfig}
-        registry={registryRef.current}
-        remainingSources={remaining}
-      >
-        {children}
-      </SourceLayer>
-    </MultiControlDataContext.Provider>
+    <SourceLayer
+      sourceKey={firstKey}
+      config={firstConfig}
+      registry={registryRef.current}
+      remainingSources={remaining}
+      sourceKeys={sourceKeys}
+    >
+      {children}
+    </SourceLayer>
   );
 }
