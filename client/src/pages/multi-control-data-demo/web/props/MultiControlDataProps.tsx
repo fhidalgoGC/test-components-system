@@ -140,6 +140,51 @@ export function MultiControlDataPropsTab() {
         </tbody>
       </table>
 
+      <h3>useMultiControlData('main') — Broadcast</h3>
+      <p>Al pasar la key reservada <code>'main'</code> (exportada como <code>MAIN_SOURCE_KEY</code>), se obtiene un proxy que propaga acciones a <strong>todos</strong> los sources:</p>
+      <table className={styles.propsTable}>
+        <thead>
+          <tr>
+            <th>Propiedad</th>
+            <th>Comportamiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>applyToState</code></td>
+            <td>Aplica el cambio de state a todos los sources simultaneamente.</td>
+          </tr>
+          <tr>
+            <td><code>resetState</code></td>
+            <td>Resetea el state de todos los sources a su defaultState.</td>
+          </tr>
+          <tr>
+            <td><code>clearState</code></td>
+            <td>Limpia el state de todos los sources.</td>
+          </tr>
+          <tr>
+            <td><code>reload</code></td>
+            <td>Fuerza recarga en todos los sources.</td>
+          </tr>
+          <tr>
+            <td><code>data</code></td>
+            <td><code>null</code> — la data es unica por source, usar <code>useMultiControlData(sourceKey)</code> para obtenerla.</td>
+          </tr>
+          <tr>
+            <td><code>loading</code></td>
+            <td><code>true</code> si <strong>cualquier</strong> source esta cargando.</td>
+          </tr>
+          <tr>
+            <td><code>error</code></td>
+            <td>El primer error encontrado entre los sources, o <code>null</code>.</td>
+          </tr>
+          <tr>
+            <td><code>state</code></td>
+            <td><code>{'{}'}</code> — el state es unico por source.</td>
+          </tr>
+        </tbody>
+      </table>
+
       <h3>Restricciones</h3>
       <table className={styles.propsTable}>
         <thead>
@@ -156,6 +201,10 @@ export function MultiControlDataPropsTab() {
           <tr>
             <td><code>Aislamiento total</code></td>
             <td>Cada source tiene state, data, loading y error completamente independientes.</td>
+          </tr>
+          <tr>
+            <td><code>"main" reservado</code></td>
+            <td>No usar <code>"main"</code> como nombre de source. Es una key reservada para el broadcast. Usar <code>MAIN_SOURCE_KEY</code> para referenciarla.</td>
           </tr>
         </tbody>
       </table>

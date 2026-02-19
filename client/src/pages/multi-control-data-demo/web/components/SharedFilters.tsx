@@ -1,4 +1,4 @@
-import { useMultiControlData } from '@/lib/ui-library/providers';
+import { useMultiControlData, MAIN_SOURCE_KEY } from '@/lib/ui-library/providers';
 import type { StateTransformer } from '@/lib/ui-library/providers';
 import styles from '../css/MultiControlDataDemo.module.css';
 
@@ -7,33 +7,24 @@ const statusTransformer: StateTransformer<string, string | undefined> = (value) 
 const pageTransformer: StateTransformer<number, number> = (value) => value;
 
 export function SharedFilters() {
-  const files = useMultiControlData('files');
-  const users = useMultiControlData('users');
+  const main = useMultiControlData(MAIN_SOURCE_KEY);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    files.applyToState('textSearch', searchTransformer, value);
-    files.applyToState('page', pageTransformer, 1);
-    users.applyToState('textSearch', searchTransformer, value);
-    users.applyToState('page', pageTransformer, 1);
+    main.applyToState('textSearch', searchTransformer, e.target.value);
+    main.applyToState('page', pageTransformer, 1);
   };
 
   const handleStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    files.applyToState('status', statusTransformer, value);
-    files.applyToState('page', pageTransformer, 1);
-    users.applyToState('status', statusTransformer, value);
-    users.applyToState('page', pageTransformer, 1);
+    main.applyToState('status', statusTransformer, e.target.value);
+    main.applyToState('page', pageTransformer, 1);
   };
 
   const handleResetAll = () => {
-    files.resetState();
-    users.resetState();
+    main.resetState();
   };
 
   const handleReloadAll = () => {
-    files.reload();
-    users.reload();
+    main.reload();
   };
 
   return (

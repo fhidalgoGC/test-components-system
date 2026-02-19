@@ -3,8 +3,32 @@ import { useControlData } from '../ControlDataProvider/index.hook';
 import type { ControlDataContextValue } from '../ControlDataProvider/index.types';
 import { MultiControlDataContext } from './index.hook';
 import type { MultiControlDataProviderProps, SourceConfig, MultiControlDataContextValue } from './index.types';
+import { MAIN_SOURCE_KEY } from './index.types';
 
 type SourceRegistry = Map<string, ControlDataContextValue<unknown>>;
+
+function createMainBroadcast(registry: SourceRegistry, sourceKeys: string[]): ControlDataContextValue<null> {
+  const allSources = () => sourceKeys.map((k) => registry.get(k)!).filter(Boolean);
+
+  return {
+    data: null,
+    loading: allSources().some((s) => s.loading),
+    error: allSources().find((s) => s.error)?.error ?? null,
+    state: {},
+    applyToState: (key, transformer, rawData) => {
+      allSources().forEach((s) => s.applyToState(key, transformer, rawData));
+    },
+    resetState: () => {
+      allSources().forEach((s) => s.resetState());
+    },
+    clearState: () => {
+      allSources().forEach((s) => s.clearState());
+    },
+    reload: () => {
+      allSources().forEach((s) => s.reload());
+    },
+  };
+}
 
 const EMPTY_CONTEXT_VALUE: MultiControlDataContextValue = {
   getSource: <TData = unknown,>(_key: string): ControlDataContextValue<TData> => {
@@ -56,6 +80,9 @@ function SourceLayer({
 
   const contextValue: MultiControlDataContextValue = {
     getSource: <TData = unknown,>(key: string): ControlDataContextValue<TData> => {
+      if (key === MAIN_SOURCE_KEY) {
+        return createMainBroadcast(registry, sourceKeys) as unknown as ControlDataContextValue<TData>;
+      }
       const source = registry.get(key);
       if (!source) {
         throw new Error(
@@ -79,6 +106,13 @@ export function MultiControlDataProvider({ children, sources }: MultiControlData
   const sourceKeys = useMemo(() => {
     return Object.keys(sources).sort();
   }, [sources]);
+
+  if (sourceKeys.includes(MAIN_SOURCE_KEY)) {
+    throw new Error(
+      `MultiControlDataProvider: "${MAIN_SOURCE_KEY}" is a reserved source key used for broadcasting to all sources. ` +
+      `Please use a different key name.`,
+    );
+  }
 
   const initialKeysRef = useRef<string[]>(sourceKeys);
 

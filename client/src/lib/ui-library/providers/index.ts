@@ -18,7 +18,7 @@ export type {
   ControlDataContextValue,
   ControlDataProviderProps,
 } from './ControlDataProvider';
-export { MultiControlDataProvider, useMultiControlData, useMultiControlDataSources } from './MultiControlDataProvider';
+export { MultiControlDataProvider, useMultiControlData, useMultiControlDataSources, MAIN_SOURCE_KEY } from './MultiControlDataProvider';
 export type {
   SourceConfig,
   SourcesMap,

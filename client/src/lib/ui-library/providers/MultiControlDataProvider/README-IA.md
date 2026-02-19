@@ -183,6 +183,46 @@ function SourceSelector() {
 }
 ```
 
+## Broadcast con `main`
+
+La key reservada `'main'` (exportada como `MAIN_SOURCE_KEY`) permite obtener un proxy que propaga acciones a **todos** los sources simultaneamente:
+
+```typescript
+import { useMultiControlData, MAIN_SOURCE_KEY } from '@/lib/ui-library/providers';
+
+function SharedFilters() {
+  const main = useMultiControlData(MAIN_SOURCE_KEY);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Aplica textSearch a TODOS los sources
+    main.applyToState('textSearch', (v: string) => v, e.target.value);
+    // Resetea la pagina de TODOS los sources
+    main.applyToState('page', (v: number) => v, 1);
+  };
+
+  const handleResetAll = () => main.resetState();   // resetea TODOS
+  const handleReloadAll = () => main.reload();       // recarga TODOS
+  const handleClearAll = () => main.clearState();     // limpia TODOS
+}
+```
+
+### Propiedades del proxy `main`
+
+| Propiedad | Valor |
+|-----------|-------|
+| `data` | `null` — la data es unica por source |
+| `loading` | `true` si **cualquier** source esta cargando |
+| `error` | Primer error encontrado entre los sources, o `null` |
+| `state` | `{}` — el state es unico por source |
+| `applyToState` | Propaga a todos los sources |
+| `resetState` | Propaga a todos los sources |
+| `clearState` | Propaga a todos los sources |
+| `reload` | Propaga a todos los sources |
+
+### Restriccion
+
+`'main'` no puede usarse como nombre de source real. El provider lanza un error en runtime si se intenta.
+
 ## Aislamiento de Estado
 
 Cada source opera de forma completamente independiente. Esto significa:
