@@ -3,6 +3,7 @@ import type { ControlDataState, MapParamsAdapter, SourcesMap } from '@/lib/ui-li
 import { SharedFilters } from './SharedFilters';
 import { FilesPanel } from './FilesPanel';
 import { UsersPanel } from './UsersPanel';
+import { ActiveSourcePanel } from './ActiveSourcePanel';
 import styles from '../css/MultiControlDataDemo.module.css';
 
 type FileItem = {
@@ -131,6 +132,7 @@ export function MultiControlDataExample() {
           <FilesPanel />
           <UsersPanel />
         </div>
+        <ActiveSourcePanel />
       </MultiControlDataProvider>
     </div>
   );

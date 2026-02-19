@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { useControlData } from '../ControlDataProvider/index.hook';
 import type { ControlDataContextValue } from '../ControlDataProvider/index.types';
 import { MultiControlDataContext } from './index.hook';
@@ -7,14 +7,19 @@ import { MAIN_SOURCE_KEY } from './index.types';
 
 type SourceRegistry = Map<string, ControlDataContextValue<unknown>>;
 
-function createMainBroadcast(registry: SourceRegistry, sourceKeys: string[]): ControlDataContextValue<null> {
+function createMainBroadcast(
+  registry: SourceRegistry,
+  sourceKeys: string[],
+  activeSourceKey: string | null,
+): ControlDataContextValue<unknown> {
   const allSources = () => sourceKeys.map((k) => registry.get(k)!).filter(Boolean);
+  const activeSource = activeSourceKey ? registry.get(activeSourceKey) ?? null : null;
 
   return {
-    data: null,
-    loading: allSources().some((s) => s.loading),
-    error: allSources().find((s) => s.error)?.error ?? null,
-    state: {},
+    data: activeSource ? activeSource.data : null,
+    loading: activeSource ? activeSource.loading : allSources().some((s) => s.loading),
+    error: activeSource ? activeSource.error : allSources().find((s) => s.error)?.error ?? null,
+    state: activeSource ? activeSource.state : {},
     applyToState: (key, transformer, rawData) => {
       allSources().forEach((s) => s.applyToState(key, transformer, rawData));
     },
@@ -35,6 +40,8 @@ const EMPTY_CONTEXT_VALUE: MultiControlDataContextValue = {
     throw new Error('No sources configured in MultiControlDataProvider');
   },
   getSources: () => [],
+  setActiveSource: () => {},
+  getActiveSource: () => null,
 };
 
 function SourceLayer({
@@ -78,10 +85,40 @@ function SourceLayer({
     );
   }
 
+  return (
+    <InnerProvider registry={registry} sourceKeys={sourceKeys}>
+      {children}
+    </InnerProvider>
+  );
+}
+
+function InnerProvider({
+  registry,
+  sourceKeys,
+  children,
+}: {
+  registry: SourceRegistry;
+  sourceKeys: string[];
+  children: React.ReactNode;
+}) {
+  const [activeSourceKey, setActiveSourceKeyState] = useState<string | null>(null);
+
+  const setActiveSource = useCallback((key: string | null) => {
+    if (key !== null && !sourceKeys.includes(key)) {
+      throw new Error(
+        `setActiveSource: "${key}" is not a valid source key. ` +
+        `Available sources: [${sourceKeys.join(', ')}]`,
+      );
+    }
+    setActiveSourceKeyState(key);
+  }, [sourceKeys]);
+
+  const getActiveSource = useCallback(() => activeSourceKey, [activeSourceKey]);
+
   const contextValue: MultiControlDataContextValue = {
     getSource: <TData = unknown,>(key: string): ControlDataContextValue<TData> => {
       if (key === MAIN_SOURCE_KEY) {
-        return createMainBroadcast(registry, sourceKeys) as unknown as ControlDataContextValue<TData>;
+        return createMainBroadcast(registry, sourceKeys, activeSourceKey) as ControlDataContextValue<TData>;
       }
       const source = registry.get(key);
       if (!source) {
@@ -93,6 +130,8 @@ function SourceLayer({
       return source as ControlDataContextValue<TData>;
     },
     getSources: () => [...sourceKeys],
+    setActiveSource,
+    getActiveSource,
   };
 
   return (

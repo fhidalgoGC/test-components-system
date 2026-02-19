@@ -168,19 +168,43 @@ export function MultiControlDataPropsTab() {
           </tr>
           <tr>
             <td><code>data</code></td>
-            <td><code>null</code> — la data es unica por source, usar <code>useMultiControlData(sourceKey)</code> para obtenerla.</td>
+            <td>Sin activeSource: <code>null</code>. Con activeSource: data del source seleccionado.</td>
           </tr>
           <tr>
             <td><code>loading</code></td>
-            <td><code>true</code> si <strong>cualquier</strong> source esta cargando.</td>
+            <td>Sin activeSource: <code>true</code> si cualquier source carga. Con activeSource: loading del source seleccionado.</td>
           </tr>
           <tr>
             <td><code>error</code></td>
-            <td>El primer error encontrado entre los sources, o <code>null</code>.</td>
+            <td>Sin activeSource: primer error entre sources. Con activeSource: error del source seleccionado.</td>
           </tr>
           <tr>
             <td><code>state</code></td>
-            <td><code>{'{}'}</code> — el state es unico por source.</td>
+            <td>Sin activeSource: <code>{'{}'}</code>. Con activeSource: state del source seleccionado.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>useMultiControlDataActive()</h3>
+      <p>Hook para controlar el source activo. El source activo determina que datos expone <code>main</code>.</p>
+      <table className={styles.propsTable}>
+        <thead>
+          <tr>
+            <th>Propiedad</th>
+            <th>Tipo</th>
+            <th>Descripcion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>activeSource</code></td>
+            <td><code>string | null</code></td>
+            <td>Key del source activo, o <code>null</code> si no hay ninguno seleccionado.</td>
+          </tr>
+          <tr>
+            <td><code>setActiveSource</code></td>
+            <td><code>{'(key: string | null) => void'}</code></td>
+            <td>Cambia el source activo. Pasar <code>null</code> para deseleccionar. Lanza error si la key no es un source valido.</td>
           </tr>
         </tbody>
       </table>

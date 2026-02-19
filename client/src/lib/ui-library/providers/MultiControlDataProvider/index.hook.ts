@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext } from 'react';
 import type { ControlDataContextValue } from '../ControlDataProvider/index.types';
 import type { MultiControlDataContextValue } from './index.types';
 
@@ -18,4 +18,18 @@ export function useMultiControlDataSources(): string[] {
     throw new Error('useMultiControlDataSources must be used within a MultiControlDataProvider');
   }
   return context.getSources();
+}
+
+export function useMultiControlDataActive(): {
+  activeSource: string | null;
+  setActiveSource: (sourceKey: string | null) => void;
+} {
+  const context = useContext(MultiControlDataContext);
+  if (!context) {
+    throw new Error('useMultiControlDataActive must be used within a MultiControlDataProvider');
+  }
+  return {
+    activeSource: context.getActiveSource(),
+    setActiveSource: context.setActiveSource,
+  };
 }

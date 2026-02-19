@@ -208,16 +208,47 @@ function SharedFilters() {
 
 ### Propiedades del proxy `main`
 
-| Propiedad | Valor |
-|-----------|-------|
-| `data` | `null` — la data es unica por source |
-| `loading` | `true` si **cualquier** source esta cargando |
-| `error` | Primer error encontrado entre los sources, o `null` |
-| `state` | `{}` — el state es unico por source |
-| `applyToState` | Propaga a todos los sources |
-| `resetState` | Propaga a todos los sources |
-| `clearState` | Propaga a todos los sources |
-| `reload` | Propaga a todos los sources |
+| Propiedad | Sin activeSource | Con activeSource |
+|-----------|-----------------|------------------|
+| `data` | `null` | data del source activo |
+| `loading` | `true` si cualquier source carga | loading del source activo |
+| `error` | Primer error entre sources | error del source activo |
+| `state` | `{}` | state del source activo |
+| `applyToState` | Propaga a todos | Propaga a todos |
+| `resetState` | Propaga a todos | Propaga a todos |
+| `clearState` | Propaga a todos | Propaga a todos |
+| `reload` | Propaga a todos | Propaga a todos |
+
+### Source Activo (`activeSource`)
+
+El contexto expone `setActiveSource(key | null)` y `getActiveSource()` para controlar que source alimenta los campos de lectura (data, state, loading, error) del proxy `main`:
+
+```typescript
+import { useMultiControlDataActive, useMultiControlData, MAIN_SOURCE_KEY } from '@/lib/ui-library/providers';
+
+function SourceSwitcher() {
+  const { activeSource, setActiveSource } = useMultiControlDataActive();
+  const main = useMultiControlData(MAIN_SOURCE_KEY);
+
+  // Cambiar al source 'files'
+  setActiveSource('files');
+  // Ahora main.data = data de 'files', main.loading = loading de 'files'
+
+  // Volver a modo sin source activo
+  setActiveSource(null);
+  // Ahora main.data = null, main.loading = any source loading
+
+  // Las acciones SIEMPRE son broadcast sin importar el activeSource
+  main.applyToState('page', (v: number) => v, 1); // aplica a TODOS
+}
+```
+
+### Hook `useMultiControlDataActive()`
+
+| Propiedad | Tipo | Descripcion |
+|-----------|------|-------------|
+| `activeSource` | `string \| null` | Key del source activo, o `null` si no hay ninguno |
+| `setActiveSource` | `(key: string \| null) => void` | Cambia el source activo. Lanza error si key no es un source valido |
 
 ### Restriccion
 
