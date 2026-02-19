@@ -131,6 +131,25 @@ export function useAcordionList(options: UseAcordionListOptions) {
     [internalController],
   );
 
+  const controllerState: AcordionListState = internalController?.getState?.() ?? stateProp ?? 'idle';
+
+  const prevDataRef = useRef<unknown[]>(data);
+
+  useEffect(() => {
+    const prevData = prevDataRef.current;
+    prevDataRef.current = data;
+
+    if (prevData === data) return;
+
+    if (!internalController) return;
+
+    if (data.length > 0 && controllerState !== 'error') {
+      internalController.setState('success');
+    } else if (data.length === 0 && controllerState === 'loading') {
+      internalController.setState('empty');
+    }
+  }, [data, controllerState, internalController]);
+
   const currentState: AcordionListState = internalController?.getState?.() ?? stateProp ?? 'idle';
 
   return {

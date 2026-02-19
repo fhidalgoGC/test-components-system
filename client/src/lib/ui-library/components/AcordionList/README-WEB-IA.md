@@ -46,7 +46,7 @@ Esto permite que el componente sea completamente agnostico: no conoce la estruct
 | `behaviors` | `AcordionListBehaviors` | No | Comportamiento de apertura/cierre (modo single/multiple, IDs abiertos). |
 | `callbacks` | `AcordionListCallbacks` | No | Funciones callback para eventos de toggle y cambio de estado. |
 | `controller` | `AcordionListController` | No | Controller externo obtenido de `useAcordionListController()`. |
-| `state` | `AcordionListState` | No | Estado visual del componente: `'idle'` \| `'loading'` \| `'empty'` \| `'error'`. Default: `'idle'`. |
+| `state` | `AcordionListState` | No | Estado visual del componente: `'idle'` \| `'loading'` \| `'success'` \| `'empty'` \| `'error'`. Default: `'idle'`. Con controller, `success` y `empty` se detectan automaticamente. |
 | `statesComponents` | `AcordionListStatesComponents` | No | Configuracion visual personalizada por estado. Sigue el patron estandar documentado en `client/src/docs/README-STATES-COMPONENTS.md`. |
 | `error` | `string` | No | Mensaje de error a mostrar cuando `state` es `'error'`. |
 | `className` | `string` | No | Clase CSS adicional para el contenedor. |
@@ -609,22 +609,39 @@ El componente soporta estados visuales para representar diferentes fases de carg
 
 ### Estados disponibles (`AcordionListState`)
 
-| Estado | Comportamiento | Tiene `StateConfig` |
-|--------|---------------|:-------------------:|
-| `idle` | Estado inicial. El componente se monto pero aun no tiene datos. Muestra el contenido normal (vacio). | NO |
-| `loading` | Muestra un spinner animado y texto "Loading..." por defecto, o el componente custom configurado. | SI |
-| `success` | Datos cargados exitosamente. Muestra el contenido normal del componente (accordions con datos). | NO |
-| `empty` | Muestra texto "No data available" por defecto, o el componente custom configurado. | SI |
-| `error` | Muestra el mensaje de error (prop `error`) o texto por defecto. | SI |
+| Estado | Comportamiento | Transicion | Tiene `StateConfig` |
+|--------|---------------|-----------|:-------------------:|
+| `idle` | Estado inicial. El componente se monto pero aun no tiene datos. | **Automatica** (al montar) | NO |
+| `loading` | Muestra un spinner animado y texto "Loading..." por defecto, o el componente custom configurado. | **Manual** (consumidor) | SI |
+| `success` | Datos cargados exitosamente. Muestra el contenido normal del componente (accordions con datos). | **Automatica** (al detectar `data.length > 0`) | NO |
+| `empty` | Muestra texto "No data available" por defecto, o el componente custom configurado. | **Automatica** (desde `loading` con `data.length === 0`) | SI |
+| `error` | Muestra el mensaje de error (prop `error`) o texto por defecto. | **Manual** (consumidor) | SI |
 
 > `idle` y `success` muestran el contenido normal del componente. Solo `loading`, `empty` y `error` tienen visualizacion especial configurable.
+
+### Transiciones automaticas
+
+El componente detecta automaticamente cambios en la prop `data` y transiciona el estado:
+
+- Cuando `data` cambia y tiene elementos (`data.length > 0`): auto transicion a `success` (excepto si esta en `error`)
+- Cuando `data` cambia y esta vacio (`data.length === 0`) estando en `loading`: auto transicion a `empty`
+
+El consumidor solo necesita controlar manualmente `loading` (antes de inyectar datos) y `error` (cuando la carga falla).
+
+> **Importante**: Las transiciones automaticas solo funcionan cuando se usa `controller` (via `useAcordionListController`). Si se usa la prop `state` directamente, el consumidor es responsable de gestionar todas las transiciones manualmente.
 
 ### Ciclo de vida
 
 ```
-idle (montaje) → loading → success (datos visibles) / empty / error
-                  ↑                     │
-                  └─────────────────────┘ (recarga)
+idle (montaje)
+  │
+  ├── data llega con items ──► success (automatico)
+  │
+  └── consumidor pone loading ──► loading
+                                    │
+                                    ├── data llega con items ──► success (automatico)
+                                    ├── data llega vacio ──► empty (automatico)
+                                    └── consumidor pone error ──► error (manual)
 ```
 
 ### Configuracion por estado (`AcordionListStateConfig`)
@@ -671,24 +688,25 @@ Solo `loading`, `empty` y `error` aceptan la configuracion del patron estandar:
 />
 ```
 
-### Ejemplo: control via controller
+### Ejemplo: control via controller (con transiciones automaticas)
 
 ```tsx
 const controller = useAcordionListController();
+const [data, setData] = useState([]);
 
-// Simular carga asincrona
+// El consumidor solo controla 'loading' y 'error' manualmente.
+// 'success' y 'empty' se resuelven automaticamente al cambiar 'data'.
 const fetchData = async () => {
-  controller.setState('loading');
+  controller.setState('loading'); // manual: muestra spinner
   try {
     const result = await api.getData();
-    if (result.length === 0) {
-      controller.setState('empty');
-    } else {
-      setData(result);
-      controller.setState('success'); // datos cargados, muestra contenido normal
-    }
+    setData(result);
+    // NO hace falta llamar controller.setState('success') ni 'empty'.
+    // El componente detecta automaticamente:
+    //   - result.length > 0  →  auto 'success' (muestra datos)
+    //   - result.length === 0 →  auto 'empty' (muestra estado vacio)
   } catch (err) {
-    controller.setState('error');
+    controller.setState('error'); // manual: solo el consumidor sabe si hubo error
   }
 };
 
