@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import type { AcordionListController, InternalAcordionListController } from './AcordionList.types';
+import type { AcordionListController, InternalAcordionListController, AcordionListState } from './AcordionList.types';
 
 export function useAcordionListController(): AcordionListController {
   const storeRef = useRef<{
@@ -7,11 +7,13 @@ export function useAcordionListController(): AcordionListController {
     subscribers: Set<() => void>;
     refreshKey: number;
     itemRefreshKeys: Map<string, number>;
+    state: AcordionListState;
   }>({
     openIds: new Set(),
     subscribers: new Set(),
     refreshKey: 0,
     itemRefreshKeys: new Map(),
+    state: 'idle',
   });
 
   const controllerRef = useRef<InternalAcordionListController | null>(null);
@@ -62,6 +64,11 @@ export function useAcordionListController(): AcordionListController {
         store.itemRefreshKeys.set(id, current + 1);
         notifySubscribers();
       },
+      setState: (state: AcordionListState) => {
+        store.state = state;
+        notifySubscribers();
+      },
+      getState: () => store.state,
       _subscribe: (callback: () => void) => {
         store.subscribers.add(callback);
         return () => {

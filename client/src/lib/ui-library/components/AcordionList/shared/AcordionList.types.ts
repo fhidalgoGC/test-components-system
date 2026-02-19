@@ -1,5 +1,26 @@
 import type { ReactNode, ComponentType, CSSProperties } from 'react';
 
+export type AcordionListState = 'idle' | 'loading' | 'success' | 'empty' | 'error';
+
+export type AcordionListStateConfig = {
+  renderType: 'component' | 'self';
+  render?: ReactNode;
+  heightMode?: 'full' | 'auto' | 'fixed';
+  height?: number | 'auto';
+  minHeight?: number;
+  widthMode?: 'full' | 'auto' | 'fixed';
+  width?: number;
+  minWidth?: number;
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  horizontalAlign?: 'left' | 'center' | 'right';
+};
+
+export type AcordionListStatesComponents = {
+  loading?: AcordionListStateConfig;
+  empty?: AcordionListStateConfig;
+  error?: AcordionListStateConfig;
+};
+
 export type AcordionListItemDataProps<R = unknown> = {
   itemData: R;
 };
@@ -69,6 +90,8 @@ export type AcordionListController = {
   isOpen: (id: string) => boolean;
   refreshAll: () => void;
   refreshItem: (id: string) => void;
+  setState: (state: AcordionListState) => void;
+  getState: () => AcordionListState;
 };
 
 export type InternalAcordionListController = AcordionListController & {
@@ -88,5 +111,8 @@ export type AcordionListProps<T = any, R = any> = {
   behaviors?: AcordionListBehaviors;
   callbacks?: AcordionListCallbacks;
   controller?: AcordionListController;
+  state?: AcordionListState;
+  statesComponents?: AcordionListStatesComponents;
+  error?: string;
   className?: string;
 };

@@ -3,6 +3,7 @@ import type {
   AcordionListProps,
   AcordionListBehaviors,
   AcordionListCallbacks,
+  AcordionListState,
   InternalAcordionListController,
 } from '../../shared';
 
@@ -12,10 +13,11 @@ type UseAcordionListOptions = {
   behaviors?: AcordionListBehaviors;
   callbacks?: AcordionListCallbacks;
   controller?: any;
+  state?: AcordionListState;
 };
 
 export function useAcordionList(options: UseAcordionListOptions) {
-  const { data, getItemId, behaviors, callbacks, controller } = options;
+  const { data, getItemId, behaviors, callbacks, controller, state: stateProp } = options;
   const mode = behaviors?.mode ?? 'single';
   const isControlled = behaviors?.openIds !== undefined;
 
@@ -129,11 +131,14 @@ export function useAcordionList(options: UseAcordionListOptions) {
     [internalController],
   );
 
+  const currentState: AcordionListState = internalController?.getState?.() ?? stateProp ?? 'idle';
+
   return {
     openIds,
     handleToggle,
     isItemOpen,
     refreshKey,
     getItemRefreshKey,
+    currentState,
   };
 }

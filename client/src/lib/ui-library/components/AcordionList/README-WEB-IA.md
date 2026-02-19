@@ -46,6 +46,9 @@ Esto permite que el componente sea completamente agnostico: no conoce la estruct
 | `behaviors` | `AcordionListBehaviors` | No | Comportamiento de apertura/cierre (modo single/multiple, IDs abiertos). |
 | `callbacks` | `AcordionListCallbacks` | No | Funciones callback para eventos de toggle y cambio de estado. |
 | `controller` | `AcordionListController` | No | Controller externo obtenido de `useAcordionListController()`. |
+| `state` | `AcordionListState` | No | Estado visual del componente: `'idle'` \| `'loading'` \| `'empty'` \| `'error'`. Default: `'idle'`. |
+| `statesComponents` | `AcordionListStatesComponents` | No | Configuracion visual personalizada por estado. Sigue el patron estandar documentado en `client/src/docs/README-STATES-COMPONENTS.md`. |
+| `error` | `string` | No | Mensaje de error a mostrar cuando `state` es `'error'`. |
 | `className` | `string` | No | Clase CSS adicional para el contenedor. |
 
 ---
@@ -259,6 +262,8 @@ const MyComponent = () => {
 | `isOpen(id)` | `(id: string) => boolean` | Consulta si un accordion especifico esta abierto. |
 | `refreshAll()` | `() => void` | Fuerza el re-renderizado de todos los accordions. Util cuando los datos internos cambian sin cambiar la referencia del array. |
 | `refreshItem(id)` | `(id: string) => void` | Fuerza el re-renderizado de un accordion especifico. |
+| `setState(state)` | `(state: AcordionListState) => void` | Cambia el estado visual del componente. Notifica a los suscriptores para re-render. |
+| `getState()` | `() => AcordionListState` | Retorna el estado visual actual del componente. |
 
 ### Comportamiento del controller con mode `single`
 
@@ -595,6 +600,117 @@ const Example4 = () => {
   );
 };
 ```
+
+---
+
+## States (`state` + `statesComponents`)
+
+El componente soporta estados visuales para representar diferentes fases de carga de datos asincronos. Sigue el patron estandar documentado en `client/src/docs/README-STATES-COMPONENTS.md`.
+
+### Estados disponibles (`AcordionListState`)
+
+| Estado | Comportamiento | Tiene `StateConfig` |
+|--------|---------------|:-------------------:|
+| `idle` | Estado inicial. El componente se monto pero aun no tiene datos. Muestra el contenido normal (vacio). | NO |
+| `loading` | Muestra un spinner animado y texto "Loading..." por defecto, o el componente custom configurado. | SI |
+| `success` | Datos cargados exitosamente. Muestra el contenido normal del componente (accordions con datos). | NO |
+| `empty` | Muestra texto "No data available" por defecto, o el componente custom configurado. | SI |
+| `error` | Muestra el mensaje de error (prop `error`) o texto por defecto. | SI |
+
+> `idle` y `success` muestran el contenido normal del componente. Solo `loading`, `empty` y `error` tienen visualizacion especial configurable.
+
+### Ciclo de vida
+
+```
+idle (montaje) → loading → success (datos visibles) / empty / error
+                  ↑                     │
+                  └─────────────────────┘ (recarga)
+```
+
+### Configuracion por estado (`AcordionListStateConfig`)
+
+Solo `loading`, `empty` y `error` aceptan la configuracion del patron estandar:
+
+| Prop | Tipo | Descripcion |
+|------|------|-------------|
+| `renderType` | `'component' \| 'self'` | `'self'`: visual interno por defecto. `'component'`: renderiza el `render` proporcionado. |
+| `render` | `ReactNode` | Componente custom a renderizar (solo cuando `renderType: 'component'`). |
+| `widthMode` | `'full' \| 'auto' \| 'fixed'` | Modo de ancho del contenedor del estado. |
+| `width` | `number` | Ancho fijo en pixels. |
+| `minWidth` | `number` | Ancho minimo en pixels. |
+| `heightMode` | `'full' \| 'auto' \| 'fixed'` | Modo de alto del contenedor del estado. |
+| `height` | `number \| 'auto'` | Alto fijo o auto. |
+| `minHeight` | `number` | Alto minimo en pixels. |
+| `verticalAlign` | `'top' \| 'middle' \| 'bottom'` | Alineacion vertical del contenido. Default: `'middle'`. |
+| `horizontalAlign` | `'left' \| 'center' \| 'right'` | Alineacion horizontal del contenido. Default: `'center'`. |
+
+### Ejemplo: control via prop `state`
+
+```tsx
+<AcordionList
+  id="my-list"
+  data={data}
+  state="loading"
+  statesComponents={{
+    loading: { renderType: 'self' },
+    empty: {
+      renderType: 'component',
+      render: <div>No se encontraron resultados</div>,
+      heightMode: 'fixed',
+      height: 200,
+      verticalAlign: 'middle',
+      horizontalAlign: 'center',
+    },
+    error: {
+      renderType: 'component',
+      render: <div style={{ color: 'red' }}>Error al cargar datos</div>,
+    },
+  }}
+  error="Timeout de conexion"
+  // ... demas props
+/>
+```
+
+### Ejemplo: control via controller
+
+```tsx
+const controller = useAcordionListController();
+
+// Simular carga asincrona
+const fetchData = async () => {
+  controller.setState('loading');
+  try {
+    const result = await api.getData();
+    if (result.length === 0) {
+      controller.setState('empty');
+    } else {
+      setData(result);
+      controller.setState('success'); // datos cargados, muestra contenido normal
+    }
+  } catch (err) {
+    controller.setState('error');
+  }
+};
+
+<AcordionList controller={controller} data={data} ... />
+```
+
+### Prioridad de estado
+
+El estado se resuelve en este orden:
+1. Estado del controller (`controller.getState()`) — tiene prioridad
+2. Prop `state` — se usa si no hay controller
+3. Default: `'idle'`
+
+### CSS Variables
+
+| Variable | Default | Descripcion |
+|----------|---------|-------------|
+| `--acordion-list-state-text` | `#6b7280` | Color del texto de estados |
+| `--acordion-list-border` | `#e5e7eb` | Color del borde del spinner |
+| `--acordion-list-primary` | `#3b82f6` | Color primario del spinner |
+| `--acordion-list-error` | `#dc2626` | Color del texto de error |
+| `--acordion-list-muted` | `#9ca3af` | Color del texto de empty |
 
 ---
 

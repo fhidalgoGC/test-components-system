@@ -97,6 +97,9 @@ const controller = useAcordionListController();
 | `behaviors` | `AcordionListBehaviors` | Modo single/multiple y ids abiertos |
 | `callbacks` | `AcordionListCallbacks` | Eventos onToggle y onOpenChange |
 | `controller` | `AcordionListController` | Hook de control externo |
+| `state` | `AcordionListState` | Estado visual: `'idle'` \| `'loading'` \| `'empty'` \| `'error'` |
+| `statesComponents` | `AcordionListStatesComponents` | Configuración visual personalizada por estado |
+| `error` | `string` | Mensaje de error a mostrar en estado `'error'` |
 | `className` | `string` | Clase CSS adicional |
 
 ### AcordionListItemHeader<R>
@@ -139,7 +142,35 @@ type AcordionListController = {
   isOpen: (id: string) => boolean;
   refreshAll: () => void;
   refreshItem: (id: string) => void;
+  setState: (state: AcordionListState) => void;
+  getState: () => AcordionListState;
 };
+```
+
+### StatesComponents
+
+```tsx
+<AcordionList
+  state="loading"
+  statesComponents={{
+    loading: {
+      renderType: 'self',
+      heightMode: 'fixed',
+      height: 200,
+      verticalAlign: 'middle',
+      horizontalAlign: 'center',
+    },
+    empty: {
+      renderType: 'component',
+      render: <div>No hay datos</div>,
+    },
+    error: {
+      renderType: 'component',
+      render: <div>Error al cargar</div>,
+    },
+  }}
+  error="Mensaje de error"
+/>
 ```
 
 ### AcordionListBehaviors

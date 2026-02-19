@@ -23,7 +23,6 @@ interface StateConfig {
 }
 
 interface StatesComponents {
-  idle?: StateConfig;
   loading?: StateConfig;
   empty?: StateConfig;
   error?: StateConfig;
@@ -32,16 +31,67 @@ interface StatesComponents {
 
 ---
 
+## Ciclo de vida de los estados
+
+### Estado inicial: `idle`
+
+Todo componente **siempre inicia en estado `idle`**. Este es el estado por defecto que el componente asigna internamente al montarse. Representa que el componente se montó pero **aún no tiene datos** — está a la espera de que el consumidor inicie una carga o cambie a otro estado.
+
+### Estado `success`
+
+Cuando la carga de datos termina correctamente, el consumidor cambia el estado a `success`. En este estado el componente **muestra su contenido normal** (datos, accordions, filas, items, etc.). Es el estado que indica "hay datos disponibles y se están mostrando".
+
+### Estados con visualización especial
+
+Los estados `loading`, `empty` y `error` tienen visualización propia configurable via `StateConfig`. Son los únicos que pueden personalizar su apariencia visual.
+
+### Transiciones
+
+El consumidor controla todas las transiciones externas. El único estado que el componente asigna por sí mismo es `idle` al montar.
+
+- `idle` → `loading` (se inicia una carga)
+- `loading` → `success` (la carga terminó con datos)
+- `loading` → `empty` (la carga terminó sin datos)
+- `loading` → `error` (la carga falló)
+- `success` → `loading` (se recarga)
+- `error` → `loading` (se reintenta)
+
+### Diagrama de transiciones
+
+```
+                         ┌──────────┐
+          montaje ──────►│   idle   │ (interno, sin datos aún)
+                         └────┬─────┘
+                              │
+                              ▼
+                        ┌──────────┐
+               ┌───────►│ loading  │◄──────────┐
+               │        └────┬─────┘           │
+               │             │                 │
+               │    ┌────────┼────────┐        │
+               │    ▼        ▼        ▼        │
+          ┌─────────┐ ┌──────────┐ ┌──────────┐
+          │ success │ │  empty   │ │  error   │
+          └─────────┘ └──────────┘ └──────────┘
+           (datos      (sin datos,   (falló,
+           visibles)    visual)       visual)
+```
+
+> **Regla:** `idle` y `success` muestran el contenido normal del componente (no tienen `StateConfig`). `loading`, `empty` y `error` tienen visualización especial configurable via `statesComponents`.
+
+---
+
 ## Estados disponibles
 
-| Estado | Descripción | Cuándo se activa |
-|--------|-------------|------------------|
-| `idle` | Estado inicial antes de cualquier carga | El componente se montó pero aún no ha recibido datos ni ha iniciado fetch |
-| `loading` | Cargando datos | Se está realizando la petición asíncrona |
-| `empty` | Sin resultados | La petición terminó exitosamente pero no retornó datos |
-| `error` | Error en la carga | La petición falló o se recibió un error |
+| Estado | Descripción | Quién lo controla | Tiene `StateConfig` | Cuándo se activa |
+|--------|-------------|-------------------|:-------------------:|------------------|
+| `idle` | Estado inicial, sin datos aún | **Componente** (interno) | NO | Al montar, antes de cualquier carga |
+| `loading` | Cargando datos | **Consumidor** (externo) | SI | El consumidor inicia una petición asíncrona |
+| `success` | Datos cargados, contenido visible | **Consumidor** (externo) | NO | La carga terminó exitosamente y hay datos para mostrar |
+| `empty` | Sin resultados | **Consumidor** (externo) | SI | La petición terminó pero no retornó datos |
+| `error` | Error en la carga | **Consumidor** (externo) | SI | La petición falló |
 
-> **Nota:** Algunos componentes incluyen estados adicionales como `success` (Modal, BaseTable). El estado `success` indica que la petición terminó correctamente y hay datos disponibles para renderizar. Cuando el componente tiene datos, típicamente los renderiza directamente sin necesitar configuración visual del state.
+> **Nota:** `idle` y `success` no tienen `StateConfig` porque ambos muestran el contenido normal del componente. La diferencia es semántica: `idle` indica que aún no se ha cargado nada, `success` indica que la carga fue exitosa y los datos están visibles. Solo `loading`, `empty` y `error` permiten personalizar su visualización via `statesComponents`.
 
 ---
 
@@ -85,17 +135,28 @@ interface StatesComponents {
 ```tsx
 const controller = useGridController();
 
-// El state se controla externamente via controller
-controller.setState('loading');
+// El componente arranca en 'idle' automáticamente (sin datos aún).
+// El consumidor controla las transiciones:
+const fetchData = async () => {
+  controller.setState('loading');
+  try {
+    const result = await api.getProducts();
+    if (result.length === 0) {
+      controller.setState('empty');
+    } else {
+      setProducts(result);
+      controller.setState('success'); // datos cargados, muestra contenido normal
+    }
+  } catch (err) {
+    controller.setState('error');
+  }
+};
 
 <Grid
   data={products}
   controller={controller}
   item={{ renderType: 'component', render: (item) => <ProductCard product={item} /> }}
   statesComponents={{
-    idle: {
-      renderType: 'self'
-    },
     loading: {
       renderType: 'component',
       render: <CustomSpinner />,
@@ -125,7 +186,7 @@ controller.setState('loading');
 />
 ```
 
-> **Nota:** El state del componente se gestiona externamente a través de su controller (ej: `controller.setState('loading')`), no mediante una prop `state` directa.
+> **Nota:** El componente inicia en `idle`. Solo `loading`, `empty` y `error` se configuran en `statesComponents` porque son los que tienen visualización especial. `success` no necesita configuración — muestra el contenido normal del componente.
 
 ---
 
@@ -136,7 +197,6 @@ controller.setState('loading');
 - **States:** `idle`, `loading`, `success`, `empty`, `error`
 - **Interfaz:** `StatesComponents` con `StateConfig` completa (incluye `widthMode`, `heightMode`, `verticalAlign`, `horizontalAlign`)
 - **Prop:** `statesComponents`
-- **Estado extra:** `success` — indica que la operación fue exitosa
 - **Cumple estándar:** SI
 
 ### Grid
@@ -193,12 +253,16 @@ Todo componente nuevo que cargue datos de forma asíncrona **debe**:
 
 1. Aceptar la prop `statesComponents?: StatesComponents`
 2. Usar la interfaz `StateConfig` estándar con todas las propiedades (renderType, render, dimensiones, alineación)
-3. Implementar al mínimo los 4 estados base: `idle`, `loading`, `empty`, `error`
-4. Si el componente requiere estados adicionales (como `success`), extender la interfaz
+3. Iniciar siempre en estado `idle` de forma interna — el componente se monta sin datos
+4. Implementar los 5 estados base: `idle` (interno), `loading`, `success`, `empty`, `error` (externos)
+5. `idle` = sin datos aún (antes de la primera carga). Muestra el contenido normal del componente (vacío o con datos iniciales)
+6. `success` = datos cargados exitosamente. Muestra el contenido normal del componente con los datos
+7. Solo `loading`, `empty` y `error` tienen `StateConfig` configurable (visualización especial)
+8. Si el componente requiere estados adicionales específicos, extender la interfaz
 
 ```ts
 interface MyComponentStatesComponents extends StatesComponents {
-  success?: StateConfig;
+  customState?: StateConfig;
 }
 ```
 
@@ -207,20 +271,26 @@ interface MyComponentStatesComponents extends StatesComponents {
 ## Flujo de decisión para renderizado de un state
 
 ```
-state recibido
+state actual del componente
   │
-  ├─ statesComponents[state] existe?
-  │   │
-  │   ├─ SI → renderType === 'component'?
-  │   │       │
-  │   │       ├─ SI → renderizar statesComponents[state].render
-  │   │       │       con dimensiones y alineación configuradas
-  │   │       │
-  │   │       └─ NO ('self') → renderizar visual interno por defecto
-  │   │               con dimensiones y alineación configuradas
-  │   │
-  │   └─ NO → renderizar visual interno por defecto
-  │           con dimensiones y alineación por defecto
+  ├─ state === 'idle' o state === 'success'
+  │   └─ renderizar contenido normal del componente
+  │       (idle: sin datos aún / success: con datos cargados)
   │
-  └─ state === 'idle' o datos disponibles → renderizar contenido normal
+  ├─ state === 'loading' | 'empty' | 'error'
+  │   │
+  │   ├─ statesComponents[state] existe?
+  │   │   │
+  │   │   ├─ SI → renderType === 'component'?
+  │   │   │       │
+  │   │   │       ├─ SI → renderizar statesComponents[state].render
+  │   │   │       │       con dimensiones y alineación configuradas
+  │   │   │       │
+  │   │   │       └─ NO ('self') → renderizar visual interno por defecto
+  │   │   │               con dimensiones y alineación configuradas
+  │   │   │
+  │   │   └─ NO → renderizar visual interno por defecto
+  │   │           con dimensiones y alineación por defecto
+  │
+  └─ Resumen: solo loading/empty/error usan StateConfig
 ```

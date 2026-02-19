@@ -13,6 +13,9 @@ export type {
   AcordionListLayout,
   AcordionListItemHeader,
   AcordionListItemBody,
+  AcordionListState,
+  AcordionListStateConfig,
+  AcordionListStatesComponents,
 } from './shared';
 
 export const AcordionList = <T = any, R = any>(props: AcordionListProps<T, R>) => {

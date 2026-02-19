@@ -17,3 +17,42 @@
   color: #1f2937;
   padding: 4px 0;
 }
+
+.stateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--acordion-list-state-text, #6b7280);
+  box-sizing: border-box;
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--acordion-list-border, #e5e7eb);
+  border-top-color: var(--acordion-list-primary, #3b82f6);
+  border-radius: 50%;
+  animation: acordionListSpin 1s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes acordionListSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.stateText {
+  font-size: 14px;
+}
+
+.errorState {
+  color: var(--acordion-list-error, #dc2626);
+}
+
+.emptyState {
+  color: var(--acordion-list-muted, #9ca3af);
+}
