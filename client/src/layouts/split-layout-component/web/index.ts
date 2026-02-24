@@ -6,6 +6,7 @@ export type {
   PanelAlign,
   PanelScroll,
   PanelBackgroundImage,
+  BackgroundRenderType,
   SizeMode,
   VerticalAlign,
   HorizontalAlign,

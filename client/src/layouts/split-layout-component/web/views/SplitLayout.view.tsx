@@ -3,20 +3,30 @@ import type { SplitLayoutProps, PanelBackgroundImage } from '../types';
 import styles from '../css/SplitLayout.module.css';
 
 function PanelBackground({ config }: { config: PanelBackgroundImage }) {
+  if (config.renderType === 'component') {
+    return (
+      <div className={styles.bgComponent} data-testid="split-panel-bg-component">
+        {config.render}
+      </div>
+    );
+  }
+
   return (
     <>
-      <img
-        src={config.src}
-        alt=""
-        aria-hidden="true"
-        className={styles.bgImage}
-        style={{
-          opacity: config.opacity ?? 1,
-          objectFit: config.objectFit || 'cover',
-          objectPosition: config.objectPosition || 'center',
-        }}
-        data-testid="split-panel-bg-image"
-      />
+      {config.src && (
+        <img
+          src={config.src}
+          alt=""
+          aria-hidden="true"
+          className={styles.bgImage}
+          style={{
+            opacity: config.opacity ?? 1,
+            objectFit: config.objectFit || 'cover',
+            objectPosition: config.objectPosition || 'center',
+          }}
+          data-testid="split-panel-bg-image"
+        />
+      )}
       {config.overlayColor && (
         <div
           className={styles.bgOverlay}

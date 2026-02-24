@@ -32,7 +32,7 @@ Important rule: Always update the component's README.md when making changes to a
 ## Feature Specifications
 - **Data-Driven Components**: `BaseTable`, `Paginator`, `List`, `Grid`, `AcordionList` offer declarative APIs and external state control.
 - **Interactive UI**: `BottomNavigationBar`, `Carousel`, `FloatingMenu`, `Modal` provide rich user interaction and customizable behaviors.
-- **Layout & Structure**: `UniversalCard`, `SplitLayout` offer flexible content rendering and responsive arrangements.
+- **Layout & Structure**: `UniversalCard`, `SplitLayout` offer flexible content rendering and responsive arrangements. `SplitLayout` supports per-panel background images via `backgroundImage` with dual render modes: `renderType: 'src'` (URL/path with opacity, objectFit, overlay) or `renderType: 'component'` (custom React component).
 - **Authentication**: `LoginCard` provides a customizable authentication interface.
 - **Selection Management**: `WrapperItemsSelected` integrates item selection capabilities into various components.
 - **Google Maps**: `GoogleMap` component for web with external marker control.

@@ -195,10 +195,22 @@ export function SplitLayoutPropsTab() {
           </thead>
           <tbody>
             <tr>
+              <td><code>renderType</code></td>
+              <td><code>'src' | 'component'</code></td>
+              <td><strong>Required</strong></td>
+              <td>Modo de renderizado: 'src' para URL de imagen, 'component' para componente React</td>
+            </tr>
+            <tr>
               <td><code>src</code></td>
               <td><code>string</code></td>
-              <td><strong>Required</strong></td>
-              <td>URL o ruta de la imagen</td>
+              <td><code>undefined</code></td>
+              <td>URL o ruta de la imagen (cuando renderType es 'src')</td>
+            </tr>
+            <tr>
+              <td><code>render</code></td>
+              <td><code>ReactNode</code></td>
+              <td><code>undefined</code></td>
+              <td>Componente React personalizado de fondo (cuando renderType es 'component')</td>
             </tr>
             <tr>
               <td><code>opacity</code></td>

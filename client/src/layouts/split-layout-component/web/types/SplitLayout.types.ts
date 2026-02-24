@@ -26,8 +26,12 @@ export interface PanelScroll {
   horizontal?: boolean;
 }
 
+export type BackgroundRenderType = 'src' | 'component';
+
 export interface PanelBackgroundImage {
-  src: string;
+  renderType: BackgroundRenderType;
+  src?: string;
+  render?: ReactNode;
   opacity?: number;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none';
   objectPosition?: string;

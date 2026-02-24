@@ -76,11 +76,13 @@ SplitLayout/
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `src` | `string` | **Required** | URL o ruta de la imagen |
-| `opacity` | `number` | `1` | Opacidad de la imagen (0 a 1) |
-| `objectFit` | `'cover' \| 'contain' \| 'fill' \| 'none'` | `'cover'` | Modo de ajuste de la imagen |
-| `objectPosition` | `string` | `'center'` | Posicion de la imagen (ej: 'top left') |
-| `overlayColor` | `string` | `undefined` | Color de capa superpuesta (ej: 'rgba(0,0,0,0.5)') |
+| `renderType` | `'src' \| 'component'` | **Required** | Modo: 'src' para URL de imagen, 'component' para componente React |
+| `src` | `string` | `undefined` | URL o ruta de la imagen (cuando renderType es 'src') |
+| `render` | `ReactNode` | `undefined` | Componente React de fondo (cuando renderType es 'component') |
+| `opacity` | `number` | `1` | Opacidad de la imagen (solo con renderType 'src') |
+| `objectFit` | `'cover' \| 'contain' \| 'fill' \| 'none'` | `'cover'` | Modo de ajuste (solo con renderType 'src') |
+| `objectPosition` | `string` | `'center'` | Posicion de la imagen (solo con renderType 'src') |
+| `overlayColor` | `string` | `undefined` | Color de overlay (solo con renderType 'src') |
 
 ### PanelAlign
 
@@ -126,7 +128,7 @@ import { SplitLayout } from '@/layouts/split-layout-component';
 />
 ```
 
-### Con imagen de fondo
+### Con imagen de fondo (renderType: 'src')
 
 ```tsx
 <SplitLayout
@@ -136,6 +138,7 @@ import { SplitLayout } from '@/layouts/split-layout-component';
     widthMode: 'percentage',
     width: 45,
     backgroundImage: {
+      renderType: 'src',
       src: '/images/hero.jpg',
       opacity: 0.8,
       overlayColor: 'rgba(0, 0, 0, 0.5)',
@@ -144,9 +147,32 @@ import { SplitLayout } from '@/layouts/split-layout-component';
   secondary={{
     render: <HeroContent />,
     backgroundImage: {
+      renderType: 'src',
       src: '/images/landscape.jpg',
       objectFit: 'cover',
       objectPosition: 'top center',
+    },
+  }}
+/>
+```
+
+### Con componente de fondo (renderType: 'component')
+
+```tsx
+<SplitLayout
+  layout={{ heightMode: 'fixed', height: 500 }}
+  main={{
+    render: <LoginForm />,
+    backgroundImage: {
+      renderType: 'component',
+      render: <VideoBackground />,
+    },
+  }}
+  secondary={{
+    render: <HeroContent />,
+    backgroundImage: {
+      renderType: 'component',
+      render: <GradientBackground />,
     },
   }}
 />
