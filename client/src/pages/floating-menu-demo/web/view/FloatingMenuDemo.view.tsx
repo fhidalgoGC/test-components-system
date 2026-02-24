@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { FloatingMenu, FloatingMenuItem, MenuPosition } from '@/lib/ui-library/components/FloatingMenu';
+import { FloatingMenu, useFloatingMenu } from '@/lib/ui-library/components/FloatingMenu';
+import type { FloatingMenuItem, MenuPosition } from '@/lib/ui-library/components/FloatingMenu';
 
 interface LanguageData {
   name: string;
@@ -64,10 +65,18 @@ export const FloatingMenuDemoWebView = () => {
   const [isOpen1, setIsOpen1] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
+  const [isOpen4, setIsOpen4] = useState(false);
+  const [isOpen5, setIsOpen5] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<MenuPosition>('bottom-start');
   const [showHeader, setShowHeader] = useState(true);
   const [showFooter, setShowFooter] = useState(true);
+
+  const selectableController = useFloatingMenu();
+  const defaultSelectedController = useFloatingMenu();
+
+  const [selectionInfo, setSelectionInfo] = useState<string | null>(null);
+  const [defaultSelectionInfo, setDefaultSelectionInfo] = useState<string | null>('es');
 
   const handleLanguageSelect = (item: FloatingMenuItem<LanguageData>) => {
     setSelectedLanguage(item.data || null);
@@ -122,6 +131,113 @@ export const FloatingMenuDemoWebView = () => {
               Idioma seleccionado: <strong>{selectedLanguage.name}</strong> ({selectedLanguage.code})
             </p>
           )}
+        </section>
+
+        <section className="bg-white rounded-lg border p-6">
+          <h2 className="text-xl font-semibold mb-4">Ejemplo: Selección Interna (selectable)</h2>
+          <p className="text-gray-600 mb-4">
+            Con <code className="bg-gray-100 px-1 rounded">selectable=true</code>, el menú marca visualmente el item seleccionado. 
+            Usa <code className="bg-gray-100 px-1 rounded">useFloatingMenu()</code> para obtener el controller y limpiar la selección.
+          </p>
+          
+          <div className="flex items-center gap-4 mb-4">
+            <div className="relative inline-block">
+              <button
+                onClick={() => setIsOpen4(!isOpen4)}
+                className="px-4 py-2 bg-indigo-500 text-white hover:bg-indigo-600 rounded-lg"
+                data-testid="button-selectable-trigger"
+              >
+                Abrir (selectable)
+              </button>
+              
+              <FloatingMenu
+                items={languageItems}
+                isOpen={isOpen4}
+                selectable={true}
+                controller={selectableController}
+                onClose={() => setIsOpen4(false)}
+                onSelectionChange={(id, item) => {
+                  setSelectionInfo(id);
+                }}
+                onItemClick={() => setIsOpen4(false)}
+                layout={{
+                  widthMode: 'fixed',
+                  width: 220,
+                }}
+              />
+            </div>
+
+            <button
+              onClick={() => {
+                selectableController.clearSelection();
+                setSelectionInfo(null);
+              }}
+              className="px-4 py-2 bg-red-100 text-red-600 hover:bg-red-200 rounded-lg text-sm"
+              data-testid="button-clear-selection"
+            >
+              Limpiar selección
+            </button>
+          </div>
+
+          {selectionInfo && (
+            <p className="text-sm text-gray-500" data-testid="text-selection-info">
+              Item seleccionado internamente: <strong>{selectionInfo}</strong>
+            </p>
+          )}
+          {!selectionInfo && (
+            <p className="text-sm text-gray-400">Ningún item seleccionado</p>
+          )}
+        </section>
+
+        <section className="bg-white rounded-lg border p-6">
+          <h2 className="text-xl font-semibold mb-4">Ejemplo: Selección con defaultSelectedId</h2>
+          <p className="text-gray-600 mb-4">
+            Con <code className="bg-gray-100 px-1 rounded">defaultSelectedId="es"</code>, el menú inicia con "Español" ya seleccionado.
+          </p>
+          
+          <div className="flex items-center gap-4 mb-4">
+            <div className="relative inline-block">
+              <button
+                onClick={() => setIsOpen5(!isOpen5)}
+                className="px-4 py-2 bg-teal-500 text-white hover:bg-teal-600 rounded-lg"
+                data-testid="button-default-selected-trigger"
+              >
+                Abrir (default: Español)
+              </button>
+              
+              <FloatingMenu
+                items={languageItems}
+                isOpen={isOpen5}
+                selectable={true}
+                defaultSelectedId="es"
+                controller={defaultSelectedController}
+                onClose={() => setIsOpen5(false)}
+                onSelectionChange={(id) => {
+                  setDefaultSelectionInfo(id);
+                }}
+                onItemClick={() => setIsOpen5(false)}
+                layout={{
+                  widthMode: 'fixed',
+                  width: 220,
+                }}
+              />
+            </div>
+
+            <button
+              onClick={() => {
+                defaultSelectedController.clearSelection();
+                setDefaultSelectionInfo(null);
+              }}
+              className="px-4 py-2 bg-red-100 text-red-600 hover:bg-red-200 rounded-lg text-sm"
+              data-testid="button-clear-default-selection"
+            >
+              Resetear selección
+            </button>
+          </div>
+
+          <p className="text-sm text-gray-500" data-testid="text-default-selection-info">
+            Item seleccionado: <strong>{defaultSelectionInfo ?? 'ninguno'}</strong>
+          </p>
         </section>
 
         <section className="bg-white rounded-lg border p-6">
@@ -316,6 +432,36 @@ export const FloatingMenuDemoWebView = () => {
                   <td className="py-2 px-3">boolean</td>
                   <td className="py-2 px-3">true</td>
                   <td className="py-2 px-3 font-sans">Controla visibilidad</td>
+                </tr>
+                <tr className="border-b bg-blue-50">
+                  <td className="py-2 px-3">selectable</td>
+                  <td className="py-2 px-3">boolean</td>
+                  <td className="py-2 px-3">false</td>
+                  <td className="py-2 px-3 font-sans">Activa la funcionalidad de selección interna</td>
+                </tr>
+                <tr className="border-b bg-blue-50">
+                  <td className="py-2 px-3">defaultSelectedId</td>
+                  <td className="py-2 px-3">string</td>
+                  <td className="py-2 px-3">-</td>
+                  <td className="py-2 px-3 font-sans">ID del item seleccionado por defecto al iniciar</td>
+                </tr>
+                <tr className="border-b bg-blue-50">
+                  <td className="py-2 px-3">selectionStyle</td>
+                  <td className="py-2 px-3">FloatingMenuSelectionStyle</td>
+                  <td className="py-2 px-3">-</td>
+                  <td className="py-2 px-3 font-sans">Estilo visual personalizado para el item seleccionado</td>
+                </tr>
+                <tr className="border-b bg-blue-50">
+                  <td className="py-2 px-3">controller</td>
+                  <td className="py-2 px-3">FloatingMenuController</td>
+                  <td className="py-2 px-3">-</td>
+                  <td className="py-2 px-3 font-sans">Controller (useFloatingMenu) para getSelectedId y clearSelection</td>
+                </tr>
+                <tr className="border-b bg-blue-50">
+                  <td className="py-2 px-3">onSelectionChange</td>
+                  <td className="py-2 px-3">(id, item) =&gt; void</td>
+                  <td className="py-2 px-3">-</td>
+                  <td className="py-2 px-3 font-sans">Callback cuando cambia la selección</td>
                 </tr>
                 <tr className="border-b">
                   <td className="py-2 px-3">onItemClick</td>

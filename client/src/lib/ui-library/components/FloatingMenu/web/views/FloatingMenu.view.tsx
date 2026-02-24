@@ -1,4 +1,6 @@
-import type { FloatingMenuProps, FloatingMenuItem, FloatingMenuLayout, FloatingMenuItemConfig, FloatingMenuSectionConfig, MenuPosition } from '../types';
+import { useState, useRef, useSyncExternalStore } from 'react';
+import type { FloatingMenuProps, FloatingMenuItem, FloatingMenuLayout, FloatingMenuItemConfig, FloatingMenuSectionConfig, FloatingMenuSelectionStyle, MenuPosition } from '../types';
+import type { InternalFloatingMenuController } from '../hooks/useFloatingMenu.hook';
 import styles from '../css/FloatingMenu.module.css';
 
 const getLayoutStyles = (layout?: FloatingMenuLayout): React.CSSProperties => {
@@ -144,6 +146,29 @@ const getItemStyles = (itemConfig?: FloatingMenuItemConfig): React.CSSProperties
   return style;
 };
 
+const getSelectionStyleObj = (selectionStyle?: FloatingMenuSelectionStyle): React.CSSProperties => {
+  if (!selectionStyle) return {};
+  const style: React.CSSProperties = {};
+  if (selectionStyle.border) style.border = selectionStyle.border;
+  if (selectionStyle.borderRadius) style.borderRadius = selectionStyle.borderRadius;
+  if (selectionStyle.backgroundColor) style.backgroundColor = selectionStyle.backgroundColor;
+  if (selectionStyle.boxShadow) style.boxShadow = selectionStyle.boxShadow;
+  if (selectionStyle.outline) style.outline = selectionStyle.outline;
+  if (selectionStyle.custom) Object.assign(style, selectionStyle.custom);
+  return style;
+};
+
+const useControllerSubscription = (controller?: InternalFloatingMenuController) => {
+  const selectedId = useSyncExternalStore(
+    (callback) => {
+      if (!controller?._subscribe) return () => {};
+      return controller._subscribe(callback);
+    },
+    () => controller?._getSelectedId?.() ?? null
+  );
+  return selectedId;
+};
+
 export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   const { 
     items, 
@@ -156,18 +181,54 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
     scroll = 'auto',
     isOpen = true,
     showBackdrop = true,
+    selectable = false,
+    defaultSelectedId,
+    selectionStyle,
+    onSelectionChange,
     onItemClick,
     onClose,
+    controller,
     className = '',
     itemClassName = '',
     headerClassName = '',
-    footerClassName = ''
+    footerClassName = '',
+    selectedClassName = ''
   } = props;
 
-  if (!isOpen) return null;
+  const internalController = controller as InternalFloatingMenuController | undefined;
+
+  const defaultIdRef = useRef(defaultSelectedId);
+
+  if (selectable && internalController && defaultIdRef.current && internalController._getSelectedId() === null) {
+    internalController._setSelectedId(defaultIdRef.current);
+  }
+
+  const [localSelectedId, setLocalSelectedId] = useState<string | null>(
+    selectable && defaultSelectedId ? defaultSelectedId : null
+  );
+
+  const controllerSelectedId = useControllerSubscription(
+    selectable ? internalController : undefined
+  );
+
+  const currentSelectedId = selectable
+    ? (internalController ? controllerSelectedId : localSelectedId)
+    : null;
 
   const handleItemClick = (item: FloatingMenuItem<T>, index: number) => {
     if (item.disabled) return;
+
+    if (selectable) {
+      const newSelectedId = item.id;
+      if (internalController) {
+        internalController._setSelectedId(newSelectedId);
+      } else {
+        setLocalSelectedId(newSelectedId);
+      }
+      const selectedItem = items.find((i) => i.id === newSelectedId) || null;
+      onSelectionChange?.(newSelectedId, selectedItem);
+    }
+
     onItemClick?.(item, index);
   };
 
@@ -175,10 +236,13 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
     onClose?.();
   };
 
+  if (!isOpen) return null;
+
   const layoutStyles = getLayoutStyles(layout);
   const positionStyles = getPositionStyles(position, offset);
   const itemStyles = getItemStyles(itemConfig);
   const scrollClass = scroll === 'auto' ? styles.scrollAuto : styles.scrollNone;
+  const selectedStyleObj = getSelectionStyleObj(selectionStyle);
   
   const showHeader = header?.show !== false && header?.renderType === 'component' && header?.render;
   const showFooter = footer?.show !== false && footer?.renderType === 'component' && footer?.render;
@@ -212,17 +276,24 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
         
         <div className={`${styles.body} ${scrollClass}`} data-testid="floatingmenu-body">
           <div className={styles.itemsContainer}>
-            {items.map((item, index) => (
-              <div
-                key={item.id}
-                className={`${styles.menuItem} ${item.disabled ? styles.disabled : ''} ${itemClassName}`}
-                style={itemStyles}
-                onClick={() => handleItemClick(item, index)}
-                data-testid={`floatingmenu-item-${item.id}`}
-              >
-                {item.render(item)}
-              </div>
-            ))}
+            {items.map((item, index) => {
+              const isSelected = selectable && currentSelectedId === item.id;
+              return (
+                <div
+                  key={item.id}
+                  className={`${styles.menuItem} ${item.disabled ? styles.disabled : ''} ${isSelected ? `${styles.selected} ${selectedClassName}` : ''} ${itemClassName}`}
+                  style={{
+                    ...itemStyles,
+                    ...(isSelected ? selectedStyleObj : {}),
+                  }}
+                  onClick={() => handleItemClick(item, index)}
+                  data-testid={`floatingmenu-item-${item.id}`}
+                  data-selected={isSelected || undefined}
+                >
+                  {item.render(item)}
+                </div>
+              );
+            })}
           </div>
         </div>
         

@@ -60,6 +60,15 @@
   background-color: #e5e7eb;
 }
 
+.menuItem.selected {
+  background-color: #eff6ff;
+  border-left: 3px solid #3b82f6;
+}
+
+.menuItem.selected:hover {
+  background-color: #dbeafe;
+}
+
 .menuItem.disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -85,4 +94,13 @@
 
 .dark .menuItem:active {
   background-color: #4b5563;
+}
+
+.dark .menuItem.selected {
+  background-color: #1e3a5f;
+  border-left: 3px solid #60a5fa;
+}
+
+.dark .menuItem.selected:hover {
+  background-color: #1e40af;
 }

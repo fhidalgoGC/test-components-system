@@ -1,10 +1,51 @@
-import { useState } from 'react';
-import type { FloatingMenuProps } from '../types';
+import { useRef } from 'react';
+import type { FloatingMenuController } from '../types';
 
-export const useFloatingMenu = (props: FloatingMenuProps) => {
-  const [state, setState] = useState({});
+interface InternalFloatingMenuController extends FloatingMenuController {
+  _subscribe: (callback: () => void) => () => void;
+  _setSelectedId: (id: string | null) => void;
+  _getSelectedId: () => string | null;
+}
 
-  return {
-    state,
-  };
+export const useFloatingMenu = (): FloatingMenuController => {
+  const storeRef = useRef<{
+    selectedId: string | null;
+    subscribers: Set<() => void>;
+  }>({
+    selectedId: null,
+    subscribers: new Set(),
+  });
+
+  const controllerRef = useRef<InternalFloatingMenuController | null>(null);
+
+  if (!controllerRef.current) {
+    const store = storeRef.current;
+
+    const notifySubscribers = () => {
+      store.subscribers.forEach((cb) => cb());
+    };
+
+    controllerRef.current = {
+      getSelectedId: () => store.selectedId,
+      clearSelection: () => {
+        store.selectedId = null;
+        notifySubscribers();
+      },
+      _subscribe: (callback: () => void) => {
+        store.subscribers.add(callback);
+        return () => {
+          store.subscribers.delete(callback);
+        };
+      },
+      _setSelectedId: (id: string | null) => {
+        store.selectedId = id;
+        notifySubscribers();
+      },
+      _getSelectedId: () => store.selectedId,
+    };
+  }
+
+  return controllerRef.current as FloatingMenuController;
 };
+
+export type { InternalFloatingMenuController };

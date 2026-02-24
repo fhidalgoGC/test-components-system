@@ -53,6 +53,20 @@ export interface FloatingMenuItem<T = unknown> {
   disabled?: boolean;
 }
 
+export interface FloatingMenuSelectionStyle {
+  border?: string;
+  borderRadius?: string;
+  backgroundColor?: string;
+  boxShadow?: string;
+  outline?: string;
+  custom?: React.CSSProperties;
+}
+
+export interface FloatingMenuController {
+  getSelectedId: () => string | null;
+  clearSelection: () => void;
+}
+
 export interface FloatingMenuProps<T = unknown> {
   items: FloatingMenuItem<T>[];
   layout?: FloatingMenuLayout;
@@ -64,10 +78,16 @@ export interface FloatingMenuProps<T = unknown> {
   scroll?: ScrollMode;
   isOpen?: boolean;
   showBackdrop?: boolean;
+  selectable?: boolean;
+  defaultSelectedId?: string;
+  selectionStyle?: FloatingMenuSelectionStyle;
+  onSelectionChange?: (selectedId: string | null, item: FloatingMenuItem<T> | null) => void;
   onItemClick?: (item: FloatingMenuItem<T>, index: number) => void;
   onClose?: () => void;
+  controller?: FloatingMenuController;
   className?: string;
   itemClassName?: string;
   headerClassName?: string;
   footerClassName?: string;
+  selectedClassName?: string;
 }

@@ -1,6 +1,6 @@
 # FloatingMenu Component
 
-Componente de menú flotante con posicionamiento configurable, secciones (header, body, footer), y soporte para items con render functions personalizadas.
+Componente de menú flotante con posicionamiento configurable, secciones (header, body, footer), selección interna de items, y soporte para items con render functions personalizadas.
 
 ## Features
 
@@ -11,6 +11,7 @@ Componente de menú flotante con posicionamiento configurable, secciones (header
 - **Layout system**: Control de dimensiones (width, height, min/max)
 - **Scroll modes**: Auto o none para el body
 - **Backdrop opcional**: Click fuera para cerrar
+- **Selección interna**: Estado interno de selección con `selectable`, `defaultSelectedId`, `selectionStyle` y `clearSelection`
 
 ## Platform Support
 
@@ -23,8 +24,8 @@ Componente de menú flotante con posicionamiento configurable, secciones (header
 ## Installation
 
 ```tsx
-import { FloatingMenu } from '@/lib/ui-library/components/FloatingMenu';
-import type { FloatingMenuItem, MenuPosition } from '@/lib/ui-library/components/FloatingMenu';
+import { FloatingMenu, useFloatingMenu } from '@/lib/ui-library/components/FloatingMenu';
+import type { FloatingMenuItem, MenuPosition, FloatingMenuController } from '@/lib/ui-library/components/FloatingMenu';
 ```
 
 ## Basic Usage
@@ -62,6 +63,65 @@ const [isOpen, setIsOpen] = useState(false);
 </div>
 ```
 
+## Selection Feature
+
+La selección interna se activa con `selectable={true}`. Cuando está desactivado (por defecto), el menú funciona sin estado de selección.
+
+### Sin controller (estado local)
+
+```tsx
+<FloatingMenu
+  items={items}
+  isOpen={isOpen}
+  selectable={true}
+  defaultSelectedId="option-1"
+  onSelectionChange={(id, item) => {
+    console.log('Seleccionado:', id, item);
+  }}
+  onClose={() => setIsOpen(false)}
+/>
+```
+
+### Con controller (useFloatingMenu)
+
+```tsx
+const controller = useFloatingMenu();
+
+<FloatingMenu
+  items={items}
+  isOpen={isOpen}
+  selectable={true}
+  defaultSelectedId="option-1"
+  controller={controller}
+  onSelectionChange={(id, item) => {
+    console.log('Seleccionado:', id, item);
+  }}
+  onClose={() => setIsOpen(false)}
+/>
+
+// Limpiar selección externamente
+<button onClick={() => controller.clearSelection()}>Reset</button>
+
+// Consultar selección actual
+controller.getSelectedId(); // => 'option-1' | null
+```
+
+### Con estilo personalizado
+
+```tsx
+<FloatingMenu
+  items={items}
+  isOpen={isOpen}
+  selectable={true}
+  selectionStyle={{
+    backgroundColor: '#e0f2fe',
+    border: '2px solid #0284c7',
+    borderRadius: '4px',
+  }}
+  onClose={() => setIsOpen(false)}
+/>
+```
+
 ## Props
 
 ### FloatingMenuProps
@@ -77,12 +137,38 @@ const [isOpen, setIsOpen] = useState(false);
 | `scroll` | `'auto' \| 'none'` | `'auto'` | Modo de scroll del body |
 | `isOpen` | `boolean` | `true` | Controla visibilidad |
 | `showBackdrop` | `boolean` | `true` | Muestra backdrop para cerrar |
+| `selectable` | `boolean` | `false` | Activa la funcionalidad de selección interna |
+| `defaultSelectedId` | `string` | - | ID del item seleccionado por defecto al iniciar |
+| `selectionStyle` | `FloatingMenuSelectionStyle` | - | Estilo visual personalizado para el item seleccionado |
+| `controller` | `FloatingMenuController` | - | Controller via `useFloatingMenu()` para getSelectedId y clearSelection |
+| `onSelectionChange` | `(id, item) => void` | - | Callback cuando cambia la selección |
 | `onItemClick` | `(item, index) => void` | - | Callback al click en item |
 | `onClose` | `() => void` | - | Callback al cerrar (click fuera) |
 | `className` | `string` | - | Clase CSS del contenedor |
 | `itemClassName` | `string` | - | Clase CSS de cada item |
 | `headerClassName` | `string` | - | Clase CSS del header |
 | `footerClassName` | `string` | - | Clase CSS del footer |
+| `selectedClassName` | `string` | - | Clase CSS adicional del item seleccionado |
+
+### FloatingMenuController (useFloatingMenu)
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `getSelectedId()` | `string \| null` | Retorna el ID del item seleccionado actualmente |
+| `clearSelection()` | `void` | Limpia la selección (pone selectedId en null) |
+
+### FloatingMenuSelectionStyle
+
+```typescript
+interface FloatingMenuSelectionStyle {
+  border?: string;
+  borderRadius?: string;
+  backgroundColor?: string;
+  boxShadow?: string;
+  outline?: string;
+  custom?: React.CSSProperties;
+}
+```
 
 ### MenuPosition
 
@@ -142,6 +228,16 @@ interface FloatingMenuLayout {
 }
 ```
 
+## Selection Behavior
+
+| Escenario | Comportamiento |
+|-----------|----------------|
+| `selectable=false` (default) | Sin estado de selección, funciona como antes |
+| `selectable=true` sin controller | Estado local interno, click selecciona items |
+| `selectable=true` con controller | Estado gestionado por controller, expone `clearSelection` y `getSelectedId` |
+| `defaultSelectedId` | Item inicial seleccionado al montar el componente |
+| `clearSelection()` | Resetea la selección a null |
+
 ## Examples
 
 ### With Position
@@ -193,38 +289,27 @@ interface FloatingMenuLayout {
 />
 ```
 
-### Language Selector
+### Selectable Language Selector
 
 ```tsx
-interface LanguageData {
-  name: string;
-  code: string;
-  flag: string;
-}
-
-const languages: FloatingMenuItem<LanguageData>[] = [
-  {
-    id: 'en',
-    data: { name: 'English', code: 'en', flag: '🇺🇸' },
-    render: (item) => (
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">{item.data?.flag}</span>
-        <span>{item.data?.name}</span>
-      </div>
-    ),
-  },
-  // ... more languages
-];
+const controller = useFloatingMenu();
 
 <FloatingMenu
   items={languages}
   isOpen={isOpen}
+  selectable={true}
+  defaultSelectedId="es"
+  controller={controller}
   layout={{ widthMode: 'fixed', width: 200 }}
-  onItemClick={(item) => {
-    setSelectedLanguage(item.data);
-    setIsOpen(false);
+  onSelectionChange={(id, item) => {
+    console.log('Selected:', id, item?.data);
   }}
+  onItemClick={() => setIsOpen(false)}
 />
+
+<button onClick={() => controller.clearSelection()}>
+  Limpiar selección
+</button>
 ```
 
 ## Folder Structure
@@ -236,6 +321,8 @@ FloatingMenu/
 │   │   └── FloatingMenu.type.ts
 │   ├── views/
 │   │   └── FloatingMenu.view.tsx
+│   ├── hooks/
+│   │   └── useFloatingMenu.hook.ts
 │   ├── css/
 │   │   └── FloatingMenu.module.css
 │   └── index.ts

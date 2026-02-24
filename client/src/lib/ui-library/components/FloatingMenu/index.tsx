@@ -13,12 +13,16 @@ export const FloatingMenu = <T,>(props: FloatingMenuProps<T>) => {
   return <FloatingMenuWeb {...props} />;
 };
 
+export { useFloatingMenu } from './web';
+
 export type { 
   FloatingMenuProps, 
   FloatingMenuItem, 
   FloatingMenuLayout, 
   FloatingMenuItemConfig,
   FloatingMenuSectionConfig,
+  FloatingMenuSelectionStyle,
+  FloatingMenuController,
   MenuPosition,
   WidthMode,
   HeightMode,
