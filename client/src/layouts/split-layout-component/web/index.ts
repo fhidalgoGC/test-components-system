@@ -1,10 +1,13 @@
 export { SplitLayoutView as SplitLayout } from './views';
 export type {
   SplitLayoutProps,
+  LayoutConfig,
   PanelConfig,
-  PanelBackground,
-  MainSide,
+  PanelAlign,
+  PanelScroll,
+  PanelBackgroundImage,
+  SizeMode,
   VerticalAlign,
   HorizontalAlign,
-  SpacingToken,
+  ComponentMainAlign,
 } from './types';

@@ -1,5 +1,32 @@
 import { useSplitLayout } from '../hooks/useSplitLayout.hook';
-import type { SplitLayoutProps } from '../types';
+import type { SplitLayoutProps, PanelBackgroundImage } from '../types';
+import styles from '../css/SplitLayout.module.css';
+
+function PanelBackground({ config }: { config: PanelBackgroundImage }) {
+  return (
+    <>
+      <img
+        src={config.src}
+        alt=""
+        aria-hidden="true"
+        className={styles.bgImage}
+        style={{
+          opacity: config.opacity ?? 1,
+          objectFit: config.objectFit || 'cover',
+          objectPosition: config.objectPosition || 'center',
+        }}
+        data-testid="split-panel-bg-image"
+      />
+      {config.overlayColor && (
+        <div
+          className={styles.bgOverlay}
+          style={{ backgroundColor: config.overlayColor }}
+          data-testid="split-panel-bg-overlay"
+        />
+      )}
+    </>
+  );
+}
 
 export function SplitLayoutView(props: SplitLayoutProps) {
   const {
@@ -27,6 +54,9 @@ export function SplitLayoutView(props: SplitLayoutProps) {
         data-testid="split-panel-main"
         data-split-main=""
       >
+        {mainPanel.backgroundImage && (
+          <PanelBackground config={mainPanel.backgroundImage} />
+        )}
         <div className={mainInnerClasses}>
           {mainPanel.render}
         </div>
@@ -38,6 +68,9 @@ export function SplitLayoutView(props: SplitLayoutProps) {
         data-testid="split-panel-secondary"
         data-split-secondary=""
       >
+        {secondaryPanel.backgroundImage && (
+          <PanelBackground config={secondaryPanel.backgroundImage} />
+        )}
         <div className={secondaryInnerClasses}>
           {secondaryPanel.render}
         </div>

@@ -26,6 +26,14 @@ export interface PanelScroll {
   horizontal?: boolean;
 }
 
+export interface PanelBackgroundImage {
+  src: string;
+  opacity?: number;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none';
+  objectPosition?: string;
+  overlayColor?: string;
+}
+
 export interface PanelConfig {
   renderType?: 'component';
   render: ReactNode;
@@ -37,6 +45,7 @@ export interface PanelConfig {
   minHeight?: number;
   align?: PanelAlign;
   scroll?: PanelScroll;
+  backgroundImage?: PanelBackgroundImage;
 }
 
 export interface SplitLayoutProps {

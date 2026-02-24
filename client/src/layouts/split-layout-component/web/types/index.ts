@@ -4,7 +4,9 @@ export type {
   PanelConfig,
   PanelAlign,
   PanelScroll,
+  PanelBackgroundImage,
   SizeMode,
   VerticalAlign,
   HorizontalAlign,
+  ComponentMainAlign,
 } from './SplitLayout.types';

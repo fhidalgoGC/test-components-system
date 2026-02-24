@@ -13,6 +13,7 @@ Layout de dos paneles (split-screen) responsivo. Muestra dos paneles lado a lado
 - **SizeMode flexible**: `full`, `auto`, `fixed`, `percentage` para width y height a nivel layout y panel
 - **Alineacion**: Vertical (top/middle/bottom) y horizontal (left/center/right) por panel
 - **Scroll configurable**: Control independiente de scroll vertical y horizontal por panel
+- **Imagen de fondo por panel**: Cada panel puede tener su propia imagen de fondo con opacidad, objectFit, objectPosition y overlay de color
 - **Responsive con collapse**: El panel secundario se oculta con CSS media query a 768px
 
 ## File Structure
@@ -69,6 +70,17 @@ SplitLayout/
 | `minHeight` | `number` | `undefined` | Altura minima en px |
 | `align` | `PanelAlign` | `{ vertical: 'middle', horizontal: 'center' }` | Alineacion del contenido |
 | `scroll` | `PanelScroll` | `{ vertical: true, horizontal: false }` | Control de scroll |
+| `backgroundImage` | `PanelBackgroundImage` | `undefined` | Imagen de fondo del panel |
+
+### PanelBackgroundImage
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `src` | `string` | **Required** | URL o ruta de la imagen |
+| `opacity` | `number` | `1` | Opacidad de la imagen (0 a 1) |
+| `objectFit` | `'cover' \| 'contain' \| 'fill' \| 'none'` | `'cover'` | Modo de ajuste de la imagen |
+| `objectPosition` | `string` | `'center'` | Posicion de la imagen (ej: 'top left') |
+| `overlayColor` | `string` | `undefined` | Color de capa superpuesta (ej: 'rgba(0,0,0,0.5)') |
 
 ### PanelAlign
 
@@ -110,6 +122,32 @@ import { SplitLayout } from '@/layouts/split-layout-component';
     render: <HeroContent />,
     align: { vertical: 'bottom', horizontal: 'left' },
     scroll: { vertical: false },
+  }}
+/>
+```
+
+### Con imagen de fondo
+
+```tsx
+<SplitLayout
+  layout={{ heightMode: 'fixed', height: 500 }}
+  main={{
+    render: <LoginForm />,
+    widthMode: 'percentage',
+    width: 45,
+    backgroundImage: {
+      src: '/images/hero.jpg',
+      opacity: 0.8,
+      overlayColor: 'rgba(0, 0, 0, 0.5)',
+    },
+  }}
+  secondary={{
+    render: <HeroContent />,
+    backgroundImage: {
+      src: '/images/landscape.jpg',
+      objectFit: 'cover',
+      objectPosition: 'top center',
+    },
   }}
 />
 ```

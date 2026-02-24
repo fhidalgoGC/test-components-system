@@ -171,6 +171,59 @@ export function SplitLayoutPropsTab() {
               <td><code>{`{ vertical: true, horizontal: false }`}</code></td>
               <td>Control de scroll por eje</td>
             </tr>
+            <tr>
+              <td><code>backgroundImage</code></td>
+              <td><code>PanelBackgroundImage</code></td>
+              <td><code>undefined</code></td>
+              <td>Imagen de fondo del panel con opciones de opacidad, ajuste y overlay</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className={styles.propsSubtitle}>PanelBackgroundImage</h3>
+      <p className={styles.propsDescription}>Configuracion de imagen de fondo para cada panel.</p>
+      <div className={styles.propsTableWrapper}>
+        <table className={styles.propsTable}>
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Tipo</th>
+              <th>Default</th>
+              <th>Descripcion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>src</code></td>
+              <td><code>string</code></td>
+              <td><strong>Required</strong></td>
+              <td>URL o ruta de la imagen</td>
+            </tr>
+            <tr>
+              <td><code>opacity</code></td>
+              <td><code>number</code></td>
+              <td><code>1</code></td>
+              <td>Opacidad de la imagen (0 a 1)</td>
+            </tr>
+            <tr>
+              <td><code>objectFit</code></td>
+              <td><code>'cover' | 'contain' | 'fill' | 'none'</code></td>
+              <td><code>'cover'</code></td>
+              <td>Modo de ajuste de la imagen dentro del panel</td>
+            </tr>
+            <tr>
+              <td><code>objectPosition</code></td>
+              <td><code>string</code></td>
+              <td><code>'center'</code></td>
+              <td>Posicion de la imagen (ej: 'top left', 'center')</td>
+            </tr>
+            <tr>
+              <td><code>overlayColor</code></td>
+              <td><code>string</code></td>
+              <td><code>undefined</code></td>
+              <td>Color de capa superpuesta sobre la imagen (ej: 'rgba(0,0,0,0.5)')</td>
+            </tr>
           </tbody>
         </table>
       </div>
