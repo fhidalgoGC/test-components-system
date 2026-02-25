@@ -3,6 +3,7 @@ import { SelectableExample } from './SelectableExample';
 import { DefaultSelectedExample } from './DefaultSelectedExample';
 import { PositionExample } from './PositionExample';
 import { SectionsExample } from './SectionsExample';
+import { OrderableExample } from './OrderableExample';
 
 export function FloatingMenuExamplesTab() {
   return (
@@ -10,6 +11,7 @@ export function FloatingMenuExamplesTab() {
       <LanguageSelectorExample />
       <SelectableExample />
       <DefaultSelectedExample />
+      <OrderableExample />
       <PositionExample />
       <SectionsExample />
     </>

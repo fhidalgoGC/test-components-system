@@ -119,6 +119,24 @@ export function FloatingMenuPropsTab() {
               <td><code>undefined</code></td>
               <td>Callback al cerrar el menú</td>
             </tr>
+            <tr>
+              <td><code>orderable</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Activa reordenamiento por drag & drop</td>
+            </tr>
+            <tr>
+              <td><code>onOrderChange</code></td>
+              <td><code>(items: FloatingMenuItem&lt;T&gt;[]) =&gt; void</code></td>
+              <td><code>undefined</code></td>
+              <td>Callback con el nuevo array de items tras reordenar</td>
+            </tr>
+            <tr>
+              <td><code>dragHandleClassName</code></td>
+              <td><code>string</code></td>
+              <td><code>undefined</code></td>
+              <td>Clase CSS adicional para el icono de drag handle</td>
+            </tr>
           </tbody>
         </table>
       </div>

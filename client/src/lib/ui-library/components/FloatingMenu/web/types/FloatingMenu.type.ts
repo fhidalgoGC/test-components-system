@@ -81,6 +81,8 @@ export interface FloatingMenuProps<T = unknown> {
   selectable?: boolean;
   defaultSelectedId?: string;
   selectionStyle?: FloatingMenuSelectionStyle;
+  orderable?: boolean;
+  onOrderChange?: (items: FloatingMenuItem<T>[]) => void;
   onSelectionChange?: (selectedId: string | null, item: FloatingMenuItem<T> | null) => void;
   onItemClick?: (item: FloatingMenuItem<T>, index: number) => void;
   onClose?: () => void;
@@ -90,4 +92,5 @@ export interface FloatingMenuProps<T = unknown> {
   headerClassName?: string;
   footerClassName?: string;
   selectedClassName?: string;
+  dragHandleClassName?: string;
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, useSyncExternalStore } from 'react';
+import { useState, useRef, useCallback, useEffect, useSyncExternalStore } from 'react';
 import type { FloatingMenuProps, FloatingMenuItem, FloatingMenuLayout, FloatingMenuItemConfig, FloatingMenuSectionConfig, FloatingMenuSelectionStyle, MenuPosition } from '../types';
 import type { InternalFloatingMenuController } from '../hooks/useFloatingMenu.hook';
 import styles from '../css/FloatingMenu.module.css';
@@ -169,6 +169,24 @@ const useControllerSubscription = (controller?: InternalFloatingMenuController) 
   return selectedId;
 };
 
+function DragHandle({ className }: { className?: string }) {
+  return (
+    <div
+      className={`${styles.dragHandle} ${className || ''}`}
+      data-testid="floatingmenu-drag-handle"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="5" cy="3" r="1.5" />
+        <circle cx="11" cy="3" r="1.5" />
+        <circle cx="5" cy="8" r="1.5" />
+        <circle cx="11" cy="8" r="1.5" />
+        <circle cx="5" cy="13" r="1.5" />
+        <circle cx="11" cy="13" r="1.5" />
+      </svg>
+    </div>
+  );
+}
+
 export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   const { 
     items, 
@@ -184,6 +202,8 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
     selectable = false,
     defaultSelectedId,
     selectionStyle,
+    orderable = false,
+    onOrderChange,
     onSelectionChange,
     onItemClick,
     onClose,
@@ -192,7 +212,8 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
     itemClassName = '',
     headerClassName = '',
     footerClassName = '',
-    selectedClassName = ''
+    selectedClassName = '',
+    dragHandleClassName = ''
   } = props;
 
   const internalController = controller as InternalFloatingMenuController | undefined;
@@ -214,6 +235,70 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   const currentSelectedId = selectable
     ? (internalController ? controllerSelectedId : localSelectedId)
     : null;
+
+  const [orderedItems, setOrderedItems] = useState<FloatingMenuItem<T>[] | null>(null);
+  const dragItemIdRef = useRef<string | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  const displayItems = orderable && orderedItems ? orderedItems : items;
+
+  useEffect(() => {
+    if (orderable) {
+      setOrderedItems(null);
+    }
+  }, [items, orderable]);
+
+  const handleDragStart = useCallback((itemId: string, e: React.DragEvent) => {
+    dragItemIdRef.current = itemId;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', itemId);
+    const target = e.currentTarget as HTMLElement;
+    requestAnimationFrame(() => {
+      target.classList.add(styles.dragging);
+    });
+  }, []);
+
+  const handleDragOver = useCallback((index: number, e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(index);
+  }, []);
+
+  const handleDragLeave = useCallback(() => {
+    setDragOverIndex(null);
+  }, []);
+
+  const handleDrop = useCallback((dropIndex: number, e: React.DragEvent) => {
+    e.preventDefault();
+    const draggedId = dragItemIdRef.current;
+    if (draggedId === null) {
+      setDragOverIndex(null);
+      return;
+    }
+
+    const currentItems = orderedItems ? [...orderedItems] : [...items];
+    const fromIndex = currentItems.findIndex((i) => i.id === draggedId);
+    if (fromIndex === -1 || fromIndex === dropIndex) {
+      setDragOverIndex(null);
+      dragItemIdRef.current = null;
+      return;
+    }
+
+    const [movedItem] = currentItems.splice(fromIndex, 1);
+    currentItems.splice(dropIndex, 0, movedItem);
+
+    setOrderedItems(currentItems);
+    setDragOverIndex(null);
+    dragItemIdRef.current = null;
+    onOrderChange?.(currentItems);
+  }, [items, orderedItems, onOrderChange]);
+
+  const handleDragEnd = useCallback((e: React.DragEvent) => {
+    const target = e.currentTarget as HTMLElement;
+    target.classList.remove(styles.dragging);
+    setDragOverIndex(null);
+    dragItemIdRef.current = null;
+  }, []);
 
   const handleItemClick = (item: FloatingMenuItem<T>, index: number) => {
     if (item.disabled) return;
@@ -276,12 +361,14 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
         
         <div className={`${styles.body} ${scrollClass}`} data-testid="floatingmenu-body">
           <div className={styles.itemsContainer}>
-            {items.map((item, index) => {
+            {displayItems.map((item, index) => {
               const isSelected = selectable && currentSelectedId === item.id;
-              return (
+              const isDragOver = orderable && dragOverIndex === index;
+
+              const itemEl = (
                 <div
                   key={item.id}
-                  className={`${styles.menuItem} ${item.disabled ? styles.disabled : ''} ${isSelected ? `${styles.selected} ${selectedClassName}` : ''} ${itemClassName}`}
+                  className={`${orderable ? styles.orderableItem : styles.menuItem} ${item.disabled ? styles.disabled : ''} ${isSelected ? `${styles.selected} ${selectedClassName}` : ''} ${isDragOver ? styles.dragOver : ''} ${itemClassName}`}
                   style={{
                     ...itemStyles,
                     ...(isSelected ? selectedStyleObj : {}),
@@ -289,10 +376,21 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
                   onClick={() => handleItemClick(item, index)}
                   data-testid={`floatingmenu-item-${item.id}`}
                   data-selected={isSelected || undefined}
+                  draggable={orderable}
+                  onDragStart={orderable ? (e) => handleDragStart(item.id, e) : undefined}
+                  onDragOver={orderable ? (e) => handleDragOver(index, e) : undefined}
+                  onDragLeave={orderable ? handleDragLeave : undefined}
+                  onDrop={orderable ? (e) => handleDrop(index, e) : undefined}
+                  onDragEnd={orderable ? handleDragEnd : undefined}
                 >
-                  {item.render(item)}
+                  <div className={orderable ? styles.orderableContent : undefined}>
+                    {item.render(item)}
+                  </div>
+                  {orderable && <DragHandle className={dragHandleClassName} />}
                 </div>
               );
+
+              return itemEl;
             })}
           </div>
         </div>

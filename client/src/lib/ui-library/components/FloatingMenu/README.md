@@ -12,6 +12,7 @@ Componente de menú flotante con posicionamiento configurable, secciones (header
 - **Scroll modes**: Auto o none para el body
 - **Backdrop opcional**: Click fuera para cerrar
 - **Selección interna**: Estado interno de selección con `selectable`, `defaultSelectedId`, `selectionStyle` y `clearSelection`
+- **Reordenable (orderable)**: Drag & drop nativo para reordenar items con `orderable`, `onOrderChange` y drag handle visual
 
 ## Platform Support
 
@@ -149,6 +150,9 @@ controller.getSelectedId(); // => 'option-1' | null
 | `headerClassName` | `string` | - | Clase CSS del header |
 | `footerClassName` | `string` | - | Clase CSS del footer |
 | `selectedClassName` | `string` | - | Clase CSS adicional del item seleccionado |
+| `orderable` | `boolean` | `false` | Activa reordenamiento por drag & drop |
+| `onOrderChange` | `(items: FloatingMenuItem<T>[]) => void` | - | Callback con el nuevo array tras reordenar |
+| `dragHandleClassName` | `string` | - | Clase CSS adicional para el drag handle |
 
 ### FloatingMenuController (useFloatingMenu)
 
@@ -227,6 +231,50 @@ interface FloatingMenuLayout {
   maxHeight?: number | string;
 }
 ```
+
+## Orderable Feature
+
+El reordenamiento se activa con `orderable={true}`. Usa HTML5 Drag and Drop API nativo. Cada item muestra un icono grip a la derecha para iniciar el drag.
+
+```tsx
+const [items, setItems] = useState(initialItems);
+
+<FloatingMenu
+  items={items}
+  isOpen={isOpen}
+  orderable={true}
+  onOrderChange={(newItems) => setItems(newItems)}
+  onClose={() => setIsOpen(false)}
+  layout={{ widthMode: 'fixed', width: 260 }}
+/>
+```
+
+### Orderable + Selectable
+
+Ambas features pueden estar activas simultáneamente:
+
+```tsx
+<FloatingMenu
+  items={items}
+  isOpen={isOpen}
+  orderable={true}
+  selectable={true}
+  controller={controller}
+  onOrderChange={(newItems) => setItems(newItems)}
+  onSelectionChange={(id) => console.log('Selected:', id)}
+  onClose={() => setIsOpen(false)}
+/>
+```
+
+### Orderable Behavior
+
+| Escenario | Comportamiento |
+|-----------|----------------|
+| `orderable=false` (default) | Sin drag & drop, items se renderizan directamente |
+| `orderable=true` | Items muestran grip handle, se pueden arrastrar para reordenar |
+| `onOrderChange` | Callback recibe nuevo array de items (no modifica el original) |
+| `dragHandleClassName` | Clase CSS adicional para personalizar el drag handle |
+| Con scroll | Auto-scroll funciona al arrastrar hacia bordes del contenedor |
 
 ## Selection Behavior
 
