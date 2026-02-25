@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Route, Switch, useLocation, Link } from 'wouter';
 import { AppAuthProvider, useAppAuth, ProtectedRoute, PublicRoute } from '@/lib/ui-library/providers/AppAuthProvider';
 import styles from './AuthStandaloneDemo.module.css';
@@ -66,6 +66,66 @@ function LoginPage() {
   );
 }
 
+function CountdownTimer({ sessionDuration, checkInterval }: { sessionDuration: number; checkInterval: number }) {
+  const { isAuthenticated } = useAppAuth();
+  const [remaining, setRemaining] = useState<number | null>(null);
+  const lastActivityRef = useRef<number>(Date.now());
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setRemaining(null);
+      return;
+    }
+    lastActivityRef.current = Date.now();
+    setRemaining(sessionDuration);
+  }, [isAuthenticated, sessionDuration]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const handler = () => {
+      lastActivityRef.current = Date.now();
+    };
+    window.addEventListener('click', handler);
+    return () => window.removeEventListener('click', handler);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - lastActivityRef.current;
+      const rem = Math.max(0, sessionDuration - elapsed);
+      setRemaining(rem);
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, [isAuthenticated, sessionDuration]);
+
+  if (!isAuthenticated || remaining === null) return null;
+
+  const secs = Math.ceil(remaining / 1000);
+  const pct = (remaining / sessionDuration) * 100;
+  const isWarning = secs <= 5;
+
+  return (
+    <div className={styles.timerContainer}>
+      <div className={styles.timerBarBg}>
+        <div
+          className={`${styles.timerBar} ${isWarning ? styles.timerBarWarning : ''}`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <span className={`${styles.timerText} ${isWarning ? styles.timerTextWarning : ''}`} data-testid="text-timer">
+        Expira en {secs}s
+      </span>
+      <span className={styles.timerDetail} data-testid="text-check-interval">
+        (revisa cada {checkInterval / 1000}s)
+      </span>
+    </div>
+  );
+}
+
 function DashboardPage() {
   const { sessionData, logout } = useAppAuth();
   const [, setLocation] = useLocation();
@@ -90,8 +150,8 @@ function DashboardPage() {
           </div>
           <h1 className={styles.cardTitle}>Dashboard</h1>
           <p className={styles.cardDescription}>
-            Esta ruta usa <code>ProtectedRoute</code>. Si no estás logueado y llegas aquí, el callback
-            <code>onUnauthorized</code> te envía a <code>/login</code>.
+            Ruta protegida con <code>ProtectedRoute</code>. Cada vez que navegas aquí se actualiza
+            <code>lastActivityTime</code>. Si no interactúas, la sesión expira.
           </p>
 
           {data && (
@@ -146,8 +206,7 @@ function ProfilePage() {
           </div>
           <h1 className={styles.cardTitle}>Perfil</h1>
           <p className={styles.cardDescription}>
-            Otra ruta protegida con <code>ProtectedRoute</code>. Navega entre Dashboard y Perfil
-            para ver que la sesión se mantiene.
+            Otra ruta protegida. Navegar aquí actualiza <code>lastActivityTime</code>, renovando la sesión.
           </p>
 
           {data && (
@@ -168,7 +227,7 @@ function ProfilePage() {
   );
 }
 
-function NavBar() {
+function NavBar({ sessionDuration, checkInterval }: { sessionDuration: number; checkInterval: number }) {
   const { isAuthenticated } = useAppAuth();
   const [location] = useLocation();
 
@@ -200,6 +259,7 @@ function NavBar() {
           Perfil
         </Link>
       </nav>
+      <CountdownTimer sessionDuration={sessionDuration} checkInterval={checkInterval} />
       <div className={styles.headerStatus}>
         <span className={`${styles.statusDot} ${isAuthenticated ? styles.statusDotGreen : styles.statusDotGray}`} />
         <span className={styles.headerStatusText} data-testid="text-standalone-status">
@@ -210,10 +270,10 @@ function NavBar() {
   );
 }
 
-function AuthApp() {
+function AuthApp({ sessionDuration, checkInterval }: { sessionDuration: number; checkInterval: number }) {
   return (
     <div className={styles.container}>
-      <NavBar />
+      <NavBar sessionDuration={sessionDuration} checkInterval={checkInterval} />
       <div className={styles.content}>
         <Switch>
           <Route path={`${BASE}/login`} component={LoginPage} />
@@ -229,9 +289,61 @@ function AuthApp() {
 }
 
 export default function AuthStandaloneDemo() {
+  const [durationSecs, setDurationSecs] = useState(15);
+  const [intervalSecs, setIntervalSecs] = useState(2);
+  const [appliedDuration, setAppliedDuration] = useState(15000);
+  const [appliedInterval, setAppliedInterval] = useState(2000);
+  const [providerKey, setProviderKey] = useState(0);
+
+  const handleApply = () => {
+    setAppliedDuration(durationSecs * 1000);
+    setAppliedInterval(intervalSecs * 1000);
+    setProviderKey(k => k + 1);
+  };
+
   return (
-    <AppAuthProvider>
-      <AuthApp />
-    </AppAuthProvider>
+    <div>
+      <div className={styles.configBar}>
+        <span className={styles.configLabel}>Configuración del Provider:</span>
+        <div className={styles.configField}>
+          <label className={styles.configFieldLabel}>Expiración (seg)</label>
+          <input
+            type="number"
+            min={3}
+            max={3600}
+            className={styles.configInput}
+            value={durationSecs}
+            onChange={(e) => setDurationSecs(Number(e.target.value))}
+            data-testid="input-session-duration"
+          />
+        </div>
+        <div className={styles.configField}>
+          <label className={styles.configFieldLabel}>Intervalo revisión (seg)</label>
+          <input
+            type="number"
+            min={1}
+            max={60}
+            className={styles.configInput}
+            value={intervalSecs}
+            onChange={(e) => setIntervalSecs(Number(e.target.value))}
+            data-testid="input-check-interval"
+          />
+        </div>
+        <button
+          className={styles.configBtn}
+          onClick={handleApply}
+          data-testid="button-apply-config"
+        >
+          Aplicar y reiniciar
+        </button>
+      </div>
+      <AppAuthProvider
+        key={providerKey}
+        sessionDuration={appliedDuration}
+        validationInterval={appliedInterval}
+      >
+        <AuthApp sessionDuration={appliedDuration} checkInterval={appliedInterval} />
+      </AppAuthProvider>
+    </div>
   );
 }

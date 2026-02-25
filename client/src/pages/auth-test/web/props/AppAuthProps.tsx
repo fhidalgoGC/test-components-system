@@ -26,14 +26,14 @@ export function AppAuthPropsTab() {
             <tr>
               <td><code>sessionDuration</code></td>
               <td><code>number</code></td>
-              <td><code>environment default</code></td>
-              <td>Duración de la sesión en milisegundos</td>
+              <td><code>8h (28800000ms)</code></td>
+              <td>Tiempo de inactividad en milisegundos antes de que la sesión expire. Se renueva con cada navegación</td>
             </tr>
             <tr>
               <td><code>validationInterval</code></td>
               <td><code>number</code></td>
-              <td><code>environment default</code></td>
-              <td>Intervalo de validación de sesión en milisegundos</td>
+              <td><code>60000 (1min)</code></td>
+              <td>Intervalo en milisegundos con que el SessionValidator revisa si la sesión expiró</td>
             </tr>
             <tr>
               <td><code>skipInitialValidation</code></td>
@@ -44,7 +44,7 @@ export function AppAuthPropsTab() {
             <tr>
               <td><code>sessionDataKey</code></td>
               <td><code>string</code></td>
-              <td><code>'app_session_data'</code></td>
+              <td><code>'app_auth_session_data'</code></td>
               <td>Clave de localStorage para guardar los datos de sesión genéricos</td>
             </tr>
             <tr>
@@ -101,6 +101,11 @@ export function AppAuthPropsTab() {
               <td><code>logout</code></td>
               <td><code>() =&gt; void</code></td>
               <td>Cierra sesión y borra todos los datos (sesión + sessionData)</td>
+            </tr>
+            <tr>
+              <td><code>refreshActivity</code></td>
+              <td><code>() =&gt; void</code></td>
+              <td>Actualiza lastActivityTime en localStorage, renovando el tiempo de expiración. ProtectedRoute lo llama automáticamente al montarse</td>
             </tr>
           </tbody>
         </table>

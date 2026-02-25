@@ -285,3 +285,108 @@
   color: #6366f1;
   font-weight: 500;
 }
+
+.configBar {
+  background: #1e293b;
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.configLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.configField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.configFieldLabel {
+  font-size: 12px;
+  color: #cbd5e1;
+  white-space: nowrap;
+}
+
+.configInput {
+  width: 70px;
+  padding: 6px 10px;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background: #334155;
+  color: #f1f5f9;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  text-align: center;
+}
+
+.configInput:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+}
+
+.configBtn {
+  padding: 6px 16px;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.configBtn:hover {
+  background: #4f46e5;
+}
+
+.timerContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timerBarBg {
+  width: 80px;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.timerBar {
+  height: 100%;
+  background: #22c55e;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.timerBarWarning {
+  background: #ef4444;
+}
+
+.timerText {
+  font-size: 12px;
+  font-weight: 600;
+  color: #22c55e;
+  white-space: nowrap;
+}
+
+.timerTextWarning {
+  color: #ef4444;
+}
+
+.timerDetail {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}

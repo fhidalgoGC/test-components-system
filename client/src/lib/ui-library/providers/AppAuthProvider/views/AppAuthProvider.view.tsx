@@ -12,6 +12,7 @@ import {
   clearSessionFromStorage,
   getSessionFromStorage,
   isSessionExpired,
+  updateLastActivity,
 } from "../../../components/SessionValidator/utils";
 import type { AppAuthContextValue, AppAuthProviderProps } from "../types";
 import { environment } from "../../../enviorments/enviroment";
@@ -220,11 +221,18 @@ export function AppAuthProvider({
     logout(false, false);
   }, [logout]);
 
+  const refreshActivity = useCallback(() => {
+    if (isAuthenticated) {
+      updateLastActivity();
+    }
+  }, [isAuthenticated]);
+
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
     sessionData,
     login: publicLogin,
     logout: publicLogout,
+    refreshActivity,
   };
 
   return (

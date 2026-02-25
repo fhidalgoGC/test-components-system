@@ -3,7 +3,13 @@ import { useAppAuth } from '../hooks';
 import type { ProtectedRouteProps } from '../types';
 
 export function ProtectedRoute({ children, onUnauthorized, fallback }: ProtectedRouteProps) {
-  const { isAuthenticated } = useAppAuth();
+  const { isAuthenticated, refreshActivity } = useAppAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      refreshActivity();
+    }
+  }, [isAuthenticated, refreshActivity]);
 
   useEffect(() => {
     if (!isAuthenticated) {
