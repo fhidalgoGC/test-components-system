@@ -42,6 +42,7 @@ const GridDemo = lazy(() => import("@/pages/grid-demo"));
 const SplitLayoutDemo = lazy(() => import("@/pages/split-layout-demo"));
 const AcordionListDemo = lazy(() => import("@/pages/acordion-list-demo"));
 const SplitLayoutPreview = lazy(() => import("@/pages/split-layout-demo/web/standalone/SplitLayoutPreview"));
+const AuthStandaloneDemo = lazy(() => import("@/pages/auth-test/web/standalone/AuthStandaloneDemo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -56,6 +57,15 @@ export function Router() {
   const isNavSidebarPage = location.startsWith('/components/nav-sidebar/');
   const isSidebarLayoutDemo = location.startsWith('/layouts/sidebar-layout');
   const isSplitStandalone = location.startsWith('/layouts/split-layout/preview/');
+  const isAuthStandalone = location === '/providers/app-auth/interactive';
+
+  if (isAuthStandalone) {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <AuthStandaloneDemo />
+      </Suspense>
+    );
+  }
   
   if (isSplitStandalone) {
     return (

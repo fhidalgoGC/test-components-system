@@ -9,8 +9,9 @@ export function PublicRouteExample() {
       <h2 className={styles.sectionTitle}>PublicRoute</h2>
       <p className={styles.sectionDescription}>
         <code className={styles.sectionDescriptionCode}>PublicRoute</code> renderiza sus children solo si el usuario NO está autenticado.
-        Si ya está autenticado, redirige a <code className={styles.sectionDescriptionCode}>redirectTo</code>.
-        Ideal para páginas de login/registro.
+        Si ya está autenticado, no renderiza nada (retorna null). No valida rutas ni redirige — simplemente oculta el contenido.
+        Ideal para formularios de login/registro.
+        Prueba la <a href="/providers/app-auth/interactive" target="_blank" rel="noopener noreferrer" style={{ color: '#6366f1', fontWeight: 500 }} data-testid="link-interactive-demo-2">demo interactiva completa</a> para ver el flujo real.
       </p>
 
       <div className={styles.demoArea}>
@@ -33,15 +34,7 @@ export function PublicRouteExample() {
           </button>
         </div>
 
-        <PublicRoute
-          redirectTo="/providers/app-auth"
-          fallback={
-            <div className={`${styles.routeBox}`} style={{ borderColor: '#fde68a', background: '#fefce8' }}>
-              <p className={styles.routeBoxLabel} data-testid="text-public-fallback">Ya estás autenticado</p>
-              <p className={styles.routeBoxDescription}>Esta vista es solo para usuarios no autenticados.</p>
-            </div>
-          }
-        >
+        <PublicRoute>
           <div className={`${styles.routeBox} ${styles.routeBoxPublic}`}>
             <p className={styles.routeBoxLabel} data-testid="text-public-content">Contenido Público</p>
             <p className={styles.routeBoxDescription}>
@@ -50,9 +43,12 @@ export function PublicRouteExample() {
           </div>
         </PublicRoute>
 
-        <p className={styles.infoText}>
-          Haz login para ver cómo el contenido público desaparece y se muestra el fallback.
-        </p>
+        {isAuthenticated && (
+          <div className={`${styles.routeBox}`} style={{ borderColor: '#fde68a', background: '#fefce8' }}>
+            <p className={styles.routeBoxLabel} data-testid="text-public-hidden">Contenido oculto por PublicRoute</p>
+            <p className={styles.routeBoxDescription}>Estás autenticado, así que PublicRoute no renderiza sus children.</p>
+          </div>
+        )}
       </div>
     </div>
   );

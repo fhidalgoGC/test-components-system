@@ -104,14 +104,12 @@ interface AppAuthContextValue {
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  redirectTo: string;              // Ruta de redirección si NO autenticado
-  fallback?: ReactNode;            // Componente mientras redirige
+  onUnauthorized: () => void;      // Callback cuando NO autenticado (consumidor decide qué hacer)
+  fallback?: ReactNode;            // Componente a mostrar cuando no autenticado
 }
 
 interface PublicRouteProps {
-  children: ReactNode;
-  redirectTo: string;              // Ruta de redirección si YA autenticado
-  fallback?: ReactNode;            // Componente mientras redirige
+  children: ReactNode;             // Solo se renderiza si NO autenticado; retorna null si hay sesión
 }
 ```
 
@@ -415,11 +413,17 @@ function LoginButton() {
 
 ```jsx
 import { ProtectedRoute, PublicRoute } from 'GC-UI-COMPONENTS';
+import { useLocation } from 'wouter';
 
 // Contenido solo para usuarios autenticados
 function Dashboard() {
+  const [, setLocation] = useLocation();
+
   return (
-    <ProtectedRoute redirectTo="/login" fallback={<p>Redirigiendo...</p>}>
+    <ProtectedRoute
+      onUnauthorized={() => setLocation('/login')}
+      fallback={<p>Redirigiendo al login...</p>}
+    >
       <DashboardContent />
     </ProtectedRoute>
   );
@@ -428,7 +432,7 @@ function Dashboard() {
 // Contenido solo para usuarios NO autenticados (login page)
 function LoginPage() {
   return (
-    <PublicRoute redirectTo="/dashboard" fallback={<p>Ya estás autenticado</p>}>
+    <PublicRoute>
       <LoginForm />
     </PublicRoute>
   );

@@ -20,12 +20,10 @@ export interface AppAuthProviderProps {
 
 export interface ProtectedRouteProps {
   children: ReactNode;
-  redirectTo: string;
+  onUnauthorized: () => void;
   fallback?: ReactNode;
 }
 
 export interface PublicRouteProps {
   children: ReactNode;
-  redirectTo: string;
-  fallback?: ReactNode;
 }
