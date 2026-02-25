@@ -3,7 +3,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/ui-library/theme";
 import {
   AppLanguageProvider,
-  AppAuthProvider,
   ConfigProvider,
   LibI18nProvider,
   useAppLanguage,
@@ -29,25 +28,12 @@ function AppContent() {
 }
 
 function App() {
-  const handleLogging = () => {
-    console.log("Inicio sesión");
-  };
-
-  const handleSessionInvalid = () => {
-    console.log("Cieeee de Sesion");
-  };
-
   return (
     <ThemeProvider>
       <ConfigProvider parentConfig={environment} priority="parent">
-        <AppAuthProvider
-          onLogging={handleLogging}
-          onSessionInvalid={handleSessionInvalid}
-        >
-          <AppLanguageProvider initial="en">
-            <AppContent />
-          </AppLanguageProvider>
-        </AppAuthProvider>
+        <AppLanguageProvider initial="en">
+          <AppContent />
+        </AppLanguageProvider>
       </ConfigProvider>
     </ThemeProvider>
   );
