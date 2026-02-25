@@ -153,6 +153,7 @@ controller.getSelectedId(); // => 'option-1' | null
 | `orderable` | `boolean` | `false` | Activa reordenamiento por drag & drop |
 | `onOrderChange` | `(items: FloatingMenuItem<T>[]) => void` | - | Callback con el nuevo array tras reordenar |
 | `dragHandleClassName` | `string` | - | Clase CSS adicional para el drag handle |
+| `bodyClassName` | `string` | - | Clase CSS adicional para el body (útil para padding) |
 
 ### FloatingMenuController (useFloatingMenu)
 
@@ -275,6 +276,33 @@ Ambas features pueden estar activas simultáneamente:
 | `onOrderChange` | Callback recibe nuevo array de items (no modifica el original) |
 | `dragHandleClassName` | Clase CSS adicional para personalizar el drag handle |
 | Con scroll | Auto-scroll funciona al arrastrar hacia bordes del contenedor |
+| `itemConfig.gap` | Separación entre items (número en px o string CSS) |
+| `bodyClassName` | Clase CSS para el body (útil para padding interno) |
+
+### Card List Layout
+
+Combina `itemConfig.gap`, `bodyClassName` e `itemClassName` para un layout tipo tarjeta con separación entre items:
+
+```tsx
+<FloatingMenu
+  items={items}
+  isOpen={isOpen}
+  orderable={true}
+  onOrderChange={(newItems) => setItems(newItems)}
+  itemConfig={{ gap: 8 }}
+  bodyClassName="p-3"
+  itemClassName="border border-gray-200 rounded-lg"
+  layout={{ widthMode: 'fixed', width: 300, maxHeight: 400 }}
+  header={{
+    renderType: 'component',
+    render: () => <div className="p-3 font-semibold">Select and Order KPIs</div>,
+  }}
+  footer={{
+    renderType: 'component',
+    render: () => <div className="p-3 text-center text-gray-500">Restore configuration</div>,
+  }}
+/>
+```
 
 ## Selection Behavior
 

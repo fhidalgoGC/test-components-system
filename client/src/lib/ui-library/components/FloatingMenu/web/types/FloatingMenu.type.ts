@@ -44,6 +44,7 @@ export interface FloatingMenuItemConfig {
   heightMode?: HeightMode;
   height?: number | string;
   minHeight?: number | string;
+  gap?: number | string;
 }
 
 export interface FloatingMenuItem<T = unknown> {
@@ -93,4 +94,5 @@ export interface FloatingMenuProps<T = unknown> {
   footerClassName?: string;
   selectedClassName?: string;
   dragHandleClassName?: string;
+  bodyClassName?: string;
 }

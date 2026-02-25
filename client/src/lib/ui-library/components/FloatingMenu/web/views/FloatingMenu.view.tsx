@@ -213,7 +213,8 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
     headerClassName = '',
     footerClassName = '',
     selectedClassName = '',
-    dragHandleClassName = ''
+    dragHandleClassName = '',
+    bodyClassName = ''
   } = props;
 
   const internalController = controller as InternalFloatingMenuController | undefined;
@@ -359,8 +360,8 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
           </div>
         )}
         
-        <div className={`${styles.body} ${scrollClass}`} data-testid="floatingmenu-body">
-          <div className={styles.itemsContainer}>
+        <div className={`${styles.body} ${scrollClass} ${bodyClassName}`} data-testid="floatingmenu-body">
+          <div className={styles.itemsContainer} style={itemConfig?.gap != null ? { gap: typeof itemConfig.gap === 'number' ? `${itemConfig.gap}px` : itemConfig.gap } : undefined}>
             {displayItems.map((item, index) => {
               const isSelected = selectable && currentSelectedId === item.id;
               const isDragOver = orderable && dragOverIndex === index;

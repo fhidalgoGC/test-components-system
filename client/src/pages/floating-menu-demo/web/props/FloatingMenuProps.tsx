@@ -137,6 +137,12 @@ export function FloatingMenuPropsTab() {
               <td><code>undefined</code></td>
               <td>Clase CSS adicional para el icono de drag handle</td>
             </tr>
+            <tr>
+              <td><code>bodyClassName</code></td>
+              <td><code>string</code></td>
+              <td><code>undefined</code></td>
+              <td>Clase CSS adicional para el body (útil para padding)</td>
+            </tr>
           </tbody>
         </table>
       </div>
