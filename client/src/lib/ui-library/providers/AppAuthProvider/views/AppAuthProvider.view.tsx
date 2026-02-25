@@ -19,7 +19,7 @@ import { ConfigContext } from "../../AppEnviromentProvider/index.hook";
 
 export const AppAuthContext = createContext<AppAuthContextValue | null>(null);
 
-const DEFAULT_SESSION_DATA_KEY = "app_session_data";
+const DEFAULT_SESSION_DATA_KEY = "app_auth_session_data";
 
 function generateSessionId(): string {
   return `session-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;

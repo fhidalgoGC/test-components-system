@@ -1,6 +1,6 @@
 import type { SessionData } from '../types';
 
-const SESSION_STORAGE_KEY = 'app_session_data';
+const SESSION_STORAGE_KEY = 'app_session_validator';
 
 export function saveSessionToStorage(sessionData: SessionData): void {
   try {
