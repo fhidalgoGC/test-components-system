@@ -113,7 +113,7 @@ export function Router() {
           <Route path="/components/heterogeneous-list/elements" component={HeterogeneousListElements} />
           <Route path="/components/heterogeneous-list/async" component={HeterogeneousListAsync} />
           <Route path="/date-demo" component={DateDemo} />
-          <Route path="/auth-test" component={AuthTest} />
+          <Route path="/providers/app-auth" component={AuthTest} />
           <Route path="/components/layout-row" component={LayoutRowDemo} />
           <Route path="/components/layout-column" component={LayoutColumnDemo} />
           <Route path="/components/google-map" component={GoogleMapDemo} />

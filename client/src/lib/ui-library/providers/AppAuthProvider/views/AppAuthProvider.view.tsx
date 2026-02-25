@@ -19,6 +19,8 @@ import { ConfigContext } from "../../AppEnviromentProvider/index.hook";
 
 export const AppAuthContext = createContext<AppAuthContextValue | null>(null);
 
+const DEFAULT_SESSION_DATA_KEY = "app_session_data";
+
 function generateSessionId(): string {
   return `session-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 }
@@ -28,11 +30,34 @@ function useOptionalConfig() {
   return configContext?.config || null;
 }
 
+function loadSessionData(key: string): unknown | null {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw === null) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function saveSessionData(key: string, data: unknown): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch {
+    // silent
+  }
+}
+
+function clearSessionData(key: string): void {
+  localStorage.removeItem(key);
+}
+
 export function AppAuthProvider({
   children,
   sessionDuration,
   validationInterval,
   skipInitialValidation = false,
+  sessionDataKey = DEFAULT_SESSION_DATA_KEY,
   onLogging,
   onLogout,
   onSessionInvalid,
@@ -50,6 +75,7 @@ export function AppAuthProvider({
     environment.SESSION_CONFIG.VALIDATION_INTERVAL;
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [sessionData, setSessionData] = useState<unknown | null>(null);
   const isLoggingOut = useRef(false);
   const isProcessingEvent = useRef(false);
   const broadcastChannel = useRef<BroadcastChannel | null>(null);
@@ -69,7 +95,7 @@ export function AppAuthProvider({
     onSessionInvalidRef.current = onSessionInvalid;
   }, [onSessionInvalid]);
 
-  const login = useCallback((fromBroadcastChannel: boolean = false) => {
+  const login = useCallback((data?: unknown, fromBroadcastChannel: boolean = false) => {
     const sessionId = generateSessionId();
 
     saveSessionToStorage({
@@ -77,6 +103,14 @@ export function AppAuthProvider({
       sessionStartTime: Date.now(),
       lastActivityTime: Date.now(),
     });
+
+    if (data !== undefined) {
+      saveSessionData(sessionDataKey, data);
+      setSessionData(data);
+    } else {
+      const existing = loadSessionData(sessionDataKey);
+      setSessionData(existing);
+    }
 
     setIsAuthenticated(true);
     isLoggingOut.current = false;
@@ -93,20 +127,19 @@ export function AppAuthProvider({
         timestamp: Date.now(),
       });
     }
-  }, []);
+  }, [sessionDataKey]);
 
   const logout = useCallback((fromBroadcastChannel: boolean = false, shouldCallInvalidCallback: boolean = false) => {
     if (isLoggingOut.current) return;
     isLoggingOut.current = true;
 
     clearSessionFromStorage();
+    clearSessionData(sessionDataKey);
     setIsAuthenticated(false);
-    
-    // SIEMPRE llamar onLogout cuando hay un logout (manual o automático)
+    setSessionData(null);
+
     onLogoutRef.current?.();
-    
-    // Solo llamar onSessionInvalid si es una invalidación real (expiración o no existe sesión)
-    // NO llamar si es un logout manual del usuario
+
     if (shouldCallInvalidCallback) {
       onSessionInvalidRef.current?.();
     }
@@ -121,7 +154,7 @@ export function AppAuthProvider({
         timestamp: Date.now(),
       });
     }
-  }, []);
+  }, [sessionDataKey]);
 
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
@@ -129,7 +162,6 @@ export function AppAuthProvider({
     const handleMessage = (event: MessageEvent) => {
       const { type } = event.data;
 
-      console.log("recibiendo eventos");
       if (type === "session_login") {
         isProcessingEvent.current = true;
         const existingSession = getSessionFromStorage();
@@ -137,7 +169,7 @@ export function AppAuthProvider({
           existingSession &&
           !isSessionExpired(existingSession, finalSessionDuration)
         ) {
-          login(true);
+          login(undefined, true);
           isLoggingOut.current = false;
         }
         isProcessingEvent.current = false;
@@ -168,26 +200,31 @@ export function AppAuthProvider({
       existingSession &&
       !isSessionExpired(existingSession, finalSessionDuration)
     ) {
-      console.log("useEffect-getSessionFromStorage");
-      login(true);
+      login(undefined, true);
     } else if (existingSession) {
-      // Caso 2: Hay sesión pero expiró - SÍ llamar onSessionInvalid
       logout(true, true);
     } else {
-      // Caso 3: No hay sesión en localStorage - SÍ llamar onSessionInvalid
       logout(true, true);
     }
   }, [skipInitialValidation]);
 
-  // Función específica para cuando SessionValidator detecta expiración
   const handleSessionValidatorInvalid = useCallback(() => {
-    logout(false, true); // SÍ llamar onSessionInvalid porque es expiración real
+    logout(false, true);
+  }, [logout]);
+
+  const publicLogin = useCallback((data?: unknown) => {
+    login(data, false);
+  }, [login]);
+
+  const publicLogout = useCallback(() => {
+    logout(false, false);
   }, [logout]);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
-    login,
-    logout,
+    sessionData,
+    login: publicLogin,
+    logout: publicLogout,
   };
 
   return (

@@ -86,7 +86,8 @@ export function getDefaultMenuItems(): MenuItem[] {
       icon: 'Database',
       children: [
         { id: 'control-data', label: 'ControlData', i18n: { en: 'ControlData', es: 'ControlData', default: 'ControlData' }, path: '/providers/control-data', icon: 'Filter' },
-        { id: 'multi-control-data', label: 'MultiControlData', i18n: { en: 'MultiControlData', es: 'MultiControlData', default: 'MultiControlData' }, path: '/providers/multi-control-data', icon: 'Layers' }
+        { id: 'multi-control-data', label: 'MultiControlData', i18n: { en: 'MultiControlData', es: 'MultiControlData', default: 'MultiControlData' }, path: '/providers/multi-control-data', icon: 'Layers' },
+        { id: 'app-auth', label: 'AppAuth', i18n: { en: 'AppAuth', es: 'AppAuth', default: 'AppAuth' }, path: '/providers/app-auth', icon: 'Shield' }
       ]
     },
     { 
@@ -96,7 +97,6 @@ export function getDefaultMenuItems(): MenuItem[] {
       icon: 'Layout',
       children: [
         { id: 'date-demo', label: 'Date Demo', i18n: { en: 'Date Demo', es: 'Demo de Fechas', default: 'Date Demo' }, path: '/date-demo', icon: 'Calendar' },
-        { id: 'auth-test', label: 'Auth Test', i18n: { en: 'Auth Test', es: 'Prueba de Auth', default: 'Auth Test' }, path: '/auth-test', icon: 'Shield' },
         { id: 'api-interceptor', label: 'ApiInterceptor', i18n: { en: 'ApiInterceptor', es: 'ApiInterceptor', default: 'ApiInterceptor' }, path: '/utils/api-interceptor', icon: 'Network' }
       ]
     }

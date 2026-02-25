@@ -1,7 +1,7 @@
-import { AuthTestView } from './views/AuthTest.view';
+import { AppAuthDemoWebView } from './web/view/AppAuthDemo.view';
 
-const AuthTest = () => {
-  return <AuthTestView />;
+const AppAuthDemo = () => {
+  return <AppAuthDemoWebView />;
 };
 
-export default AuthTest;
+export default AppAuthDemo;

@@ -1,6 +1,6 @@
 # AppAuthProvider - Provider de Autenticación y Gestión de Sesiones
 
-**Version: 1.0.9**
+**Version: 1.1.0**
 
 ## 📖 Descripción
 
@@ -8,11 +8,13 @@
 
 **Características principales:**
 - ✅ Gestión de estado de autenticación (`isAuthenticated`, `login()`, `logout()`)
+- ✅ Datos de sesión genéricos con `login(data)` y `sessionData` (v1.1.0)
 - ✅ Validación automática de sesión basada en tiempo real
 - ✅ Sincronización cross-tab usando BroadcastChannel
-- ✅ Persistencia de sesión en localStorage
+- ✅ Persistencia de sesión y datos en localStorage
 - ✅ Modo `skipInitialValidation` para páginas de login (v1.0.8)
 - ✅ Callbacks de ciclo de vida (`onLogging`, `onLogout`, `onSessionInvalid`) (v1.0.9)
+- ✅ Componentes `ProtectedRoute` y `PublicRoute` para protección de rutas (v1.1.0)
 - ✅ Integración con ConfigProvider para configuración jerárquica
 
 ## 🏗️ Estructura Modular
@@ -23,8 +25,14 @@ AppAuthProvider/
 │   └── AppAuthProvider.view.tsx  # AppAuthProvider component
 ├── types/
 │   └── AppAuthProvider.types.ts  # TypeScript types
-├── index.hook.ts                 # Custom hook (useAppAuth)
-└── README.md                     # This documentation
+├── hooks/
+│   └── useAppAuth.hook.ts        # Custom hook (useAppAuth)
+├── components/
+│   ├── ProtectedRoute.tsx        # Wrapper para rutas protegidas
+│   ├── PublicRoute.tsx           # Wrapper para rutas públicas
+│   └── index.ts                  # Exports de componentes
+├── index.ts                      # Exports principales
+└── README-IA.md                  # This documentation
 ```
 
 ## 🏗️ Arquitectura
@@ -35,15 +43,27 @@ AppAuthProvider/
 AppAuthProvider
 ├── 🔐 Control de autenticación global
 │   ├── Estado isAuthenticated
-│   ├── Función login()
-│   └── Función logout()
+│   ├── Función login(data?) con datos genéricos
+│   ├── Función logout()
+│   └── sessionData (datos guardados con login)
+│
+├── 📦 Datos de sesión genéricos (v1.1.0)
+│   ├── login(data) guarda datos en localStorage
+│   ├── sessionData expuesto en contexto
+│   ├── sessionDataKey configurable
+│   ├── Persistencia y recuperación automática
+│   └── logout() borra datos automáticamente
+│
+├── 🛡️ Protección de rutas (v1.1.0)
+│   ├── ProtectedRoute (renderiza si autenticado, redirige si no)
+│   └── PublicRoute (renderiza si NO autenticado, redirige si sí)
 │
 ├── ⏰ Gestión automática de sesión
 │   ├── Expiración basada en tiempo REAL (no inactividad)
 │   ├── sessionStartTime (marca de inicio de sesión)
 │   ├── sessionDuration configurable
 │   ├── SessionValidator automático
-│   └── skipInitialValidation para páginas de login ⚡ NUEVO
+│   └── skipInitialValidation para páginas de login
 │
 ├── 🔄 Sincronización cross-tab
 │   ├── BroadcastChannel API
@@ -52,7 +72,7 @@ AppAuthProvider
 │
 ├── 🎯 Callbacks de ciclo de vida
 │   ├── onLogging (al iniciar sesión manualmente)
-│   ├── onLogout (SIEMPRE que hay logout) ⚡ NUEVO
+│   ├── onLogout (SIEMPRE que hay logout)
 │   └── onSessionInvalid (solo cuando sesión es inválida)
 │
 └── ⚙️ Integración con ConfigProvider
@@ -69,6 +89,7 @@ interface AppAuthProviderProps {
   sessionDuration?: number;        // Duración de la sesión en ms (default: 8 horas)
   validationInterval?: number;     // Intervalo de validación en ms (default: 10 segundos)
   skipInitialValidation?: boolean; // Si es true, no valida la sesión al iniciar (útil para páginas de login)
+  sessionDataKey?: string;         // Clave de localStorage para datos de sesión (default: 'app_session_data')
   onLogging?: () => void;          // Callback al iniciar sesión manualmente
   onLogout?: () => void;           // Callback SIEMPRE que hay logout (manual o automático)
   onSessionInvalid?: () => void;   // Callback solo cuando sesión es inválida/expirada
@@ -76,8 +97,21 @@ interface AppAuthProviderProps {
 
 interface AppAuthContextValue {
   isAuthenticated: boolean;
-  login: () => void;
+  sessionData: unknown | null;     // Datos genéricos guardados con login(data)
+  login: (data?: unknown) => void; // Login con datos opcionales
   logout: () => void;
+}
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+  redirectTo: string;              // Ruta de redirección si NO autenticado
+  fallback?: ReactNode;            // Componente mientras redirige
+}
+
+interface PublicRouteProps {
+  children: ReactNode;
+  redirectTo: string;              // Ruta de redirección si YA autenticado
+  fallback?: ReactNode;            // Componente mientras redirige
 }
 ```
 
@@ -358,29 +392,46 @@ function App() {
 import { useAppAuth } from 'GC-UI-COMPONENTS';
 
 function LoginButton() {
-  const { isAuthenticated, login, logout } = useAppAuth();
+  const { isAuthenticated, sessionData, login, logout } = useAppAuth();
   
   if (isAuthenticated) {
-    return <button onClick={logout}>Cerrar Sesión</button>;
+    return (
+      <div>
+        <p>Bienvenido, {(sessionData as any)?.name}</p>
+        <button onClick={logout}>Cerrar Sesión</button>
+      </div>
+    );
   }
   
-  return <button onClick={login}>Iniciar Sesión</button>;
+  return (
+    <button onClick={() => login({ name: 'Juan', role: 'admin' })}>
+      Iniciar Sesión
+    </button>
+  );
 }
 ```
 
-### **Componente de Autenticación Protegida**
+### **Componente de Autenticación Protegida con ProtectedRoute**
 
 ```jsx
-import { useAppAuth } from 'GC-UI-COMPONENTS';
+import { ProtectedRoute, PublicRoute } from 'GC-UI-COMPONENTS';
 
-function ProtectedContent() {
-  const { isAuthenticated } = useAppAuth();
-  
-  if (!isAuthenticated) {
-    return <LoginPage />;
-  }
-  
-  return <Dashboard />;
+// Contenido solo para usuarios autenticados
+function Dashboard() {
+  return (
+    <ProtectedRoute redirectTo="/login" fallback={<p>Redirigiendo...</p>}>
+      <DashboardContent />
+    </ProtectedRoute>
+  );
+}
+
+// Contenido solo para usuarios NO autenticados (login page)
+function LoginPage() {
+  return (
+    <PublicRoute redirectTo="/dashboard" fallback={<p>Ya estás autenticado</p>}>
+      <LoginForm />
+    </PublicRoute>
+  );
 }
 ```
 

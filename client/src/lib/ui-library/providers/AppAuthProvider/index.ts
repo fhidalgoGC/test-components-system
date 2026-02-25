@@ -1,3 +1,4 @@
 export { AppAuthProvider } from './views/AppAuthProvider.view';
 export { useAppAuth } from './hooks';
-export type { AppAuthContextValue, AppAuthProviderProps } from './types';
+export { ProtectedRoute, PublicRoute } from './components';
+export type { AppAuthContextValue, AppAuthProviderProps, ProtectedRouteProps, PublicRouteProps } from './types';
