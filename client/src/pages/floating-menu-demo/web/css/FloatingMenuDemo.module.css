@@ -1,0 +1,257 @@
+.section {
+  margin-bottom: 48px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.sectionDescription {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.sectionDescriptionCode {
+  background: #f3f4f6;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.demoArea {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.triggerBtn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.triggerBtnGray {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.triggerBtnGray:hover {
+  background: #e5e7eb;
+}
+
+.triggerBtnIndigo {
+  background: #6366f1;
+  color: white;
+}
+
+.triggerBtnIndigo:hover {
+  background: #4f46e5;
+}
+
+.triggerBtnTeal {
+  background: #14b8a6;
+  color: white;
+}
+
+.triggerBtnTeal:hover {
+  background: #0d9488;
+}
+
+.triggerBtnGreen {
+  background: #22c55e;
+  color: white;
+}
+
+.triggerBtnGreen:hover {
+  background: #16a34a;
+}
+
+.triggerBtnPurple {
+  background: #a855f7;
+  color: white;
+}
+
+.triggerBtnPurple:hover {
+  background: #9333ea;
+}
+
+.clearBtn {
+  padding: 8px 16px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.clearBtn:hover {
+  background: #fee2e2;
+}
+
+.infoText {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 12px;
+}
+
+.infoTextMuted {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.positionGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.positionBtn {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+}
+
+.positionBtn:hover {
+  background: #f9fafb;
+}
+
+.positionBtnActive {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.positionCenter {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+}
+
+.propsContainer {
+  padding: 24px;
+  max-width: 1200px;
+}
+
+.propsTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.propsSubtitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 32px;
+  margin-bottom: 4px;
+}
+
+.propsDescription {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.propsTableWrapper {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.propsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.propsTable th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  color: #374151;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.propsTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #4b5563;
+  vertical-align: top;
+}
+
+.propsTable tr:hover td {
+  background: #f9fafb;
+}
+
+.propsTable code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #1f2937;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.positionGridProps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  font-size: 13px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.positionGridItem {
+  background: white;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.positionGridItemDefault {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
