@@ -80,9 +80,9 @@
   align-items: center;
   padding: 0.75rem 1rem;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-  border: 2px solid transparent;
+  transition: background-color 0.15s ease;
   user-select: none;
+  position: relative;
 }
 
 .orderableItem:hover {
@@ -141,8 +141,15 @@
   background-color: #f9fafb;
 }
 
-.dragOver {
-  border-top: 2px solid #3b82f6;
+.dragOver::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #3b82f6;
+  border-radius: 1px;
 }
 
 .dark .floatingMenu {
@@ -206,6 +213,6 @@
   background-color: #1f2937;
 }
 
-.dark .dragOver {
-  border-top-color: #60a5fa;
+.dark .dragOver::before {
+  background-color: #60a5fa;
 }
