@@ -89,7 +89,7 @@ export function CardListExample() {
             onClose={() => setIsOpen(false)}
             itemConfig={{ gap: 8 }}
             bodyClassName="p-3"
-            itemClassName="border border-gray-200 rounded-lg"
+            itemClassName="border border-gray-300 rounded-md"
             layout={{ widthMode: 'fixed', width: 300, maxHeight: 400 }}
             header={{
               renderType: 'component',
