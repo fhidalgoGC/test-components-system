@@ -88,7 +88,7 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'control-data', label: 'ControlData', i18n: { en: 'ControlData', es: 'ControlData', default: 'ControlData' }, path: '/providers/control-data', icon: 'Filter' },
         { id: 'multi-control-data', label: 'MultiControlData', i18n: { en: 'MultiControlData', es: 'MultiControlData', default: 'MultiControlData' }, path: '/providers/multi-control-data', icon: 'Layers' },
         { id: 'app-auth', label: 'AppAuth', i18n: { en: 'AppAuth', es: 'AppAuth', default: 'AppAuth' }, path: '/providers/app-auth', icon: 'Shield' },
-        { id: 'app-auth-interactive', label: 'AppAuth Interactive', i18n: { en: 'AppAuth Interactive', es: 'AppAuth Interactivo', default: 'AppAuth Interactive' }, path: '/providers/app-auth/interactive', icon: 'ShieldCheck', openInNewTab: true }
+        { id: 'app-auth-interactive', label: 'AppAuth Demo', i18n: { en: 'AppAuth Demo', es: 'AppAuth Demo', default: 'AppAuth Demo' }, path: '/providers/app-auth/demo/login', icon: 'ShieldCheck', openInNewTab: true }
       ]
     },
     { 

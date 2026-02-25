@@ -40,6 +40,8 @@
   background: transparent;
   cursor: pointer;
   transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .navBtn:hover {

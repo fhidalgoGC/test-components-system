@@ -57,7 +57,7 @@ export function Router() {
   const isNavSidebarPage = location.startsWith('/components/nav-sidebar/');
   const isSidebarLayoutDemo = location.startsWith('/layouts/sidebar-layout');
   const isSplitStandalone = location.startsWith('/layouts/split-layout/preview/');
-  const isAuthStandalone = location === '/providers/app-auth/interactive';
+  const isAuthStandalone = location.startsWith('/providers/app-auth/demo');
 
   if (isAuthStandalone) {
     return (

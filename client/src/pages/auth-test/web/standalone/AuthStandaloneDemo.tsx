@@ -1,216 +1,228 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
+import { Route, Switch, useLocation, Link } from 'wouter';
 import { AppAuthProvider, useAppAuth, ProtectedRoute, PublicRoute } from '@/lib/ui-library/providers/AppAuthProvider';
 import styles from './AuthStandaloneDemo.module.css';
 
-function LoginView() {
+const BASE = '/providers/app-auth/demo';
+
+function LoginPage() {
   const { login } = useAppAuth();
+  const [, setLocation] = useLocation();
   const [name, setName] = useState('Juan Pérez');
   const [role, setRole] = useState('admin');
 
   const handleLogin = () => {
     login({ name, role, loginTime: new Date().toISOString() });
+    setLocation(`${BASE}/dashboard`);
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.cardIcon} data-testid="icon-login">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-            <polyline points="10 17 15 12 10 7" />
-            <line x1="15" y1="12" x2="3" y2="12" />
-          </svg>
-        </div>
-        <h1 className={styles.cardTitle}>Iniciar Sesión</h1>
-        <p className={styles.cardDescription}>
-          Esta página usa <code>PublicRoute</code> — solo es visible si NO estás autenticado.
-          Al hacer login, cambiarás al Dashboard automáticamente.
-        </p>
+    <PublicRoute>
+      <div className={styles.page}>
+        <div className={styles.card}>
+          <div className={styles.cardIcon} data-testid="icon-login">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+          </div>
+          <h1 className={styles.cardTitle}>Iniciar Sesión</h1>
+          <p className={styles.cardDescription}>
+            Esta página usa <code>PublicRoute</code> — solo es visible si NO estás autenticado.
+            Si ya tienes sesión, este contenido desaparece.
+          </p>
 
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Nombre</label>
-          <input
-            className={styles.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            data-testid="input-login-name"
-          />
-        </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Nombre</label>
+            <input
+              className={styles.input}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              data-testid="input-login-name"
+            />
+          </div>
 
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Rol</label>
-          <input
-            className={styles.input}
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            data-testid="input-login-role"
-          />
-        </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Rol</label>
+            <input
+              className={styles.input}
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              data-testid="input-login-role"
+            />
+          </div>
 
-        <button
-          className={styles.btnPrimary}
-          onClick={handleLogin}
-          data-testid="button-standalone-login"
-        >
-          Iniciar Sesión
-        </button>
+          <button
+            className={styles.btnPrimary}
+            onClick={handleLogin}
+            data-testid="button-standalone-login"
+          >
+            Iniciar Sesión
+          </button>
+        </div>
       </div>
-    </div>
+    </PublicRoute>
   );
 }
 
-function DashboardView() {
+function DashboardPage() {
   const { sessionData, logout } = useAppAuth();
+  const [, setLocation] = useLocation();
   const data = sessionData as { name?: string; role?: string; loginTime?: string } | null;
 
+  const handleLogout = () => {
+    logout();
+    setLocation(`${BASE}/login`);
+  };
+
   return (
-    <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.cardIcon} data-testid="icon-dashboard">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          </svg>
-        </div>
-        <h1 className={styles.cardTitle}>Dashboard Protegido</h1>
-        <p className={styles.cardDescription}>
-          Esta página usa <code>ProtectedRoute</code> — solo es visible si estás autenticado.
-          Al hacer logout, el callback <code>onUnauthorized</code> te lleva al Login.
-        </p>
-
-        {data && (
-          <div className={styles.dataCard}>
-            <div className={styles.dataRow}>
-              <span className={styles.dataKey}>Nombre:</span>
-              <span className={styles.dataValue} data-testid="text-dashboard-name">{data.name}</span>
-            </div>
-            <div className={styles.dataRow}>
-              <span className={styles.dataKey}>Rol:</span>
-              <span className={styles.dataValue} data-testid="text-dashboard-role">{data.role}</span>
-            </div>
-            <div className={styles.dataRow}>
-              <span className={styles.dataKey}>Login:</span>
-              <span className={styles.dataValue} data-testid="text-dashboard-time">
-                {data.loginTime ? new Date(data.loginTime).toLocaleString() : '-'}
-              </span>
-            </div>
+    <ProtectedRoute
+      onUnauthorized={() => setLocation(`${BASE}/login`)}
+      fallback={<div className={styles.page}><p>Redirigiendo al login...</p></div>}
+    >
+      <div className={styles.page}>
+        <div className={styles.card}>
+          <div className={styles.cardIcon} data-testid="icon-dashboard">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
           </div>
-        )}
+          <h1 className={styles.cardTitle}>Dashboard</h1>
+          <p className={styles.cardDescription}>
+            Esta ruta usa <code>ProtectedRoute</code>. Si no estás logueado y llegas aquí, el callback
+            <code>onUnauthorized</code> te envía a <code>/login</code>.
+          </p>
 
-        <button
-          className={styles.btnDanger}
-          onClick={logout}
-          data-testid="button-standalone-logout"
+          {data && (
+            <div className={styles.dataCard}>
+              <div className={styles.dataRow}>
+                <span className={styles.dataKey}>Nombre:</span>
+                <span className={styles.dataValue} data-testid="text-dashboard-name">{data.name}</span>
+              </div>
+              <div className={styles.dataRow}>
+                <span className={styles.dataKey}>Rol:</span>
+                <span className={styles.dataValue} data-testid="text-dashboard-role">{data.role}</span>
+              </div>
+              <div className={styles.dataRow}>
+                <span className={styles.dataKey}>Login:</span>
+                <span className={styles.dataValue} data-testid="text-dashboard-time">
+                  {data.loginTime ? new Date(data.loginTime).toLocaleString() : '-'}
+                </span>
+              </div>
+            </div>
+          )}
+
+          <button
+            className={styles.btnDanger}
+            onClick={handleLogout}
+            data-testid="button-standalone-logout"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </ProtectedRoute>
+  );
+}
+
+function ProfilePage() {
+  const { sessionData } = useAppAuth();
+  const [, setLocation] = useLocation();
+  const data = sessionData as { name?: string; role?: string } | null;
+
+  return (
+    <ProtectedRoute
+      onUnauthorized={() => setLocation(`${BASE}/login`)}
+      fallback={<div className={styles.page}><p>Redirigiendo al login...</p></div>}
+    >
+      <div className={styles.page}>
+        <div className={styles.card}>
+          <div className={styles.cardIcon} data-testid="icon-profile">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <h1 className={styles.cardTitle}>Perfil</h1>
+          <p className={styles.cardDescription}>
+            Otra ruta protegida con <code>ProtectedRoute</code>. Navega entre Dashboard y Perfil
+            para ver que la sesión se mantiene.
+          </p>
+
+          {data && (
+            <div className={styles.dataCard}>
+              <div className={styles.dataRow}>
+                <span className={styles.dataKey}>Usuario:</span>
+                <span className={styles.dataValue} data-testid="text-profile-name">{data.name}</span>
+              </div>
+              <div className={styles.dataRow}>
+                <span className={styles.dataKey}>Rol:</span>
+                <span className={styles.dataValue} data-testid="text-profile-role">{data.role}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </ProtectedRoute>
+  );
+}
+
+function NavBar() {
+  const { isAuthenticated } = useAppAuth();
+  const [location] = useLocation();
+
+  const isActive = (path: string) => location === path;
+
+  return (
+    <div className={styles.header}>
+      <h2 className={styles.headerTitle} data-testid="text-standalone-title">AppAuth — Demo con Rutas</h2>
+      <nav className={styles.headerNav}>
+        <Link
+          href={`${BASE}/login`}
+          className={`${styles.navBtn} ${isActive(`${BASE}/login`) ? styles.navBtnActive : ''}`}
+          data-testid="link-nav-login"
         >
-          Cerrar Sesión
-        </button>
+          Login
+        </Link>
+        <Link
+          href={`${BASE}/dashboard`}
+          className={`${styles.navBtn} ${isActive(`${BASE}/dashboard`) ? styles.navBtnActive : ''}`}
+          data-testid="link-nav-dashboard"
+        >
+          Dashboard
+        </Link>
+        <Link
+          href={`${BASE}/profile`}
+          className={`${styles.navBtn} ${isActive(`${BASE}/profile`) ? styles.navBtnActive : ''}`}
+          data-testid="link-nav-profile"
+        >
+          Perfil
+        </Link>
+      </nav>
+      <div className={styles.headerStatus}>
+        <span className={`${styles.statusDot} ${isAuthenticated ? styles.statusDotGreen : styles.statusDotGray}`} />
+        <span className={styles.headerStatusText} data-testid="text-standalone-status">
+          {isAuthenticated ? 'Autenticado' : 'No autenticado'}
+        </span>
       </div>
     </div>
   );
 }
 
-function AuthRouter() {
-  const { isAuthenticated } = useAppAuth();
-  const [view, setView] = useState<'login' | 'dashboard'>(isAuthenticated ? 'dashboard' : 'login');
-
-  useEffect(() => {
-    setView(isAuthenticated ? 'dashboard' : 'login');
-  }, [isAuthenticated]);
-
-  const handleUnauthorized = useCallback(() => {
-    console.log('[ProtectedRoute] onUnauthorized — cambiando a login');
-    setView('login');
-  }, []);
-
+function AuthApp() {
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h2 className={styles.headerTitle} data-testid="text-standalone-title">AppAuth — Demo Interactiva</h2>
-        <div className={styles.headerNav}>
-          <button
-            className={`${styles.navBtn} ${view === 'login' ? styles.navBtnActive : ''}`}
-            onClick={() => setView('login')}
-            data-testid="button-nav-login"
-          >
-            Login (PublicRoute)
-          </button>
-          <button
-            className={`${styles.navBtn} ${view === 'dashboard' ? styles.navBtnActive : ''}`}
-            onClick={() => setView('dashboard')}
-            data-testid="button-nav-dashboard"
-          >
-            Dashboard (ProtectedRoute)
-          </button>
-        </div>
-        <div className={styles.headerStatus}>
-          <span className={`${styles.statusDot} ${isAuthenticated ? styles.statusDotGreen : styles.statusDotGray}`} />
-          <span className={styles.headerStatusText} data-testid="text-standalone-status">
-            {isAuthenticated ? 'Autenticado' : 'No autenticado'}
-          </span>
-        </div>
-      </div>
-
+      <NavBar />
       <div className={styles.content}>
-        {view === 'login' && (
-          <PublicRoute>
-            <LoginView />
-          </PublicRoute>
-        )}
-
-        {view === 'login' && isAuthenticated && (
-          <div className={styles.page}>
-            <div className={styles.redirectCard}>
-              <div className={styles.redirectIcon}>
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-              </div>
-              <h2 className={styles.redirectTitle} data-testid="text-public-redirect">Ya estás autenticado</h2>
-              <p className={styles.redirectText}>
-                <code>PublicRoute</code> oculta el login porque ya tienes sesión activa.
-              </p>
-              <button
-                className={styles.btnSecondary}
-                onClick={() => setView('dashboard')}
-                data-testid="button-go-dashboard"
-              >
-                Ir al Dashboard
-              </button>
-            </div>
-          </div>
-        )}
-
-        {view === 'dashboard' && (
-          <ProtectedRoute
-            onUnauthorized={handleUnauthorized}
-            fallback={
-              <div className={styles.page}>
-                <div className={styles.redirectCard}>
-                  <div className={styles.redirectIcon}>
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                  </div>
-                  <h2 className={styles.redirectTitle} data-testid="text-protected-redirect">Acceso denegado</h2>
-                  <p className={styles.redirectText}>
-                    <code>ProtectedRoute</code> llamó <code>onUnauthorized</code> porque no tienes sesión.
-                  </p>
-                  <button
-                    className={styles.btnSecondary}
-                    onClick={() => setView('login')}
-                    data-testid="button-go-login"
-                  >
-                    Ir al Login
-                  </button>
-                </div>
-              </div>
-            }
-          >
-            <DashboardView />
-          </ProtectedRoute>
-        )}
+        <Switch>
+          <Route path={`${BASE}/login`} component={LoginPage} />
+          <Route path={`${BASE}/dashboard`} component={DashboardPage} />
+          <Route path={`${BASE}/profile`} component={ProfilePage} />
+          <Route>
+            <LoginPage />
+          </Route>
+        </Switch>
       </div>
     </div>
   );
@@ -219,7 +231,7 @@ function AuthRouter() {
 export default function AuthStandaloneDemo() {
   return (
     <AppAuthProvider>
-      <AuthRouter />
+      <AuthApp />
     </AppAuthProvider>
   );
 }

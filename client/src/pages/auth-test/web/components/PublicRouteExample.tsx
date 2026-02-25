@@ -11,7 +11,7 @@ export function PublicRouteExample() {
         <code className={styles.sectionDescriptionCode}>PublicRoute</code> renderiza sus children solo si el usuario NO está autenticado.
         Si ya está autenticado, no renderiza nada (retorna null). No valida rutas ni redirige — simplemente oculta el contenido.
         Ideal para formularios de login/registro.
-        Prueba la <a href="/providers/app-auth/interactive" target="_blank" rel="noopener noreferrer" style={{ color: '#6366f1', fontWeight: 500 }} data-testid="link-interactive-demo-2">demo interactiva completa</a> para ver el flujo real.
+        Prueba la <a href="/providers/app-auth/demo/login" target="_blank" rel="noopener noreferrer" style={{ color: '#6366f1', fontWeight: 500 }} data-testid="link-interactive-demo-2">demo interactiva completa</a> para ver el flujo real.
       </p>
 
       <div className={styles.demoArea}>

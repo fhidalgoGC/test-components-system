@@ -20,7 +20,7 @@ export function ProtectedRouteExample() {
         Si no lo está, llama el callback <code className={styles.sectionDescriptionCode}>onUnauthorized</code> y muestra el
         <code className={styles.sectionDescriptionCode}>fallback</code>.
         El consumidor decide qué hacer: redirigir, mostrar un modal, etc.
-        Prueba la <a href="/providers/app-auth/interactive" target="_blank" rel="noopener noreferrer" style={{ color: '#6366f1', fontWeight: 500 }} data-testid="link-interactive-demo">demo interactiva completa</a> para ver el flujo real.
+        Prueba la <a href="/providers/app-auth/demo/login" target="_blank" rel="noopener noreferrer" style={{ color: '#6366f1', fontWeight: 500 }} data-testid="link-interactive-demo">demo interactiva completa</a> para ver el flujo real.
       </p>
 
       <div className={styles.demoArea}>
