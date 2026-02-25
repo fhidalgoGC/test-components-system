@@ -59,12 +59,12 @@ const initialItems: FloatingMenuItem<{ name: string; emoji: string }>[] = [
 export function OrderableExample() {
   const [isOpen, setIsOpen] = useState(false);
   const [items, setItems] = useState(initialItems);
-  const [orderLog, setOrderLog] = useState<string[]>([]);
+  const [currentOrder, setCurrentOrder] = useState<string | null>(null);
 
   const handleOrderChange = (newItems: FloatingMenuItem<{ name: string; emoji: string }>[]) => {
     setItems(newItems);
-    const names = newItems.map((i) => i.data?.name).join(' → ');
-    setOrderLog((prev) => [...prev.slice(-2), names]);
+    const names = newItems.map((i) => `${i.data?.emoji} ${i.data?.name}`).join('\n');
+    setCurrentOrder(names);
   };
 
   return (
@@ -99,7 +99,7 @@ export function OrderableExample() {
           <button
             onClick={() => {
               setItems(initialItems);
-              setOrderLog([]);
+              setCurrentOrder(null);
             }}
             className={styles.clearBtn}
             data-testid="button-reset-order"
@@ -108,16 +108,26 @@ export function OrderableExample() {
           </button>
         </div>
 
-        {orderLog.length > 0 && (
+        {currentOrder && (
           <div style={{ marginTop: 12 }}>
-            <p className={styles.infoText} data-testid="text-order-log-title">
-              <strong>Último orden:</strong>
+            <p className={styles.infoText} data-testid="text-order-title">
+              <strong>Orden actual (todos los items):</strong>
             </p>
-            {orderLog.map((log, i) => (
-              <p key={i} className={styles.infoText} data-testid={`text-order-log-${i}`}>
-                {log}
-              </p>
-            ))}
+            <pre
+              style={{
+                marginTop: 8,
+                padding: 12,
+                background: '#f9fafb',
+                borderRadius: 8,
+                border: '1px solid #e5e7eb',
+                fontSize: 13,
+                lineHeight: 1.6,
+                whiteSpace: 'pre-wrap',
+              }}
+              data-testid="text-order-result"
+            >
+              {currentOrder}
+            </pre>
           </div>
         )}
       </div>
