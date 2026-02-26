@@ -27,4 +27,5 @@ export interface ProtectedRouteProps {
 
 export interface PublicRouteProps {
   children: ReactNode;
+  autoLogoutDelay?: number;
 }

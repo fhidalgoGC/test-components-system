@@ -113,7 +113,8 @@ interface ProtectedRouteProps {
 }
 
 interface PublicRouteProps {
-  children: ReactNode;             // Solo se renderiza si NO autenticado; retorna null si hay sesión
+  children: ReactNode;             // Siempre se renderiza
+  autoLogoutDelay?: number;        // Tiempo en ms antes de auto-logout si hay sesión (default: 30000)
 }
 ```
 
@@ -267,14 +268,26 @@ function Dashboard() {
 
 ### PublicRoute
 
-Renderiza sus children solo si el usuario **NO** está autenticado. Si hay sesión activa, retorna `null`. Sin callbacks, sin redirecciones — solo oculta el contenido.
+Siempre renderiza sus children. Si el usuario ya tiene sesión activa y se queda en esta ruta sin navegar, se activa un temporizador. Si pasa el tiempo configurado (`autoLogoutDelay`, default 30 segundos) sin cambiar de ruta, se hace logout automático como si la sesión hubiera expirado (llama `onSessionInvalid` + `logout`).
+
+Si el usuario navega a otra ruta antes de que termine el temporizador, el timer se cancela automáticamente.
 
 ```jsx
 import { PublicRoute } from 'GC-UI-COMPONENTS';
 
+// Default: 30 segundos antes de auto-logout
 function LoginPage() {
   return (
     <PublicRoute>
+      <LoginForm />
+    </PublicRoute>
+  );
+}
+
+// Custom: 60 segundos antes de auto-logout
+function LoginPage() {
+  return (
+    <PublicRoute autoLogoutDelay={60000}>
       <LoginForm />
     </PublicRoute>
   );
@@ -456,7 +469,8 @@ interface AppAuthContextValue {
 
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | Required | Contenido si NO autenticado. Retorna null si hay sesión |
+| `children` | `ReactNode` | Required | Siempre se renderiza |
+| `autoLogoutDelay` | `number` | `30000` (30s) | Tiempo en ms antes de auto-logout si hay sesión activa |
 
 ## Changelog
 
@@ -467,6 +481,8 @@ interface AppAuthContextValue {
 - Eliminado `skipInitialValidation` — ya no es necesario porque `PublicRoute` maneja las rutas públicas
 - `ProtectedRoute` ahora llama `onSessionInvalid` automáticamente cuando detecta que no hay sesión
 - Agregado `triggerSessionInvalid()` al contexto para disparar el callback manualmente
+- `PublicRoute` ya no oculta contenido — siempre renderiza children
+- `PublicRoute` ahora tiene auto-logout: si hay sesión y el usuario no navega, hace logout automático después de `autoLogoutDelay` (default 30s)
 
 ### v1.2.0 (Febrero 2026)
 - Expiración de sesión ahora basada en INACTIVIDAD (lastActivityTime) en vez de tiempo absoluto
