@@ -7,6 +7,7 @@ export interface AppAuthContextValue {
   logout: (data?: unknown) => void;
   refreshActivity: () => void;
   triggerSessionInvalid: () => void;
+  autoLogoutDelay: number;
 }
 
 export interface AppAuthProviderProps {
@@ -14,6 +15,7 @@ export interface AppAuthProviderProps {
   sessionDuration?: number;
   validationInterval?: number;
   sessionDataKey?: string;
+  autoLogoutDelay?: number;
   onLogging?: (data?: unknown) => void;
   onLogout?: (data?: unknown) => void;
   onSessionInvalid?: () => void;
@@ -27,5 +29,4 @@ export interface ProtectedRouteProps {
 
 export interface PublicRouteProps {
   children: ReactNode;
-  autoLogoutDelay?: number;
 }

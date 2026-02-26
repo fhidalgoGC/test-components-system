@@ -2,10 +2,8 @@ import { useEffect, useRef } from 'react';
 import { useAppAuth } from '../hooks';
 import type { PublicRouteProps } from '../types';
 
-const DEFAULT_AUTO_LOGOUT_DELAY = 30000;
-
-export function PublicRoute({ children, autoLogoutDelay = DEFAULT_AUTO_LOGOUT_DELAY }: PublicRouteProps) {
-  const { isAuthenticated, logout, triggerSessionInvalid } = useAppAuth();
+export function PublicRoute({ children }: PublicRouteProps) {
+  const { isAuthenticated, logout, triggerSessionInvalid, autoLogoutDelay } = useAppAuth();
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {

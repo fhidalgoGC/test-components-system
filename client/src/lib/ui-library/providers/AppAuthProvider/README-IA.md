@@ -92,6 +92,7 @@ interface AppAuthProviderProps {
   sessionDuration?: number;        // Tiempo de inactividad en ms antes de expirar (default: 8 horas)
   validationInterval?: number;     // Intervalo de revisión en ms (default: 60 segundos)
   sessionDataKey?: string;         // Clave de localStorage para datos genéricos (default: 'app_auth_session_data')
+  autoLogoutDelay?: number;        // Tiempo en ms antes de auto-logout en PublicRoute (default: 30000)
   onLogging?: (data?: unknown) => void; // Callback al iniciar sesión, recibe la data del login
   onLogout?: (data?: unknown) => void;  // Callback en cualquier logout, recibe data del logout manual
   onSessionInvalid?: () => void;   // Callback solo cuando sesión es inválida/expirada
@@ -113,8 +114,7 @@ interface ProtectedRouteProps {
 }
 
 interface PublicRouteProps {
-  children: ReactNode;             // Siempre se renderiza
-  autoLogoutDelay?: number;        // Tiempo en ms antes de auto-logout si hay sesión (default: 30000)
+  children: ReactNode;             // Siempre se renderiza (autoLogoutDelay se configura en el provider)
 }
 ```
 
@@ -275,7 +275,7 @@ Si el usuario navega a otra ruta antes de que termine el temporizador, el timer 
 ```jsx
 import { PublicRoute } from 'GC-UI-COMPONENTS';
 
-// Default: 30 segundos antes de auto-logout
+// El autoLogoutDelay se configura en el provider, no en PublicRoute
 function LoginPage() {
   return (
     <PublicRoute>
@@ -284,12 +284,15 @@ function LoginPage() {
   );
 }
 
-// Custom: 60 segundos antes de auto-logout
-function LoginPage() {
+// Configuración en el provider
+function App() {
   return (
-    <PublicRoute autoLogoutDelay={60000}>
-      <LoginForm />
-    </PublicRoute>
+    <AppAuthProvider autoLogoutDelay={60000}> {/* 60 segundos */}
+      <Switch>
+        <Route path="/login" component={LoginPage} />
+        <Route path="/dashboard" component={DashboardPage} />
+      </Switch>
+    </AppAuthProvider>
   );
 }
 ```
@@ -440,6 +443,7 @@ Estas claves son independientes para evitar colisiones.
 | `sessionDuration` | `number` | `28800000` (8h) | Tiempo de inactividad en ms antes de expirar |
 | `validationInterval` | `number` | `60000` (1min) | Intervalo de revisión en ms |
 | `sessionDataKey` | `string` | `'app_auth_session_data'` | Clave de localStorage para datos genéricos |
+| `autoLogoutDelay` | `number` | `30000` (30s) | Tiempo en ms antes de auto-logout en PublicRoute |
 | `onLogging` | `(data?: unknown) => void` | `undefined` | Callback al hacer login, recibe la data |
 | `onLogout` | `(data?: unknown) => void` | `undefined` | Callback en cualquier logout, recibe data |
 | `onSessionInvalid` | `() => void` | `undefined` | Callback cuando sesión expira/inválida |
@@ -469,8 +473,7 @@ interface AppAuthContextValue {
 
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | Required | Siempre se renderiza |
-| `autoLogoutDelay` | `number` | `30000` (30s) | Tiempo en ms antes de auto-logout si hay sesión activa |
+| `children` | `ReactNode` | Required | Siempre se renderiza (autoLogoutDelay viene del provider) |
 
 ## Changelog
 

@@ -58,6 +58,7 @@ export function AppAuthProvider({
   sessionDuration,
   validationInterval,
   sessionDataKey = DEFAULT_SESSION_DATA_KEY,
+  autoLogoutDelay = 30000,
   onLogging,
   onLogout,
   onSessionInvalid,
@@ -233,6 +234,7 @@ export function AppAuthProvider({
     logout: publicLogout,
     refreshActivity,
     triggerSessionInvalid,
+    autoLogoutDelay,
   };
 
   return (
