@@ -6,10 +6,10 @@ El prop `layout` es el estandar que usamos en los componentes de la libreria par
 
 ```ts
 interface Layout {
-  widthMode?: 'full' | 'auto' | 'fixed';
+  widthMode?: 'full' | 'auto' | 'fixed' | 'percentage';
   width?: number;
   minWidth?: number;
-  heightMode?: 'full' | 'auto' | 'fixed';
+  heightMode?: 'full' | 'auto' | 'fixed' | 'percentage';
   height?: number | 'auto';
   minHeight?: number;
 }
@@ -21,18 +21,22 @@ interface Layout {
 
 Define como se calcula el ancho del componente.
 
-| Valor   | Descripcion                                                        | CSS generado     |
-|---------|--------------------------------------------------------------------|------------------|
-| `full`  | Ocupa todo el ancho disponible del contenedor padre.               | `width: 100%`    |
-| `auto`  | Se adapta al contenido interno del componente.                     | `width: auto`    |
-| `fixed` | Usa el valor exacto definido en `width` (en pixeles).              | `width: {n}px`   |
+| Valor        | Descripcion                                                        | CSS generado     |
+|--------------|---------------------------------------------------------------------|------------------|
+| `full`       | Ocupa todo el ancho disponible del contenedor padre.                | `width: 100%`    |
+| `auto`       | Se adapta al contenido interno del componente.                      | `width: auto`    |
+| `fixed`      | Usa el valor exacto definido en `width` (en pixeles).               | `width: {n}px`   |
+| `percentage` | Usa el valor de `width` como porcentaje del contenedor padre.       | `width: {n}%`    |
 
 ### width
 
-Valor numerico en pixeles. Solo se aplica cuando `widthMode` es `'fixed'`.
+Valor numerico. Su interpretacion depende del `widthMode`:
+- Con `widthMode: 'fixed'` → se interpreta como pixeles (`width: 400` = `400px`).
+- Con `widthMode: 'percentage'` → se interpreta como porcentaje del padre (`width: 50` = `50%`).
 
 ```json
 { "widthMode": "fixed", "width": 400 }
+{ "widthMode": "percentage", "width": 50 }
 ```
 
 ### minWidth
@@ -47,18 +51,22 @@ Ancho minimo en pixeles. Se aplica independientemente del `widthMode`. Util para
 
 Define como se calcula la altura del componente.
 
-| Valor   | Descripcion                                                        | CSS generado      |
-|---------|--------------------------------------------------------------------|-------------------|
-| `full`  | Ocupa toda la altura disponible del contenedor padre.              | `height: 100%`    |
-| `auto`  | Se adapta al contenido interno del componente.                     | `height: auto`    |
-| `fixed` | Usa el valor exacto definido en `height` (en pixeles).             | `height: {n}px`   |
+| Valor        | Descripcion                                                        | CSS generado      |
+|--------------|---------------------------------------------------------------------|-------------------|
+| `full`       | Ocupa toda la altura disponible del contenedor padre.               | `height: 100%`    |
+| `auto`       | Se adapta al contenido interno del componente.                      | `height: auto`    |
+| `fixed`      | Usa el valor exacto definido en `height` (en pixeles).              | `height: {n}px`   |
+| `percentage` | Usa el valor de `height` como porcentaje del contenedor padre.      | `height: {n}%`    |
 
 ### height
 
-Valor numerico en pixeles o `'auto'`. Solo se aplica cuando `heightMode` es `'fixed'` (numerico) o se pasa `'auto'` directamente.
+Valor numerico o `'auto'`. Su interpretacion depende del `heightMode`:
+- Con `heightMode: 'fixed'` → se interpreta como pixeles (`height: 500` = `500px`).
+- Con `heightMode: 'percentage'` → se interpreta como porcentaje del padre (`height: 75` = `75%`).
 
 ```json
 { "heightMode": "fixed", "height": 500 }
+{ "heightMode": "percentage", "height": 75 }
 ```
 
 ### minHeight
@@ -128,6 +136,29 @@ Altura minima en pixeles. Se aplica independientemente del `heightMode`. Util pa
 }
 ```
 
+### Componente que ocupa la mitad del padre
+
+```json
+{
+  "widthMode": "percentage",
+  "width": 50,
+  "heightMode": "full"
+}
+```
+
+### Componente con porcentaje y minimos
+
+```json
+{
+  "widthMode": "percentage",
+  "width": 70,
+  "minWidth": 400,
+  "heightMode": "percentage",
+  "height": 80,
+  "minHeight": 300
+}
+```
+
 ## Componentes que ya lo implementan
 
 Los siguientes componentes ya usan el prop `layout` con este estandar:
@@ -155,12 +186,14 @@ function getLayoutStyles(layout?: Layout): React.CSSProperties {
 
   if (layout?.widthMode === 'full') styles.width = '100%';
   else if (layout?.widthMode === 'fixed' && layout.width) styles.width = layout.width;
+  else if (layout?.widthMode === 'percentage' && layout.width) styles.width = `${layout.width}%`;
 
   if (layout?.minWidth) styles.minWidth = layout.minWidth;
 
   if (layout?.heightMode === 'full') styles.height = '100%';
   else if (layout?.heightMode === 'auto') styles.height = 'auto';
   else if (layout?.heightMode === 'fixed' && layout.height) styles.height = layout.height;
+  else if (layout?.heightMode === 'percentage' && layout.height) styles.height = `${layout.height}%`;
 
   if (layout?.minHeight) styles.minHeight = layout.minHeight;
 
