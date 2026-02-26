@@ -25,12 +25,12 @@ interface Layout {
 
 ### widthMode
 
-Define como se calcula el ancho del componente.
+Define como se calcula el ancho del componente. Por defecto `'auto'`.
 
 | Valor        | Descripcion                                                        | CSS generado     |
 |--------------|---------------------------------------------------------------------|------------------|
 | `full`       | Ocupa todo el ancho disponible del contenedor padre.                | `width: 100%`    |
-| `auto`       | Se adapta al contenido interno del componente.                      | `width: auto`    |
+| `auto`       | Se adapta al contenido interno del componente. **(default)**        | `width: auto`    |
 | `fixed`      | Usa el valor exacto definido en `width` (en pixeles).               | `width: {n}px`   |
 | `percentage` | Usa el valor de `width` como porcentaje del contenedor padre.       | `width: {n}%`    |
 
@@ -55,12 +55,12 @@ Ancho minimo en pixeles. Se aplica independientemente del `widthMode`. Util para
 
 ### heightMode
 
-Define como se calcula la altura del componente.
+Define como se calcula la altura del componente. Por defecto `'auto'`.
 
 | Valor        | Descripcion                                                        | CSS generado      |
 |--------------|---------------------------------------------------------------------|-------------------|
 | `full`       | Ocupa toda la altura disponible del contenedor padre.               | `height: 100%`    |
-| `auto`       | Se adapta al contenido interno del componente.                      | `height: auto`    |
+| `auto`       | Se adapta al contenido interno del componente. **(default)**        | `height: auto`    |
 | `fixed`      | Usa el valor exacto definido en `height` (en pixeles).              | `height: {n}px`   |
 | `percentage` | Usa el valor de `height` como porcentaje del contenedor padre.      | `height: {n}%`    |
 
@@ -270,16 +270,20 @@ Ejemplo de conversion a estilos:
 function getLayoutStyles(layout?: Layout): React.CSSProperties {
   const styles: React.CSSProperties = {};
 
-  if (layout?.widthMode === 'full') styles.width = '100%';
-  else if (layout?.widthMode === 'fixed' && layout.width) styles.width = layout.width;
-  else if (layout?.widthMode === 'percentage' && layout.width) styles.width = `${layout.width}%`;
+  const wMode = layout?.widthMode || 'auto';
+  const hMode = layout?.heightMode || 'auto';
+
+  if (wMode === 'full') styles.width = '100%';
+  else if (wMode === 'auto') styles.width = 'auto';
+  else if (wMode === 'fixed' && layout?.width) styles.width = layout.width;
+  else if (wMode === 'percentage' && layout?.width) styles.width = `${layout.width}%`;
 
   if (layout?.minWidth) styles.minWidth = layout.minWidth;
 
-  if (layout?.heightMode === 'full') styles.height = '100%';
-  else if (layout?.heightMode === 'auto') styles.height = 'auto';
-  else if (layout?.heightMode === 'fixed' && layout.height) styles.height = layout.height;
-  else if (layout?.heightMode === 'percentage' && layout.height) styles.height = `${layout.height}%`;
+  if (hMode === 'full') styles.height = '100%';
+  else if (hMode === 'auto') styles.height = 'auto';
+  else if (hMode === 'fixed' && layout?.height) styles.height = layout.height;
+  else if (hMode === 'percentage' && layout?.height) styles.height = `${layout.height}%`;
 
   if (layout?.minHeight) styles.minHeight = layout.minHeight;
 
