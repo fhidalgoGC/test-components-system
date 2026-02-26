@@ -105,6 +105,7 @@ interface AppAuthContextValue {
   logout: (data?: unknown) => void; // Logout con datos opcionales
   refreshActivity: () => void;     // Renueva lastActivityTime, extendiendo la sesión (v1.2.0)
   triggerSessionInvalid: () => void; // Dispara el callback onSessionInvalid manualmente (v1.2.1)
+  sessionInvalidated: boolean;     // true cuando la sesión ya fue invalidada (v1.2.1)
 }
 
 interface ProtectedRouteProps {
@@ -232,9 +233,10 @@ refreshActivity();
 
 Renderiza sus children solo si el usuario está autenticado. Si no lo está:
 
-1. **Siempre** llama `onSessionInvalid` del provider (via `triggerSessionInvalid()`)
-2. **Si se pasó** `onUnauthorized`, también lo llama (para acciones adicionales como redirecciones)
-3. Muestra el `fallback` si se proporcionó
+1. Revisa `sessionInvalidated` del provider — si ya es `true`, **no vuelve a disparar callbacks** (evita redirecciones duplicadas)
+2. Si `sessionInvalidated` es `false`, llama `triggerSessionInvalid()` (que pone `sessionInvalidated = true` y ejecuta `onSessionInvalid`)
+3. **Si se pasó** `onUnauthorized`, también lo llama
+4. Muestra el `fallback` si se proporcionó
 
 Cada vez que se monta (navegación a la ruta), llama `refreshActivity()` automáticamente para renovar la sesión.
 
@@ -458,6 +460,7 @@ interface AppAuthContextValue {
   logout: (data?: unknown) => void;      // Cerrar sesión con datos opcionales
   refreshActivity: () => void;           // Renovar lastActivityTime (v1.2.0)
   triggerSessionInvalid: () => void;     // Dispara onSessionInvalid manualmente (v1.2.1)
+  sessionInvalidated: boolean;           // true si la sesión ya fue invalidada (v1.2.1)
 }
 ```
 
@@ -486,6 +489,7 @@ interface AppAuthContextValue {
 - Agregado `triggerSessionInvalid()` al contexto para disparar el callback manualmente
 - `PublicRoute` ya no oculta contenido — siempre renderiza children
 - `PublicRoute` ahora tiene auto-logout: si hay sesión y el usuario no navega, hace logout automático después de `autoLogoutDelay` (default 30s)
+- Agregado `sessionInvalidated` al contexto — el provider trackea si la sesión ya fue invalidada, evitando que `ProtectedRoute` dispare callbacks duplicados
 
 ### v1.2.0 (Febrero 2026)
 - Expiración de sesión ahora basada en INACTIVIDAD (lastActivityTime) en vez de tiempo absoluto

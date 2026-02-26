@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 export interface AppAuthContextValue {
   isAuthenticated: boolean;
+  sessionInvalidated: boolean;
   sessionData: unknown | null;
   login: (data?: unknown) => void;
   logout: (data?: unknown) => void;

@@ -76,6 +76,7 @@ export function AppAuthProvider({
     environment.SESSION_CONFIG.VALIDATION_INTERVAL;
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [sessionInvalidated, setSessionInvalidated] = useState(false);
   const [sessionData, setSessionData] = useState<unknown | null>(null);
   const isLoggingOut = useRef(false);
   const isProcessingEvent = useRef(false);
@@ -114,6 +115,7 @@ export function AppAuthProvider({
     }
 
     setIsAuthenticated(true);
+    setSessionInvalidated(false);
     isLoggingOut.current = false;
     onLoggingRef.current?.(data);
 
@@ -142,6 +144,7 @@ export function AppAuthProvider({
     onLogoutRef.current?.(logoutData);
 
     if (shouldCallInvalidCallback) {
+      setSessionInvalidated(true);
       onSessionInvalidRef.current?.();
     }
 
@@ -224,11 +227,13 @@ export function AppAuthProvider({
   }, [isAuthenticated]);
 
   const triggerSessionInvalid = useCallback(() => {
+    setSessionInvalidated(true);
     onSessionInvalidRef.current?.();
   }, []);
 
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
+    sessionInvalidated,
     sessionData,
     login: publicLogin,
     logout: publicLogout,
