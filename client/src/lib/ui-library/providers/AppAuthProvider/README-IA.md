@@ -8,11 +8,11 @@
 
 **Características principales:**
 - Gestión de estado de autenticación (`isAuthenticated`, `login()`, `logout()`)
-- Datos de sesión genéricos con `login(data)` y `sessionData` (v1.1.0)
-- Expiración por inactividad con `refreshActivity()` (v1.2.0)
-- `ProtectedRoute` con callback `onUnauthorized` — agnóstico al router (v1.2.0)
-- `PublicRoute` simplificado — solo `children`, retorna null si autenticado (v1.2.0)
-- `ProtectedRoute` llama `refreshActivity()` automáticamente al montarse (v1.2.0)
+- Datos de sesión genéricos con `login(data)` y `sessionData`
+- Expiración por inactividad con `refreshActivity()`
+- `ProtectedRoute` y `PublicRoute` para control de acceso a rutas
+- Estado `sessionInvalidated` para evitar callbacks duplicados
+- Auto-logout en `PublicRoute` configurable con `autoLogoutDelay`
 - Validación automática de sesión con intervalo configurable
 - Sincronización cross-tab usando BroadcastChannel
 - Persistencia de sesión y datos en localStorage
@@ -24,64 +24,193 @@
 ```
 AppAuthProvider/
 ├── views/
-│   └── AppAuthProvider.view.tsx  # AppAuthProvider component
+│   └── AppAuthProvider.view.tsx
 ├── types/
-│   └── AppAuthProvider.types.ts  # TypeScript types
+│   └── AppAuthProvider.types.ts
 ├── hooks/
-│   └── useAppAuth.hook.ts        # Custom hook (useAppAuth)
+│   └── useAppAuth.hook.ts
 ├── components/
-│   ├── ProtectedRoute.tsx        # Wrapper para rutas protegidas
-│   ├── PublicRoute.tsx           # Wrapper para rutas públicas
-│   └── index.ts                  # Exports de componentes
-├── index.ts                      # Exports principales
-└── README-IA.md                  # This documentation
+│   ├── ProtectedRoute.tsx
+│   ├── PublicRoute.tsx
+│   └── index.ts
+├── index.ts
+└── README-IA.md
 ```
 
-## Arquitectura
+## Flujos de Autenticación
+
+### Flujo 1: Login exitoso
 
 ```
-AppAuthProvider
-├── Control de autenticación global
-│   ├── Estado isAuthenticated
-│   ├── Función login(data?) con datos genéricos
-│   ├── Función logout()
-│   ├── Función refreshActivity() (v1.2.0)
-│   └── sessionData (datos guardados con login)
-│
-├── Datos de sesión genéricos (v1.1.0)
-│   ├── login(data) guarda datos en localStorage
-│   ├── sessionData expuesto en contexto
-│   ├── sessionDataKey configurable (default: 'app_auth_session_data')
-│   ├── Persistencia y recuperación automática
-│   └── logout() borra datos automáticamente
-│
-├── Protección de rutas (v1.2.0)
-│   ├── ProtectedRoute (renderiza si autenticado, llama onSessionInvalid + onUnauthorized si no)
-│   ├── ProtectedRoute llama refreshActivity() al montarse
-│   └── PublicRoute (renderiza si NO autenticado, retorna null si hay sesión)
-│
-├── Gestión automática de sesión (v1.2.0)
-│   ├── Expiración basada en INACTIVIDAD (lastActivityTime)
-│   ├── refreshActivity() renueva lastActivityTime
-│   ├── ProtectedRoute renueva automáticamente al navegar
-│   ├── sessionDuration configurable (default: 8 horas)
-│   ├── validationInterval configurable (default: 60 segundos)
-│   └── SessionValidator automático
-│
-├── Sincronización cross-tab
-│   ├── BroadcastChannel API
-│   ├── Sincronización automática de login/logout
-│   └── Persistencia en localStorage
-│
-├── Callbacks de ciclo de vida
-│   ├── onLogging (al iniciar sesión manualmente)
-│   ├── onLogout (SIEMPRE que hay logout)
-│   └── onSessionInvalid (solo cuando sesión es inválida/expirada)
-│
-└── Integración con ConfigProvider
-    ├── Configuración jerárquica (props > ConfigProvider > defaults)
-    ├── sessionDuration configurable
-    └── validationInterval configurable
+Usuario en /login (PublicRoute)
+    │
+    ├─> Ingresa credenciales
+    ├─> Tu app valida con backend
+    ├─> Llama login({ name: 'Juan', role: 'admin' })
+    │
+    ├─> Provider:
+    │   ├─> isAuthenticated = true
+    │   ├─> sessionInvalidated = false (reset)
+    │   ├─> Guarda sessionData en localStorage
+    │   ├─> Guarda lastActivityTime en localStorage
+    │   ├─> Ejecuta onLogging(data)
+    │   └─> BroadcastChannel notifica otras pestañas
+    │
+    ├─> PublicRoute: cancela timer de autoLogoutDelay (si estaba activo)
+    │
+    └─> Usuario navega a /dashboard (ProtectedRoute)
+        ├─> ProtectedRoute ve isAuthenticated = true
+        ├─> Llama refreshActivity() (renueva lastActivityTime)
+        └─> Renderiza children
+```
+
+### Flujo 2: Navegación entre rutas protegidas (sesión activa)
+
+```
+Usuario en /dashboard (ProtectedRoute)
+    │
+    ├─> ProtectedRoute al montarse:
+    │   ├─> Ve isAuthenticated = true
+    │   ├─> Llama refreshActivity()
+    │   └─> lastActivityTime = Date.now() (se renueva)
+    │
+    ├─> Usuario navega a /profile (ProtectedRoute)
+    │   ├─> ProtectedRoute al montarse:
+    │   │   ├─> Ve isAuthenticated = true
+    │   │   ├─> Llama refreshActivity()
+    │   │   └─> lastActivityTime = Date.now() (se renueva)
+    │   └─> Renderiza children
+    │
+    └─> Mientras navegue, la sesión nunca expira
+        (cada navegación renueva lastActivityTime)
+```
+
+### Flujo 3: Sesión expira por inactividad
+
+```
+Usuario en /dashboard (ProtectedRoute) - dejó de navegar
+    │
+    ├─> SessionValidator revisa cada N segundos (validationInterval)
+    │   └─> (Date.now() - lastActivityTime) > sessionDuration?
+    │
+    ├─> SI, la sesión expiró:
+    │   ├─> Provider:
+    │   │   ├─> isAuthenticated = false
+    │   │   ├─> sessionInvalidated = true
+    │   │   ├─> Limpia localStorage
+    │   │   ├─> Ejecuta onLogout()
+    │   │   ├─> Ejecuta onSessionInvalid()
+    │   │   └─> BroadcastChannel notifica otras pestañas
+    │   │
+    │   └─> ProtectedRoute re-renderiza:
+    │       ├─> Ve isAuthenticated = false
+    │       ├─> Ve sessionInvalidated = true
+    │       ├─> NO dispara callbacks (ya fueron disparados por SessionValidator)
+    │       └─> Muestra fallback o null
+    │
+    └─> onSessionInvalid del provider maneja la redirección a /login
+```
+
+### Flujo 4: Acceso directo a ruta protegida sin sesión
+
+```
+Usuario abre /dashboard directamente en el navegador (sin sesión)
+    │
+    ├─> Provider al montar:
+    │   ├─> Revisa localStorage: no hay sesión
+    │   ├─> isAuthenticated = false
+    │   ├─> sessionInvalidated = true
+    │   ├─> Ejecuta onLogout()
+    │   └─> Ejecuta onSessionInvalid()
+    │
+    ├─> ProtectedRoute al montarse:
+    │   ├─> Ve isAuthenticated = false
+    │   ├─> Ve sessionInvalidated = true (ya procesado)
+    │   ├─> NO dispara callbacks duplicados
+    │   └─> Muestra fallback o null
+    │
+    └─> onSessionInvalid del provider ya manejó la redirección a /login
+```
+
+### Flujo 5: Usuario autenticado llega a ruta pública (PublicRoute)
+
+```
+Usuario con sesión activa navega a /login (PublicRoute)
+    │
+    ├─> PublicRoute al montarse:
+    │   ├─> Ve isAuthenticated = true
+    │   ├─> Inicia timer de autoLogoutDelay (default: 30 seg)
+    │   └─> Renderiza children normalmente (NO oculta contenido)
+    │
+    ├─> CASO A: Usuario navega a otra ruta antes del timeout
+    │   ├─> Timer se cancela (cleanup del useEffect)
+    │   └─> Sesión permanece activa
+    │
+    └─> CASO B: Usuario se queda sin hacer nada
+        ├─> Timer termina (30 seg)
+        ├─> Provider:
+        │   ├─> triggerSessionInvalid() → sessionInvalidated = true
+        │   ├─> Ejecuta onSessionInvalid()
+        │   └─> logout() → isAuthenticated = false
+        └─> Sesión cerrada como si hubiera expirado
+```
+
+### Flujo 6: Logout manual
+
+```
+Usuario hace clic en "Cerrar Sesión"
+    │
+    ├─> Llama logout({ reason: 'user_action' })
+    │
+    ├─> Provider:
+    │   ├─> isAuthenticated = false
+    │   ├─> Limpia localStorage (sesión + sessionData)
+    │   ├─> Ejecuta onLogout({ reason: 'user_action' })
+    │   ├─> NO ejecuta onSessionInvalid (es logout manual)
+    │   ├─> sessionInvalidated NO cambia (no es invalidación)
+    │   └─> BroadcastChannel notifica otras pestañas
+    │
+    └─> Tu app redirige a /login manualmente
+```
+
+### Flujo 7: Sincronización cross-tab
+
+```
+Pestaña 1                              Pestaña 2
+    │                                      │
+    ├─> Usuario hace login()               │
+    │   └─> BroadcastChannel ──────────> Recibe evento
+    │                                      ├─> Verifica localStorage
+    │                                      ├─> isAuthenticated = true
+    │                                      └─> Actualiza estado
+    │                                      │
+    ├─> Usuario hace logout()              │
+    │   └─> BroadcastChannel ──────────> Recibe evento
+    │                                      ├─> isAuthenticated = false
+    │                                      └─> Ejecuta onLogout()
+```
+
+### Flujo 8: Recarga de página con sesión válida
+
+```
+Usuario recarga /dashboard (F5)
+    │
+    ├─> Provider al montar:
+    │   ├─> Lee localStorage: encuentra sesión
+    │   ├─> Verifica: (Date.now() - lastActivityTime) < sessionDuration?
+    │   │
+    │   ├─> SI, sesión válida:
+    │   │   ├─> isAuthenticated = true
+    │   │   ├─> Restaura sessionData de localStorage
+    │   │   └─> NO dispara callbacks (restauración silenciosa)
+    │   │
+    │   └─> NO, sesión expirada:
+    │       ├─> isAuthenticated = false
+    │       ├─> sessionInvalidated = true
+    │       ├─> Ejecuta onLogout()
+    │       └─> Ejecuta onSessionInvalid()
+    │
+    └─> ProtectedRoute renderiza según isAuthenticated
 ```
 
 ## Props Interface
@@ -100,22 +229,23 @@ interface AppAuthProviderProps {
 
 interface AppAuthContextValue {
   isAuthenticated: boolean;
+  sessionInvalidated: boolean;     // true cuando la sesión ya fue invalidada
   sessionData: unknown | null;     // Datos genéricos guardados con login(data)
   login: (data?: unknown) => void; // Login con datos opcionales
   logout: (data?: unknown) => void; // Logout con datos opcionales
-  refreshActivity: () => void;     // Renueva lastActivityTime, extendiendo la sesión (v1.2.0)
-  triggerSessionInvalid: () => void; // Dispara el callback onSessionInvalid manualmente (v1.2.1)
-  sessionInvalidated: boolean;     // true cuando la sesión ya fue invalidada (v1.2.1)
+  refreshActivity: () => void;     // Renueva lastActivityTime
+  triggerSessionInvalid: () => void; // Dispara onSessionInvalid + pone sessionInvalidated=true
+  autoLogoutDelay: number;         // Tiempo configurado para auto-logout en PublicRoute
 }
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  onUnauthorized?: () => void;     // Callback opcional cuando NO autenticado (se llama junto con onSessionInvalid)
+  onUnauthorized?: () => void;     // Callback opcional cuando NO autenticado
   fallback?: ReactNode;            // Componente a mostrar cuando no autenticado
 }
 
 interface PublicRouteProps {
-  children: ReactNode;             // Siempre se renderiza (autoLogoutDelay se configura en el provider)
+  children: ReactNode;             // Siempre se renderiza (autoLogoutDelay viene del provider)
 }
 ```
 
@@ -130,9 +260,7 @@ El AppAuthProvider ofrece **3 callbacks** para gestionar eventos del ciclo de au
 ```typescript
 const handleLogin = (data?: unknown) => {
   console.log("Usuario inició sesión con data:", data);
-  // data contiene lo que se pasó a login({ name: 'Juan', role: 'admin' })
   navigate('/dashboard');
-  analytics.track('user_login', data);
 };
 ```
 
@@ -147,28 +275,26 @@ const handleLogin = (data?: unknown) => {
 ```typescript
 const handleLogout = (data?: unknown) => {
   console.log("Logout detectado con data:", data);
-  // data contiene lo que se pasó a logout({ reason: 'user_action' })
   localStorage.removeItem('auth_token');
-  websocket.close();
 };
 ```
 
 **Se ejecuta en:**
-- Logout manual del usuario (botón "Cerrar Sesión")
+- Logout manual del usuario
 - Sesión expiró por inactividad (SessionValidator)
 - No hay sesión al cargar la app
 - Sesión expirada al cargar la app
 - Logout sincronizado desde otra pestaña
+- Auto-logout de PublicRoute
 
 ### 3. onSessionInvalid - Solo Sesiones Inválidas
 
-**Se ejecuta:** Solo cuando la sesión es inválida o expiró (NO en logout manual)
+**Se ejecuta:** Solo cuando la sesión es inválida o expiró (NO en logout manual). Pone `sessionInvalidated = true` en el provider.
 
 ```typescript
 const handleSessionExpired = () => {
   console.log("Sesión expirada por inactividad");
   window.location.href = '/login';
-  toast.error('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
 };
 ```
 
@@ -176,92 +302,46 @@ const handleSessionExpired = () => {
 - No hay sesión al cargar la app
 - Sesión expirada al cargar la app
 - SessionValidator detecta expiración por inactividad
+- ProtectedRoute detecta !isAuthenticated (solo si sessionInvalidated es false)
+- Auto-logout de PublicRoute
 
 **NO se ejecuta en:**
 - Logout manual del usuario
 
 ### Tabla de Comportamiento Completo
 
-| Acción | `onLogging` | `onLogout` | `onSessionInvalid` |
-|--------|-------------|------------|-------------------|
-| Usuario hace login manual | SI | No | No |
-| Usuario hace logout manual | No | SI | No |
-| NO hay sesión al iniciar app | No | SI | SI |
-| Sesión expiró por inactividad al iniciar | No | SI | SI |
-| SessionValidator detecta expiración | No | SI | SI |
-| Otra pestaña hace logout | No | SI | No |
-| Restaurar sesión válida al recargar | No | No | No |
+| Acción | `onLogging` | `onLogout` | `onSessionInvalid` | `sessionInvalidated` |
+|--------|-------------|------------|-------------------|---------------------|
+| Usuario hace login manual | SI (data) | No | No | false (reset) |
+| Usuario hace logout manual | No | SI (data) | No | sin cambio |
+| NO hay sesión al iniciar app | No | SI | SI | true |
+| Sesión expiró por inactividad | No | SI | SI | true |
+| SessionValidator detecta expiración | No | SI | SI | true |
+| ProtectedRoute sin sesión (1ra vez) | No | No | SI | true |
+| ProtectedRoute sin sesión (ya invalidada) | No | No | No | true (ya estaba) |
+| PublicRoute auto-logout | No | SI | SI | true |
+| Otra pestaña hace logout | No | SI | No | sin cambio |
+| Restaurar sesión válida al recargar | No | No | No | sin cambio |
 
-## Expiración de Sesión por Inactividad (v1.2.0)
-
-A partir de v1.2.0, la sesión expira por **inactividad**, no por tiempo absoluto desde el login.
-
-```
-1. Usuario hace login()
-   └─> lastActivityTime = Date.now()
-
-2. Usuario navega a ruta protegida (ProtectedRoute)
-   └─> refreshActivity() se llama automáticamente
-   └─> lastActivityTime = Date.now() (se renueva)
-
-3. SessionValidator verifica cada N segundos (validationInterval)
-   └─> Si (Date.now() - lastActivityTime) > sessionDuration
-       └─> Sesión expirada por inactividad
-       └─> Llama onSessionInvalid()
-       └─> Ejecuta logout()
-
-4. Mientras el usuario navegue entre rutas protegidas, la sesión se renueva
-```
-
-### refreshActivity()
-
-Disponible en el contexto via `useAppAuth()`. Actualiza `lastActivityTime` en localStorage.
-
-```typescript
-const { refreshActivity } = useAppAuth();
-
-// Llamar manualmente cuando quieras renovar la sesión
-refreshActivity();
-
-// ProtectedRoute lo llama automáticamente al montarse
-// No necesitas llamarlo manualmente en la mayoría de los casos
-```
-
-## ProtectedRoute y PublicRoute (v1.2.0)
+## ProtectedRoute y PublicRoute
 
 ### ProtectedRoute
 
 Renderiza sus children solo si el usuario está autenticado. Si no lo está:
 
-1. Revisa `sessionInvalidated` del provider — si ya es `true`, **no vuelve a disparar callbacks** (evita redirecciones duplicadas)
-2. Si `sessionInvalidated` es `false`, llama `triggerSessionInvalid()` (que pone `sessionInvalidated = true` y ejecuta `onSessionInvalid`)
-3. **Si se pasó** `onUnauthorized`, también lo llama
+1. Revisa `sessionInvalidated` del provider — si ya es `true`, **no vuelve a disparar callbacks**
+2. Si `sessionInvalidated` es `false`, llama `triggerSessionInvalid()` (pone `sessionInvalidated = true` + ejecuta `onSessionInvalid`)
+3. Si se pasó `onUnauthorized`, también lo llama
 4. Muestra el `fallback` si se proporcionó
 
-Cada vez que se monta (navegación a la ruta), llama `refreshActivity()` automáticamente para renovar la sesión.
+Cada vez que se monta con sesión activa, llama `refreshActivity()` automáticamente para renovar la sesión.
 
 ```jsx
 import { ProtectedRoute } from 'GC-UI-COMPONENTS';
-import { useLocation } from 'wouter';
 
-// Opción 1: Sin onUnauthorized (la redirección se maneja en onSessionInvalid del provider)
 function Dashboard() {
   return (
     <ProtectedRoute fallback={<p>Redirigiendo...</p>}>
-      <DashboardContent />
-    </ProtectedRoute>
-  );
-}
-
-// Opción 2: Con onUnauthorized (acción extra específica de esta ruta)
-function Dashboard() {
-  const [, setLocation] = useLocation();
-
-  return (
-    <ProtectedRoute
-      onUnauthorized={() => setLocation('/login')}
-      fallback={<p>Redirigiendo al login...</p>}
-    >
       <DashboardContent />
     </ProtectedRoute>
   );
@@ -270,14 +350,13 @@ function Dashboard() {
 
 ### PublicRoute
 
-Siempre renderiza sus children. Si el usuario ya tiene sesión activa y se queda en esta ruta sin navegar, se activa un temporizador. Si pasa el tiempo configurado (`autoLogoutDelay`, default 30 segundos) sin cambiar de ruta, se hace logout automático como si la sesión hubiera expirado (llama `onSessionInvalid` + `logout`).
+Siempre renderiza sus children. Si el usuario ya tiene sesión activa y se queda en esta ruta sin navegar, se activa un temporizador (`autoLogoutDelay`, configurado en el provider). Si pasa el tiempo sin cambiar de ruta, hace logout automático (llama `triggerSessionInvalid` + `logout`).
 
-Si el usuario navega a otra ruta antes de que termine el temporizador, el timer se cancela automáticamente.
+Si el usuario navega a otra ruta antes del timeout, el timer se cancela automáticamente.
 
 ```jsx
 import { PublicRoute } from 'GC-UI-COMPONENTS';
 
-// El autoLogoutDelay se configura en el provider, no en PublicRoute
 function LoginPage() {
   return (
     <PublicRoute>
@@ -285,62 +364,9 @@ function LoginPage() {
     </PublicRoute>
   );
 }
-
-// Configuración en el provider
-function App() {
-  return (
-    <AppAuthProvider autoLogoutDelay={60000}> {/* 60 segundos */}
-      <Switch>
-        <Route path="/login" component={LoginPage} />
-        <Route path="/dashboard" component={DashboardPage} />
-      </Switch>
-    </AppAuthProvider>
-  );
-}
 ```
 
-## Uso Básico
-
-### Instalación Mínima
-
-```jsx
-import { AppAuthProvider } from 'GC-UI-COMPONENTS';
-
-function App() {
-  return (
-    <AppAuthProvider>
-      <MyAppContent />
-    </AppAuthProvider>
-  );
-}
-```
-
-### Uso del Hook useAppAuth
-
-```jsx
-import { useAppAuth } from 'GC-UI-COMPONENTS';
-
-function LoginButton() {
-  const { isAuthenticated, sessionData, login, logout, refreshActivity } = useAppAuth();
-
-  if (isAuthenticated) {
-    return (
-      <div>
-        <p>Bienvenido, {(sessionData as any)?.name}</p>
-        <button onClick={logout}>Cerrar Sesión</button>
-      </div>
-    );
-  }
-
-  return (
-    <button onClick={() => login({ name: 'Juan', role: 'admin' })}>
-      Iniciar Sesión
-    </button>
-  );
-}
-```
-
-### Ejemplo Completo con Rutas
+## Uso Completo con Rutas
 
 ```jsx
 import { AppAuthProvider, ProtectedRoute, PublicRoute, useAppAuth } from 'GC-UI-COMPONENTS';
@@ -379,8 +405,15 @@ function DashboardPage() {
 function App() {
   return (
     <AppAuthProvider
-      sessionDuration={30 * 60 * 1000}
-      validationInterval={5000}
+      sessionDuration={30 * 60 * 1000}     // 30 minutos de inactividad
+      validationInterval={5000}              // Revisa cada 5 segundos
+      autoLogoutDelay={30000}                // 30 seg en PublicRoute antes de auto-logout
+      onLogging={(data) => {
+        console.log("Login:", data);
+      }}
+      onLogout={(data) => {
+        console.log("Logout:", data);
+      }}
       onSessionInvalid={() => {
         window.location.href = '/login';
       }}
@@ -455,12 +488,13 @@ Estas claves son independientes para evitar colisiones.
 ```typescript
 interface AppAuthContextValue {
   isAuthenticated: boolean;              // Estado de autenticación
+  sessionInvalidated: boolean;           // true si la sesión ya fue invalidada
   sessionData: unknown | null;           // Datos genéricos de sesión
   login: (data?: unknown) => void;       // Iniciar sesión con datos opcionales
   logout: (data?: unknown) => void;      // Cerrar sesión con datos opcionales
-  refreshActivity: () => void;           // Renovar lastActivityTime (v1.2.0)
-  triggerSessionInvalid: () => void;     // Dispara onSessionInvalid manualmente (v1.2.1)
-  sessionInvalidated: boolean;           // true si la sesión ya fue invalidada (v1.2.1)
+  refreshActivity: () => void;           // Renovar lastActivityTime
+  triggerSessionInvalid: () => void;     // Dispara onSessionInvalid manualmente
+  autoLogoutDelay: number;               // Tiempo configurado para auto-logout
 }
 ```
 
@@ -469,7 +503,7 @@ interface AppAuthContextValue {
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
 | `children` | `ReactNode` | Required | Contenido si autenticado |
-| `onUnauthorized` | `() => void` | No | Callback opcional cuando NO autenticado |
+| `onUnauthorized` | `() => void` | `undefined` | Callback opcional cuando NO autenticado |
 | `fallback` | `ReactNode` | `undefined` | Componente mientras no autenticado |
 
 ### PublicRoute Props
@@ -489,19 +523,18 @@ interface AppAuthContextValue {
 - Agregado `triggerSessionInvalid()` al contexto para disparar el callback manualmente
 - `PublicRoute` ya no oculta contenido — siempre renderiza children
 - `PublicRoute` ahora tiene auto-logout: si hay sesión y el usuario no navega, hace logout automático después de `autoLogoutDelay` (default 30s)
-- Agregado `sessionInvalidated` al contexto — el provider trackea si la sesión ya fue invalidada, evitando que `ProtectedRoute` dispare callbacks duplicados
+- `autoLogoutDelay` se configura a nivel del provider, no de PublicRoute
+- Agregado `sessionInvalidated` al contexto — evita callbacks duplicados entre SessionValidator y ProtectedRoute
+- ProtectedRoute usa `sessionInvalidated` para no disparar callbacks si ya fueron procesados
 
 ### v1.2.0 (Febrero 2026)
 - Expiración de sesión ahora basada en INACTIVIDAD (lastActivityTime) en vez de tiempo absoluto
 - Agregado `refreshActivity()` al contexto para renovar el tiempo de sesión
 - `ProtectedRoute` llama `refreshActivity()` automáticamente al montarse
 - `ProtectedRoute` ahora usa callback `onUnauthorized` en vez de `redirectTo` — agnóstico al router
-- `PublicRoute` simplificado: solo `children`, retorna null si autenticado (sin redirectTo)
 - Separadas storage keys: `app_session_validator` (interno) y `app_auth_session_data` (datos usuario)
-- Eliminado console.log del SessionValidator
 - Default `validationInterval` actualizado a 60 segundos
 - Default `sessionDataKey` actualizado a `'app_auth_session_data'`
-- Demo interactiva con rutas reales (wouter), inputs de configuración y timer visual
 
 ### v1.1.0 (Enero 2026)
 - Datos de sesión genéricos con `login(data)` y `sessionData`
@@ -512,7 +545,6 @@ interface AppAuthContextValue {
 ### v1.0.9 (Noviembre 2025)
 - Agregado prop `onLogout`
 - Modificado `onSessionInvalid` para ejecutarse solo en sesiones inválidas
-- Documentación de callbacks
 
 ### v1.0.0 (Octubre 2025)
 - Versión inicial
