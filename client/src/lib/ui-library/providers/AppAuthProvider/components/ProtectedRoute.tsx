@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useAppAuth } from '../hooks';
 import type { ProtectedRouteProps } from '../types';
