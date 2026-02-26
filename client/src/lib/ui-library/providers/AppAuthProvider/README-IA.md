@@ -1,6 +1,6 @@
 # AppAuthProvider - Provider de Autenticación y Gestión de Sesiones
 
-**Version: 1.2.0**
+**Version: 1.2.1**
 
 ## Descripción
 
@@ -95,7 +95,7 @@ interface AppAuthProviderProps {
   validationInterval?: number;     // Intervalo de revisión en ms (default: 60 segundos)
   skipInitialValidation?: boolean; // Si es true, no valida la sesión al iniciar
   sessionDataKey?: string;         // Clave de localStorage para datos genéricos (default: 'app_auth_session_data')
-  onLogging?: () => void;          // Callback al iniciar sesión manualmente
+  onLogging?: (data?: unknown) => void; // Callback al iniciar sesión, recibe la data del login
   onLogout?: () => void;           // Callback SIEMPRE que hay logout (manual o automático)
   onSessionInvalid?: () => void;   // Callback solo cuando sesión es inválida/expirada
 }
@@ -125,13 +125,14 @@ El AppAuthProvider ofrece **3 callbacks** para gestionar eventos del ciclo de au
 
 ### 1. onLogging - Login Manual
 
-**Se ejecuta:** Solo cuando el usuario hace `login()` manualmente
+**Se ejecuta:** Solo cuando el usuario hace `login()` manualmente. **Recibe la data** que se pasó a `login(data)`.
 
 ```typescript
-const handleLogin = () => {
-  console.log("Usuario inició sesión");
+const handleLogin = (data?: unknown) => {
+  console.log("Usuario inició sesión con data:", data);
+  // data contiene lo que se pasó a login({ name: 'Juan', role: 'admin' })
   navigate('/dashboard');
-  analytics.track('user_login');
+  analytics.track('user_login', data);
 };
 ```
 
@@ -423,7 +424,7 @@ Estas claves son independientes para evitar colisiones.
 | `validationInterval` | `number` | `60000` (1min) | Intervalo de revisión en ms |
 | `skipInitialValidation` | `boolean` | `false` | No valida sesión al montar (para login) |
 | `sessionDataKey` | `string` | `'app_auth_session_data'` | Clave de localStorage para datos genéricos |
-| `onLogging` | `() => void` | `undefined` | Callback al hacer login manual |
+| `onLogging` | `(data?: unknown) => void` | `undefined` | Callback al hacer login, recibe la data |
 | `onLogout` | `() => void` | `undefined` | Callback en cualquier logout |
 | `onSessionInvalid` | `() => void` | `undefined` | Callback cuando sesión expira/inválida |
 
@@ -454,6 +455,9 @@ interface AppAuthContextValue {
 | `children` | `ReactNode` | Required | Contenido si NO autenticado. Retorna null si hay sesión |
 
 ## Changelog
+
+### v1.2.1 (Febrero 2026)
+- `onLogging` ahora recibe `(data?: unknown)` — la misma data que se pasó a `login(data)`
 
 ### v1.2.0 (Febrero 2026)
 - Expiración de sesión ahora basada en INACTIVIDAD (lastActivityTime) en vez de tiempo absoluto

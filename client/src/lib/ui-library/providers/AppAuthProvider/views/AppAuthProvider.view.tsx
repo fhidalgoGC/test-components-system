@@ -115,7 +115,7 @@ export function AppAuthProvider({
 
     setIsAuthenticated(true);
     isLoggingOut.current = false;
-    onLoggingRef.current?.();
+    onLoggingRef.current?.(data);
 
     if (
       !fromBroadcastChannel &&
