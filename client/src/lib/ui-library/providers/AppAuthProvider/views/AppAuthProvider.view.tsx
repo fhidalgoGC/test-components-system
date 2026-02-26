@@ -98,6 +98,7 @@ export function AppAuthProvider({
   }, [onSessionInvalid]);
 
   const login = useCallback((data?: unknown, fromBroadcastChannel: boolean = false) => {
+    console.log('[AppAuthProvider] login() llamado', { data, fromBroadcastChannel });
     const sessionId = generateSessionId();
 
     saveSessionToStorage({
@@ -117,6 +118,7 @@ export function AppAuthProvider({
     setIsAuthenticated(true);
     setSessionInvalidated(false);
     isLoggingOut.current = false;
+    console.log('[AppAuthProvider] → onLogging callback', { data });
     onLoggingRef.current?.(data);
 
     if (
@@ -133,7 +135,11 @@ export function AppAuthProvider({
   }, [sessionDataKey]);
 
   const logout = useCallback((fromBroadcastChannel: boolean = false, shouldCallInvalidCallback: boolean = false, logoutData?: unknown) => {
-    if (isLoggingOut.current) return;
+    if (isLoggingOut.current) {
+      console.log('[AppAuthProvider] logout() ignorado (ya en proceso)');
+      return;
+    }
+    console.log('[AppAuthProvider] logout() llamado', { fromBroadcastChannel, shouldCallInvalidCallback, logoutData });
     isLoggingOut.current = true;
 
     clearSessionFromStorage();
@@ -141,10 +147,12 @@ export function AppAuthProvider({
     setIsAuthenticated(false);
     setSessionData(null);
 
+    console.log('[AppAuthProvider] → onLogout callback', { logoutData });
     onLogoutRef.current?.(logoutData);
 
     if (shouldCallInvalidCallback) {
       setSessionInvalidated(true);
+      console.log('[AppAuthProvider] → onSessionInvalid callback (desde logout)');
       onSessionInvalidRef.current?.();
     }
 
@@ -195,20 +203,25 @@ export function AppAuthProvider({
   }, []);
 
   useEffect(() => {
+    console.log('[AppAuthProvider] MONTADO — verificando sesión existente');
     const existingSession = getSessionFromStorage();
     if (
       existingSession &&
       !isSessionExpired(existingSession, finalSessionDuration)
     ) {
+      console.log('[AppAuthProvider] Sesión válida encontrada, restaurando');
       login(undefined, true);
     } else if (existingSession) {
+      console.log('[AppAuthProvider] Sesión expirada encontrada, haciendo logout');
       logout(true, true);
     } else {
+      console.log('[AppAuthProvider] Sin sesión, haciendo logout inicial');
       logout(true, true);
     }
   }, []);
 
   const handleSessionValidatorInvalid = useCallback(() => {
+    console.log('[AppAuthProvider] SessionValidator detectó sesión inválida/expirada');
     logout(false, true);
   }, [logout]);
 
@@ -222,11 +235,13 @@ export function AppAuthProvider({
 
   const refreshActivity = useCallback(() => {
     if (isAuthenticated) {
+      console.log('[AppAuthProvider] refreshActivity() — lastActivityTime renovado');
       updateLastActivity();
     }
   }, [isAuthenticated]);
 
   const triggerSessionInvalid = useCallback(() => {
+    console.log('[AppAuthProvider] triggerSessionInvalid() llamado');
     setSessionInvalidated(true);
     onSessionInvalidRef.current?.();
   }, []);
