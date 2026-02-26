@@ -192,7 +192,7 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
     items, 
     layout,
     position = 'bottom-start',
-    offset = 8,
+    offset = 0,
     header,
     footer,
     itemConfig,
