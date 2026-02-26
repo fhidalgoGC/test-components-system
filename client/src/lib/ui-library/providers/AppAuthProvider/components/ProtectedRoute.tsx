@@ -15,7 +15,7 @@ export function ProtectedRoute({ children, onUnauthorized, fallback }: Protected
   useEffect(() => {
     if (!isAuthenticated) {
       triggerSessionInvalid();
-      onUnauthorized();
+      onUnauthorized?.();
     }
   }, [isAuthenticated, onUnauthorized, triggerSessionInvalid]);
 

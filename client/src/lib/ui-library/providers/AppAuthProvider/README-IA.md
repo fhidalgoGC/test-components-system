@@ -108,7 +108,7 @@ interface AppAuthContextValue {
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  onUnauthorized: () => void;      // Callback cuando NO autenticado (consumidor decide qué hacer)
+  onUnauthorized?: () => void;     // Callback opcional cuando NO autenticado (se llama junto con onSessionInvalid)
   fallback?: ReactNode;            // Componente a mostrar cuando no autenticado
 }
 
@@ -432,7 +432,7 @@ interface AppAuthContextValue {
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
 | `children` | `ReactNode` | Required | Contenido si autenticado |
-| `onUnauthorized` | `() => void` | Required | Callback cuando NO autenticado |
+| `onUnauthorized` | `() => void` | No | Callback opcional cuando NO autenticado |
 | `fallback` | `ReactNode` | `undefined` | Componente mientras no autenticado |
 
 ### PublicRoute Props

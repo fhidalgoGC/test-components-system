@@ -21,7 +21,7 @@ export interface AppAuthProviderProps {
 
 export interface ProtectedRouteProps {
   children: ReactNode;
-  onUnauthorized: () => void;
+  onUnauthorized?: () => void;
   fallback?: ReactNode;
 }
 
