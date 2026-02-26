@@ -1,10 +1,15 @@
-# Layout Prop — Estandar de dimensionamiento
+# Layout Prop — Estandar de dimensionamiento y alineacion
 
-El prop `layout` es el estandar que usamos en los componentes de la libreria para controlar el tamano final del componente. Cualquier componente que necesite adaptarse al espacio disponible o tener un tamano fijo debe implementar este prop.
+El prop `layout` es el estandar que usamos en los componentes de la libreria para controlar el tamano final y la alineacion del contenido del componente. Cualquier componente que necesite adaptarse al espacio disponible o tener un tamano fijo debe implementar este prop.
 
 ## Interfaz
 
 ```ts
+interface LayoutAlign {
+  vertical?: 'top' | 'middle' | 'bottom';
+  horizontal?: 'left' | 'center' | 'right';
+}
+
 interface Layout {
   widthMode?: 'full' | 'auto' | 'fixed' | 'percentage';
   width?: number;
@@ -12,6 +17,7 @@ interface Layout {
   heightMode?: 'full' | 'auto' | 'fixed' | 'percentage';
   height?: number | 'auto';
   minHeight?: number;
+  align?: LayoutAlign;
 }
 ```
 
@@ -77,6 +83,39 @@ Altura minima en pixeles. Se aplica independientemente del `heightMode`. Util pa
 { "heightMode": "auto", "minHeight": 200 }
 ```
 
+### align
+
+Controla la alineacion del contenido interno del componente. Usa flexbox internamente.
+
+#### align.vertical
+
+Define la alineacion vertical del contenido dentro del componente.
+
+| Valor    | Descripcion                                          | CSS generado               |
+|----------|------------------------------------------------------|----------------------------|
+| `top`    | Contenido alineado en la parte superior.             | `alignItems: flex-start`   |
+| `middle` | Contenido centrado verticalmente.                    | `alignItems: center`       |
+| `bottom` | Contenido alineado en la parte inferior.             | `alignItems: flex-end`     |
+
+#### align.horizontal
+
+Define la alineacion horizontal del contenido dentro del componente.
+
+| Valor    | Descripcion                                          | CSS generado                  |
+|----------|------------------------------------------------------|-------------------------------|
+| `left`   | Contenido alineado a la izquierda.                   | `justifyContent: flex-start`  |
+| `center` | Contenido centrado horizontalmente.                  | `justifyContent: center`      |
+| `right`  | Contenido alineado a la derecha.                     | `justifyContent: flex-end`    |
+
+```json
+{
+  "align": {
+    "vertical": "middle",
+    "horizontal": "center"
+  }
+}
+```
+
 ## Ejemplo de uso completo
 
 ```tsx
@@ -87,6 +126,10 @@ Altura minima en pixeles. Se aplica independientemente del `heightMode`. Util pa
     heightMode: 'fixed',
     height: 400,
     minHeight: 200,
+    align: {
+      vertical: 'top',
+      horizontal: 'left',
+    },
   }}
   data={items}
   itemConfig={{ renderType: 'component', render: (item) => <Card {...item} /> }}
@@ -159,6 +202,47 @@ Altura minima en pixeles. Se aplica independientemente del `heightMode`. Util pa
 }
 ```
 
+### Componente centrado con tamano fijo
+
+```json
+{
+  "widthMode": "fixed",
+  "width": 600,
+  "heightMode": "fixed",
+  "height": 400,
+  "align": {
+    "vertical": "middle",
+    "horizontal": "center"
+  }
+}
+```
+
+### Componente con contenido arriba a la izquierda
+
+```json
+{
+  "widthMode": "full",
+  "heightMode": "full",
+  "align": {
+    "vertical": "top",
+    "horizontal": "left"
+  }
+}
+```
+
+### Componente con contenido abajo a la derecha
+
+```json
+{
+  "widthMode": "full",
+  "heightMode": "full",
+  "align": {
+    "vertical": "bottom",
+    "horizontal": "right"
+  }
+}
+```
+
 ## Componentes que ya lo implementan
 
 Los siguientes componentes ya usan el prop `layout` con este estandar:
@@ -174,7 +258,7 @@ Los siguientes componentes ya usan el prop `layout` con este estandar:
 
 ## Como implementarlo en un componente nuevo
 
-1. Importar o definir los tipos `WidthMode` y `HeightMode` en el archivo de tipos del componente.
+1. Importar o definir los tipos `WidthMode`, `HeightMode` y `LayoutAlign` en el archivo de tipos del componente.
 2. Agregar la interfaz `Layout` como prop del componente (preferiblemente como objeto `layout`).
 3. En el componente, convertir los valores del layout a estilos CSS inline o clases.
 
@@ -197,6 +281,27 @@ function getLayoutStyles(layout?: Layout): React.CSSProperties {
 
   if (layout?.minHeight) styles.minHeight = layout.minHeight;
 
+  if (layout?.align) {
+    styles.display = 'flex';
+    styles.flexDirection = 'column';
+
+    const verticalMap = { top: 'flex-start', middle: 'center', bottom: 'flex-end' } as const;
+    const horizontalMap = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
+
+    if (layout.align.vertical) {
+      styles.alignItems = horizontalMap[layout.align.horizontal || 'left'];
+      styles.justifyContent = verticalMap[layout.align.vertical];
+    }
+
+    if (layout.align.horizontal) {
+      styles.alignItems = horizontalMap[layout.align.horizontal];
+    }
+
+    if (layout.align.vertical) {
+      styles.justifyContent = verticalMap[layout.align.vertical];
+    }
+  }
+
   return styles;
 }
 ```
@@ -211,4 +316,4 @@ function getLayoutStyles(layout?: Layout): React.CSSProperties {
 
 ## Regla importante
 
-Todos los componentes de la libreria que renderizan un contenedor visual deben aceptar el prop `layout`. Esto garantiza que la aplicacion padre pueda controlar las dimensiones de cualquier componente de forma consistente, sin necesidad de wrappers o estilos externos.
+Todos los componentes de la libreria que renderizan un contenedor visual deben aceptar el prop `layout`. Esto garantiza que la aplicacion padre pueda controlar las dimensiones y la alineacion del contenido de cualquier componente de forma consistente, sin necesidad de wrappers o estilos externos.
