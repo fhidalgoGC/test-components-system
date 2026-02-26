@@ -45,7 +45,6 @@ function saveSessionData(key: string, data: unknown): void {
   try {
     localStorage.setItem(key, JSON.stringify(data));
   } catch {
-    // silent
   }
 }
 
@@ -116,21 +115,16 @@ export function AppAuthProvider({
     pendingCallbackRef.current = null;
 
     if (pending.type === 'login') {
-      console.log('[AppAuth] 4. useEffect → estado ya aplicado → llamando onLogging', { data: pending.data, isAuthenticated });
       onLoggingRef.current?.(pending.data);
-      console.log('[AppAuth] 5. onLogging terminó');
     } else if (pending.type === 'logout') {
-      console.log('[AppAuth] 4. useEffect → estado ya aplicado → llamando onLogout', { data: pending.data, isAuthenticated });
       onLogoutRef.current?.(pending.data);
       if (pending.shouldCallInvalid) {
-        console.log('[AppAuth] 5. Llamando onSessionInvalid');
         onSessionInvalidRef.current?.();
       }
     }
   }, [isAuthenticated, sessionInvalidated]);
 
   const login = useCallback((data?: unknown, fromBroadcastChannel: boolean = false) => {
-    console.log('[AppAuth] 1. login() llamado', { data, fromBroadcastChannel });
     const sessionId = generateSessionId();
 
     saveSessionToStorage({
@@ -145,7 +139,6 @@ export function AppAuthProvider({
 
     pendingCallbackRef.current = { type: 'login', data };
 
-    console.log('[AppAuth] 2. setState → isAuthenticated=true, sessionInvalidated=false');
     if (data !== undefined) {
       setSessionData(data);
     } else {
@@ -155,7 +148,6 @@ export function AppAuthProvider({
     setIsAuthenticated(true);
     setSessionInvalidated(false);
     isLoggingOut.current = false;
-    console.log('[AppAuth] 3. setState encolado → esperando render para llamar callbacks');
 
     if (
       !fromBroadcastChannel &&
@@ -172,10 +164,8 @@ export function AppAuthProvider({
 
   const logout = useCallback((fromBroadcastChannel: boolean = false, shouldCallInvalidCallback: boolean = false, logoutData?: unknown) => {
     if (isLoggingOut.current) {
-      console.log('[AppAuth] logout() ignorado (ya en proceso)');
       return;
     }
-    console.log('[AppAuth] 1. logout() llamado', { fromBroadcastChannel, shouldCallInvalidCallback, logoutData });
     isLoggingOut.current = true;
 
     clearSessionFromStorage();
@@ -183,13 +173,11 @@ export function AppAuthProvider({
 
     pendingCallbackRef.current = { type: 'logout', data: logoutData, shouldCallInvalid: shouldCallInvalidCallback };
 
-    console.log('[AppAuth] 2. setState → isAuthenticated=false' + (shouldCallInvalidCallback ? ', sessionInvalidated=true' : ''));
     setIsAuthenticated(false);
     setSessionData(null);
     if (shouldCallInvalidCallback) {
       setSessionInvalidated(true);
     }
-    console.log('[AppAuth] 3. setState encolado → esperando render para llamar callbacks');
 
     if (
       !fromBroadcastChannel &&
@@ -238,25 +226,20 @@ export function AppAuthProvider({
   }, []);
 
   useEffect(() => {
-    console.log('[AppAuth] PROVIDER MONTADO — verificando sesión en localStorage');
     const existingSession = getSessionFromStorage();
     if (
       existingSession &&
       !isSessionExpired(existingSession, finalSessionDuration)
     ) {
-      console.log('[AppAuth] Sesión válida encontrada → restaurando');
       login(undefined, true);
     } else if (existingSession) {
-      console.log('[AppAuth] Sesión expirada encontrada → logout');
       logout(true, true);
     } else {
-      console.log('[AppAuth] Sin sesión → logout inicial');
       logout(true, true);
     }
   }, []);
 
   const handleSessionValidatorInvalid = useCallback(() => {
-    console.log('[AppAuth] SessionValidator detectó expiración por inactividad');
     logout(false, true);
   }, [logout]);
 
@@ -270,13 +253,11 @@ export function AppAuthProvider({
 
   const refreshActivity = useCallback(() => {
     if (isAuthenticated) {
-      console.log('[AppAuth] refreshActivity() — lastActivityTime renovado');
       updateLastActivity();
     }
   }, [isAuthenticated]);
 
   const triggerSessionInvalid = useCallback(() => {
-    console.log('[AppAuth] triggerSessionInvalid() — sessionInvalidated=true');
     setSessionInvalidated(true);
     onSessionInvalidRef.current?.();
   }, []);

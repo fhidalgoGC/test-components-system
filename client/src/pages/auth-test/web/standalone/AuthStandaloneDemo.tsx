@@ -283,16 +283,13 @@ function AuthApp({ sessionDuration, checkInterval }: { sessionDuration: number; 
     <AppAuthProvider
       sessionDuration={sessionDuration}
       validationInterval={checkInterval}
-      onLogging={(data) => {
-        console.log('[Demo] onLogging → navegando a /dashboard', data);
+      onLogging={() => {
         setLocation(`${BASE}/dashboard`);
       }}
       onLogout={() => {
-        console.log('[Demo] onLogout → navegando a /login');
         setLocation(`${BASE}/login`);
       }}
       onSessionInvalid={() => {
-        console.log('[Demo] onSessionInvalid → navegando a /login');
         setLocation(`${BASE}/login`);
       }}
     >
