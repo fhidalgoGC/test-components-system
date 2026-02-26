@@ -56,7 +56,7 @@ AppAuthProvider
 │   └── logout() borra datos automáticamente
 │
 ├── Protección de rutas (v1.2.0)
-│   ├── ProtectedRoute (renderiza si autenticado, llama onUnauthorized si no)
+│   ├── ProtectedRoute (renderiza si autenticado, llama onSessionInvalid + onUnauthorized si no)
 │   ├── ProtectedRoute llama refreshActivity() al montarse
 │   └── PublicRoute (renderiza si NO autenticado, retorna null si hay sesión)
 │
@@ -229,7 +229,11 @@ refreshActivity();
 
 ### ProtectedRoute
 
-Renderiza sus children solo si el usuario está autenticado. Si no lo está, llama el callback `onUnauthorized` y muestra el `fallback`. **Es completamente agnóstico al router** — el consumidor decide qué hacer en el callback.
+Renderiza sus children solo si el usuario está autenticado. Si no lo está:
+
+1. **Siempre** llama `onSessionInvalid` del provider (via `triggerSessionInvalid()`)
+2. **Si se pasó** `onUnauthorized`, también lo llama (para acciones adicionales como redirecciones)
+3. Muestra el `fallback` si se proporcionó
 
 Cada vez que se monta (navegación a la ruta), llama `refreshActivity()` automáticamente para renovar la sesión.
 
@@ -237,6 +241,16 @@ Cada vez que se monta (navegación a la ruta), llama `refreshActivity()` automá
 import { ProtectedRoute } from 'GC-UI-COMPONENTS';
 import { useLocation } from 'wouter';
 
+// Opción 1: Sin onUnauthorized (la redirección se maneja en onSessionInvalid del provider)
+function Dashboard() {
+  return (
+    <ProtectedRoute fallback={<p>Redirigiendo...</p>}>
+      <DashboardContent />
+    </ProtectedRoute>
+  );
+}
+
+// Opción 2: Con onUnauthorized (acción extra específica de esta ruta)
 function Dashboard() {
   const [, setLocation] = useLocation();
 
@@ -335,10 +349,7 @@ function DashboardPage() {
   const [, setLocation] = useLocation();
 
   return (
-    <ProtectedRoute
-      onUnauthorized={() => setLocation('/login')}
-      fallback={<p>Redirigiendo...</p>}
-    >
+    <ProtectedRoute fallback={<p>Redirigiendo...</p>}>
       <p>Bienvenido, {(sessionData as any)?.name}</p>
       <button onClick={() => { logout(); setLocation('/login'); }}>
         Cerrar Sesión
@@ -349,7 +360,13 @@ function DashboardPage() {
 
 function App() {
   return (
-    <AppAuthProvider sessionDuration={30 * 60 * 1000} validationInterval={5000}>
+    <AppAuthProvider
+      sessionDuration={30 * 60 * 1000}
+      validationInterval={5000}
+      onSessionInvalid={() => {
+        window.location.href = '/login';
+      }}
+    >
       <Switch>
         <Route path="/login" component={LoginPage} />
         <Route path="/dashboard" component={DashboardPage} />
