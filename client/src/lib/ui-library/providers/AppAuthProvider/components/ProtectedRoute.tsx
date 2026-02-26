@@ -5,8 +5,10 @@ import type { ProtectedRouteProps } from '../types';
 export function ProtectedRoute({ children, onUnauthorized, fallback }: ProtectedRouteProps) {
   const { isAuthenticated, sessionInvalidated, refreshActivity, triggerSessionInvalid } = useAppAuth();
 
+  console.log('[ProtectedRoute] RENDER', { isAuthenticated, sessionInvalidated });
+
   useEffect(() => {
-    console.log('[ProtectedRoute] MONTADO', { isAuthenticated, sessionInvalidated });
+    console.log('[ProtectedRoute] MONTADO (useEffect)', { isAuthenticated, sessionInvalidated });
   }, []);
 
   useEffect(() => {
@@ -18,11 +20,11 @@ export function ProtectedRoute({ children, onUnauthorized, fallback }: Protected
 
   useEffect(() => {
     if (!isAuthenticated && !sessionInvalidated) {
-      console.log('[ProtectedRoute] Sin sesión y no invalidada → triggerSessionInvalid() + onUnauthorized()');
+      console.log('[ProtectedRoute] Sin sesión + no invalidada → triggerSessionInvalid() + onUnauthorized()');
       triggerSessionInvalid();
       onUnauthorized?.();
     } else if (!isAuthenticated && sessionInvalidated) {
-      console.log('[ProtectedRoute] Sin sesión pero ya invalidada → NO dispara callbacks');
+      console.log('[ProtectedRoute] Sin sesión + ya invalidada → NO dispara callbacks (duplicado evitado)');
     }
   }, [isAuthenticated, sessionInvalidated, onUnauthorized, triggerSessionInvalid]);
 
@@ -31,5 +33,6 @@ export function ProtectedRoute({ children, onUnauthorized, fallback }: Protected
     return fallback ? <>{fallback}</> : null;
   }
 
+  console.log('[ProtectedRoute] Renderizando children (autenticado)');
   return <>{children}</>;
 }
