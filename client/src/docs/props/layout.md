@@ -87,25 +87,27 @@ Altura minima en pixeles. Se aplica independientemente del `heightMode`. Util pa
 
 Controla la alineacion del contenido interno del componente. Usa flexbox internamente.
 
+**Valor por defecto:** Si no se pasa `align`, el componente siempre se alinea centrado en ambos ejes (`vertical: 'middle'`, `horizontal: 'center'`).
+
 #### align.vertical
 
-Define la alineacion vertical del contenido dentro del componente.
-
-| Valor    | Descripcion                                          | CSS generado               |
-|----------|------------------------------------------------------|----------------------------|
-| `top`    | Contenido alineado en la parte superior.             | `alignItems: flex-start`   |
-| `middle` | Contenido centrado verticalmente.                    | `alignItems: center`       |
-| `bottom` | Contenido alineado en la parte inferior.             | `alignItems: flex-end`     |
-
-#### align.horizontal
-
-Define la alineacion horizontal del contenido dentro del componente.
+Define la alineacion vertical del contenido dentro del componente. Por defecto `'middle'`.
 
 | Valor    | Descripcion                                          | CSS generado                  |
 |----------|------------------------------------------------------|-------------------------------|
-| `left`   | Contenido alineado a la izquierda.                   | `justifyContent: flex-start`  |
-| `center` | Contenido centrado horizontalmente.                  | `justifyContent: center`      |
-| `right`  | Contenido alineado a la derecha.                     | `justifyContent: flex-end`    |
+| `top`    | Contenido alineado en la parte superior.             | `justifyContent: flex-start`  |
+| `middle` | Contenido centrado verticalmente. **(default)**      | `justifyContent: center`      |
+| `bottom` | Contenido alineado en la parte inferior.             | `justifyContent: flex-end`    |
+
+#### align.horizontal
+
+Define la alineacion horizontal del contenido dentro del componente. Por defecto `'center'`.
+
+| Valor    | Descripcion                                          | CSS generado               |
+|----------|------------------------------------------------------|----------------------------|
+| `left`   | Contenido alineado a la izquierda.                   | `alignItems: flex-start`   |
+| `center` | Contenido centrado horizontalmente. **(default)**    | `alignItems: center`       |
+| `right`  | Contenido alineado a la derecha.                     | `alignItems: flex-end`     |
 
 ```json
 {
@@ -281,26 +283,16 @@ function getLayoutStyles(layout?: Layout): React.CSSProperties {
 
   if (layout?.minHeight) styles.minHeight = layout.minHeight;
 
-  if (layout?.align) {
-    styles.display = 'flex';
-    styles.flexDirection = 'column';
+  const verticalMap = { top: 'flex-start', middle: 'center', bottom: 'flex-end' } as const;
+  const horizontalMap = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
 
-    const verticalMap = { top: 'flex-start', middle: 'center', bottom: 'flex-end' } as const;
-    const horizontalMap = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
+  const vertical = layout?.align?.vertical || 'middle';
+  const horizontal = layout?.align?.horizontal || 'center';
 
-    if (layout.align.vertical) {
-      styles.alignItems = horizontalMap[layout.align.horizontal || 'left'];
-      styles.justifyContent = verticalMap[layout.align.vertical];
-    }
-
-    if (layout.align.horizontal) {
-      styles.alignItems = horizontalMap[layout.align.horizontal];
-    }
-
-    if (layout.align.vertical) {
-      styles.justifyContent = verticalMap[layout.align.vertical];
-    }
-  }
+  styles.display = 'flex';
+  styles.flexDirection = 'column';
+  styles.justifyContent = verticalMap[vertical];
+  styles.alignItems = horizontalMap[horizontal];
 
   return styles;
 }
