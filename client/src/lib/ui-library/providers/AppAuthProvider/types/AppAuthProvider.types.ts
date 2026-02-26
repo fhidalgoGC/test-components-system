@@ -4,7 +4,7 @@ export interface AppAuthContextValue {
   isAuthenticated: boolean;
   sessionData: unknown | null;
   login: (data?: unknown) => void;
-  logout: () => void;
+  logout: (data?: unknown) => void;
   refreshActivity: () => void;
 }
 
@@ -15,7 +15,7 @@ export interface AppAuthProviderProps {
   skipInitialValidation?: boolean;
   sessionDataKey?: string;
   onLogging?: (data?: unknown) => void;
-  onLogout?: () => void;
+  onLogout?: (data?: unknown) => void;
   onSessionInvalid?: () => void;
 }
 

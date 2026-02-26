@@ -130,7 +130,7 @@ export function AppAuthProvider({
     }
   }, [sessionDataKey]);
 
-  const logout = useCallback((fromBroadcastChannel: boolean = false, shouldCallInvalidCallback: boolean = false) => {
+  const logout = useCallback((fromBroadcastChannel: boolean = false, shouldCallInvalidCallback: boolean = false, logoutData?: unknown) => {
     if (isLoggingOut.current) return;
     isLoggingOut.current = true;
 
@@ -139,7 +139,7 @@ export function AppAuthProvider({
     setIsAuthenticated(false);
     setSessionData(null);
 
-    onLogoutRef.current?.();
+    onLogoutRef.current?.(logoutData);
 
     if (shouldCallInvalidCallback) {
       onSessionInvalidRef.current?.();
@@ -217,8 +217,8 @@ export function AppAuthProvider({
     login(data, false);
   }, [login]);
 
-  const publicLogout = useCallback(() => {
-    logout(false, false);
+  const publicLogout = useCallback((data?: unknown) => {
+    logout(false, false, data);
   }, [logout]);
 
   const refreshActivity = useCallback(() => {

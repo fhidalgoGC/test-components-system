@@ -96,7 +96,7 @@ interface AppAuthProviderProps {
   skipInitialValidation?: boolean; // Si es true, no valida la sesión al iniciar
   sessionDataKey?: string;         // Clave de localStorage para datos genéricos (default: 'app_auth_session_data')
   onLogging?: (data?: unknown) => void; // Callback al iniciar sesión, recibe la data del login
-  onLogout?: () => void;           // Callback SIEMPRE que hay logout (manual o automático)
+  onLogout?: (data?: unknown) => void;  // Callback en cualquier logout, recibe data del logout manual
   onSessionInvalid?: () => void;   // Callback solo cuando sesión es inválida/expirada
 }
 
@@ -104,7 +104,7 @@ interface AppAuthContextValue {
   isAuthenticated: boolean;
   sessionData: unknown | null;     // Datos genéricos guardados con login(data)
   login: (data?: unknown) => void; // Login con datos opcionales
-  logout: () => void;
+  logout: (data?: unknown) => void; // Logout con datos opcionales
   refreshActivity: () => void;     // Renueva lastActivityTime, extendiendo la sesión (v1.2.0)
 }
 
@@ -142,11 +142,12 @@ const handleLogin = (data?: unknown) => {
 
 ### 2. onLogout - Cualquier Logout
 
-**Se ejecuta:** **SIEMPRE** que hay un logout (manual o automático)
+**Se ejecuta:** **SIEMPRE** que hay un logout (manual o automático). **Recibe la data** que se pasó a `logout(data)` (solo en logout manual; en logout automático por expiración, data es `undefined`).
 
 ```typescript
-const handleLogout = () => {
-  console.log("Logout detectado");
+const handleLogout = (data?: unknown) => {
+  console.log("Logout detectado con data:", data);
+  // data contiene lo que se pasó a logout({ reason: 'user_action' })
   localStorage.removeItem('auth_token');
   websocket.close();
 };
@@ -425,7 +426,7 @@ Estas claves son independientes para evitar colisiones.
 | `skipInitialValidation` | `boolean` | `false` | No valida sesión al montar (para login) |
 | `sessionDataKey` | `string` | `'app_auth_session_data'` | Clave de localStorage para datos genéricos |
 | `onLogging` | `(data?: unknown) => void` | `undefined` | Callback al hacer login, recibe la data |
-| `onLogout` | `() => void` | `undefined` | Callback en cualquier logout |
+| `onLogout` | `(data?: unknown) => void` | `undefined` | Callback en cualquier logout, recibe data |
 | `onSessionInvalid` | `() => void` | `undefined` | Callback cuando sesión expira/inválida |
 
 ### useAppAuth Hook
@@ -435,7 +436,7 @@ interface AppAuthContextValue {
   isAuthenticated: boolean;              // Estado de autenticación
   sessionData: unknown | null;           // Datos genéricos de sesión
   login: (data?: unknown) => void;       // Iniciar sesión con datos opcionales
-  logout: () => void;                    // Cerrar sesión
+  logout: (data?: unknown) => void;      // Cerrar sesión con datos opcionales
   refreshActivity: () => void;           // Renovar lastActivityTime (v1.2.0)
 }
 ```
@@ -458,6 +459,8 @@ interface AppAuthContextValue {
 
 ### v1.2.1 (Febrero 2026)
 - `onLogging` ahora recibe `(data?: unknown)` — la misma data que se pasó a `login(data)`
+- `onLogout` ahora recibe `(data?: unknown)` — la misma data que se pasó a `logout(data)`
+- `logout()` en el contexto ahora acepta `(data?: unknown)` opcional
 
 ### v1.2.0 (Febrero 2026)
 - Expiración de sesión ahora basada en INACTIVIDAD (lastActivityTime) en vez de tiempo absoluto
