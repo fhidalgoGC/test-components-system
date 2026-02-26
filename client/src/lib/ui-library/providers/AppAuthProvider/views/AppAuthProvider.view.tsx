@@ -283,10 +283,15 @@ export function AppAuthProvider({
     onSessionInvalidRef.current?.();
   }, []);
 
+  const getSessionData = useCallback(<T = unknown,>(): T | null => {
+    return sessionData as T | null;
+  }, [sessionData]);
+
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
     sessionInvalidated,
     sessionData,
+    getSessionData,
     login: publicLogin,
     logout: publicLogout,
     refreshActivity,
