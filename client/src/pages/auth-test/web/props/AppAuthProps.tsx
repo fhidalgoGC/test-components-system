@@ -36,12 +36,6 @@ export function AppAuthPropsTab() {
               <td>Intervalo en milisegundos con que el SessionValidator revisa si la sesión expiró</td>
             </tr>
             <tr>
-              <td><code>skipInitialValidation</code></td>
-              <td><code>boolean</code></td>
-              <td><code>false</code></td>
-              <td>Si es true, no valida la sesión al montar el provider</td>
-            </tr>
-            <tr>
               <td><code>sessionDataKey</code></td>
               <td><code>string</code></td>
               <td><code>'app_auth_session_data'</code></td>

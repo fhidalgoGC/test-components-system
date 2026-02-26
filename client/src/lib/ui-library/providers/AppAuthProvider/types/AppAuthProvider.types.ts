@@ -12,7 +12,6 @@ export interface AppAuthProviderProps {
   children: ReactNode;
   sessionDuration?: number;
   validationInterval?: number;
-  skipInitialValidation?: boolean;
   sessionDataKey?: string;
   onLogging?: (data?: unknown) => void;
   onLogout?: (data?: unknown) => void;

@@ -16,7 +16,6 @@
 - Validación automática de sesión con intervalo configurable
 - Sincronización cross-tab usando BroadcastChannel
 - Persistencia de sesión y datos en localStorage
-- Modo `skipInitialValidation` para páginas de login
 - Callbacks de ciclo de vida (`onLogging`, `onLogout`, `onSessionInvalid`)
 - Integración con ConfigProvider para configuración jerárquica
 
@@ -67,8 +66,7 @@ AppAuthProvider
 │   ├── ProtectedRoute renueva automáticamente al navegar
 │   ├── sessionDuration configurable (default: 8 horas)
 │   ├── validationInterval configurable (default: 60 segundos)
-│   ├── SessionValidator automático
-│   └── skipInitialValidation para páginas de login
+│   └── SessionValidator automático
 │
 ├── Sincronización cross-tab
 │   ├── BroadcastChannel API
@@ -93,7 +91,6 @@ interface AppAuthProviderProps {
   children: React.ReactNode;
   sessionDuration?: number;        // Tiempo de inactividad en ms antes de expirar (default: 8 horas)
   validationInterval?: number;     // Intervalo de revisión en ms (default: 60 segundos)
-  skipInitialValidation?: boolean; // Si es true, no valida la sesión al iniciar
   sessionDataKey?: string;         // Clave de localStorage para datos genéricos (default: 'app_auth_session_data')
   onLogging?: (data?: unknown) => void; // Callback al iniciar sesión, recibe la data del login
   onLogout?: (data?: unknown) => void;  // Callback en cualquier logout, recibe data del logout manual
@@ -361,18 +358,6 @@ function App() {
 }
 ```
 
-## skipInitialValidation
-
-### ¿Qué hace?
-
-Por defecto, cuando montas el `AppAuthProvider`, busca en localStorage si existe una sesión válida. Si la encuentra, activa `isAuthenticated = true`.
-
-**Usar `skipInitialValidation={true}`** en páginas de login donde el usuario AÚN NO ha iniciado sesión.
-
-**NO usar** en páginas protegidas que necesitan restaurar la sesión.
-
-**Importante:** `skipInitialValidation` solo salta la validación al montar. El SessionValidator se activa normalmente después de `login()`.
-
 ## Configuración
 
 ### Orden de Precedencia
@@ -423,7 +408,6 @@ Estas claves son independientes para evitar colisiones.
 | `children` | `ReactNode` | Required | Contenido de la aplicación |
 | `sessionDuration` | `number` | `28800000` (8h) | Tiempo de inactividad en ms antes de expirar |
 | `validationInterval` | `number` | `60000` (1min) | Intervalo de revisión en ms |
-| `skipInitialValidation` | `boolean` | `false` | No valida sesión al montar (para login) |
 | `sessionDataKey` | `string` | `'app_auth_session_data'` | Clave de localStorage para datos genéricos |
 | `onLogging` | `(data?: unknown) => void` | `undefined` | Callback al hacer login, recibe la data |
 | `onLogout` | `(data?: unknown) => void` | `undefined` | Callback en cualquier logout, recibe data |
@@ -461,6 +445,7 @@ interface AppAuthContextValue {
 - `onLogging` ahora recibe `(data?: unknown)` — la misma data que se pasó a `login(data)`
 - `onLogout` ahora recibe `(data?: unknown)` — la misma data que se pasó a `logout(data)`
 - `logout()` en el contexto ahora acepta `(data?: unknown)` opcional
+- Eliminado `skipInitialValidation` — ya no es necesario porque `PublicRoute` maneja las rutas públicas
 
 ### v1.2.0 (Febrero 2026)
 - Expiración de sesión ahora basada en INACTIVIDAD (lastActivityTime) en vez de tiempo absoluto
@@ -484,9 +469,6 @@ interface AppAuthContextValue {
 - Agregado prop `onLogout`
 - Modificado `onSessionInvalid` para ejecutarse solo en sesiones inválidas
 - Documentación de callbacks
-
-### v1.0.8 (Noviembre 2025)
-- Agregado prop `skipInitialValidation`
 
 ### v1.0.0 (Octubre 2025)
 - Versión inicial

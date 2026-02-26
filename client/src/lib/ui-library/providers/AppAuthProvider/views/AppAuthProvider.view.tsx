@@ -57,7 +57,6 @@ export function AppAuthProvider({
   children,
   sessionDuration,
   validationInterval,
-  skipInitialValidation = false,
   sessionDataKey = DEFAULT_SESSION_DATA_KEY,
   onLogging,
   onLogout,
@@ -192,10 +191,6 @@ export function AppAuthProvider({
   }, []);
 
   useEffect(() => {
-    if (skipInitialValidation) {
-      return;
-    }
-
     const existingSession = getSessionFromStorage();
     if (
       existingSession &&
@@ -207,7 +202,7 @@ export function AppAuthProvider({
     } else {
       logout(true, true);
     }
-  }, [skipInitialValidation]);
+  }, []);
 
   const handleSessionValidatorInvalid = useCallback(() => {
     logout(false, true);

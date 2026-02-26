@@ -5,7 +5,7 @@ import { PublicRouteExample } from './PublicRouteExample';
 
 export function AppAuthExamplesTab() {
   return (
-    <AppAuthProvider skipInitialValidation>
+    <AppAuthProvider>
       <SessionDataExample />
       <ProtectedRouteExample />
       <PublicRouteExample />
