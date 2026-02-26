@@ -222,12 +222,17 @@ export function AppAuthProvider({
     }
   }, [isAuthenticated]);
 
+  const triggerSessionInvalid = useCallback(() => {
+    onSessionInvalidRef.current?.();
+  }, []);
+
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
     sessionData,
     login: publicLogin,
     logout: publicLogout,
     refreshActivity,
+    triggerSessionInvalid,
   };
 
   return (

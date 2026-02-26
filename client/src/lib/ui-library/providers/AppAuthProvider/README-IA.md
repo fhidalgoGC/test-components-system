@@ -103,6 +103,7 @@ interface AppAuthContextValue {
   login: (data?: unknown) => void; // Login con datos opcionales
   logout: (data?: unknown) => void; // Logout con datos opcionales
   refreshActivity: () => void;     // Renueva lastActivityTime, extendiendo la sesión (v1.2.0)
+  triggerSessionInvalid: () => void; // Dispara el callback onSessionInvalid manualmente (v1.2.1)
 }
 
 interface ProtectedRouteProps {
@@ -422,6 +423,7 @@ interface AppAuthContextValue {
   login: (data?: unknown) => void;       // Iniciar sesión con datos opcionales
   logout: (data?: unknown) => void;      // Cerrar sesión con datos opcionales
   refreshActivity: () => void;           // Renovar lastActivityTime (v1.2.0)
+  triggerSessionInvalid: () => void;     // Dispara onSessionInvalid manualmente (v1.2.1)
 }
 ```
 
@@ -446,6 +448,8 @@ interface AppAuthContextValue {
 - `onLogout` ahora recibe `(data?: unknown)` — la misma data que se pasó a `logout(data)`
 - `logout()` en el contexto ahora acepta `(data?: unknown)` opcional
 - Eliminado `skipInitialValidation` — ya no es necesario porque `PublicRoute` maneja las rutas públicas
+- `ProtectedRoute` ahora llama `onSessionInvalid` automáticamente cuando detecta que no hay sesión
+- Agregado `triggerSessionInvalid()` al contexto para disparar el callback manualmente
 
 ### v1.2.0 (Febrero 2026)
 - Expiración de sesión ahora basada en INACTIVIDAD (lastActivityTime) en vez de tiempo absoluto

@@ -6,6 +6,7 @@ export interface AppAuthContextValue {
   login: (data?: unknown) => void;
   logout: (data?: unknown) => void;
   refreshActivity: () => void;
+  triggerSessionInvalid: () => void;
 }
 
 export interface AppAuthProviderProps {

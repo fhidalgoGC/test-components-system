@@ -4,7 +4,7 @@ import { useAppAuth } from '../hooks';
 import type { ProtectedRouteProps } from '../types';
 
 export function ProtectedRoute({ children, onUnauthorized, fallback }: ProtectedRouteProps) {
-  const { isAuthenticated, refreshActivity } = useAppAuth();
+  const { isAuthenticated, refreshActivity, triggerSessionInvalid } = useAppAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -14,9 +14,10 @@ export function ProtectedRoute({ children, onUnauthorized, fallback }: Protected
 
   useEffect(() => {
     if (!isAuthenticated) {
+      triggerSessionInvalid();
       onUnauthorized();
     }
-  }, [isAuthenticated, onUnauthorized]);
+  }, [isAuthenticated, onUnauthorized, triggerSessionInvalid]);
 
   if (!isAuthenticated) {
     return fallback ? <>{fallback}</> : null;
