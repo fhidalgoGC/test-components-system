@@ -7,13 +7,11 @@ const BASE = '/providers/app-auth/demo';
 
 function LoginPage() {
   const { login } = useAppAuth();
-  const [, setLocation] = useLocation();
   const [name, setName] = useState('Juan Pérez');
   const [role, setRole] = useState('admin');
 
   const handleLogin = () => {
     login({ name, role, loginTime: new Date().toISOString() });
-    setLocation(`${BASE}/dashboard`);
   };
 
   return (
@@ -128,17 +126,14 @@ function CountdownTimer({ sessionDuration, checkInterval }: { sessionDuration: n
 
 function DashboardPage() {
   const { sessionData, logout } = useAppAuth();
-  const [, setLocation] = useLocation();
   const data = sessionData as { name?: string; role?: string; loginTime?: string } | null;
 
   const handleLogout = () => {
     logout();
-    setLocation(`${BASE}/login`);
   };
 
   return (
     <ProtectedRoute
-      onUnauthorized={() => setLocation(`${BASE}/login`)}
       fallback={<div className={styles.page}><p>Redirigiendo al login...</p></div>}
     >
       <div className={styles.page}>
@@ -188,12 +183,10 @@ function DashboardPage() {
 
 function ProfilePage() {
   const { sessionData } = useAppAuth();
-  const [, setLocation] = useLocation();
   const data = sessionData as { name?: string; role?: string } | null;
 
   return (
     <ProtectedRoute
-      onUnauthorized={() => setLocation(`${BASE}/login`)}
       fallback={<div className={styles.page}><p>Redirigiendo al login...</p></div>}
     >
       <div className={styles.page}>
@@ -270,21 +263,46 @@ function NavBar({ sessionDuration, checkInterval }: { sessionDuration: number; c
   );
 }
 
-function AuthApp({ sessionDuration, checkInterval }: { sessionDuration: number; checkInterval: number }) {
+function AuthRoutes() {
   return (
-    <div className={styles.container}>
-      <NavBar sessionDuration={sessionDuration} checkInterval={checkInterval} />
-      <div className={styles.content}>
-        <Switch>
-          <Route path={`${BASE}/login`} component={LoginPage} />
-          <Route path={`${BASE}/dashboard`} component={DashboardPage} />
-          <Route path={`${BASE}/profile`} component={ProfilePage} />
-          <Route>
-            <LoginPage />
-          </Route>
-        </Switch>
+    <Switch>
+      <Route path={`${BASE}/login`} component={LoginPage} />
+      <Route path={`${BASE}/dashboard`} component={DashboardPage} />
+      <Route path={`${BASE}/profile`} component={ProfilePage} />
+      <Route>
+        <LoginPage />
+      </Route>
+    </Switch>
+  );
+}
+
+function AuthApp({ sessionDuration, checkInterval }: { sessionDuration: number; checkInterval: number }) {
+  const [, setLocation] = useLocation();
+
+  return (
+    <AppAuthProvider
+      sessionDuration={sessionDuration}
+      validationInterval={checkInterval}
+      onLogging={(data) => {
+        console.log('[Demo] onLogging → navegando a /dashboard', data);
+        setLocation(`${BASE}/dashboard`);
+      }}
+      onLogout={() => {
+        console.log('[Demo] onLogout → navegando a /login');
+        setLocation(`${BASE}/login`);
+      }}
+      onSessionInvalid={() => {
+        console.log('[Demo] onSessionInvalid → navegando a /login');
+        setLocation(`${BASE}/login`);
+      }}
+    >
+      <div className={styles.container}>
+        <NavBar sessionDuration={sessionDuration} checkInterval={checkInterval} />
+        <div className={styles.content}>
+          <AuthRoutes />
+        </div>
       </div>
-    </div>
+    </AppAuthProvider>
   );
 }
 
@@ -337,13 +355,7 @@ export default function AuthStandaloneDemo() {
           Aplicar y reiniciar
         </button>
       </div>
-      <AppAuthProvider
-        key={providerKey}
-        sessionDuration={appliedDuration}
-        validationInterval={appliedInterval}
-      >
-        <AuthApp sessionDuration={appliedDuration} checkInterval={appliedInterval} />
-      </AppAuthProvider>
+      <AuthApp key={providerKey} sessionDuration={appliedDuration} checkInterval={appliedInterval} />
     </div>
   );
 }

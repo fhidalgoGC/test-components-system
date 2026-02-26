@@ -6,7 +6,6 @@ import {
   useEffect,
   useContext,
 } from "react";
-import { flushSync } from "react-dom";
 import SessionValidator from "../../../components/SessionValidator";
 import {
   saveSessionToStorage,
@@ -81,11 +80,17 @@ export function AppAuthProvider({
   const [sessionData, setSessionData] = useState<unknown | null>(null);
   const isLoggingOut = useRef(false);
   const isProcessingEvent = useRef(false);
-  const isInsideEffectRef = useRef(false);
+  const isMountedRef = useRef(false);
   const broadcastChannel = useRef<BroadcastChannel | null>(null);
   const onLoggingRef = useRef(onLogging);
   const onLogoutRef = useRef(onLogout);
   const onSessionInvalidRef = useRef(onSessionInvalid);
+
+  const pendingCallbackRef = useRef<{
+    type: 'login' | 'logout';
+    data?: unknown;
+    shouldCallInvalid?: boolean;
+  } | null>(null);
 
   useEffect(() => {
     onLoggingRef.current = onLogging;
@@ -99,13 +104,30 @@ export function AppAuthProvider({
     onSessionInvalidRef.current = onSessionInvalid;
   }, [onSessionInvalid]);
 
-  const applyStateUpdates = useCallback((updater: () => void) => {
-    if (isInsideEffectRef.current) {
-      updater();
-    } else {
-      flushSync(updater);
+  useEffect(() => {
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      return;
     }
-  }, []);
+
+    if (pendingCallbackRef.current === null) return;
+
+    const pending = pendingCallbackRef.current;
+    pendingCallbackRef.current = null;
+
+    if (pending.type === 'login') {
+      console.log('[AppAuth] 4. useEffect → estado ya aplicado → llamando onLogging', { data: pending.data, isAuthenticated });
+      onLoggingRef.current?.(pending.data);
+      console.log('[AppAuth] 5. onLogging terminó');
+    } else if (pending.type === 'logout') {
+      console.log('[AppAuth] 4. useEffect → estado ya aplicado → llamando onLogout', { data: pending.data, isAuthenticated });
+      onLogoutRef.current?.(pending.data);
+      if (pending.shouldCallInvalid) {
+        console.log('[AppAuth] 5. Llamando onSessionInvalid');
+        onSessionInvalidRef.current?.();
+      }
+    }
+  }, [isAuthenticated, sessionInvalidated]);
 
   const login = useCallback((data?: unknown, fromBroadcastChannel: boolean = false) => {
     console.log('[AppAuth] 1. login() llamado', { data, fromBroadcastChannel });
@@ -121,24 +143,19 @@ export function AppAuthProvider({
       saveSessionData(sessionDataKey, data);
     }
 
-    console.log('[AppAuth] 2. Aplicando estado: isAuthenticated=true, sessionInvalidated=false');
-    applyStateUpdates(() => {
-      if (data !== undefined) {
-        setSessionData(data);
-      } else {
-        const existing = loadSessionData(sessionDataKey);
-        setSessionData(existing);
-      }
-      setIsAuthenticated(true);
-      setSessionInvalidated(false);
-    });
-    console.log('[AppAuth] 3. Estado aplicado (render completado)');
+    pendingCallbackRef.current = { type: 'login', data };
 
+    console.log('[AppAuth] 2. setState → isAuthenticated=true, sessionInvalidated=false');
+    if (data !== undefined) {
+      setSessionData(data);
+    } else {
+      const existing = loadSessionData(sessionDataKey);
+      setSessionData(existing);
+    }
+    setIsAuthenticated(true);
+    setSessionInvalidated(false);
     isLoggingOut.current = false;
-
-    console.log('[AppAuth] 4. Llamando onLogging callback', { data });
-    onLoggingRef.current?.(data);
-    console.log('[AppAuth] 5. onLogging callback terminó');
+    console.log('[AppAuth] 3. setState encolado → esperando render para llamar callbacks');
 
     if (
       !fromBroadcastChannel &&
@@ -151,7 +168,7 @@ export function AppAuthProvider({
         timestamp: Date.now(),
       });
     }
-  }, [sessionDataKey, applyStateUpdates]);
+  }, [sessionDataKey]);
 
   const logout = useCallback((fromBroadcastChannel: boolean = false, shouldCallInvalidCallback: boolean = false, logoutData?: unknown) => {
     if (isLoggingOut.current) {
@@ -164,23 +181,15 @@ export function AppAuthProvider({
     clearSessionFromStorage();
     clearSessionData(sessionDataKey);
 
-    console.log('[AppAuth] 2. Aplicando estado: isAuthenticated=false' + (shouldCallInvalidCallback ? ', sessionInvalidated=true' : ''));
-    applyStateUpdates(() => {
-      setIsAuthenticated(false);
-      setSessionData(null);
-      if (shouldCallInvalidCallback) {
-        setSessionInvalidated(true);
-      }
-    });
-    console.log('[AppAuth] 3. Estado aplicado (render completado)');
+    pendingCallbackRef.current = { type: 'logout', data: logoutData, shouldCallInvalid: shouldCallInvalidCallback };
 
-    console.log('[AppAuth] 4. Llamando onLogout callback', { logoutData });
-    onLogoutRef.current?.(logoutData);
-
+    console.log('[AppAuth] 2. setState → isAuthenticated=false' + (shouldCallInvalidCallback ? ', sessionInvalidated=true' : ''));
+    setIsAuthenticated(false);
+    setSessionData(null);
     if (shouldCallInvalidCallback) {
-      console.log('[AppAuth] 5. Llamando onSessionInvalid callback');
-      onSessionInvalidRef.current?.();
+      setSessionInvalidated(true);
     }
+    console.log('[AppAuth] 3. setState encolado → esperando render para llamar callbacks');
 
     if (
       !fromBroadcastChannel &&
@@ -192,7 +201,7 @@ export function AppAuthProvider({
         timestamp: Date.now(),
       });
     }
-  }, [sessionDataKey, applyStateUpdates]);
+  }, [sessionDataKey]);
 
   useEffect(() => {
     broadcastChannel.current = new BroadcastChannel("app_auth_channel");
@@ -229,7 +238,6 @@ export function AppAuthProvider({
   }, []);
 
   useEffect(() => {
-    isInsideEffectRef.current = true;
     console.log('[AppAuth] PROVIDER MONTADO — verificando sesión en localStorage');
     const existingSession = getSessionFromStorage();
     if (
@@ -245,7 +253,6 @@ export function AppAuthProvider({
       console.log('[AppAuth] Sin sesión → logout inicial');
       logout(true, true);
     }
-    isInsideEffectRef.current = false;
   }, []);
 
   const handleSessionValidatorInvalid = useCallback(() => {
