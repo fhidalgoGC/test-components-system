@@ -540,6 +540,60 @@ interface NombreDelTipo {
 | `propX=false` | Que pasa |
 | Sin `propY` | Comportamiento por defecto |
 
+## Flujos y estados (si aplica)
+
+Cuando el componente tiene estados internos que cambian (como `idle`, `loading`, `success`, `empty`, `error`), se documentan con:
+
+### 1. Tabla de estados
+
+Lista cada estado posible, que hace, como se llega a el, y si tiene configuracion visual.
+
+| Estado | Descripcion | Transicion | Configurable |
+|--------|-------------|-----------|:------------:|
+| `idle` | Estado inicial al montar el componente | Automatica (al montar) | NO |
+| `loading` | Muestra spinner o componente de carga | Manual (el consumidor lo activa) | SI |
+| `success` | Datos cargados, muestra el contenido normal | Automatica (al detectar datos) | NO |
+| `empty` | Sin datos, muestra mensaje vacio | Automatica (desde loading con data vacia) | SI |
+| `error` | Error en la carga, muestra mensaje de error | Manual (el consumidor lo activa) | SI |
+
+### 2. Diagrama de flujo
+
+Muestra visualmente como el componente transiciona entre estados.
+
+\```
+idle (montaje)
+  │
+  ├── data llega con items ──► success (automatico)
+  │
+  └── consumidor activa loading ──► loading
+                                      │
+                                      ├── data llega con items ──► success (automatico)
+                                      ├── data llega vacia ──► empty (automatico)
+                                      └── consumidor pone error ──► error (manual)
+                                                                      │
+                                                                      └── consumidor reintenta ──► loading (manual)
+\```
+
+### 3. Reglas de transicion
+
+Notas importantes sobre como funcionan las transiciones:
+
+- Cuales son automaticas (el componente las detecta solo)
+- Cuales son manuales (el consumidor las controla)
+- Que pasa con el controller vs sin controller
+- Restricciones (por ejemplo, desde `error` no se auto-transiciona a `success`)
+
+### 4. Configuracion visual por estado (si aplica)
+
+Si los estados tienen visualizacion configurable, se documenta la interfaz:
+
+| Prop | Tipo | Descripcion |
+|------|------|-------------|
+| `renderType` | `'self' \| 'component'` | Visual interno o componente custom |
+| `render` | `ReactNode` | Componente custom (solo con `renderType: 'component'`) |
+| `verticalAlign` | `'top' \| 'middle' \| 'bottom'` | Alineacion vertical |
+| `horizontalAlign` | `'left' \| 'center' \| 'right'` | Alineacion horizontal |
+
 ## Ejemplos de integracion (si aplica)
 
 ### Con otro componente
@@ -569,6 +623,7 @@ Disponible en `/components/nombre-componente`
 | Hooks / Funciones expuestas | El componente expone hooks de control o funciones utilitarias |
 | Tipos auxiliares | Hay interfaces que el consumidor necesita conocer |
 | Comportamiento | Hay logica condicional que depende de combinaciones de props |
+| Flujos y estados | El componente tiene estados internos que transicionan (idle, loading, success, empty, error, etc.) |
 | Ejemplos de integracion | El componente se usa tipicamente combinado con otros |
 | Demo | Siempre (link a la pagina de demo) |
 
@@ -711,6 +766,38 @@ console.log(controller.count); // 0
 | `maxVisible=3` | Solo muestra las 3 mas recientes, el resto se oculta |
 | `onClose` sin `controller` | El padre es responsable de eliminar el item del array |
 | `onClose` con `controller` | Se puede llamar `controller.remove(id)` dentro del callback |
+
+## Flujos y estados
+
+### Estados disponibles
+
+| Estado | Descripcion | Transicion | Configurable |
+|--------|-------------|-----------|:------------:|
+| `idle` | Panel montado, esperando notificaciones | Automatica (al montar) | NO |
+| `has-items` | Hay notificaciones visibles | Automatica (al agregar items) | NO |
+| `empty` | Todas las notificaciones fueron cerradas | Automatica (al quedar sin items) | SI |
+
+### Diagrama de flujo
+
+\```
+idle (montaje)
+  │
+  ├── items llegan (props o controller.add) ──► has-items
+  │                                              │
+  │                                              ├── onClose individual ──► has-items (si quedan items)
+  │                                              ├── onClose ultimo item ──► empty (automatico)
+  │                                              └── controller.clearAll() ──► empty (automatico)
+  │
+  └── sin items iniciales ──► empty
+                                │
+                                └── controller.add() ──► has-items
+\```
+
+### Reglas de transicion
+
+- Las transiciones entre `idle`, `has-items` y `empty` son automaticas basadas en la cantidad de items
+- Con `controller`: el hook gestiona las transiciones internamente
+- Sin `controller`: el padre controla las transiciones via la prop `items`
 
 ## Demo
 
