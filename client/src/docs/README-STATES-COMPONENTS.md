@@ -9,6 +9,11 @@ Todo componente de la biblioteca que carga información externa de forma asíncr
 ## Interfaz estándar: `StatesComponents`
 
 ```ts
+interface StateConfigAlign {
+  vertical?: 'top' | 'middle' | 'bottom';
+  horizontal?: 'left' | 'center' | 'right';
+}
+
 interface StateConfig {
   renderType: 'component' | 'self';
   render?: ReactNode;
@@ -18,8 +23,7 @@ interface StateConfig {
   widthMode?: 'full' | 'auto' | 'fixed';
   width?: number;
   minWidth?: number;
-  verticalAlign?: 'top' | 'middle' | 'bottom';
-  horizontalAlign?: 'left' | 'center' | 'right';
+  align?: StateConfigAlign;
 }
 
 interface StatesComponents {
@@ -140,10 +144,12 @@ Los estados `loading`, `empty` y `error` tienen visualización propia configurab
 
 ### Alineación
 
+La alineación se define dentro del objeto `align`, siguiendo el mismo estándar que el prop `layout` (ver `client/src/docs/props/layout.md`).
+
 | Propiedad | Valores | Default |
 |-----------|---------|---------|
-| `verticalAlign` | `'top' \| 'middle' \| 'bottom'` | `'middle'` |
-| `horizontalAlign` | `'left' \| 'center' \| 'right'` | `'center'` |
+| `align.vertical` | `'top' \| 'middle' \| 'bottom'` | `'middle'` |
+| `align.horizontal` | `'left' \| 'center' \| 'right'` | `'center'` |
 
 ---
 
@@ -180,16 +186,14 @@ const fetchData = async () => {
       render: <CustomSpinner />,
       heightMode: 'fixed',
       height: 300,
-      verticalAlign: 'middle',
-      horizontalAlign: 'center'
+      align: { vertical: 'middle', horizontal: 'center' }
     },
     empty: {
       renderType: 'component',
       render: <EmptyState message="No hay productos" />,
       heightMode: 'auto',
       minHeight: 200,
-      verticalAlign: 'middle',
-      horizontalAlign: 'center'
+      align: { vertical: 'middle', horizontal: 'center' }
     },
     error: {
       renderType: 'component',
@@ -197,8 +201,7 @@ const fetchData = async () => {
       heightMode: 'fixed',
       height: 250,
       widthMode: 'full',
-      verticalAlign: 'top',
-      horizontalAlign: 'left'
+      align: { vertical: 'top', horizontal: 'left' }
     }
   }}
 />
@@ -213,7 +216,7 @@ const fetchData = async () => {
 ### Modal
 
 - **States:** `idle`, `loading`, `success`, `empty`, `error`
-- **Interfaz:** `StatesComponents` con `StateConfig` completa (incluye `widthMode`, `heightMode`, `verticalAlign`, `horizontalAlign`)
+- **Interfaz:** `StatesComponents` con `StateConfig` completa (incluye `widthMode`, `heightMode`, `align: { vertical, horizontal }`)
 - **Prop:** `statesComponents`
 - **Cumple estándar:** SI
 
@@ -222,7 +225,7 @@ const fetchData = async () => {
 - **States:** `idle`, `loading`, `empty`, `error`
 - **Interfaz:** `GridStatesComponents` con `GridStateComponent`
 - **Prop:** `statesComponents`
-- **Props actuales de `GridStateComponent`:** `renderType`, `render`, `verticalAlign`, `horizontalAlign`, `position`
+- **Props actuales de `GridStateComponent`:** `renderType`, `render`, `verticalAlign`, `horizontalAlign`, `position` (usa props planas en vez de `align: {}`, pendiente de migrar)
 - **Props adicionales:** `position` (`'bottom'` | `'over'`) en loading para controlar dónde se renderiza el indicador
 - **Diferencias con estándar:** No tiene `widthMode`, `width`, `minWidth`, `heightMode`, `height`, `minHeight`. Solo tiene alineación y `position`
 - **Cumple estándar:** NO — faltan todas las propiedades de dimensiones
