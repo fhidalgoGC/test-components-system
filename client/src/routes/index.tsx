@@ -43,6 +43,7 @@ const SplitLayoutDemo = lazy(() => import("@/pages/split-layout-demo"));
 const AcordionListDemo = lazy(() => import("@/pages/acordion-list-demo"));
 const SplitLayoutPreview = lazy(() => import("@/pages/split-layout-demo/web/standalone/SplitLayoutPreview"));
 const AuthStandaloneDemo = lazy(() => import("@/pages/auth-test/web/standalone/AuthStandaloneDemo"));
+const LoadingDemo = lazy(() => import("@/pages/loading-demo"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -139,6 +140,7 @@ export function Router() {
           <Route path="/components/grid" component={GridDemo} />
           <Route path="/layouts/split-layout" component={SplitLayoutDemo} />
           <Route path="/components/acordion-list" component={AcordionListDemo} />
+          <Route path="/components/loading" component={LoadingDemo} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

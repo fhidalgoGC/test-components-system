@@ -25,3 +25,5 @@ export type {
   MultiControlDataContextValue,
   MultiControlDataProviderProps,
 } from './MultiControlDataProvider';
+export { LoadingProvider, useLoading } from './LoadingProvider';
+export type { LoadingContextValue, LoadingProviderProps, LoadingConfig } from './LoadingProvider';

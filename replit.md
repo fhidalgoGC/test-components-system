@@ -36,6 +36,7 @@ Important rule: Always update the component's README.md when making changes to a
 - **Authentication**: `LoginCard` provides a customizable authentication interface.
 - **Selection Management**: `WrapperItemsSelected` integrates item selection capabilities into various components.
 - **Google Maps**: `GoogleMap` component for web with external marker control.
+- **Loading**: `Loading` component with configurable overlay (`transparent`, `light`, `dark`, `none`), coverage (`component`, `fullscreen`), spinner sizes (`xs`-`xl`), and `LoadingProvider` for global loading state control via `useLoading()` hook.
 
 # External Dependencies
 
