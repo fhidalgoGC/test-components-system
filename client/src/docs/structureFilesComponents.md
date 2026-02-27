@@ -21,7 +21,8 @@ Guia de referencia para la organizacion interna de los componentes de la libreri
 ├── layouts/            # Variantes de layout
 ├── utils/              # Funciones utilitarias
 ├── environment/        # Configuracion y constantes
-└── index.tsx           # Wrapper: Provider + View
+├── index.tsx           # Wrapper: Provider + View
+└── README-USE.md       # Documentacion de uso del componente
 ```
 
 ---
@@ -295,10 +296,11 @@ export type { ComponentNameProps } from './types';
 
 ## Resumen: cuando crear cada carpeta
 
-| Carpeta | Crear cuando... | No crear si... |
-|---------|-----------------|----------------|
+| Carpeta / Archivo | Crear cuando... | No crear si... |
+|-------------------|-----------------|----------------|
 | `views/` | Siempre | — |
 | `types/` | Siempre | — |
+| `README-USE.md` | Siempre | — |
 | `styles/` | Tiene estilos CSS Modules | Solo usa Tailwind inline |
 | `hooks/` | Tiene hooks propios o i18n | Sin logica de estado ni i18n |
 | `i18n/` | Tiene textos internos traducibles | Solo recibe textos via props |
@@ -319,10 +321,11 @@ export type { ComponentNameProps } from './types';
 ├── views/
 │   ├── SimpleAlert.view.tsx
 │   └── index.ts
-└── index.tsx
+├── index.tsx
+└── README-USE.md
 ```
 
-Solo `types/` y `views/`. Sin estilos propios, sin i18n, sin provider, sin hooks.
+Solo `types/`, `views/` y `README-USE.md`. Sin estilos propios, sin i18n, sin provider, sin hooks.
 
 ---
 
@@ -356,7 +359,233 @@ Solo `types/` y `views/`. Sin estilos propios, sin i18n, sin provider, sin hooks
 ├── views/
 │   ├── DataTable.view.tsx
 │   └── index.ts
-└── index.tsx
+├── index.tsx
+└── README-USE.md
 ```
 
 Todas las carpetas necesarias estan presentes porque el componente las justifica.
+
+---
+
+## README-USE.md — Documentacion de uso
+
+**Siempre necesario.** Cada componente debe tener un `README-USE.md` que documente como usarlo, sus props, variantes y ejemplos.
+
+### Reglas del README-USE.md
+
+- Se escribe en español
+- Documenta TODAS las props del componente
+- Incluye ejemplos de codigo para cada variante o modo de uso
+- Las tablas de props usan el formato: `Prop | Tipo | Default | Descripcion`
+- Si el componente tiene un hook/controller, se documenta su API
+- Si el componente tiene tipos auxiliares (interfaces), se muestran con su definicion completa
+- Si el componente tiene comportamientos condicionales, se documentan en tablas de comportamiento
+
+### Estructura estandar del README-USE.md
+
+```markdown
+# NombreComponente
+
+Descripcion breve de una linea sobre que hace el componente y para que sirve.
+
+## Caracteristicas
+
+- **Feature 1**: Descripcion corta
+- **Feature 2**: Descripcion corta
+- **Feature 3**: Descripcion corta
+
+## Importacion
+
+\```tsx
+import { NombreComponente } from '@/lib/ui-library/components/NombreComponente';
+import type { NombreComponenteProps } from '@/lib/ui-library/components/NombreComponente';
+\```
+
+## Uso basico
+
+\```tsx
+<NombreComponente
+  propRequerida="valor"
+  otraProp={data}
+/>
+\```
+
+## Variantes de uso
+
+### Variante 1: Nombre descriptivo
+
+Explicacion breve de cuando usar esta variante.
+
+\```tsx
+<NombreComponente
+  propRequerida="valor"
+  variante="opcion1"
+/>
+\```
+
+### Variante 2: Nombre descriptivo
+
+Explicacion breve de cuando usar esta variante.
+
+\```tsx
+<NombreComponente
+  propRequerida="valor"
+  variante="opcion2"
+  propAdicional={valor}
+/>
+\```
+
+## Props
+
+### NombreComponenteProps
+
+| Prop | Tipo | Default | Descripcion |
+|------|------|---------|-------------|
+| `propRequerida` | `string` | requerido | Que hace esta prop |
+| `propOpcional` | `boolean` | `false` | Que hace esta prop |
+| `className` | `string` | `undefined` | Clase CSS adicional |
+
+## Tipos auxiliares
+
+### NombreDelTipo
+
+\```typescript
+interface NombreDelTipo {
+  campo1: string;
+  campo2?: number;
+}
+\```
+
+### OtroTipo
+
+| Prop | Tipo | Descripcion |
+|------|------|-------------|
+| `campo1` | `string` | Que hace |
+| `campo2` | `number` | Que hace |
+
+## Controller / Hook (si aplica)
+
+### useNombreComponenteController
+
+\```tsx
+const controller = useNombreComponenteController();
+
+controller.metodo1();
+controller.metodo2('param');
+\```
+
+| Metodo | Retorna | Descripcion |
+|--------|---------|-------------|
+| `metodo1()` | `void` | Que hace |
+| `metodo2(id)` | `boolean` | Que hace |
+
+## Comportamiento
+
+| Escenario | Comportamiento |
+|-----------|----------------|
+| `propX=true` | Que pasa |
+| `propX=false` | Que pasa |
+| Sin `propY` | Comportamiento por defecto |
+
+## Ejemplos de integracion (si aplica)
+
+### Con otro componente
+
+\```tsx
+<ContenedorPadre>
+  <NombreComponente ... />
+  <OtroComponente ... />
+</ContenedorPadre>
+\```
+
+## Demo
+
+Disponible en `/components/nombre-componente`
+```
+
+### Secciones opcionales
+
+| Seccion | Incluir cuando... |
+|---------|-------------------|
+| Caracteristicas | Siempre (resume las capacidades del componente) |
+| Importacion | Siempre |
+| Uso basico | Siempre |
+| Variantes de uso | El componente tiene multiples modos o configuraciones |
+| Props | Siempre |
+| Tipos auxiliares | Hay interfaces que el consumidor necesita conocer |
+| Controller / Hook | El componente expone un hook de control externo |
+| Comportamiento | Hay logica condicional que depende de combinaciones de props |
+| Ejemplos de integracion | El componente se usa tipicamente combinado con otros |
+| Demo | Siempre (link a la pagina de demo) |
+
+### Ejemplo real: README-USE.md de un componente simple
+
+```markdown
+# SimpleAlert
+
+Alerta visual configurable con niveles de severidad y cierre opcional.
+
+## Caracteristicas
+
+- **4 niveles**: `info`, `warning`, `error`, `success`
+- **Cierre opcional**: Boton de cerrar configurable
+- **Icono automatico**: Icono segun el nivel de severidad
+
+## Importacion
+
+\```tsx
+import { SimpleAlert } from '@/lib/ui-library/components/SimpleAlert';
+\```
+
+## Uso basico
+
+\```tsx
+<SimpleAlert level="info" message="Operacion completada" />
+\```
+
+## Variantes de uso
+
+### Con cierre
+
+\```tsx
+<SimpleAlert
+  level="warning"
+  message="Sesion por expirar"
+  closable={true}
+  onClose={() => console.log('cerrado')}
+/>
+\```
+
+### Con titulo
+
+\```tsx
+<SimpleAlert
+  level="error"
+  title="Error de conexion"
+  message="No se pudo conectar al servidor"
+/>
+\```
+
+## Props
+
+| Prop | Tipo | Default | Descripcion |
+|------|------|---------|-------------|
+| `level` | `'info' \| 'warning' \| 'error' \| 'success'` | requerido | Nivel de severidad |
+| `message` | `string` | requerido | Texto del mensaje |
+| `title` | `string` | `undefined` | Titulo opcional |
+| `closable` | `boolean` | `false` | Muestra boton de cerrar |
+| `onClose` | `() => void` | `undefined` | Callback al cerrar |
+| `className` | `string` | `undefined` | Clase CSS adicional |
+
+## Comportamiento
+
+| Escenario | Comportamiento |
+|-----------|----------------|
+| `closable=true` | Muestra boton X, llama `onClose` al hacer click |
+| `closable=false` | Sin boton de cierre, la alerta es persistente |
+| Sin `title` | Solo muestra el mensaje, sin linea de titulo |
+
+## Demo
+
+Disponible en `/components/simple-alert`
+```
