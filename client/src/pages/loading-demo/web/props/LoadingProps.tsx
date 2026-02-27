@@ -53,10 +53,10 @@ export function LoadingPropsTab() {
               <td>Componente custom a renderizar cuando <code>renderType: 'component'</code>. Se muestra centrado dentro del overlay.</td>
             </tr>
             <tr>
-              <td><code>label</code></td>
-              <td><code>string</code></td>
+              <td><code>labelI18n</code></td>
+              <td><code>LabelOrMultiLanguage</code></td>
               <td><code>undefined</code></td>
-              <td>Texto debajo del spinner (solo aplica cuando <code>renderType: 'self'</code>).</td>
+              <td>Texto debajo del spinner (solo aplica cuando <code>renderType: 'self'</code>). Acepta un <code>string</code> simple o un objeto <code>MultiLanguageLabel</code> con traducciones por idioma.</td>
             </tr>
             <tr>
               <td><code>className</code></td>
@@ -203,10 +203,10 @@ export function LoadingPropsTab() {
               <td>Tamaño por defecto cuando se llama a <code>show()</code> sin config.</td>
             </tr>
             <tr>
-              <td><code>defaultLabel</code></td>
-              <td><code>string</code></td>
+              <td><code>defaultLabelI18n</code></td>
+              <td><code>LabelOrMultiLanguage</code></td>
               <td><code>undefined</code></td>
-              <td>Label por defecto cuando se llama a <code>show()</code> sin config.</td>
+              <td>Label por defecto cuando se llama a <code>show()</code> sin config. Acepta <code>string</code> o <code>MultiLanguageLabel</code>.</td>
             </tr>
           </tbody>
         </table>
@@ -271,9 +271,9 @@ export function LoadingPropsTab() {
               <td>Sobreescribe el tamaño del spinner.</td>
             </tr>
             <tr>
-              <td><code>label</code></td>
-              <td><code>string</code></td>
-              <td>Sobreescribe el label del spinner.</td>
+              <td><code>labelI18n</code></td>
+              <td><code>LabelOrMultiLanguage</code></td>
+              <td>Sobreescribe el label del spinner. Acepta <code>string</code> o <code>MultiLanguageLabel</code>.</td>
             </tr>
             <tr>
               <td><code>renderType</code></td>

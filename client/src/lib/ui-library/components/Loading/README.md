@@ -1,6 +1,6 @@
 # Loading
 
-Componente de carga configurable. Puede cubrir un componente individual o la pantalla completa. Se controla por props directas o con el `LoadingProvider`. Soporta spinner por defecto o componente custom.
+Componente de carga configurable. Puede cubrir un componente individual o la pantalla completa. Se controla por props directas o con el `LoadingProvider`. Soporta spinner por defecto o componente custom. Los textos visibles usan el estandar `labelI18n` para soporte multilenguaje automatico.
 
 ## Estructura interna
 
@@ -33,7 +33,7 @@ Usa el componente `SelfSpinner` ubicado en `components/self/`. Es el spinner cir
   overlay="transparent"
   coverage="component"
   size="md"
-  label="Cargando..."
+  labelI18n={{ en: 'Loading...', es: 'Cargando...', default: 'Loading...' }}
 />
 ```
 
@@ -68,6 +68,28 @@ Renderiza cualquier componente custom que le pases en el prop `render`. El compo
 ```
 
 En ambos casos el overlay, coverage y centrado funcionan igual. Solo cambia que se muestra en el centro.
+
+## labelI18n
+
+El prop `labelI18n` acepta un `string` simple o un `MultiLanguageLabel` para traduccion automatica segun el idioma activo:
+
+```tsx
+// String simple (no traducible)
+<Loading labelI18n="Cargando..." />
+
+// MultiLanguageLabel (traducible)
+<Loading
+  labelI18n={{
+    en: 'Loading data...',
+    es: 'Cargando datos...',
+    default: 'Loading data...',
+  }}
+/>
+```
+
+El `SelfSpinner` usa `LibI18nContext` para obtener el idioma activo y `resolveMultiLanguageLabel` para resolver el texto. El label se actualiza automaticamente cuando el usuario cambia de idioma.
+
+Ver documentacion completa del estandar en `client/src/docs/props/labelI18n.md`.
 
 ## Como funciona sobre un componente
 
@@ -133,7 +155,10 @@ El `LoadingProvider` centraliza el control del loading. Desde cualquier componen
 ```tsx
 const { show, hide } = useLoading();
 
-show({ overlay: 'light', label: 'Guardando...' });
+show({
+  overlay: 'light',
+  labelI18n: { en: 'Saving...', es: 'Guardando...', default: 'Saving...' },
+});
 await saveData();
 hide();
 ```
@@ -146,11 +171,10 @@ Pasas una referencia al elemento padre y el provider inyecta el loading dentro v
 const cardRef = useRef<HTMLDivElement>(null);
 const { show, hide } = useLoading();
 
-// El loading se inyecta dentro del elemento referenciado
 show({
   parentRef: cardRef,
   overlay: 'transparent',
-  label: 'Cargando datos...',
+  labelI18n: { en: 'Loading data...', es: 'Cargando datos...', default: 'Loading data...' },
 });
 
 // En el JSX
@@ -181,7 +205,10 @@ show({ parentRef: card1Ref });
 show({ parentRef: card2Ref });
 
 // O fullscreen (sin parentRef)
-show({ overlay: 'dark', label: 'Cerrando sesion...' });
+show({
+  overlay: 'dark',
+  labelI18n: { en: 'Signing out...', es: 'Cerrando sesion...', default: 'Signing out...' },
+});
 ```
 
 ### Provider con componente custom
@@ -203,7 +230,11 @@ import { LoadingProvider, useLoading } from '@/lib/ui-library/providers';
 
 function App() {
   return (
-    <LoadingProvider defaultOverlay="light" defaultSize="lg">
+    <LoadingProvider
+      defaultOverlay="light"
+      defaultSize="lg"
+      defaultLabelI18n={{ en: 'Loading...', es: 'Cargando...', default: 'Loading...' }}
+    >
       <MyComponent />
     </LoadingProvider>
   );
@@ -213,23 +244,23 @@ function App() {
 ## Props del componente
 
 | Prop         | Tipo                                           | Default         | Descripcion                              |
-|--------------|------------------------------------------------|-----------------|------------------------------------------|
+|--------------|-------------------------------------------------|-----------------|------------------------------------------|
 | `state`      | `'loading' \| 'completed'`                     | `'loading'`     | Estado actual del loading                |
 | `overlay`    | `'transparent' \| 'light' \| 'dark' \| 'none'` | `'transparent'` | Tipo de fondo del overlay                |
 | `coverage`   | `'component' \| 'fullscreen'`                  | `'component'`   | Si cubre un componente o toda la pantalla |
 | `size`       | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`        | `'md'`          | Tamano del spinner (solo renderType self) |
 | `renderType` | `'self' \| 'component'`                        | `'self'`        | Modo de renderizado del contenido         |
 | `render`     | `ReactNode`                                    | `undefined`     | Componente custom (renderType component)  |
-| `label`      | `string`                                       | `undefined`     | Texto debajo del spinner (solo renderType self) |
+| `labelI18n`  | `LabelOrMultiLanguage`                         | `undefined`     | Texto debajo del spinner (solo renderType self). Acepta string o MultiLanguageLabel. |
 | `className`  | `string`                                       | `undefined`     | Clase CSS adicional                      |
 
 ## Props del LoadingProvider
 
-| Prop            | Tipo             | Default         | Descripcion                     |
-|-----------------|------------------|-----------------|---------------------------------|
-| `defaultOverlay`| `LoadingOverlay` | `'transparent'` | Overlay por defecto del provider |
-| `defaultSize`   | `LoadingSize`    | `'lg'`          | Tamano por defecto del provider  |
-| `defaultLabel`  | `string`         | `undefined`     | Label por defecto del provider   |
+| Prop              | Tipo                   | Default         | Descripcion                     |
+|-------------------|------------------------|-----------------|---------------------------------|
+| `defaultOverlay`  | `LoadingOverlay`       | `'transparent'` | Overlay por defecto del provider |
+| `defaultSize`     | `LoadingSize`          | `'lg'`          | Tamano por defecto del provider  |
+| `defaultLabelI18n`| `LabelOrMultiLanguage` | `undefined`     | Label por defecto del provider. Acepta string o MultiLanguageLabel. |
 
 ## API del hook useLoading()
 
@@ -246,7 +277,7 @@ function App() {
 |--------------|------------------------------|------------------------------------------|
 | `overlay`    | `LoadingOverlay`             | Overlay del loading                      |
 | `size`       | `LoadingSize`                | Tamano del spinner                       |
-| `label`      | `string`                     | Texto debajo del spinner                 |
+| `labelI18n`  | `LabelOrMultiLanguage`       | Texto debajo del spinner. Acepta string o MultiLanguageLabel. |
 | `renderType` | `'self' \| 'component'`      | Modo de renderizado                      |
 | `render`     | `ReactNode`                  | Componente custom                        |
 | `parentRef`  | `RefObject<HTMLElement>`     | Referencia al padre (component) o nada (fullscreen) |
@@ -277,6 +308,7 @@ function App() {
 5. Con `renderType: 'component'`: el contenido custom siempre se renderiza centrado dentro del overlay.
 6. La referencia `parentRef` se puede cambiar en cada `show()`. El provider limpia la referencia anterior automaticamente.
 7. El elemento referenciado por `parentRef` debe estar montado en el DOM antes de llamar `show()`. Si `parentRef.current` es `null` al momento de la llamada, el loading se comporta como fullscreen.
+8. `labelI18n` solo se muestra con `renderType: 'self'`. Se resuelve automaticamente segun el idioma activo via `LibI18nContext`.
 
 ## Demo
 

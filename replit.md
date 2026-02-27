@@ -36,7 +36,7 @@ Important rule: Always update the component's README.md when making changes to a
 - **Authentication**: `LoginCard` provides a customizable authentication interface.
 - **Selection Management**: `WrapperItemsSelected` integrates item selection capabilities into various components.
 - **Google Maps**: `GoogleMap` component for web with external marker control.
-- **Loading**: `Loading` component with configurable overlay (`transparent`, `light`, `dark`, `none`), coverage (`component`, `fullscreen`), spinner sizes (`xs`-`xl`), `renderType` (`self` for built-in spinner in `components/self/`, `component` for custom ReactNode via `render` prop), and `LoadingProvider` for global loading state control via `useLoading()` hook with `parentRef` support for portal-based component-level loading.
+- **Loading**: `Loading` component with configurable overlay (`transparent`, `light`, `dark`, `none`), coverage (`component`, `fullscreen`), spinner sizes (`xs`-`xl`), `renderType` (`self` for built-in spinner in `components/self/`, `component` for custom ReactNode via `render` prop), `labelI18n` (accepts `string` or `MultiLanguageLabel` for automatic i18n via `LibI18nContext`), and `LoadingProvider` for global loading state control via `useLoading()` hook with `parentRef` support for portal-based component-level loading. Provider uses `defaultLabelI18n` and `show({ labelI18n })` for multilanguage labels.
 
 # External Dependencies
 

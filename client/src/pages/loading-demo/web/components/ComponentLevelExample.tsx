@@ -66,7 +66,7 @@ export function ComponentLevelExample() {
             overlay={overlay}
             coverage="component"
             size={size}
-            label="Cargando datos..."
+            labelI18n={{ en: 'Loading data...', es: 'Cargando datos...', default: 'Loading data...' }}
           />
         )}
       </div>

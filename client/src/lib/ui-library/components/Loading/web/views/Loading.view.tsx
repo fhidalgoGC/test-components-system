@@ -16,7 +16,7 @@ export function Loading({
   size = 'md',
   renderType = 'self',
   render,
-  label,
+  labelI18n,
   className,
 }: LoadingProps) {
   const needsPositioning = overlay !== 'none';
@@ -37,7 +37,7 @@ export function Loading({
     if (renderType === 'component' && render) {
       return render;
     }
-    return <SelfSpinner size={size} label={label} overlay={overlay} />;
+    return <SelfSpinner size={size} labelI18n={labelI18n} overlay={overlay} />;
   };
 
   return (

@@ -1,10 +1,11 @@
 import type { ReactNode, RefObject } from 'react';
 import type { LoadingOverlay, LoadingSize, LoadingRenderType } from '../../../components/Loading/web/types/Loading.type';
+import type { LabelOrMultiLanguage } from '../../../types/language.types';
 
 export interface LoadingConfig {
   overlay?: LoadingOverlay;
   size?: LoadingSize;
-  label?: string;
+  labelI18n?: LabelOrMultiLanguage;
   renderType?: LoadingRenderType;
   render?: ReactNode;
   parentRef?: RefObject<HTMLElement>;
@@ -21,5 +22,5 @@ export interface LoadingProviderProps {
   children: ReactNode;
   defaultOverlay?: LoadingOverlay;
   defaultSize?: LoadingSize;
-  defaultLabel?: string;
+  defaultLabelI18n?: LabelOrMultiLanguage;
 }

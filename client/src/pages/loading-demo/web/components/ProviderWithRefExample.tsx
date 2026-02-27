@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useLoading } from '@/lib/ui-library/providers';
+import type { LabelOrMultiLanguage } from '@/lib/ui-library/types/language.types';
 import styles from '../css/LoadingDemo.module.css';
 
 export function ProviderWithRefExample() {
@@ -7,8 +8,8 @@ export function ProviderWithRefExample() {
   const card2Ref = useRef<HTMLDivElement>(null);
   const { show, hide, isLoading } = useLoading();
 
-  const handleLoadCard = (ref: React.RefObject<HTMLDivElement>, label: string) => {
-    show({ parentRef: ref as React.RefObject<HTMLElement>, overlay: 'light', size: 'md', label });
+  const handleLoadCard = (ref: React.RefObject<HTMLDivElement>, labelI18n: LabelOrMultiLanguage) => {
+    show({ parentRef: ref as React.RefObject<HTMLElement>, overlay: 'light', size: 'md', labelI18n });
     setTimeout(() => hide(), 3000);
   };
 
@@ -22,14 +23,14 @@ export function ProviderWithRefExample() {
 
       <div className={styles.providerButtons} style={{ marginBottom: 16 }}>
         <button
-          onClick={() => handleLoadCard(card1Ref, 'Cargando Card 1...')}
+          onClick={() => handleLoadCard(card1Ref, { en: 'Loading Card 1...', es: 'Cargando Card 1...', default: 'Loading Card 1...' })}
           className={`${styles.btn} ${styles.btnPrimary}`}
           data-testid="button-load-card1"
         >
           Loading Card 1 (3s)
         </button>
         <button
-          onClick={() => handleLoadCard(card2Ref, 'Cargando Card 2...')}
+          onClick={() => handleLoadCard(card2Ref, { en: 'Loading Card 2...', es: 'Cargando Card 2...', default: 'Loading Card 2...' })}
           className={`${styles.btn} ${styles.btnBlue}`}
           data-testid="button-load-card2"
         >
@@ -37,7 +38,7 @@ export function ProviderWithRefExample() {
         </button>
         <button
           onClick={() => {
-            show({ overlay: 'dark', label: 'Pantalla completa...' });
+            show({ overlay: 'dark', labelI18n: { en: 'Full screen...', es: 'Pantalla completa...', default: 'Full screen...' } });
             setTimeout(() => hide(), 3000);
           }}
           className={`${styles.btn} ${styles.btnDark}`}

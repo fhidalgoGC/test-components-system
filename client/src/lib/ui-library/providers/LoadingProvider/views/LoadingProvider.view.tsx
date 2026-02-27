@@ -9,13 +9,13 @@ export function LoadingProvider({
   children,
   defaultOverlay = 'transparent',
   defaultSize = 'lg',
-  defaultLabel,
+  defaultLabelI18n,
 }: LoadingProviderProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [config, setConfig] = useState<LoadingConfig>({
     overlay: defaultOverlay,
     size: defaultSize,
-    label: defaultLabel,
+    labelI18n: defaultLabelI18n,
   });
   const originalPositionRef = useRef<string | null>(null);
   const activeParentRef = useRef<HTMLElement | null>(null);
@@ -34,7 +34,7 @@ export function LoadingProvider({
     const newConfig: LoadingConfig = {
       overlay: defaultOverlay,
       size: defaultSize,
-      label: defaultLabel,
+      labelI18n: defaultLabelI18n,
       ...overrides,
     };
 
@@ -50,7 +50,7 @@ export function LoadingProvider({
 
     setConfig(newConfig);
     setIsLoading(true);
-  }, [defaultOverlay, defaultSize, defaultLabel, restoreParentPosition]);
+  }, [defaultOverlay, defaultSize, defaultLabelI18n, restoreParentPosition]);
 
   const hide = useCallback(() => {
     restoreParentPosition();
@@ -73,7 +73,7 @@ export function LoadingProvider({
         overlay={config.overlay}
         coverage={config.parentRef?.current ? 'component' : 'fullscreen'}
         size={config.size}
-        label={config.label}
+        labelI18n={config.labelI18n}
         renderType={config.renderType}
         render={config.render}
       />

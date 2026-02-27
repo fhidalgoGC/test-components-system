@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { LabelOrMultiLanguage } from '../../../../types/language.types';
 
 export type LoadingState = 'loading' | 'completed';
 
@@ -17,6 +18,6 @@ export interface LoadingProps {
   size?: LoadingSize;
   renderType?: LoadingRenderType;
   render?: ReactNode;
-  label?: string;
+  labelI18n?: LabelOrMultiLanguage;
   className?: string;
 }

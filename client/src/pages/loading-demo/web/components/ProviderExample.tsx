@@ -13,7 +13,7 @@ export function ProviderExample() {
       <div className={styles.providerButtons}>
         <button
           onClick={() => {
-            show({ overlay: 'transparent', label: 'Procesando...' });
+            show({ overlay: 'transparent', labelI18n: { en: 'Processing...', es: 'Procesando...', default: 'Processing...' } });
             setTimeout(() => hide(), 3000);
           }}
           className={`${styles.btn} ${styles.btnPrimary}`}
@@ -23,7 +23,7 @@ export function ProviderExample() {
         </button>
         <button
           onClick={() => {
-            show({ overlay: 'light', label: 'Guardando...' });
+            show({ overlay: 'light', labelI18n: { en: 'Saving...', es: 'Guardando...', default: 'Saving...' } });
             setTimeout(() => hide(), 3000);
           }}
           className={`${styles.btn} ${styles.btnBlue}`}
@@ -33,7 +33,7 @@ export function ProviderExample() {
         </button>
         <button
           onClick={() => {
-            show({ overlay: 'dark', label: 'Enviando...' });
+            show({ overlay: 'dark', labelI18n: { en: 'Sending...', es: 'Enviando...', default: 'Sending...' } });
             setTimeout(() => hide(), 3000);
           }}
           className={`${styles.btn} ${styles.btnDark}`}
