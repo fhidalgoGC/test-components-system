@@ -8,66 +8,9 @@ Guia de referencia para la organizacion interna de los componentes de la libreri
 
 ---
 
-## Estructura raiz del componente
+## Estructura completa
 
 ```
-ComponentName/
-├── web/                # Variante web (Vite + React DOM)
-├── mobile/             # Variante mobile responsive (opcional)
-├── native/             # Variante React Native (opcional)
-├── shared/             # Logica compartida entre variantes (opcional)
-├── index.tsx           # Entry point con switch de plataforma
-└── README.md           # Documentacion del componente
-```
-
-### Reglas de la raiz
-
-- **Solo** `index.tsx`, `README.md` y las carpetas de variante (`web/`, `mobile/`, `native/`, `shared/`) van en la raiz.
-- **Nunca** poner carpetas como `hooks/`, `styles/`, `types/`, `components/`, `providers/` directamente en la raiz. Esas van dentro de la variante correspondiente (`web/`, `mobile/`, etc.).
-- Si el componente solo tiene una variante (por ejemplo solo `web/`), la estructura sigue siendo la misma: todo dentro de `web/`.
-
-### index.tsx segun las variantes
-
-**Solo web:**
-```tsx
-export { ComponentNameView as ComponentName } from './web';
-export type { ComponentNameProps } from './web/types';
-```
-
-**Web + Mobile:**
-```tsx
-import { useIsMobile } from '../../hooks';
-import { ComponentName as ComponentNameWeb } from './web';
-import { ComponentName as ComponentNameMobile } from './mobile';
-
-export const ComponentName = (props) => {
-  const isMobile = useIsMobile();
-  return isMobile
-    ? <ComponentNameMobile {...props} />
-    : <ComponentNameWeb {...props} />;
-};
-```
-
-**Solo una variante con la otra pendiente:**
-```tsx
-import { useIsMobile } from '../../hooks';
-import { ComponentName as ComponentNameWeb } from './web';
-import { NotImplemented } from '../NotImplemented';
-
-export const ComponentName = (props) => {
-  const isMobile = useIsMobile();
-  return isMobile
-    ? <NotImplemented platform="Mobile" componentName="ComponentName" />
-    : <ComponentNameWeb {...props} />;
-};
-```
-
----
-
-## Estructura interna de una variante (web/, mobile/, native/)
-
-```
-web/
 ├── components/         # Subcomponentes internos
 ├── styles/             # CSS Modules
 ├── hooks/              # Hooks del componente
@@ -113,7 +56,7 @@ export function ComponentNameView(props: ComponentNameProps) {
 
 ```
 types/
-├── ComponentName.type.ts    # Props + Context + tipos auxiliares
+├── ComponentName.type.ts
 └── index.ts
 ```
 
@@ -141,10 +84,12 @@ Contiene los archivos `.module.css` con los estilos encapsulados del componente.
 ```
 styles/
 ├── ComponentName.module.css
-└── index.ts                   # Re-export opcional
+└── index.ts
 ```
 
-**Cuando crearla:** Cuando el componente tiene estilos propios. Si el componente usa solo clases de Tailwind directamente en el JSX y no necesita un CSS Module, **no se crea**.
+**Cuando crearla:** Cuando el componente tiene estilos propios que necesitan un CSS Module.
+
+**No crearla:** Si el componente usa solo clases de Tailwind directamente en el JSX y no necesita un archivo CSS aparte.
 
 ---
 
@@ -154,12 +99,14 @@ Contiene hooks personalizados del componente, incluyendo el hook de i18n.
 
 ```
 hooks/
-├── useI18nMerge.hook.ts       # Combina traducciones locales + globales
-├── useComponentName.hook.ts   # Logica de estado/comportamiento
+├── useI18nMerge.hook.ts
+├── useComponentName.hook.ts
 └── index.ts
 ```
 
-**Cuando crearla:** Cuando el componente necesita hooks propios. Si el componente tiene i18n, esta carpeta es necesaria para el `useI18nMerge.hook.ts`. Si no tiene ni hooks ni i18n, **no se crea**.
+**Cuando crearla:** Cuando el componente necesita hooks propios. Si el componente tiene i18n, esta carpeta es necesaria para el `useI18nMerge.hook.ts`.
+
+**No crearla:** Si el componente no tiene logica de estado propia ni i18n.
 
 ---
 
@@ -171,7 +118,7 @@ Contiene archivos JSON con las traducciones especificas del componente.
 i18n/
 ├── en.json
 ├── es.json
-└── index.ts       # localDictionaries + getLocalDict
+└── index.ts
 ```
 
 ```json
@@ -195,7 +142,9 @@ export const getLocalDict = (lang?: string) => {
 };
 ```
 
-**Cuando crearla:** Cuando el componente tiene textos internos visibles al usuario que necesitan traduccion (labels, placeholders, mensajes). Si el componente solo recibe textos via props (como `labelI18n`) y no tiene textos propios, **no se crea**.
+**Cuando crearla:** Cuando el componente tiene textos internos visibles al usuario que necesitan traduccion (labels, placeholders, mensajes).
+
+**No crearla:** Si el componente solo recibe textos via props (como `labelI18n`) y no tiene textos propios.
 
 ---
 
@@ -233,26 +182,30 @@ export const ComponentNameProvider: React.FC<{
 };
 ```
 
-**Cuando crearla:** Cuando el componente tiene i18n, estado compartido entre subcomponentes, o logica que necesita ser accesible via contexto. Si el componente es simple y no comparte estado, **no se crea**.
+**Cuando crearla:** Cuando el componente tiene i18n, estado compartido entre subcomponentes, o logica que necesita ser accesible via contexto.
+
+**No crearla:** Si el componente es simple, no tiene i18n y no comparte estado entre hijos.
 
 ---
 
 ### components/ — Subcomponentes internos
 
-Contiene componentes hijos que solo se usan dentro de este componente. No se exportan.
+Contiene componentes hijos que solo se usan dentro de este componente. No se exportan al exterior.
 
 ```
 components/
 ├── SubComponent/
 │   ├── SubComponent.tsx
-│   ├── styles/SubComponent.module.css    # Si necesita estilos propios
+│   ├── styles/SubComponent.module.css
 │   └── index.ts
 └── AnotherSub/
     ├── AnotherSub.tsx
     └── index.ts
 ```
 
-**Cuando crearla:** Cuando el componente tiene partes internas que merecen ser su propio componente (por ejemplo, `SelfSpinner` dentro de `Loading`, `HeaderCell` dentro de `BaseTable`). Si el componente es simple y todo cabe en la vista, **no se crea**.
+**Cuando crearla:** Cuando el componente tiene partes internas que merecen ser su propio componente (por ejemplo, `SelfSpinner` dentro de `Loading`, `HeaderCell` dentro de `BaseTable`).
+
+**No crearla:** Si el componente es simple y todo cabe en la vista.
 
 ---
 
@@ -267,7 +220,9 @@ layouts/
 └── index.ts
 ```
 
-**Cuando crearla:** Cuando el componente tiene multiples modos de presentacion (por ejemplo, `List` con layout normal y compacto). Si el componente tiene un solo layout, **no se crea**.
+**Cuando crearla:** Cuando el componente tiene multiples modos de presentacion (por ejemplo, `List` con layout normal y compacto).
+
+**No crearla:** Si el componente tiene un solo layout.
 
 ---
 
@@ -281,7 +236,9 @@ utils/
 └── index.ts
 ```
 
-**Cuando crearla:** Cuando hay logica de transformacion de datos, formateadores, validadores, o calculos que no pertenecen al hook ni a la vista. Si no hay logica auxiliar, **no se crea**.
+**Cuando crearla:** Cuando hay logica de transformacion de datos, formateadores, validadores, o calculos que no pertenecen al hook ni a la vista.
+
+**No crearla:** Si no hay logica auxiliar independiente.
 
 ---
 
@@ -291,8 +248,8 @@ Contiene constantes de configuracion del componente con soporte para variables d
 
 ```
 environment/
-├── enviroment.ts     # Constantes flat
-└── index.ts          # Re-export como COMPONENT_NAME_CONFIG
+├── enviroment.ts
+└── index.ts
 ```
 
 ```tsx
@@ -301,13 +258,15 @@ export const environment = {
 };
 ```
 
-**Cuando crearla:** Cuando el componente necesita configuracion externa o valores por defecto que pueden ser sobreescritos via `ConfigProvider` o variables de entorno. Si el componente no tiene configuracion externa, **no se crea**.
+**Cuando crearla:** Cuando el componente necesita configuracion externa o valores por defecto que pueden ser sobreescritos via `ConfigProvider` o variables de entorno.
+
+**No crearla:** Si el componente no tiene configuracion sobreescribible.
 
 ---
 
-## web/index.tsx — Wrapper
+## index.tsx — Wrapper
 
-El archivo `index.tsx` dentro de la variante conecta el Provider con la View:
+El archivo `index.tsx` conecta el Provider con la View:
 
 ```tsx
 import type { ComponentNameProps } from './types';
@@ -334,57 +293,33 @@ export type { ComponentNameProps } from './types';
 
 ---
 
-## shared/ — Logica compartida entre variantes
-
-Cuando `web/` y `mobile/` comparten logica (tipos, controladores, utilidades), se coloca en `shared/` al nivel de la raiz del componente.
-
-```
-ComponentName/
-├── shared/
-│   ├── types/
-│   ├── controllers/
-│   └── utils/
-├── web/
-├── mobile/
-└── index.tsx
-```
-
-**Cuando crearla:** Solo cuando existen multiples variantes (`web/` + `mobile/`) que comparten tipos o logica. Si solo hay una variante, **no se crea**.
-
----
-
 ## Resumen: cuando crear cada carpeta
 
 | Carpeta | Crear cuando... | No crear si... |
 |---------|-----------------|----------------|
 | `views/` | Siempre | — |
 | `types/` | Siempre | — |
-| `styles/` | El componente tiene CSS Modules | Solo usa Tailwind inline |
-| `hooks/` | Tiene hooks propios o i18n | Componente sin logica de estado ni i18n |
+| `styles/` | Tiene estilos CSS Modules | Solo usa Tailwind inline |
+| `hooks/` | Tiene hooks propios o i18n | Sin logica de estado ni i18n |
 | `i18n/` | Tiene textos internos traducibles | Solo recibe textos via props |
 | `providers/` | Tiene i18n, estado compartido o contexto | Componente simple sin subcomponentes |
 | `components/` | Tiene subcomponentes internos | Todo cabe en la vista |
 | `layouts/` | Tiene multiples modos de presentacion | Un solo layout |
 | `utils/` | Tiene logica auxiliar pura | Sin logica de transformacion |
 | `environment/` | Necesita config externa o env vars | Sin configuracion sobreescribible |
-| `shared/` | Multiples variantes comparten logica | Solo una variante |
 
 ---
 
 ## Ejemplo minimo (componente simple)
 
 ```
-SimpleAlert/
-├── web/
-│   ├── types/
-│   │   ├── SimpleAlert.type.ts
-│   │   └── index.ts
-│   ├── views/
-│   │   ├── SimpleAlert.view.tsx
-│   │   └── index.ts
-│   └── index.tsx
-├── index.tsx
-└── README.md
+├── types/
+│   ├── SimpleAlert.type.ts
+│   └── index.ts
+├── views/
+│   ├── SimpleAlert.view.tsx
+│   └── index.ts
+└── index.tsx
 ```
 
 Solo `types/` y `views/`. Sin estilos propios, sin i18n, sin provider, sin hooks.
@@ -394,65 +329,34 @@ Solo `types/` y `views/`. Sin estilos propios, sin i18n, sin provider, sin hooks
 ## Ejemplo completo (componente complejo con i18n)
 
 ```
-DataTable/
-├── web/
-│   ├── components/
-│   │   └── HeaderCell/
-│   │       ├── HeaderCell.tsx
-│   │       └── index.ts
-│   ├── styles/
-│   │   ├── DataTable.module.css
-│   │   └── index.ts
-│   ├── hooks/
-│   │   ├── useI18nMerge.hook.ts
-│   │   ├── useDataTable.hook.ts
-│   │   └── index.ts
-│   ├── i18n/
-│   │   ├── en.json
-│   │   ├── es.json
-│   │   └── index.ts
-│   ├── providers/
-│   │   ├── DataTable.provider.tsx
-│   │   └── index.ts
-│   ├── types/
-│   │   ├── DataTable.type.ts
-│   │   └── index.ts
-│   ├── utils/
-│   │   ├── datatable.util.ts
-│   │   └── index.ts
-│   ├── views/
-│   │   ├── DataTable.view.tsx
-│   │   └── index.ts
-│   └── index.tsx
-├── index.tsx
-└── README.md
+├── components/
+│   └── HeaderCell/
+│       ├── HeaderCell.tsx
+│       └── index.ts
+├── styles/
+│   ├── DataTable.module.css
+│   └── index.ts
+├── hooks/
+│   ├── useI18nMerge.hook.ts
+│   ├── useDataTable.hook.ts
+│   └── index.ts
+├── i18n/
+│   ├── en.json
+│   ├── es.json
+│   └── index.ts
+├── providers/
+│   ├── DataTable.provider.tsx
+│   └── index.ts
+├── types/
+│   ├── DataTable.type.ts
+│   └── index.ts
+├── utils/
+│   ├── datatable.util.ts
+│   └── index.ts
+├── views/
+│   ├── DataTable.view.tsx
+│   └── index.ts
+└── index.tsx
 ```
 
 Todas las carpetas necesarias estan presentes porque el componente las justifica.
-
----
-
-## Ejemplo multi-plataforma
-
-```
-UserProfile/
-├── shared/
-│   ├── types/
-│   │   └── UserProfile.type.ts
-│   └── controllers/
-│       └── userprofile.controller.ts
-├── web/
-│   ├── styles/
-│   ├── hooks/
-│   ├── views/
-│   └── index.tsx
-├── mobile/
-│   ├── styles/
-│   ├── hooks/
-│   ├── views/
-│   └── index.tsx
-├── index.tsx       # Switch con useIsMobile()
-└── README.md
-```
-
-`shared/` contiene los tipos y controladores que ambas variantes usan. Cada variante tiene su propia vista y estilos.
