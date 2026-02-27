@@ -445,6 +445,75 @@ Explicacion breve de cuando usar esta variante.
 | `propOpcional` | `boolean` | `false` | Que hace esta prop |
 | `className` | `string` | `undefined` | Clase CSS adicional |
 
+## Callbacks
+
+Los callbacks son funciones que el componente invoca cuando ocurren eventos internos. Se pasan como props.
+
+| Callback | Tipo | Descripcion |
+|----------|------|-------------|
+| `onEventoUno` | `(param: string) => void` | Se ejecuta cuando ocurre el evento uno |
+| `onEventoDos` | `(id: string, data: T) => void` | Se ejecuta cuando ocurre el evento dos |
+| `onClose` | `() => void` | Se ejecuta al cerrar el componente |
+
+\```tsx
+<NombreComponente
+  propRequerida="valor"
+  onEventoUno={(param) => console.log('Evento:', param)}
+  onEventoDos={(id, data) => handleData(id, data)}
+  onClose={() => setOpen(false)}
+/>
+\```
+
+## Hooks / Funciones expuestas
+
+Hooks y funciones que el componente expone para control externo. Se importan y usan fuera del JSX.
+
+### useNombreComponente
+
+Hook que retorna un controller para manipular el componente de forma imperativa.
+
+\```tsx
+import { useNombreComponente } from '@/lib/ui-library/components/NombreComponente';
+
+const controller = useNombreComponente();
+\```
+
+| Metodo / Propiedad | Tipo | Descripcion |
+|--------------------|------|-------------|
+| `metodo1()` | `() => void` | Que hace |
+| `metodo2(id)` | `(id: string) => boolean` | Que hace |
+| `propiedad1` | `string` | Valor actual de algo |
+| `isActive` | `boolean` | Estado actual |
+
+\```tsx
+// Ejemplo de uso
+const controller = useNombreComponente();
+
+// Usar metodos
+controller.metodo1();
+const resultado = controller.metodo2('id-1');
+
+// Leer estado
+console.log(controller.isActive);
+
+// Conectar al componente
+<NombreComponente controller={controller} ... />
+\```
+
+### Funciones utilitarias (si aplica)
+
+Funciones puras exportadas por el componente que se pueden usar de forma independiente.
+
+\```tsx
+import { funcionUtil } from '@/lib/ui-library/components/NombreComponente';
+
+const resultado = funcionUtil(param1, param2);
+\```
+
+| Funcion | Parametros | Retorna | Descripcion |
+|---------|------------|---------|-------------|
+| `funcionUtil` | `(a: string, b: number)` | `ResultType` | Que hace |
+
 ## Tipos auxiliares
 
 ### NombreDelTipo
@@ -462,22 +531,6 @@ interface NombreDelTipo {
 |------|------|-------------|
 | `campo1` | `string` | Que hace |
 | `campo2` | `number` | Que hace |
-
-## Controller / Hook (si aplica)
-
-### useNombreComponenteController
-
-\```tsx
-const controller = useNombreComponenteController();
-
-controller.metodo1();
-controller.metodo2('param');
-\```
-
-| Metodo | Retorna | Descripcion |
-|--------|---------|-------------|
-| `metodo1()` | `void` | Que hace |
-| `metodo2(id)` | `boolean` | Que hace |
 
 ## Comportamiento
 
@@ -512,57 +565,69 @@ Disponible en `/components/nombre-componente`
 | Uso basico | Siempre |
 | Variantes de uso | El componente tiene multiples modos o configuraciones |
 | Props | Siempre |
+| Callbacks | El componente tiene callbacks (`onX`) que notifican eventos al padre |
+| Hooks / Funciones expuestas | El componente expone hooks de control o funciones utilitarias |
 | Tipos auxiliares | Hay interfaces que el consumidor necesita conocer |
-| Controller / Hook | El componente expone un hook de control externo |
 | Comportamiento | Hay logica condicional que depende de combinaciones de props |
 | Ejemplos de integracion | El componente se usa tipicamente combinado con otros |
 | Demo | Siempre (link a la pagina de demo) |
 
-### Ejemplo real: README-USE.md de un componente simple
+### Ejemplo real: README-USE.md de un componente con callbacks y hook
 
 ```markdown
-# SimpleAlert
+# NotificationPanel
 
-Alerta visual configurable con niveles de severidad y cierre opcional.
+Panel de notificaciones con control externo, acciones por item y cierre programatico.
 
 ## Caracteristicas
 
-- **4 niveles**: `info`, `warning`, `error`, `success`
-- **Cierre opcional**: Boton de cerrar configurable
-- **Icono automatico**: Icono segun el nivel de severidad
+- **Multiples niveles**: `info`, `warning`, `error`, `success`
+- **Cierre individual**: Cada notificacion se puede cerrar
+- **Control externo**: Hook `useNotificationPanel` para agregar, limpiar y consultar notificaciones
+- **Callbacks**: Eventos al cerrar, al hacer click y al limpiar todo
 
 ## Importacion
 
 \```tsx
-import { SimpleAlert } from '@/lib/ui-library/components/SimpleAlert';
+import { NotificationPanel, useNotificationPanel } from '@/lib/ui-library/components/NotificationPanel';
+import type { NotificationItem } from '@/lib/ui-library/components/NotificationPanel';
 \```
 
 ## Uso basico
 
 \```tsx
-<SimpleAlert level="info" message="Operacion completada" />
+<NotificationPanel
+  items={notifications}
+  onClose={(id) => removeNotification(id)}
+/>
 \```
 
 ## Variantes de uso
 
-### Con cierre
+### Con control externo
 
 \```tsx
-<SimpleAlert
-  level="warning"
-  message="Sesion por expirar"
-  closable={true}
-  onClose={() => console.log('cerrado')}
+const controller = useNotificationPanel();
+
+<NotificationPanel
+  controller={controller}
+  onClose={(id) => console.log('Cerrada:', id)}
+  onClearAll={() => console.log('Todas limpiadas')}
 />
+
+<button onClick={() => controller.add({ level: 'info', message: 'Nuevo item' })}>
+  Agregar
+</button>
+<button onClick={() => controller.clearAll()}>Limpiar</button>
 \```
 
-### Con titulo
+### Con click en item
 
 \```tsx
-<SimpleAlert
-  level="error"
-  title="Error de conexion"
-  message="No se pudo conectar al servidor"
+<NotificationPanel
+  items={notifications}
+  onItemClick={(id, item) => navigateTo(item.link)}
+  onClose={(id) => removeNotification(id)}
 />
 \```
 
@@ -570,22 +635,84 @@ import { SimpleAlert } from '@/lib/ui-library/components/SimpleAlert';
 
 | Prop | Tipo | Default | Descripcion |
 |------|------|---------|-------------|
-| `level` | `'info' \| 'warning' \| 'error' \| 'success'` | requerido | Nivel de severidad |
-| `message` | `string` | requerido | Texto del mensaje |
-| `title` | `string` | `undefined` | Titulo opcional |
-| `closable` | `boolean` | `false` | Muestra boton de cerrar |
-| `onClose` | `() => void` | `undefined` | Callback al cerrar |
+| `items` | `NotificationItem[]` | `[]` | Lista de notificaciones a mostrar |
+| `controller` | `NotificationPanelController` | `undefined` | Controller via `useNotificationPanel()` |
+| `maxVisible` | `number` | `5` | Maximo de notificaciones visibles |
 | `className` | `string` | `undefined` | Clase CSS adicional |
+
+## Callbacks
+
+| Callback | Tipo | Descripcion |
+|----------|------|-------------|
+| `onClose` | `(id: string) => void` | Se ejecuta al cerrar una notificacion individual |
+| `onItemClick` | `(id: string, item: NotificationItem) => void` | Se ejecuta al hacer click en una notificacion |
+| `onClearAll` | `() => void` | Se ejecuta al limpiar todas las notificaciones |
+
+\```tsx
+<NotificationPanel
+  items={items}
+  onClose={(id) => console.log('Cerrada:', id)}
+  onItemClick={(id, item) => console.log('Click:', item.message)}
+  onClearAll={() => console.log('Todo limpio')}
+/>
+\```
+
+## Hooks / Funciones expuestas
+
+### useNotificationPanel
+
+Hook que retorna un controller para gestionar notificaciones de forma imperativa.
+
+\```tsx
+const controller = useNotificationPanel();
+\```
+
+| Metodo / Propiedad | Tipo | Descripcion |
+|--------------------|------|-------------|
+| `add(item)` | `(item: Partial<NotificationItem>) => void` | Agrega una notificacion |
+| `remove(id)` | `(id: string) => void` | Elimina una notificacion por id |
+| `clearAll()` | `() => void` | Elimina todas las notificaciones |
+| `getItems()` | `() => NotificationItem[]` | Retorna las notificaciones actuales |
+| `count` | `number` | Cantidad de notificaciones activas |
+
+\```tsx
+const controller = useNotificationPanel();
+
+// Agregar notificacion
+controller.add({ level: 'success', message: 'Guardado correctamente' });
+
+// Limpiar todo
+controller.clearAll();
+
+// Consultar estado
+console.log(controller.count); // 0
+
+// Conectar al componente
+<NotificationPanel controller={controller} onClose={(id) => controller.remove(id)} />
+\```
+
+## Tipos auxiliares
+
+### NotificationItem
+
+| Prop | Tipo | Descripcion |
+|------|------|-------------|
+| `id` | `string` | Identificador unico |
+| `level` | `'info' \| 'warning' \| 'error' \| 'success'` | Nivel de severidad |
+| `message` | `string` | Texto del mensaje |
+| `link` | `string` | URL opcional para navegacion |
 
 ## Comportamiento
 
 | Escenario | Comportamiento |
 |-----------|----------------|
-| `closable=true` | Muestra boton X, llama `onClose` al hacer click |
-| `closable=false` | Sin boton de cierre, la alerta es persistente |
-| Sin `title` | Solo muestra el mensaje, sin linea de titulo |
+| `items` sin `controller` | Modo estatico: las notificaciones vienen por props |
+| Con `controller` | Modo dinamico: el hook gestiona las notificaciones internamente |
+| `maxVisible=3` | Solo muestra las 3 mas recientes, el resto se oculta |
+| `onClose` sin `controller` | El padre es responsable de eliminar el item del array |
+| `onClose` con `controller` | Se puede llamar `controller.remove(id)` dentro del callback |
 
 ## Demo
 
-Disponible en `/components/simple-alert`
+Disponible en `/components/notification-panel`
 ```
