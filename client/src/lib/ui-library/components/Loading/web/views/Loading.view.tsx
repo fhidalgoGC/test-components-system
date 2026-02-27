@@ -1,13 +1,6 @@
 import type { LoadingProps } from '../types/Loading.type';
+import { SelfSpinner } from '../../components/self';
 import styles from '../css/Loading.module.css';
-
-const sizeMap: Record<string, string> = {
-  xs: styles.sizeXs,
-  sm: styles.sizeSm,
-  md: styles.sizeMd,
-  lg: styles.sizeLg,
-  xl: styles.sizeXl,
-};
 
 const overlayMap: Record<string, string> = {
   transparent: styles.overlayTransparent,
@@ -21,6 +14,8 @@ export function Loading({
   overlay = 'transparent',
   coverage = 'component',
   size = 'md',
+  renderType = 'self',
+  render,
   label,
   className,
 }: LoadingProps) {
@@ -36,22 +31,18 @@ export function Loading({
     className,
   ].filter(Boolean).join(' ');
 
-  const spinnerClasses = [
-    styles.spinner,
-    sizeMap[size] || styles.sizeMd,
-  ].filter(Boolean).join(' ');
-
-  const labelClasses = [
-    styles.label,
-    overlay === 'dark' ? styles.labelDark : '',
-  ].filter(Boolean).join(' ');
-
   if (state === 'completed') return null;
+
+  const renderContent = () => {
+    if (renderType === 'component' && render) {
+      return render;
+    }
+    return <SelfSpinner size={size} label={label} overlay={overlay} />;
+  };
 
   return (
     <div className={wrapperClasses} data-testid="loading-overlay">
-      <div className={spinnerClasses} data-testid="loading-spinner" />
-      {label && <span className={labelClasses} data-testid="loading-label">{label}</span>}
+      {renderContent()}
     </div>
   );
 }

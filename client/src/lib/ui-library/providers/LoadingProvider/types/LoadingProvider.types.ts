@@ -1,10 +1,13 @@
-import type { ReactNode } from 'react';
-import type { LoadingOverlay, LoadingSize } from '../../../components/Loading/web/types/Loading.type';
+import type { ReactNode, RefObject } from 'react';
+import type { LoadingOverlay, LoadingSize, LoadingRenderType } from '../../../components/Loading/web/types/Loading.type';
 
 export interface LoadingConfig {
   overlay?: LoadingOverlay;
   size?: LoadingSize;
   label?: string;
+  renderType?: LoadingRenderType;
+  render?: ReactNode;
+  parentRef?: RefObject<HTMLElement>;
 }
 
 export interface LoadingContextValue {

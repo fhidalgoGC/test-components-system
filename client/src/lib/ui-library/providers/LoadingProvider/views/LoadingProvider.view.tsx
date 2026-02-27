@@ -1,4 +1,5 @@
-import { createContext, useState, useCallback } from 'react';
+import { createContext, useState, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Loading } from '../../../components/Loading';
 import type { LoadingContextValue, LoadingProviderProps, LoadingConfig } from '../types';
 
@@ -16,20 +17,45 @@ export function LoadingProvider({
     size: defaultSize,
     label: defaultLabel,
   });
+  const originalPositionRef = useRef<string | null>(null);
+  const activeParentRef = useRef<HTMLElement | null>(null);
+
+  const restoreParentPosition = useCallback(() => {
+    if (activeParentRef.current && originalPositionRef.current !== null) {
+      activeParentRef.current.style.position = originalPositionRef.current;
+    }
+    activeParentRef.current = null;
+    originalPositionRef.current = null;
+  }, []);
 
   const show = useCallback((overrides?: LoadingConfig) => {
-    if (overrides) {
-      setConfig(prev => ({
-        ...prev,
-        ...overrides,
-      }));
+    restoreParentPosition();
+
+    const newConfig: LoadingConfig = {
+      overlay: defaultOverlay,
+      size: defaultSize,
+      label: defaultLabel,
+      ...overrides,
+    };
+
+    if (newConfig.parentRef?.current) {
+      const el = newConfig.parentRef.current;
+      const computed = window.getComputedStyle(el).position;
+      originalPositionRef.current = el.style.position || '';
+      activeParentRef.current = el;
+      if (computed === 'static' || computed === '') {
+        el.style.position = 'relative';
+      }
     }
+
+    setConfig(newConfig);
     setIsLoading(true);
-  }, []);
+  }, [defaultOverlay, defaultSize, defaultLabel, restoreParentPosition]);
 
   const hide = useCallback(() => {
+    restoreParentPosition();
     setIsLoading(false);
-  }, []);
+  }, [restoreParentPosition]);
 
   const contextValue: LoadingContextValue = {
     isLoading,
@@ -38,18 +64,32 @@ export function LoadingProvider({
     config,
   };
 
+  const renderLoading = () => {
+    if (!isLoading) return null;
+
+    const loadingElement = (
+      <Loading
+        state="loading"
+        overlay={config.overlay}
+        coverage={config.parentRef?.current ? 'component' : 'fullscreen'}
+        size={config.size}
+        label={config.label}
+        renderType={config.renderType}
+        render={config.render}
+      />
+    );
+
+    if (config.parentRef?.current) {
+      return createPortal(loadingElement, config.parentRef.current);
+    }
+
+    return loadingElement;
+  };
+
   return (
     <LoadingContext.Provider value={contextValue}>
       {children}
-      {isLoading && (
-        <Loading
-          state="loading"
-          overlay={config.overlay}
-          coverage="fullscreen"
-          size={config.size}
-          label={config.label}
-        />
-      )}
+      {renderLoading()}
     </LoadingContext.Provider>
   );
 }

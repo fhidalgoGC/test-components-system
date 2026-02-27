@@ -38,19 +38,57 @@ export function LoadingPropsTab() {
               <td><code>size</code></td>
               <td><code>'xs' | 'sm' | 'md' | 'lg' | 'xl'</code></td>
               <td><code>'md'</code></td>
-              <td>Tamaño del spinner.</td>
+              <td>Tamaño del spinner (solo aplica cuando <code>renderType: 'self'</code>).</td>
+            </tr>
+            <tr>
+              <td><code>renderType</code></td>
+              <td><code>'self' | 'component'</code></td>
+              <td><code>'self'</code></td>
+              <td>Modo de renderizado. <code>'self'</code> usa el spinner interno (<code>SelfSpinner</code>). <code>'component'</code> renderiza el componente custom pasado en <code>render</code>.</td>
+            </tr>
+            <tr>
+              <td><code>render</code></td>
+              <td><code>ReactNode</code></td>
+              <td><code>undefined</code></td>
+              <td>Componente custom a renderizar cuando <code>renderType: 'component'</code>. Se muestra centrado dentro del overlay.</td>
             </tr>
             <tr>
               <td><code>label</code></td>
               <td><code>string</code></td>
               <td><code>undefined</code></td>
-              <td>Texto que se muestra debajo del spinner.</td>
+              <td>Texto debajo del spinner (solo aplica cuando <code>renderType: 'self'</code>).</td>
             </tr>
             <tr>
               <td><code>className</code></td>
               <td><code>string</code></td>
               <td><code>undefined</code></td>
               <td>Clase CSS adicional para el contenedor del loading.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className={styles.propsSubtitle}>LoadingRenderType</h3>
+      <p className={styles.propsDescription}>Modo de renderizado del contenido interno del loading.</p>
+      <div className={styles.propsTableWrapper}>
+        <table className={styles.propsTable}>
+          <thead>
+            <tr>
+              <th>Valor</th>
+              <th>Descripción</th>
+              <th>Componente interno</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>'self'</code></td>
+              <td>Usa el spinner por defecto de la librería (default)</td>
+              <td><code>SelfSpinner</code> en <code>components/self/</code></td>
+            </tr>
+            <tr>
+              <td><code>'component'</code></td>
+              <td>Renderiza el componente custom pasado en <code>render</code></td>
+              <td>El <code>ReactNode</code> del prop <code>render</code></td>
             </tr>
           </tbody>
         </table>
@@ -85,7 +123,7 @@ export function LoadingPropsTab() {
             </tr>
             <tr>
               <td><code>'none'</code></td>
-              <td>Sin fondo ni positioning, solo el spinner inline</td>
+              <td>Sin fondo ni positioning, solo el contenido inline</td>
               <td>Sin background</td>
             </tr>
           </tbody>
@@ -93,7 +131,7 @@ export function LoadingPropsTab() {
       </div>
 
       <h3 className={styles.propsSubtitle}>LoadingSize</h3>
-      <p className={styles.propsDescription}>Dimensiones del spinner según el tamaño seleccionado.</p>
+      <p className={styles.propsDescription}>Dimensiones del spinner según el tamaño seleccionado (solo <code>renderType: 'self'</code>).</p>
       <div className={styles.propsTableWrapper}>
         <table className={styles.propsTable}>
           <thead>
@@ -194,17 +232,17 @@ export function LoadingPropsTab() {
             <tr>
               <td><code>show</code></td>
               <td><code>(config?: LoadingConfig) =&gt; void</code></td>
-              <td>Muestra el loading fullscreen. Puede sobreescribir overlay, size y label.</td>
+              <td>Muestra el loading. Si se pasa <code>parentRef</code>, cubre ese componente. Si no, cubre toda la pantalla.</td>
             </tr>
             <tr>
               <td><code>hide</code></td>
               <td><code>() =&gt; void</code></td>
-              <td>Oculta el loading global.</td>
+              <td>Oculta el loading y restaura el <code>position</code> original del padre si fue modificado.</td>
             </tr>
             <tr>
               <td><code>config</code></td>
               <td><code>LoadingConfig</code></td>
-              <td>Configuración actual del loading (overlay, size, label).</td>
+              <td>Configuración actual del loading.</td>
             </tr>
           </tbody>
         </table>
@@ -230,12 +268,27 @@ export function LoadingPropsTab() {
             <tr>
               <td><code>size</code></td>
               <td><code>LoadingSize</code></td>
-              <td>Sobreescribe el tamaño del provider.</td>
+              <td>Sobreescribe el tamaño del spinner.</td>
             </tr>
             <tr>
               <td><code>label</code></td>
               <td><code>string</code></td>
-              <td>Sobreescribe el label del provider.</td>
+              <td>Sobreescribe el label del spinner.</td>
+            </tr>
+            <tr>
+              <td><code>renderType</code></td>
+              <td><code>'self' | 'component'</code></td>
+              <td>Modo de renderizado: <code>'self'</code> para el spinner interno, <code>'component'</code> para un componente custom.</td>
+            </tr>
+            <tr>
+              <td><code>render</code></td>
+              <td><code>ReactNode</code></td>
+              <td>Componente custom a renderizar (solo cuando <code>renderType: 'component'</code>).</td>
+            </tr>
+            <tr>
+              <td><code>parentRef</code></td>
+              <td><code>RefObject&lt;HTMLElement&gt;</code></td>
+              <td>Referencia al elemento padre donde inyectar el loading via portal. Si no se pasa, el loading es fullscreen. Se puede cambiar dinámicamente en cada <code>show()</code>.</td>
             </tr>
           </tbody>
         </table>
