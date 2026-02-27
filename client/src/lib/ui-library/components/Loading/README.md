@@ -6,54 +6,48 @@ Componente de carga configurable. Puede cubrir un componente individual o la pan
 
 ```
 Loading/
-├── components/
-│   └── self/                        # Spinner por defecto (renderType: 'self')
-│       ├── css/
-│       │   └── SelfSpinner.module.css
-│       ├── hooks/
-│       │   ├── useI18nMerge.hook.ts # Hook i18n local + global
-│       │   └── index.ts
-│       ├── i18n/
-│       │   ├── en.json              # Traducciones ingles
-│       │   ├── es.json              # Traducciones espanol
-│       │   └── index.ts             # localDictionaries + getLocalDict
-│       ├── providers/
-│       │   ├── SelfSpinner.provider.tsx  # Context con t() y lang
-│       │   └── index.ts
-│       ├── types/
-│       │   ├── SelfSpinner.type.ts  # Props + Context interfaces
-│       │   └── index.ts
-│       ├── views/
-│       │   ├── SelfSpinner.view.tsx  # Vista del spinner
-│       │   └── index.ts
-│       ├── SelfSpinner.tsx          # Wrapper: Provider + View
-│       └── index.ts                 # Barrel exports
-├── web/
-│   ├── css/Loading.module.css       # Estilos del wrapper/overlay/coverage
-│   ├── types/Loading.type.ts        # Tipos del componente
-│   └── views/Loading.view.tsx       # Vista principal
-├── index.tsx                        # Barrel exports
+├── web/                                 # Estructura estandar de componente
+│   ├── components/
+│   │   └── self/                        # Componente visual del spinner
+│   │       ├── css/SelfSpinner.module.css
+│   │       ├── SelfSpinner.tsx
+│   │       └── index.ts
+│   ├── css/Loading.module.css           # Estilos del wrapper/overlay/coverage
+│   ├── hooks/
+│   │   ├── useI18nMerge.hook.ts         # Hook i18n local + global
+│   │   └── index.ts
+│   ├── i18n/
+│   │   ├── en.json                      # Traducciones ingles
+│   │   ├── es.json                      # Traducciones espanol
+│   │   └── index.ts                     # localDictionaries + getLocalDict
+│   ├── providers/
+│   │   ├── Loading.provider.tsx         # Context con t() y lang
+│   │   └── index.ts
+│   ├── types/Loading.type.ts            # Props + Context interfaces
+│   ├── views/Loading.view.tsx           # Vista principal
+│   └── index.tsx                        # Wrapper: Provider + View
+├── index.tsx                            # Barrel exports
 └── README.md
 ```
 
-### Patron i18n del SelfSpinner
+### Patron i18n
 
-El `SelfSpinner` sigue el patron estandar de componentes con i18n:
+El Loading sigue el patron estandar de componentes con i18n a nivel `web/`:
 
 1. **i18n/**: Archivos JSON con traducciones locales (`en.json`, `es.json`) y `getLocalDict(lang)` para seleccionar el diccionario correcto.
 2. **hooks/useI18nMerge**: Combina traducciones locales del componente con traducciones globales del `LibI18nProvider`. Soporta prioridad configurable (`local-first` o `global-first`).
-3. **providers/SelfSpinner.provider**: Crea el contexto con `t()` (funcion traductora) y `lang` (idioma activo). Usa `useI18nMerge` internamente.
-4. **views/SelfSpinner.view**: Consume el contexto via `useSelfSpinnerContext()` para obtener `lang` y resolver `labelI18n`.
-5. **SelfSpinner.tsx**: Wrapper que envuelve la vista dentro del provider.
+3. **providers/Loading.provider**: Crea el contexto `LoadingContext` con `t()` (funcion traductora) y `lang` (idioma activo). Usa `useI18nMerge` internamente.
+4. **views/Loading.view**: Consume el contexto via `useLoadingContext()` para obtener `lang` y pasarlo al `SelfSpinner`.
+5. **web/index.tsx**: Wrapper que envuelve la vista dentro del provider.
 
 ```tsx
-// El wrapper conecta provider + view
-<SelfSpinnerProvider langOverride={langOverride} i18nOrder={i18nOrder}>
-  <SelfSpinnerView size={size} labelI18n={labelI18n} overlay={overlay} />
-</SelfSpinnerProvider>
+// web/index.tsx - Wrapper conecta provider + view
+<LoadingComponentProvider langOverride={langOverride} i18nOrder={i18nOrder}>
+  <LoadingView {...viewProps} />
+</LoadingComponentProvider>
 ```
 
-Las traducciones locales (`i18n/en.json`, `i18n/es.json`) incluyen textos internos del spinner. El `labelI18n` externo (pasado como prop) se resuelve con `resolveMultiLanguageLabel` usando el `lang` del contexto.
+El `SelfSpinner` dentro de `web/components/self/` es un componente visual puro: recibe `lang` como prop y resuelve `labelI18n` con `resolveMultiLanguageLabel`. No tiene provider ni i18n propios — toda la logica de idioma viene del provider a nivel `web/`.
 
 ## renderType: self vs component
 

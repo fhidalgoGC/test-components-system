@@ -20,4 +20,11 @@ export interface LoadingProps {
   render?: ReactNode;
   labelI18n?: LabelOrMultiLanguage;
   className?: string;
+  langOverride?: string;
+  i18nOrder?: 'global-first' | 'local-first';
+}
+
+export interface LoadingContext {
+  t: (key: string, params?: Record<string, string | number>) => string;
+  lang: string;
 }

@@ -1,24 +1,24 @@
 import { createContext, useContext, useMemo } from 'react';
 import type { ReactNode } from 'react';
-import type { SelfSpinnerContext } from '../types';
+import type { LoadingContext } from '../types/Loading.type';
 import { useI18nMerge } from '../hooks';
 
-const Ctx = createContext<SelfSpinnerContext | null>(null);
+const Ctx = createContext<LoadingContext | null>(null);
 
-export function useSelfSpinnerContext() {
+export function useLoadingContext() {
   const ctx = useContext(Ctx);
-  if (!ctx) throw new Error('SelfSpinnerProvider not mounted');
+  if (!ctx) throw new Error('LoadingProvider not mounted');
   return ctx;
 }
 
-export const SelfSpinnerProvider: React.FC<{
+export const LoadingComponentProvider: React.FC<{
   children: ReactNode;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';
 }> = ({ children, langOverride, i18nOrder = 'local-first' }) => {
   const { t, lang } = useI18nMerge(langOverride, { order: i18nOrder });
 
-  const value = useMemo<SelfSpinnerContext>(() => ({
+  const value = useMemo<LoadingContext>(() => ({
     t, lang
   }), [t, lang]);
 

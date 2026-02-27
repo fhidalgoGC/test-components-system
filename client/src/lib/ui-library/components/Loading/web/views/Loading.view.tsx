@@ -1,5 +1,6 @@
 import type { LoadingProps } from '../types/Loading.type';
-import { SelfSpinner } from '../../components/self';
+import { useLoadingContext } from '../providers';
+import { SelfSpinner } from '../components/self';
 import styles from '../css/Loading.module.css';
 
 const overlayMap: Record<string, string> = {
@@ -9,7 +10,7 @@ const overlayMap: Record<string, string> = {
   none: styles.overlayNone,
 };
 
-export function Loading({
+export function LoadingView({
   state = 'loading',
   overlay = 'transparent',
   coverage = 'component',
@@ -19,6 +20,7 @@ export function Loading({
   labelI18n,
   className,
 }: LoadingProps) {
+  const { lang } = useLoadingContext();
   const needsPositioning = overlay !== 'none';
 
   const wrapperClasses = [
@@ -37,7 +39,7 @@ export function Loading({
     if (renderType === 'component' && render) {
       return render;
     }
-    return <SelfSpinner size={size} labelI18n={labelI18n} overlay={overlay} />;
+    return <SelfSpinner size={size} labelI18n={labelI18n} overlay={overlay} lang={lang} />;
   };
 
   return (

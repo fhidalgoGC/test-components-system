@@ -1,7 +1,7 @@
-import type { SelfSpinnerProps } from '../types';
-import { useSelfSpinnerContext } from '../providers';
+import type { LoadingSize, LoadingOverlay } from '../../types/Loading.type';
+import type { LabelOrMultiLanguage } from '../../../../../types/language.types';
 import { resolveMultiLanguageLabel } from '../../../../../utils/i18n.util';
-import styles from '../css/SelfSpinner.module.css';
+import styles from './css/SelfSpinner.module.css';
 
 const sizeMap: Record<string, string> = {
   xs: styles.sizeXs,
@@ -11,9 +11,14 @@ const sizeMap: Record<string, string> = {
   xl: styles.sizeXl,
 };
 
-export function SelfSpinnerView({ size = 'md', labelI18n, overlay }: SelfSpinnerProps) {
-  const { lang } = useSelfSpinnerContext();
+interface SelfSpinnerProps {
+  size?: LoadingSize;
+  labelI18n?: LabelOrMultiLanguage;
+  overlay?: LoadingOverlay;
+  lang?: string;
+}
 
+export function SelfSpinner({ size = 'md', labelI18n, overlay, lang = 'en' }: SelfSpinnerProps) {
   const spinnerClasses = [
     styles.spinner,
     sizeMap[size] || styles.sizeMd,
