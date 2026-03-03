@@ -1,6 +1,6 @@
 # AppAuthProvider - Provider de Autenticación y Gestión de Sesiones
 
-**Version: 1.2.1**
+**Version: 1.3.0**
 
 ## Descripción
 
@@ -32,6 +32,9 @@ AppAuthProvider/
 ├── components/
 │   ├── ProtectedRoute.tsx
 │   ├── PublicRoute.tsx
+│   └── index.ts
+├── utils/
+│   ├── deepMerge.ts
 │   └── index.ts
 ├── index.ts
 └── README-IA.md
@@ -490,6 +493,8 @@ interface AppAuthContextValue {
   isAuthenticated: boolean;              // Estado de autenticación
   sessionInvalidated: boolean;           // true si la sesión ya fue invalidada
   sessionData: unknown | null;           // Datos genéricos de sesión
+  getSessionData: <T = unknown>() => T | null; // Obtener datos tipados de sesión
+  updateSessionData: (data: Record<string, unknown>) => void; // Deep merge parcial de datos de sesión
   login: (data?: unknown) => void;       // Iniciar sesión con datos opcionales
   logout: (data?: unknown) => void;      // Cerrar sesión con datos opcionales
   refreshActivity: () => void;           // Renovar lastActivityTime
@@ -512,7 +517,116 @@ interface AppAuthContextValue {
 |------|------|---------|-------------|
 | `children` | `ReactNode` | Required | Siempre se renderiza (autoLogoutDelay viene del provider) |
 
+## updateSessionData — Deep Merge Recursivo
+
+`updateSessionData` permite actualizar parcialmente los datos de sesión sin perder la data existente. Usa deep merge recursivo.
+
+**Requisito:** Solo funciona si `login()` ya fue llamado. Si no hay sesión activa, lanza un warning por consola y no hace nada.
+
+### Comportamiento del Deep Merge
+
+```
+Datos actuales:  { name: 'Freddy', role: 'admin' }
+updateSessionData({ edad: 15 })
+Resultado:       { name: 'Freddy', role: 'admin', edad: 15 }
+```
+
+```
+Datos actuales:  { name: 'Freddy' }
+updateSessionData({ name: 'Juan' })
+Resultado:       { name: 'Juan' }
+```
+
+```
+Datos actuales:  { user: { name: 'Freddy', age: 30 }, token: 'abc' }
+updateSessionData({ user: { age: 31, email: 'f@mail.com' } })
+Resultado:       { user: { name: 'Freddy', age: 31, email: 'f@mail.com' }, token: 'abc' }
+```
+
+**Reglas:**
+- Keys nuevas → se agregan
+- Keys existentes con valor primitivo → se sobrescriben
+- Keys existentes con objetos anidados → merge recursivo
+- Arrays → se sobrescriben (no se concatenan)
+- `null` → sobrescribe directamente
+
+### Flujo de updateSessionData
+
+```
+Usuario autenticado (isAuthenticated = true)
+    │
+    ├─> Llama updateSessionData({ token: 'xyz', permisos: ['read'] })
+    │
+    ├─> Provider:
+    │   ├─> Verifica isAuthenticated === true ✓
+    │   ├─> Lee sessionData actual
+    │   ├─> Deep merge: { ...actual, ...nuevo } (recursivo)
+    │   ├─> setSessionData(merged)
+    │   └─> Persiste en localStorage
+    │
+    └─> sessionData actualizado, componentes re-renderizan
+```
+
+```
+Usuario NO autenticado (isAuthenticated = false)
+    │
+    ├─> Llama updateSessionData({ token: 'xyz' })
+    │
+    └─> Provider:
+        ├─> Verifica isAuthenticated === false ✗
+        ├─> console.warn('[AppAuth] updateSessionData ignorado...')
+        └─> No hace nada
+```
+
+### Ejemplo de Uso
+
+```tsx
+function ProfilePage() {
+  const { getSessionData, updateSessionData } = useAppAuth();
+  const session = getSessionData<{ name: string; token: string }>();
+
+  const handleUpdateToken = (newToken: string) => {
+    updateSessionData({ token: newToken });
+  };
+
+  const handleAddPermissions = (permisos: string[]) => {
+    updateSessionData({ permisos });
+  };
+
+  return <div>Hola, {session?.name}</div>;
+}
+```
+
+### Ejemplo con ApiInterceptor
+
+```tsx
+function ApiAuthConnector({ children }: { children: ReactNode }) {
+  const { getSessionData, updateSessionData, isAuthenticated } = useAppAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      privateApi.setAuth({
+        type: 'bearer',
+        getToken: () => getSessionData<{ access_token: string }>()?.access_token ?? null,
+      });
+    } else {
+      privateApi.clearAuth();
+    }
+  }, [isAuthenticated]);
+
+  return children;
+}
+```
+
 ## Changelog
+
+### v1.3.0 (Marzo 2026)
+- Agregado `updateSessionData(data)` al contexto — deep merge recursivo de datos de sesión
+- Agregado `getSessionData<T>()` al contexto — obtener datos tipados de sesión
+- `updateSessionData` solo funciona post-login (requiere `isAuthenticated === true`)
+- Deep merge recursivo: objetos anidados se mezclan, arrays y primitivos se sobrescriben
+- Datos actualizados se persisten automáticamente en localStorage
+- Agregada utilidad interna `deepMerge` en `utils/deepMerge.ts`
 
 ### v1.2.1 (Febrero 2026)
 - `onLogging` ahora recibe `(data?: unknown)` — la misma data que se pasó a `login(data)`

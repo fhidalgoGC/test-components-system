@@ -17,6 +17,7 @@ import {
 import type { AppAuthContextValue, AppAuthProviderProps } from "../types";
 import { environment } from "../../../enviorments/enviroment";
 import { ConfigContext } from "../../AppEnviromentProvider/index.hook";
+import { deepMerge } from "../utils";
 
 export const AppAuthContext = createContext<AppAuthContextValue | null>(null);
 
@@ -287,11 +288,30 @@ export function AppAuthProvider({
     return sessionData as T | null;
   }, [sessionData]);
 
+  const updateSessionData = useCallback((data: Record<string, unknown>) => {
+    if (!isAuthenticated) {
+      console.warn('[AppAuth] updateSessionData ignorado: no hay sesión activa. Debes llamar login() primero.');
+      return;
+    }
+
+    setSessionData(prev => {
+      const currentData: Record<string, unknown> =
+        prev !== null && typeof prev === 'object' && !Array.isArray(prev)
+          ? (prev as Record<string, unknown>)
+          : {};
+
+      const newData = deepMerge(currentData, data);
+      saveSessionData(sessionDataKey, newData);
+      return newData;
+    });
+  }, [isAuthenticated, sessionDataKey]);
+
   const contextValue: AppAuthContextValue = {
     isAuthenticated,
     sessionInvalidated,
     sessionData,
     getSessionData,
+    updateSessionData,
     login: publicLogin,
     logout: publicLogout,
     refreshActivity,

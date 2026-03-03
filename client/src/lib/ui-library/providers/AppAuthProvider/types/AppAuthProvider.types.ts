@@ -5,6 +5,7 @@ export interface AppAuthContextValue {
   sessionInvalidated: boolean;
   sessionData: unknown | null;
   getSessionData: <T = unknown>() => T | null;
+  updateSessionData: (data: Record<string, unknown>) => void;
   login: (data?: unknown) => void;
   logout: (data?: unknown) => void;
   refreshActivity: () => void;
