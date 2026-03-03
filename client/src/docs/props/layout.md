@@ -10,86 +10,35 @@ interface LayoutAlign {
   horizontal?: 'left' | 'center' | 'right';
 }
 
-interface Layout {
-  widthMode?: 'full' | 'auto' | 'fixed' | 'percentage';
-  width?: number;
-  minWidth?: number;
-  heightMode?: 'full' | 'auto' | 'fixed' | 'percentage';
-  height?: number | 'auto';
-  minHeight?: number;
+interface Layout extends HeightWidthSize {
   align?: LayoutAlign;
 }
 ```
 
-## Propiedades
+`Layout` extiende de `HeightWidthSize` (`widthMode`, `width`, `minWidth`, `heightMode`, `height`, `minHeight`) y agrega `align` para la alineacion del contenido.
 
-### widthMode
+> Ver documentacion completa de las propiedades de dimensionamiento en [`HeightWidthSize.md`](./HeightWidthSize.md).
 
-Define como se calcula el ancho del componente. Por defecto `'auto'`.
+## Propiedades de dimensionamiento (de HeightWidthSize)
 
-| Valor        | Descripcion                                                        | CSS generado     |
-|--------------|---------------------------------------------------------------------|------------------|
-| `full`       | Ocupa todo el ancho disponible del contenedor padre.                | `width: 100%`    |
-| `auto`       | Se adapta al contenido interno del componente. **(default)**        | `width: auto`    |
-| `fixed`      | Usa el valor exacto definido en `width` (en pixeles).               | `width: {n}px`   |
-| `percentage` | Usa el valor de `width` como porcentaje del contenedor padre.       | `width: {n}%`    |
+Las siguientes propiedades vienen de `HeightWidthSize` y estan documentadas en detalle en [`HeightWidthSize.md`](./HeightWidthSize.md):
 
-### width
+| Propiedad | Tipo | Default | Descripcion |
+|-----------|------|---------|-------------|
+| `widthMode` | `'full' \| 'auto' \| 'fixed' \| 'percentage'` | `'auto'` | Como se calcula el ancho |
+| `width` | `number` | — | Valor numerico (px o %) segun widthMode |
+| `minWidth` | `number` | — | Ancho minimo en pixeles |
+| `heightMode` | `'full' \| 'auto' \| 'fixed' \| 'percentage'` | `'auto'` | Como se calcula la altura |
+| `height` | `number \| 'auto'` | — | Valor numerico (px o %) segun heightMode |
+| `minHeight` | `number` | — | Altura minima en pixeles |
 
-Valor numerico. Su interpretacion depende del `widthMode`:
-- Con `widthMode: 'fixed'` → se interpreta como pixeles (`width: 400` = `400px`).
-- Con `widthMode: 'percentage'` → se interpreta como porcentaje del padre (`width: 50` = `50%`).
-
-```json
-{ "widthMode": "fixed", "width": 400 }
-{ "widthMode": "percentage", "width": 50 }
-```
-
-### minWidth
-
-Ancho minimo en pixeles. Se aplica independientemente del `widthMode`. Util para evitar que el componente se comprima demasiado en pantallas pequenas.
-
-```json
-{ "widthMode": "full", "minWidth": 300 }
-```
-
-### heightMode
-
-Define como se calcula la altura del componente. Por defecto `'auto'`.
-
-| Valor        | Descripcion                                                        | CSS generado      |
-|--------------|---------------------------------------------------------------------|-------------------|
-| `full`       | Ocupa toda la altura disponible del contenedor padre.               | `height: 100%`    |
-| `auto`       | Se adapta al contenido interno del componente. **(default)**        | `height: auto`    |
-| `fixed`      | Usa el valor exacto definido en `height` (en pixeles).              | `height: {n}px`   |
-| `percentage` | Usa el valor de `height` como porcentaje del contenedor padre.      | `height: {n}%`    |
-
-### height
-
-Valor numerico o `'auto'`. Su interpretacion depende del `heightMode`:
-- Con `heightMode: 'fixed'` → se interpreta como pixeles (`height: 500` = `500px`).
-- Con `heightMode: 'percentage'` → se interpreta como porcentaje del padre (`height: 75` = `75%`).
-
-```json
-{ "heightMode": "fixed", "height": 500 }
-{ "heightMode": "percentage", "height": 75 }
-```
-
-### minHeight
-
-Altura minima en pixeles. Se aplica independientemente del `heightMode`. Util para garantizar que el componente tenga una altura minima visible.
-
-```json
-{ "heightMode": "auto", "minHeight": 200 }
-```
-
-### align
+## align
 
 Controla la alineacion del contenido interno del componente. Usa flexbox internamente.
 
 **Valor por defecto:** Si no se pasa `align`, el componente siempre se alinea centrado en ambos ejes (`vertical: 'middle'`, `horizontal: 'center'`).
 
-#### align.vertical
+### align.vertical
 
 Define la alineacion vertical del contenido dentro del componente. Por defecto `'middle'`.
 
@@ -99,7 +48,7 @@ Define la alineacion vertical del contenido dentro del componente. Por defecto `
 | `middle` | Contenido centrado verticalmente. **(default)**      | `justifyContent: center`      |
 | `bottom` | Contenido alineado en la parte inferior.             | `justifyContent: flex-end`    |
 
-#### align.horizontal
+### align.horizontal
 
 Define la alineacion horizontal del contenido dentro del componente. Por defecto `'center'`.
 
@@ -138,73 +87,9 @@ Define la alineacion horizontal del contenido dentro del componente. Por defecto
 />
 ```
 
-## Combinaciones comunes
+## Combinaciones comunes con align
 
-### Componente que llena todo el espacio
-
-```json
-{
-  "widthMode": "full",
-  "heightMode": "full"
-}
-```
-
-### Componente con ancho fijo y altura automatica
-
-```json
-{
-  "widthMode": "fixed",
-  "width": 400,
-  "heightMode": "auto"
-}
-```
-
-### Componente responsivo con minimos
-
-```json
-{
-  "widthMode": "full",
-  "minWidth": 300,
-  "heightMode": "auto",
-  "minHeight": 150
-}
-```
-
-### Componente con dimensiones exactas
-
-```json
-{
-  "widthMode": "fixed",
-  "width": 800,
-  "heightMode": "fixed",
-  "height": 600
-}
-```
-
-### Componente que ocupa la mitad del padre
-
-```json
-{
-  "widthMode": "percentage",
-  "width": 50,
-  "heightMode": "full"
-}
-```
-
-### Componente con porcentaje y minimos
-
-```json
-{
-  "widthMode": "percentage",
-  "width": 70,
-  "minWidth": 400,
-  "heightMode": "percentage",
-  "height": 80,
-  "minHeight": 300
-}
-```
-
-### Componente centrado con tamano fijo
+### Centrado con tamano fijo
 
 ```json
 {
@@ -219,7 +104,7 @@ Define la alineacion horizontal del contenido dentro del componente. Por defecto
 }
 ```
 
-### Componente con contenido arriba a la izquierda
+### Contenido arriba a la izquierda
 
 ```json
 {
@@ -232,7 +117,7 @@ Define la alineacion horizontal del contenido dentro del componente. Por defecto
 }
 ```
 
-### Componente con contenido abajo a la derecha
+### Contenido abajo a la derecha
 
 ```json
 {
@@ -244,6 +129,8 @@ Define la alineacion horizontal del contenido dentro del componente. Por defecto
   }
 }
 ```
+
+> Para combinaciones de dimensionamiento sin `align` (llenar espacio, ancho fijo, responsivo con minimos, porcentajes, etc.), ver los ejemplos en [`HeightWidthSize.md`](./HeightWidthSize.md).
 
 ## Componentes que ya lo implementan
 
@@ -260,7 +147,7 @@ Los siguientes componentes ya usan el prop `layout` con este estandar:
 
 ## Como implementarlo en un componente nuevo
 
-1. Importar o definir los tipos `WidthMode`, `HeightMode` y `LayoutAlign` en el archivo de tipos del componente.
+1. Importar o definir los tipos `HeightWidthSize` y `LayoutAlign` en el archivo de tipos del componente.
 2. Agregar la interfaz `Layout` como prop del componente (preferiblemente como objeto `layout`).
 3. En el componente, convertir los valores del layout a estilos CSS inline o clases.
 
