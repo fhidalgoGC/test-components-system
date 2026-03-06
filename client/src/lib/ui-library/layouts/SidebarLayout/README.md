@@ -15,11 +15,13 @@ Desktop (>= 768px)                              Mobile (< 768px)
 │              │         MAIN (C)            │   │        MAIN (C)          │
 │              │                             │   │      (fullscreen)        │
 │              │                             │   │                          │
-└──────────────┴─────────────────────────────┘   └──────────────────────────┘
+└──────────────┴─────────────────────────────┘   ├──────────────────────────┤
+                                                 │    BOTTOM NAV (opt.)     │
+                                                 └──────────────────────────┘
 ```
 
 - **Web (>= 768px)**: Sidebar + Toolbar + Main
-- **Mobile (< 768px)**: Solo Toolbar + Main (sin sidebar)
+- **Mobile (< 768px)**: Toolbar + Main + Bottom Nav opcional (sin sidebar)
 - Resolución automática via `useIsMobile()` — sin media queries CSS
 
 ## Estructura de Archivos
@@ -60,6 +62,7 @@ SidebarLayout/
 - **Padding configurable**: Props `mainPaddingX` y `mainPaddingY` para controlar el espaciado interno del área Main
 - **Sidebar colapsable**: Hook para controlar estado collapsed/expanded (solo web)
 - **Modo controlado/no-controlado**: Manejo flexible del estado del sidebar
+- **Bottom nav en mobile**: Prop `bottomNavContent` para renderizar navegación inferior en mobile (solo se muestra en mobile)
 
 ## Importación
 
@@ -91,6 +94,7 @@ import { SidebarLayout, useSidebarLayout } from "@/lib/ui-library/layouts";
 | `className` | `string` | - | Clases CSS adicionales |
 | `mainPaddingX` | `number` | - | Padding horizontal del área Main en px |
 | `mainPaddingY` | `number` | - | Padding vertical del área Main en px |
+| `bottomNavContent` | `ReactNode` | - | Navegación inferior (solo se renderiza en mobile) |
 
 ### SidebarLayoutMobileProps (Mobile — interno)
 
@@ -102,6 +106,7 @@ import { SidebarLayout, useSidebarLayout } from "@/lib/ui-library/layouts";
 | `className` | `string` | - | Clases CSS adicionales |
 | `mainPaddingX` | `number` | - | Padding horizontal del Main |
 | `mainPaddingY` | `number` | - | Padding vertical del Main |
+| `bottomNavContent` | `ReactNode` | - | Navegación inferior fija en la parte baja |
 
 ### SidebarLayoutContextValue
 

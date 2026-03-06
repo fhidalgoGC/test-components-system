@@ -7,4 +7,5 @@ export interface SidebarLayoutMobileProps {
   className?: string;
   mainPaddingX?: number;
   mainPaddingY?: number;
+  bottomNavContent?: ReactNode;
 }

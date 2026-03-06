@@ -15,6 +15,7 @@ export function SidebarLayout(props: SidebarLayoutProps) {
         className={props.className}
         mainPaddingX={props.mainPaddingX}
         mainPaddingY={props.mainPaddingY}
+        bottomNavContent={props.bottomNavContent}
       />
     );
   }

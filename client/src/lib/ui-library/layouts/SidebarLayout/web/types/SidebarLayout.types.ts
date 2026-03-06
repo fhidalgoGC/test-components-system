@@ -16,6 +16,8 @@ export interface SidebarLayoutProps {
   
   mainPaddingX?: number;
   mainPaddingY?: number;
+  
+  bottomNavContent?: ReactNode;
 }
 
 export interface SidebarLayoutContextValue {

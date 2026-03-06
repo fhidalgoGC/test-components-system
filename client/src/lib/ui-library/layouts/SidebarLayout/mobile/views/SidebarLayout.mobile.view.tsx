@@ -12,6 +12,7 @@ export function SidebarLayoutMobileView({
   className,
   mainPaddingX,
   mainPaddingY,
+  bottomNavContent,
 }: SidebarLayoutMobileProps) {
   const contextValue = useMemo(() => ({
     collapsed: true,
@@ -41,6 +42,12 @@ export function SidebarLayoutMobileView({
             {children}
           </div>
         </div>
+
+        {bottomNavContent && (
+          <div className={styles.bottomNav}>
+            {bottomNavContent}
+          </div>
+        )}
       </div>
     </SidebarLayoutContext.Provider>
   );
