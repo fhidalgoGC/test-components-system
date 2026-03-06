@@ -1,5 +1,9 @@
+import { useMemo } from 'react';
 import type { SidebarLayoutMobileProps } from '../types/SidebarLayout.mobile.types';
+import { SidebarLayoutContext } from '../../web/hooks/useSidebarLayout.hook';
 import styles from '../css/SidebarLayout.mobile.module.scss';
+
+const noop = () => {};
 
 export function SidebarLayoutMobileView({
   toolbarContent,
@@ -9,26 +13,35 @@ export function SidebarLayoutMobileView({
   mainPaddingX,
   mainPaddingY,
 }: SidebarLayoutMobileProps) {
-  return (
-    <div className={`${styles.layoutContainer} ${className || ''}`}>
-      <div
-        className={styles.toolbar}
-        style={{ height: toolbarHeight ?? 'auto' }}
-      >
-        {toolbarContent}
-      </div>
+  const contextValue = useMemo(() => ({
+    collapsed: true,
+    setCollapsed: noop,
+    toggleCollapse: noop,
+    sidebarWidth: 0 as number | 'auto',
+  }), []);
 
-      <div className={styles.main}>
+  return (
+    <SidebarLayoutContext.Provider value={contextValue}>
+      <div className={`${styles.layoutContainer} ${className || ''}`}>
         <div
-          className={styles.mainContent}
-          style={{
-            ...(mainPaddingX !== undefined && { paddingLeft: mainPaddingX, paddingRight: mainPaddingX }),
-            ...(mainPaddingY !== undefined && { paddingTop: mainPaddingY, paddingBottom: mainPaddingY }),
-          }}
+          className={styles.toolbar}
+          style={{ height: toolbarHeight ?? 'auto' }}
         >
-          {children}
+          {toolbarContent}
+        </div>
+
+        <div className={styles.main}>
+          <div
+            className={styles.mainContent}
+            style={{
+              ...(mainPaddingX !== undefined && { paddingLeft: mainPaddingX, paddingRight: mainPaddingX }),
+              ...(mainPaddingY !== undefined && { paddingTop: mainPaddingY, paddingBottom: mainPaddingY }),
+            }}
+          >
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+    </SidebarLayoutContext.Provider>
   );
 }
