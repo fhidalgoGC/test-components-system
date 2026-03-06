@@ -68,6 +68,29 @@ function ScrollMainContent() {
   );
 }
 
+function BottomNavContent() {
+  return (
+    <div className={styles.bottomNavArea}>
+      <div className={styles.bottomNavItem}>
+        <span className={styles.bottomNavIcon}>🏠</span>
+        <span>Inicio</span>
+      </div>
+      <div className={styles.bottomNavItem}>
+        <span className={styles.bottomNavIcon}>🔍</span>
+        <span>Buscar</span>
+      </div>
+      <div className={styles.bottomNavItem}>
+        <span className={styles.bottomNavIcon}>➕</span>
+        <span>Crear</span>
+      </div>
+      <div className={styles.bottomNavItem}>
+        <span className={styles.bottomNavIcon}>👤</span>
+        <span>Perfil</span>
+      </div>
+    </div>
+  );
+}
+
 type DemoType = 'basic' | 'scroll' | 'collapsed';
 
 export default function SidebarLayoutDemoPage() {
@@ -103,6 +126,7 @@ export default function SidebarLayoutDemoPage() {
         defaultCollapsed={demo === 'collapsed'}
         sidebarContent={<SidebarContent />}
         toolbarContent={<ToolbarContent />}
+        bottomNavContent={<BottomNavContent />}
       >
         {renderMainContent()}
       </SidebarLayout>
