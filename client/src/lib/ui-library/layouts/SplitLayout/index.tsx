@@ -1,4 +1,6 @@
 import { SplitLayout as SplitLayoutWeb } from './web';
+import { SplitLayoutMobile } from './mobile';
+import { useIsMobile } from '../../hooks/useResponsive';
 import type {
   SplitLayoutProps,
   LayoutConfig,
@@ -12,8 +14,15 @@ import type {
   HorizontalAlign,
   ComponentMainAlign,
 } from './web/types';
+import type { SplitLayoutMobileProps, MobileLayoutConfig } from './mobile/types';
 
 export const SplitLayout = (props: SplitLayoutProps) => {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <SplitLayoutMobile layout={props.layout} main={props.main} />;
+  }
+
   return <SplitLayoutWeb {...props} />;
 };
 
@@ -29,4 +38,6 @@ export type {
   VerticalAlign,
   HorizontalAlign,
   ComponentMainAlign,
+  SplitLayoutMobileProps,
+  MobileLayoutConfig,
 };

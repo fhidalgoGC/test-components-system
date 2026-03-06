@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'wouter';
-import { SplitLayout } from '@/layouts/split-layout-component';
-import type { SizeMode, VerticalAlign, HorizontalAlign } from '@/layouts/split-layout-component';
+import { SplitLayout } from '@/lib/ui-library/layouts/SplitLayout';
+import type { SizeMode, VerticalAlign, HorizontalAlign } from '@/lib/ui-library/layouts/SplitLayout';
 
 type ExampleKey = 'login' | 'reversed' | 'scroll' | 'interactive';
 const validExamples: ExampleKey[] = ['login', 'reversed', 'scroll', 'interactive'];

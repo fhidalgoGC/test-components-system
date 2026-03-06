@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  overflow: hidden;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.mainPanel {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.secondPanel {
+  min-width: 0;
+}
+
+.panelInner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+
+.bgOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bgComponent {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Vertical Align */
+.vTop { justify-content: flex-start; }
+.vMiddle { justify-content: center; }
+.vBottom { justify-content: flex-end; }
+
+/* Horizontal Align */
+.hLeft { align-items: flex-start; }
+.hCenter { align-items: center; }
+.hRight { align-items: flex-end; }
+
+/* Scroll */
+.scrollYAuto { overflow-y: auto; }
+.scrollYHidden { overflow-y: hidden; }
+.scrollXAuto { overflow-x: auto; }
+.scrollXHidden { overflow-x: hidden; }
