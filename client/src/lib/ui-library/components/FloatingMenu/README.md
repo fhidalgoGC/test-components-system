@@ -18,9 +18,24 @@ Componente de menú flotante con posicionamiento configurable, secciones (header
 
 | Platform | Status | Description |
 |----------|--------|-------------|
-| Web | ✅ Implemented | Vite + Tailwind CSS |
-| Mobile | ❌ Not Implemented | Web-only component |
-| Native | ❌ Not Implemented | Web-only component |
+| Web | ✅ Implemented | Menú flotante con posicionamiento relativo, drag & drop |
+| Mobile | ✅ Implemented | Bottom sheet con animación slide-up, sin drag & drop |
+| Native | ❌ Not Implemented | Pendiente |
+
+### Diferencias Web vs Mobile
+
+| Feature | Web | Mobile |
+|---------|-----|--------|
+| Presentación | Menú flotante posicionado | Bottom sheet desde abajo |
+| Posición (`position`) | 12 posiciones disponibles | No aplica (siempre desde abajo) |
+| Offset | Configurable | No aplica |
+| Drag & drop (`orderable`) | Sí | No (touch no soporta HTML5 D&D) |
+| Backdrop | Transparente | Semi-transparente oscuro |
+| Header/Footer | Sí | Sí |
+| Selección | Sí | Sí |
+| Scroll | Sí | Sí |
+| Controller | Sí | Sí |
+| Resolución | Automática via `useIsMobile()` (< 768px) | |
 
 ## Installation
 
@@ -398,11 +413,23 @@ FloatingMenu/
 │   ├── views/
 │   │   └── FloatingMenu.view.tsx
 │   ├── hooks/
-│   │   └── useFloatingMenu.hook.ts
+│   │   ├── useFloatingMenu.hook.ts
+│   │   └── useI18nMerge.hook.ts
 │   ├── css/
-│   │   └── FloatingMenu.module.css
+│   │   ├── FloatingMenu.module.css
+│   │   └── FloatingMenu.module.ts
 │   └── index.ts
-├── index.tsx           # Web/Mobile dispatch
+├── mobile/
+│   ├── types/
+│   │   ├── FloatingMenu.mobile.types.ts
+│   │   └── index.ts
+│   ├── views/
+│   │   ├── FloatingMenu.mobile.view.tsx
+│   │   └── index.ts
+│   ├── css/
+│   │   └── FloatingMenu.mobile.module.css
+│   └── index.ts
+├── index.tsx           # Web/Mobile dispatch via useIsMobile()
 └── README.md
 ```
 
