@@ -182,7 +182,37 @@ function App() {
 ```
 
 En web (>= 768px): muestra Sidebar + Toolbar + Main.
-En mobile (< 768px): solo muestra Toolbar + Main (sin sidebar).
+En mobile (< 768px): solo muestra Toolbar + Main + Bottom Nav (sin sidebar).
+
+## Con Bottom Nav en Mobile
+
+```tsx
+function MyBottomNav() {
+  return (
+    <nav style={{ display: 'flex', justifyContent: 'space-around', background: '#1e293b', padding: 10, color: 'white' }}>
+      <span>Inicio</span>
+      <span>Buscar</span>
+      <span>Perfil</span>
+    </nav>
+  );
+}
+
+function App() {
+  return (
+    <SidebarLayout
+      sidebarContent={<MySidebar />}
+      toolbarContent={<MyToolbar />}
+      bottomNavContent={<MyBottomNav />}
+    >
+      <MainContent />
+    </SidebarLayout>
+  );
+}
+```
+
+- En web (>= 768px): `bottomNavContent` no se renderiza — el usuario navega con el sidebar
+- En mobile (< 768px): `bottomNavContent` aparece fijo en la parte inferior, debajo del Main
+- Si no se pasa `bottomNavContent`, no aparece nada abajo — solo Toolbar + Main
 
 ## Modo Controlado
 
