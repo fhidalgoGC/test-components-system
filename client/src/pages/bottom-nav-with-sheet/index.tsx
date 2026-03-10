@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { BottomNavigationBar } from '@/lib/ui-library/components/BottomNavigationBar';
-import { FloatingMenu } from '@/lib/ui-library/components/FloatingMenu';
 import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
 import type { NavItem } from '@/lib/ui-library/components/BottomNavigationBar/mobile/types';
-import type { FloatingMenuItem } from '@/lib/ui-library/components/FloatingMenu/shared/types';
 import type { NavigationItem } from '@/lib/ui-library/components/NavigationSidebar';
-import { Home, Truck, List, Settings, User, LogOut, HelpCircle, Menu } from 'lucide-react';
+import { Home, Truck, List, Settings, Menu, Package } from 'lucide-react';
 
-const navItems: NavItem[] = [
+const bottomNavItems: NavItem[] = [
   {
     id: 'dashboard',
     label: { en: 'Dashboard', es: 'Dashboard', default: 'Dashboard' },
@@ -37,40 +35,30 @@ const sidebarItems: NavigationItem[] = [
   { id: 'settings', label: 'Ajustes', path: '/settings', icon: <Settings size={20} /> },
 ];
 
-const menuItems: FloatingMenuItem<unknown>[] = [
-  {
-    id: 'profile',
-    render: () => (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '4px 0' }}>
-        <User size={20} />
-        <span style={{ fontSize: 16 }}>Mi perfil</span>
-      </div>
-    ),
+const pageContent: Record<string, { title: string; description: string }> = {
+  dashboard: {
+    title: 'Dashboard',
+    description: 'Vista general de tu aplicacion. Aqui puedes ver estadisticas y resumen de actividad.',
   },
-  {
-    id: 'help',
-    render: () => (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '4px 0' }}>
-        <HelpCircle size={20} />
-        <span style={{ fontSize: 16 }}>Ayuda</span>
-      </div>
-    ),
+  trips: {
+    title: 'Viajes',
+    description: 'Gestiona tus viajes activos, historial y programacion de rutas.',
   },
-  {
-    id: 'logout',
-    render: () => (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '4px 0', color: '#ef4444' }}>
-        <LogOut size={20} />
-        <span style={{ fontSize: 16 }}>Cerrar sesión</span>
-      </div>
-    ),
+  catalogs: {
+    title: 'Catalogos',
+    description: 'Administra tus catalogos de productos, servicios y configuraciones.',
   },
-];
+  settings: {
+    title: 'Ajustes',
+    description: 'Configura las preferencias de tu cuenta y la aplicacion.',
+  },
+};
 
 export default function BottomNavWithSheetDemo() {
   const [selectedNav, setSelectedNav] = useState('dashboard');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const current = pageContent[selectedNav] || pageContent.dashboard;
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb' }}>
@@ -83,31 +71,12 @@ export default function BottomNavWithSheetDemo() {
         padding: '0 16px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        gap: 12,
         height: 56,
         flexShrink: 0,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button
-            onClick={() => setIsSidebarOpen(true)}
-            style={{
-              border: 'none',
-              background: 'none',
-              cursor: 'pointer',
-              padding: 8,
-              borderRadius: 8,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            data-testid="btn-open-sidebar"
-          >
-            <Menu size={24} />
-          </button>
-          <h1 style={{ fontSize: 18, fontWeight: 600, margin: 0 }} data-testid="text-app-title">Mi App</h1>
-        </div>
         <button
-          onClick={() => setIsMenuOpen(true)}
+          onClick={() => setIsSidebarOpen(true)}
           style={{
             border: 'none',
             background: 'none',
@@ -118,67 +87,27 @@ export default function BottomNavWithSheetDemo() {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-          data-testid="btn-open-menu"
+          data-testid="btn-open-sidebar"
         >
-          <User size={24} />
+          <Menu size={24} />
         </button>
+        <h1 style={{ fontSize: 18, fontWeight: 600, margin: 0 }} data-testid="text-app-title">Mi App</h1>
       </header>
 
       <main style={{ flex: 1, overflow: 'auto', padding: 16, paddingBottom: 80 }}>
         <div style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, marginBottom: 16, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }} data-testid="text-demo-title">Demo: BottomNav + Sidebar + BottomSheet</h2>
-          <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6 }}>
-            Esta demo muestra los 3 componentes mobile funcionando juntos:
-          </p>
-          <ul style={{ fontSize: 14, color: '#6b7280', lineHeight: 2, marginTop: 8, paddingLeft: 20 }}>
-            <li><strong>NavigationSidebar</strong> (drawer desde la izquierda) - toca el icono de hamburguesa</li>
-            <li><strong>FloatingMenu</strong> (BottomSheet desde abajo) - toca el icono de usuario</li>
-            <li><strong>BottomNavigationBar</strong> (barra fija abajo) - siempre visible</li>
-          </ul>
-          <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6, marginTop: 8 }}>
-            Todos usan <code>createPortal</code> a <code>document.body</code> con
-            <code> z-index: 9999</code>, asi que siempre aparecen por encima de la barra inferior.
+          <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 8 }} data-testid="text-page-title">{current.title}</h2>
+          <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6 }} data-testid="text-page-description">
+            {current.description}
           </p>
         </div>
 
         <div style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <p style={{ fontSize: 14, color: '#374151' }} data-testid="text-active-tab">
-            Pestana activa: <strong>{selectedNav}</strong>
+          <p style={{ fontSize: 13, color: '#9ca3af', lineHeight: 1.8 }}>
+            <strong>Toolbar:</strong> El boton de hamburguesa abre el NavigationSidebar como drawer.<br />
+            <strong>Sidebar:</strong> Se cierra con swipe hacia la izquierda, tocando el overlay, o con el boton X.<br />
+            <strong>BottomNav:</strong> Barra fija abajo para cambiar de seccion.
           </p>
-          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#111827',
-                color: 'white',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 14,
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
-              data-testid="btn-open-sidebar-body"
-            >
-              Abrir sidebar
-            </button>
-            <button
-              onClick={() => setIsMenuOpen(true)}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 14,
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
-              data-testid="btn-open-menu-body"
-            >
-              Abrir menu
-            </button>
-          </div>
         </div>
       </main>
 
@@ -190,27 +119,32 @@ export default function BottomNavWithSheetDemo() {
         onNavigate={(path) => {
           const id = path.replace('/', '');
           setSelectedNav(id);
-          setIsSidebarOpen(false);
         }}
-        headerContent={
-          <span style={{ fontWeight: 600, fontSize: 16 }}>Mi App</span>
+        headerIcon={
+          <div style={{
+            width: 32,
+            height: 32,
+            borderRadius: 8,
+            backgroundColor: '#3b82f6',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Package size={16} color="white" />
+          </div>
         }
-        showThemeToggle={false}
-        showLanguageSelector={false}
-      />
-
-      <FloatingMenu
-        items={menuItems}
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        onItemClick={(item) => {
-          console.log('Item clicked:', item.id);
-          setIsMenuOpen(false);
-        }}
+        headerContent={
+          <div>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>Mi App</span>
+            <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>v1.0.0</span>
+          </div>
+        }
+        showThemeToggle={true}
+        showLanguageSelector={true}
       />
 
       <BottomNavigationBar
-        items={navItems}
+        items={bottomNavItems}
         selectedId={selectedNav}
         onSelect={(item) => setSelectedNav(item.id)}
       />
