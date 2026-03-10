@@ -70,19 +70,21 @@ ComponentName/
 │   │   ├── componentname.util.ts
 │   │   └── index.ts
 │   └── index.ts
-├── web/                     # Solo vista y estilos específicos de web
+├── web/                     # Vista, estilos y lo que NO se puede compartir
 │   ├── styles/
 │   │   └── ComponentName.module.scss
 │   ├── views/
 │   │   ├── ComponentName.view.tsx
 │   │   └── index.ts
+│   ├── hooks/               # (opcional) hooks exclusivos de web
 │   └── index.ts
-├── mobile/                  # Solo vista y estilos específicos de mobile
+├── mobile/                  # Vista, estilos y lo que NO se puede compartir
 │   ├── styles/
 │   │   └── ComponentName.mobile.module.css
 │   ├── views/
 │   │   ├── ComponentName.mobile.view.tsx
 │   │   └── index.ts
+│   ├── hooks/               # (opcional) hooks exclusivos de mobile
 │   └── index.ts
 ├── index.tsx                # Dispatch web/mobile
 └── README.md
@@ -111,24 +113,35 @@ Todo lo que usan **ambas** variantes (o más):
 | **utils**     | Funciones de cálculo, helpers    |
 
 ### `web/`
-Solo lo exclusivo de la variante web:
+Vista, estilos y cualquier lógica que **no se pueda compartir** con otras variantes:
 
-| Contenido   | Ejemplo                           |
-|-------------|-----------------------------------|
-| **views**   | ComponentName.view.tsx            |
-| **styles**  | ComponentName.module.scss      |
+| Contenido   | Ejemplo                                        |
+|-------------|------------------------------------------------|
+| **views**   | ComponentName.view.tsx                         |
+| **styles**  | ComponentName.module.scss                      |
+| **hooks**   | useWebAnimation.hook.ts (solo si es exclusivo) |
+| **utils**   | webonly.util.ts (solo si es exclusivo)          |
+| **providers** | WebOnly.provider.tsx (solo si es exclusivo)  |
 
-Importa directamente de `../../shared/types`, `../../shared/utils`, etc.
+Importa lo compartido de `../../shared/types`, `../../shared/utils`, etc.
 
 ### `mobile/`
-Solo lo exclusivo de la variante mobile:
+Vista, estilos y cualquier lógica que **no se pueda compartir** con otras variantes:
 
-| Contenido   | Ejemplo                           |
-|-------------|-----------------------------------|
-| **views**   | ComponentName.mobile.view.tsx     |
-| **styles**  | ComponentName.mobile.module.css   |
+| Contenido   | Ejemplo                                           |
+|-------------|---------------------------------------------------|
+| **views**   | ComponentName.mobile.view.tsx                     |
+| **styles**  | ComponentName.mobile.module.css                   |
+| **hooks**   | useTouchGesture.hook.ts (solo si es exclusivo)    |
+| **utils**   | mobileonly.util.ts (solo si es exclusivo)          |
+| **providers** | MobileOnly.provider.tsx (solo si es exclusivo)  |
 
-Importa directamente de `../../shared/types`, `../../shared/utils`, etc.
+Importa lo compartido de `../../shared/types`, `../../shared/utils`, etc.
+
+### Criterio para decidir shared vs web/mobile
+
+> Si un hook, util, provider o tipo lo usa **más de una variante** → va en `shared/`.
+> Si **solo lo usa una variante** y no tiene sentido en las demás → va en `web/` o `mobile/`.
 
 ---
 
