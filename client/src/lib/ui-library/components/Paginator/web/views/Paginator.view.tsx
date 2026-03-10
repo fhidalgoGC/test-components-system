@@ -138,17 +138,18 @@ export const PaginatorView = (props: PaginatorProps) => {
       <div className={styles.paginatorContent}>
         <div className={styles.leftSection}>
           {showItemsPerPage && (
-            <ItemsPerPageSelect
-              value={itemsPerPage}
-              options={itemsPerPageOptions}
-              onChange={setItemsPerPage}
-              label={t('showing')}
-            />
+            <>
+              <ItemsPerPageSelect
+                value={itemsPerPage}
+                options={itemsPerPageOptions}
+                onChange={setItemsPerPage}
+                label={t('showing')}
+              />
+              <span className={styles.itemsInfo} data-testid="paginator-items-info">
+                {t('of')} {totalItems} {t('items')}
+              </span>
+            </>
           )}
-          
-          <span className={styles.itemsInfo} data-testid="paginator-items-info">
-            {t('of')} {totalItems} {t('items')}
-          </span>
           
           {showPageNumbers && (
             <div className={styles.navigationContainer}>

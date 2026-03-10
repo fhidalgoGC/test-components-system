@@ -151,47 +151,49 @@ export const PaginatorMobileView = (props: PaginatorProps) => {
         </div>
       )}
 
-      <div className={styles.bottomRow}>
-        {showItemsPerPage && (
-          <div className={styles.itemsPerPageContainer}>
-            <span className={styles.itemsPerPageLabel}>{t('showing')}</span>
-            <button
-              className={styles.itemsPerPageButton}
-              onClick={() => setIsSheetOpen(true)}
-              data-testid="paginator-mobile-items-per-page"
-            >
-              {itemsPerPage}
-              <ChevronDown className={styles.chevronIcon} />
-            </button>
+      {showItemsPerPage && (
+        <>
+          <div className={styles.bottomRow}>
+            <div className={styles.itemsPerPageContainer}>
+              <span className={styles.itemsPerPageLabel}>{t('showing')}</span>
+              <button
+                className={styles.itemsPerPageButton}
+                onClick={() => setIsSheetOpen(true)}
+                data-testid="paginator-mobile-items-per-page"
+              >
+                {itemsPerPage}
+                <ChevronDown className={styles.chevronIcon} />
+              </button>
+            </div>
+
+            <span className={styles.itemsInfo} data-testid="paginator-mobile-items-info">
+              {t('of')} {totalItems} {t('items')}
+            </span>
           </div>
-        )}
 
-        <span className={styles.itemsInfo} data-testid="paginator-mobile-items-info">
-          {t('of')} {totalItems} {t('items')}
-        </span>
-      </div>
-
-      <BottomSheetWrapperMobileView
-        isOpen={isSheetOpen}
-        onClose={() => setIsSheetOpen(false)}
-        title={t('itemsPerPage')}
-        heightMode="auto"
-        dataTestId="paginator-mobile-sheet"
-      >
-        <div>
-          {itemsPerPageOptions.map((option) => (
-            <button
-              key={option}
-              className={`${styles.sheetOption} ${option === itemsPerPage ? styles.sheetOptionActive : ''}`}
-              onClick={() => handleSelectOption(option)}
-              data-testid={`paginator-mobile-option-${option}`}
-            >
-              <span>{option} {t('items')}</span>
-              {option === itemsPerPage && <Check className={styles.checkIcon} />}
-            </button>
-          ))}
-        </div>
-      </BottomSheetWrapperMobileView>
+          <BottomSheetWrapperMobileView
+            isOpen={isSheetOpen}
+            onClose={() => setIsSheetOpen(false)}
+            title={t('itemsPerPage')}
+            heightMode="auto"
+            dataTestId="paginator-mobile-sheet"
+          >
+            <div>
+              {itemsPerPageOptions.map((option) => (
+                <button
+                  key={option}
+                  className={`${styles.sheetOption} ${option === itemsPerPage ? styles.sheetOptionActive : ''}`}
+                  onClick={() => handleSelectOption(option)}
+                  data-testid={`paginator-mobile-option-${option}`}
+                >
+                  <span>{option} {t('items')}</span>
+                  {option === itemsPerPage && <Check className={styles.checkIcon} />}
+                </button>
+              ))}
+            </div>
+          </BottomSheetWrapperMobileView>
+        </>
+      )}
     </div>
   );
 };

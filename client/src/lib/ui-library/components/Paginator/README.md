@@ -18,7 +18,7 @@ import { Paginator } from "@/lib/ui-library/components/Paginator";
 | `itemsPerPageOptions` | `number[]` | `[10, 25, 50, 100]` | Opciones del selector de elementos por página |
 | `onPageChange` | `(page: number) => void` | - | Callback al cambiar de página |
 | `onItemsPerPageChange` | `(itemsPerPage: number) => void` | - | Callback al cambiar elementos por página |
-| `showItemsPerPage` | `boolean` | `true` | Mostrar/ocultar selector de elementos por página |
+| `showItemsPerPage` | `boolean` | `true` | Mostrar/ocultar la sección completa de selector de elementos por página (dropdown/botón + texto "de X elementos") |
 | `showPageNumbers` | `boolean` | `true` | Mostrar/ocultar números de página y navegación |
 | `maxVisiblePages` | `number` | `4` (web) / `3` (mobile) | Cantidad máxima de números de página visibles |
 | `className` | `string` | - | Clase CSS adicional |
@@ -100,6 +100,8 @@ El componente **no** incluye padding, margin, borde ni background por defecto. E
 ```
 
 ## Sin selector de items por página
+
+Cuando `showItemsPerPage={false}`, se oculta toda la sección de selección: el dropdown (web) o botón (mobile), el texto "mostrando", y el texto "de X elementos". Solo quedan visibles los controles de paginación (números de página y botones de navegación).
 
 ```tsx
 <Paginator
