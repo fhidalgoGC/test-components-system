@@ -1,20 +1,13 @@
 import { useIsMobile } from '../../hooks';
 import { LayoutRow as LayoutRowWeb } from './web';
-import { NotImplemented } from '../NotImplemented';
-import type { LayoutRowProps, SlotConfig } from './web/types';
-
-// Mobile version placeholder (uncomment when implemented)
-// import { LayoutRow as LayoutRowMobile } from './mobile';
+import { LayoutRow as LayoutRowMobile } from './mobile';
+import type { LayoutRowProps, SlotConfig } from './shared/types';
 
 export const LayoutRow = (props: LayoutRowProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    // Return mobile version when implemented
-    // return <LayoutRowMobile {...props} />;
-    
-    // Fallback: mobile version not implemented
-    return <NotImplemented platform="Mobile" componentName="LayoutRow" />;
+    return <LayoutRowMobile {...props} />;
   }
 
   return <LayoutRowWeb {...props} />;

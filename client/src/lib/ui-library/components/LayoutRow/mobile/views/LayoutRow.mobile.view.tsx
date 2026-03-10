@@ -1,4 +1,4 @@
-import type { LayoutRowProps, LayoutRowComponent, SlotConfig, SpacingToken, GapToken, SlotGapToken } from '../../shared/types';
+import type { LayoutRowProps, LayoutRowComponent, SpacingToken, GapToken, SlotGapToken } from '../../shared/types';
 import {
   getWidthStyle,
   getHeightStyle,
@@ -9,7 +9,7 @@ import {
   groupByAlign,
   capitalize,
 } from '../../shared/utils';
-import styles from '../css/LayoutRow.module.scss';
+import styles from '../styles/LayoutRow.mobile.module.css';
 
 const getPaddingXClass = (value: SpacingToken | number | undefined): string => {
   if (!value || typeof value === 'number') return '';
@@ -69,7 +69,7 @@ const getAlignClass = (align: string) => {
 const getComponentWrapperClasses = (comp: LayoutRowComponent): string => {
   const classes = [styles.componentWrapper];
 
-  const wm = comp.widthMode || 'auto';
+  const wm = comp.widthMode || 'full';
   if (wm === 'full') classes.push(styles.componentWidthFull);
   else if (wm === 'fixed' || wm === 'percentage') classes.push(styles.componentWidthFixed);
   else classes.push(styles.componentWidthAuto);
@@ -82,18 +82,7 @@ const getComponentWrapperClasses = (comp: LayoutRowComponent): string => {
   return classes.join(' ');
 };
 
-const getSlotClasses = (config: SlotConfig | undefined): string => {
-  if (!config || !config.widthMode) return '';
-  switch (config.widthMode) {
-    case 'full': return styles.slotFull;
-    case 'auto': return styles.slotAuto;
-    case 'fixed': return styles.slotFixed;
-    case 'percentage': return styles.slotFixed;
-    default: return '';
-  }
-};
-
-export const LayoutRowView = (props: LayoutRowProps) => {
+export const LayoutRowMobileView = (props: LayoutRowProps) => {
   const {
     slots,
     slotConfig,
@@ -123,7 +112,6 @@ export const LayoutRowView = (props: LayoutRowProps) => {
     getMarginXClass(marginX),
     getMarginYClass(marginY),
     getSlotGapClass(slotGap),
-    getVerticalAlignClass(componentVerticalAlign),
     className,
   ].filter(Boolean).join(' ');
 
@@ -134,7 +122,7 @@ export const LayoutRowView = (props: LayoutRowProps) => {
   };
 
   return (
-    <div className={containerClasses} style={inlineStyles} data-testid="layoutrow">
+    <div className={containerClasses} style={inlineStyles} data-testid="layoutrow-mobile">
       {Array.from({ length: slots }, (_, slotIndex) => {
         const slotComponents = groupedBySlot[slotIndex] || [];
         const currentSlotConfig = slotConfig?.[slotIndex];
@@ -142,16 +130,22 @@ export const LayoutRowView = (props: LayoutRowProps) => {
 
         const slotClasses = [
           styles.slot,
-          getSlotClasses(currentSlotConfig),
           getVerticalAlignClass(componentVerticalAlign),
         ].filter(Boolean).join(' ');
+
+        const slotStyle: React.CSSProperties = {};
+        if (currentSlotConfig?.widthMode === 'percentage' && currentSlotConfig.width !== undefined) {
+          slotStyle.width = '100%';
+        } else if (currentSlotConfig?.widthMode === 'fixed' && currentSlotConfig.width !== undefined) {
+          slotStyle.width = '100%';
+        }
 
         return (
           <div
             key={slotIndex}
             className={slotClasses}
-            style={getSlotStyle(currentSlotConfig)}
-            data-testid={`layoutrow-slot-${slotIndex}`}
+            style={slotStyle}
+            data-testid={`layoutrow-mobile-slot-${slotIndex}`}
           >
             {(['left', 'center', 'right'] as const).map((align) => {
               const alignComponents = alignGroups[align];
@@ -160,16 +154,16 @@ export const LayoutRowView = (props: LayoutRowProps) => {
               return (
                 <div
                   key={align}
-                  className={`${styles.slot} ${getAlignClass(align)} ${getComponentGapClass(componentGap)}`}
+                  className={`${styles.alignGroup} ${getAlignClass(align)} ${getComponentGapClass(componentGap)}`}
                   style={getComponentGapStyle(componentGap)}
-                  data-testid={`layoutrow-slot-${slotIndex}-${align}`}
+                  data-testid={`layoutrow-mobile-slot-${slotIndex}-${align}`}
                 >
                   {alignComponents.map((comp, idx) => (
                     <div
                       key={idx}
                       className={getComponentWrapperClasses(comp)}
                       style={getComponentWrapperStyle(comp)}
-                      data-testid={`layoutrow-component-${slotIndex}-${align}-${idx}`}
+                      data-testid={`layoutrow-mobile-component-${slotIndex}-${align}-${idx}`}
                     >
                       {comp.component}
                     </div>

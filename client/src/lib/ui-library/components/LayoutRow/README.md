@@ -34,6 +34,24 @@ LayoutRow (contenedor principal)
 - Los componentes se renderizan dentro de su grupo de alineación
 - Múltiples componentes en el mismo grupo se apilan horizontalmente con `componentGap`
 
+## Platform Support
+
+| Platform | Status | Descripción |
+|----------|--------|-------------|
+| Web | ✅ Implementado | Layout horizontal con slots lado a lado |
+| Mobile | ✅ Implementado | Layout vertical, slots apilados (< 768px) |
+| Native | ❌ Pendiente | No implementado |
+
+### Diferencias Web vs Mobile
+
+| Feature | Web | Mobile |
+|---------|-----|--------|
+| Dirección | Horizontal (`flex-row`) | Vertical (`flex-column`) |
+| Slots | Lado a lado, dividiendo espacio | Apilados verticalmente, ancho 100% |
+| `slotConfig` | Respeta `widthMode`/`width`/porcentaje | Ignorado (siempre full width) |
+| Grupos de alineación | Horizontal dentro del slot | Horizontal (filas con wrap) |
+| Resolución | Automática via `useIsMobile()` (< 768px) | |
+
 ## Importación
 
 ```tsx
@@ -439,3 +457,55 @@ Cada componente dentro del LayoutRow puede controlar su propio ancho y alto de f
 | Slots dividen | Espacio horizontal | Espacio vertical |
 | Alineación | `left`, `center`, `right` | `top`, `center`, `bottom` |
 | Uso típico | Toolbars, headers, footers | Páginas, sidebars, cards |
+
+## Folder Structure
+
+```
+LayoutRow/
+├── shared/
+│   ├── types/
+│   │   ├── LayoutRow.type.ts
+│   │   └── index.ts
+│   ├── hooks/
+│   │   ├── useLayoutRow.hook.ts
+│   │   ├── useI18nMerge.hook.ts
+│   │   └── index.ts
+│   ├── providers/
+│   │   ├── LayoutRow.provider.tsx
+│   │   └── index.ts
+│   ├── i18n/
+│   │   ├── en.json
+│   │   ├── es.json
+│   │   └── index.ts
+│   ├── environment/
+│   │   ├── enviroment.ts
+│   │   └── index.ts
+│   ├── utils/
+│   │   ├── layoutrow.util.ts
+│   │   └── index.ts
+│   └── index.ts
+├── web/
+│   ├── css/
+│   │   ├── LayoutRow.module.scss
+│   │   ├── LayoutRow.module.ts
+│   │   └── index.ts
+│   ├── views/
+│   │   ├── LayoutRow.view.tsx
+│   │   └── index.ts
+│   ├── hooks/ (re-exports from shared)
+│   ├── providers/ (re-exports from shared)
+│   ├── types/ (re-exports from shared)
+│   ├── utils/ (re-exports from shared)
+│   ├── environment/ (re-exports from shared)
+│   └── index.tsx
+├── mobile/
+│   ├── styles/
+│   │   └── LayoutRow.mobile.module.css
+│   ├── views/
+│   │   ├── LayoutRow.mobile.view.tsx
+│   │   └── index.ts
+│   └── index.ts
+├── index.tsx           # Web/Mobile dispatch via useIsMobile()
+├── README.md
+└── README-IA.md
+```
