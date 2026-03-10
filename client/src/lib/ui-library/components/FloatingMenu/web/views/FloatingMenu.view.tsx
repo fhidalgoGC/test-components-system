@@ -1,50 +1,13 @@
-import { useState, useRef, useCallback, useEffect, useSyncExternalStore } from 'react';
-import type { FloatingMenuProps, FloatingMenuItem, FloatingMenuLayout, FloatingMenuItemConfig, FloatingMenuSectionConfig, FloatingMenuSelectionStyle, MenuPosition } from '../types';
-import type { InternalFloatingMenuController } from '../hooks/useFloatingMenu.hook';
-import styles from '../css/FloatingMenu.module.css';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import type { FloatingMenuProps, FloatingMenuItem, MenuPosition, InternalFloatingMenuController } from '../../shared/types';
+import { getLayoutStyles, getSectionStyles, getItemStyles, getSelectionStyleObj, useControllerSubscription, getGapStyle } from '../../shared/utils';
+import styles from '../styles/FloatingMenu.module.css';
+import type { CSSProperties } from 'react';
 
-const getLayoutStyles = (layout?: FloatingMenuLayout): React.CSSProperties => {
-  if (!layout) return {};
-  
-  const style: React.CSSProperties = {};
-  
-  if (layout.widthMode === 'full') {
-    style.width = '100%';
-  } else if (layout.widthMode === 'fixed' && layout.width) {
-    style.width = typeof layout.width === 'number' ? `${layout.width}px` : layout.width;
-  } else if (layout.widthMode === 'auto') {
-    style.width = 'auto';
-  }
-  
-  if (layout.minWidth) {
-    style.minWidth = typeof layout.minWidth === 'number' ? `${layout.minWidth}px` : layout.minWidth;
-  }
-  if (layout.maxWidth) {
-    style.maxWidth = typeof layout.maxWidth === 'number' ? `${layout.maxWidth}px` : layout.maxWidth;
-  }
-  
-  if (layout.heightMode === 'full') {
-    style.height = '100%';
-  } else if (layout.heightMode === 'fixed' && layout.height) {
-    style.height = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
-  } else if (layout.heightMode === 'auto') {
-    style.height = 'auto';
-  }
-  
-  if (layout.minHeight) {
-    style.minHeight = typeof layout.minHeight === 'number' ? `${layout.minHeight}px` : layout.minHeight;
-  }
-  if (layout.maxHeight) {
-    style.maxHeight = typeof layout.maxHeight === 'number' ? `${layout.maxHeight}px` : layout.maxHeight;
-  }
-  
-  return style;
-};
-
-const getPositionStyles = (position: MenuPosition, offset: number): React.CSSProperties => {
-  const style: React.CSSProperties = {};
+const getPositionStyles = (position: MenuPosition, offset: number): CSSProperties => {
+  const style: CSSProperties = {};
   const offsetPx = `${offset}px`;
-  
+
   switch (position) {
     case 'top':
       style.bottom = `calc(100% + ${offsetPx})`;
@@ -99,74 +62,8 @@ const getPositionStyles = (position: MenuPosition, offset: number): React.CSSPro
       style.bottom = '0';
       break;
   }
-  
-  return style;
-};
 
-const getSectionStyles = (config?: FloatingMenuSectionConfig): React.CSSProperties => {
-  if (!config) return {};
-  
-  const style: React.CSSProperties = {};
-  
-  if (config.heightMode === 'full') {
-    style.height = '100%';
-  } else if (config.heightMode === 'fixed' && config.height) {
-    style.height = typeof config.height === 'number' ? `${config.height}px` : config.height;
-  } else if (config.heightMode === 'auto') {
-    style.height = 'auto';
-  }
-  
-  if (config.minHeight) {
-    style.minHeight = typeof config.minHeight === 'number' ? `${config.minHeight}px` : config.minHeight;
-  }
-  if (config.maxHeight) {
-    style.maxHeight = typeof config.maxHeight === 'number' ? `${config.maxHeight}px` : config.maxHeight;
-  }
-  
   return style;
-};
-
-const getItemStyles = (itemConfig?: FloatingMenuItemConfig): React.CSSProperties => {
-  if (!itemConfig) return {};
-  
-  const style: React.CSSProperties = {};
-  
-  if (itemConfig.heightMode === 'full') {
-    style.height = '100%';
-  } else if (itemConfig.heightMode === 'fixed' && itemConfig.height) {
-    style.height = typeof itemConfig.height === 'number' ? `${itemConfig.height}px` : itemConfig.height;
-  } else if (itemConfig.heightMode === 'auto') {
-    style.height = 'auto';
-  }
-  
-  if (itemConfig.minHeight) {
-    style.minHeight = typeof itemConfig.minHeight === 'number' ? `${itemConfig.minHeight}px` : itemConfig.minHeight;
-  }
-  
-  return style;
-};
-
-const getSelectionStyleObj = (selectionStyle?: FloatingMenuSelectionStyle): React.CSSProperties => {
-  if (!selectionStyle) return {};
-  const style: React.CSSProperties = {};
-  if (selectionStyle.border) style.border = selectionStyle.border;
-  if (selectionStyle.borderRadius) style.borderRadius = selectionStyle.borderRadius;
-  if (selectionStyle.backgroundColor) style.backgroundColor = selectionStyle.backgroundColor;
-  if (selectionStyle.boxShadow) style.boxShadow = selectionStyle.boxShadow;
-  if (selectionStyle.outline) style.outline = selectionStyle.outline;
-  if (selectionStyle.custom) Object.assign(style, selectionStyle.custom);
-  return style;
-};
-
-const useControllerSubscription = (controller?: InternalFloatingMenuController) => {
-  const selectedId = useSyncExternalStore(
-    (callback) => {
-      if (!controller?._subscribe) return () => {};
-      return controller._subscribe(callback);
-    },
-    () => controller?._getSelectedId?.() ?? null
-  );
-  return selectedId;
 };
 
 function DragHandle({ className }: { className?: string }) {
@@ -188,8 +85,8 @@ function DragHandle({ className }: { className?: string }) {
 }
 
 export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
-  const { 
-    items, 
+  const {
+    items,
     layout,
     position = 'bottom-start',
     offset = 0,
@@ -329,29 +226,29 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
   const itemStyles = getItemStyles(itemConfig);
   const scrollClass = scroll === 'auto' ? styles.scrollAuto : styles.scrollNone;
   const selectedStyleObj = getSelectionStyleObj(selectionStyle);
-  
+
   const showHeader = header?.show !== false && header?.renderType === 'component' && header?.render;
   const showFooter = footer?.show !== false && footer?.renderType === 'component' && footer?.render;
-  
+
   const headerStyles = getSectionStyles(header);
   const footerStyles = getSectionStyles(footer);
 
   return (
     <>
       {showBackdrop && (
-        <div 
-          className={styles.backdrop} 
+        <div
+          className={styles.backdrop}
           onClick={handleBackdropClick}
           data-testid="floatingmenu-backdrop"
         />
       )}
-      <div 
+      <div
         className={`${styles.floatingMenu} ${className}`}
         style={{ ...layoutStyles, ...positionStyles }}
         data-testid="floatingmenu"
       >
         {showHeader && (
-          <div 
+          <div
             className={`${styles.header} ${headerClassName}`}
             style={headerStyles}
             data-testid="floatingmenu-header"
@@ -359,9 +256,9 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
             {header.render!()}
           </div>
         )}
-        
+
         <div className={`${styles.body} ${scrollClass} ${bodyClassName}`} data-testid="floatingmenu-body">
-          <div className={styles.itemsContainer} style={itemConfig?.gap != null ? { gap: typeof itemConfig.gap === 'number' ? `${itemConfig.gap}px` : itemConfig.gap } : undefined}>
+          <div className={styles.itemsContainer} style={getGapStyle(itemConfig?.gap)}>
             {displayItems.map((item, index) => {
               const isSelected = selectable && currentSelectedId === item.id;
               const isDragOver = orderable && dragOverIndex === index;
@@ -395,9 +292,9 @@ export const FloatingMenuView = <T,>(props: FloatingMenuProps<T>) => {
             })}
           </div>
         </div>
-        
+
         {showFooter && (
-          <div 
+          <div
             className={`${styles.footer} ${footerClassName}`}
             style={footerStyles}
             data-testid="floatingmenu-footer"

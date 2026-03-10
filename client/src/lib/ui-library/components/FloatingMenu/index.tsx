@@ -1,7 +1,7 @@
 import { useIsMobile } from '../../hooks';
 import { FloatingMenu as FloatingMenuWeb } from './web';
 import { FloatingMenuMobileView } from './mobile';
-import type { FloatingMenuProps } from './web/types';
+import type { FloatingMenuProps } from './shared/types';
 
 export const FloatingMenu = <T,>(props: FloatingMenuProps<T>) => {
   const isMobile = useIsMobile();
@@ -13,7 +13,7 @@ export const FloatingMenu = <T,>(props: FloatingMenuProps<T>) => {
   return <FloatingMenuWeb {...props} />;
 };
 
-export { useFloatingMenu } from './web';
+export { useFloatingMenu } from './shared/hooks';
 
 export type { 
   FloatingMenuProps, 
@@ -28,6 +28,4 @@ export type {
   HeightMode,
   ScrollMode,
   RenderType
-} from './web/types';
-
-export type { FloatingMenuMobileProps } from './mobile/types';
+} from './shared/types';

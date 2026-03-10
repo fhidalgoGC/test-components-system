@@ -1,0 +1,36 @@
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollAuto {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollNone {
+  overflow: hidden;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.menuItem:active {
+  background-color: #e5e7eb;
+}
+
+.selected {
+  background-color: #eff6ff;
+  border-left: 3px solid #3b82f6;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

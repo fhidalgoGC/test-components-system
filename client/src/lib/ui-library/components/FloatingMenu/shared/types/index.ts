@@ -1,0 +1,15 @@
+export type {
+  WidthMode,
+  HeightMode,
+  ScrollMode,
+  RenderType,
+  MenuPosition,
+  FloatingMenuLayout,
+  FloatingMenuSectionConfig,
+  FloatingMenuItemConfig,
+  FloatingMenuItem,
+  FloatingMenuSelectionStyle,
+  FloatingMenuController,
+  InternalFloatingMenuController,
+  FloatingMenuProps,
+} from './FloatingMenu.type';

@@ -1,11 +1,5 @@
 import { useRef } from 'react';
-import type { FloatingMenuController } from '../types';
-
-interface InternalFloatingMenuController extends FloatingMenuController {
-  _subscribe: (callback: () => void) => () => void;
-  _setSelectedId: (id: string | null) => void;
-  _getSelectedId: () => string | null;
-}
+import type { FloatingMenuController, InternalFloatingMenuController } from '../types';
 
 export const useFloatingMenu = (): FloatingMenuController => {
   const storeRef = useRef<{
@@ -47,5 +41,3 @@ export const useFloatingMenu = (): FloatingMenuController => {
 
   return controllerRef.current as FloatingMenuController;
 };
-
-export type { InternalFloatingMenuController };

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, CSSProperties } from 'react';
 
 export type WidthMode = 'full' | 'auto' | 'fixed';
 export type HeightMode = 'full' | 'auto' | 'fixed';
@@ -60,12 +60,18 @@ export interface FloatingMenuSelectionStyle {
   backgroundColor?: string;
   boxShadow?: string;
   outline?: string;
-  custom?: React.CSSProperties;
+  custom?: CSSProperties;
 }
 
 export interface FloatingMenuController {
   getSelectedId: () => string | null;
   clearSelection: () => void;
+}
+
+export interface InternalFloatingMenuController extends FloatingMenuController {
+  _subscribe: (callback: () => void) => () => void;
+  _setSelectedId: (id: string | null) => void;
+  _getSelectedId: () => string | null;
 }
 
 export interface FloatingMenuProps<T = unknown> {

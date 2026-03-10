@@ -19,7 +19,7 @@ Componente de menú flotante con posicionamiento configurable, secciones (header
 | Platform | Status | Description |
 |----------|--------|-------------|
 | Web | ✅ Implemented | Menú flotante con posicionamiento relativo, drag & drop |
-| Mobile | ✅ Implemented | Bottom sheet con animación slide-up, sin drag & drop |
+| Mobile | ✅ Implemented | Bottom sheet via BottomSheetWrapper, sin drag & drop |
 | Native | ❌ Not Implemented | Pendiente |
 
 ### Diferencias Web vs Mobile
@@ -407,26 +407,29 @@ const controller = useFloatingMenu();
 
 ```
 FloatingMenu/
-├── web/
+├── shared/                          # Compartido entre web y mobile
 │   ├── types/
-│   │   └── FloatingMenu.type.ts
-│   ├── views/
-│   │   └── FloatingMenu.view.tsx
+│   │   ├── FloatingMenu.type.ts     # Props, interfaces, tipos compartidos
+│   │   └── index.ts
 │   ├── hooks/
-│   │   ├── useFloatingMenu.hook.ts
-│   │   └── useI18nMerge.hook.ts
-│   ├── css/
-│   │   ├── FloatingMenu.module.css
-│   │   └── FloatingMenu.module.ts
+│   │   ├── useFloatingMenu.hook.ts  # Controller hook (selección)
+│   │   └── index.ts
+│   ├── utils/
+│   │   ├── floatingmenu.util.ts     # getLayoutStyles, getSectionStyles, etc.
+│   │   └── index.ts
 │   └── index.ts
-├── mobile/
-│   ├── types/
-│   │   ├── FloatingMenu.mobile.types.ts
-│   │   └── index.ts
+├── web/
 │   ├── views/
-│   │   ├── FloatingMenu.mobile.view.tsx
+│   │   ├── FloatingMenu.view.tsx    # Vista web (posicionamiento, drag & drop)
 │   │   └── index.ts
-│   ├── css/
+│   ├── styles/
+│   │   └── FloatingMenu.module.css
+│   └── index.tsx
+├── mobile/
+│   ├── views/
+│   │   ├── FloatingMenu.mobile.view.tsx  # Vista mobile (usa BottomSheetWrapper)
+│   │   └── index.ts
+│   ├── styles/
 │   │   └── FloatingMenu.mobile.module.css
 │   └── index.ts
 ├── index.tsx           # Web/Mobile dispatch via useIsMobile()
