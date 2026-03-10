@@ -67,7 +67,8 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'layout-basic', label: 'Basic', i18n: { en: 'Basic', es: 'Básico', default: 'Basic' }, path: '/layouts/sidebar-layout', icon: 'Layout', openInNewTab: true },
         { id: 'layout-scroll', label: 'With Scroll', i18n: { en: 'With Scroll', es: 'Con Scroll', default: 'With Scroll' }, path: '/layouts/sidebar-layout/scroll', icon: 'ScrollText', openInNewTab: true },
         { id: 'layout-controlled', label: 'Controlled', i18n: { en: 'Controlled', es: 'Controlado', default: 'Controlled' }, path: '/layouts/sidebar-layout/controlled', icon: 'Settings', openInNewTab: true },
-        { id: 'layout-with-nav', label: 'With Navigation', i18n: { en: 'With Navigation', es: 'Con Navegación', default: 'With Navigation' }, path: '/layouts/sidebar-layout/with-navigation', icon: 'Navigation', openInNewTab: true }
+        { id: 'layout-with-nav', label: 'With Navigation', i18n: { en: 'With Navigation', es: 'Con Navegación', default: 'With Navigation' }, path: '/layouts/sidebar-layout/with-navigation', icon: 'Navigation', openInNewTab: true },
+        { id: 'layout-bottom-nav', label: 'With BottomNav', i18n: { en: 'With BottomNav', es: 'Con BottomNav', default: 'With BottomNav' }, path: '/layouts/sidebar-layout/with-bottom-nav', icon: 'Smartphone', openInNewTab: true }
       ]
     },
     { 

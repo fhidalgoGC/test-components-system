@@ -28,6 +28,7 @@ const SidebarLayoutBasic = lazy(() => import("@/pages/layout-sidebar-toolbar/bas
 const SidebarLayoutScroll = lazy(() => import("@/pages/layout-sidebar-toolbar/scroll"));
 const SidebarLayoutControlled = lazy(() => import("@/pages/layout-sidebar-toolbar/controlled"));
 const SidebarLayoutWithNavigation = lazy(() => import("@/pages/layout-sidebar-toolbar/with-navigation"));
+const SidebarLayoutWithBottomNav = lazy(() => import("@/pages/layout-sidebar-toolbar/with-bottom-nav"));
 const GoogleMapDemo = lazy(() => import("@/pages/google-map-demo/GoogleMapDemo"));
 const BaseTableDemo = lazy(() => import("@/pages/base-table-demo").then(m => ({ default: m.default || m.BaseTableDemo })));
 const PaginatorDemo = lazy(() => import("@/pages/paginator-demo"));
@@ -86,6 +87,7 @@ export function Router() {
           <Route path="/layouts/sidebar-layout/scroll" component={SidebarLayoutScroll} />
           <Route path="/layouts/sidebar-layout/controlled" component={SidebarLayoutControlled} />
           <Route path="/layouts/sidebar-layout/with-navigation" component={SidebarLayoutWithNavigation} />
+          <Route path="/layouts/sidebar-layout/with-bottom-nav" component={SidebarLayoutWithBottomNav} />
         </Switch>
       </Suspense>
     );
