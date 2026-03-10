@@ -13,7 +13,8 @@ export const BaseTable = (props: BaseTableProps) => {
   return <BaseTableWeb {...props} />;
 };
 
-export { useTableState } from './shared/hooks';
+export { useTableState, useTableSearch } from './shared/hooks';
+export type { UseTableSearchOptions, UseTableSearchResult } from './shared/hooks';
 export { TextCell, HeaderCell } from './shared/components';
 export type { TextCellProps, HeaderCellProps } from './shared/components';
 export type {

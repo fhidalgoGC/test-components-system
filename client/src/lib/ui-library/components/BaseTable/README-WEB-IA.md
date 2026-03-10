@@ -24,7 +24,8 @@ BaseTable/
 │   │   └── state.type.ts              # Tipos de estado de tabla
 │   ├── hooks/
 │   │   ├── index.ts
-│   │   └── useTableState.hook.ts      # Hook de gestión de estado
+│   │   ├── useTableState.hook.ts      # Hook de gestión de estado
+│   │   └── useTableSearch.hook.ts     # Hook de búsqueda en datos renderizados
 │   └── components/
 │       ├── index.ts
 │       ├── TextCell.tsx               # Celda de texto por defecto
@@ -702,3 +703,72 @@ function SortableTable() {
 | Scroll horizontal | Configurable | Siempre activo |
 | Padding de celdas | 0 (custom via render) | 8px 12px (por defecto) |
 | Font size | Hereda | 13px headers, 14px celdas |
+
+## useTableSearch - Búsqueda en datos renderizados
+
+Hook externo que filtra los datos del BaseTable buscando en todas las columnas visibles. La búsqueda es case-insensitive y por coincidencia parcial.
+
+### Importación
+
+```tsx
+import { useTableSearch } from "@/lib/ui-library/components/BaseTable";
+```
+
+### Parámetros
+
+| Parámetro | Tipo | Default | Descripción |
+|-----------|------|---------|-------------|
+| `data` | `any[]` | requerido | Array de datos a filtrar |
+| `columns` | `ColumnConfig[]` | requerido | Configuración de columnas (para determinar qué columnas buscar) |
+| `columnIds` | `string[]` | todas las visibles | Limitar la búsqueda a columnas específicas |
+
+### Retorno
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `searchTerm` | `string` | Término de búsqueda actual |
+| `setSearchTerm` | `(term: string) => void` | Actualizar el término de búsqueda |
+| `filteredData` | `any[]` | Datos filtrados (o todos si no hay búsqueda) |
+| `isSearching` | `boolean` | `true` si hay un término activo |
+| `clearSearch` | `() => void` | Limpia el término de búsqueda |
+
+### Uso básico
+
+```tsx
+const data = [
+  { id: 1, name: "John", email: "john@example.com" },
+  { id: 2, name: "Jane", email: "jane@example.com" },
+];
+
+const columns: ColumnConfig[] = [
+  { metadata: { columnId: "name", order: 0 } },
+  { metadata: { columnId: "email", order: 1 } },
+];
+
+const { searchTerm, setSearchTerm, filteredData, isSearching, clearSearch } = useTableSearch({
+  data,
+  columns,
+});
+
+return (
+  <>
+    <input
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      placeholder="Buscar..."
+    />
+    {isSearching && <button onClick={clearSearch}>Limpiar</button>}
+    <BaseTable data={filteredData} config={{ columns }} />
+  </>
+);
+```
+
+### Buscar solo en columnas específicas
+
+```tsx
+const { filteredData, setSearchTerm } = useTableSearch({
+  data,
+  columns,
+  columnIds: ["name", "email"],
+});
+```
