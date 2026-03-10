@@ -40,9 +40,7 @@ export const TableHeader = ({ columns, headersDefault, columnsDefault, callbacks
     
     let newDirection: SortDirection = 'asc';
     if (sortState?.columnId === column.metadata.columnId) {
-      if (sortState.direction === 'asc') newDirection = 'desc';
-      else if (sortState.direction === 'desc') newDirection = 'none';
-      else newDirection = 'asc';
+      newDirection = sortState.direction === 'asc' ? 'desc' : 'asc';
     }
 
     setSortState({ columnId: column.metadata.columnId, direction: newDirection });
