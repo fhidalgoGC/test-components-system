@@ -1,10 +1,10 @@
-import { ChevronDown, ChevronRight, Sun, Moon, ChevronLeft, Menu, X, Package } from 'lucide-react';
+import { ChevronDown, ChevronRight, Sun, Moon, ChevronLeft, Package } from 'lucide-react';
 import { useContext } from 'react';
-import type { NavigationSidebarProps, NavigationSubItem, NavigationItem } from '../types';
-import { useNavigationSidebar } from '../hooks';
-import { useI18nMerge } from '../hooks/useI18nMerge.hook';
-import { LibI18nContext } from '../../../providers/AppLanguageLibUiProvider/index.hook';
-import styles from '../css/NavigationSidebar.module.css';
+import type { NavigationSidebarProps, NavigationSubItem, NavigationItem } from '../../shared/types';
+import { useNavigationSidebar } from '../../shared/hooks';
+import { useI18nMerge } from '../../shared/hooks/useI18nMerge.hook';
+import { LibI18nContext } from '../../../../providers/AppLanguageLibUiProvider/index.hook';
+import styles from '../styles/NavigationSidebar.module.css';
 
 function useOptionalLibI18n() {
   const ctx = useContext(LibI18nContext);
@@ -25,7 +25,7 @@ function resolveItemLabel(
   return item.label;
 }
 
-export function NavigationSidebarView(props: NavigationSidebarProps) {
+export function NavigationSidebarWebView(props: NavigationSidebarProps) {
   const {
     processedItems,
     expandedItems,
@@ -79,7 +79,6 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
         style={{ width: `${sidebarWidth}px` }}
         data-testid="navigation-sidebar"
       >
-        {/* HEADER */}
         <div className={`${styles.header} ${isDark ? styles.dark : ''}`} style={headerStyle} data-testid="sidebar-header">
           {headerIcon || headerContent ? (
             <div className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
@@ -108,7 +107,6 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
           )}
         </div>
 
-        {/* Toggle Collapse Button */}
         <button
           onClick={handleToggleCollapse}
           className={`hidden lg:flex ${styles.toggleButton} ${isDark ? styles.dark : ''}`}
@@ -122,7 +120,6 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
           )}
         </button>
 
-        {/* BODY - Navigation Items */}
         <nav className={styles.nav} aria-label={t('navigationsidebar.navigation.main')} data-testid="sidebar-body">
           <div className="space-y-2">
             {processedItems.map((item) => {
@@ -210,7 +207,6 @@ export function NavigationSidebarView(props: NavigationSidebarProps) {
           </div>
         </nav>
 
-        {/* FOOTER */}
         {showFooter && (
         <div className={`${styles.footer} ${isDark ? styles.dark : ''}`} data-testid="sidebar-footer">
           {footerContent ? (

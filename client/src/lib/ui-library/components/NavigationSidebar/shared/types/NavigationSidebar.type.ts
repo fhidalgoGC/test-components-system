@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { MultiLanguageLabel } from '../../../types/language.types';
+import type { MultiLanguageLabel } from '../../../../types/language.types';
 
 export interface NavigationSubItem {
   id: string;

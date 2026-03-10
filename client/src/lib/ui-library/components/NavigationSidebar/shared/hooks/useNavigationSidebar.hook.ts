@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useContext } from 'react';
 import type { NavigationSidebarProps, NavigationItem, UseNavigationSidebarReturn } from '../types';
-import { LibI18nContext } from '../../../providers/AppLanguageLibUiProvider/index.hook';
+import { LibI18nContext } from '../../../../providers/AppLanguageLibUiProvider/index.hook';
 
 function useOptionalLibI18n() {
   return useContext(LibI18nContext);

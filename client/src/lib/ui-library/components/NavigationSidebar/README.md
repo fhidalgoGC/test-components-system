@@ -2,6 +2,13 @@
 
 Componente de navegación lateral con estructura de **Header**, **Body** y **Footer** configurable.
 
+## Soporte de Plataformas
+
+| Plataforma | Variante | Descripción |
+|-----------|----------|-------------|
+| Web (≥ 768px) | Sidebar fijo | Sidebar lateral con colapsar/expandir |
+| Mobile (< 768px) | Drawer | Drawer que se desliza desde la izquierda con overlay |
+
 ## Arquitectura
 
 ```
@@ -26,16 +33,24 @@ import { NavigationSidebar } from "@/lib/ui-library/components/NavigationSidebar
 import type { NavigationItem } from "@/lib/ui-library/components/NavigationSidebar";
 ```
 
+Para mobile, importar con props adicionales:
+
+```tsx
+import type { NavigationSidebarMobileProps } from "@/lib/ui-library/components/NavigationSidebar";
+```
+
 ## Props
+
+### Props compartidas (web + mobile)
 
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
 | `items` | `NavigationItem[]` | **requerido** | Items de navegación (Body) |
 | `headerContent` | `ReactNode` | - | Componente para el Header |
+| `headerIcon` | `ReactNode` | - | Icono para el Header |
 | `headerHeight` | `number \| string` | - | Altura fija del header (ej: `80` o `"5rem"`) |
 | `footerContent` | `ReactNode` | - | Componente personalizado para el Footer |
 | `currentPath` | `string` | - | Ruta actual para marcar items activos |
-| `defaultCollapsed` | `boolean` | `false` | Estado inicial colapsado |
 | `showThemeToggle` | `boolean` | `true` | Mostrar botón de tema (solo si no hay footerContent) |
 | `showLanguageSelector` | `boolean` | `true` | Mostrar selector de idioma (solo si no hay footerContent) |
 | `availableLanguages` | `string[]` | `['en', 'es']` | Idiomas disponibles |
@@ -45,10 +60,24 @@ import type { NavigationItem } from "@/lib/ui-library/components/NavigationSideb
 | `onThemeChange` | `(theme) => void` | - | Callback al cambiar tema |
 | `onLanguageChange` | `(language) => void` | - | Callback al cambiar idioma |
 | `onCollapseChange` | `(collapsed) => void` | - | Callback al colapsar/expandir |
-| `collapsedWidth` | `number` | `80` | Ancho en modo colapsado (px) |
-| `expandedWidth` | `number` | `280` | Ancho en modo expandido (px) |
 | `langOverride` | `string` | - | Override del idioma para traducciones |
 | `className` | `string` | - | Clases CSS adicionales |
+| `showFooter` | `boolean` | `true` | Mostrar footer |
+
+### Props exclusivas de web
+
+| Prop | Tipo | Default | Descripción |
+|------|------|---------|-------------|
+| `defaultCollapsed` | `boolean` | `false` | Estado inicial colapsado |
+| `collapsedWidth` | `number` | `80` | Ancho en modo colapsado (px) |
+| `expandedWidth` | `number` | `280` | Ancho en modo expandido (px) |
+
+### Props exclusivas de mobile
+
+| Prop | Tipo | Default | Descripción |
+|------|------|---------|-------------|
+| `isOpen` | `boolean` | **requerido** | Si el drawer está abierto |
+| `onClose` | `() => void` | **requerido** | Callback al cerrar el drawer |
 
 ## Interfaces
 
@@ -63,6 +92,7 @@ interface NavigationItem {
   isActive?: boolean;
   children?: NavigationSubItem[];
   component?: ReactNode;
+  i18n?: MultiLanguageLabel;
 }
 ```
 
@@ -76,10 +106,11 @@ interface NavigationSubItem {
   icon?: ReactNode;
   isActive?: boolean;
   component?: ReactNode;
+  i18n?: MultiLanguageLabel;
 }
 ```
 
-## Ejemplo Básico
+## Ejemplo Básico (Web)
 
 ```tsx
 import { NavigationSidebar } from "@/lib/ui-library/components/NavigationSidebar";
@@ -111,238 +142,90 @@ function App() {
 }
 ```
 
-## Header Personalizado
+## Ejemplo Mobile (Drawer)
 
-El header recibe un `ReactNode` para renderizar cualquier contenido:
-
-```tsx
-<NavigationSidebar
-  headerContent={
-    <div className="flex items-center justify-between w-full">
-      <div className="flex items-center gap-3">
-        <img src="/logo.png" className="w-8 h-8" />
-        <span className="font-bold">Brand</span>
-      </div>
-      <span className="text-xs bg-blue-100 px-2 py-1 rounded">v2.0</span>
-    </div>
-  }
-  items={menuItems}
-/>
-```
-
-## Footer Personalizado
-
-Por defecto, el footer muestra los controles de tema e idioma. Puedes personalizarlo:
+En mobile (< 768px), el componente se comporta como un drawer que se desliza desde la izquierda. Necesitas controlar su estado `isOpen`/`onClose`:
 
 ```tsx
-// Footer predeterminado (tema + idioma)
-<NavigationSidebar
-  items={menuItems}
-  showThemeToggle={true}
-  showLanguageSelector={true}
-/>
+import { useState } from "react";
+import { NavigationSidebar } from "@/lib/ui-library/components/NavigationSidebar";
+import type { NavigationSidebarMobileProps } from "@/lib/ui-library/components/NavigationSidebar";
+import { Menu, Home, Settings } from "lucide-react";
 
-// Footer personalizado
-<NavigationSidebar
-  items={menuItems}
-  footerContent={
-    <div className="flex items-center gap-2">
-      <img src="/avatar.png" className="w-8 h-8 rounded-full" />
-      <div>
-        <p className="text-sm font-medium">John Doe</p>
-        <p className="text-xs text-gray-500">Admin</p>
-      </div>
-    </div>
-  }
-/>
-```
-
-## Items con Sub-menús
-
-```tsx
 const menuItems = [
-  {
-    id: "components",
-    label: "Components",
-    icon: <Package className="h-5 w-5" />,
-    children: [
-      { id: "button", label: "Button", path: "/components/button" },
-      { id: "card", label: "Card", path: "/components/card" },
-      { 
-        id: "carousel", 
-        label: "Carousel", 
-        path: "/components/carousel",
-        component: (
-          <div className="flex items-center gap-2">
-            <span>Carousel</span>
-            <span className="text-xs bg-green-100 text-green-800 px-1 rounded">New</span>
-          </div>
-        )
-      },
-    ],
-  },
+  { id: "home", label: "Inicio", path: "/", icon: <Home size={20} /> },
+  { id: "settings", label: "Config", path: "/settings", icon: <Settings size={20} /> },
 ];
+
+function MobileApp() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  return (
+    <div>
+      <header>
+        <button onClick={() => setIsSidebarOpen(true)}>
+          <Menu size={24} />
+        </button>
+        <h1>Mi App</h1>
+      </header>
+
+      <NavigationSidebar
+        items={menuItems}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        onNavigate={(path) => console.log("Navegar a:", path)}
+      />
+    </div>
+  );
+}
 ```
 
-## Modo Controlado vs No Controlado
+## Comportamiento Mobile
 
-### No Controlado (manejo interno)
-
-```tsx
-<NavigationSidebar
-  items={menuItems}
-  onThemeChange={(theme) => console.log(theme)}
-  onLanguageChange={(lang) => console.log(lang)}
-/>
-```
-
-### Controlado (manejo externo)
-
-```tsx
-const [theme, setTheme] = useState<'light' | 'dark'>('light');
-const [language, setLanguage] = useState('es');
-
-<NavigationSidebar
-  items={menuItems}
-  currentTheme={theme}
-  currentLanguage={language}
-  onThemeChange={setTheme}
-  onLanguageChange={setLanguage}
-/>
-```
+- El drawer se renderiza via `createPortal` a `document.body`
+- Overlay semi-transparente con `z-index: 9998`
+- Drawer con `z-index: 9999` (siempre por encima de BottomNavigationBar y otros elementos fijos)
+- Al tocar el overlay o un item de navegación, el drawer se cierra
+- Se bloquea el scroll del body mientras está abierto
+- Animación de slide-in desde la izquierda con transición de 300ms
 
 ## Responsive
 
-- **Desktop (≥1024px)**: Sidebar fijo, botón de colapsar visible
-- **Mobile (<1024px)**: Sidebar oculto, botón hamburguesa fijo
-
-## Altura del Header
-
-Usa el prop `headerHeight` para definir una altura fija del header. El divider aparecerá después de esa altura:
-
-```tsx
-// Con número (píxeles)
-<NavigationSidebar
-  headerHeight={80}
-  headerContent={
-    <div className="flex items-center gap-3">
-      <img src="/logo.png" className="w-10 h-10" />
-      <div>
-        <h1 className="font-bold">Mi App</h1>
-        <p className="text-xs text-gray-500">v1.0.0</p>
-      </div>
-    </div>
-  }
-  items={menuItems}
-/>
-
-// Con string (rem, vh, etc)
-<NavigationSidebar
-  headerHeight="5rem"
-  headerContent={...}
-  items={menuItems}
-/>
-```
-
-## Personalización de Colores
-
-El componente soporta tres formas de personalizar los colores:
-
-### Opción 1: Via `className` (más simple)
-
-Pasa clases de Tailwind directamente. Soporta variantes `dark:` para modo oscuro:
-
-```tsx
-<NavigationSidebar
-  className="bg-slate-100 dark:bg-slate-900"
-  items={menuItems}
-/>
-
-// Con color específico (hex, rgb, hsl)
-<NavigationSidebar
-  className="bg-[#1a2332] dark:bg-[#0f1419]"
-  items={menuItems}
-/>
-```
-
-### Opción 2: Via CSS Variables (recomendado)
-
-Define las variables CSS en tu archivo global (index.css). Esto permite control completo sobre todos los colores:
-
-```css
-:root {
-  /* Colores del sidebar en modo light */
-  --sidebar-background: 0 0% 98%;           /* fondo */
-  --sidebar-foreground: 240 5.3% 26.1%;     /* texto */
-  --sidebar-primary: 240 5.9% 10%;          /* items activos */
-  --sidebar-accent: 240 4.8% 95.9%;         /* hover */
-  --sidebar-border: 220 13% 91%;            /* bordes */
-}
-
-.dark {
-  /* Colores del sidebar en modo dark */
-  --sidebar-background: 240 5.9% 10%;       /* fondo oscuro */
-  --sidebar-foreground: 240 4.8% 95.9%;     /* texto claro */
-  --sidebar-primary: 224.3 76.3% 48%;       /* azul primario */
-  --sidebar-accent: 240 3.7% 15.9%;         /* hover */
-  --sidebar-border: 240 3.7% 15.9%;         /* bordes */
-}
-```
-
-> **Nota:** Los valores son HSL sin `hsl()`, solo números separados por espacios.
-
-### Opción 3: Clase CSS personalizada
-
-Define una clase en tu proyecto y pásala via `className`:
-
-```css
-/* En tu CSS */
-.mi-sidebar-custom {
-  background-color: #1e293b;
-  color: #f8fafc;
-}
-
-.dark .mi-sidebar-custom {
-  background-color: #0f172a;
-}
-```
-
-```tsx
-<NavigationSidebar
-  className="mi-sidebar-custom"
-  items={menuItems}
-/>
-```
-
-### Variables CSS disponibles
-
-| Variable | Descripción |
-|----------|-------------|
-| `--sidebar-background` | Color de fondo del sidebar |
-| `--sidebar-foreground` | Color del texto |
-| `--sidebar-primary` | Color de items activos |
-| `--sidebar-accent` | Color de hover/focus |
-| `--sidebar-border` | Color de bordes |
-| `--sidebar-primary-foreground` | Texto sobre color primario |
-| `--sidebar-accent-foreground` | Texto sobre color accent |
+- **Web (≥ 768px)**: Sidebar fijo lateral, con botón de colapsar visible en ≥ 1024px
+- **Mobile (< 768px)**: Drawer desde la izquierda con overlay
 
 ## Estructura de Archivos
 
 ```
 NavigationSidebar/
-├── index.tsx
+├── index.tsx                           # Dispatch web/mobile via useIsMobile()
 ├── README.md
-├── css/
-│   └── NavigationSidebar.module.css
-├── hooks/
-│   ├── useNavigationSidebar.hook.ts
-│   └── useI18nMerge.hook.ts
-├── i18n/
-│   ├── en.json
-│   ├── es.json
+├── shared/
+│   ├── types/
+│   │   ├── NavigationSidebar.type.ts
+│   │   └── index.ts
+│   ├── hooks/
+│   │   ├── useNavigationSidebar.hook.ts
+│   │   ├── useNavigationSidebarController.hook.ts
+│   │   ├── useI18nMerge.hook.ts
+│   │   └── index.ts
+│   ├── i18n/
+│   │   ├── en.json
+│   │   ├── es.json
+│   │   └── index.ts
 │   └── index.ts
-├── types/
-│   └── NavigationSidebar.type.ts
-└── views/
-    └── NavigationSidebar.view.tsx
+├── web/
+│   ├── views/
+│   │   ├── NavigationSidebar.view.tsx
+│   │   └── index.ts
+│   ├── styles/
+│   │   └── NavigationSidebar.module.css
+│   └── index.ts
+└── mobile/
+    ├── views/
+    │   ├── NavigationSidebar.mobile.view.tsx
+    │   └── index.ts
+    ├── styles/
+    │   └── NavigationSidebar.mobile.module.css
+    └── index.ts
 ```

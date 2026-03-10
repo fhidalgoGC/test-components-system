@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { BottomNavigationBar } from '@/lib/ui-library/components/BottomNavigationBar';
 import { FloatingMenu } from '@/lib/ui-library/components/FloatingMenu';
+import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
 import type { NavItem } from '@/lib/ui-library/components/BottomNavigationBar/mobile/types';
 import type { FloatingMenuItem } from '@/lib/ui-library/components/FloatingMenu/shared/types';
+import type { NavigationItem } from '@/lib/ui-library/components/NavigationSidebar';
 import { Home, Truck, List, Settings, User, LogOut, HelpCircle, Menu } from 'lucide-react';
 
 const navItems: NavItem[] = [
@@ -26,6 +28,13 @@ const navItems: NavItem[] = [
     label: { en: 'Settings', es: 'Ajustes', default: 'Settings' },
     metadata: { icon: <Settings size={22} />, dataTestId: 'nav-settings' },
   },
+];
+
+const sidebarItems: NavigationItem[] = [
+  { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: <Home size={20} /> },
+  { id: 'trips', label: 'Viajes', path: '/trips', icon: <Truck size={20} /> },
+  { id: 'catalogs', label: 'Catálogos', path: '/catalogs', icon: <List size={20} /> },
+  { id: 'settings', label: 'Ajustes', path: '/settings', icon: <Settings size={20} /> },
 ];
 
 const menuItems: FloatingMenuItem<unknown>[] = [
@@ -61,6 +70,7 @@ const menuItems: FloatingMenuItem<unknown>[] = [
 export default function BottomNavWithSheetDemo() {
   const [selectedNav, setSelectedNav] = useState('dashboard');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f9fafb' }}>
@@ -77,7 +87,25 @@ export default function BottomNavWithSheetDemo() {
         height: 56,
         flexShrink: 0,
       }}>
-        <h1 style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>Mi App</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              padding: 8,
+              borderRadius: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            data-testid="btn-open-sidebar"
+          >
+            <Menu size={24} />
+          </button>
+          <h1 style={{ fontSize: 18, fontWeight: 600, margin: 0 }} data-testid="text-app-title">Mi App</h1>
+        </div>
         <button
           onClick={() => setIsMenuOpen(true)}
           style={{
@@ -92,46 +120,84 @@ export default function BottomNavWithSheetDemo() {
           }}
           data-testid="btn-open-menu"
         >
-          <Menu size={24} />
+          <User size={24} />
         </button>
       </header>
 
       <main style={{ flex: 1, overflow: 'auto', padding: 16, paddingBottom: 80 }}>
         <div style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, marginBottom: 16, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Demo: BottomNav + BottomSheet</h2>
+          <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }} data-testid="text-demo-title">Demo: BottomNav + Sidebar + BottomSheet</h2>
           <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6 }}>
-            Esta página tiene un <strong>BottomNavigationBar</strong> fijo abajo y un botón en el header 
-            que abre un <strong>FloatingMenu</strong> como BottomSheet.
+            Esta demo muestra los 3 componentes mobile funcionando juntos:
           </p>
+          <ul style={{ fontSize: 14, color: '#6b7280', lineHeight: 2, marginTop: 8, paddingLeft: 20 }}>
+            <li><strong>NavigationSidebar</strong> (drawer desde la izquierda) - toca el icono de hamburguesa</li>
+            <li><strong>FloatingMenu</strong> (BottomSheet desde abajo) - toca el icono de usuario</li>
+            <li><strong>BottomNavigationBar</strong> (barra fija abajo) - siempre visible</li>
+          </ul>
           <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6, marginTop: 8 }}>
-            El BottomSheet usa <code>createPortal</code> a <code>document.body</code> con 
-            <code> z-index: 9999</code>, así que siempre aparece por encima del navbar y del BottomNavigationBar.
+            Todos usan <code>createPortal</code> a <code>document.body</code> con
+            <code> z-index: 9999</code>, asi que siempre aparecen por encima de la barra inferior.
           </p>
         </div>
 
         <div style={{ backgroundColor: 'white', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <p style={{ fontSize: 14, color: '#374151' }}>
-            Pestaña activa: <strong>{selectedNav}</strong>
+          <p style={{ fontSize: 14, color: '#374151' }} data-testid="text-active-tab">
+            Pestana activa: <strong>{selectedNav}</strong>
           </p>
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            style={{
-              marginTop: 12,
-              padding: '10px 20px',
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              borderRadius: 8,
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: 'pointer',
-            }}
-            data-testid="btn-open-menu-body"
-          >
-            Abrir menú (BottomSheet)
-          </button>
+          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#111827',
+                color: 'white',
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 14,
+                fontWeight: 500,
+                cursor: 'pointer',
+              }}
+              data-testid="btn-open-sidebar-body"
+            >
+              Abrir sidebar
+            </button>
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 14,
+                fontWeight: 500,
+                cursor: 'pointer',
+              }}
+              data-testid="btn-open-menu-body"
+            >
+              Abrir menu
+            </button>
+          </div>
         </div>
       </main>
+
+      <NavigationSidebar
+        items={sidebarItems}
+        currentPath={`/${selectedNav}`}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        onNavigate={(path) => {
+          const id = path.replace('/', '');
+          setSelectedNav(id);
+          setIsSidebarOpen(false);
+        }}
+        headerContent={
+          <span style={{ fontWeight: 600, fontSize: 16 }}>Mi App</span>
+        }
+        showThemeToggle={false}
+        showLanguageSelector={false}
+      />
 
       <FloatingMenu
         items={menuItems}

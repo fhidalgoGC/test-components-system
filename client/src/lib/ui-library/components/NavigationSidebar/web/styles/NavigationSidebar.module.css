@@ -21,14 +21,6 @@
   width: 280px;
 }
 
-.mobileHidden {
-  transform: translateX(0);
-}
-
-.mobileVisible {
-  transform: translateX(0);
-}
-
 .header {
   padding: 0 1rem;
   border-bottom: 1px solid #e5e7eb;
@@ -221,31 +213,6 @@
 
 .toggleButton.dark:hover {
   background-color: #374151;
-}
-
-.mobileMenuButton {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 50;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-
-.mobileMenuButton.dark {
-  background-color: #1f2937;
-  border-color: #374151;
-}
-
-.mobileOverlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 30;
 }
 
 .iconContainer {
