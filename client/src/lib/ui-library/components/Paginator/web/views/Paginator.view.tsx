@@ -75,33 +75,37 @@ const generatePageNumbers = (currentPage: number, totalPages: number, maxVisible
   }
 
   const blockSize = maxVisible - 1;
-
-  if (currentPage <= blockSize) {
-    const pages: (number | string)[] = [];
-    for (let i = 1; i <= blockSize; i++) {
-      pages.push(i);
-    }
-    pages.push('...');
-    pages.push(totalPages);
-    return pages;
-  }
-
-  if (currentPage >= totalPages - blockSize + 1) {
-    const pages: (number | string)[] = [1, '...'];
-    for (let i = totalPages - blockSize + 1; i <= totalPages; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
-
   const offset = Math.floor((blockSize - 1) / 2);
-  const start = currentPage - offset;
-  const end = start + blockSize - 1;
+  let start = currentPage - offset;
+  let end = start + blockSize - 1;
 
-  const pages: (number | string)[] = [1, '...'];
+  if (start < 1) {
+    start = 1;
+    end = blockSize;
+  }
+  if (end > totalPages) {
+    end = totalPages;
+    start = totalPages - blockSize + 1;
+  }
+
+  const pages: (number | string)[] = [];
+
+  if (start > 2) {
+    pages.push(1, '...');
+  } else if (start === 2) {
+    pages.push(1);
+  }
+
   for (let i = start; i <= end; i++) {
     pages.push(i);
   }
+
+  if (end < totalPages - 1) {
+    pages.push('...', totalPages);
+  } else if (end === totalPages - 1) {
+    pages.push(totalPages);
+  }
+
   return pages;
 };
 

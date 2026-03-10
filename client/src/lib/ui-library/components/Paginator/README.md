@@ -44,31 +44,34 @@ import { Paginator } from "@/lib/ui-library/components/Paginator";
 
 ## maxVisiblePages - Limite de numeros visibles
 
-Controla cuantos numeros de pagina se muestran. Por defecto muestra maximo **4** numeros en web y **3** en mobile. Solo aparece un unico `...` y solo cuando hay mas paginas de las que caben.
+Controla cuantos numeros de pagina se muestran. Por defecto muestra maximo **4** numeros en web y **3** en mobile. La ventana de paginas se centra alrededor de la pagina actual, asegurando que siempre se vea al menos una pagina anterior y una siguiente (cuando existen).
 
 ### Reglas
 
-1. Nunca aparecen dos `...`
-2. `...` solo aparece si `totalPages > maxVisiblePages`
-3. Se muestran exactamente `maxVisiblePages` numeros de pagina (sin contar el `...`)
+1. La pagina actual siempre muestra la pagina siguiente y anterior (si existen)
+2. `...` aparece cuando hay paginas ocultas entre los numeros visibles
+3. Se muestra la primera y/o ultima pagina como referencia cuando no estan en la ventana visible
 
 ### Ejemplos (maxVisiblePages=4, 10 paginas)
 
 ```
-Pagina 1:   [1]  2   3  ...  10    (cerca del inicio)
-Pagina 3:    1   2  [3] ...  10    (cerca del inicio)
-Pagina 4:    1  ...  3  [4]  5     (zona media)
-Pagina 5:    1  ...  4  [5]  6     (zona media)
-Pagina 8:    1  ...  [8] 9   10   (cerca del final)
-Pagina 10:   1  ...   8  9  [10]   (cerca del final)
-4 paginas:   1   2   3   4         (sin ellipsis, caben todas)
+Pagina 1:    [1]  2   3  ...  10    (inicio, muestra siguiente)
+Pagina 2:   1   [2]  3  ...  10    (inicio, muestra siguiente)
+Pagina 3:   1   2   [3]  4  ...  10 (transicion, muestra siguiente)
+Pagina 4:   1  ...  3  [4]  5  ...  10  (zona media)
+Pagina 5:   1  ...  4  [5]  6  ...  10  (zona media)
+Pagina 8:   1  ...  7  [8]  9   10  (transicion al final)
+Pagina 9:   1  ...  8  [9]  10      (cerca del final)
+Pagina 10:  1  ...  8   9  [10]     (final)
+4 paginas:  1   2   3   4           (sin ellipsis, caben todas)
 ```
 
 ### Ejemplos (maxVisiblePages=6, 44 paginas)
 
 ```
 Pagina 1:   [1]  2   3   4   5  ...  44
-Pagina 22:   1  ...  21  22  23  24  25
+Pagina 4:    1   2   3  [4]  5   6  ...  44
+Pagina 22:   1  ...  20  21  [22]  23  24  ...  44
 Pagina 44:   1  ...  40  41  42  43  [44]
 ```
 
