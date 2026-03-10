@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, useCallback, useState, useEffect } from 'react';
 import type { PaginatorContext, PaginatorProps } from '../types';
-import { useI18nMerge, useVisibility } from '../hooks';
+import { useI18nMerge } from '../hooks/useI18nMerge.hook';
+import { useVisibility } from '../hooks/useVisibility.hook';
 
 const PaginatorCtx = createContext<PaginatorContext | undefined>(undefined);
 

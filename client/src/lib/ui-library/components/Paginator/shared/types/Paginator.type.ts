@@ -1,4 +1,4 @@
-import type { VisibilityConfig, Device, Orientation } from '../../../types/shared.types';
+import type { VisibilityConfig, Device, Orientation } from '../../../../types/shared.types';
 
 export interface PaginatorProps {
   totalItems: number;

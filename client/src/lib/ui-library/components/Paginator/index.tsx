@@ -1,15 +1,19 @@
-import type { PaginatorProps } from './types';
-import { PaginatorProvider } from './providers';
-import { PaginatorView } from './views';
+import { useIsMobile } from '../../hooks';
+import type { PaginatorProps } from './shared/types';
+import { PaginatorProvider } from './shared/providers';
+import { PaginatorWeb } from './web';
+import { PaginatorMobile } from './mobile';
 
 export const Paginator = (props: PaginatorProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <PaginatorProvider {...props}>
-      <PaginatorView {...props} />
+      {isMobile ? <PaginatorMobile {...props} /> : <PaginatorWeb {...props} />}
     </PaginatorProvider>
   );
 };
 
-export type { PaginatorProps, PaginatorContext, PaginatorMetadata } from './types';
-export { usePaginatorContext } from './providers';
-export { usePaginator } from './hooks';
+export type { PaginatorProps, PaginatorContext, PaginatorMetadata } from './shared/types';
+export { usePaginatorContext } from './shared/providers';
+export { usePaginator } from './shared/hooks';

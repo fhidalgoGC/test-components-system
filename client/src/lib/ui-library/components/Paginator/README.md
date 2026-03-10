@@ -1,6 +1,6 @@
 # Paginator Component
 
-Componente de paginación externamente controlado con soporte i18n, layout flexible y generación de números de página con ellipsis.
+Componente de paginación externamente controlado con soporte i18n, layout flexible, generación de números de página con ellipsis y soporte dual web/mobile.
 
 ## Importación
 
@@ -20,15 +20,31 @@ import { Paginator } from "@/lib/ui-library/components/Paginator";
 | `onItemsPerPageChange` | `(itemsPerPage: number) => void` | - | Callback al cambiar elementos por página |
 | `showItemsPerPage` | `boolean` | `true` | Mostrar/ocultar selector de elementos por página |
 | `showPageNumbers` | `boolean` | `true` | Mostrar/ocultar números de página y navegación |
-| `maxVisiblePages` | `number` | `4` | Cantidad máxima de números de página visibles |
+| `maxVisiblePages` | `number` | `4` (web) / `3` (mobile) | Cantidad máxima de números de página visibles |
 | `className` | `string` | - | Clase CSS adicional |
 | `langOverride` | `string` | - | Override del idioma (`'en'`, `'es'`) |
 | `i18nOrder` | `'global-first' \| 'local-first'` | `'local-first'` | Prioridad de traducciones |
 | `config` | `VisibilityConfig` | - | Configuración de visibilidad responsive |
 
+## Platform Support
+
+| Platform | Status | Descripción |
+|----------|--------|-------------|
+| Web | Implementado | Select nativo para items por página |
+| Mobile | Implementado | BottomSheet para selección de items por página |
+
+### Diferencias Web vs Mobile
+
+| Feature | Web | Mobile |
+|---------|-----|--------|
+| Items per page selector | `<select>` nativo | Botón que abre BottomSheet |
+| maxVisiblePages default | 4 | 3 |
+| Page buttons | hover states | tap states (touch optimized) |
+| Resolución | Automática via `useIsMobile()` (< 768px) | |
+
 ## maxVisiblePages - Limite de numeros visibles
 
-Controla cuantos numeros de pagina se muestran. Por defecto muestra maximo **4** numeros. Solo aparece un unico `...` y solo cuando hay mas paginas de las que caben.
+Controla cuantos numeros de pagina se muestran. Por defecto muestra maximo **4** numeros en web y **3** en mobile. Solo aparece un unico `...` y solo cuando hay mas paginas de las que caben.
 
 ### Reglas
 
@@ -152,17 +168,51 @@ const { metadata } = usePaginator({
 // metadata: { totalItems, currentPage, itemsPerPage, totalPages, startItem, endItem }
 ```
 
+## Mobile - BottomSheet para Items Per Page
+
+En mobile (< 768px), el selector de items por página se reemplaza por un botón que abre un BottomSheet con las opciones disponibles. Cada opción muestra el número de items y un check si es la opción activa.
+
 ## Estructura de Archivos
 
 ```
 Paginator/
-├── css/                # Estilos CSS Modules
-├── hooks/              # usePaginator, useVisibility, useI18nMerge
-├── i18n/               # Traducciones (en.json, es.json)
-├── providers/          # PaginatorProvider (contexto)
-├── types/              # PaginatorProps, PaginatorContext, PaginatorMetadata
-├── views/              # PaginatorView (renderizado)
-├── environment/        # Configuración de entorno
-├── utils/              # Utilidades
-└── index.tsx           # Exportación principal
+├── shared/                              # Compartido entre web y mobile
+│   ├── types/
+│   │   ├── Paginator.type.ts           # Props, interfaces, tipos
+│   │   └── index.ts
+│   ├── hooks/
+│   │   ├── usePaginator.hook.ts        # Hook de control externo
+│   │   ├── useI18nMerge.hook.ts        # Fusión de traducciones
+│   │   ├── useVisibility.hook.ts       # Visibilidad responsive
+│   │   └── index.ts
+│   ├── providers/
+│   │   ├── Paginator.provider.tsx      # Context provider
+│   │   └── index.ts
+│   ├── i18n/
+│   │   ├── en.json                     # Traducciones inglés
+│   │   ├── es.json                     # Traducciones español
+│   │   └── index.ts
+│   ├── environment/
+│   │   ├── enviroment.ts              # Config del componente
+│   │   └── index.ts
+│   ├── utils/
+│   │   ├── paginator.util.ts          # Utilidades
+│   │   └── index.ts
+│   └── index.ts
+├── web/
+│   ├── styles/
+│   │   └── Paginator.module.css        # Estilos web
+│   ├── views/
+│   │   ├── Paginator.view.tsx          # Vista web (select nativo)
+│   │   └── index.ts
+│   └── index.tsx
+├── mobile/
+│   ├── styles/
+│   │   └── Paginator.mobile.module.css # Estilos mobile (touch optimized)
+│   ├── views/
+│   │   ├── Paginator.mobile.view.tsx   # Vista mobile (BottomSheet)
+│   │   └── index.ts
+│   └── index.tsx
+├── index.tsx                            # Dispatch Web/Mobile + exports
+└── README.md
 ```

@@ -1,0 +1,176 @@
+.paginatorWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.itemsPerPageContainer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.itemsPerPageLabel {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.itemsPerPageButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #fff;
+  color: #374151;
+  cursor: pointer;
+  min-width: 48px;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.itemsPerPageButton:active {
+  background-color: #f3f4f6;
+}
+
+.chevronIcon {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.itemsInfo {
+  font-size: 13px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pageButton {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.pageButton:active:not(:disabled):not(.pageButtonDisabled) {
+  background-color: #f3f4f6;
+}
+
+.pageButtonActive {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.pageButtonActive:active {
+  background-color: #2563eb;
+}
+
+.pageButtonDisabled,
+.pageButtonDisabled:active {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.navButton {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 4px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.navButton:active:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.navButtonDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ellipsis {
+  padding: 0 4px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.sheetOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+  background-color: transparent;
+  font-size: 16px;
+  color: #374151;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  text-align: left;
+}
+
+.sheetOption:last-child {
+  border-bottom: none;
+}
+
+.sheetOption:active {
+  background-color: #f9fafb;
+}
+
+.sheetOptionActive {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.checkIcon {
+  width: 18px;
+  height: 18px;
+  color: #3b82f6;
+}

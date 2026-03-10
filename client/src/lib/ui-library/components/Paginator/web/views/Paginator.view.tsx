@@ -1,6 +1,6 @@
-import type { PaginatorProps } from '../types';
-import { usePaginatorContext } from '../providers';
-import styles from '../css/Paginator.module.css';
+import type { PaginatorProps } from '../../shared/types';
+import { usePaginatorContext } from '../../shared/providers';
+import styles from '../styles/Paginator.module.css';
 
 interface PageButtonProps {
   page: number | string;
