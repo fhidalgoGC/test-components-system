@@ -70,21 +70,31 @@ ComponentName/
 │   │   ├── componentname.util.ts
 │   │   └── index.ts
 │   └── index.ts
-├── web/                     # Vista, estilos y lo que NO se puede compartir
+├── web/                     # Lo exclusivo de web (mismas subcarpetas que shared cuando aplique)
 │   ├── styles/
 │   │   └── ComponentName.module.scss
 │   ├── views/
 │   │   ├── ComponentName.view.tsx
 │   │   └── index.ts
+│   ├── types/               # (opcional) tipos exclusivos de web
 │   ├── hooks/               # (opcional) hooks exclusivos de web
+│   ├── providers/           # (opcional) providers exclusivos de web
+│   ├── utils/               # (opcional) utils exclusivos de web
+│   ├── i18n/                # (opcional) traducciones exclusivas de web
+│   ├── environment/         # (opcional) config exclusiva de web
 │   └── index.ts
-├── mobile/                  # Vista, estilos y lo que NO se puede compartir
+├── mobile/                  # Lo exclusivo de mobile (mismas subcarpetas que shared cuando aplique)
 │   ├── styles/
 │   │   └── ComponentName.mobile.module.css
 │   ├── views/
 │   │   ├── ComponentName.mobile.view.tsx
 │   │   └── index.ts
+│   ├── types/               # (opcional) tipos exclusivos de mobile
 │   ├── hooks/               # (opcional) hooks exclusivos de mobile
+│   ├── providers/           # (opcional) providers exclusivos de mobile
+│   ├── utils/               # (opcional) utils exclusivos de mobile
+│   ├── i18n/                # (opcional) traducciones exclusivas de mobile
+│   ├── environment/         # (opcional) config exclusiva de mobile
 │   └── index.ts
 ├── index.tsx                # Dispatch web/mobile
 └── README.md
@@ -112,36 +122,27 @@ Todo lo que usan **ambas** variantes (o más):
 | **environment** | Configuración del componente   |
 | **utils**     | Funciones de cálculo, helpers    |
 
-### `web/`
-Vista, estilos y cualquier lógica que **no se pueda compartir** con otras variantes:
+### `web/` y `mobile/`
+Pueden tener **las mismas subcarpetas que `shared/`** (types, hooks, providers, utils, i18n, environment) pero solo para lo que es **exclusivo** de esa variante:
 
-| Contenido   | Ejemplo                                        |
-|-------------|------------------------------------------------|
-| **views**   | ComponentName.view.tsx                         |
-| **styles**  | ComponentName.module.scss                      |
-| **hooks**   | useWebAnimation.hook.ts (solo si es exclusivo) |
-| **utils**   | webonly.util.ts (solo si es exclusivo)          |
-| **providers** | WebOnly.provider.tsx (solo si es exclusivo)  |
+| Contenido     | Ejemplo web                          | Ejemplo mobile                          |
+|---------------|--------------------------------------|-----------------------------------------|
+| **views**     | ComponentName.view.tsx               | ComponentName.mobile.view.tsx           |
+| **styles**    | ComponentName.module.scss            | ComponentName.mobile.module.css         |
+| **types**     | WebOnlyProps.type.ts                 | MobileOnlyProps.type.ts                 |
+| **hooks**     | useDragAndDrop.hook.ts               | useTouchGesture.hook.ts                 |
+| **providers** | DragContext.provider.tsx             | BottomSheetContext.provider.tsx          |
+| **utils**     | position.util.ts                     | gesture.util.ts                         |
+| **i18n**      | Textos que solo aparecen en web      | Textos que solo aparecen en mobile      |
+| **environment** | Config exclusiva de web            | Config exclusiva de mobile              |
 
-Importa lo compartido de `../../shared/types`, `../../shared/utils`, etc.
-
-### `mobile/`
-Vista, estilos y cualquier lógica que **no se pueda compartir** con otras variantes:
-
-| Contenido   | Ejemplo                                           |
-|-------------|---------------------------------------------------|
-| **views**   | ComponentName.mobile.view.tsx                     |
-| **styles**  | ComponentName.mobile.module.css                   |
-| **hooks**   | useTouchGesture.hook.ts (solo si es exclusivo)    |
-| **utils**   | mobileonly.util.ts (solo si es exclusivo)          |
-| **providers** | MobileOnly.provider.tsx (solo si es exclusivo)  |
-
-Importa lo compartido de `../../shared/types`, `../../shared/utils`, etc.
+Importan lo compartido de `../../shared/types`, `../../shared/utils`, etc.
 
 ### Criterio para decidir shared vs web/mobile
 
-> Si un hook, util, provider o tipo lo usa **más de una variante** → va en `shared/`.
-> Si **solo lo usa una variante** y no tiene sentido en las demás → va en `web/` o `mobile/`.
+> Si lo usa **más de una variante** → va en `shared/`.
+> Si es **único de una variante** y no tiene sentido en las demás → va en `web/` o `mobile/`.
+> La estructura de subcarpetas es la misma en los tres niveles (shared, web, mobile). La diferencia es el alcance: compartido vs exclusivo.
 
 ---
 
