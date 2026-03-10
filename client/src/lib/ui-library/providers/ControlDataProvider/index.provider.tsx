@@ -8,12 +8,14 @@ export function ControlDataProvider<TParams = unknown, TResponse = unknown>({
   mapParams,
   defaultState,
   debounceMs = 400,
+  mutuallyExclusive,
 }: ControlDataProviderProps<TParams, TResponse>) {
   const controlData = useControlData<TParams, TResponse>(
     fetchFn,
     mapParams,
     defaultState,
-    debounceMs
+    debounceMs,
+    mutuallyExclusive
   );
 
   const value = useMemo<ControlDataContextValue<TResponse>>(

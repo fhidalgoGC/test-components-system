@@ -16,6 +16,7 @@ import { ControlDataProvider, useControlDataContext } from "@/lib/ui-library/pro
 | `mapParams` | `(state: ControlDataState) => TParams` | requerido | Transforma el state en los parámetros para `fetchFn` |
 | `defaultState` | `Partial<ControlDataState>` | `{}` | Estado inicial del provider |
 | `debounceMs` | `number` | `400` | Milisegundos de debounce antes de ejecutar el fetch |
+| `mutuallyExclusive` | `StateKey[][]` | `undefined` | Grupos de keys mutuamente excluyentes. Al aplicar un key, los demás del grupo se eliminan del state |
 
 ## Contexto (useControlDataContext)
 
@@ -89,6 +90,29 @@ Elimina un key individual del state. Hace un `delete` real del key (no lo pone e
 removeFromState("search");
 
 removeFromState("filters");
+```
+
+## mutuallyExclusive
+
+Permite definir grupos de keys que son mutuamente excluyentes. Cuando se aplica un key con `applyToState`, todos los demás keys del mismo grupo se eliminan automáticamente del state.
+
+```tsx
+<ControlDataProvider
+  fetchFn={fetchTrips}
+  mapParams={adapter}
+  mutuallyExclusive={[['date', 'dateRange']]}
+>
+  <MyComponent />
+</ControlDataProvider>
+```
+
+En este ejemplo, si se hace `applyToState('dateRange', ...)`, el key `date` se elimina del state automáticamente, y viceversa. Se pueden definir múltiples grupos:
+
+```tsx
+mutuallyExclusive={[
+  ['date', 'dateRange'],
+  ['listView', 'gridView'],
+]}
 ```
 
 ## resetState vs clearState

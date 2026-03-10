@@ -10,6 +10,8 @@ export type MapParamsAdapter<TOutput = unknown> = (state: ControlDataState) => T
 
 export type FetchFunction<TParams = unknown, TResponse = unknown> = (params: TParams) => Promise<TResponse>;
 
+export type MutuallyExclusiveGroup = StateKey[];
+
 export type ControlDataContextValue<TData = unknown> = {
   data: TData | null;
   loading: boolean;
@@ -28,4 +30,5 @@ export type ControlDataProviderProps<TParams = unknown, TResponse = unknown> = {
   mapParams: MapParamsAdapter<TParams>;
   defaultState?: Partial<ControlDataState>;
   debounceMs?: number;
+  mutuallyExclusive?: MutuallyExclusiveGroup[];
 };

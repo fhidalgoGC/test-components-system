@@ -8,4 +8,5 @@ export type {
   FetchFunction,
   ControlDataContextValue,
   ControlDataProviderProps,
+  MutuallyExclusiveGroup,
 } from './index.types';

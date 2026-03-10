@@ -6,6 +6,7 @@ import type {
   MapParamsAdapter,
   FetchFunction,
   ControlDataContextValue,
+  MutuallyExclusiveGroup,
 } from './index.types';
 
 export const ControlDataContext = createContext<ControlDataContextValue<unknown> | undefined>(undefined);
@@ -24,9 +25,11 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
   fetchFn: FetchFunction<TParams, TResponse>,
   mapParams: MapParamsAdapter<TParams>,
   defaultState?: Partial<ControlDataState>,
-  debounceMs: number = 400
+  debounceMs: number = 400,
+  mutuallyExclusive?: MutuallyExclusiveGroup[]
 ): ControlDataContextValue<TResponse> {
   const defaultRef = useRef<ControlDataState>({ ...DEFAULT_STATE, ...defaultState });
+  const exclusiveRef = useRef(mutuallyExclusive);
 
   const [state, setState] = useState<ControlDataState>({
     ...defaultRef.current,
@@ -83,10 +86,20 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     setState((prev) => {
       const previousValue = prev[key] as R | undefined;
       const newValue = transformer(rawData, previousValue);
-      return {
+      const next: ControlDataState = {
         ...prev,
         [key]: newValue,
       };
+      if (exclusiveRef.current) {
+        for (const group of exclusiveRef.current) {
+          if (group.includes(key)) {
+            for (const otherKey of group) {
+              if (otherKey !== key) delete next[otherKey];
+            }
+          }
+        }
+      }
+      return next;
     });
   }, []);
 
