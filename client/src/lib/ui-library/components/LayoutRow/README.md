@@ -485,7 +485,7 @@ LayoutRow/
 │   │   └── index.ts
 │   └── index.ts
 ├── web/
-│   ├── css/
+│   ├── styles/
 │   │   ├── LayoutRow.module.scss
 │   │   ├── LayoutRow.module.ts
 │   │   └── index.ts

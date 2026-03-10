@@ -9,7 +9,7 @@ import {
   groupByAlign,
   capitalize,
 } from '../../shared/utils';
-import styles from '../css/LayoutRow.module.scss';
+import styles from '../styles/LayoutRow.module.scss';
 
 const getPaddingXClass = (value: SpacingToken | number | undefined): string => {
   if (!value || typeof value === 'number') return '';

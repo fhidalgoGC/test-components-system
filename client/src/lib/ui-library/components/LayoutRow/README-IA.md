@@ -166,24 +166,30 @@ interface LayoutRowComponent {
 
 ```
 LayoutRow/
-├── web/
-│   ├── css/
-│   │   ├── LayoutRow.module.css
-│   │   └── index.ts
-│   ├── hooks/
-│   │   ├── useLayoutRow.hook.ts
-│   │   └── index.ts
+├── shared/
 │   ├── types/
-│   │   ├── LayoutRow.type.ts
+│   ├── hooks/
+│   ├── providers/
+│   ├── i18n/
+│   ├── environment/
+│   ├── utils/
+│   └── index.ts
+├── web/
+│   ├── styles/
+│   │   ├── LayoutRow.module.scss
+│   │   ├── LayoutRow.module.ts
 │   │   └── index.ts
 │   ├── views/
 │   │   ├── LayoutRow.view.tsx
 │   │   └── index.ts
-│   ├── i18n/
-│   ├── providers/
-│   ├── environment/
-│   ├── utils/
 │   └── index.tsx
+├── mobile/
+│   ├── styles/
+│   │   └── LayoutRow.mobile.module.css
+│   ├── views/
+│   │   ├── LayoutRow.mobile.view.tsx
+│   │   └── index.ts
+│   └── index.ts
 └── index.tsx
 ```
 
