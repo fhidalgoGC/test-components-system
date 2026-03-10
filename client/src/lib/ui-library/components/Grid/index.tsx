@@ -1,7 +1,7 @@
 import { useIsMobile } from '../../hooks';
 import { Grid as GridWeb } from './web';
 import { NotImplemented } from '../NotImplemented';
-import type { GridProps } from './shared';
+import type { GridProps } from './shared/types';
 
 export const Grid = <T,>(props: GridProps<T>) => {
   const isMobile = useIsMobile();
@@ -13,5 +13,5 @@ export const Grid = <T,>(props: GridProps<T>) => {
   return <GridWeb {...props} />;
 };
 
-export type { GridProps, GridController, GridState, GridSelectionConfig, GridSelectionStyle, GridSelectionItemActionEvent } from './shared';
-export { useGridController } from './shared';
+export type { GridProps, GridController, GridState, GridSelectionConfig, GridSelectionStyle, GridSelectionItemActionEvent, GridCapacityInfo } from './shared/types';
+export { useGridController } from './shared/hooks';

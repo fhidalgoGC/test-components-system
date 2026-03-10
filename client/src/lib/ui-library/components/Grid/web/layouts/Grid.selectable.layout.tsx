@@ -1,4 +1,4 @@
-import type { GridProps, GridSelectionStyle } from '../../shared';
+import type { GridProps, GridSelectionStyle } from '../../shared/types';
 import { WrapperItemsSelected, useSelectionSafe } from '../../../WrapperItemsSelected';
 import { GridView } from '../views';
 import { useRef, useCallback } from 'react';

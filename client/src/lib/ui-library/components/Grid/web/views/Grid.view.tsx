@@ -1,6 +1,6 @@
-import type { GridProps, GridStateComponent } from '../../shared';
+import type { GridProps, GridStateComponent } from '../../shared/types';
 import { useGrid } from '../hooks';
-import styles from '../css/Grid.module.css';
+import styles from '../styles/Grid.module.css';
 
 function getAlignClasses(config?: GridStateComponent): string {
   const classes: string[] = [styles.stateContainer];

@@ -1,4 +1,4 @@
-import type { GridProps } from '../shared';
+import type { GridProps } from '../shared/types';
 import { GridView } from './views';
 import { GridSelectableLayout } from './layouts';
 
@@ -10,4 +10,3 @@ export const Grid = <T,>(props: GridProps<T>) => {
 };
 
 export { GridView } from './views';
-export type { GridProps, GridController, GridState, GridSelectionConfig, GridSelectionStyle, GridSelectionItemActionEvent } from './types';

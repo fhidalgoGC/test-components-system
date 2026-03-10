@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import type { GridController, InternalGridController, GridState } from './Grid.types';
+import type { GridController, InternalGridController, GridState } from '../types';
 
 export function useGridController(): GridController {
   const storeRef = useRef<{

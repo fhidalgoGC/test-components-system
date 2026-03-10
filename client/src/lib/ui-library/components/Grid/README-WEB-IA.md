@@ -337,22 +337,27 @@ if (isMobile) {
 
 ```
 Grid/
-├── shared/
-│   ├── Grid.types.ts          # Tipos compartidos (GridProps, GridState, SelectionConfig, etc.)
-│   ├── useGridController.ts   # Hook de control externo
+├── shared/                              # Compartido entre web y mobile
+│   ├── types/
+│   │   ├── Grid.type.ts                 # Props, interfaces, tipos compartidos
+│   │   └── index.ts
+│   ├── hooks/
+│   │   ├── useGridController.ts         # Hook de control externo
+│   │   └── index.ts
 │   └── index.ts
 ├── web/
-│   ├── css/
-│   │   └── Grid.module.css    # Estilos del Grid
+│   ├── styles/
+│   │   └── Grid.module.css              # Estilos del Grid
 │   ├── hooks/
-│   │   └── useGrid.hook.ts    # Lógica (layout calc, scroll detection, state)
+│   │   ├── useGrid.hook.ts              # Lógica web (layout calc, scroll detection, state)
+│   │   └── index.ts
 │   ├── layouts/
-│   │   └── Grid.selectable.layout.tsx  # Layout con selección (solo carga si selectionConfig presente)
+│   │   ├── Grid.selectable.layout.tsx   # Layout con selección (solo carga si selectionConfig presente)
+│   │   └── index.ts
 │   ├── views/
-│   │   └── Grid.view.tsx      # Componente React (layout normal)
-│   ├── types/
-│   │   └── Grid.type.ts       # Re-export de tipos compartidos
-│   └── index.tsx              # Routing entre layout normal y selectable
-├── index.tsx                  # Dispatch Web/Mobile + exports
+│   │   ├── Grid.view.tsx                # Componente React (layout normal)
+│   │   └── index.ts
+│   └── index.tsx                        # Routing entre layout normal y selectable
+├── index.tsx                            # Dispatch Web/Mobile + exports
 └── README-WEB-IA.md
 ```

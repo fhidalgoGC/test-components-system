@@ -1,7 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { Grid, useGridController } from '@/lib/ui-library/components/Grid';
-import type { GridSelectionConfig } from '@/lib/ui-library/components/Grid';
-import type { GridCapacityInfo } from '@/lib/ui-library/components/Grid/shared';
+import type { GridSelectionConfig, GridCapacityInfo } from '@/lib/ui-library/components/Grid';
 import { generateProducts, ProductCard } from './GridDemo.data';
 import type { Product } from './GridDemo.data';
 import styles from '../css/GridDemo.module.css';

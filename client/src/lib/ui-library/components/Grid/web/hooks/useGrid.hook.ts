@@ -4,7 +4,7 @@ import type {
   GridState,
   GridCapacityInfo,
   InternalGridController,
-} from '../../shared';
+} from '../../shared/types';
 
 interface UseGridResult<T> {
   state: GridState;

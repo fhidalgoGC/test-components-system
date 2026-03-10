@@ -1,2 +1,2 @@
-export * from './Grid.types';
-export * from './useGridController';
+export * from './types';
+export * from './hooks';
