@@ -5,6 +5,7 @@ import type { NavigationSidebarProps, NavigationSubItem, NavigationItem } from '
 import { useNavigationSidebar } from '../../shared/hooks';
 import { useI18nMerge } from '../../shared/hooks/useI18nMerge.hook';
 import { LibI18nContext } from '../../../../providers/AppLanguageLibUiProvider/index.hook';
+import { useDrawerSwipe } from '../hooks';
 import styles from '../styles/NavigationSidebar.mobile.module.css';
 
 function useOptionalLibI18n() {
@@ -68,6 +69,12 @@ export function NavigationSidebarMobileView(props: NavigationSidebarMobileProps)
 
   const isDark = currentTheme === 'dark';
 
+  const { drawerRef, handlers: swipeHandlers } = useDrawerSwipe({
+    onClose,
+    isOpen,
+    drawerWidth: 280,
+  });
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -102,12 +109,14 @@ export function NavigationSidebarMobileView(props: NavigationSidebarMobileProps)
         data-testid="navigation-sidebar-mobile-overlay"
       />
       <div
+        ref={drawerRef}
         className={`
           ${styles.drawer}
           ${isOpen ? styles.drawerOpen : ''}
           ${isDark ? styles.dark : ''}
         `}
         data-testid="navigation-sidebar-mobile"
+        {...swipeHandlers}
       >
         <div className={`${styles.header} ${isDark ? styles.dark : ''}`} style={headerStyle} data-testid="sidebar-header-mobile">
           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -130,6 +139,10 @@ export function NavigationSidebarMobileView(props: NavigationSidebarMobileProps)
           >
             <X size={20} />
           </button>
+        </div>
+
+        <div className={styles.swipeIndicator} data-testid="swipe-indicator">
+          <div className={`${styles.swipeBar} ${isDark ? styles.swipeBarDark : ''}`} />
         </div>
 
         <nav className={styles.nav} aria-label={t('navigationsidebar.navigation.main')} data-testid="sidebar-body-mobile">

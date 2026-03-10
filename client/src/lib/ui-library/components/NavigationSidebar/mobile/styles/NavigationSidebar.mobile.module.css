@@ -193,6 +193,24 @@
   color: #93c5fd;
 }
 
+.swipeIndicator {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 8px 2px;
+  flex-shrink: 0;
+}
+
+.swipeBar {
+  width: 4px;
+  height: 32px;
+  border-radius: 2px;
+  background-color: #d1d5db;
+}
+
+.swipeBarDark {
+  background-color: #4b5563;
+}
+
 .footer {
   margin-top: auto;
   padding: 1rem;

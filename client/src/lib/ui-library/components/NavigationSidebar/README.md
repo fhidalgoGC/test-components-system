@@ -185,9 +185,16 @@ function MobileApp() {
 - El drawer se renderiza via `createPortal` a `document.body`
 - Overlay semi-transparente con `z-index: 9998`
 - Drawer con `z-index: 9999` (siempre por encima de BottomNavigationBar y otros elementos fijos)
-- Al tocar el overlay o un item de navegación, el drawer se cierra
+- Se cierra de 3 formas:
+  1. **Tocar el overlay** (fuera del drawer)
+  2. **Tocar el botón X** en el header del drawer
+  3. **Gesto swipe** hacia la izquierda sobre el drawer (deslizar de derecha a izquierda)
+- El gesto de swipe detecta velocidad y distancia: un swipe rápido (> 0.5 px/ms) o que supere el 30% del ancho cierra el drawer
+- El drawer sigue el dedo mientras se arrastra, dando feedback visual en tiempo real
+- Indicador visual de swipe (barra vertical) en el borde derecho del drawer
 - Se bloquea el scroll del body mientras está abierto
 - Animación de slide-in desde la izquierda con transición de 300ms
+- Al seleccionar un item de navegación, el drawer se cierra automáticamente
 
 ## Responsive
 
@@ -227,5 +234,8 @@ NavigationSidebar/
     │   └── index.ts
     ├── styles/
     │   └── NavigationSidebar.mobile.module.css
+    ├── hooks/
+    │   ├── useDrawerSwipe.hook.ts
+    │   └── index.ts
     └── index.ts
 ```
