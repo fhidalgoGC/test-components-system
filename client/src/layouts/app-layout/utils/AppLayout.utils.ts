@@ -71,6 +71,15 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'layout-bottom-nav', label: 'With BottomNav', i18n: { en: 'With BottomNav', es: 'Con BottomNav', default: 'With BottomNav' }, path: '/layouts/sidebar-layout/with-bottom-nav', icon: 'Smartphone', openInNewTab: true }
       ]
     },
+    {
+      id: 'demos',
+      label: 'Demos',
+      i18n: { en: 'Demos', es: 'Demos', default: 'Demos' },
+      icon: 'Play',
+      children: [
+        { id: 'demo-toolbar-drawer', label: 'Toolbar + Drawer', i18n: { en: 'Toolbar + Drawer', es: 'Toolbar + Drawer', default: 'Toolbar + Drawer' }, path: '/demos/bottom-nav-sheet', icon: 'PanelLeft', openInNewTab: true }
+      ]
+    },
     { 
       id: 'heterogeneous-list', 
       label: 'HeterogeneousList', 

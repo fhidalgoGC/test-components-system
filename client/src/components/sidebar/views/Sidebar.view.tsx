@@ -69,6 +69,17 @@ const iconMap: Record<string, any> = {
       <rect x="3" y="3" width="7" height="18" rx="1" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
       <rect x="14" y="3" width="7" height="18" rx="1" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
     </svg>
+  ),
+  'Play': ({ className }: { className?: string }) => (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <polygon strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} points="5 3 19 12 5 21 5 3" />
+    </svg>
+  ),
+  'PanelLeft': ({ className }: { className?: string }) => (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="18" height="18" rx="2" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v18" />
+    </svg>
   )
 };
 
