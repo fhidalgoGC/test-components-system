@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import type { CSSProperties } from 'react';
 import { X } from 'lucide-react';
 import type { BottomSheetWrapperProps, BottomSheetHeightMode } from '../types';
@@ -57,7 +58,7 @@ export function BottomSheetWrapperMobileView({
     sheetStyle.height = customHeight;
   }
 
-  return (
+  const content = (
     <div
       className={styles.overlay}
       data-testid={dataTestId}
@@ -122,4 +123,6 @@ export function BottomSheetWrapperMobileView({
       </div>
     </div>
   );
+
+  return createPortal(content, document.body);
 }

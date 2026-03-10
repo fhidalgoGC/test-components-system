@@ -127,3 +127,4 @@ function MyComponent() {
 - `-webkit-overflow-scrolling: touch` para scroll suave en iOS
 - `safe-area-inset-bottom` en el footer para dispositivos con notch
 - Animación `slideUp` con keyframes CSS
+- **React Portal**: se renderiza en `document.body` vía `createPortal`, garantizando que siempre aparece desde el fondo de la pantalla completa aunque esté dentro de layouts con `overflow: hidden` (ej. SidebarLayout)
