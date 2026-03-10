@@ -71,7 +71,7 @@ ComponentName/
 │   │   └── index.ts
 │   └── index.ts
 ├── web/                     # Solo vista y estilos específicos de web
-│   ├── css/  (o styles/)
+│   ├── styles/
 │   │   └── ComponentName.module.scss
 │   ├── views/
 │   │   ├── ComponentName.view.tsx
@@ -116,7 +116,7 @@ Solo lo exclusivo de la variante web:
 | Contenido   | Ejemplo                           |
 |-------------|-----------------------------------|
 | **views**   | ComponentName.view.tsx            |
-| **css/styles** | ComponentName.module.scss      |
+| **styles**  | ComponentName.module.scss      |
 
 Importa directamente de `../../shared/types`, `../../shared/utils`, etc.
 
@@ -302,7 +302,7 @@ export const ComponentName = (props: ComponentNameProps) => {
 
 | Variante           | Vista                                  | Estilos                                    |
 |--------------------|-----------------------------------------|--------------------------------------------|
-| Web                | `ComponentName.view.tsx`               | `ComponentName.module.scss` (o `.css`)     |
+| Web                | `ComponentName.view.tsx`               | `ComponentName.module.scss`                |
 | Mobile             | `ComponentName.mobile.view.tsx`        | `ComponentName.mobile.module.css`          |
 | Tablet             | `ComponentName.tablet.view.tsx`        | `ComponentName.tablet.module.css`          |
 | Mobile Portrait    | `ComponentName.portrait.view.tsx`      | `ComponentName.portrait.module.css`        |
@@ -311,7 +311,7 @@ export const ComponentName = (props: ComponentNameProps) => {
 ### Carpeta de estilos
 
 - Componentes nuevos: usar `styles/`
-- Componentes legacy (SplitLayout, SidebarLayout): usan `css/` por compatibilidad
+- Componentes legacy (SplitLayout, SidebarLayout): usan `css/` por compatibilidad, migrar a `styles/` cuando se toquen
 
 ---
 
