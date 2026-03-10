@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BottomNavigationBar } from '@/lib/ui-library/components/BottomNavigationBar';
-import { NavigationSidebar } from '@/lib/ui-library/components/NavigationSidebar';
+import { NavigationSidebarMobile } from '@/lib/ui-library/components/NavigationSidebar/mobile';
+import type { NavigationSidebarMobileProps } from '@/lib/ui-library/components/NavigationSidebar/mobile';
 import type { NavItem } from '@/lib/ui-library/components/BottomNavigationBar/mobile/types';
 import type { NavigationItem } from '@/lib/ui-library/components/NavigationSidebar';
 import { Home, Truck, List, Settings, Menu, Package } from 'lucide-react';
@@ -111,7 +112,7 @@ export default function BottomNavWithSheetDemo() {
         </div>
       </main>
 
-      <NavigationSidebar
+      <NavigationSidebarMobile
         items={sidebarItems}
         currentPath={`/${selectedNav}`}
         isOpen={isSidebarOpen}
@@ -139,8 +140,6 @@ export default function BottomNavWithSheetDemo() {
             <span style={{ fontSize: 11, color: '#9ca3af', display: 'block' }}>v1.0.0</span>
           </div>
         }
-        showThemeToggle={true}
-        showLanguageSelector={true}
       />
 
       <BottomNavigationBar
