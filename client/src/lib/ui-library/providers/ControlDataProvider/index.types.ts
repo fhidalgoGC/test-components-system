@@ -16,6 +16,7 @@ export type ControlDataContextValue<TData = unknown> = {
   error: Error | null;
   state: ControlDataState;
   applyToState: <T = unknown, R = unknown>(key: StateKey, transformer: StateTransformer<T, R>, rawData: T) => void;
+  removeFromState: (key: StateKey) => void;
   resetState: () => void;
   clearState: () => void;
   reload: () => void;

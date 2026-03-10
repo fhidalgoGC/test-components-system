@@ -90,6 +90,15 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     });
   }, []);
 
+  const removeFromState = useCallback((key: StateKey) => {
+    setState((prev) => {
+      if (!(key in prev)) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  }, []);
+
   const resetState = useCallback(() => {
     setState({ ...defaultRef.current });
   }, []);
@@ -108,6 +117,7 @@ export function useControlData<TParams = unknown, TResponse = unknown>(
     error,
     state,
     applyToState,
+    removeFromState,
     resetState,
     clearState,
     reload,
