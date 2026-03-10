@@ -1,7 +1,7 @@
 import type { GridProps, GridStateComponent } from '../../shared/types';
 import { useGrid } from '../../shared/hooks';
 import { renderStateContent } from '../../shared/utils';
-import styles from '../styles/Grid.module.css';
+import styles from '../styles/Grid.mobile.module.css';
 
 function getAlignClasses(config?: GridStateComponent): string {
   const classes: string[] = [styles.stateContainer];
@@ -19,7 +19,7 @@ function getAlignClasses(config?: GridStateComponent): string {
   return classes.join(' ');
 }
 
-export function GridView<T>(props: GridProps<T>) {
+export function GridMobileView<T>(props: GridProps<T>) {
   const { id, item, scroll, statesComponents, showBorder, className } = props;
 
   const {
@@ -35,7 +35,6 @@ export function GridView<T>(props: GridProps<T>) {
 
   const containerClasses = [
     styles.container,
-    layout?.widthMode === 'full' ? styles.widthFull : layout?.widthMode === 'auto' ? styles.widthAuto : '',
     layout?.heightMode === 'full' ? styles.heightFull : layout?.heightMode === 'auto' ? styles.heightAuto : '',
     scroll?.enabled !== false ? styles.scrollable : styles.noScroll,
     showBorder ? styles.containerBorder : '',

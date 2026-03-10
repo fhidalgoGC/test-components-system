@@ -322,16 +322,23 @@ type GridSelectionStyle = {
 - `multiSelect: false`: selección simple (un solo item a la vez). Al seleccionar uno nuevo, el anterior se deselecciona automáticamente.
 - `multiSelect: true`: selección múltiple (toggle individual por item).
 
-## Platform Detection
+## Platform Support
 
-Solo disponible para Web. En mobile muestra componente `NotImplemented`:
+| Platform | Status | Description |
+|----------|--------|-------------|
+| Web | Implementado | Grid con posicionamiento, drag-based layout, selection |
+| Mobile | Implementado | Grid adaptado a mobile, touch scrolling, selection via tap |
 
-```typescript
-const isMobile = useIsMobile();
-if (isMobile) {
-  return <NotImplemented platform="Mobile" componentName="Grid" />;
-}
-```
+### Diferencias Web vs Mobile
+
+| Feature | Web | Mobile |
+|---------|-----|--------|
+| Columns | Auto-calc con minCardWidth | Auto-calc con minCardWidth (menos columnas) |
+| Scroll | overflow-y: auto | -webkit-overflow-scrolling: touch |
+| Selection | Click + keyboard | Tap |
+| States | idle, loading, empty, error | idle, loading, empty, error |
+| Controller | useGridController() | useGridController() |
+| Resolución | Automática via `useIsMobile()` (< 768px) | |
 
 ## Folder Structure
 
@@ -343,21 +350,32 @@ Grid/
 │   │   └── index.ts
 │   ├── hooks/
 │   │   ├── useGridController.ts         # Hook de control externo
+│   │   ├── useGrid.hook.ts             # Lógica compartida (layout calc, scroll, state)
+│   │   └── index.ts
+│   ├── utils/
+│   │   ├── grid.util.tsx               # renderStateContent helper
 │   │   └── index.ts
 │   └── index.ts
 ├── web/
 │   ├── styles/
-│   │   └── Grid.module.css              # Estilos del Grid
-│   ├── hooks/
-│   │   ├── useGrid.hook.ts              # Lógica web (layout calc, scroll detection, state)
-│   │   └── index.ts
+│   │   └── Grid.module.css              # Estilos web
 │   ├── layouts/
-│   │   ├── Grid.selectable.layout.tsx   # Layout con selección (solo carga si selectionConfig presente)
+│   │   ├── Grid.selectable.layout.tsx   # Layout con selección web
 │   │   └── index.ts
 │   ├── views/
-│   │   ├── Grid.view.tsx                # Componente React (layout normal)
+│   │   ├── Grid.view.tsx                # Vista web
 │   │   └── index.ts
-│   └── index.tsx                        # Routing entre layout normal y selectable
+│   └── index.tsx
+├── mobile/
+│   ├── styles/
+│   │   └── Grid.mobile.module.css       # Estilos mobile (touch optimized)
+│   ├── layouts/
+│   │   ├── Grid.mobile.selectable.layout.tsx  # Layout con selección mobile
+│   │   └── index.ts
+│   ├── views/
+│   │   ├── Grid.mobile.view.tsx         # Vista mobile
+│   │   └── index.ts
+│   └── index.tsx
 ├── index.tsx                            # Dispatch Web/Mobile + exports
 └── README-WEB-IA.md
 ```

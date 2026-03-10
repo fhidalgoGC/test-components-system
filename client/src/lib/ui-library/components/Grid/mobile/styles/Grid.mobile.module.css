@@ -1,0 +1,140 @@
+.container {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.containerBorder {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.heightFull {
+  height: 100%;
+}
+
+.heightAuto {
+  height: auto;
+}
+
+.grid {
+  display: grid;
+  box-sizing: border-box;
+}
+
+.scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.noScroll {
+  overflow: hidden;
+}
+
+.stateContainer {
+  display: flex;
+  width: 100%;
+  min-height: 100px;
+}
+
+.stateContainer.vTop {
+  align-items: flex-start;
+}
+
+.stateContainer.vMiddle {
+  align-items: center;
+}
+
+.stateContainer.vBottom {
+  align-items: flex-end;
+}
+
+.stateContainer.hLeft {
+  justify-content: flex-start;
+}
+
+.stateContainer.hCenter {
+  justify-content: center;
+}
+
+.stateContainer.hRight {
+  justify-content: flex-end;
+}
+
+.defaultLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.defaultEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.defaultError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  color: #ef4444;
+  font-size: 14px;
+}
+
+.defaultIdle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 10;
+  border-radius: inherit;
+}
+
+.sentinel {
+  width: 100%;
+  height: 1px;
+  visibility: hidden;
+}

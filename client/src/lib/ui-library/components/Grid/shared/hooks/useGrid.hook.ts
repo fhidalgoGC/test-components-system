@@ -4,7 +4,7 @@ import type {
   GridState,
   GridCapacityInfo,
   InternalGridController,
-} from '../../shared/types';
+} from '../types';
 
 interface UseGridResult<T> {
   state: GridState;
@@ -71,7 +71,6 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
     setColumns(cols);
 
     const maxRows = grid?.maxRows;
-    const minRows = grid?.minRows;
     const naturalRows = Math.ceil(data.length / cols);
     const effectiveRows = maxRows ? Math.min(naturalRows, maxRows) : naturalRows;
     const visibleItems = maxRows ? cols * maxRows : data.length;
