@@ -12,7 +12,7 @@ import {
   parseAlignDividerToken,
   capitalize,
 } from '../../shared/utils';
-import styles from '../styles/LayoutColumn.module.scss';
+import styles from '../styles/LayoutColumn.mobile.module.css';
 
 const getPaddingXClass = (value: SpacingToken | number | undefined): string => {
   if (!value || typeof value === 'number') return '';
@@ -65,7 +65,7 @@ const getSlotWrapperClass = (config: SlotConfig | undefined): string => {
   return `${styles.slotWrapper} ${styles.slotWrapperAuto}`;
 };
 
-export const LayoutColumnView = (props: LayoutColumnProps) => {
+export const LayoutColumnMobileView = (props: LayoutColumnProps) => {
   const {
     slots,
     slotConfig,
@@ -91,7 +91,7 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
     return {
       height: 0,
       borderTopWidth: `${dividerSizeToPixels[size]}px`,
-      borderTopStyle: style,
+      borderTopStyle: style as any,
       borderTopColor: dividerColorToValue[color],
     };
   })() : null;
@@ -138,11 +138,11 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
   })() : null;
 
   return (
-    <div className={containerClasses} style={inlineStyles} data-testid="layoutcolumn">
+    <div className={containerClasses} style={inlineStyles} data-testid="layoutcolumn-mobile">
       {slotsToRender.map((slotIndex, arrayIndex) => {
         const hasContentOverride = slotIndex in slotContentOverrides;
         const slotComponents = groupedBySlot[slotIndex] || [];
-        
+
         const topComponents = slotComponents.filter(c => c.align === 'top');
         const centerComponents = slotComponents.filter(c => c.align === 'center');
         const bottomComponents = slotComponents.filter(c => c.align === 'bottom');
@@ -157,122 +157,108 @@ export const LayoutColumnView = (props: LayoutColumnProps) => {
         const slotWrapperClass = getSlotWrapperClass(currentSlotConfig);
         const slotWrapperStyleVal = getSlotWrapperStyle(currentSlotConfig);
 
-        const slotHeightMode = currentSlotConfig?.heightMode || 'auto';
-        const isAutoSlot = slotHeightMode === 'auto';
-        const slotAutoOverride: React.CSSProperties = isAutoSlot
-          ? { overflow: 'visible', flex: '0 0 auto', minHeight: 'auto' }
-          : {};
-        const slotContentAutoOverride: React.CSSProperties = isAutoSlot
-          ? { overflow: 'visible', flex: '0 0 auto', minHeight: 'auto' }
-          : {};
-        const componentAutoOverride: React.CSSProperties = isAutoSlot
-          ? { flex: '0 0 auto', minHeight: 'auto' }
-          : {};
-
         return (
           <div key={slotIndex} className={slotWrapperClass} style={slotWrapperStyleVal}>
             <div
               className={styles.slot}
-              style={slotAutoOverride}
-              data-testid={`layoutcolumn-slot-${slotIndex}`}
+              data-testid={`layoutcolumn-mobile-slot-${slotIndex}`}
             >
-            {hasContentOverride ? (
-              <div
-                key={slotContentOverrides[slotIndex].revisionKey}
-                className={`${styles.slotContent} ${styles.alignTop}`}
-                style={{ ...(isAutoSlot ? slotContentAutoOverride : { flex: 1 }) }}
-                data-testid={`layoutcolumn-slot-${slotIndex}-override`}
-              >
-                <div className={`${styles.componentWrapper} ${styles.componentFull}`} style={componentAutoOverride}>
-                  {slotContentOverrides[slotIndex].content}
+              {hasContentOverride ? (
+                <div
+                  key={slotContentOverrides[slotIndex].revisionKey}
+                  className={`${styles.slotContent} ${styles.alignTop}`}
+                  data-testid={`layoutcolumn-mobile-slot-${slotIndex}-override`}
+                >
+                  <div className={`${styles.componentWrapper} ${styles.componentFull}`}>
+                    {slotContentOverrides[slotIndex].content}
+                  </div>
                 </div>
-              </div>
-            ) : (
-            <>
-            {hasTop && (
-              <div
-                className={`${styles.slotContent} ${styles.alignTop} ${getComponentGapClass(componentGap)}`}
-                style={{ ...getComponentGapStyle(componentGap), ...slotContentAutoOverride }}
-                data-testid={`layoutcolumn-slot-${slotIndex}-top`}
-              >
-                {topComponents.map((comp, idx) => {
-                  const sizeMode = comp.sizeMode || 'auto';
-                  const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
-                  return (
-                    <div 
-                      key={comp.id || idx} 
-                      className={`${styles.componentWrapper} ${wrapperClass}`}
-                      style={{ ...getComponentHeightStyle(comp), ...(sizeMode === 'full' ? componentAutoOverride : {}) }}
-                      data-testid={`layoutcolumn-component-${slotIndex}-top-${idx}`}
+              ) : (
+                <>
+                  {hasTop && (
+                    <div
+                      className={`${styles.slotContent} ${styles.alignTop} ${getComponentGapClass(componentGap)}`}
+                      style={getComponentGapStyle(componentGap)}
+                      data-testid={`layoutcolumn-mobile-slot-${slotIndex}-top`}
                     >
-                      {comp.component}
+                      {topComponents.map((comp, idx) => {
+                        const sizeMode = comp.sizeMode || 'auto';
+                        const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
+                        return (
+                          <div
+                            key={comp.id || idx}
+                            className={`${styles.componentWrapper} ${wrapperClass}`}
+                            style={getComponentHeightStyle(comp)}
+                            data-testid={`layoutcolumn-mobile-component-${slotIndex}-top-${idx}`}
+                          >
+                            {comp.component}
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  )}
 
-            {slotAlignDivider && hasTop && (hasCenter || hasBottom) && (
-              <div className={styles.alignDivider} style={alignDividerStyle || undefined} />
-            )}
+                  {slotAlignDivider && hasTop && (hasCenter || hasBottom) && (
+                    <div className={styles.alignDivider} style={alignDividerStyle || undefined} />
+                  )}
 
-            {hasCenter && (
-              <div
-                className={`${styles.slotContent} ${styles.alignCenter} ${getComponentGapClass(componentGap)}`}
-                style={{ ...getComponentGapStyle(componentGap), ...slotContentAutoOverride }}
-                data-testid={`layoutcolumn-slot-${slotIndex}-center`}
-              >
-                {centerComponents.map((comp, idx) => {
-                  const sizeMode = comp.sizeMode || 'auto';
-                  const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
-                  return (
-                    <div 
-                      key={comp.id || idx} 
-                      className={`${styles.componentWrapper} ${wrapperClass}`}
-                      style={{ ...getComponentHeightStyle(comp), ...(sizeMode === 'full' ? componentAutoOverride : {}) }}
-                      data-testid={`layoutcolumn-component-${slotIndex}-center-${idx}`}
+                  {hasCenter && (
+                    <div
+                      className={`${styles.slotContent} ${styles.alignCenter} ${getComponentGapClass(componentGap)}`}
+                      style={getComponentGapStyle(componentGap)}
+                      data-testid={`layoutcolumn-mobile-slot-${slotIndex}-center`}
                     >
-                      {comp.component}
+                      {centerComponents.map((comp, idx) => {
+                        const sizeMode = comp.sizeMode || 'auto';
+                        const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
+                        return (
+                          <div
+                            key={comp.id || idx}
+                            className={`${styles.componentWrapper} ${wrapperClass}`}
+                            style={getComponentHeightStyle(comp)}
+                            data-testid={`layoutcolumn-mobile-component-${slotIndex}-center-${idx}`}
+                          >
+                            {comp.component}
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  )}
 
-            {slotAlignDivider && (hasCenter || hasTop) && hasBottom && (
-              <div className={styles.alignDivider} style={alignDividerStyle || undefined} />
-            )}
+                  {slotAlignDivider && (hasCenter || hasTop) && hasBottom && (
+                    <div className={styles.alignDivider} style={alignDividerStyle || undefined} />
+                  )}
 
-            {hasBottom && (
-              <div
-                className={`${styles.slotContent} ${styles.alignBottom} ${getComponentGapClass(componentGap)}`}
-                style={{ ...getComponentGapStyle(componentGap), ...slotContentAutoOverride }}
-                data-testid={`layoutcolumn-slot-${slotIndex}-bottom`}
-              >
-                {bottomComponents.map((comp, idx) => {
-                  const sizeMode = comp.sizeMode || 'auto';
-                  const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
-                  return (
-                    <div 
-                      key={comp.id || idx} 
-                      className={`${styles.componentWrapper} ${wrapperClass}`}
-                      style={{ ...getComponentHeightStyle(comp), ...(sizeMode === 'full' ? componentAutoOverride : {}) }}
-                      data-testid={`layoutcolumn-component-${slotIndex}-bottom-${idx}`}
+                  {hasBottom && (
+                    <div
+                      className={`${styles.slotContent} ${styles.alignBottom} ${getComponentGapClass(componentGap)}`}
+                      style={getComponentGapStyle(componentGap)}
+                      data-testid={`layoutcolumn-mobile-slot-${slotIndex}-bottom`}
                     >
-                      {comp.component}
+                      {bottomComponents.map((comp, idx) => {
+                        const sizeMode = comp.sizeMode || 'auto';
+                        const wrapperClass = sizeMode === 'full' ? styles.componentFull : styles.componentAuto;
+                        return (
+                          <div
+                            key={comp.id || idx}
+                            className={`${styles.componentWrapper} ${wrapperClass}`}
+                            style={getComponentHeightStyle(comp)}
+                            data-testid={`layoutcolumn-mobile-component-${slotIndex}-bottom-${idx}`}
+                          >
+                            {comp.component}
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-              </div>
-            )}
-            </>
-            )}
+                  )}
+                </>
+              )}
             </div>
             {showDivider && dividerStyle && (
-              <div 
-                className={styles.slotDivider} 
+              <div
+                className={styles.slotDivider}
                 style={dividerStyle}
-                data-testid={`layoutcolumn-divider-${slotIndex}`}
+                data-testid={`layoutcolumn-mobile-divider-${slotIndex}`}
               />
             )}
           </div>

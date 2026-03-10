@@ -741,3 +741,57 @@ Si no pasas `controller`, todo funciona igual que antes:
   components={components}
 />
 ```
+
+## Estructura de Archivos
+
+```
+LayoutColumn/
+├── shared/                  # Todo lo compartido entre web y mobile
+│   ├── types/
+│   │   ├── LayoutColumn.type.ts
+│   │   └── index.ts
+│   ├── hooks/
+│   │   ├── useLayoutColumn.ts
+│   │   ├── useI18nMerge.hook.ts
+│   │   └── index.ts
+│   ├── providers/
+│   │   ├── LayoutColumn.provider.tsx
+│   │   └── index.ts
+│   ├── i18n/
+│   │   ├── en.json
+│   │   ├── es.json
+│   │   └── index.ts
+│   ├── environment/
+│   │   ├── enviroment.ts
+│   │   └── index.ts
+│   ├── utils/
+│   │   ├── layoutcolumn.util.ts
+│   │   └── index.ts
+│   └── index.ts
+├── web/                     # Vista y estilos exclusivos de web
+│   ├── styles/
+│   │   └── LayoutColumn.module.scss
+│   ├── views/
+│   │   ├── LayoutColumn.view.tsx
+│   │   └── index.ts
+│   └── index.tsx
+├── mobile/                  # Vista y estilos exclusivos de mobile (< 768px)
+│   ├── styles/
+│   │   └── LayoutColumn.mobile.module.css
+│   ├── views/
+│   │   ├── LayoutColumn.mobile.view.tsx
+│   │   └── index.ts
+│   └── index.ts
+├── index.tsx                # Dispatch web/mobile via useIsMobile()
+└── README.md
+```
+
+## Web vs Mobile
+
+| Aspecto | Web (>= 768px) | Mobile (< 768px) |
+|---------|----------------|-------------------|
+| Resolución | Automática via `useIsMobile()` | Automática via `useIsMobile()` |
+| Estilos | SCSS modules | CSS modules |
+| Overflow (slots auto) | `overflow: visible` con overrides | Sin overrides de overflow |
+| Funcionalidad | Completa | Completa |
+| Controller | Compartido desde `shared/hooks` | Compartido desde `shared/hooks` |

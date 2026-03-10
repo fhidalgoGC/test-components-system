@@ -1,24 +1,17 @@
 import { useIsMobile } from '../../hooks';
 import { LayoutColumn as LayoutColumnWeb } from './web';
-import { NotImplemented } from '../NotImplemented';
-import type { LayoutColumnProps, LayoutColumnComponent, UseLayoutColumnOptions, UseLayoutColumnReturn, SlotConfig } from './web/types';
-
-// Mobile version placeholder (uncomment when implemented)
-// import { LayoutColumn as LayoutColumnMobile } from './mobile';
+import { LayoutColumn as LayoutColumnMobile } from './mobile';
+import type { LayoutColumnProps, LayoutColumnComponent, UseLayoutColumnOptions, UseLayoutColumnReturn, SlotConfig } from './shared/types';
 
 export const LayoutColumn = (props: LayoutColumnProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    // Return mobile version when implemented
-    // return <LayoutColumnMobile {...props} />;
-    
-    // Fallback: mobile version not implemented
-    return <NotImplemented platform="Mobile" componentName="LayoutColumn" />;
+    return <LayoutColumnMobile {...props} />;
   }
 
   return <LayoutColumnWeb {...props} />;
 };
 
 export type { LayoutColumnProps, LayoutColumnComponent, UseLayoutColumnOptions, UseLayoutColumnReturn, SlotConfig };
-export { useLayoutColumn } from './web/hooks';
+export { useLayoutColumn } from './shared/hooks';

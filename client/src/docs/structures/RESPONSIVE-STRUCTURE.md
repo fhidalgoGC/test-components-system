@@ -329,6 +329,34 @@ export const ComponentName = (props: ComponentNameProps) => {
 
 ---
 
+## Limpieza al Refactorizar
+
+Cuando se migra un componente existente a esta estructura, **se eliminan todos los archivos y carpetas que ya no se usan**. No se dejan archivos huérfanos ni islas de código muerto.
+
+### Proceso de limpieza
+
+1. **Mover a `shared/`**: Los archivos compartidos (types, hooks, providers, i18n, environment, utils) se mueven desde `web/` (o donde estuvieran) hacia `shared/`.
+2. **Eliminar originales**: Una vez movidos, los archivos originales en `web/` se eliminan. Si una subcarpeta queda vacía (ej. `web/types/`, `web/hooks/`), se elimina la carpeta completa.
+3. **Renombrar `css/` → `styles/`**: Si el componente usaba `css/`, se renombra a `styles/`.
+4. **Actualizar imports**: Todos los imports que apuntaban a las rutas viejas se actualizan a las nuevas rutas en `shared/`.
+5. **Verificar consumidores externos**: Buscar en todo el proyecto imports a las rutas viejas (ej. `LayoutColumn/web/types`) y actualizarlos a `LayoutColumn/shared/types`.
+
+### Qué se elimina
+
+| Situación | Acción |
+|-----------|--------|
+| Archivo movido a `shared/` | Eliminar el original en `web/` |
+| Carpeta vacía tras mover archivos | Eliminar la carpeta |
+| Carpeta `css/` renombrada a `styles/` | No queda la vieja `css/` |
+| Barrel file (`index.ts`) de carpeta eliminada | Se elimina junto con la carpeta |
+| `web/index.tsx` ya no re-exporta types/hooks | Simplificar a solo exportar la vista |
+
+### Resultado esperado tras migración
+
+`web/` y `mobile/` quedan **ligeros**: solo `views/`, `styles/`, `index.ts` y subcarpetas exclusivas si las hay. Toda la lógica compartida vive en `shared/`.
+
+---
+
 ## Resumen de Reglas
 
 1. **`shared/`** contiene todo lo reutilizable: types, hooks, providers, i18n, environment, utils
@@ -339,3 +367,4 @@ export const ComponentName = (props: ComponentNameProps) => {
 6. Nunca crear carpetas de lógica (types, hooks, etc.) al nivel raíz del componente
 7. Cada variante es una carpeta al mismo nivel: `web/`, `mobile/`, `tablet/`
 8. Sub-variantes (portrait/landscape) van como subcarpetas dentro de su variante padre
+9. Al refactorizar, se eliminan todos los archivos y carpetas huérfanos — no se deja código muerto ni islas sin usar

@@ -1,6 +1,5 @@
 import { LayoutColumn, useLayoutColumn } from "@/lib/ui-library/components/LayoutColumn";
-import type { SlotConfig } from "@/lib/ui-library/components/LayoutColumn/web/types";
-import type { LayoutColumnComponent } from "@/lib/ui-library/components/LayoutColumn/web/types";
+import type { SlotConfig, LayoutColumnComponent } from "@/lib/ui-library/components/LayoutColumn/shared/types";
 import styles from "../css/LayoutColumnDemo.module.scss";
 
 function FilterSection({ label, height }: { label: string; height?: number }) {
