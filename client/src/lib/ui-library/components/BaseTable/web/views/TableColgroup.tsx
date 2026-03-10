@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnConfig, ColumnsDefaultConfig } from '../types';
+import type { ColumnConfig, ColumnsDefaultConfig } from '../../shared/types';
 
 interface TableColgroupProps {
   columns: ColumnConfig[];

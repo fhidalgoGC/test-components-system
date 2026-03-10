@@ -27,7 +27,7 @@ const defaultStyle: CSSProperties = {
   minWidth: MIN_WIDTH,
   boxSizing: 'border-box',
   textAlign: 'inherit',
-  backgroundColor: '#c3e6cb', // TEMP: verde claro para visualizar
+  backgroundColor: '#c3e6cb',
 };
 
 const textWrapStyles: Record<TextWrapMode, CSSProperties> = {

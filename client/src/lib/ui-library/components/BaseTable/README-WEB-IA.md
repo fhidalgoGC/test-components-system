@@ -1,42 +1,61 @@
-# BaseTable - Web Version
+# BaseTable - Componente de Tabla Declarativo
 
 ## Overview
-Declarative, agnostic table component (web only) designed for configuration interpretation without business logic. The component interprets configuration and notifies events via callbacks, but does NOT transform data or apply internal sorting/filtering logic.
+Componente de tabla declarativo y agnóstico con soporte dual web/mobile. Interpreta configuración sin aplicar lógica de negocio. Notifica eventos vía callbacks pero NO transforma datos ni aplica sorting/filtering interno.
 
-## Folder Structure
+## Estructura de Carpetas
 
 ```
-web/
-├── components/
+BaseTable/
+├── index.tsx                          # Root: dispatch web/mobile via useIsMobile()
+├── README-WEB-IA.md
+├── shared/
 │   ├── index.ts
-│   ├── TextCell.tsx           # Default text cell component
-│   └── HeaderCell.tsx         # Default header cell component
-├── css/
-│   ├── index.ts
-│   └── BaseTable.module.css   # Component styles
-├── hooks/
-│   ├── index.ts
-│   └── useTableState.hook.ts  # State management hook
-├── types/
-│   ├── index.ts
-│   ├── BaseTable.type.ts      # Main component props
-│   ├── layout.type.ts         # Layout configuration
-│   ├── cells.type.ts          # Cell configuration
-│   ├── headers.type.ts        # Header configuration
-│   ├── rows.type.ts           # Row configuration
-│   ├── columns.type.ts        # Column configuration
-│   ├── behaviors.type.ts      # Behaviors and states
-│   ├── callbacks.type.ts      # Callback definitions
-│   └── state.type.ts          # Table state types
-├── views/
-│   ├── index.ts
-│   ├── BaseTable.view.tsx     # Main component
-│   ├── TableHeader.tsx        # Header rendering
-│   └── TableBody.tsx          # Body rendering
-└── index.tsx                   # Main export
+│   ├── types/
+│   │   ├── index.ts
+│   │   ├── BaseTable.type.ts          # Props principales del componente
+│   │   ├── layout.type.ts             # Configuración de layout
+│   │   ├── cells.type.ts              # Configuración de celdas
+│   │   ├── headers.type.ts            # Configuración de headers
+│   │   ├── rows.type.ts               # Configuración de filas
+│   │   ├── columns.type.ts            # Configuración de columnas
+│   │   ├── behaviors.type.ts          # Comportamientos y estados
+│   │   ├── callbacks.type.ts          # Definiciones de callbacks
+│   │   └── state.type.ts              # Tipos de estado de tabla
+│   ├── hooks/
+│   │   ├── index.ts
+│   │   └── useTableState.hook.ts      # Hook de gestión de estado
+│   └── components/
+│       ├── index.ts
+│       ├── TextCell.tsx               # Celda de texto por defecto
+│       └── HeaderCell.tsx             # Celda de header por defecto
+├── web/
+│   ├── index.tsx                      # Export de la vista web
+│   ├── styles/
+│   │   └── BaseTable.module.css       # Estilos web
+│   └── views/
+│       ├── index.ts
+│       ├── BaseTable.view.tsx         # Componente principal web
+│       ├── TableHeader.tsx            # Renderizado de headers
+│       ├── TableBody.tsx              # Renderizado de body
+│       ├── TableColgroup.tsx          # Renderizado de colgroup
+│       └── TableStates.tsx            # Renderizado de estados
+└── mobile/
+    ├── index.tsx                      # Export de la vista mobile
+    ├── styles/
+    │   └── BaseTableMobile.module.css # Estilos mobile
+    └── views/
+        ├── index.ts
+        └── BaseTableMobile.view.tsx   # Componente principal mobile
 ```
 
-## Basic Usage
+## Resolución de Plataforma
+
+El root `index.tsx` usa `useIsMobile()` (breakpoint: 768px) para despachar automáticamente:
+- **Desktop (≥768px)**: Renderiza `web/views/BaseTable.view.tsx` — tabla completa con layout separado, sticky header, stretch rows, colgroup
+- **Mobile (<768px)**: Renderiza `mobile/views/BaseTableMobile.view.tsx` — tabla simplificada con scroll horizontal nativo, padding optimizado para touch
+
+## Uso Básico
 
 ```tsx
 import { BaseTable, useTableState } from 'GC-UI-COMPONENTS';
@@ -75,12 +94,12 @@ function MyTable() {
 
 | Prop | Type | Required | Description |
 |------|------|----------|-------------|
-| `data` | `any[]` | Yes | Array of data objects |
-| `state` | `TableState` | Yes | Current table state |
-| `config` | `BaseTableConfig` | Yes | Table configuration |
-| `callbacks` | `TableCallbacks` | No | Event callbacks |
+| `data` | `any[]` | Yes | Array de objetos de datos |
+| `state` | `TableState` | Yes | Estado actual de la tabla |
+| `config` | `BaseTableConfig` | Yes | Configuración de la tabla |
+| `callbacks` | `TableCallbacks` | No | Callbacks de eventos |
 
-## Configuration Types
+## Tipos de Configuración
 
 ### BaseTableConfig
 
@@ -117,16 +136,16 @@ interface LayoutConfig {
 ```typescript
 interface ColumnConfig {
   metadata: {
-    columnId: string;      // Identificador unico (coincide con la key del objeto de datos)
-    order?: number;        // Orden de visualizacion
+    columnId: string;
+    order?: number;
   };
   header?: {
     cell?: ColumnHeaderCellConfig;
   };
   cell?: ColumnCellConfig;
   visible?: boolean;
-  minWidth?: number;               // Ancho minimo en pixeles
-  maxWidth?: number | 'stretch' | 'container';  // Ancho maximo o modo de distribucion
+  minWidth?: number;
+  maxWidth?: number | 'stretch' | 'container';
   sortable?: boolean;
 }
 ```
@@ -137,11 +156,11 @@ interface ColumnConfig {
 interface ColumnHeaderCellConfig {
   verticalAlign?: 'top' | 'middle' | 'bottom';
   horizontalAlign?: 'left' | 'center' | 'right';
-  sortKey?: string;              // Custom sort key
-  sortable?: boolean;            // Enable sorting
-  render?: ReactNode;            // Custom render component
-  clickable?: boolean;           // Enable click events
-  iconPosition?: 'left' | 'right';  // Sort icon position
+  sortKey?: string;
+  sortable?: boolean;
+  render?: ReactNode;
+  clickable?: boolean;
+  iconPosition?: 'left' | 'right';
 }
 ```
 
@@ -204,9 +223,9 @@ La columna se ajusta al contenido pero no supera el ancho indicado en pixeles. E
 
 ```tsx
 const columns: ColumnConfig[] = [
-  { metadata: { columnId: 'id' }, maxWidth: 80 },        // Maximo 80px
-  { metadata: { columnId: 'name' }, maxWidth: 250 },     // Maximo 250px
-  { metadata: { columnId: 'description' }, maxWidth: 400 }, // Maximo 400px
+  { metadata: { columnId: 'id' }, maxWidth: 80 },
+  { metadata: { columnId: 'name' }, maxWidth: 250 },
+  { metadata: { columnId: 'description' }, maxWidth: 400 },
 ];
 ```
 
@@ -218,9 +237,9 @@ Las columnas con `maxWidth: 'stretch'` se reparten equitativamente el espacio ho
 
 ```tsx
 const columns: ColumnConfig[] = [
-  { metadata: { columnId: 'id' }, maxWidth: 80 },          // Fija: 80px
-  { metadata: { columnId: 'name' }, maxWidth: 'stretch' }, // Stretch: comparte espacio
-  { metadata: { columnId: 'email' }, maxWidth: 'stretch' },// Stretch: comparte espacio
+  { metadata: { columnId: 'id' }, maxWidth: 80 },
+  { metadata: { columnId: 'name' }, maxWidth: 'stretch' },
+  { metadata: { columnId: 'email' }, maxWidth: 'stretch' },
 ];
 // 'id' ocupa 80px, 'name' y 'email' se dividen el resto 50/50
 ```
@@ -232,10 +251,10 @@ const columns: ColumnConfig[] = [
 **Ejemplo con mix fijo + stretch**:
 ```tsx
 const columns: ColumnConfig[] = [
-  { metadata: { columnId: 'avatar' }, maxWidth: 60 },       // 60px fijo
-  { metadata: { columnId: 'name' }, maxWidth: 'stretch' },  // (100% - 160px) / 2
-  { metadata: { columnId: 'email' }, maxWidth: 'stretch' }, // (100% - 160px) / 2
-  { metadata: { columnId: 'actions' }, maxWidth: 100 },      // 100px fijo
+  { metadata: { columnId: 'avatar' }, maxWidth: 60 },
+  { metadata: { columnId: 'name' }, maxWidth: 'stretch' },
+  { metadata: { columnId: 'email' }, maxWidth: 'stretch' },
+  { metadata: { columnId: 'actions' }, maxWidth: 100 },
 ];
 // fixedWidthTotal = 60 + 100 = 160px
 // Cada stretch = calc((100% - 160px) / 2)
@@ -266,23 +285,23 @@ const columns: ColumnConfig[] = [
 const columns: ColumnConfig[] = [
   {
     metadata: { columnId: 'id', order: 0 },
-    minWidth: 60,          // Nunca menos de 60px
-    maxWidth: 80,          // Nunca mas de 80px
+    minWidth: 60,
+    maxWidth: 80,
   },
   {
     metadata: { columnId: 'name', order: 1 },
-    minWidth: 150,         // Nunca menos de 150px
-    maxWidth: 'stretch',   // Ocupa su parte del espacio sobrante
+    minWidth: 150,
+    maxWidth: 'stretch',
   },
   {
     metadata: { columnId: 'email', order: 2 },
-    minWidth: 200,         // Nunca menos de 200px
-    maxWidth: 'stretch',   // Ocupa su parte del espacio sobrante
+    minWidth: 200,
+    maxWidth: 'stretch',
   },
   {
     metadata: { columnId: 'actions', order: 3 },
-    minWidth: 100,         // Nunca menos de 100px
-    maxWidth: 120,         // Nunca mas de 120px
+    minWidth: 100,
+    maxWidth: 120,
   },
 ];
 ```
@@ -295,8 +314,8 @@ Configuracion por defecto que aplica a todas las columnas. Cada columna individu
 interface ColumnsDefaultConfig {
   maxVisibleColumns?: number;
   scroll?: boolean;
-  minWidth?: number;                        // minWidth por defecto para todas las columnas
-  maxWidth?: number | 'stretch' | 'container'; // maxWidth por defecto para todas las columnas
+  minWidth?: number;
+  maxWidth?: number | 'stretch' | 'container';
   sortable?: boolean;
   visible?: boolean;
 }
@@ -307,9 +326,9 @@ interface ColumnsDefaultConfig {
 config={{
   columns: [
     { metadata: { columnId: 'id' }, minWidth: 60, maxWidth: 80 },
-    { metadata: { columnId: 'name' } },    // hereda minWidth: 120, maxWidth: 'stretch'
-    { metadata: { columnId: 'email' } },   // hereda minWidth: 120, maxWidth: 'stretch'
-    { metadata: { columnId: 'role' } },    // hereda minWidth: 120, maxWidth: 'stretch'
+    { metadata: { columnId: 'name' } },
+    { metadata: { columnId: 'email' } },
+    { metadata: { columnId: 'role' } },
   ],
   columnsDefault: {
     minWidth: 120,
@@ -326,8 +345,8 @@ config={{
 
 ```typescript
 interface HeadersDefaultConfig {
-  enabled?: boolean;             // Mostrar/ocultar headers (default: true)
-  dividers?: boolean;            // Mostrar divisores entre columnas (default: true)
+  enabled?: boolean;
+  dividers?: boolean;
   height?: number | string;
   heightMode?: 'fixed' | 'auto';
   cell?: HeaderCellConfig;
@@ -366,15 +385,15 @@ interface CellsDefaultConfig {
 
 ```typescript
 interface RowsDefaultConfig {
-  height?: number | string;                // Alto de fila (fixed/auto)
-  heightMode?: 'fixed' | 'auto' | 'stretch'; // Modo de alto
-  minHeight?: number;                      // Alto minimo en pixeles
-  maxHeight?: number | 'stretch' | 'container'; // Alto maximo
-  maxVisibleRows?: number;                // Limita filas visibles, corta el arreglo (sin scroll)
+  height?: number | string;
+  heightMode?: 'fixed' | 'auto' | 'stretch';
+  minHeight?: number;
+  maxHeight?: number | 'stretch' | 'container';
+  maxVisibleRows?: number;
   scroll?: boolean;
   hoverable?: boolean;
-  dividers?: boolean;                      // Mostrar divisores entre filas (default: true)
-  stretchCount?: number;                   // Filas para dividir espacio (requerido en stretch)
+  dividers?: boolean;
+  stretchCount?: number;
 }
 ```
 
@@ -496,15 +515,15 @@ const tableState = useTableState({ initialState: 'success' });
 // Available states: 'idle' | 'loading' | 'success' | 'error' | 'empty'
 
 // Methods
-tableState.state          // Current state
-tableState.setLoading()   // Set loading state
-tableState.setSuccess(data)  // Set success with data
-tableState.setErrorState(error)  // Set error state
-tableState.setEmpty()     // Set empty state
-tableState.reset()        // Reset to initial state
+tableState.state
+tableState.setLoading()
+tableState.setSuccess(data)
+tableState.setErrorState(error)
+tableState.setEmpty()
+tableState.reset()
 ```
 
-## Helper Components
+## Componentes Helper
 
 ### TextCell
 
@@ -513,7 +532,7 @@ import { TextCell } from 'GC-UI-COMPONENTS';
 
 <TextCell
   text="Cell content"
-  textWrap="truncate"    // 'break-word' | 'truncate'
+  textWrap="truncate"
   bold={false}
   padding={8}
   paddingX={12}
@@ -528,36 +547,33 @@ import { HeaderCell } from 'GC-UI-COMPONENTS';
 
 <HeaderCell
   text="Column Title"
-  textWrap="truncate"    // 'break-word' | 'truncate'
+  textWrap="truncate"
   bold={true}
   padding={8}
 />
 ```
 
-## Configuration Override Chain
+## Cadena de Prioridad de Configuración
 
-The component follows a configuration override chain:
+1. **Configuración por columna** (mayor prioridad)
+2. **Configuración por defecto** (cellsDefault, headersDefault, etc.)
+3. **Defaults internos** (menor prioridad)
 
-1. **Column-specific config** (highest priority)
-2. **Default config** (cellsDefault, headersDefault, etc.)
-3. **Built-in defaults** (lowest priority)
-
-Example:
 ```typescript
 config={{
   columns: [
     {
       metadata: { columnId: 'name' },
-      cell: { horizontalAlign: 'center' }  // This column only
+      cell: { horizontalAlign: 'center' }
     }
   ],
   cellsDefault: {
-    horizontalAlign: 'left'  // All columns by default
+    horizontalAlign: 'left'
   }
 }}
 ```
 
-## Complete Example with Sorting
+## Ejemplo Completo con Sorting
 
 ```tsx
 import { useState } from 'react';
@@ -667,15 +683,22 @@ function SortableTable() {
 }
 ```
 
-## Development
+## Desarrollo
 
-1. Edit styles in `web/css/BaseTable.module.css`
-2. Add logic in `web/hooks/useTableState.hook.ts`
-3. Update types in `web/types/`
-4. Modify views in `web/views/`
+1. Editar estilos web en `web/styles/BaseTable.module.css`
+2. Editar estilos mobile en `mobile/styles/BaseTableMobile.module.css`
+3. Lógica compartida (hooks, types, components) en `shared/`
+4. Vistas web en `web/views/`
+5. Vistas mobile en `mobile/views/`
 
-## Platform Resolution
+## Diferencias Web vs Mobile
 
-- `index.tsx` dispatches to `web/` implementation
-- Mobile version shows "Not Implemented" message
-- Desktop browsers use full `web/` implementation
+| Característica | Web | Mobile |
+|---------------|-----|--------|
+| Layout separado (sticky header) | Sí | No |
+| Stretch rows | Sí (ResizeObserver) | No |
+| Colgroup | Sí | No |
+| Hover effects | Sí (:hover) | No (usa :active) |
+| Scroll horizontal | Configurable | Siempre activo |
+| Padding de celdas | 0 (custom via render) | 8px 12px (por defecto) |
+| Font size | Hereda | 13px headers, 14px celdas |

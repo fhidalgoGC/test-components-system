@@ -4,7 +4,7 @@ import {
   useTableState,
 } from "@/lib/ui-library/components/BaseTable";
 import type { ColumnConfig } from "@/lib/ui-library/components/BaseTable";
-import { HeaderCell, TextCell } from "@/lib/ui-library/components/BaseTable/web/components";
+import { HeaderCell, TextCell } from "@/lib/ui-library/components/BaseTable/shared/components";
 import styles from "../css/BaseTableDemo.module.scss";
 
 const allData = [

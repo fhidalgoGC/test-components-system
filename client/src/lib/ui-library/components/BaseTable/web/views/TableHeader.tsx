@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import type { ColumnConfig, HeadersDefaultConfig, ColumnsDefaultConfig, SortDirection, TableCallbacks } from '../types';
-import styles from '../css/BaseTable.module.css';
+import type { ColumnConfig, HeadersDefaultConfig, ColumnsDefaultConfig, SortDirection, TableCallbacks } from '../../shared/types';
+import styles from '../styles/BaseTable.module.css';
 
 interface TableHeaderProps {
   columns: ColumnConfig[];

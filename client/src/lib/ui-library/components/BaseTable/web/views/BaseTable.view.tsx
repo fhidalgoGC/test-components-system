@@ -1,10 +1,10 @@
 import { useMemo, useRef, useCallback, useState, useEffect } from 'react';
-import type { BaseTableProps, TableState } from '../types';
+import type { BaseTableProps, TableState } from '../../shared/types';
 import { TableHeader } from './TableHeader';
 import { TableBody } from './TableBody';
 import { TableStates } from './TableStates';
 import { TableColgroup } from './TableColgroup';
-import styles from '../css/BaseTable.module.css';
+import styles from '../styles/BaseTable.module.css';
 
 export const BaseTableView = (props: BaseTableProps) => {
   const {

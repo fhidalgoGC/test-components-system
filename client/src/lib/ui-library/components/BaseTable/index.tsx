@@ -1,20 +1,21 @@
 import { useIsMobile } from '../../hooks';
 import { BaseTable as BaseTableWeb } from './web';
-import { NotImplemented } from '../NotImplemented';
-import type { BaseTableProps } from './web/types';
+import { BaseTable as BaseTableMobile } from './mobile';
+import type { BaseTableProps } from './shared/types';
 
 export const BaseTable = (props: BaseTableProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <NotImplemented platform="Mobile" componentName="BaseTable" />;
+    return <BaseTableMobile {...props} />;
   }
 
   return <BaseTableWeb {...props} />;
 };
 
-export { useTableState, TextCell, HeaderCell } from './web';
-export type { TextCellProps, HeaderCellProps } from './web';
+export { useTableState } from './shared/hooks';
+export { TextCell, HeaderCell } from './shared/components';
+export type { TextCellProps, HeaderCellProps } from './shared/components';
 export type {
   BaseTableProps,
   BaseTableConfig,
@@ -48,4 +49,4 @@ export type {
   SortDirection,
   TableState,
   TableStateContext,
-} from './web';
+} from './shared/types';

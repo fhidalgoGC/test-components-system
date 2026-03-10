@@ -1,5 +1,5 @@
-import type { StatesConfig, TableState } from '../types';
-import styles from '../css/BaseTable.module.css';
+import type { StatesConfig, TableState } from '../../shared/types';
+import styles from '../styles/BaseTable.module.css';
 
 interface TableStatesProps {
   state: TableState;

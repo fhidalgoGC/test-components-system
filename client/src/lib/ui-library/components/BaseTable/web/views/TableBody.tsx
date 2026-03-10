@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { ColumnConfig, RowsDefaultConfig, ColumnsDefaultConfig, CellsDefaultConfig, BehaviorsConfig, TableCallbacks, ColumnCellConfig } from '../types';
-import styles from '../css/BaseTable.module.css';
+import type { ColumnConfig, RowsDefaultConfig, ColumnsDefaultConfig, CellsDefaultConfig, BehaviorsConfig, TableCallbacks, ColumnCellConfig } from '../../shared/types';
+import styles from '../styles/BaseTable.module.css';
 
 interface TableBodyProps {
   data: any[];
