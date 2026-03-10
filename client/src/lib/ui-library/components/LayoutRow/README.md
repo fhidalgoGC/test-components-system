@@ -492,11 +492,6 @@ LayoutRow/
 │   ├── views/
 │   │   ├── LayoutRow.view.tsx
 │   │   └── index.ts
-│   ├── hooks/ (re-exports from shared)
-│   ├── providers/ (re-exports from shared)
-│   ├── types/ (re-exports from shared)
-│   ├── utils/ (re-exports from shared)
-│   ├── environment/ (re-exports from shared)
 │   └── index.tsx
 ├── mobile/
 │   ├── styles/

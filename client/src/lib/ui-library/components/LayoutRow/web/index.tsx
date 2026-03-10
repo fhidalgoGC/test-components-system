@@ -9,4 +9,4 @@ export type {
   HeightMode, 
   VerticalAlign, 
   HorizontalAlign 
-} from './types';
+} from '../shared/types';
