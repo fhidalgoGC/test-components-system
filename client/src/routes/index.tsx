@@ -45,6 +45,7 @@ const AcordionListDemo = lazy(() => import("@/pages/acordion-list-demo"));
 const SplitLayoutPreview = lazy(() => import("@/pages/split-layout-demo/web/standalone/SplitLayoutPreview"));
 const AuthStandaloneDemo = lazy(() => import("@/pages/auth-test/web/standalone/AuthStandaloneDemo"));
 const LoadingDemo = lazy(() => import("@/pages/loading-demo"));
+const BottomNavWithSheet = lazy(() => import("@/pages/bottom-nav-with-sheet"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const PageLoader = () => (
@@ -60,6 +61,15 @@ export function Router() {
   const isSidebarLayoutDemo = location.startsWith('/layouts/sidebar-layout');
   const isSplitStandalone = location.startsWith('/layouts/split-layout/preview/');
   const isAuthStandalone = location.startsWith('/providers/app-auth/demo');
+  const isBottomNavSheet = location === '/demos/bottom-nav-sheet';
+
+  if (isBottomNavSheet) {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <BottomNavWithSheet />
+      </Suspense>
+    );
+  }
 
   if (isAuthStandalone) {
     return (
