@@ -251,12 +251,13 @@ function App() {
 ### Cálculo del espacio disponible
 
 ```
-Altura total del viewport (100vh)
+Altura total del viewport (100dvh / 100vh)
   - Altura del Toolbar (fija o auto)
+  - Altura del Bottom Nav (si existe)
   = Espacio disponible para Main
 ```
 
-El Toolbar usa `flex-shrink: 0` y el Main usa `flex: 1`, por lo que el Main siempre ocupa exactamente el espacio restante.
+El Toolbar y el Bottom Nav usan `flex-shrink: 0` y el Main usa `flex: 1`, por lo que el Main siempre ocupa exactamente el espacio restante entre ambos. Se usa `100dvh` (dynamic viewport height) con fallback a `100vh` para manejar correctamente la barra del navegador en dispositivos móviles.
 
 ### Scroll interno
 
