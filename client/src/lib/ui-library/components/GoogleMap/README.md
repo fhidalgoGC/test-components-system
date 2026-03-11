@@ -17,7 +17,7 @@ import type { GoogleMapProps, MapMarker, MapCenter, MapSizeValue } from "@/lib/u
 
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
-| `apiKey` | `string` | requerido | API Key de Google Maps |
+| `apiKey` | `string` | `VITE_GOOGLE_MAPS_API_KEY` | API Key de Google Maps. Si no se pasa, toma del environment |
 | `center` | `MapCenter` | requerido | Centro del mapa `{ lat, lng }` |
 | `zoom` | `number` | `12` | Nivel de zoom (1-20) |
 | `markers` | `MapMarker[]` | `[]` | Array de marcadores a mostrar |
@@ -189,6 +189,22 @@ El componente incluye traducciones para estados de carga y error:
 <GoogleMap i18nOrder="local-first" ... />
 ```
 
+## Environment
+
+La API key se puede configurar de 3 formas (en orden de prioridad):
+
+1. **Prop directa**: `<GoogleMap apiKey="TU_KEY" />`
+2. **Variable de entorno**: `VITE_GOOGLE_MAPS_API_KEY` en `.env`
+3. **ConfigProvider**: via `parentConfig` del `AppEnvironmentProvider`
+
+```
+environment/
+├── enviroment.ts    // Lee VITE_GOOGLE_MAPS_API_KEY
+└── index.ts         // Exporta como GOOGLE_MAP_CONFIG
+```
+
+Si no se pasa `apiKey` como prop, el componente toma automáticamente el valor de `VITE_GOOGLE_MAPS_API_KEY`.
+
 ## Arquitectura Interna
 
 ```
@@ -200,6 +216,7 @@ GoogleMap/
     ├── hooks/useI18nMerge.hook.ts // Hook de internacionalización
     ├── types/GoogleMap.type.ts  // Tipos e interfaces
     ├── css/GoogleMap.module.css // Estilos del contenedor y estados
+    ├── environment/             // Configuración (API key)
     └── i18n/                   // Traducciones (en.ts, es.ts)
 ```
 

@@ -2,6 +2,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import type { GoogleMapProps, MapSizeValue } from '../types';
 import { useGoogleMap } from '../hooks';
 import { useI18nMerge } from '../hooks/useI18nMerge.hook';
+import { GOOGLE_MAP_CONFIG } from '../environment';
 import styles from '../css/GoogleMap.module.css';
 
 const getSizeValue = (value: MapSizeValue | undefined, defaultValue: string): string => {
@@ -19,6 +20,8 @@ export const GoogleMapView = (props: GoogleMapProps) => {
     langOverride,
     i18nOrder,
   } = props;
+
+  const resolvedApiKey = apiKey || GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY;
 
   const { t } = useI18nMerge(langOverride, { order: i18nOrder });
 
@@ -41,7 +44,7 @@ export const GoogleMapView = (props: GoogleMapProps) => {
   return (
     <div className={`${styles.container} ${className || ''}`} data-testid="googlemap">
       <LoadScript 
-        googleMapsApiKey={apiKey}
+        googleMapsApiKey={resolvedApiKey}
         loadingElement={
           <div className={styles.loading} style={containerStyle} data-testid="googlemap-loading">
             {t('loading')}

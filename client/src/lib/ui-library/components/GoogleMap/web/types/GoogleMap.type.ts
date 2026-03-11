@@ -17,7 +17,7 @@ export interface MapCenter {
 export type MapSizeValue = number | string;
 
 export interface GoogleMapProps {
-  apiKey: string;
+  apiKey?: string;
   center: MapCenter;
   zoom?: number;
   markers?: MapMarker[];

@@ -52,6 +52,7 @@ export const SESSION_CONFIG = {
 import { BOTTOM_NAV_CONFIG } from "../components/BottomNavigationBar/mobile/environment";
 import { HETEROGENEOUS_LIST_CONFIG } from "../components/HeterogeneousList/mobile/environment";
 import { TAG_SELECTOR_CONFIG } from "../components/TagSelector/environment";
+import { GOOGLE_MAP_CONFIG } from "../components/GoogleMap/web/environment";
 
 export const environment = {
   // Language Configuration
@@ -63,6 +64,7 @@ export const environment = {
   BOTTOM_NAV_CONFIG,
   HETEROGENEOUS_LIST_CONFIG,
   TAG_SELECTOR_CONFIG,
+  GOOGLE_MAP_CONFIG,
   // Development environment detection
   IS_DEVELOPMENT:
     import.meta.env.DEV ||
