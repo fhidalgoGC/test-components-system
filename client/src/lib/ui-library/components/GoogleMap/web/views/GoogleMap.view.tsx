@@ -63,8 +63,17 @@ export const GoogleMapView = (props: GoogleMapProps) => {
   const configContext = useContext(ConfigContext);
   const resolvedApiKey =
     apiKey ||
-    configContext?.environment?.GOOGLE_MAP_CONFIG?.GOOGLE_MAPS_API_KEY ||
-    GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY;
+    configContext?.environment?.GOOGLE_MAP_CONFIG?.VITE_GOOGLE_MAPS_API_KEY ||
+    GOOGLE_MAP_CONFIG.VITE_GOOGLE_MAPS_API_KEY;
+
+  console.log("que1", apiKey?.substring(2));
+  console.log(
+    "que2",
+    configContext?.environment?.GOOGLE_MAP_CONFIG?.VITE_GOOGLE_MAPS_API_KEY?.substring(
+      2,
+    ),
+  );
+  console.log("que3", GOOGLE_MAP_CONFIG.VITE_GOOGLE_MAPS_API_KEY?.substring(2));
 
   const { t, lang } = useI18nMerge(langOverride, { order: i18nOrder });
 

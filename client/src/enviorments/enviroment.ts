@@ -49,6 +49,8 @@ export const environment = {
     import.meta.env.DEV ||
     import.meta.env.VITE_NODE_ENV === "development" ||
     import.meta.env.NODE_ENV === "development",
+
+  VITE_GOOGLE_MAPS_API_KEY: "import.meta.env.VITE_GOOGLE_MAPS_API_KEY",
 };
 
 export const APP_CONFIG = environment;
