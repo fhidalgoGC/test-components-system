@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { GoogleMap } from '@/lib/ui-library/components/GoogleMap';
 import type { MapMarker, MapCenter } from '@/lib/ui-library/components/GoogleMap/web/types';
+import { GOOGLE_MAP_CONFIG } from '@/lib/ui-library/components/GoogleMap/web/environment';
 import { Trash2, MapPin, Plus } from 'lucide-react';
 
 const DEFAULT_CENTER: MapCenter = { lat: 19.4326, lng: -99.1332 };
-const DEMO_API_KEY = '';
 
 export function GoogleMapDemo() {
-  const [apiKey, setApiKey] = useState(DEMO_API_KEY);
+  const [apiKey, setApiKey] = useState(GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY);
   const [markers, setMarkers] = useState<MapMarker[]>([
     { id: '1', position: { lat: 19.4326, lng: -99.1332 }, title: 'Ciudad de México' },
     { id: '2', position: { lat: 19.4284, lng: -99.1276 }, title: 'Zócalo' },
