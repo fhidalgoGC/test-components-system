@@ -11,12 +11,6 @@ import { environment } from "../../../../enviorments/enviroment";
 
 const DEFAULT_CENTER: MapCenter = { lat: 19.4326, lng: -99.1332 };
 
-const parentEnvironment = {
-  GOOGLE_MAP_CONFIG: {
-    GOOGLE_MAPS_API_KEY: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
-  },
-};
-
 const DEMO_DATA: MapDataItem[] = [
   {
     id: "cp-1",
@@ -105,13 +99,13 @@ export function ConfigProviderExample() {
     <div className={styles.section}>
       <h2 className={styles.sectionTitle}>Sin prop apiKey (ConfigProvider)</h2>
       <p className={styles.sectionDescription}>
-        El mapa NO recibe <code>apiKey</code> como prop. La resuelve
+        El mapa NO recibe <code>apiKey</code> como prop. La resuelve -----
         automáticamente desde el
         <code> ConfigProvider</code> (o variable de entorno{" "}
         <code>VITE_GOOGLE_MAPS_API_KEY</code>).
       </p>
 
-      <ConfigProvider parentConfig={parentEnvironment} priority="auto">
+      <ConfigProvider parentConfig={environment} priority="auto">
         <MapWithoutApiKey />
       </ConfigProvider>
     </div>
