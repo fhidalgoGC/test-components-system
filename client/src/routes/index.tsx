@@ -29,8 +29,7 @@ const SidebarLayoutScroll = lazy(() => import("@/pages/layout-sidebar-toolbar/sc
 const SidebarLayoutControlled = lazy(() => import("@/pages/layout-sidebar-toolbar/controlled"));
 const SidebarLayoutWithNavigation = lazy(() => import("@/pages/layout-sidebar-toolbar/with-navigation"));
 const SidebarLayoutWithBottomNav = lazy(() => import("@/pages/layout-sidebar-toolbar/with-bottom-nav"));
-const GoogleMapDemo = lazy(() => import("@/pages/google-map-demo/GoogleMapDemo"));
-const GoogleMapConfigDemo = lazy(() => import("@/pages/google-map-demo/GoogleMapConfigDemo"));
+const GoogleMapDemo = lazy(() => import("@/pages/google-map-demo"));
 const BaseTableDemo = lazy(() => import("@/pages/base-table-demo").then(m => ({ default: m.default || m.BaseTableDemo })));
 const PaginatorDemo = lazy(() => import("@/pages/paginator-demo"));
 const ControlDataDemo = lazy(() => import("@/pages/control-data-demo"));
@@ -141,7 +140,6 @@ export function Router() {
           <Route path="/components/layout-row" component={LayoutRowDemo} />
           <Route path="/components/layout-column" component={LayoutColumnDemo} />
           <Route path="/components/google-map" component={GoogleMapDemo} />
-          <Route path="/components/google-map-config" component={GoogleMapConfigDemo} />
           <Route path="/components/base-table" component={BaseTableDemo} />
           <Route path="/components/paginator" component={PaginatorDemo} />
           <Route path="/providers/control-data" component={ControlDataDemo} />

@@ -25,7 +25,6 @@ export function getDefaultMenuItems(): MenuItem[] {
         { id: 'bottom-nav', label: 'BottomNavigationBar', path: '/components/bottom-nav', icon: 'Navigation' },
         { id: 'bottom-nav-config', label: 'BottomNav + Config', path: '/components/bottom-nav-config', icon: 'Settings' },
         { id: 'google-map', label: 'GoogleMap', i18n: { en: 'GoogleMap', es: 'Mapa Google', default: 'GoogleMap' }, path: '/components/google-map', icon: 'Map' },
-        { id: 'google-map-config', label: 'GoogleMap + Config', i18n: { en: 'GoogleMap + Config', es: 'Mapa + Config', default: 'GoogleMap + Config' }, path: '/components/google-map-config', icon: 'Settings' },
         { id: 'base-table', label: 'BaseTable', i18n: { en: 'BaseTable', es: 'Tabla Base', default: 'BaseTable' }, path: '/components/base-table', icon: 'Table' },
         { id: 'paginator', label: 'Paginator', i18n: { en: 'Paginator', es: 'Paginador', default: 'Paginator' }, path: '/components/paginator', icon: 'ChevronLeft' },
         { id: 'accordion', label: 'Accordion', i18n: { en: 'Accordion', es: 'Acordeón', default: 'Accordion' }, path: '/components/accordion', icon: 'ChevronDown' },
