@@ -1,7 +1,9 @@
+import { useContext } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import type { GoogleMapProps, MapSizeValue } from '../types';
 import { useGoogleMap } from '../hooks';
 import { useI18nMerge } from '../hooks/useI18nMerge.hook';
+import { ConfigContext } from '../../../../providers/AppEnviromentProvider/index.hook';
 import { GOOGLE_MAP_CONFIG } from '../environment';
 import styles from '../css/GoogleMap.module.css';
 
@@ -21,7 +23,11 @@ export const GoogleMapView = (props: GoogleMapProps) => {
     i18nOrder,
   } = props;
 
-  const resolvedApiKey = apiKey || GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY;
+  const configContext = useContext(ConfigContext);
+  const resolvedApiKey =
+    apiKey
+    || configContext?.environment?.GOOGLE_MAP_CONFIG?.GOOGLE_MAPS_API_KEY
+    || GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY;
 
   const { t } = useI18nMerge(langOverride, { order: i18nOrder });
 

@@ -191,11 +191,11 @@ El componente incluye traducciones para estados de carga y error:
 
 ## Environment
 
-La API key se puede configurar de 3 formas (en orden de prioridad):
+La API key se resuelve con la siguiente cadena de prioridad:
 
 1. **Prop directa**: `<GoogleMap apiKey="TU_KEY" />`
-2. **Variable de entorno**: `VITE_GOOGLE_MAPS_API_KEY` en `.env`
-3. **ConfigProvider**: via `parentConfig` del `AppEnvironmentProvider`
+2. **ConfigProvider** (AppEnvironmentProvider): via `parentConfig.GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY`
+3. **Variable de entorno**: `VITE_GOOGLE_MAPS_API_KEY` en `.env`
 
 ```
 environment/
@@ -203,7 +203,21 @@ environment/
 └── index.ts         // Exporta como GOOGLE_MAP_CONFIG
 ```
 
-Si no se pasa `apiKey` como prop, el componente toma automáticamente el valor de `VITE_GOOGLE_MAPS_API_KEY`.
+En la app padre, se configura via `AppEnvironmentProvider`:
+
+```tsx
+<AppEnvironmentProvider
+  parentConfig={{
+    GOOGLE_MAP_CONFIG: {
+      GOOGLE_MAPS_API_KEY: 'TU_API_KEY_DESDE_PARENT',
+    },
+  }}
+>
+  <GoogleMap center={{ lat: 19.43, lng: -99.13 }} />
+</AppEnvironmentProvider>
+```
+
+Si no se pasa `apiKey` como prop ni se configura el provider, toma automáticamente de `VITE_GOOGLE_MAPS_API_KEY`.
 
 ## Arquitectura Interna
 
