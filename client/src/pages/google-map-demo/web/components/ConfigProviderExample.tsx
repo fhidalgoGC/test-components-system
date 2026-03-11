@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { GoogleMap } from '@/lib/ui-library/components/GoogleMap';
 import { ConfigProvider, useConfig } from '@/lib/ui-library/providers';
-import type { MapDataItem, MapCenter } from '@/lib/ui-library/components/GoogleMap/web/types';
+import type { MapDataItem, MapCenter } from '@/lib/ui-library/components/GoogleMap/shared/types';
 import styles from '../css/GoogleMapDemo.module.css';
 
 const DEFAULT_CENTER: MapCenter = { lat: 19.4326, lng: -99.1332 };
@@ -56,8 +56,7 @@ function MapWithoutApiKey() {
           center={DEFAULT_CENTER}
           zoom={14}
           data={DEMO_DATA}
-          width="100%"
-          height={350}
+          layout={{ widthMode: 'full', heightMode: 'fixed', height: 350 }}
           showZoomControl={true}
           onDataItemClick={(item) => setClickedItem(item)}
         />

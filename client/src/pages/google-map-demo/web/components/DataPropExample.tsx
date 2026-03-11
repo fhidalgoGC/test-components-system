@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GoogleMap } from '@/lib/ui-library/components/GoogleMap';
-import type { MapDataItem, MapCenter } from '@/lib/ui-library/components/GoogleMap/web/types';
+import type { MapDataItem, MapCenter } from '@/lib/ui-library/components/GoogleMap/shared/types';
 import styles from '../css/GoogleMapDemo.module.css';
 
 const DEFAULT_CENTER: MapCenter = { lat: 19.4326, lng: -99.1332 };
@@ -44,8 +44,7 @@ export function DataPropExample() {
             center={DEFAULT_CENTER}
             zoom={14}
             data={data}
-            width="100%"
-            height={400}
+            layout={{ widthMode: 'full', heightMode: 'fixed', height: 400 }}
             showZoomControl={true}
             showMapTypeControl={true}
             onDataItemClick={(item) => setClickedItem(item)}

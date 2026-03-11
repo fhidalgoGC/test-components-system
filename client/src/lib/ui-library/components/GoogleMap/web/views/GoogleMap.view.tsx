@@ -1,23 +1,51 @@
 import { useContext, useCallback } from 'react';
+import type { CSSProperties } from 'react';
 import { APIProvider, Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
-import type { GoogleMapProps, MapSizeValue } from '../types';
-import { useGoogleMap } from '../hooks';
-import { useI18nMerge } from '../hooks/useI18nMerge.hook';
+import type { GoogleMapProps, GoogleMapLayout } from '../../shared/types';
+import { useGoogleMap } from '../../shared/hooks';
+import { useI18nMerge } from '../../shared/hooks/useI18nMerge.hook';
 import { ConfigContext } from '../../../../providers/AppEnviromentProvider/index.hook';
-import { GOOGLE_MAP_CONFIG } from '../environment';
-import styles from '../css/GoogleMap.module.css';
+import { GOOGLE_MAP_CONFIG } from '../../shared/environment';
+import styles from '../styles/GoogleMap.module.css';
 
-const getSizeValue = (value: MapSizeValue | undefined, defaultValue: string): string => {
-  if (value === undefined) return defaultValue;
-  if (typeof value === 'number') return `${value}px`;
-  return value;
+const getLayoutStyles = (layout?: GoogleMapLayout): CSSProperties => {
+  const style: CSSProperties = {};
+
+  const wMode = layout?.widthMode || 'full';
+  const hMode = layout?.heightMode || 'fixed';
+
+  if (wMode === 'full') style.width = '100%';
+  else if (wMode === 'auto') style.width = 'auto';
+  else if (wMode === 'fixed' && layout?.width) style.width = layout.width;
+  else if (wMode === 'percentage' && layout?.width) style.width = `${layout.width}%`;
+
+  if (layout?.minWidth) style.minWidth = layout.minWidth;
+
+  if (hMode === 'full') style.height = '100%';
+  else if (hMode === 'auto') style.height = 'auto';
+  else if (hMode === 'fixed') style.height = layout?.height ?? 400;
+  else if (hMode === 'percentage' && layout?.height && layout.height !== 'auto') style.height = `${layout.height}%`;
+
+  if (layout?.minHeight) style.minHeight = layout.minHeight;
+
+  const verticalMap = { top: 'flex-start', middle: 'center', bottom: 'flex-end' } as const;
+  const horizontalMap = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
+
+  const vertical = layout?.align?.vertical || 'middle';
+  const horizontal = layout?.align?.horizontal || 'center';
+
+  style.display = 'flex';
+  style.flexDirection = 'column';
+  style.justifyContent = verticalMap[vertical];
+  style.alignItems = horizontalMap[horizontal];
+
+  return style;
 };
 
 export const GoogleMapView = (props: GoogleMapProps) => {
   const {
     apiKey,
-    width,
-    height,
+    layout,
     className,
     langOverride,
     i18nOrder,
@@ -42,10 +70,7 @@ export const GoogleMapView = (props: GoogleMapProps) => {
     handleMarkerDragEnd,
   } = useGoogleMap(props, lang);
 
-  const containerStyle = {
-    width: getSizeValue(width, '100%'),
-    height: getSizeValue(height, '400px'),
-  };
+  const containerStyle = getLayoutStyles(layout);
 
   const onMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     handleMapClick(e);
@@ -53,8 +78,8 @@ export const GoogleMapView = (props: GoogleMapProps) => {
 
   if (!resolvedApiKey) {
     return (
-      <div className={`${styles.container} ${className || ''}`} data-testid="googlemap">
-        <div className={styles.loading} style={containerStyle} data-testid="googlemap-no-key">
+      <div className={`${styles.container} ${className || ''}`} style={containerStyle} data-testid="googlemap">
+        <div className={styles.loading} style={{ width: '100%', height: '100%' }} data-testid="googlemap-no-key">
           {t('errorApiKey')}
         </div>
       </div>
@@ -62,10 +87,10 @@ export const GoogleMapView = (props: GoogleMapProps) => {
   }
 
   return (
-    <div className={`${styles.container} ${className || ''}`} data-testid="googlemap">
+    <div className={`${styles.container} ${className || ''}`} style={containerStyle} data-testid="googlemap">
       <APIProvider apiKey={resolvedApiKey}>
         <Map
-          style={containerStyle}
+          style={{ width: '100%', height: '100%' }}
           defaultCenter={center}
           defaultZoom={zoom}
           gestureHandling="cooperative"

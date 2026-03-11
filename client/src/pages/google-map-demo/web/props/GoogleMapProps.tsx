@@ -47,16 +47,10 @@ export function GoogleMapPropsTab() {
               <td>Array de marcadores manuales. Ignorado si data está definido</td>
             </tr>
             <tr>
-              <td><code>width</code></td>
-              <td><code>number | string</code></td>
-              <td><code>'100%'</code></td>
-              <td>Ancho del mapa (px o string CSS)</td>
-            </tr>
-            <tr>
-              <td><code>height</code></td>
-              <td><code>number | string</code></td>
-              <td><code>'400px'</code></td>
-              <td>Altura del mapa (px o string CSS)</td>
+              <td><code>layout</code></td>
+              <td><code>GoogleMapLayout</code></td>
+              <td><code>{'{'}widthMode: 'full', heightMode: 'fixed', height: 400{'}'}</code></td>
+              <td>Dimensionamiento y alineación del mapa (widthMode, width, minWidth, heightMode, height, minHeight, align)</td>
             </tr>
             <tr>
               <td><code>showZoomControl</code></td>
@@ -287,6 +281,94 @@ export function GoogleMapPropsTab() {
               <td><code>number</code></td>
               <td>-</td>
               <td>Longitud</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className={styles.propsSubtitle}>GoogleMapLayout</h3>
+      <p className={styles.propsDescription}>Dimensionamiento y alineación del contenedor del mapa. Sigue el estándar <code>Layout</code> de la librería.</p>
+      <div className={styles.propsTableWrapper}>
+        <table className={styles.propsTable}>
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Tipo</th>
+              <th>Default</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>widthMode</code></td>
+              <td><code>'full' | 'auto' | 'fixed' | 'percentage'</code></td>
+              <td><code>'full'</code></td>
+              <td>Cómo se calcula el ancho del mapa</td>
+            </tr>
+            <tr>
+              <td><code>width</code></td>
+              <td><code>number</code></td>
+              <td>-</td>
+              <td>Valor numérico (px o %) según widthMode</td>
+            </tr>
+            <tr>
+              <td><code>minWidth</code></td>
+              <td><code>number</code></td>
+              <td>-</td>
+              <td>Ancho mínimo en pixeles</td>
+            </tr>
+            <tr>
+              <td><code>heightMode</code></td>
+              <td><code>'full' | 'auto' | 'fixed' | 'percentage'</code></td>
+              <td><code>'fixed'</code></td>
+              <td>Cómo se calcula la altura del mapa</td>
+            </tr>
+            <tr>
+              <td><code>height</code></td>
+              <td><code>number | 'auto'</code></td>
+              <td><code>400</code></td>
+              <td>Valor numérico (px o %) según heightMode</td>
+            </tr>
+            <tr>
+              <td><code>minHeight</code></td>
+              <td><code>number</code></td>
+              <td>-</td>
+              <td>Altura mínima en pixeles</td>
+            </tr>
+            <tr>
+              <td><code>align</code></td>
+              <td><code>LayoutAlign</code></td>
+              <td><code>{'{'}vertical: 'middle', horizontal: 'center'{'}'}</code></td>
+              <td>Alineación del contenido dentro del contenedor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className={styles.propsSubtitle}>LayoutAlign</h3>
+      <p className={styles.propsDescription}>Alineación del contenido interno del componente.</p>
+      <div className={styles.propsTableWrapper}>
+        <table className={styles.propsTable}>
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Tipo</th>
+              <th>Default</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>vertical</code></td>
+              <td><code>'top' | 'middle' | 'bottom'</code></td>
+              <td><code>'middle'</code></td>
+              <td>Alineación vertical del contenido</td>
+            </tr>
+            <tr>
+              <td><code>horizontal</code></td>
+              <td><code>'left' | 'center' | 'right'</code></td>
+              <td><code>'center'</code></td>
+              <td>Alineación horizontal del contenido</td>
             </tr>
           </tbody>
         </table>

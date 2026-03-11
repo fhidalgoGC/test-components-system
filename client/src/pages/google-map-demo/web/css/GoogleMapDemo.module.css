@@ -262,6 +262,35 @@
   }
 }
 
+.layoutPreviewContainer {
+  background: #f3f4f6;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 500px;
+  display: flex;
+  overflow: hidden;
+}
+
+.layoutControlGroup {
+  margin-bottom: 8px;
+}
+
+.layoutControlGroup:last-child {
+  margin-bottom: 0;
+}
+
+.controlSelect {
+  display: block;
+  width: 100%;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
 .propsContainer {
   padding: 24px;
   max-width: 1200px;

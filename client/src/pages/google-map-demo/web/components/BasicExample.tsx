@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { GoogleMap } from '@/lib/ui-library/components/GoogleMap';
-import type { MapMarker, MapCenter } from '@/lib/ui-library/components/GoogleMap/web/types';
-import { GOOGLE_MAP_CONFIG } from '@/lib/ui-library/components/GoogleMap/web/environment';
+import type { MapMarker, MapCenter } from '@/lib/ui-library/components/GoogleMap/shared/types';
+import { GOOGLE_MAP_CONFIG } from '@/lib/ui-library/components/GoogleMap/shared/environment';
 import { Trash2, MapPin, Plus } from 'lucide-react';
 import styles from '../css/GoogleMapDemo.module.css';
 
@@ -63,8 +63,7 @@ export function BasicExample() {
                 center={center}
                 zoom={zoom}
                 markers={markers}
-                width="100%"
-                height={400}
+                layout={{ widthMode: 'full', heightMode: 'fixed', height: 400 }}
                 showZoomControl={showZoomControl}
                 showMapTypeControl={true}
                 onMapClick={handleMapClick}

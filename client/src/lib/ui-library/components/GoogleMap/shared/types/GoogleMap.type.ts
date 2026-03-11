@@ -16,7 +16,23 @@ export interface MapCenter {
   lng: number;
 }
 
-export type MapSizeValue = number | string;
+export type WidthMode = 'full' | 'auto' | 'fixed' | 'percentage';
+export type HeightMode = 'full' | 'auto' | 'fixed' | 'percentage';
+
+export interface LayoutAlign {
+  vertical?: 'top' | 'middle' | 'bottom';
+  horizontal?: 'left' | 'center' | 'right';
+}
+
+export interface GoogleMapLayout {
+  widthMode?: WidthMode;
+  width?: number;
+  minWidth?: number;
+  heightMode?: HeightMode;
+  height?: number | 'auto';
+  minHeight?: number;
+  align?: LayoutAlign;
+}
 
 export interface MapMarkerMetadata {
   color?: string;
@@ -41,8 +57,7 @@ export interface GoogleMapProps {
   zoom?: number;
   data?: MapDataItem[];
   markers?: MapMarker[];
-  width?: MapSizeValue;
-  height?: MapSizeValue;
+  layout?: GoogleMapLayout;
   mapId?: string;
   showZoomControl?: boolean;
   showStreetViewControl?: boolean;

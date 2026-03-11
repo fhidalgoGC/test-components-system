@@ -12,7 +12,7 @@ Requiere la librería `@vis.gl/react-google-maps` (librería oficial de Google) 
 import { GoogleMap } from "@/lib/ui-library/components/GoogleMap";
 import type {
   GoogleMapProps, MapDataItem, MapMarkerMetadata,
-  MapMarker, MapCenter, MapSizeValue
+  MapMarker, MapCenter, GoogleMapLayout, LayoutAlign
 } from "@/lib/ui-library/components/GoogleMap";
 ```
 
@@ -25,8 +25,7 @@ import type {
 | `zoom` | `number` | `12` | Nivel de zoom (1-20) |
 | `data` | `MapDataItem[]` | - | Array declarativo con coordenadas, `labelI18n` y `metadata` |
 | `markers` | `MapMarker[]` | `[]` | Array de marcadores manuales (ignorado si `data` está definido) |
-| `width` | `number \| string` | `'100%'` | Ancho del mapa (px o string CSS) |
-| `height` | `number \| string` | `'400px'` | Altura del mapa (px o string CSS) |
+| `layout` | `GoogleMapLayout` | `{ widthMode: 'full', heightMode: 'fixed', height: 400 }` | Dimensionamiento y alineación del mapa |
 | `mapId` | `string` | `'DEFAULT_MAP_ID'` | ID del mapa de Google Cloud (requerido para AdvancedMarker) |
 | `showZoomControl` | `boolean` | `true` | Mostrar control de zoom (+/-) |
 | `showStreetViewControl` | `boolean` | `false` | Mostrar control de Street View |
@@ -42,14 +41,37 @@ import type {
 
 ## Interfaces
 
+### GoogleMapLayout
+
+```tsx
+interface GoogleMapLayout {
+  widthMode?: 'full' | 'auto' | 'fixed' | 'percentage';  // Default: 'full'
+  width?: number;
+  minWidth?: number;
+  heightMode?: 'full' | 'auto' | 'fixed' | 'percentage'; // Default: 'fixed'
+  height?: number | 'auto';                                // Default: 400
+  minHeight?: number;
+  align?: LayoutAlign;
+}
+```
+
+### LayoutAlign
+
+```tsx
+interface LayoutAlign {
+  vertical?: 'top' | 'middle' | 'bottom';     // Default: 'middle'
+  horizontal?: 'left' | 'center' | 'right';   // Default: 'center'
+}
+```
+
 ### MapDataItem
 
 ```tsx
 interface MapDataItem<T extends MapMarkerMetadata = MapMarkerMetadata> {
   id: string;
   position: { lat: number; lng: number };
-  labelI18n?: MultiLanguageLabel;  // Etiqueta multiidioma
-  metadata?: T;                     // Color, icono, draggable, etc.
+  labelI18n?: MultiLanguageLabel;
+  metadata?: T;
 }
 ```
 
@@ -90,12 +112,18 @@ interface MapMarker {
 - Si `data` está definido (incluso como `[]`), se usa `data` y se ignora `markers`.
 - Si `data` no está definido (`undefined`), se usa `markers`.
 
-## Ejemplo con data (recomendado)
+## Ejemplo con layout y data (recomendado)
 
 ```tsx
 <GoogleMap
   center={{ lat: 19.43, lng: -99.13 }}
   zoom={14}
+  layout={{
+    widthMode: 'full',
+    heightMode: 'fixed',
+    height: 400,
+    minHeight: 200,
+  }}
   data={[
     {
       id: '1',
@@ -114,17 +142,53 @@ interface MapMarker {
 />
 ```
 
+## Ejemplo con layout fijo y porcentaje
+
+```tsx
+<GoogleMap
+  center={{ lat: 19.43, lng: -99.13 }}
+  zoom={13}
+  layout={{
+    widthMode: 'fixed',
+    width: 600,
+    heightMode: 'percentage',
+    height: 50,
+    align: { vertical: 'top', horizontal: 'left' },
+  }}
+  markers={[
+    { id: '1', position: { lat: 19.4326, lng: -99.1332 }, title: 'CDMX' },
+  ]}
+/>
+```
+
 ## Ejemplo con markers (legacy)
 
 ```tsx
 <GoogleMap
   center={{ lat: 19.4326, lng: -99.1332 }}
   zoom={13}
+  layout={{ widthMode: 'full', heightMode: 'fixed', height: 400 }}
   markers={[
     { id: '1', position: { lat: 19.4326, lng: -99.1332 }, title: 'CDMX' },
   ]}
   onMarkerClick={(m) => console.log('Marker:', m)}
 />
+```
+
+## Combinaciones comunes de layout
+
+```tsx
+// Llenar todo el espacio del padre
+layout={{ widthMode: 'full', heightMode: 'full' }}
+
+// Ancho fijo, altura fija
+layout={{ widthMode: 'fixed', width: 800, heightMode: 'fixed', height: 600 }}
+
+// Porcentaje con mínimos
+layout={{ widthMode: 'percentage', width: 80, minWidth: 400, heightMode: 'fixed', height: 400, minHeight: 200 }}
+
+// Sin layout (defaults: widthMode='full', heightMode='fixed', height=400)
+<GoogleMap center={center} />
 ```
 
 ## Environment (cadena de resolución apiKey)
@@ -160,16 +224,18 @@ El componente incluye traducciones para estados de carga y error. La prop `data`
 
 ```
 GoogleMap/
-├── index.tsx                    // Selector web/mobile (breakpoint 768px)
+├── index.tsx                          // Dispatch web/mobile (useIsMobile)
 ├── README.md
+├── shared/                            // Todo lo compartido entre variantes
+│   ├── types/GoogleMap.type.ts        // GoogleMapProps, GoogleMapLayout, MapDataItem, etc.
+│   ├── hooks/useGoogleMap.hook.ts     // Lógica: data→markers, callbacks
+│   ├── hooks/useI18nMerge.hook.ts     // Hook de internacionalización
+│   ├── i18n/                          // Traducciones (en.ts, es.ts)
+│   └── environment/                   // Configuración (API key)
 └── web/
-    ├── views/GoogleMap.view.tsx // Vista con APIProvider + Map + AdvancedMarker
-    ├── hooks/useGoogleMap.hook.ts // Lógica: data→markers, callbacks
-    ├── hooks/useI18nMerge.hook.ts // Hook de internacionalización
-    ├── types/GoogleMap.type.ts  // MapDataItem, MapMarkerMetadata, etc.
-    ├── css/GoogleMap.module.css // Estilos del contenedor y estados
-    ├── environment/             // Configuración (API key)
-    └── i18n/                   // Traducciones (en.ts, es.ts)
+    ├── views/GoogleMap.view.tsx        // Vista con APIProvider + Map + AdvancedMarker
+    ├── styles/GoogleMap.module.css     // Estilos del contenedor y estados
+    └── index.tsx                      // Export de la vista web
 ```
 
 ## Plataforma

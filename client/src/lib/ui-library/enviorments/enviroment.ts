@@ -52,7 +52,7 @@ export const SESSION_CONFIG = {
 import { BOTTOM_NAV_CONFIG } from "../components/BottomNavigationBar/mobile/environment";
 import { HETEROGENEOUS_LIST_CONFIG } from "../components/HeterogeneousList/mobile/environment";
 import { TAG_SELECTOR_CONFIG } from "../components/TagSelector/environment";
-import { GOOGLE_MAP_CONFIG } from "../components/GoogleMap/web/environment";
+import { GOOGLE_MAP_CONFIG } from "../components/GoogleMap/shared/environment";
 
 export const environment = {
   // Language Configuration
