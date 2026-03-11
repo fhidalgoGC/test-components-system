@@ -63,7 +63,7 @@ Important rule: Always update the component's README.md when making changes to a
 - `cmdk`
 - `framer-motion`
 - `lucide-react`
-- `@react-google-maps/api`
+- `@vis.gl/react-google-maps`
 
 ### Development and Build Tools
 - `@replit/vite-plugin-*`

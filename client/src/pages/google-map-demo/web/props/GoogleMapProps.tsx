@@ -107,10 +107,10 @@ export function GoogleMapPropsTab() {
               <td>Callback al soltar un marcador arrastrado</td>
             </tr>
             <tr>
-              <td><code>onMapLoad</code></td>
-              <td><code>(map: google.maps.Map) =&gt; void</code></td>
-              <td>-</td>
-              <td>Callback cuando el mapa termina de cargar</td>
+              <td><code>mapId</code></td>
+              <td><code>string</code></td>
+              <td><code>'DEFAULT_MAP_ID'</code></td>
+              <td>ID del mapa de Google Cloud (requerido para AdvancedMarker)</td>
             </tr>
             <tr>
               <td><code>className</code></td>

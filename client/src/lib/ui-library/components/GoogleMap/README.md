@@ -1,10 +1,10 @@
 # GoogleMap Component
 
-Componente de Google Maps con marcadores controlados externamente. Soporta la prop `data` para marcadores declarativos con `labelI18n` y `metadata`, controles de mapa configurables, callbacks de interacción y marcadores arrastrables.
+Componente de Google Maps con marcadores modernos (`AdvancedMarkerElement`). Soporta la prop `data` para marcadores declarativos con `labelI18n` y `metadata`, controles de mapa configurables, callbacks de interacción y marcadores arrastrables.
 
 ## Dependencia
 
-Requiere la librería `@react-google-maps/api` y una API Key de Google Cloud Platform con **Maps JavaScript API** habilitada.
+Requiere la librería `@vis.gl/react-google-maps` (librería oficial de Google) y una API Key de Google Cloud Platform con **Maps JavaScript API** habilitada.
 
 ## Importación
 
@@ -27,6 +27,7 @@ import type {
 | `markers` | `MapMarker[]` | `[]` | Array de marcadores manuales (ignorado si `data` está definido) |
 | `width` | `number \| string` | `'100%'` | Ancho del mapa (px o string CSS) |
 | `height` | `number \| string` | `'400px'` | Altura del mapa (px o string CSS) |
+| `mapId` | `string` | `'DEFAULT_MAP_ID'` | ID del mapa de Google Cloud (requerido para AdvancedMarker) |
 | `showZoomControl` | `boolean` | `true` | Mostrar control de zoom (+/-) |
 | `showStreetViewControl` | `boolean` | `false` | Mostrar control de Street View |
 | `showMapTypeControl` | `boolean` | `false` | Mostrar selector de tipo de mapa |
@@ -35,7 +36,6 @@ import type {
 | `onMarkerClick` | `(marker: MapMarker) => void` | - | Callback al hacer clic en un marcador |
 | `onDataItemClick` | `(item: MapDataItem) => void` | - | Callback al hacer clic en un item de `data` |
 | `onMarkerDragEnd` | `(marker: MapMarker, newPosition: MapCenter) => void` | - | Callback al soltar un marcador arrastrado |
-| `onMapLoad` | `(map: google.maps.Map) => void` | - | Callback cuando el mapa termina de cargar |
 | `className` | `string` | - | Clase CSS adicional |
 | `langOverride` | `string` | - | Idioma forzado (`'en'`, `'es'`) |
 | `i18nOrder` | `'global-first' \| 'local-first'` | - | Prioridad de traducciones |
@@ -163,8 +163,8 @@ GoogleMap/
 ├── index.tsx                    // Selector web/mobile (breakpoint 768px)
 ├── README.md
 └── web/
-    ├── views/GoogleMap.view.tsx // Vista con LoadScript + GoogleMap + Markers
-    ├── hooks/useGoogleMap.hook.ts // Lógica: data→markers, callbacks, refs
+    ├── views/GoogleMap.view.tsx // Vista con APIProvider + Map + AdvancedMarker
+    ├── hooks/useGoogleMap.hook.ts // Lógica: data→markers, callbacks
     ├── hooks/useI18nMerge.hook.ts // Hook de internacionalización
     ├── types/GoogleMap.type.ts  // MapDataItem, MapMarkerMetadata, etc.
     ├── css/GoogleMap.module.css // Estilos del contenedor y estados

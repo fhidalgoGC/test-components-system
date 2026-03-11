@@ -43,6 +43,7 @@ export interface GoogleMapProps {
   markers?: MapMarker[];
   width?: MapSizeValue;
   height?: MapSizeValue;
+  mapId?: string;
   showZoomControl?: boolean;
   showStreetViewControl?: boolean;
   showMapTypeControl?: boolean;
@@ -51,7 +52,6 @@ export interface GoogleMapProps {
   onMarkerClick?: (marker: MapMarker) => void;
   onMarkerDragEnd?: (marker: MapMarker, newPosition: MapCenter) => void;
   onDataItemClick?: (item: MapDataItem) => void;
-  onMapLoad?: (map: google.maps.Map) => void;
   className?: string;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';

@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { useContext, useCallback } from 'react';
+import { APIProvider, Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
 import type { GoogleMapProps, MapSizeValue } from '../types';
 import { useGoogleMap } from '../hooks';
 import { useI18nMerge } from '../hooks/useI18nMerge.hook';
@@ -21,6 +21,7 @@ export const GoogleMapView = (props: GoogleMapProps) => {
     className,
     langOverride,
     i18nOrder,
+    mapId,
   } = props;
 
   const configContext = useContext(ConfigContext);
@@ -36,7 +37,6 @@ export const GoogleMapView = (props: GoogleMapProps) => {
     zoom,
     markers,
     mapOptions,
-    handleMapLoad,
     handleMapClick,
     handleMarkerClick,
     handleMarkerDragEnd,
@@ -47,37 +47,49 @@ export const GoogleMapView = (props: GoogleMapProps) => {
     height: getSizeValue(height, '400px'),
   };
 
+  const onMapClick = useCallback((e: google.maps.MapMouseEvent) => {
+    handleMapClick(e);
+  }, [handleMapClick]);
+
+  if (!resolvedApiKey) {
+    return (
+      <div className={`${styles.container} ${className || ''}`} data-testid="googlemap">
+        <div className={styles.loading} style={containerStyle} data-testid="googlemap-no-key">
+          {t('errorApiKey')}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`${styles.container} ${className || ''}`} data-testid="googlemap">
-      <LoadScript 
-        googleMapsApiKey={resolvedApiKey}
-        loadingElement={
-          <div className={styles.loading} style={containerStyle} data-testid="googlemap-loading">
-            {t('loading')}
-          </div>
-        }
-      >
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={zoom}
-          options={mapOptions}
-          onLoad={handleMapLoad}
-          onClick={handleMapClick}
+      <APIProvider apiKey={resolvedApiKey}>
+        <Map
+          style={containerStyle}
+          defaultCenter={center}
+          defaultZoom={zoom}
+          gestureHandling="cooperative"
+          zoomControl={mapOptions.zoomControl}
+          streetViewControl={mapOptions.streetViewControl}
+          mapTypeControl={mapOptions.mapTypeControl}
+          fullscreenControl={mapOptions.fullscreenControl}
+          mapId={mapId || 'DEFAULT_MAP_ID'}
+          onClick={onMapClick}
         >
           {markers.map((marker) => (
-            <Marker
+            <AdvancedMarker
               key={marker.id}
               position={marker.position}
               title={marker.title}
-              icon={marker.icon}
               draggable={marker.draggable}
               onClick={() => handleMarkerClick(marker)}
               onDragEnd={(e) => handleMarkerDragEnd(marker, e)}
-            />
+            >
+              <Pin />
+            </AdvancedMarker>
           ))}
-        </GoogleMap>
-      </LoadScript>
+        </Map>
+      </APIProvider>
     </div>
   );
 };

@@ -11,14 +11,12 @@ export const useGoogleMap = (props: GoogleMapProps, resolvedLang?: string) => {
     onMarkerClick,
     onMarkerDragEnd,
     onDataItemClick,
-    onMapLoad,
     showZoomControl = true,
     showStreetViewControl = false,
     showMapTypeControl = false,
     showFullscreenControl = false,
   } = props;
 
-  const mapRef = useRef<google.maps.Map | null>(null);
   const dataItemsRef = useRef<Map<string, MapDataItem>>(new Map());
 
   const resolvedMarkers = useMemo<MapMarker[]>(() => {
@@ -48,11 +46,6 @@ export const useGoogleMap = (props: GoogleMapProps, resolvedLang?: string) => {
     return markers;
   }, [data, markers, resolvedLang]);
 
-  const handleMapLoad = useCallback((map: google.maps.Map) => {
-    mapRef.current = map;
-    onMapLoad?.(map);
-  }, [onMapLoad]);
-
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     if (e.latLng && onMapClick) {
       const position: MapCenter = {
@@ -80,21 +73,18 @@ export const useGoogleMap = (props: GoogleMapProps, resolvedLang?: string) => {
     }
   }, [onMarkerDragEnd]);
 
-  const mapOptions: google.maps.MapOptions = {
+  const mapOptions = {
     zoomControl: showZoomControl,
     streetViewControl: showStreetViewControl,
     mapTypeControl: showMapTypeControl,
     fullscreenControl: showFullscreenControl,
-    gestureHandling: 'cooperative',
   };
 
   return {
-    mapRef,
     center,
     zoom,
     markers: resolvedMarkers,
     mapOptions,
-    handleMapLoad,
     handleMapClick,
     handleMarkerClick,
     handleMarkerDragEnd,
