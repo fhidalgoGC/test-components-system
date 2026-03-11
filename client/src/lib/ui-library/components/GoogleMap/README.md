@@ -1,6 +1,6 @@
 # GoogleMap Component
 
-Componente de Google Maps con marcadores controlados externamente. Soporta controles de mapa configurables, callbacks de interacción y marcadores arrastrables. Solo disponible en versión web.
+Componente de Google Maps con marcadores controlados externamente. Soporta la prop `data` para marcadores declarativos con `labelI18n` y `metadata`, controles de mapa configurables, callbacks de interacción y marcadores arrastrables.
 
 ## Dependencia
 
@@ -10,17 +10,21 @@ Requiere la librería `@react-google-maps/api` y una API Key de Google Cloud Pla
 
 ```tsx
 import { GoogleMap } from "@/lib/ui-library/components/GoogleMap";
-import type { GoogleMapProps, MapMarker, MapCenter, MapSizeValue } from "@/lib/ui-library/components/GoogleMap";
+import type {
+  GoogleMapProps, MapDataItem, MapMarkerMetadata,
+  MapMarker, MapCenter, MapSizeValue
+} from "@/lib/ui-library/components/GoogleMap";
 ```
 
 ## Props
 
 | Prop | Tipo | Default | Descripción |
 |------|------|---------|-------------|
-| `apiKey` | `string` | `VITE_GOOGLE_MAPS_API_KEY` | API Key de Google Maps. Si no se pasa, toma del environment |
+| `apiKey` | `string` | Desde environment | API Key de Google Maps (opcional, se resuelve automáticamente) |
 | `center` | `MapCenter` | requerido | Centro del mapa `{ lat, lng }` |
 | `zoom` | `number` | `12` | Nivel de zoom (1-20) |
-| `markers` | `MapMarker[]` | `[]` | Array de marcadores a mostrar |
+| `data` | `MapDataItem[]` | - | Array declarativo con coordenadas, `labelI18n` y `metadata` |
+| `markers` | `MapMarker[]` | `[]` | Array de marcadores manuales (ignorado si `data` está definido) |
 | `width` | `number \| string` | `'100%'` | Ancho del mapa (px o string CSS) |
 | `height` | `number \| string` | `'400px'` | Altura del mapa (px o string CSS) |
 | `showZoomControl` | `boolean` | `true` | Mostrar control de zoom (+/-) |
@@ -29,6 +33,7 @@ import type { GoogleMapProps, MapMarker, MapCenter, MapSizeValue } from "@/lib/u
 | `showFullscreenControl` | `boolean` | `false` | Mostrar botón de pantalla completa |
 | `onMapClick` | `(position: MapCenter) => void` | - | Callback al hacer clic en el mapa |
 | `onMarkerClick` | `(marker: MapMarker) => void` | - | Callback al hacer clic en un marcador |
+| `onDataItemClick` | `(item: MapDataItem) => void` | - | Callback al hacer clic en un item de `data` |
 | `onMarkerDragEnd` | `(marker: MapMarker, newPosition: MapCenter) => void` | - | Callback al soltar un marcador arrastrado |
 | `onMapLoad` | `(map: google.maps.Map) => void` | - | Callback cuando el mapa termina de cargar |
 | `className` | `string` | - | Clase CSS adicional |
@@ -36,6 +41,28 @@ import type { GoogleMapProps, MapMarker, MapCenter, MapSizeValue } from "@/lib/u
 | `i18nOrder` | `'global-first' \| 'local-first'` | - | Prioridad de traducciones |
 
 ## Interfaces
+
+### MapDataItem
+
+```tsx
+interface MapDataItem<T extends MapMarkerMetadata = MapMarkerMetadata> {
+  id: string;
+  position: { lat: number; lng: number };
+  labelI18n?: MultiLanguageLabel;  // Etiqueta multiidioma
+  metadata?: T;                     // Color, icono, draggable, etc.
+}
+```
+
+### MapMarkerMetadata
+
+```tsx
+interface MapMarkerMetadata {
+  color?: string;
+  icon?: string;
+  draggable?: boolean;
+  [key: string]: unknown;
+}
+```
 
 ### MapCenter
 
@@ -51,159 +78,60 @@ interface MapCenter {
 ```tsx
 interface MapMarker {
   id: string;
-  position: {
-    lat: number;
-    lng: number;
-  };
-  title?: string;      // Tooltip del marcador
-  icon?: string;       // URL de icono personalizado
-  draggable?: boolean; // Permite arrastrar el marcador
+  position: { lat: number; lng: number };
+  title?: string;
+  icon?: string;
+  draggable?: boolean;
 }
 ```
 
-### MapSizeValue
+## Prioridad data vs markers
+
+- Si `data` está definido (incluso como `[]`), se usa `data` y se ignora `markers`.
+- Si `data` no está definido (`undefined`), se usa `markers`.
+
+## Ejemplo con data (recomendado)
 
 ```tsx
-type MapSizeValue = number | string;
-// number → se convierte a "Npx" (ej: 400 → "400px")
-// string → se usa tal cual (ej: "100%", "50vh")
+<GoogleMap
+  center={{ lat: 19.43, lng: -99.13 }}
+  zoom={14}
+  data={[
+    {
+      id: '1',
+      position: { lat: 19.43, lng: -99.13 },
+      labelI18n: { en: 'Mexico City', es: 'CDMX', default: 'CDMX' },
+      metadata: { color: '#FF0000', draggable: false },
+    },
+    {
+      id: '2',
+      position: { lat: 19.42, lng: -99.12 },
+      labelI18n: { en: 'Zócalo Square', es: 'Plaza del Zócalo', default: 'Zócalo' },
+      metadata: { color: '#0066FF', draggable: true },
+    },
+  ]}
+  onDataItemClick={(item) => console.log('Clicked:', item)}
+/>
 ```
 
-## Ejemplo Básico
+## Ejemplo con markers (legacy)
 
 ```tsx
-const [markers, setMarkers] = useState<MapMarker[]>([
-  { id: '1', position: { lat: 19.4326, lng: -99.1332 }, title: 'CDMX' },
-]);
-
 <GoogleMap
-  apiKey="TU_API_KEY"
   center={{ lat: 19.4326, lng: -99.1332 }}
   zoom={13}
-  markers={markers}
-  width="100%"
-  height={400}
-  showZoomControl={true}
-  onMapClick={(pos) => console.log('Click:', pos)}
+  markers={[
+    { id: '1', position: { lat: 19.4326, lng: -99.1332 }, title: 'CDMX' },
+  ]}
   onMarkerClick={(m) => console.log('Marker:', m)}
 />
 ```
 
-## Marcadores Interactivos
-
-```tsx
-const [markers, setMarkers] = useState<MapMarker[]>([]);
-
-const handleMapClick = (position: MapCenter) => {
-  const newMarker: MapMarker = {
-    id: `marker-${Date.now()}`,
-    position,
-    title: `Marcador ${markers.length + 1}`,
-    draggable: true,
-  };
-  setMarkers([...markers, newMarker]);
-};
-
-const handleMarkerDragEnd = (marker: MapMarker, newPosition: MapCenter) => {
-  setMarkers(markers.map(m =>
-    m.id === marker.id ? { ...m, position: newPosition } : m
-  ));
-};
-
-<GoogleMap
-  apiKey="TU_API_KEY"
-  center={{ lat: 19.4326, lng: -99.1332 }}
-  zoom={13}
-  markers={markers}
-  onMapClick={handleMapClick}
-  onMarkerDragEnd={handleMarkerDragEnd}
-/>
-```
-
-## Acceso a la Instancia del Mapa
-
-El callback `onMapLoad` expone la instancia nativa de `google.maps.Map`, permitiendo operaciones avanzadas:
-
-```tsx
-const handleMapLoad = (map: google.maps.Map) => {
-  // Acceso completo a la API de Google Maps
-  map.panTo({ lat: 40.7128, lng: -74.0060 });
-  map.setZoom(15);
-};
-
-<GoogleMap
-  apiKey="TU_API_KEY"
-  center={{ lat: 19.4326, lng: -99.1332 }}
-  onMapLoad={handleMapLoad}
-/>
-```
-
-## Controles del Mapa
-
-Todos los controles nativos de Google Maps son configurables individualmente:
-
-```tsx
-<GoogleMap
-  apiKey="TU_API_KEY"
-  center={{ lat: 19.4326, lng: -99.1332 }}
-  showZoomControl={true}          // Botones +/-
-  showStreetViewControl={true}    // Pegman (Street View)
-  showMapTypeControl={true}       // Selector mapa/satélite
-  showFullscreenControl={true}    // Botón pantalla completa
-/>
-```
-
-El mapa usa `gestureHandling: 'cooperative'` por defecto, lo que requiere Ctrl+Scroll para hacer zoom (evita scroll accidental).
-
-## Tamaño del Mapa
-
-El tamaño acepta valores numéricos (píxeles) o strings CSS:
-
-```tsx
-// Píxeles fijos
-<GoogleMap width={600} height={400} ... />
-
-// Strings CSS
-<GoogleMap width="100%" height="50vh" ... />
-
-// Mixto
-<GoogleMap width="100%" height={300} ... />
-```
-
-## Internacionalización (i18n)
-
-El componente incluye traducciones para estados de carga y error:
-
-| Clave | EN | ES |
-|-------|----|----|
-| `loading` | Loading map... | Cargando mapa... |
-| `error` | Error loading map | Error al cargar el mapa |
-| `errorApiKey` | Invalid API key | API key inválida |
-| `clickToAddMarker` | Click on the map to add a marker | Haz clic en el mapa para agregar un marcador |
-
-```tsx
-// Forzar idioma
-<GoogleMap langOverride="es" ... />
-
-// Prioridad de traducciones
-<GoogleMap i18nOrder="local-first" ... />
-```
-
-## Environment
-
-La API key se resuelve con la siguiente cadena de prioridad:
+## Environment (cadena de resolución apiKey)
 
 1. **Prop directa**: `<GoogleMap apiKey="TU_KEY" />`
-2. **ConfigProvider** (AppEnvironmentProvider): via `parentConfig.GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY`
+2. **ConfigProvider**: via `parentConfig.GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY`
 3. **Variable de entorno**: `VITE_GOOGLE_MAPS_API_KEY` en `.env`
-
-```
-environment/
-├── enviroment.ts    // Lee VITE_GOOGLE_MAPS_API_KEY
-└── index.ts         // Exporta como GOOGLE_MAP_CONFIG
-```
-
-En la app padre, se configura via `AppEnvironmentProvider`:
 
 ```tsx
 <AppEnvironmentProvider
@@ -217,18 +145,28 @@ En la app padre, se configura via `AppEnvironmentProvider`:
 </AppEnvironmentProvider>
 ```
 
-Si no se pasa `apiKey` como prop ni se configura el provider, toma automáticamente de `VITE_GOOGLE_MAPS_API_KEY`.
+## Internacionalización (i18n)
+
+El componente incluye traducciones para estados de carga y error. La prop `data` resuelve `labelI18n` automáticamente según el idioma activo.
+
+| Clave | EN | ES |
+|-------|----|----|
+| `loading` | Loading map... | Cargando mapa... |
+| `error` | Error loading map | Error al cargar el mapa |
+| `errorApiKey` | Invalid API key | API key inválida |
+| `clickToAddMarker` | Click on the map to add a marker | Haz clic en el mapa para agregar un marcador |
 
 ## Arquitectura Interna
 
 ```
 GoogleMap/
 ├── index.tsx                    // Selector web/mobile (breakpoint 768px)
+├── README.md
 └── web/
     ├── views/GoogleMap.view.tsx // Vista con LoadScript + GoogleMap + Markers
-    ├── hooks/useGoogleMap.hook.ts // Lógica: opciones, callbacks, refs
+    ├── hooks/useGoogleMap.hook.ts // Lógica: data→markers, callbacks, refs
     ├── hooks/useI18nMerge.hook.ts // Hook de internacionalización
-    ├── types/GoogleMap.type.ts  // Tipos e interfaces
+    ├── types/GoogleMap.type.ts  // MapDataItem, MapMarkerMetadata, etc.
     ├── css/GoogleMap.module.css // Estilos del contenedor y estados
     ├── environment/             // Configuración (API key)
     └── i18n/                   // Traducciones (en.ts, es.ts)

@@ -1,14 +1,16 @@
-import { useCallback, useRef } from 'react';
-import type { GoogleMapProps, MapCenter, MapMarker } from '../types';
+import { useCallback, useRef, useMemo } from 'react';
+import type { GoogleMapProps, MapCenter, MapMarker, MapDataItem } from '../types';
 
-export const useGoogleMap = (props: GoogleMapProps) => {
+export const useGoogleMap = (props: GoogleMapProps, resolvedLang?: string) => {
   const {
     center,
     zoom = 12,
     markers = [],
+    data,
     onMapClick,
     onMarkerClick,
     onMarkerDragEnd,
+    onDataItemClick,
     onMapLoad,
     showZoomControl = true,
     showStreetViewControl = false,
@@ -17,6 +19,34 @@ export const useGoogleMap = (props: GoogleMapProps) => {
   } = props;
 
   const mapRef = useRef<google.maps.Map | null>(null);
+  const dataItemsRef = useRef<Map<string, MapDataItem>>(new Map());
+
+  const resolvedMarkers = useMemo<MapMarker[]>(() => {
+    if (data !== undefined) {
+      const itemsMap = new Map<string, MapDataItem>();
+      const converted = data.map((item): MapMarker => {
+        itemsMap.set(item.id, item);
+
+        let title: string | undefined;
+        if (item.labelI18n) {
+          const lang = resolvedLang || 'en';
+          title = item.labelI18n[lang] || item.labelI18n.default || '';
+        }
+
+        return {
+          id: item.id,
+          position: item.position,
+          title,
+          icon: item.metadata?.icon,
+          draggable: item.metadata?.draggable ?? false,
+        };
+      });
+      dataItemsRef.current = itemsMap;
+      return converted;
+    }
+    dataItemsRef.current = new Map();
+    return markers;
+  }, [data, markers, resolvedLang]);
 
   const handleMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
@@ -34,8 +64,11 @@ export const useGoogleMap = (props: GoogleMapProps) => {
   }, [onMapClick]);
 
   const handleMarkerClick = useCallback((marker: MapMarker) => {
+    if (onDataItemClick && dataItemsRef.current.has(marker.id)) {
+      onDataItemClick(dataItemsRef.current.get(marker.id)!);
+    }
     onMarkerClick?.(marker);
-  }, [onMarkerClick]);
+  }, [onMarkerClick, onDataItemClick]);
 
   const handleMarkerDragEnd = useCallback((marker: MapMarker, e: google.maps.MapMouseEvent) => {
     if (e.latLng && onMarkerDragEnd) {
@@ -59,7 +92,7 @@ export const useGoogleMap = (props: GoogleMapProps) => {
     mapRef,
     center,
     zoom,
-    markers,
+    markers: resolvedMarkers,
     mapOptions,
     handleMapLoad,
     handleMapClick,

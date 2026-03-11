@@ -29,7 +29,7 @@ export const GoogleMapView = (props: GoogleMapProps) => {
     || configContext?.environment?.GOOGLE_MAP_CONFIG?.GOOGLE_MAPS_API_KEY
     || GOOGLE_MAP_CONFIG.GOOGLE_MAPS_API_KEY;
 
-  const { t } = useI18nMerge(langOverride, { order: i18nOrder });
+  const { t, lang } = useI18nMerge(langOverride, { order: i18nOrder });
 
   const {
     center,
@@ -40,7 +40,7 @@ export const GoogleMapView = (props: GoogleMapProps) => {
     handleMapClick,
     handleMarkerClick,
     handleMarkerDragEnd,
-  } = useGoogleMap(props);
+  } = useGoogleMap(props, lang);
 
   const containerStyle = {
     width: getSizeValue(width, '100%'),

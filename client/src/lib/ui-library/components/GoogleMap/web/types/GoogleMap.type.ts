@@ -1,3 +1,5 @@
+import type { MultiLanguageLabel } from '../../../../types/language.types';
+
 export interface MapMarker {
   id: string;
   position: {
@@ -16,10 +18,28 @@ export interface MapCenter {
 
 export type MapSizeValue = number | string;
 
+export interface MapMarkerMetadata {
+  color?: string;
+  icon?: string;
+  draggable?: boolean;
+  [key: string]: unknown;
+}
+
+export interface MapDataItem<T extends MapMarkerMetadata = MapMarkerMetadata> {
+  id: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
+  labelI18n?: MultiLanguageLabel;
+  metadata?: T;
+}
+
 export interface GoogleMapProps {
   apiKey?: string;
   center: MapCenter;
   zoom?: number;
+  data?: MapDataItem[];
   markers?: MapMarker[];
   width?: MapSizeValue;
   height?: MapSizeValue;
@@ -30,6 +50,7 @@ export interface GoogleMapProps {
   onMapClick?: (position: MapCenter) => void;
   onMarkerClick?: (marker: MapMarker) => void;
   onMarkerDragEnd?: (marker: MapMarker, newPosition: MapCenter) => void;
+  onDataItemClick?: (item: MapDataItem) => void;
   onMapLoad?: (map: google.maps.Map) => void;
   className?: string;
   langOverride?: string;
