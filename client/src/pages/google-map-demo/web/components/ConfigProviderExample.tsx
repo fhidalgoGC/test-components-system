@@ -7,7 +7,7 @@ import type {
 } from "@/lib/ui-library/components/GoogleMap/shared/types";
 import styles from "../css/GoogleMapDemo.module.css";
 
-import { environment } from "@/enviorments/enviroment";
+import { environment } from "../../../../enviorments/enviroment";
 
 const DEFAULT_CENTER: MapCenter = { lat: 19.4326, lng: -99.1332 };
 
