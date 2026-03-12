@@ -62,7 +62,6 @@ function MapWithoutApiKey() {
       <ConfigInfo />
       <div className={styles.mapContainer}>
         <GoogleMap
-          apiKey="AIzaSyD4XvQZJxJXZJXZJXZJXZJXZJXZJXZJXZsss"
           center={DEFAULT_CENTER}
           zoom={14}
           data={DEMO_DATA}
@@ -105,10 +104,10 @@ export function ConfigProviderExample() {
         <code> ConfigProvider</code> (o variable de entorno{" "}
         <code>VITE_GOOGLE_MAPS_API_KEY</code>).
       </p>
-      {/* <ConfigProvider parentConfig={environment} priority="auto"> */}
-      sadasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdas
-      <MapWithoutApiKey />
-      {/* </ConfigProvider> */}
+
+      <ConfigProvider parentConfig={environment} priority="parent">
+        <MapWithoutApiKey />
+      </ConfigProvider>
     </div>
   );
 }
