@@ -92,6 +92,7 @@
 .menuItem {
   width: 100%;
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   padding: 0.625rem 0.75rem;
   font-size: 0.875rem;
@@ -219,6 +220,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .iconSmall {
