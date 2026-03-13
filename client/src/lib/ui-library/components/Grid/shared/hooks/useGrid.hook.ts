@@ -116,66 +116,60 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
   const dataLengthRef = useRef(data.length);
   dataLengthRef.current = data.length;
 
-  const scrollEnabledRef = useRef(scroll?.enabled);
-  const scrollThresholdRef = useRef(scroll?.threshold);
-  scrollEnabledRef.current = scroll?.enabled;
-  scrollThresholdRef.current = scroll?.threshold;
+  const checkReachEnd = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    if (controllerStateRef.current !== 'idle') return;
+    if (reachEndFiredRef.current) return;
+    if (dataLengthRef.current === 0) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    const threshold = scroll?.threshold ?? 50;
+    const distanceToBottom = scrollHeight - scrollTop - clientHeight;
+
+    if (distanceToBottom <= threshold) {
+      reachEndFiredRef.current = true;
+      callbacksRef.current?.onReachEnd?.();
+    }
+  }, [scroll?.threshold]);
 
   useEffect(() => {
     if (!scroll?.enabled) return;
-    if (!sentinelRef.current) return;
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry?.isIntersecting) {
-          reachEndFiredRef.current = false;
-          return;
-        }
+    const handleScroll = () => {
+      checkReachEnd();
+    };
 
-        if (controllerStateRef.current !== 'idle') return;
-        if (reachEndFiredRef.current) return;
-        if (dataLengthRef.current === 0) return;
+    container.addEventListener('scroll', handleScroll, { passive: true });
 
-        reachEndFiredRef.current = true;
-        callbacksRef.current?.onReachEnd?.();
-      },
-      {
-        root: containerRef.current,
-        threshold: 0,
-        rootMargin: `0px 0px ${scroll.threshold ?? 50}px 0px`,
-      }
-    );
+    requestAnimationFrame(() => {
+      checkReachEnd();
+    });
 
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [scroll?.enabled, scroll?.threshold]);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [scroll?.enabled, checkReachEnd]);
 
   useEffect(() => {
     if (currentState !== 'idle') return;
     reachEndFiredRef.current = false;
 
-    if (!scrollEnabledRef.current) return;
-    if (!sentinelRef.current || !containerRef.current) return;
-    if (dataLengthRef.current === 0) return;
-
-    const sentinel = sentinelRef.current;
-    const container = containerRef.current;
-    const threshold = scrollThresholdRef.current ?? 50;
+    if (!scroll?.enabled) return;
 
     requestAnimationFrame(() => {
-      const containerRect = container.getBoundingClientRect();
-      const sentinelRect = sentinel.getBoundingClientRect();
-
-      const sentinelVisible = sentinelRect.top < containerRect.bottom + threshold;
-
-      if (sentinelVisible && controllerStateRef.current === 'idle' && !reachEndFiredRef.current) {
-        reachEndFiredRef.current = true;
-        callbacksRef.current?.onReachEnd?.();
-      }
+      checkReachEnd();
     });
-  }, [currentState]);
+  }, [currentState, scroll?.enabled, checkReachEnd]);
+
+  useEffect(() => {
+    if (!scroll?.enabled) return;
+    if (data.length === 0) return;
+
+    requestAnimationFrame(() => {
+      checkReachEnd();
+    });
+  }, [data.length, scroll?.enabled, checkReachEnd]);
 
   useEffect(() => {
     callbacks?.onStateChange?.(currentState);
