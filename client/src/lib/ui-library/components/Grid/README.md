@@ -15,16 +15,6 @@ import { Grid, useGridController } from '@/lib/ui-library/components/Grid';
 
 No se importa la variante directamente. El dispatch web/mobile es automático.
 
-## Resumen de diferencias
-
-| Aspecto | Web | Mobile |
-|---------|-----|--------|
-| Ancho | Configurable via `layout.widthMode` | Siempre 100% |
-| Scroll | `overflow-y: auto` | `-webkit-overflow-scrolling: touch` |
-| Selección | Click + keyboard | Tap |
-| Columnas típicas | 2-4 | 1-2 |
-| `minCardWidth` recomendado | 250-300 | 140-180 |
-
 ## Plataforma
 
 | Plataforma | Estado |
