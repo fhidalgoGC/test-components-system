@@ -1,6 +1,6 @@
 # GoogleMap Component
 
-Componente de Google Maps con marcadores modernos (`AdvancedMarkerElement`). Soporta la prop `data` para marcadores declarativos con `labelI18n` y `metadata`, controles de mapa configurables, callbacks de interacción y marcadores arrastrables.
+Componente de Google Maps con marcadores modernos (`AdvancedMarkerElement`). Soporta la prop `data` para marcadores declarativos con `labelI18n` y `metadata`, controles de mapa configurables, callbacks de interacción y marcadores arrastrables. Soporte dual web/mobile con dispatch automático.
 
 ## Dependencia
 
@@ -49,7 +49,7 @@ interface GoogleMapLayout {
   width?: number;
   minWidth?: number;
   heightMode?: 'full' | 'auto' | 'fixed' | 'percentage'; // Default: 'fixed'
-  height?: number | 'auto';                                // Default: 400
+  height?: number | 'auto';                                // Default: 400 (web), 300 (mobile)
   minHeight?: number;
   align?: LayoutAlign;
 }
@@ -187,7 +187,7 @@ layout={{ widthMode: 'fixed', width: 800, heightMode: 'fixed', height: 600 }}
 // Porcentaje con mínimos
 layout={{ widthMode: 'percentage', width: 80, minWidth: 400, heightMode: 'fixed', height: 400, minHeight: 200 }}
 
-// Sin layout (defaults: widthMode='full', heightMode='fixed', height=400)
+// Sin layout (defaults: widthMode='full', heightMode='fixed', height=400 web / 300 mobile)
 <GoogleMap center={center} />
 ```
 
@@ -220,6 +220,18 @@ El componente incluye traducciones para estados de carga y error. La prop `data`
 | `errorApiKey` | Invalid API key | API key inválida |
 | `clickToAddMarker` | Click on the map to add a marker | Haz clic en el mapa para agregar un marcador |
 
+## Diferencias Web vs Mobile
+
+| Aspecto | Web | Mobile |
+|---------|-----|--------|
+| Altura default | 400px | 300px |
+| Ancho | Configurable via `layout.widthMode` | Siempre 100% |
+| Alineación (`layout.align`) | Soportada | Ignorada (siempre full-width) |
+| `gestureHandling` | `cooperative` (scroll + ctrl) | `greedy` (touch directo) |
+| `streetViewControl` | Configurable | Deshabilitado |
+| `mapTypeControl` | Configurable | Deshabilitado |
+| Dispatch | Automático via `useIsMobile()` (< 768px) | Automático via `useIsMobile()` (< 768px) |
+
 ## Arquitectura Interna
 
 ```
@@ -232,10 +244,14 @@ GoogleMap/
 │   ├── hooks/useI18nMerge.hook.ts     // Hook de internacionalización
 │   ├── i18n/                          // Traducciones (en.ts, es.ts)
 │   └── environment/                   // Configuración (API key)
-└── web/
-    ├── views/GoogleMap.view.tsx        // Vista con APIProvider + Map + AdvancedMarker
-    ├── styles/GoogleMap.module.css     // Estilos del contenedor y estados
-    └── index.tsx                      // Export de la vista web
+├── web/
+│   ├── views/GoogleMap.view.tsx       // Vista con APIProvider + Map + AdvancedMarker
+│   ├── styles/GoogleMap.module.css    // Estilos del contenedor y estados
+│   └── index.tsx                      // Export de la vista web
+└── mobile/
+    ├── views/GoogleMap.mobile.view.tsx // Vista mobile optimizada para touch
+    ├── styles/GoogleMap.mobile.module.css // Estilos mobile (full-width, tamaños reducidos)
+    └── index.tsx                      // Export de la vista mobile
 ```
 
 ## Plataforma
@@ -243,4 +259,4 @@ GoogleMap/
 | Plataforma | Estado |
 |------------|--------|
 | Web | Disponible |
-| Mobile | No implementado (muestra `NotImplemented`) |
+| Mobile | Disponible |

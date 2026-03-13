@@ -1,13 +1,13 @@
 import { useIsMobile } from '../../hooks';
 import { GoogleMap as GoogleMapWeb } from './web';
-import { NotImplemented } from '../NotImplemented';
+import { GoogleMap as GoogleMapMobile } from './mobile';
 import type { GoogleMapProps } from './shared/types';
 
 export const GoogleMap = (props: GoogleMapProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <NotImplemented platform="Mobile" componentName="GoogleMap" />;
+    return <GoogleMapMobile {...props} />;
   }
 
   return <GoogleMapWeb {...props} />;
