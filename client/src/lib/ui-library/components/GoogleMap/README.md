@@ -254,6 +254,13 @@ GoogleMap/
     └── index.tsx                      // Export de la vista mobile
 ```
 
+## Demo
+
+La página de demo (`/components/google-map`) detecta automáticamente el tamaño de pantalla:
+
+- **Web (≥ 768px)**: Muestra ejemplos con markers básicos, layout configurable, prop `data` con `labelI18n`, y ConfigProvider.
+- **Mobile (< 768px)**: Muestra ejemplos optimizados para touch con markers básicos y prop `data`, incluyendo tarjeta informativa sobre las diferencias de la variante mobile.
+
 ## Plataforma
 
 | Plataforma | Estado |
