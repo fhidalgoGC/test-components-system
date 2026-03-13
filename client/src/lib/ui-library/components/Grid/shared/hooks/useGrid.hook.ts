@@ -116,6 +116,11 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
   const dataLengthRef = useRef(data.length);
   dataLengthRef.current = data.length;
 
+  const scrollEnabledRef = useRef(scroll?.enabled);
+  const scrollThresholdRef = useRef(scroll?.threshold);
+  scrollEnabledRef.current = scroll?.enabled;
+  scrollThresholdRef.current = scroll?.threshold;
+
   useEffect(() => {
     if (!scroll?.enabled) return;
     if (!sentinelRef.current) return;
@@ -148,9 +153,28 @@ export function useGrid<T>(props: GridProps<T>): UseGridResult<T> {
   }, [scroll?.enabled, scroll?.threshold]);
 
   useEffect(() => {
-    if (currentState === 'idle') {
-      reachEndFiredRef.current = false;
-    }
+    if (currentState !== 'idle') return;
+    reachEndFiredRef.current = false;
+
+    if (!scrollEnabledRef.current) return;
+    if (!sentinelRef.current || !containerRef.current) return;
+    if (dataLengthRef.current === 0) return;
+
+    const sentinel = sentinelRef.current;
+    const container = containerRef.current;
+    const threshold = scrollThresholdRef.current ?? 50;
+
+    requestAnimationFrame(() => {
+      const containerRect = container.getBoundingClientRect();
+      const sentinelRect = sentinel.getBoundingClientRect();
+
+      const sentinelVisible = sentinelRect.top < containerRect.bottom + threshold;
+
+      if (sentinelVisible && controllerStateRef.current === 'idle' && !reachEndFiredRef.current) {
+        reachEndFiredRef.current = true;
+        callbacksRef.current?.onReachEnd?.();
+      }
+    });
   }, [currentState]);
 
   useEffect(() => {
