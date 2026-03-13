@@ -194,6 +194,63 @@ const controller = useGridController();
 
 **Regla Crítica**: `onReachEnd` solo se dispara si `state === 'idle'`. Si está en `'loading'`, no se dispara el evento.
 
+### Requisitos para que onReachEnd funcione
+
+El `onReachEnd` usa un `IntersectionObserver` con un elemento sentinel invisible al final del contenido. Para que se dispare correctamente, se deben cumplir **todas** estas condiciones:
+
+| Requisito | Por qué | Qué pasa si falta |
+|-----------|---------|-------------------|
+| `scroll.enabled: true` | Monta el `IntersectionObserver` y el sentinel | No se detecta el final del scroll, `onReachEnd` nunca se dispara |
+| `layout.heightMode: 'fixed'` con un `height` definido, o `'full'` con un padre que tenga altura | El contenedor necesita una altura limitada para que el contenido haga scroll. Si la altura crece con el contenido, el sentinel siempre está visible y el observer no lo detecta como "entrando" | `onReachEnd` se dispara inmediatamente al montar o nunca se dispara |
+| `controller` pasado al Grid | Sincroniza el estado interno. Sin controller, el estado puede no actualizarse correctamente | El estado puede quedarse en un valor incorrecto y bloquear futuros disparos |
+| Estado `idle` activo | `onReachEnd` solo se dispara si `state === 'idle'` | Si el estado queda en `'loading'` o `'error'` después de una carga (por ejemplo, si no se llama `controller.setState('idle')` al terminar), no se vuelve a disparar |
+| `data` con al menos un item | No se dispara si `data` está vacío | Evita disparos innecesarios cuando no hay contenido |
+
+### Errores comunes
+
+```tsx
+// MAL — sin altura fija, el contenedor crece con el contenido
+<Grid
+  data={items}
+  layout={{ widthMode: 'full' }}
+  scroll={{ enabled: true }}
+  callbacks={{ onReachEnd: handleLoadMore }}
+  ...
+/>
+
+// BIEN — altura fija, el contenido hace scroll dentro
+<Grid
+  data={items}
+  controller={controller}
+  layout={{ widthMode: 'full', heightMode: 'fixed', height: 500 }}
+  scroll={{ enabled: true }}
+  callbacks={{ onReachEnd: handleLoadMore }}
+  ...
+/>
+
+// BIEN — altura 100% con padre que tiene altura definida
+<div style={{ height: '80vh' }}>
+  <Grid
+    data={items}
+    controller={controller}
+    layout={{ heightMode: 'full' }}
+    scroll={{ enabled: true }}
+    callbacks={{ onReachEnd: handleLoadMore }}
+    ...
+  />
+</div>
+```
+
+### Checklist rápido
+
+Si `onReachEnd` no se dispara, verificar en este orden:
+
+1. ¿`scroll.enabled` es `true`?
+2. ¿El contenedor del Grid tiene altura fija (`heightMode: 'fixed'` + `height`) o `'full'` con padre de altura definida?
+3. ¿Se pasa un `controller` al Grid?
+4. ¿Después de cargar datos se llama `controller.setState('idle')`?
+5. ¿`data` tiene al menos un item?
+
 ## States Components
 
 ```tsx
