@@ -41,18 +41,26 @@ export function InfiniteScrollExample() {
   } : undefined;
 
   const handleReachEnd = useCallback(async () => {
-    if (loadedRef.current >= TOTAL_ITEMS) return;
+    console.log('[Grid onReachEnd] FIRED — state:', controller.getState(), '| loaded:', loadedRef.current, '/', TOTAL_ITEMS);
 
+    if (loadedRef.current >= TOTAL_ITEMS) {
+      console.log('[Grid onReachEnd] SKIP — all items loaded');
+      return;
+    }
+
+    console.log('[Grid onReachEnd] Setting state to loading...');
     controller.setState('loading');
     setLoadCount((c) => c + 1);
 
     const remaining = TOTAL_ITEMS - loadedRef.current;
     const toLoad = Math.min(PAGE_SIZE, remaining);
 
+    console.log('[Grid onReachEnd] Fetching', toLoad, 'items starting at index', loadedRef.current);
     const newProducts = await simulateApiFetch(loadedRef.current, toLoad);
     loadedRef.current += toLoad;
 
     setProducts((prev) => [...prev, ...newProducts]);
+    console.log('[Grid onReachEnd] Loaded. Total items:', loadedRef.current, '| Setting state to idle');
     controller.setState('idle');
   }, [controller]);
 
