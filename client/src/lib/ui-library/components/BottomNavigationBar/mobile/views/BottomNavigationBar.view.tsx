@@ -2,18 +2,25 @@ import type { BottomNavigationBarProps } from '../types';
 import { useBottomNavigationBarContext } from '../providers';
 import { resolveMultiLanguageLabel } from '../../../../utils';
 import { cn } from '../../../../utils';
+import { useLayoutContainer } from '../../../../contexts';
 import styles from '../css/BottomNavigationBar.module';
 
 export const BottomNavigationBarView = (props: BottomNavigationBarProps) => {
   const { className } = props;
   const { items, selectedId, onItemClick, lang, disabledIds } = useBottomNavigationBarContext();
+  const { insideLayout } = useLayoutContainer();
+
+  const containerClass = cn(
+    insideLayout ? styles.containerInline : styles.container,
+    className,
+  );
 
   if (!items || items.length === 0) {
-    return <nav className={cn(styles.container, className)} data-testid="bottomnavigationbar" />;
+    return <nav className={containerClass} data-testid="bottomnavigationbar" />;
   }
 
   return (
-    <nav className={cn(styles.container, className)} data-testid="bottomnavigationbar">
+    <nav className={containerClass} data-testid="bottomnavigationbar">
       {items.map((item) => {
         const isSelected = selectedId === item.id;
         // Priority: disabledIds prop > item.metadata.isDisabled

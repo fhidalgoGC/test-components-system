@@ -9,6 +9,17 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+.containerInline {
+  @apply relative;
+  @apply flex items-center justify-around;
+  @apply bg-white dark:bg-gray-900;
+  @apply border-t border-gray-200 dark:border-gray-800;
+  @apply shadow-lg;
+  @apply h-16;
+  @apply w-full;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 .navItem {
   @apply flex flex-col items-center justify-center;
   @apply flex-1;
