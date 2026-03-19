@@ -29,16 +29,47 @@ export const BaseTableView = (props: BaseTableProps) => {
 
   const headerScrollRef = useRef<HTMLDivElement>(null);
   const bodyScrollRef = useRef<HTMLDivElement>(null);
+  const wrapperScrollRef = useRef<HTMLDivElement>(null);
   const [bodyContainerHeight, setBodyContainerHeight] = useState<number>(0);
   const [scrollbarWidth, setScrollbarWidth] = useState<number>(0);
 
   const isRowStretch = rowsDefault?.heightMode === 'stretch' && rowsDefault?.stretchCount && rowsDefault.stretchCount > 0;
 
+  const infiniteScrollConfig = behaviors?.infiniteScroll;
+  const isInfiniteScrollEnabled = infiniteScrollConfig?.enabled === true;
+  const infiniteScrollThreshold = infiniteScrollConfig?.threshold ?? 100;
+  const infiniteScrollLockRef = useRef(false);
+
+  useEffect(() => {
+    if (state !== 'loadingMore') {
+      infiniteScrollLockRef.current = false;
+    }
+  }, [state]);
+
+  const handleInfiniteScroll = useCallback((scrollElement: HTMLElement) => {
+    if (!isInfiniteScrollEnabled || state === 'loadingMore' || state === 'loading') return;
+    if (infiniteScrollLockRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollElement;
+    const hasVerticalOverflow = scrollHeight > clientHeight + 1;
+    if (!hasVerticalOverflow) return;
+
+    const distanceToBottom = scrollHeight - scrollTop - clientHeight;
+
+    if (distanceToBottom <= infiniteScrollThreshold) {
+      infiniteScrollLockRef.current = true;
+      callbacks?.onReachEnd?.();
+    }
+  }, [isInfiniteScrollEnabled, state, infiniteScrollThreshold, callbacks]);
+
   const handleBodyScroll = useCallback(() => {
     if (headerScrollRef.current && bodyScrollRef.current) {
       headerScrollRef.current.scrollLeft = bodyScrollRef.current.scrollLeft;
     }
-  }, []);
+    if (bodyScrollRef.current && isInfiniteScrollEnabled) {
+      handleInfiniteScroll(bodyScrollRef.current);
+    }
+  }, [isInfiniteScrollEnabled, handleInfiniteScroll]);
 
   useEffect(() => {
     const el = bodyScrollRef.current;
@@ -176,16 +207,52 @@ export const BaseTableView = (props: BaseTableProps) => {
 
   const visibleColumnsCount = visibleColumns.length;
 
+  const handleWrapperScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    if (!isInfiniteScrollEnabled) return;
+    handleInfiniteScroll(e.currentTarget);
+  }, [isInfiniteScrollEnabled, handleInfiniteScroll]);
+
   const hasData = data.length > 0;
   const isLoadingWithData = state === 'loading' && hasData;
-  const shouldShowData = state === 'idle' || state === 'success' || isLoadingWithData;
+  const isLoadingMore = state === 'loadingMore';
+  const shouldShowData = state === 'idle' || state === 'success' || isLoadingWithData || isLoadingMore;
   const shouldShowStateMessage = !shouldShowData && (state === 'loading' || state === 'error' || state === 'empty');
 
   const loadingMessage = behaviors?.states?.loading?.message || 
                          behaviors?.states?.loading?.defaultText || 
                          'Loading...';
 
-  // Layout separado: header fijo arriba, body con scroll abajo
+  const loadingMoreMessage = infiniteScrollConfig?.loadingMoreMessage || 'Loading more...';
+
+  const renderLoadingMoreFooter = () => {
+    if (!isLoadingMore) return null;
+
+    if (infiniteScrollConfig?.loadingMoreComponent) {
+      return (
+        <tfoot data-testid="table-loading-more">
+          <tr>
+            <td colSpan={visibleColumnsCount}>
+              {infiniteScrollConfig.loadingMoreComponent}
+            </td>
+          </tr>
+        </tfoot>
+      );
+    }
+
+    return (
+      <tfoot data-testid="table-loading-more">
+        <tr>
+          <td colSpan={visibleColumnsCount}>
+            <div className={styles.loadingMoreContainer}>
+              <div className={styles.loadingMoreSpinner} />
+              <span className={styles.loadingMoreText}>{loadingMoreMessage}</span>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    );
+  };
+
   if (useSeparatedLayout) {
     return (
       <div className={`${wrapperClasses} ${styles.tableContainer} ${styles.separatedLayout}`} style={separatedContainerStyle} data-testid={dataTestId}>
@@ -198,7 +265,6 @@ export const BaseTableView = (props: BaseTableProps) => {
           </div>
         )}
         
-        {/* Header container - fijo arriba */}
         <div className={styles.headerContainer} ref={headerScrollRef} style={scrollbarWidth > 0 ? { paddingRight: scrollbarWidth } : undefined}>
           <table className={tableClasses}>
             <TableColgroup
@@ -221,7 +287,6 @@ export const BaseTableView = (props: BaseTableProps) => {
           </table>
         </div>
 
-        {/* Body container - con scroll vertical o corte */}
         <div 
           className={`${styles.bodyContainer} ${layout?.verticalScroll ? styles.bodyWithScroll : styles.bodyNoScroll}`} 
           ref={bodyScrollRef}
@@ -236,19 +301,22 @@ export const BaseTableView = (props: BaseTableProps) => {
               autoStretchLastColumnId={columnWidthInfo.lastColumnId}
             />
             {shouldShowData ? (
-              <TableBody
-                data={data}
-                columns={columns}
-                rowsDefault={rowsDefault}
-                columnsDefault={columnsDefault}
-                cellsDefault={cellsDefault}
-                behaviors={behaviors}
-                callbacks={callbacks}
-                stretchCount={columnWidthInfo.stretchCount}
-                fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
-                autoStretchLastColumnId={columnWidthInfo.lastColumnId}
-                bodyContainerHeight={bodyContainerHeight}
-              />
+              <>
+                <TableBody
+                  data={data}
+                  columns={columns}
+                  rowsDefault={rowsDefault}
+                  columnsDefault={columnsDefault}
+                  cellsDefault={cellsDefault}
+                  behaviors={behaviors}
+                  callbacks={callbacks}
+                  stretchCount={columnWidthInfo.stretchCount}
+                  fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
+                  autoStretchLastColumnId={columnWidthInfo.lastColumnId}
+                  bodyContainerHeight={bodyContainerHeight}
+                />
+                {renderLoadingMoreFooter()}
+              </>
             ) : shouldShowStateMessage ? (
               <TableStates
                 state={state}
@@ -263,9 +331,14 @@ export const BaseTableView = (props: BaseTableProps) => {
     );
   }
 
-  // Layout normal: una sola tabla
   return (
-    <div className={`${wrapperClasses} ${styles.tableContainer}`} style={wrapperStyle} data-testid={dataTestId}>
+    <div 
+      className={`${wrapperClasses} ${styles.tableContainer}`} 
+      style={wrapperStyle} 
+      data-testid={dataTestId}
+      ref={wrapperScrollRef}
+      onScroll={handleWrapperScroll}
+    >
       {isLoadingWithData && (
         <div className={styles.loadingOverlay} data-testid="table-loading-overlay">
           <div className={styles.loadingOverlayContent}>
@@ -288,18 +361,21 @@ export const BaseTableView = (props: BaseTableProps) => {
         />
 
         {shouldShowData ? (
-          <TableBody
-            data={data}
-            columns={columns}
-            rowsDefault={rowsDefault}
-            columnsDefault={columnsDefault}
-            cellsDefault={cellsDefault}
-            behaviors={behaviors}
-            callbacks={callbacks}
-            stretchCount={columnWidthInfo.stretchCount}
-            fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
-            autoStretchLastColumnId={columnWidthInfo.lastColumnId}
-          />
+          <>
+            <TableBody
+              data={data}
+              columns={columns}
+              rowsDefault={rowsDefault}
+              columnsDefault={columnsDefault}
+              cellsDefault={cellsDefault}
+              behaviors={behaviors}
+              callbacks={callbacks}
+              stretchCount={columnWidthInfo.stretchCount}
+              fixedWidthTotal={columnWidthInfo.fixedWidthTotal}
+              autoStretchLastColumnId={columnWidthInfo.lastColumnId}
+            />
+            {renderLoadingMoreFooter()}
+          </>
         ) : shouldShowStateMessage ? (
           <TableStates
             state={state}

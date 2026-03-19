@@ -332,3 +332,28 @@
 .tbodyStretch {
   /* no extra styles needed - row heights set via JS */
 }
+
+/* Loading more (infinite scroll) */
+.loadingMoreContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  gap: 10px;
+  color: var(--table-state-text, #6b7280);
+}
+
+.loadingMoreSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--table-border, #e5e7eb);
+  border-top-color: var(--table-primary, #3b82f6);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  flex-shrink: 0;
+}
+
+.loadingMoreText {
+  font-size: 13px;
+  color: var(--table-state-text, #6b7280);
+}

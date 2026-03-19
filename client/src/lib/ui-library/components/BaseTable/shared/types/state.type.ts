@@ -1,4 +1,4 @@
-export type TableState = 'idle' | 'loading' | 'success' | 'error' | 'empty';
+export type TableState = 'idle' | 'loading' | 'success' | 'error' | 'empty' | 'loadingMore';
 
 export interface TableStateContext {
   state: TableState;

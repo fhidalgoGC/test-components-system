@@ -8,6 +8,7 @@ import {
   TextWrapDemo,
   StretchDemo,
   MaxVisibleRowsDemo,
+  InfiniteScrollDemo,
 } from "../components";
 import styles from "../css/BaseTableDemo.module.scss";
 
@@ -34,6 +35,7 @@ export const BaseTableDemoView = () => {
         <TextWrapDemo />
         <StretchDemo />
         <MaxVisibleRowsDemo />
+        <InfiniteScrollDemo />
       </div>
     </div>
   );

@@ -45,7 +45,8 @@ export const BaseTableMobileView = (props: BaseTableProps) => {
 
   const hasData = data.length > 0;
   const isLoadingWithData = state === 'loading' && hasData;
-  const shouldShowData = state === 'idle' || state === 'success' || isLoadingWithData;
+  const isLoadingMore = state === 'loadingMore';
+  const shouldShowData = state === 'idle' || state === 'success' || isLoadingWithData || isLoadingMore;
   const shouldShowStateMessage = !shouldShowData && (state === 'loading' || state === 'error' || state === 'empty');
 
   const loadingMessage = behaviors?.states?.loading?.message ||
@@ -238,57 +239,73 @@ export const BaseTableMobileView = (props: BaseTableProps) => {
         )}
 
         {shouldShowData ? (
-          <tbody className={styles.tbody}>
-            {visibleData.map((row, rowIndex) => {
-              const trClasses = [
-                styles.tr,
-                isRowClickable && styles.clickable,
-              ].filter(Boolean).join(' ');
+          <>
+            <tbody className={styles.tbody}>
+              {visibleData.map((row, rowIndex) => {
+                const trClasses = [
+                  styles.tr,
+                  isRowClickable && styles.clickable,
+                ].filter(Boolean).join(' ');
 
-              return (
-                <tr
-                  key={rowIndex}
-                  className={trClasses}
-                  onClick={() => handleRowClick(rowIndex, row)}
-                  data-testid={`tr-mobile-${rowIndex}`}
-                >
-                  {visibleColumns.map((column) => {
-                    const columnId = column.metadata.columnId;
-                    const value = row[columnId];
-                    const mergedCellConfig = mergeCellConfig(cellsDefault, column.cell);
+                return (
+                  <tr
+                    key={rowIndex}
+                    className={trClasses}
+                    onClick={() => handleRowClick(rowIndex, row)}
+                    data-testid={`tr-mobile-${rowIndex}`}
+                  >
+                    {visibleColumns.map((column) => {
+                      const columnId = column.metadata.columnId;
+                      const value = row[columnId];
+                      const mergedCellConfig = mergeCellConfig(cellsDefault, column.cell);
 
-                    const tdClasses = [
-                      styles.td,
-                      isCellClickable && styles.clickable,
-                      getAlignClass(mergedCellConfig.horizontalAlign),
-                      getValignClass(mergedCellConfig.verticalAlign),
-                    ].filter(Boolean).join(' ');
+                      const tdClasses = [
+                        styles.td,
+                        isCellClickable && styles.clickable,
+                        getAlignClass(mergedCellConfig.horizontalAlign),
+                        getValignClass(mergedCellConfig.verticalAlign),
+                      ].filter(Boolean).join(' ');
 
-                    const renderContent = () => {
-                      if (mergedCellConfig.render) {
-                        if (typeof mergedCellConfig.render === 'function') {
-                          return mergedCellConfig.render(value, row, columnId);
+                      const renderContent = () => {
+                        if (mergedCellConfig.render) {
+                          if (typeof mergedCellConfig.render === 'function') {
+                            return mergedCellConfig.render(value, row, columnId);
+                          }
+                          return mergedCellConfig.render;
                         }
-                        return mergedCellConfig.render;
-                      }
-                      return value ?? '';
-                    };
+                        return value ?? '';
+                      };
 
-                    return (
-                      <td
-                        key={columnId}
-                        className={tdClasses}
-                        onClick={(e) => handleCellClick(columnId, rowIndex, value, row, e)}
-                        data-testid={`td-mobile-${columnId}-${rowIndex}`}
-                      >
-                        {renderContent()}
-                      </td>
-                    );
-                  })}
+                      return (
+                        <td
+                          key={columnId}
+                          className={tdClasses}
+                          onClick={(e) => handleCellClick(columnId, rowIndex, value, row, e)}
+                          data-testid={`td-mobile-${columnId}-${rowIndex}`}
+                        >
+                          {renderContent()}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+            {isLoadingMore && (
+              <tfoot data-testid="table-loading-more-mobile">
+                <tr>
+                  <td colSpan={visibleColumns.length}>
+                    <div className={styles.loadingMoreContainer}>
+                      <div className={styles.loadingSpinner} style={{ width: 20, height: 20, borderWidth: 2 }} />
+                      <span className={styles.loadingMoreText}>
+                        {behaviors?.infiniteScroll?.loadingMoreMessage || 'Loading more...'}
+                      </span>
+                    </div>
+                  </td>
                 </tr>
-              );
-            })}
-          </tbody>
+              </tfoot>
+            )}
+          </>
         ) : shouldShowStateMessage ? (
           <tbody>
             <tr>

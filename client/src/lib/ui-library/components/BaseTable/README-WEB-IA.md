@@ -501,10 +501,64 @@ interface TableCallbacks {
   onCellClick?: (columnId: string, rowIndex: number, value: any, rowData: any) => void;
   onRowClick?: (rowIndex: number, rowData: any) => void;
   onSort?: (column: ColumnConfig, direction: SortDirection) => void;
+  onReachEnd?: () => void;
 }
 
 type SortDirection = 'asc' | 'desc' | 'none';
 ```
+
+## Infinite Scroll
+
+El componente soporta scroll infinito para cargar datos progresivamente al llegar al final de la tabla.
+
+### Configuración
+
+```typescript
+interface InfiniteScrollConfig {
+  enabled?: boolean;              // Activa/desactiva la detección de scroll
+  threshold?: number;             // Píxeles antes del final para disparar (default: 100)
+  loadingMoreMessage?: string;    // Mensaje mostrado mientras carga más datos
+  loadingMoreComponent?: ReactNode; // Componente personalizado para el estado de carga
+}
+```
+
+### Uso
+
+```tsx
+<BaseTable
+  data={data}
+  state={isLoadingMore ? 'loadingMore' : 'success'}
+  config={{
+    columns,
+    layout: {
+      widthMode: 'full',
+      heightMode: 'fixed',
+      height: 400,
+      stickyHeader: true,
+      verticalScroll: true,
+    },
+    behaviors: {
+      infiniteScroll: {
+        enabled: hasMore,
+        threshold: 80,
+        loadingMoreMessage: 'Cargando más datos...',
+      },
+    },
+  }}
+  callbacks={{
+    onReachEnd: () => {
+      // Cargar más datos aquí
+    },
+  }}
+/>
+```
+
+### Comportamiento
+- **`onReachEnd`**: Se dispara cuando el usuario hace scroll hasta el umbral definido por `threshold`.
+- **`state: 'loadingMore'`**: Muestra un spinner al final de la tabla. Los datos existentes permanecen visibles.
+- **Guard de re-entrada**: Internamente se bloquea `onReachEnd` hasta que el estado cambie de `loadingMore`, evitando disparos duplicados.
+- **Validación de overflow**: Solo se dispara cuando hay overflow vertical real (el contenido es más alto que el contenedor).
+- **Funciona en web y mobile**: Ambas variantes manejan `loadingMore` correctamente.
 
 ## Table State
 
@@ -513,7 +567,7 @@ type SortDirection = 'asc' | 'desc' | 'none';
 ```typescript
 const tableState = useTableState({ initialState: 'success' });
 
-// Available states: 'idle' | 'loading' | 'success' | 'error' | 'empty'
+// Available states: 'idle' | 'loading' | 'success' | 'error' | 'empty' | 'loadingMore'
 
 // Methods
 tableState.state

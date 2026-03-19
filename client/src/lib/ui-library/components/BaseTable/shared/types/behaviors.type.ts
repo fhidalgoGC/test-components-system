@@ -16,8 +16,16 @@ export interface StatesConfig {
   empty?: StateConfig;
 }
 
+export interface InfiniteScrollConfig {
+  enabled?: boolean;
+  threshold?: number;
+  loadingMoreMessage?: string;
+  loadingMoreComponent?: ReactNode;
+}
+
 export interface BehaviorsConfig {
   hoverable?: HoverableTarget;
   clickable?: ClickableTarget;
   states?: StatesConfig;
+  infiniteScroll?: InfiniteScrollConfig;
 }

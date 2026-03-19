@@ -183,3 +183,17 @@
   color: var(--table-state-text, #6b7280);
   font-size: 13px;
 }
+
+.loadingMoreContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  gap: 8px;
+  color: var(--table-state-text, #6b7280);
+}
+
+.loadingMoreText {
+  font-size: 12px;
+  color: var(--table-state-text, #6b7280);
+}

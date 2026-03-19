@@ -7,4 +7,5 @@ export interface TableCallbacks {
   onCellClick?: (columnId: string, rowIndex: number, value: any, rowData: any) => void;
   onRowClick?: (rowIndex: number, rowData: any) => void;
   onSort?: (column: ColumnConfig, direction: SortDirection) => void;
+  onReachEnd?: () => void;
 }

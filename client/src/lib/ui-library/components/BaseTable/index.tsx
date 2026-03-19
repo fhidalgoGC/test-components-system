@@ -46,6 +46,7 @@ export type {
   ClickableTarget,
   StatesConfig,
   StateConfig,
+  InfiniteScrollConfig,
   TableCallbacks,
   SortDirection,
   TableState,
