@@ -560,6 +560,18 @@ interface InfiniteScrollConfig {
 - **Validación de overflow**: Solo se dispara cuando hay overflow vertical real (el contenido es más alto que el contenedor).
 - **Funciona en web y mobile**: Ambas variantes manejan `loadingMore` correctamente.
 
+### Arquitectura del Scroll Container (Web)
+
+Cuando `heightMode: 'fixed'` + `height` + `verticalScroll: true` (y NO es `separatedLayout`), el componente usa un patrón de doble div:
+
+```
+outer div (tableContainer, height fijo, overflow: hidden)
+  └── inner div (scrollContainerStyle: overflowY: auto, height, maxHeight, flexShrink: 0)
+        └── <table> completa (thead + tbody + tfoot)
+```
+
+Este patrón evita problemas con `display: flex` de `.tableWrapper` (que causa que elementos hijos se compriman en vez de hacer overflow). El div exterior contiene, el div interior es el que hace scroll. La `<table>` completa (con headers, body y footer) vive dentro del scroll container, manteniendo toda la funcionalidad de tabla HTML nativa.
+
 ## Table State
 
 ### useTableState Hook

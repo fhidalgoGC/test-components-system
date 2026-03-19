@@ -93,6 +93,8 @@ export const BaseTableView = (props: BaseTableProps) => {
 
   const useSeparatedLayout = (layout?.stickyHeader && ((layout?.heightMode === 'fixed' && layout?.height) || layout?.heightMode === 'full')) || isRowStretch;
 
+  const needsScrollContainer = !useSeparatedLayout && layout?.heightMode === 'fixed' && layout?.height && layout?.verticalScroll;
+
   const wrapperClasses = useMemo(() => {
     const classes = [styles.tableWrapper];
     
@@ -101,9 +103,7 @@ export const BaseTableView = (props: BaseTableProps) => {
     if (layout?.heightMode === 'full') classes.push(styles.fullHeight);
     if (layout?.heightMode === 'auto') classes.push(styles.autoHeight);
     
-    // Scroll horizontal (solo si no usamos layout separado)
-    if (!useSeparatedLayout) {
-      // Priorizar layout.horizontalScroll, fallback a columnsDefault.scroll
+    if (!useSeparatedLayout && !needsScrollContainer) {
       const horizontalScroll = layout?.horizontalScroll ?? columnsDefault?.scroll;
       if (horizontalScroll === false) {
         classes.push(styles.noScroll);
@@ -111,19 +111,8 @@ export const BaseTableView = (props: BaseTableProps) => {
         classes.push(styles.withScroll);
       }
       
-      // Scroll vertical
       if (layout?.heightMode === 'fixed' && layout?.height) {
-        // Si hay altura fija, controlar si hay scroll o se corta
-        if (layout?.stickyHeader) {
-          // Con sticky header, el scroll lo maneja el layout separado
-          classes.push(styles.noVerticalScroll);
-        } else if (layout?.verticalScroll) {
-          // Sin sticky header pero con scroll habilitado
-          classes.push(styles.withVerticalScroll);
-        } else {
-          // Sin sticky header y sin scroll: cortar contenido
-          classes.push(styles.noVerticalScroll);
-        }
+        classes.push(styles.noVerticalScroll);
       } else {
         classes.push(styles.noVerticalScroll);
       }
@@ -132,7 +121,7 @@ export const BaseTableView = (props: BaseTableProps) => {
     if (className) classes.push(className);
     
     return classes.join(' ');
-  }, [layout, columnsDefault?.scroll, className, useSeparatedLayout]);
+  }, [layout, columnsDefault?.scroll, className, useSeparatedLayout, needsScrollContainer]);
 
   const wrapperStyle = useMemo(() => {
     const style: React.CSSProperties = {};
@@ -149,18 +138,18 @@ export const BaseTableView = (props: BaseTableProps) => {
     return style;
   }, [layout, useSeparatedLayout]);
 
-  const scrollContainerStyle = useMemo(() => {
-    if (useSeparatedLayout) return {};
-    if (layout?.heightMode !== 'fixed' || !layout?.height) return {};
-    const h = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
-    const style: React.CSSProperties = {
-      height: h,
-      maxHeight: h,
-      overflowY: layout?.verticalScroll ? 'auto' : 'hidden',
-      overflowX: 'auto',
+  const scrollContainerStyle = useMemo((): React.CSSProperties => {
+    if (!needsScrollContainer) return {};
+    const h = typeof layout!.height === 'number' ? `${layout!.height}px` : layout!.height;
+    const horizontalScroll = layout?.horizontalScroll ?? columnsDefault?.scroll;
+    return {
+      overflowY: 'auto',
+      overflowX: horizontalScroll !== false ? 'auto' : 'hidden',
+      height: h as string,
+      maxHeight: h as string,
+      flexShrink: 0,
     };
-    return style;
-  }, [layout, useSeparatedLayout]);
+  }, [needsScrollContainer, layout, columnsDefault?.scroll]);
 
   const separatedContainerStyle = useMemo(() => {
     if (!useSeparatedLayout) return {};
@@ -343,8 +332,6 @@ export const BaseTableView = (props: BaseTableProps) => {
     );
   }
 
-  const needsScrollContainer = !useSeparatedLayout && layout?.heightMode === 'fixed' && layout?.height;
-
   const tableContent = (
     <>
       {isLoadingWithData && (
@@ -399,8 +386,12 @@ export const BaseTableView = (props: BaseTableProps) => {
   if (needsScrollContainer) {
     return (
       <div
-        className={`${wrapperClasses} ${styles.tableContainer}`}
-        style={wrapperStyle}
+        className={`${styles.tableContainer}${className ? ` ${className}` : ''}`}
+        style={{
+          ...wrapperStyle,
+          overflow: 'hidden',
+          width: layout?.widthMode === 'full' ? '100%' : wrapperStyle.width,
+        }}
         data-testid={dataTestId}
       >
         <div

@@ -1,7 +1,7 @@
-import { BaseTableDemoView } from './views/BaseTableDemo.view';
+import { BaseTableDemoWebView } from './web/view/BaseTableDemo.view';
 
 const BaseTableDemo = () => {
-  return <BaseTableDemoView />;
+  return <BaseTableDemoWebView />;
 };
 
 export default BaseTableDemo;
