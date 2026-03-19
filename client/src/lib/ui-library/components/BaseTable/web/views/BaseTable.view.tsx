@@ -91,7 +91,7 @@ export const BaseTableView = (props: BaseTableProps) => {
     return () => observer.disconnect();
   }, [isRowStretch]);
 
-  const useSeparatedLayout = (layout?.stickyHeader && layout?.heightMode === 'fixed' && layout?.height) || isRowStretch;
+  const useSeparatedLayout = (layout?.stickyHeader && ((layout?.heightMode === 'fixed' && layout?.height) || layout?.heightMode === 'full')) || isRowStretch;
 
   const wrapperClasses = useMemo(() => {
     const classes = [styles.tableWrapper];
@@ -156,10 +156,10 @@ export const BaseTableView = (props: BaseTableProps) => {
       display: 'flex',
       flexDirection: 'column',
     };
-    if (layout?.height) {
-      style.height = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
-    } else if (isRowStretch && layout?.heightMode === 'full') {
+    if (layout?.heightMode === 'full') {
       style.height = '100%';
+    } else if (layout?.height) {
+      style.height = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
     }
     return style;
   }, [layout, useSeparatedLayout, isRowStretch]);
