@@ -142,16 +142,23 @@ export const BaseTableView = (props: BaseTableProps) => {
     }
     if (!useSeparatedLayout && layout?.heightMode === 'fixed' && layout?.height) {
       style.height = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
-      style.maxHeight = style.height;
-      if (layout?.verticalScroll) {
-        style.overflowY = 'auto';
-      } else {
-        style.overflowY = 'hidden';
-      }
     }
     if (layout?.minWidth) style.minWidth = layout.minWidth;
     if (layout?.minHeight) style.minHeight = layout.minHeight;
     
+    return style;
+  }, [layout, useSeparatedLayout]);
+
+  const scrollContainerStyle = useMemo(() => {
+    if (useSeparatedLayout) return {};
+    if (layout?.heightMode !== 'fixed' || !layout?.height) return {};
+    const h = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
+    const style: React.CSSProperties = {
+      height: h,
+      maxHeight: h,
+      overflowY: layout?.verticalScroll ? 'auto' : 'hidden',
+      overflowX: 'auto',
+    };
     return style;
   }, [layout, useSeparatedLayout]);
 
@@ -336,14 +343,10 @@ export const BaseTableView = (props: BaseTableProps) => {
     );
   }
 
-  return (
-    <div 
-      className={`${wrapperClasses} ${styles.tableContainer}`} 
-      style={wrapperStyle} 
-      data-testid={dataTestId}
-      ref={wrapperScrollRef}
-      onScroll={handleWrapperScroll}
-    >
+  const needsScrollContainer = !useSeparatedLayout && layout?.heightMode === 'fixed' && layout?.height;
+
+  const tableContent = (
+    <>
       {isLoadingWithData && (
         <div className={styles.loadingOverlay} data-testid="table-loading-overlay">
           <div className={styles.loadingOverlayContent}>
@@ -390,6 +393,36 @@ export const BaseTableView = (props: BaseTableProps) => {
           />
         ) : null}
       </table>
+    </>
+  );
+
+  if (needsScrollContainer) {
+    return (
+      <div
+        className={`${wrapperClasses} ${styles.tableContainer}`}
+        style={wrapperStyle}
+        data-testid={dataTestId}
+      >
+        <div
+          ref={wrapperScrollRef}
+          style={scrollContainerStyle}
+          onScroll={handleWrapperScroll}
+        >
+          {tableContent}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div 
+      className={`${wrapperClasses} ${styles.tableContainer}`} 
+      style={wrapperStyle} 
+      data-testid={dataTestId}
+      ref={wrapperScrollRef}
+      onScroll={handleWrapperScroll}
+    >
+      {tableContent}
     </div>
   );
 };
