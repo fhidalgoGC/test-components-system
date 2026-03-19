@@ -140,9 +140,14 @@ export const BaseTableView = (props: BaseTableProps) => {
     if (layout?.widthMode === 'fixed' && layout?.width) {
       style.width = typeof layout.width === 'number' ? `${layout.width}px` : layout.width;
     }
-    // Solo aplicar altura al wrapper si no usamos layout separado
     if (!useSeparatedLayout && layout?.heightMode === 'fixed' && layout?.height) {
       style.height = typeof layout.height === 'number' ? `${layout.height}px` : layout.height;
+      style.maxHeight = style.height;
+      if (layout?.verticalScroll) {
+        style.overflowY = 'auto';
+      } else {
+        style.overflowY = 'hidden';
+      }
     }
     if (layout?.minWidth) style.minWidth = layout.minWidth;
     if (layout?.minHeight) style.minHeight = layout.minHeight;
