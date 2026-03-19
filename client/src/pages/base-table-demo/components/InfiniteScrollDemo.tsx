@@ -105,7 +105,7 @@ export function InfiniteScrollDemo() {
         </span>
       </div>
 
-      <div className={styles.demoBox} data-testid="demo-infinite-scroll" style={{ height: 420 }}>
+      <div className={styles.demoBox} data-testid="demo-infinite-scroll">
         <BaseTable
           data={data}
           state={tableState.state}
@@ -113,8 +113,8 @@ export function InfiniteScrollDemo() {
             columns,
             layout: {
               widthMode: "full",
-              heightMode: "full",
-              stickyHeader: true,
+              heightMode: "fixed",
+              height: 400,
               verticalScroll: true,
             },
             behaviors: {
