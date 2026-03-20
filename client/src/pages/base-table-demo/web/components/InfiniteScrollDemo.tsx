@@ -44,12 +44,13 @@ const columns: ColumnConfig[] = [
   },
 ];
 
-const PAGE_SIZE = 15;
-const MAX_ITEMS = 100;
+const INITIAL_SIZE = 5;
+const PAGE_SIZE = 5;
+const MAX_ITEMS = 50;
 
 export function InfiniteScrollDemo() {
   const tableState = useTableState({ initialState: "success" });
-  const { data, append, reset } = useAppendableState(() => generateUsers(1, PAGE_SIZE));
+  const { data, append, reset } = useAppendableState(() => generateUsers(1, INITIAL_SIZE));
   const [hasMore, setHasMore] = useState(true);
 
   const handleReachEnd = useCallback(() => {
@@ -76,7 +77,7 @@ export function InfiniteScrollDemo() {
   }, [hasMore, tableState, data.length, append]);
 
   const handleReset = () => {
-    reset(generateUsers(1, PAGE_SIZE));
+    reset(generateUsers(1, INITIAL_SIZE));
     setHasMore(true);
     tableState.setState("success");
   };
@@ -88,8 +89,8 @@ export function InfiniteScrollDemo() {
         10. Infinite Scroll (onReachEnd)
       </h2>
       <p className={styles.section__description}>
-        Al hacer scroll hasta el final de la tabla, se dispara el callback <code>onReachEnd</code> que
-        carga mas datos automaticamente. El estado cambia a "loadingMore" mientras se cargan los datos.
+        Inicia con {INITIAL_SIZE} registros visibles. Al hacer scroll hasta el final, se dispara <code>onReachEnd</code> que
+        carga {PAGE_SIZE} registros mas usando <code>useAppendableState.append()</code>.
         Se detiene al llegar a {MAX_ITEMS} items.
       </p>
 
@@ -112,7 +113,7 @@ export function InfiniteScrollDemo() {
             layout: {
               widthMode: "full",
               heightMode: "fixed",
-              height: 400,
+              height: 200,
               verticalScroll: true,
             },
             behaviors: {
