@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { BaseTable, useTableState } from "@/lib/ui-library/components/BaseTable";
 import type { ColumnConfig } from "@/lib/ui-library/components/BaseTable";
+import { useAppendableState } from "@/lib/ui-library/hooks";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 import styles from '../css/BaseTableDemo.module.scss';
@@ -48,7 +49,7 @@ const MAX_ITEMS = 100;
 
 export function InfiniteScrollDemo() {
   const tableState = useTableState({ initialState: "success" });
-  const [data, setData] = useState(() => generateUsers(1, PAGE_SIZE));
+  const { data, append, reset } = useAppendableState(() => generateUsers(1, PAGE_SIZE));
   const [hasMore, setHasMore] = useState(true);
 
   const handleReachEnd = useCallback(() => {
@@ -57,28 +58,25 @@ export function InfiniteScrollDemo() {
     tableState.setState("loadingMore");
 
     setTimeout(() => {
-      setData((prev) => {
-        const nextId = prev.length + 1;
-        const remaining = MAX_ITEMS - prev.length;
-        if (remaining <= 0) {
-          setHasMore(false);
-          tableState.setState("success");
-          return prev;
-        }
-        const count = Math.min(PAGE_SIZE, remaining);
-        const newItems = generateUsers(nextId, count);
-        const updated = [...prev, ...newItems];
-        if (updated.length >= MAX_ITEMS) {
-          setHasMore(false);
-        }
+      const nextId = data.length + 1;
+      const remaining = MAX_ITEMS - data.length;
+      if (remaining <= 0) {
+        setHasMore(false);
         tableState.setState("success");
-        return updated;
-      });
+        return;
+      }
+      const count = Math.min(PAGE_SIZE, remaining);
+      const newItems = generateUsers(nextId, count);
+      append(newItems);
+      if (data.length + count >= MAX_ITEMS) {
+        setHasMore(false);
+      }
+      tableState.setState("success");
     }, 1500);
-  }, [hasMore, tableState]);
+  }, [hasMore, tableState, data.length, append]);
 
   const handleReset = () => {
-    setData(generateUsers(1, PAGE_SIZE));
+    reset(generateUsers(1, PAGE_SIZE));
     setHasMore(true);
     tableState.setState("success");
   };
