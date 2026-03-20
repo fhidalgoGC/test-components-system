@@ -555,22 +555,83 @@ interface InfiniteScrollConfig {
 
 ### Comportamiento
 - **`onReachEnd`**: Se dispara cuando el usuario hace scroll hasta el umbral definido por `threshold`.
+- **Auto-load**: Si el contenido no desborda el contenedor (ej. pocas filas caben sin scroll), `onReachEnd` se dispara automaticamente para cargar mas datos hasta que haya overflow y el scroll se active. Esto solo ocurre cuando `verticalScroll: true`.
 - **`state: 'loadingMore'`**: Muestra un spinner al final de la tabla. Los datos existentes permanecen visibles.
 - **Guard de re-entrada**: Internamente se bloquea `onReachEnd` hasta que el estado cambie de `loadingMore`, evitando disparos duplicados.
-- **Validación de overflow**: Solo se dispara cuando hay overflow vertical real (el contenido es más alto que el contenedor).
 - **Funciona en web y mobile**: Ambas variantes manejan `loadingMore` correctamente.
+
+### Uso con useAppendableState
+
+Para agregar datos progresivamente sin preocuparse por la data anterior, usar el hook `useAppendableState`:
+
+```tsx
+import { BaseTable, useTableState } from 'GC-UI-COMPONENTS';
+import { useAppendableState } from 'GC-UI-COMPONENTS/hooks';
+
+function InfiniteTable() {
+  const tableState = useTableState({ initialState: 'success' });
+  const { data, append, reset } = useAppendableState(() => fetchInitialData());
+  const [hasMore, setHasMore] = useState(true);
+
+  const handleReachEnd = () => {
+    if (!hasMore) return;
+    tableState.setState('loadingMore');
+
+    fetchMoreData(data.length).then((newItems) => {
+      append(newItems);
+      if (data.length + newItems.length >= MAX_ITEMS) {
+        setHasMore(false);
+      }
+      tableState.setState('success');
+    });
+  };
+
+  const handleReset = () => {
+    reset(fetchInitialData());
+    setHasMore(true);
+    tableState.setState('success');
+  };
+
+  return (
+    <BaseTable
+      data={data}
+      state={tableState.state}
+      config={{
+        columns,
+        layout: {
+          widthMode: 'full',
+          heightMode: 'fixed',
+          height: 400,
+          verticalScroll: true,
+        },
+        behaviors: {
+          infiniteScroll: {
+            enabled: hasMore,
+            threshold: 80,
+            loadingMoreMessage: 'Cargando mas datos...',
+          },
+        },
+      }}
+      callbacks={{ onReachEnd: handleReachEnd }}
+    />
+  );
+}
+```
+
+**Ventaja**: El consumidor solo hace `append(newItems)` sin tener que manejar `setData(prev => [...prev, ...newItems])`. El hook tambien expone `prepend`, `clear`, `reset` y `setData` (para casos especiales).
 
 ### Arquitectura del Scroll Container (Web)
 
-Cuando `heightMode: 'fixed'` + `height` + `verticalScroll: true` (y NO es `separatedLayout`), el componente usa un patrón de doble div:
+Cuando `heightMode: 'fixed'` + `height` + `verticalScroll: true` (y NO es `separatedLayout`), el componente usa un div unico con scroll:
 
 ```
-outer div (tableContainer, height fijo, overflow: hidden)
-  └── inner div (scrollContainerStyle: overflowY: auto, height, maxHeight, flexShrink: 0)
-        └── <table> completa (thead + tbody + tfoot)
+div (tableContainer, maxHeight + minHeight fijos, overflowY: auto)
+  └── <table> completa (thead + tbody + tfoot)
 ```
 
-Este patrón evita problemas con `display: flex` de `.tableWrapper` (que causa que elementos hijos se compriman en vez de hacer overflow). El div exterior contiene, el div interior es el que hace scroll. La `<table>` completa (con headers, body y footer) vive dentro del scroll container, manteniendo toda la funcionalidad de tabla HTML nativa.
+Se usa `maxHeight` + `minHeight` (no `height`) para evitar que el `<table>` HTML comprima sus filas al tamaño del contenedor. Con `maxHeight` la tabla mantiene su alto natural y el div activa el scroll cuando el contenido desborda. `minHeight` asegura que el contenedor mantenga el alto fijo especificado aunque haya pocas filas.
+
+El efecto de auto-load detecta cuando el contenido no desborda el contenedor (`scrollHeight <= clientHeight`) y dispara `onReachEnd` automaticamente via `requestAnimationFrame`, permitiendo que la tabla cargue datos hasta que haya suficiente contenido para activar el scroll.
 
 ## Table State
 
