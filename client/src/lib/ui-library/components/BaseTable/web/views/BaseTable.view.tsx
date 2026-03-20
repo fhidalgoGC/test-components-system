@@ -51,9 +51,6 @@ export const BaseTableView = (props: BaseTableProps) => {
     if (infiniteScrollLockRef.current) return;
 
     const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-    const hasVerticalOverflow = scrollHeight > clientHeight + 1;
-    if (!hasVerticalOverflow) return;
-
     const distanceToBottom = scrollHeight - scrollTop - clientHeight;
 
     if (distanceToBottom <= infiniteScrollThreshold) {
@@ -61,6 +58,17 @@ export const BaseTableView = (props: BaseTableProps) => {
       callbacks?.onReachEnd?.();
     }
   }, [isInfiniteScrollEnabled, state, infiniteScrollThreshold, callbacks]);
+
+  useEffect(() => {
+    if (!isInfiniteScrollEnabled || state === 'loadingMore' || state === 'loading') return;
+    if (!layout?.verticalScroll) return;
+    const el = wrapperScrollRef.current ?? bodyScrollRef.current;
+    if (!el) return;
+    const raf = requestAnimationFrame(() => {
+      handleInfiniteScroll(el);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [data.length, isInfiniteScrollEnabled, state, handleInfiniteScroll, layout?.verticalScroll]);
 
   const handleBodyScroll = useCallback(() => {
     if (headerScrollRef.current && bodyScrollRef.current) {
@@ -145,9 +153,8 @@ export const BaseTableView = (props: BaseTableProps) => {
     return {
       overflowY: 'auto',
       overflowX: horizontalScroll !== false ? 'auto' : 'hidden',
-      height: h as string,
       maxHeight: h as string,
-      flexShrink: 0,
+      minHeight: h as string,
     };
   }, [needsScrollContainer, layout, columnsDefault?.scroll]);
 
@@ -384,23 +391,23 @@ export const BaseTableView = (props: BaseTableProps) => {
   );
 
   if (needsScrollContainer) {
+    const scrollWidth = layout?.widthMode === 'full' ? '100%' :
+      (layout?.widthMode === 'fixed' && layout?.width
+        ? (typeof layout.width === 'number' ? `${layout.width}px` : layout.width)
+        : undefined);
     return (
       <div
+        ref={wrapperScrollRef}
         className={`${styles.tableContainer}${className ? ` ${className}` : ''}`}
         style={{
-          ...wrapperStyle,
-          overflow: 'hidden',
-          width: layout?.widthMode === 'full' ? '100%' : wrapperStyle.width,
+          ...scrollContainerStyle,
+          width: scrollWidth,
+          position: 'relative',
         }}
+        onScroll={handleWrapperScroll}
         data-testid={dataTestId}
       >
-        <div
-          ref={wrapperScrollRef}
-          style={scrollContainerStyle}
-          onScroll={handleWrapperScroll}
-        >
-          {tableContent}
-        </div>
+        {tableContent}
       </div>
     );
   }
