@@ -617,6 +617,113 @@ export function ListPropsTab() {
           </tbody>
         </table>
       </div>
+
+      <h2 className={styles.propsTitle}>DraggableConfig&lt;T&gt;</h2>
+      <p className={styles.propsDescription}>Configuración de drag and drop para reordenar items.</p>
+      <div className={styles.propsTableWrapper}>
+        <table className={styles.propsTable}>
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Tipo</th>
+              <th>Default</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>enabled</code></td>
+              <td><code>boolean</code></td>
+              <td><code>true</code></td>
+              <td>Activa o desactiva el drag and drop</td>
+            </tr>
+            <tr>
+              <td><code>getItemId</code></td>
+              <td><code>(item: T, index: number) =&gt; string</code></td>
+              <td>-</td>
+              <td>Función que retorna el ID único de cada item (requerido)</td>
+            </tr>
+            <tr>
+              <td><code>isItemDraggable</code></td>
+              <td><code>(item: T, index: number) =&gt; boolean</code></td>
+              <td><code>() =&gt; true</code></td>
+              <td>Función que determina si un item específico puede ser arrastrado. Por defecto todos los items son arrastrables</td>
+            </tr>
+            <tr>
+              <td><code>onReorder</code></td>
+              <td><code>(newData: T[], event: DraggableReorderEvent) =&gt; void</code></td>
+              <td><code>undefined</code></td>
+              <td>Callback con el nuevo array ordenado y detalles del movimiento</td>
+            </tr>
+            <tr>
+              <td><code>handle</code></td>
+              <td><code>DragHandleConfig</code></td>
+              <td><code>undefined</code></td>
+              <td>Configuración del icono de arrastre</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className={styles.propsTitle}>DragHandleConfig</h2>
+      <p className={styles.propsDescription}>Configuración del icono/handle de arrastre.</p>
+      <div className={styles.propsTableWrapper}>
+        <table className={styles.propsTable}>
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Tipo</th>
+              <th>Default</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>render</code></td>
+              <td><code>ComponentType&lt;{'{'} isDragging: boolean {'}'}&gt;</code></td>
+              <td>-</td>
+              <td>Componente personalizado para el handle (requerido). Si no se pasa handle, todo el item es el área de arrastre</td>
+            </tr>
+            <tr>
+              <td><code>position</code></td>
+              <td><code>'left' | 'right'</code></td>
+              <td><code>'right'</code></td>
+              <td>Posición del handle respecto al contenido del item</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className={styles.propsTitle}>DraggableReorderEvent&lt;T&gt;</h2>
+      <p className={styles.propsDescription}>Evento emitido al completar un reordenamiento.</p>
+      <div className={styles.propsTableWrapper}>
+        <table className={styles.propsTable}>
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Tipo</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>item</code></td>
+              <td><code>T</code></td>
+              <td>El item que fue movido</td>
+            </tr>
+            <tr>
+              <td><code>fromIndex</code></td>
+              <td><code>number</code></td>
+              <td>Índice original del item</td>
+            </tr>
+            <tr>
+              <td><code>toIndex</code></td>
+              <td><code>number</code></td>
+              <td>Nuevo índice del item</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

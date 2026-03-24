@@ -82,6 +82,25 @@ export interface SelectionConfig<T = any> {
   selectionStyle?: SelectionStyle;
 }
 
+export interface DragHandleConfig {
+  render: ComponentType<{ isDragging: boolean }>;
+  position?: 'left' | 'right';
+}
+
+export interface DraggableReorderEvent<T = any> {
+  item: T;
+  fromIndex: number;
+  toIndex: number;
+}
+
+export interface DraggableConfig<T = any> {
+  enabled?: boolean;
+  getItemId: (item: T, index: number) => string;
+  isItemDraggable?: (item: T, index: number) => boolean;
+  onReorder?: (newData: T[], event: DraggableReorderEvent<T>) => void;
+  handle?: DragHandleConfig;
+}
+
 export interface ListProps<T = any> {
   id: string;
   layout?: ListLayout;
@@ -93,6 +112,7 @@ export interface ListProps<T = any> {
   data?: T[];
   controller?: ListController<T>;
   selectionConfig?: SelectionConfig<T>;
+  draggableConfig?: DraggableConfig<T>;
   className?: string;
   langOverride?: string;
   i18nOrder?: 'global-first' | 'local-first';

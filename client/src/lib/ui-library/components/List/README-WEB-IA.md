@@ -12,7 +12,8 @@ Componente List agnóstico y reutilizable con control externo del ciclo de rende
 - Selección de items integrada vía `WrapperItemsSelected` (single/multi-select)
 - Transformación de callbacks con `getItem` (T → R)
 - Estilos de selección configurables (borde, fondo, sombra, etc.)
-- Dos layouts internos: normal y selectable (solo se carga en memoria si se necesita)
+- Drag and drop reordering via `@dnd-kit` (item completo o handle custom, posición left/right)
+- Tres layouts internos: normal, selectable y draggable (solo se carga en memoria si se necesita)
 - `layout.gap` controla el spacing entre items (responsabilidad del List, no del item)
 
 ## Comportamiento Web
@@ -72,6 +73,17 @@ type ListProps<T> = {
 
   data: T[];
   controller?: ListController<T>;
+
+  draggableConfig?: {
+    enabled?: boolean;
+    getItemId: (item: T, index: number) => string;
+    isItemDraggable?: (item: T, index: number) => boolean;
+    onReorder?: (newData: T[], event: DraggableReorderEvent<T>) => void;
+    handle?: {
+      render: ComponentType<{ isDragging: boolean }>;
+      position?: 'left' | 'right';
+    };
+  };
 
   selectionConfig?: {
     getItemId: (item: T, index: number) => string;
@@ -332,6 +344,92 @@ const [selectedIds, setSelectedIds] = useState<string[]>(['1']);
 />
 ```
 
+## Drag & Drop
+
+### Lista básica (item completo es arrastrável)
+
+Por defecto, sin `handle`, todo el item es el área de arrastre:
+
+```tsx
+const [items, setItems] = useState<Product[]>(products);
+
+<List<Product>
+  id="draggable-list"
+  data={items}
+  layout={{ gap: 8 }}
+  item={{
+    renderType: 'component',
+    render: (item) => <ProductCard {...item} />,
+  }}
+  draggableConfig={{
+    getItemId: (item) => String(item.id),
+    onReorder: (newData, event) => {
+      setItems(newData);
+      console.log(`Moved "${event.item.name}" from ${event.fromIndex} to ${event.toIndex}`);
+    },
+  }}
+/>
+```
+
+### Lista con handle personalizado
+
+Si se pasa `handle`, solo el handle inicia el drag (el item no se arrastra al tocarlo directamente):
+
+```tsx
+const CustomHandle = ({ isDragging }: { isDragging: boolean }) => (
+  <GripVertical className={isDragging ? 'text-blue-500' : 'text-gray-400'} />
+);
+
+<List<Product>
+  id="custom-drag-list"
+  data={items}
+  item={{
+    renderType: 'component',
+    render: (item) => <ProductCard {...item} />,
+  }}
+  draggableConfig={{
+    getItemId: (item) => String(item.id),
+    onReorder: setItems,
+    handle: {
+      render: CustomHandle,
+      position: 'left',
+    },
+  }}
+/>
+```
+
+### Items no arrastrables (isItemDraggable)
+
+```tsx
+<List<Product>
+  id="partial-drag-list"
+  data={items}
+  item={{
+    renderType: 'component',
+    render: (item) => <ProductCard {...item} />,
+  }}
+  draggableConfig={{
+    getItemId: (item) => String(item.id),
+    isItemDraggable: (item) => !item.locked,  // items con locked=true no se mueven
+    onReorder: setItems,
+  }}
+/>
+```
+
+Cuando `isItemDraggable` retorna `false` para un item:
+- No se muestra el drag handle
+- El item no se puede iniciar como drag (no es arrastrable)
+- El item SÍ se desplaza cuando otros items se mueven a su alrededor (actúa como drop target)
+- Se aplica la clase `.sortableItemDisabled`
+
+### DraggableReorderEvent<T>
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `item` | `T` | El item que fue movido |
+| `fromIndex` | `number` | Índice original |
+| `toIndex` | `number` | Nuevo índice |
+
 ## Arquitectura de Selección
 
 Cuando `selectionConfig` está presente, el List usa un layout interno diferente (`List.selectable.layout.tsx`) que:
@@ -342,6 +440,18 @@ Cuando `selectionConfig` está presente, el List usa un layout interno diferente
 4. Mantiene un mapa interno `itemId → T` para transformar callbacks cuando `getItem` está presente
 
 Cuando `selectionConfig` NO está presente, se usa el layout normal sin cargar ningún código de selección en memoria.
+
+## Arquitectura de Drag & Drop
+
+Cuando `draggableConfig` está presente (y tiene prioridad sobre `selectionConfig`), el List usa `List.draggable.layout.tsx` que:
+
+1. Usa `@dnd-kit/core` (DndContext, PointerSensor) y `@dnd-kit/sortable` (SortableContext, useSortable)
+2. Mantiene `internalData` state (starts null, uses propData); después de reorder setea `internalData` para que el UI quede ordenado
+3. PointerSensor tiene 5px activation distance para permitir clicks normales en los items
+4. Por defecto todo el item es el área de arrastre (cursor: grab). No se muestra ningún handle
+5. Si se pasa `handle` con un `render` component, solo el handle inicia el drag (el item no se arrastra directamente)
+6. `onReorder` callback dispara con el array completo reordenado + metadata del evento (item, fromIndex, toIndex)
+7. `isItemDraggable` permite bloquear items individuales: no se pueden arrastrar pero SÍ se desplazan cuando otros se mueven (`disabled: { draggable: true, droppable: false }`)
 
 ### getItem vs getItemId
 
@@ -392,12 +502,14 @@ List/
 ├── web/
 │   ├── layouts/
 │   │   ├── List.normal.layout.tsx       # Layout normal (sin selección)
-│   │   └── List.selectable.layout.tsx   # Layout con selección (WrapperItemsSelected + getItem)
+│   │   ├── List.selectable.layout.tsx   # Layout con selección (WrapperItemsSelected + getItem)
+│   │   └── List.draggable.layout.tsx    # Layout con drag & drop (@dnd-kit)
 │   ├── css/
-│   │   └── List.module.css
+│   │   ├── List.module.css
+│   │   └── List.draggable.module.css    # Estilos D&D (handle, sorting states)
 │   ├── hooks/
 │   │   └── useList.hook.ts
-│   └── index.tsx                        # Despacho según selectionConfig
+│   └── index.tsx                        # Despacho según draggableConfig/selectionConfig
 ├── mobile/
 │   ├── layouts/
 │   │   ├── List.normal.layout.tsx       # Layout normal (sin selección)

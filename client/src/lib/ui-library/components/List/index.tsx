@@ -1,7 +1,7 @@
 import { useIsMobile } from '../../hooks';
 import { List as ListMobile } from './mobile';
 import { List as ListWeb } from './web';
-import type { ListProps, ListController, RenderState, SelectionConfig, SelectionStyle } from './shared/List.types';
+import type { ListProps, ListController, RenderState, SelectionConfig, SelectionStyle, DraggableConfig, DraggableReorderEvent, DragHandleConfig } from './shared/List.types';
 
 export const List = <T,>(props: ListProps<T>) => {
   const isMobile = useIsMobile();
@@ -14,4 +14,4 @@ export const List = <T,>(props: ListProps<T>) => {
 };
 
 export { useListController } from './shared';
-export type { ListProps, ListController, RenderState, SelectionConfig, SelectionStyle };
+export type { ListProps, ListController, RenderState, SelectionConfig, SelectionStyle, DraggableConfig, DraggableReorderEvent, DragHandleConfig };

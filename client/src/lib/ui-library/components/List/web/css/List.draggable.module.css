@@ -1,0 +1,63 @@
+.sortableItem {
+  touch-action: none;
+  user-select: none;
+}
+
+.sortableItemDragging {
+  opacity: 0.5;
+  z-index: 10;
+}
+
+.sortableItemDropTarget {
+  transition: transform 200ms ease;
+}
+
+.sortableItemContent {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+
+.sortableItemBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  cursor: grab;
+  color: #9ca3af;
+  flex-shrink: 0;
+  border-radius: 4px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.dragHandle:hover {
+  color: #6b7280;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+  color: #374151;
+}
+
+.dragHandleSelf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.dragHandleDragging {
+  color: #3b82f6;
+}
+
+.sortableItemDisabled {
+  cursor: default;
+}
