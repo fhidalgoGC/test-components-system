@@ -1,1 +1,1 @@
-export { default } from './ListDemo';
+export { ListDemoWebView as default } from './web/view/ListDemo.view';
