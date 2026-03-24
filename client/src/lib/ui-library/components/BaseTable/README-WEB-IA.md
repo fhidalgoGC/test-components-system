@@ -811,6 +811,48 @@ function SortableTable() {
 }
 ```
 
+## Reordenar Columnas Dinámicamente
+
+Las columnas se renderizan según `metadata.order`. Para reordenar columnas en tiempo real, actualiza el array de `columns` con nuevos valores de `order`. La tabla se actualiza sin necesidad de re-renderizar los datos. Si usas `metadata.order`, el orden del array no importa — solo el valor numérico de `order` determina la posición.
+
+```tsx
+const [columnOrder, setColumnOrder] = useState([
+  { id: 'nombre', label: 'Nombre', order: 0 },
+  { id: 'apellido', label: 'Apellido', order: 1 },
+  { id: 'edad', label: 'Edad', order: 2 },
+]);
+
+const columns: ColumnConfig[] = columnOrder.map((col, index) => ({
+  metadata: { columnId: col.id, order: index },
+  header: { cell: { render: col.label } },
+}));
+
+<BaseTable data={data} state="success" config={{ columns }} />
+```
+
+Se puede combinar con el componente `List` y su drag & drop para crear un control interactivo de reordenamiento:
+
+```tsx
+<List<ColumnOrderItem>
+  id="column-order-list"
+  data={columnOrder}
+  layout={{ widthMode: 'full', heightMode: 'auto', gap: 0 }}
+  item={{
+    renderType: 'component',
+    render: (col) => <div>{col.label}</div>,
+  }}
+  draggableConfig={{
+    getItemId: (col) => col.id,
+    onReorder: (newData) => {
+      setColumnOrder(newData.map((item, i) => ({ ...item, order: i })));
+    },
+    handle: { render: DragHandle, position: 'left' },
+  }}
+/>
+```
+
+Al arrastrar items en la lista, la tabla refleja el nuevo orden de columnas instantáneamente.
+
 ## Desarrollo
 
 1. Editar estilos web en `web/styles/BaseTable.module.css`

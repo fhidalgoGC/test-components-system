@@ -8,6 +8,7 @@ import { TextWrapDemo } from './TextWrapDemo';
 import { StretchDemo } from './StretchDemo';
 import { MaxVisibleRowsDemo } from './MaxVisibleRowsDemo';
 import { InfiniteScrollDemo } from './InfiniteScrollDemo';
+import { ColumnReorderDemo } from './ColumnReorderDemo';
 
 export function BaseTableExamplesTab() {
   return (
@@ -22,6 +23,7 @@ export function BaseTableExamplesTab() {
       <StretchDemo />
       <MaxVisibleRowsDemo />
       <InfiniteScrollDemo />
+      <ColumnReorderDemo />
     </>
   );
 }
