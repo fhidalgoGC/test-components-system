@@ -813,45 +813,84 @@ function SortableTable() {
 
 ## Reordenar Columnas Dinámicamente
 
-Las columnas se renderizan según `metadata.order`. Para reordenar columnas en tiempo real, actualiza el array de `columns` con nuevos valores de `order`. La tabla se actualiza sin necesidad de re-renderizar los datos. Si usas `metadata.order`, el orden del array no importa — solo el valor numérico de `order` determina la posición.
+Las columnas se renderizan según `metadata.order`. Para reordenar columnas en tiempo real, usa el hook `useTableColumns` que gestiona el estado del orden y expone la configuración actualizada para que cualquier componente externo pueda consumirla.
+
+### useTableColumns
 
 ```tsx
-const [columnOrder, setColumnOrder] = useState([
-  { id: 'nombre', label: 'Nombre', order: 0 },
-  { id: 'apellido', label: 'Apellido', order: 1 },
-  { id: 'edad', label: 'Edad', order: 2 },
-]);
-
-const columns: ColumnConfig[] = columnOrder.map((col, index) => ({
-  metadata: { columnId: col.id, order: index },
-  header: { cell: { render: col.label } },
-}));
-
-<BaseTable data={data} state="success" config={{ columns }} />
+import { useTableColumns } from 'GC-UI-COMPONENTS';
+import type { ColumnConfig, ColumnOrderItem, UseTableColumnsResult } from 'GC-UI-COMPONENTS';
 ```
 
-Se puede combinar con el componente `List` y su drag & drop para crear un control interactivo de reordenamiento:
+#### Parámetros
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `columns` | `ColumnConfig[]` | Configuración inicial de columnas |
+
+#### Retorno (UseTableColumnsResult)
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `columns` | `ColumnConfig[]` | Configuración actualizada con `metadata.order` correcto. Pasar directo al `config.columns` de la tabla |
+| `columnOrder` | `ColumnOrderItem[]` | Array de `{ columnId, label }` en el orden actual. Útil para renderizar un control externo |
+| `reorderColumns` | `(newOrder: ColumnOrderItem[]) => void` | Reemplaza el orden completo con un nuevo array de `ColumnOrderItem` |
+| `reorderByIds` | `(columnIds: string[]) => void` | Reordena pasando solo los IDs en el nuevo orden |
+| `moveColumn` | `(fromIndex: number, toIndex: number) => void` | Mueve una columna de un índice a otro |
+| `resetOrder` | `() => void` | Restaura el orden inicial |
+| `getColumnConfig` | `() => ColumnConfig[]` | Retorna la configuración actual de columnas |
+
+#### ColumnOrderItem
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `columnId` | `string` | ID de la columna (coincide con `metadata.columnId`) |
+| `label` | `string` | Label extraído del header render (o columnId si no es string) |
+
+### Uso básico
+
+```tsx
+const baseColumns: ColumnConfig[] = [
+  { metadata: { columnId: 'nombre', order: 0 }, header: { cell: { render: 'Nombre' } } },
+  { metadata: { columnId: 'apellido', order: 1 }, header: { cell: { render: 'Apellido' } } },
+  { metadata: { columnId: 'edad', order: 2 }, header: { cell: { render: 'Edad' } } },
+];
+
+const tableColumns = useTableColumns({ columns: baseColumns });
+
+<BaseTable
+  data={data}
+  state="success"
+  config={{ columns: tableColumns.columns }}
+/>
+
+// Desde cualquier componente externo puedes leer y modificar el orden:
+tableColumns.columnOrder       // → [{ columnId: 'nombre', label: 'Nombre' }, ...]
+tableColumns.columns           // → ColumnConfig[] con metadata.order actualizado
+tableColumns.moveColumn(0, 2)  // → Mueve 'nombre' a la posición 2
+tableColumns.resetOrder()      // → Restaura el orden inicial
+```
+
+### Combinado con List + D&D
 
 ```tsx
 <List<ColumnOrderItem>
   id="column-order-list"
-  data={columnOrder}
+  data={tableColumns.columnOrder}
   layout={{ widthMode: 'full', heightMode: 'auto', gap: 0 }}
   item={{
     renderType: 'component',
     render: (col) => <div>{col.label}</div>,
   }}
   draggableConfig={{
-    getItemId: (col) => col.id,
-    onReorder: (newData) => {
-      setColumnOrder(newData.map((item, i) => ({ ...item, order: i })));
-    },
+    getItemId: (col) => col.columnId,
+    onReorder: (newData) => tableColumns.reorderColumns(newData),
     handle: { render: DragHandle, position: 'left' },
   }}
 />
 ```
 
-Al arrastrar items en la lista, la tabla refleja el nuevo orden de columnas instantáneamente.
+Al arrastrar items en la lista, `tableColumns.columns` se actualiza y la tabla refleja el nuevo orden instantáneamente.
 
 ## Desarrollo
 

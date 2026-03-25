@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react';
 import {
   BaseTable,
   useTableState,
+  useTableColumns,
 } from '@/lib/ui-library/components/BaseTable';
-import type { ColumnConfig } from '@/lib/ui-library/components/BaseTable';
+import type { ColumnConfig, ColumnOrderItem } from '@/lib/ui-library/components/BaseTable';
 import { List } from '@/lib/ui-library/components/List';
 import type { DraggableReorderEvent } from '@/lib/ui-library/components/List';
 import { GripVertical, RotateCcw } from 'lucide-react';
@@ -26,18 +26,42 @@ const sampleData: Person[] = [
   { id: 5, nombre: 'Pedro', apellido: 'Fernandez', edad: 29, ciudad: 'Bilbao', profesion: 'Profesor' },
 ];
 
-interface ColumnOrderItem {
-  id: string;
-  label: string;
-  order: number;
-}
-
-const initialColumnOrder: ColumnOrderItem[] = [
-  { id: 'nombre', label: 'Nombre', order: 0 },
-  { id: 'apellido', label: 'Apellido', order: 1 },
-  { id: 'edad', label: 'Edad', order: 2 },
-  { id: 'ciudad', label: 'Ciudad', order: 3 },
-  { id: 'profesion', label: 'Profesion', order: 4 },
+const baseColumns: ColumnConfig[] = [
+  {
+    metadata: { columnId: 'nombre', order: 0 },
+    header: { cell: { render: 'Nombre', horizontalAlign: 'left' } },
+    cell: { horizontalAlign: 'left' },
+    minWidth: 120,
+    maxWidth: 'stretch',
+  },
+  {
+    metadata: { columnId: 'apellido', order: 1 },
+    header: { cell: { render: 'Apellido', horizontalAlign: 'left' } },
+    cell: { horizontalAlign: 'left' },
+    minWidth: 120,
+    maxWidth: 'stretch',
+  },
+  {
+    metadata: { columnId: 'edad', order: 2 },
+    header: { cell: { render: 'Edad', horizontalAlign: 'center' } },
+    cell: { horizontalAlign: 'center' },
+    minWidth: 80,
+    maxWidth: 100,
+  },
+  {
+    metadata: { columnId: 'ciudad', order: 3 },
+    header: { cell: { render: 'Ciudad', horizontalAlign: 'left' } },
+    cell: { horizontalAlign: 'left' },
+    minWidth: 120,
+    maxWidth: 'stretch',
+  },
+  {
+    metadata: { columnId: 'profesion', order: 4 },
+    header: { cell: { render: 'Profesion', horizontalAlign: 'left' } },
+    cell: { horizontalAlign: 'left' },
+    minWidth: 120,
+    maxWidth: 'stretch',
+  },
 ];
 
 const DragHandle = ({ isDragging }: { isDragging: boolean }) => (
@@ -48,31 +72,10 @@ const DragHandle = ({ isDragging }: { isDragging: boolean }) => (
 
 export function ColumnReorderDemo() {
   const tableState = useTableState({ initialState: 'success' });
-  const [columnOrder, setColumnOrder] = useState<ColumnOrderItem[]>(initialColumnOrder);
+  const tableColumns = useTableColumns({ columns: baseColumns });
 
-  const columns: ColumnConfig[] = useMemo(() => {
-    return columnOrder.map((col, index) => ({
-      metadata: { columnId: col.id, order: index },
-      header: {
-        cell: {
-          render: col.label,
-          horizontalAlign: col.id === 'edad' ? 'center' as const : 'left' as const,
-        },
-      },
-      cell: {
-        horizontalAlign: col.id === 'edad' ? 'center' as const : 'left' as const,
-      },
-      minWidth: col.id === 'edad' ? 80 : 120,
-      maxWidth: col.id === 'edad' ? 100 : ('stretch' as const),
-    }));
-  }, [columnOrder]);
-
-  const handleReorder = (newData: ColumnOrderItem[], event: DraggableReorderEvent<ColumnOrderItem>) => {
-    setColumnOrder(newData.map((item, index) => ({ ...item, order: index })));
-  };
-
-  const handleReset = () => {
-    setColumnOrder([...initialColumnOrder]);
+  const handleReorder = (newData: ColumnOrderItem[], _event: DraggableReorderEvent<ColumnOrderItem>) => {
+    tableColumns.reorderColumns(newData);
   };
 
   return (
@@ -82,6 +85,8 @@ export function ColumnReorderDemo() {
       <p className={styles.section__description}>
         Arrastra las columnas en la lista lateral para cambiar su orden en la tabla.
         La tabla se actualiza en tiempo real sin re-renderizar los datos.
+        El hook <code>useTableColumns</code> expone <code>columns</code>, <code>columnOrder</code>,
+        <code>reorderColumns</code>, <code>moveColumn</code>, <code>resetOrder</code> y <code>getColumnConfig</code>.
       </p>
 
       <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
@@ -91,7 +96,7 @@ export function ColumnReorderDemo() {
               Orden de columnas
             </span>
             <button
-              onClick={handleReset}
+              onClick={tableColumns.resetOrder}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -113,7 +118,7 @@ export function ColumnReorderDemo() {
           <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.5rem', overflow: 'hidden' }}>
             <List<ColumnOrderItem>
               id="column-order-list"
-              data={columnOrder}
+              data={tableColumns.columnOrder}
               layout={{
                 widthMode: 'full',
                 heightMode: 'auto',
@@ -121,45 +126,48 @@ export function ColumnReorderDemo() {
               }}
               item={{
                 renderType: 'component',
-                render: (col) => (
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      padding: '0.625rem 0.75rem',
-                      backgroundColor: '#ffffff',
-                      borderBottom: '1px solid #f3f4f6',
-                      fontSize: '0.875rem',
-                      fontWeight: 500,
-                      color: '#1f2937',
-                      userSelect: 'none',
-                    }}
-                    data-testid={`column-item-${col.id}`}
-                  >
-                    <span
+                render: (col) => {
+                  const currentIndex = tableColumns.columnOrder.findIndex(c => c.columnId === col.columnId);
+                  return (
+                    <div
                       style={{
-                        width: '1.25rem',
-                        height: '1.25rem',
-                        borderRadius: '50%',
-                        backgroundColor: '#eff6ff',
-                        color: '#3b82f6',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.625rem',
-                        fontWeight: 700,
-                        flexShrink: 0,
+                        gap: '0.5rem',
+                        padding: '0.625rem 0.75rem',
+                        backgroundColor: '#ffffff',
+                        borderBottom: '1px solid #f3f4f6',
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        color: '#1f2937',
+                        userSelect: 'none',
                       }}
+                      data-testid={`column-item-${col.columnId}`}
                     >
-                      {col.order + 1}
-                    </span>
-                    {col.label}
-                  </div>
-                ),
+                      <span
+                        style={{
+                          width: '1.25rem',
+                          height: '1.25rem',
+                          borderRadius: '50%',
+                          backgroundColor: '#eff6ff',
+                          color: '#3b82f6',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '0.625rem',
+                          fontWeight: 700,
+                          flexShrink: 0,
+                        }}
+                      >
+                        {currentIndex + 1}
+                      </span>
+                      {col.label}
+                    </div>
+                  );
+                },
               }}
               draggableConfig={{
-                getItemId: (col) => col.id,
+                getItemId: (col) => col.columnId,
                 onReorder: handleReorder,
                 handle: {
                   render: DragHandle,
@@ -180,7 +188,7 @@ export function ColumnReorderDemo() {
             }}
             data-testid="text-column-order"
           >
-            {columnOrder.map(c => c.label).join(' → ')}
+            {tableColumns.columnOrder.map(c => c.label).join(' → ')}
           </div>
         </div>
 
@@ -189,7 +197,7 @@ export function ColumnReorderDemo() {
             data={sampleData}
             state={tableState.state}
             config={{
-              columns,
+              columns: tableColumns.columns,
               layout: {
                 widthMode: 'full',
                 heightMode: 'auto',

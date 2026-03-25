@@ -426,6 +426,59 @@ export function BaseTablePropsTab() {
           </tbody>
         </table>
       </div>
+
+      <h3 className={styles.propsSubtitle}>useTableColumns</h3>
+      <p className={styles.propsDescription}>
+        Hook para gestionar el orden de columnas externamente. Recibe la configuración inicial y expone el estado actualizado + funciones para reordenar.
+      </p>
+      <div className={styles.propsTableWrapper}>
+        <table className={styles.propsTable}>
+          <thead>
+            <tr>
+              <th>Propiedad</th>
+              <th>Tipo</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>columns</code></td>
+              <td><code>ColumnConfig[]</code></td>
+              <td>Configuración de columnas con <code>metadata.order</code> actualizado. Pasar directo a <code>config.columns</code></td>
+            </tr>
+            <tr>
+              <td><code>columnOrder</code></td>
+              <td><code>ColumnOrderItem[]</code></td>
+              <td>Array de <code>{'{columnId, label}'}</code> en el orden actual. Útil para renderizar controles externos (ej: lista con D&D)</td>
+            </tr>
+            <tr>
+              <td><code>reorderColumns</code></td>
+              <td><code>(newOrder: ColumnOrderItem[]) =&gt; void</code></td>
+              <td>Reemplaza el orden con un nuevo array de ColumnOrderItem</td>
+            </tr>
+            <tr>
+              <td><code>reorderByIds</code></td>
+              <td><code>(columnIds: string[]) =&gt; void</code></td>
+              <td>Reordena pasando solo los IDs en el nuevo orden</td>
+            </tr>
+            <tr>
+              <td><code>moveColumn</code></td>
+              <td><code>(fromIndex: number, toIndex: number) =&gt; void</code></td>
+              <td>Mueve una columna de un índice a otro</td>
+            </tr>
+            <tr>
+              <td><code>resetOrder</code></td>
+              <td><code>() =&gt; void</code></td>
+              <td>Restaura el orden inicial de columnas</td>
+            </tr>
+            <tr>
+              <td><code>getColumnConfig</code></td>
+              <td><code>() =&gt; ColumnConfig[]</code></td>
+              <td>Retorna la configuración actual de columnas</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
