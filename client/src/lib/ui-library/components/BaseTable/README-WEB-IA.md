@@ -834,10 +834,15 @@ import type { ColumnConfig, ColumnOrderItem, UseTableColumnsResult } from 'GC-UI
 |-----------|------|-------------|
 | `columns` | `ColumnConfig[]` | Configuración actualizada con `metadata.order` correcto. Pasar directo al `config.columns` de la tabla |
 | `columnOrder` | `ColumnOrderItem[]` | Array de `{ columnId, label }` en el orden actual. Útil para renderizar un control externo |
+| `columnsState` | `ColumnState[]` | Estado descriptivo completo de cada columna: order, visible, sortable, sortDirection, minWidth, maxWidth, horizontalAlign |
+| `sortState` | `{ columnId, direction } \| null` | Estado de sort activo, o null si no hay sort |
 | `reorderColumns` | `(newOrder: ColumnOrderItem[]) => void` | Reemplaza el orden completo con un nuevo array de `ColumnOrderItem` |
 | `reorderByIds` | `(columnIds: string[]) => void` | Reordena pasando solo los IDs en el nuevo orden |
 | `moveColumn` | `(fromIndex: number, toIndex: number) => void` | Mueve una columna de un índice a otro |
-| `resetOrder` | `() => void` | Restaura el orden inicial |
+| `toggleVisibility` | `(columnId: string) => void` | Alterna la visibilidad de una columna |
+| `setSort` | `(columnId: string, direction: SortDirection) => void` | Establece el sort activo en una columna |
+| `clearSort` | `() => void` | Limpia el sort activo |
+| `resetOrder` | `() => void` | Restaura el orden inicial, visibilidad y sort |
 | `getColumnConfig` | `() => ColumnConfig[]` | Retorna la configuración actual de columnas |
 
 #### ColumnOrderItem
@@ -846,6 +851,20 @@ import type { ColumnConfig, ColumnOrderItem, UseTableColumnsResult } from 'GC-UI
 |-----------|------|-------------|
 | `columnId` | `string` | ID de la columna (coincide con `metadata.columnId`) |
 | `label` | `string` | Label extraído del header render (o columnId si no es string) |
+
+#### ColumnState
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `columnId` | `string` | ID de la columna |
+| `label` | `string` | Label de la columna |
+| `order` | `number` | Posición actual (0-based) |
+| `visible` | `boolean` | Si la columna es visible |
+| `sortable` | `boolean` | Si la columna soporta sort (resuelto desde column + header + defaults) |
+| `sortDirection` | `SortDirection \| null` | Dirección de sort activa o null |
+| `minWidth` | `number \| undefined` | Ancho mínimo configurado |
+| `maxWidth` | `number \| 'stretch' \| 'container' \| undefined` | Ancho máximo configurado |
+| `horizontalAlign` | `string \| undefined` | Alineación horizontal |
 
 ### Uso básico
 

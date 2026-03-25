@@ -14,7 +14,7 @@ export const BaseTable = (props: BaseTableProps) => {
 };
 
 export { useTableState, useTableSearch, useTableColumns } from './shared/hooks';
-export type { UseTableSearchOptions, UseTableSearchResult, UseTableColumnsOptions, UseTableColumnsResult, ColumnOrderItem } from './shared/hooks';
+export type { UseTableSearchOptions, UseTableSearchResult, UseTableColumnsOptions, UseTableColumnsResult, ColumnOrderItem, ColumnState } from './shared/hooks';
 export { TextCell, HeaderCell } from './shared/components';
 export type { TextCellProps, HeaderCellProps } from './shared/components';
 export type {

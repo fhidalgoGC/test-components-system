@@ -452,6 +452,16 @@ export function BaseTablePropsTab() {
               <td>Array de <code>{'{columnId, label}'}</code> en el orden actual. Útil para renderizar controles externos (ej: lista con D&D)</td>
             </tr>
             <tr>
+              <td><code>columnsState</code></td>
+              <td><code>ColumnState[]</code></td>
+              <td>Estado descriptivo de cada columna: order, visible, sortable, sortDirection, minWidth, maxWidth, horizontalAlign</td>
+            </tr>
+            <tr>
+              <td><code>sortState</code></td>
+              <td><code>{'{columnId, direction}'} | null</code></td>
+              <td>Estado de sort activo o null si no hay sort</td>
+            </tr>
+            <tr>
               <td><code>reorderColumns</code></td>
               <td><code>(newOrder: ColumnOrderItem[]) =&gt; void</code></td>
               <td>Reemplaza el orden con un nuevo array de ColumnOrderItem</td>
@@ -467,9 +477,24 @@ export function BaseTablePropsTab() {
               <td>Mueve una columna de un índice a otro</td>
             </tr>
             <tr>
+              <td><code>toggleVisibility</code></td>
+              <td><code>(columnId: string) =&gt; void</code></td>
+              <td>Alterna la visibilidad de una columna</td>
+            </tr>
+            <tr>
+              <td><code>setSort</code></td>
+              <td><code>(columnId: string, direction: SortDirection) =&gt; void</code></td>
+              <td>Establece el sort activo en una columna</td>
+            </tr>
+            <tr>
+              <td><code>clearSort</code></td>
+              <td><code>() =&gt; void</code></td>
+              <td>Limpia el sort activo</td>
+            </tr>
+            <tr>
               <td><code>resetOrder</code></td>
               <td><code>() =&gt; void</code></td>
-              <td>Restaura el orden inicial de columnas</td>
+              <td>Restaura el orden inicial, visibilidad y sort</td>
             </tr>
             <tr>
               <td><code>getColumnConfig</code></td>
