@@ -680,7 +680,13 @@ A partir de la **v1.3.0** se agrega la opción `responseType` que permite forzar
 
 ### Manejo de errores en respuestas binarias
 
-Cuando `responseType` es `'blob'` o `'arrayBuffer'`, el interceptor **no** intenta leer `error.message` desde el body (porque no es JSON). En su lugar usa `response.statusText` como `message`. El `data` del response sigue siendo el `Blob`/`ArrayBuffer` recibido.
+Cuando `responseType` es `'blob'` o `'arrayBuffer'` y la respuesta es exitosa, el `data` se devuelve sin tocar como `Blob`/`ArrayBuffer`.
+
+Si la respuesta **falla** (status no-OK) y el header `Content-Type` indica `application/json`, el interceptor **parsea automáticamente el body como JSON** —incluso aunque se haya pedido `blob` / `arrayBuffer`— y extrae `error.message` del cuerpo. Esto es útil porque muchos backends devuelven JSON estructurado en errores aunque la ruta exitosa sea binaria (descarga de archivos).
+
+- Éxito + binario → `data` es `Blob` / `ArrayBuffer` (sin cambios).
+- Error + `Content-Type: application/json` → `data` es el objeto JSON parseado y `error.message` proviene de `body.message` si existe.
+- Error + cualquier otro `Content-Type` → `data` se mantiene como `Blob` / `ArrayBuffer` y `error.message` cae a `response.statusText`.
 
 ### Ejemplo: descarga de Excel
 

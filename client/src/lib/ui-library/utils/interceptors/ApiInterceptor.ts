@@ -319,7 +319,23 @@ export function createApiInterceptor(
 
       let data: T;
       const responseType = options.responseType;
-      if (responseType === 'blob') {
+      const isBinaryResponseType = responseType === 'blob' || responseType === 'arrayBuffer';
+      const errorContentType = response.headers.get('content-type');
+      const binaryErrorIsJson =
+        isBinaryResponseType &&
+        !response.ok &&
+        !!errorContentType &&
+        errorContentType.includes('application/json');
+
+      if (binaryErrorIsJson) {
+        try {
+          data = (await response.json()) as T;
+        } catch {
+          data = (responseType === 'blob'
+            ? await response.blob()
+            : await response.arrayBuffer()) as unknown as T;
+        }
+      } else if (responseType === 'blob') {
         data = (await response.blob()) as unknown as T;
       } else if (responseType === 'arrayBuffer') {
         data = (await response.arrayBuffer()) as unknown as T;
@@ -356,10 +372,12 @@ export function createApiInterceptor(
 
       if (!response.ok) {
         const isBinary = responseType === 'blob' || responseType === 'arrayBuffer';
+        const canExtractMessage = (!isBinary || binaryErrorIsJson)
+          && typeof data === 'object' && data !== null && 'message' in (data as object);
         let error: InterceptedError = {
           status: response.status,
           statusText: response.statusText,
-          message: !isBinary && typeof data === 'object' && data && 'message' in data
+          message: canExtractMessage
             ? String((data as any).message)
             : response.statusText,
           request,
