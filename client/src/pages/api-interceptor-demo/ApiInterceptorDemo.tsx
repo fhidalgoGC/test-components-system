@@ -311,6 +311,66 @@ export function ApiInterceptorDemo() {
     addLog('info', 'Path-specific interceptor removed');
   };
 
+  const handleDownloadBlob = async () => {
+    setLoading(true);
+    addLog('info', 'Downloading binary file with responseType: "blob"...');
+    try {
+      // jsonplaceholder photos return image URLs, but we'll use a real binary endpoint:
+      // download a small image from a public CDN through the interceptor as a Blob.
+      const blobApi = createApiInterceptor({
+        baseUrl: 'https://via.placeholder.com',
+        defaultVisibility: 'public',
+      });
+      const response = await blobApi.get<Blob>('/150/0000FF/FFFFFF.png', undefined, {
+        responseType: 'blob',
+      });
+
+      const blob = response.data;
+      const isBlob = blob instanceof Blob;
+      addLog('response', `Got binary response (Blob? ${isBlob}, size: ${isBlob ? blob.size : 'n/a'} bytes, type: ${isBlob ? blob.type : 'n/a'})`, {
+        status: response.status,
+        contentType: response.headers['content-type'],
+      });
+
+      if (isBlob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `download-${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        addLog('info', 'File download triggered (check your downloads folder)');
+      }
+    } catch (error) {
+      addLog('error', 'Failed to download blob', error);
+    }
+    setLoading(false);
+  };
+
+  const handleArrayBufferRequest = async () => {
+    setLoading(true);
+    addLog('info', 'Fetching binary data with responseType: "arrayBuffer"...');
+    try {
+      const blobApi = createApiInterceptor({
+        baseUrl: 'https://via.placeholder.com',
+        defaultVisibility: 'public',
+      });
+      const response = await blobApi.get<ArrayBuffer>('/100/FF0000/FFFFFF.png', undefined, {
+        responseType: 'arrayBuffer',
+      });
+      const buf = response.data;
+      const isBuf = buf instanceof ArrayBuffer;
+      addLog('response', `Got ArrayBuffer? ${isBuf}, byteLength: ${isBuf ? buf.byteLength : 'n/a'}`, {
+        status: response.status,
+      });
+    } catch (error) {
+      addLog('error', 'Failed arrayBuffer fetch', error);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-2" data-testid="title-api-interceptor">ApiInterceptor Demo</h1>
@@ -430,6 +490,21 @@ export function ApiInterceptorDemo() {
               </Button>
               <Button onClick={handleTestDynamicTransformer} disabled={loading} testId="btn-test-transformer">
                 Test GET /comments (transformed)
+              </Button>
+            </div>
+          </Section>
+
+          <Section title="Binary Responses (Blob / ArrayBuffer) — v1.3.0">
+            <div className="space-y-2">
+              <p className="text-sm text-gray-500 mb-2">
+                Forzar parseo binario con <code>responseType: 'blob' | 'arrayBuffer'</code>.
+                Sin esta opción, el body se convertía a string y los archivos quedaban corruptos.
+              </p>
+              <Button onClick={handleDownloadBlob} disabled={loading} testId="btn-download-blob">
+                Download Image as Blob (responseType: 'blob')
+              </Button>
+              <Button onClick={handleArrayBufferRequest} disabled={loading} testId="btn-arraybuffer">
+                Fetch as ArrayBuffer (responseType: 'arrayBuffer')
               </Button>
             </div>
           </Section>

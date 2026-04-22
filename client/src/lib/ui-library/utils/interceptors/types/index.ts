@@ -188,6 +188,13 @@ export interface ApiInterceptorInstance {
   getConfig: () => ApiInterceptorConfig;
 }
 
+/**
+ * Response parsing type. When omitted, the interceptor auto-detects based on Content-Type
+ * (application/json → json, otherwise → text). Pass explicitly to force a specific parser,
+ * required for binary responses like Excel, PDF, ZIP, images.
+ */
+export type ResponseType = 'json' | 'text' | 'blob' | 'arrayBuffer';
+
 export interface RequestOptions {
   method?: HttpMethod;
   body?: unknown;
@@ -199,9 +206,11 @@ export interface RequestOptions {
   cache?: boolean;
   signal?: AbortSignal;
   transform?: ResponseTransformer;
+  responseType?: ResponseType;
 }
 
 export interface RequestWithTransformOptions {
   params?: QueryParams;
   transform?: ResponseTransformer;
+  responseType?: ResponseType;
 }

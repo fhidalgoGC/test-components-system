@@ -15,6 +15,7 @@ import type {
   ResponseTransformer,
   DynamicHeaderGetter,
   DynamicHeaderConfig,
+  ResponseType,
 } from './types';
 
 interface DynamicTransformer {
@@ -317,11 +318,22 @@ export function createApiInterceptor(
       const endTime = Date.now();
 
       let data: T;
-      const contentType = response.headers.get('content-type');
-      if (contentType?.includes('application/json')) {
+      const responseType = options.responseType;
+      if (responseType === 'blob') {
+        data = (await response.blob()) as unknown as T;
+      } else if (responseType === 'arrayBuffer') {
+        data = (await response.arrayBuffer()) as unknown as T;
+      } else if (responseType === 'text') {
+        data = (await response.text()) as unknown as T;
+      } else if (responseType === 'json') {
         data = await response.json();
       } else {
-        data = await response.text() as unknown as T;
+        const contentType = response.headers.get('content-type');
+        if (contentType?.includes('application/json')) {
+          data = await response.json();
+        } else {
+          data = await response.text() as unknown as T;
+        }
       }
 
       const responseHeaders: Record<string, string> = {};
@@ -343,11 +355,12 @@ export function createApiInterceptor(
       };
 
       if (!response.ok) {
+        const isBinary = responseType === 'blob' || responseType === 'arrayBuffer';
         let error: InterceptedError = {
           status: response.status,
           statusText: response.statusText,
-          message: typeof data === 'object' && data && 'message' in data 
-            ? String((data as any).message) 
+          message: !isBinary && typeof data === 'object' && data && 'message' in data
+            ? String((data as any).message)
             : response.statusText,
           request,
           response: interceptedResponse,
@@ -418,20 +431,20 @@ export function createApiInterceptor(
   return {
     request: executeRequest,
     
-    get: <T>(endpoint: string, params?: QueryParams, options?: { transform?: ResponseTransformer }) => 
-      executeRequest<T>(endpoint, { method: 'GET', params, transform: options?.transform }),
+    get: <T>(endpoint: string, params?: QueryParams, options?: { transform?: ResponseTransformer; responseType?: ResponseType }) =>
+      executeRequest<T>(endpoint, { method: 'GET', params, transform: options?.transform, responseType: options?.responseType }),
     
-    post: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer }) => 
-      executeRequest<T>(endpoint, { method: 'POST', body, params: options?.params, transform: options?.transform }),
+    post: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer; responseType?: ResponseType }) =>
+      executeRequest<T>(endpoint, { method: 'POST', body, params: options?.params, transform: options?.transform, responseType: options?.responseType }),
     
-    put: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer }) => 
-      executeRequest<T>(endpoint, { method: 'PUT', body, params: options?.params, transform: options?.transform }),
+    put: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer; responseType?: ResponseType }) =>
+      executeRequest<T>(endpoint, { method: 'PUT', body, params: options?.params, transform: options?.transform, responseType: options?.responseType }),
     
-    patch: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer }) => 
-      executeRequest<T>(endpoint, { method: 'PATCH', body, params: options?.params, transform: options?.transform }),
+    patch: <T>(endpoint: string, body?: unknown, options?: { params?: QueryParams; transform?: ResponseTransformer; responseType?: ResponseType }) =>
+      executeRequest<T>(endpoint, { method: 'PATCH', body, params: options?.params, transform: options?.transform, responseType: options?.responseType }),
     
-    delete: <T>(endpoint: string, params?: QueryParams, options?: { transform?: ResponseTransformer }) => 
-      executeRequest<T>(endpoint, { method: 'DELETE', params, transform: options?.transform }),
+    delete: <T>(endpoint: string, params?: QueryParams, options?: { transform?: ResponseTransformer; responseType?: ResponseType }) =>
+      executeRequest<T>(endpoint, { method: 'DELETE', params, transform: options?.transform, responseType: options?.responseType }),
 
     addRequestInterceptor: (interceptor: RequestInterceptor) => {
       requestInterceptors.push(interceptor);

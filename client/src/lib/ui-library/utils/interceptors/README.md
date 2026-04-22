@@ -658,5 +658,84 @@ interface RequestOptions {
   visibility?: EndpointVisibility;
   requiresAuth?: boolean;
   signal?: AbortSignal;
+  responseType?: ResponseType; // 'json' | 'text' | 'blob' | 'arrayBuffer'
 }
+```
+
+## Respuestas binarias (Blob) — v1.3.0
+
+Por defecto el interceptor parsea automáticamente la respuesta según el header `Content-Type` (JSON → `.json()`, cualquier otro → `.text()`). Para descargar archivos binarios (Excel, PDF, ZIP, imágenes, etc.) este parseo automático corrompe el contenido al convertirlo en string.
+
+A partir de la **v1.3.0** se agrega la opción `responseType` que permite forzar el tipo de parseo. Es **100% aditiva**: cualquier código existente que NO pase `responseType` sigue funcionando exactamente igual.
+
+### Valores de `responseType`
+
+| Valor | Body | Uso |
+|-------|------|-----|
+| _omitido_ | auto (JSON o texto según `Content-Type`) | **Comportamiento por defecto** — sin cambios para apps existentes |
+| `'json'` | `await response.json()` | Forzar JSON aunque el `Content-Type` no lo indique |
+| `'text'` | `await response.text()` | Forzar texto plano |
+| `'blob'` | `await response.blob()` → `Blob` | Descarga de Excel, PDF, ZIP, imágenes |
+| `'arrayBuffer'` | `await response.arrayBuffer()` → `ArrayBuffer` | Procesamiento binario de bajo nivel |
+
+### Manejo de errores en respuestas binarias
+
+Cuando `responseType` es `'blob'` o `'arrayBuffer'`, el interceptor **no** intenta leer `error.message` desde el body (porque no es JSON). En su lugar usa `response.statusText` como `message`. El `data` del response sigue siendo el `Blob`/`ArrayBuffer` recibido.
+
+### Ejemplo: descarga de Excel
+
+```typescript
+import { createApiInterceptor } from '@/lib/ui-library/utils/interceptors';
+
+const api = createApiInterceptor({
+  baseUrl: 'https://api.example.com',
+  defaultHeaders: { 'Content-Type': 'application/json' },
+});
+
+api.setAuth({ type: 'bearer', getToken: () => myToken });
+
+function extractFilename(contentDisposition?: string): string | null {
+  if (!contentDisposition) return null;
+  const match = contentDisposition.match(/filename="?([^"]+)"?/);
+  return match?.[1] ?? null;
+}
+
+async function downloadExcel(query: Record<string, unknown>) {
+  const response = await api.get<Blob>('/reports/journal-flow', query, {
+    responseType: 'blob',
+  });
+
+  const blob = response.data;
+  const filename = extractFilename(response.headers['content-disposition'])
+    ?? `report-${Date.now()}.xlsx`;
+
+  // Convertir Blob → URL → click para disparar descarga
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  return { success: true, filename };
+}
+```
+
+### Disponible en todos los métodos de conveniencia
+
+`responseType` se acepta como tercer parámetro de `options` en `get`, `post`, `put`, `patch` y `delete`, además de `request`:
+
+```typescript
+await api.get<Blob>('/file', undefined, { responseType: 'blob' });
+await api.post<ArrayBuffer>('/process', payload, { responseType: 'arrayBuffer' });
+await api.request<Blob>('/file', { method: 'GET', responseType: 'blob' });
+```
+
+### Compatibilidad
+
+- Sin `responseType`: comportamiento idéntico al de versiones anteriores. Cero breaking changes.
+- Las firmas públicas de `get/post/put/patch/delete` solo se extendieron con un campo opcional.
+- No se modificó ningún tipo de retorno existente.
 ```
