@@ -738,4 +738,3 @@ await api.request<Blob>('/file', { method: 'GET', responseType: 'blob' });
 - Sin `responseType`: comportamiento idéntico al de versiones anteriores. Cero breaking changes.
 - Las firmas públicas de `get/post/put/patch/delete` solo se extendieron con un campo opcional.
 - No se modificó ningún tipo de retorno existente.
-```
