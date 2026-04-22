@@ -86,6 +86,18 @@ export function useTranslationLoader(globalTranslationPaths: GlobalTranslationPa
       const loaded: Record<string, Record<string, any>> = {};
       
       for (const translationPath of globalTranslationPaths) {
+        // Si se pasa `data` directamente, se usa sin hacer fetch
+        if (translationPath.data) {
+          loaded[translationPath.lang] = translationPath.data;
+          continue;
+        }
+
+        if (!translationPath.path) {
+          console.warn(`Translation entry for lang "${translationPath.lang}" has neither data nor path.`);
+          loaded[translationPath.lang] = {};
+          continue;
+        }
+
         try {
           const module = await import(/* @vite-ignore */ translationPath.path);
           loaded[translationPath.lang] = module.default || module;

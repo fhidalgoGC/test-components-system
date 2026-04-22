@@ -63,9 +63,11 @@ type LibI18nProviderProps = {
 };
 
 type GlobalTranslationPath = {
-  lang: string; // Idioma como string genérico ('es', 'en', etc.)
-  path: string; // Ruta relativa al archivo JSON
+  lang: string;  // Idioma como string genérico ('es', 'en', etc.)
+  path?: string; // URL del módulo JSON (usar makeModuleUrl). Ignorado si se pasa `data`.
+  data?: Record<string, any>; // Objeto de traducciones ya cargado. Si se pasa, se usa directamente sin fetch.
 };
+// Nota: path o data son mutuamente excluyentes. Si ambos están, `data` tiene prioridad.
 ```
 
 ## 🎯 Hook useLibI18n
@@ -180,6 +182,43 @@ function ExternalAppDemo() {
     </LibI18nProvider>
   );
 }
+```
+
+### **3b. Traducciones pasadas como objeto (sin fetch)**
+
+Útil cuando los JSON ya están importados estáticamente en el bundle o cuando las traducciones se construyen dinámicamente en runtime.
+
+```jsx
+import esTranslations from '../../../i18n/es.json';
+import enTranslations from '../../../i18n/en.json';
+
+function ExternalAppDemo() {
+  const app = useAppLanguage();
+
+  // Con `data`, el objeto se usa directamente — no hay fetch ni URL
+  const globalTranslationPaths = [
+    { lang: "es", data: esTranslations },
+    { lang: "en", data: enTranslations },
+  ];
+
+  return (
+    <LibI18nProvider
+      parentLanguageProvider={app}
+      globalTranslationPaths={globalTranslationPaths}
+    >
+      <TagSelector {...props} />
+    </LibI18nProvider>
+  );
+}
+```
+
+También se puede mezclar: unas entradas con `path` y otras con `data`:
+
+```jsx
+const globalTranslationPaths = [
+  { lang: "es", data: esTranslations },      // objeto directo
+  { lang: "en", path: makeModuleUrl(enTranslations) }, // carga dinámica
+];
 ```
 
 ### **4. Uso Controlado por Props**

@@ -13,7 +13,10 @@ export type LibI18nContextValue = {
 
 export type GlobalTranslationPath = {
   lang: string;
-  path: string;
+  /** URL del módulo JSON de traducciones (usar makeModuleUrl). Ignorado si se pasa `data`. */
+  path?: string;
+  /** Objeto de traducciones ya cargado. Si se pasa, se usa directamente sin fetch. */
+  data?: Record<string, any>;
 };
 
 export type LibI18nProviderProps = {
