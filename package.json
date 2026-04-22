@@ -1,6 +1,6 @@
 {
   "name": "GC-UI-COMPONENTS",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "type": "module",
   "main": "client/src/lib/ui-library/index.ts",
   "license": "MIT",
